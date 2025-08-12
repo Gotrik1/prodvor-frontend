@@ -38,7 +38,7 @@ export default function Home() {
                 src={logoImage}
                 alt="ProDvor Mascot" 
                 width={250} 
-                height={610}
+                height={250}
                 className="object-contain"
                 data-ai-hint="robot soccer"
                 priority
