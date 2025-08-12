@@ -23,15 +23,25 @@ export default function Home() {
             <Logo />
             <span className="font-headline">ProDvor</span>
           </a>
-          <Button className="bg-accent hover:bg-accent/90 text-accent-foreground">Создать аккаунт</Button>
+          <Button>Войти</Button>
         </div>
       </header>
       
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="relative w-full py-20 md:py-32 lg:py-40 text-center overflow-hidden">
-           <div className="absolute top-0 left-0 -z-10 h-full w-full bg-[radial-gradient(#29abe2_1px,transparent_1px)] [background-size:16px_16px] [mask-image:radial-gradient(ellipse_50%_50%_at_50%_50%,#000_70%,transparent_100%)]"></div>
+        <section className="relative w-full pt-12 pb-20 md:pt-20 md:pb-32 text-center">
           <div className="container mx-auto px-4 md:px-6 z-10 relative">
+            <div className="flex justify-center mb-8">
+              <Image 
+                src="https://placehold.co/400x400.png" 
+                alt="ProDvor Mascot" 
+                width={400} 
+                height={400}
+                className="object-contain"
+                data-ai-hint="robot soccer"
+                priority
+              />
+            </div>
             <div className="max-w-4xl mx-auto">
               <h1 className="text-4xl md:text-5xl lg:text-7xl font-black tracking-tighter mb-4 font-headline">
                 Твоя игра. Твои правила. Твоя арена.
@@ -40,7 +50,7 @@ export default function Home() {
                 ProDvor — это социальная платформа, объединяющая дворовый спорт и любительский киберспорт. Создавай команду, находи соперников, участвуй в турнирах и строй свою спортивную карьеру.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold">Начать побеждать</Button>
+                <Button size="lg" className="font-bold">Начать побеждать</Button>
                 <Button size="lg" variant="outline" className="font-bold">Подробнее</Button>
               </div>
             </div>
