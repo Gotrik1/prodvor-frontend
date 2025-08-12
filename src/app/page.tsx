@@ -3,6 +3,7 @@ import { Button } from '@/shared/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Cpu, Users, Trophy } from 'lucide-react';
 import { LogoGenerator } from '@/widgets/logo-generator';
+import logoImage from '@/images/logo_1.png';
 
 const Logo = () => (
     <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-primary">
@@ -33,7 +34,7 @@ export default function Home() {
           <div className="container mx-auto px-4 md:px-6 z-10 relative">
             <div className="flex justify-center mb-8">
               <Image 
-                src="https://placehold.co/1200x610.png" 
+                src={logoImage}
                 alt="ProDvor Mascot" 
                 width={1200} 
                 height={610}
