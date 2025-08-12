@@ -35,7 +35,7 @@ export default function Home() {
           <div className="container mx-auto px-4 md:px-6 z-10 relative">
             <div className="flex justify-center mb-8">
               <Image 
-                src={logoImage}
+                src="https://prodvor.website/_next/image?url=%2Fimages%2Fbb80f999-29b3-433f-95d3-8b4cb0bd2604.png"
                 alt="ProDvor Mascot" 
                 width={250} 
                 height={610}
