@@ -4,7 +4,6 @@ import { Button } from '@/shared/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Cpu, Users, Trophy } from 'lucide-react';
 import { LogoGenerator } from '@/widgets/logo-generator';
-import logoImage from '@/images/logo_1.png';
 
 const Logo = () => (
     <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-primary">
@@ -35,7 +34,7 @@ export default function Home() {
           <div className="container mx-auto px-4 md:px-6 z-10 relative">
             <div className="flex justify-center mb-8">
               <Image 
-                src={logoImage}
+                src="https://prodvor.website/_next/image?url=%2Fimages%2Fbb80f999-29b3-433f-95d3-8b4cb0bd2604.png&w=1920&q=75"
                 alt="ProDvor Mascot" 
                 width={250} 
                 height={250}
