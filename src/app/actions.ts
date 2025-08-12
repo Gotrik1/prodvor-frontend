@@ -3,7 +3,7 @@
 import {
   generateTeamLogoVariations,
   type GenerateTeamLogoVariationsInput,
-} from "@/ai/flows/generate-team-logo-variations";
+} from "@/shared/api/generate-team-logo-variations";
 
 export async function generateLogosAction(
   input: GenerateTeamLogoVariationsInput

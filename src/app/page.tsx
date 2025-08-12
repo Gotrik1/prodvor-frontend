@@ -1,8 +1,8 @@
 import Image from 'next/image';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/shared/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Cpu, Users, Trophy } from 'lucide-react';
-import { LogoGenerator } from '@/components/logo-generator';
+import { LogoGenerator } from '@/widgets/logo-generator';
 
 const Logo = () => (
     <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-primary">
