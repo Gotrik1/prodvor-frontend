@@ -1,3 +1,4 @@
+
 import Image from 'next/image';
 import { Button } from '@/shared/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
@@ -13,7 +14,7 @@ const Logo = () => (
         <path d="M22 7L12 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
         <path d="M17 4.5L7 9.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
     </svg>
-)
+);
 
 export default function Home() {
   return (
@@ -36,7 +37,7 @@ export default function Home() {
               <Image 
                 src={logoImage}
                 alt="ProDvor Mascot" 
-                width={1200} 
+                width={250} 
                 height={610}
                 className="object-contain"
                 data-ai-hint="robot soccer"
@@ -182,5 +183,3 @@ export default function Home() {
     </div>
   );
 }
-
-    
