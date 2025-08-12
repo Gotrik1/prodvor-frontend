@@ -9,15 +9,8 @@ const nextConfig: NextConfig = {
     ignoreDuringBuilds: true,
   },
   images: {
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'prodvor.website',
-      },
-    ],
+    remotePatterns: [],
   },
 };
 
 export default nextConfig;
-
-    
