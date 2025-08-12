@@ -33,7 +33,7 @@ export default function Home() {
           <div className="container mx-auto px-4 md:px-6 z-10 relative">
             <div className="flex justify-center mb-8">
               <Image 
-                src="/logo_1.png" 
+                src="https://placehold.co/1200x610.png" 
                 alt="ProDvor Mascot" 
                 width={1200} 
                 height={610}
@@ -181,3 +181,5 @@ export default function Home() {
     </div>
   );
 }
+
+    
