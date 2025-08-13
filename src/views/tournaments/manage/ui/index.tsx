@@ -1,6 +1,6 @@
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
-import { ArrowLeft, Users, Calendar, Megaphone, Settings, Bot, GanttChartIcon, CheckCircle, XCircle, Clock, Search, Shield, Award, PlusCircle, Send, UserPlus } from "lucide-react";
+import { ArrowLeft, Users, Calendar, Megaphone, Settings, Bot, GanttChartIcon, CheckCircle, XCircle, Clock, Search, Shield, Award, PlusCircle, Send, UserPlus, Film, UploadCloud, Video } from "lucide-react";
 import Link from "next/link";
 import { tournaments, teams, staff, sponsors } from '@/mocks';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
@@ -183,6 +183,85 @@ function ScheduleTab() {
                     <Calendar className="mx-auto h-12 w-12 text-muted-foreground" />
                     <h3 className="mt-4 text-lg font-semibold">Расписание в разработке</h3>
                     <p className="mt-1 text-sm text-muted-foreground">Здесь будет интерактивный календарь матчей.</p>
+                </div>
+            </CardContent>
+        </Card>
+    )
+}
+
+function MediaTab() {
+    const mockMedia = [
+        { type: 'image', src: 'https://placehold.co/600x400.png', title: 'Фото с открытия', dataAiHint: 'tournament opening' },
+        { type: 'image', src: 'https://placehold.co/600x400.png', title: 'Лучший момент дня', dataAiHint: 'sports highlight' },
+        { type: 'video', src: 'https://www.youtube.com/embed/dQw4w9WgXcQ', title: 'Прямая трансляция - Финал' },
+        { type: 'image', src: 'https://placehold.co/600x400.png', title: 'Награждение', dataAiHint: 'award ceremony' },
+    ];
+
+    return (
+        <Card>
+            <CardHeader>
+                <CardTitle>Медиа-центр</CardTitle>
+                <CardDescription>Загружайте фото и видео, чтобы делиться яркими моментами турнира.</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <Label htmlFor="banner" className="mb-2 block font-medium">Загрузить фото</Label>
+                        <div className="flex items-center justify-center w-full">
+                            <label htmlFor="dropzone-file" className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed rounded-lg cursor-pointer bg-muted/50 hover:bg-muted">
+                                <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                                    <UploadCloud className="w-8 h-8 mb-4 text-muted-foreground" />
+                                    <p className="mb-2 text-sm text-muted-foreground"><span className="font-semibold">Нажмите, чтобы загрузить</span></p>
+                                </div>
+                                <input id="dropzone-file" type="file" className="hidden" />
+                            </label>
+                        </div>
+                    </div>
+                     <div>
+                        <Label htmlFor="video-url" className="mb-2 block font-medium">Добавить видео</Label>
+                        <div className="flex gap-2">
+                           <Input id="video-url" placeholder="Ссылка на YouTube или Twitch..." />
+                           <Button>Добавить</Button>
+                        </div>
+                        <p className="text-xs text-muted-foreground mt-2">Вставьте ссылку на трансляцию или запись.</p>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 className="text-lg font-semibold mb-4 border-t pt-6">Галерея</h3>
+                    {mockMedia.length > 0 ? (
+                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                            {mockMedia.map((media, index) => (
+                                <div key={index} className="group relative aspect-video w-full overflow-hidden rounded-lg">
+                                    {media.type === 'image' ? (
+                                        <Image src={media.src} alt={media.title} layout="fill" objectFit="cover" data-ai-hint={media.dataAiHint}/>
+                                    ) : (
+                                        <iframe
+                                            className="w-full h-full"
+                                            src={media.src}
+                                            title={media.title}
+                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                            allowFullScreen
+                                        ></iframe>
+                                    )}
+                                    <div className="absolute bottom-0 left-0 right-0 bg-black/50 text-white p-2 text-sm truncate opacity-0 group-hover:opacity-100 transition-opacity">
+                                        {media.title}
+                                    </div>
+                                    <Button variant="destructive" size="icon" className="absolute top-2 right-2 h-7 w-7 opacity-0 group-hover:opacity-100 transition-opacity">
+                                        <XCircle className="h-4 w-4"/>
+                                    </Button>
+                                </div>
+                            ))}
+                        </div>
+                    ) : (
+                         <div className="min-h-[20vh] flex items-center justify-center bg-muted/30 rounded-lg">
+                            <div className="text-center">
+                                <Film className="mx-auto h-12 w-12 text-muted-foreground" />
+                                <h3 className="mt-4 text-lg font-semibold">Медиафайлов пока нет</h3>
+                                <p className="mt-1 text-sm text-muted-foreground">Загрузите фото или видео, чтобы они появились здесь.</p>
+                            </div>
+                        </div>
+                    )}
                 </div>
             </CardContent>
         </Card>
@@ -446,11 +525,12 @@ export function TournamentManagementPage({ tournamentId }: { tournamentId: strin
             <main className="flex-1 p-4 md:p-6 lg:p-8">
                 <div className="container mx-auto">
                     <Tabs defaultValue="overview" className="w-full">
-                        <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 md:grid-cols-8 mb-4">
+                        <TabsList className="grid w-full grid-cols-3 sm:grid-cols-5 md:grid-cols-9 mb-4">
                             <TabsTrigger value="overview">Обзор</TabsTrigger>
                             <TabsTrigger value="participants"><Users className="mr-2 h-4 w-4" />Участники</TabsTrigger>
                             <TabsTrigger value="bracket">Сетка</TabsTrigger>
                             <TabsTrigger value="schedule"><Calendar className="mr-2 h-4 w-4" />Расписание</TabsTrigger>
+                            <TabsTrigger value="media"><Film className="mr-2 h-4 w-4" />Медиа</TabsTrigger>
                             <TabsTrigger value="staff"><Shield className="mr-2 h-4 w-4" />Персонал</TabsTrigger>
                             <TabsTrigger value="sponsors"><Award className="mr-2 h-4 w-4" />Спонсоры</TabsTrigger>
                             <TabsTrigger value="announcements"><Megaphone className="mr-2 h-4 w-4" />Анонсы</TabsTrigger>
@@ -467,6 +547,9 @@ export function TournamentManagementPage({ tournamentId }: { tournamentId: strin
                         </TabsContent>
                         <TabsContent value="schedule">
                             <ScheduleTab />
+                        </TabsContent>
+                        <TabsContent value="media">
+                            <MediaTab />
                         </TabsContent>
                         <TabsContent value="staff">
                             <StaffTab />
