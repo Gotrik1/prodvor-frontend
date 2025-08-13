@@ -4,9 +4,9 @@
 
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
-import { ArrowLeft, Users, Calendar, Megaphone, Settings, Bot, GanttChartIcon, CheckCircle, XCircle, Clock, Search, Shield, Award, PlusCircle, Send, UserPlus, Film, UploadCloud, Video, PlayCircle, StopCircle, Ban, ListChecks, LucideIcon } from "lucide-react";
+import { ArrowLeft, Users, Calendar, Megaphone, Settings, Bot, GanttChartIcon, CheckCircle, XCircle, Clock, Search, Shield, Award, PlusCircle, Send, UserPlus, Film, UploadCloud, Video, PlayCircle, StopCircle, Ban, ListChecks, LucideIcon, Trash2 } from "lucide-react";
 import Link from "next/link";
-import { tournaments, teams, staff, sponsors, requirements } from '@/mocks';
+import { myTournaments, allTournaments, registeredTeams, staff, sponsors, requirements } from '@/views/tournaments/public-page/ui/mock-data';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 import { Badge } from "@/shared/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/shared/ui/table";
@@ -19,44 +19,11 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/select";
 import React, { useState } from "react";
 import { Checkbox } from "@/shared/ui/checkbox";
+import { Popover, PopoverContent, PopoverTrigger } from "@/shared/ui/popover";
+import { cn } from "@/shared/lib/utils";
+import { Calendar as CalendarIcon } from 'lucide-react';
+import { Calendar as CalendarComponent } from "@/shared/ui/calendar";
 
-const myTournaments = [
-    {
-      id: 'mytourney1',
-      name: 'Летний Кубок ProDvor',
-      game: 'Дворовый футбол',
-      status: 'РЕГИСТРАЦИЯ' as const,
-      prizePool: '100 000 руб.',
-      participants: 8,
-      maxParticipants: 16,
-      startDate: '2025-08-01',
-      bannerUrl: 'https://placehold.co/1200x300.png',
-      dataAiHint: 'soccer street'
-    },
-    {
-      id: 'mytourney2',
-      name: 'Осенний марафон по Dota 2',
-      game: 'Dota 2',
-      status: 'ИДЕТ' as const,
-      prizePool: 'Эксклюзивные скины',
-      participants: 30,
-      maxParticipants: 32,
-      startDate: '2025-09-10',
-      bannerUrl: 'https://placehold.co/1200x300.png',
-      dataAiHint: 'esports dota'
-    },
-];
-
-const allTournaments = [...tournaments, ...myTournaments];
-const registeredTeams = [
-    ...teams,
-    { id: 'team3', name: 'Стальные Ястребы', logoUrl: 'https://placehold.co/100x100.png', captainId: 'user1', members: ['user1'], game: 'Дворовый футбол', rank: 1450 },
-    { id: 'team4', name: 'Бетонные Тигры', logoUrl: 'https://placehold.co/100x100.png', captainId: 'user2', members: ['user2'], game: 'Дворовый футбол', rank: 1550 },
-    { id: 'team5', name: 'Разрушители', logoUrl: 'https://placehold.co/100x100.png', captainId: 'user3', members: ['user3'], game: 'Дворовый футбол', rank: 1600 },
-    { id: 'team6', name: 'Фортуна', logoUrl: 'https://placehold.co/100x100.png', captainId: 'user4', members: ['user4'], game: 'Дворовый футбол', rank: 1300 },
-    { id: 'team7', name: 'Красная Фурия', logoUrl: 'https://placehold.co/100x100.png', captainId: 'user1', members: ['user1'], game: 'Дворовый футбол', rank: 1700 },
-    { id: 'team8', name: 'Легион', logoUrl: 'https://placehold.co/100x100.png', captainId: 'user2', members: ['user2'], game: 'Дворовый футбол', rank: 1650 },
-];
 
 
 const statusColors: Record<string, string> = {
@@ -71,7 +38,7 @@ const statusColors: Record<string, string> = {
 
 const statusOptions = ['АНОНС', 'ПРЕДРЕГИСТРАЦИЯ', 'РЕГИСТРАЦИЯ', 'ИДЕТ', 'ЗАВЕРШЕН', 'ПРИОСТАНОВЛЕН', 'ОТМЕНЕН'];
 
-const StatCard = ({ title, value, icon: Icon }: { title: string, value: string | React.ReactNode, icon: LucideIcon }) => (
+const StatCard = ({ title, value }: { title: string, value: string | React.ReactNode }) => (
     <div className="p-4 bg-muted rounded-lg flex flex-col items-center justify-center text-center h-full">
         <p className="text-sm text-muted-foreground mb-2">{title}</p>
         <div className="text-2xl font-bold">{value}</div>
@@ -122,9 +89,9 @@ function OverviewTab({ tournament }: { tournament: (typeof allTournaments)[0] })
                                     </SelectContent>
                                 </Select>
                             </div>
-                            <StatCard title="Участники" value={`${tournament.participants}/${tournament.maxParticipants}`} icon={Users} />
-                            <StatCard title="Призовой фонд" value={<span className="text-primary">{tournament.prizePool}</span>} icon={Award} />
-                            <StatCard title="Дата начала" value={new Date(tournament.startDate).toLocaleDateString('ru-RU')} icon={Calendar} />
+                            <StatCard title="Участники" value={`${tournament.participants}/${tournament.maxParticipants}`} />
+                            <StatCard title="Призовой фонд" value={<span className="text-primary">{tournament.prizePool}</span>} />
+                            <StatCard title="Дата начала" value={new Date(tournament.startDate).toLocaleDateString('ru-RU')} />
                         </div>
                     </CardContent>
                 </Card>
@@ -362,7 +329,7 @@ function MediaTab() {
                                         {media.title}
                                     </div>
                                     <Button variant="destructive" size="icon" className="absolute top-2 right-2 h-7 w-7 opacity-0 group-hover:opacity-100 transition-opacity">
-                                        <XCircle className="h-4 w-4"/>
+                                        <Trash2 className="h-4 w-4"/>
                                     </Button>
                                 </div>
                             ))}
@@ -419,6 +386,38 @@ function SettingsTab({ tournament }: { tournament: (typeof allTournaments)[0] })
                         <Label htmlFor="name">Название турнира</Label>
                         <Input id="name" defaultValue={tournament.name} />
                     </div>
+                    <div>
+                         <Label>Ключевые даты</Label>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-2">
+                            <Popover>
+                                <PopoverTrigger asChild>
+                                <Button variant={"outline"} className={cn("w-full justify-start text-left font-normal", !true && "text-muted-foreground")}>
+                                    <CalendarIcon className="mr-2 h-4 w-4" />
+                                    <span>Начало регистрации</span>
+                                </Button>
+                                </PopoverTrigger>
+                                <PopoverContent className="w-auto p-0"><CalendarComponent mode="single" initialFocus /></PopoverContent>
+                            </Popover>
+                             <Popover>
+                                <PopoverTrigger asChild>
+                                <Button variant={"outline"} className={cn("w-full justify-start text-left font-normal", !true && "text-muted-foreground")}>
+                                    <CalendarIcon className="mr-2 h-4 w-4" />
+                                    <span>Конец регистрации</span>
+                                </Button>
+                                </PopoverTrigger>
+                                <PopoverContent className="w-auto p-0"><CalendarComponent mode="single" initialFocus /></PopoverContent>
+                            </Popover>
+                             <Popover>
+                                <PopoverTrigger asChild>
+                                <Button variant={"outline"} className={cn("w-full justify-start text-left font-normal", !true && "text-muted-foreground")}>
+                                    <CalendarIcon className="mr-2 h-4 w-4" />
+                                    <span>Начало турнира</span>
+                                </Button>
+                                </PopoverTrigger>
+                                <PopoverContent className="w-auto p-0"><CalendarComponent mode="single" initialFocus /></PopoverContent>
+                            </Popover>
+                        </div>
+                    </div>
                     <div className="space-y-2">
                         <Label htmlFor="prize">Призовой фонд</Label>
                         <Input id="prize" defaultValue={tournament.prizePool} />
@@ -426,6 +425,9 @@ function SettingsTab({ tournament }: { tournament: (typeof allTournaments)[0] })
                     <div className="space-y-2">
                         <Label htmlFor="rules">Правила</Label>
                         <Textarea id="rules" placeholder="Опишите основные правила и регламент турнира..." rows={10} defaultValue="1. Все матчи играются до 2 побед (Best of 3). 2. Опоздание на матч более чем на 15 минут карается техническим поражением. 3. Запрещено использование любого стороннего ПО."/>
+                    </div>
+                     <div className="flex justify-end pt-4">
+                        <Button type="submit" size="lg">Сохранить изменения</Button>
                     </div>
                 </CardContent>
             </Card>
