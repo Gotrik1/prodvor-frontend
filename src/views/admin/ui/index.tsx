@@ -97,8 +97,8 @@ export function AdminPage() {
                         </p>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <Card>
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <Card className="lg:col-span-2">
                             <CardHeader>
                                 <CardTitle>Шаблоны страниц</CardTitle>
                                 <CardDescription>
@@ -157,7 +157,7 @@ export function AdminPage() {
                                 </CardDescription>
                             </CardHeader>
                             <CardContent>
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div className="grid grid-cols-1 gap-6">
                                      <Link href="/admin/statistics">
                                         <Card className="cursor-pointer h-full hover:border-primary transition-colors hover:shadow-lg">
                                             <CardHeader className="flex flex-row items-center gap-4">
