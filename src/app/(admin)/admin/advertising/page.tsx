@@ -6,6 +6,6 @@ export const metadata: Metadata = {
     description: 'Управление рекламными кампаниями, аудиториями и анализ доходности.',
 };
 
-export default function AdminAdvertisingPage() {
+export default function Page() {
   return <AdvertisingPage />;
 }

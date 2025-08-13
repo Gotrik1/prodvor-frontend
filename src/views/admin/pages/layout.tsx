@@ -1,15 +1,78 @@
 'use client';
 
-// Этот layout предназначен для страниц администрирования.
-// Он не включает в себя сложный DashboardLayout, который видят пользователи.
+import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarProvider, SidebarInset } from "@/shared/ui/sidebar";
+import { BarChart, DollarSign, Home } from "lucide-react";
+import Link from "next/link";
+import Image from "next/image";
+import { DashboardHeader } from "@/widgets/dashboard-header";
+import { DashboardFooter } from "@/widgets/dashboard-footer";
+import { usePathname } from "next/navigation";
+
+const Logo = () => (
+    <div className="flex items-center gap-2 font-bold text-xl">
+        <Link href="/" className="flex items-center gap-2">
+            <Image src="https://prodvor.website/_next/image?url=%2Fimages%2Fyour-logo.png&w=64&q=75" alt="ProDvor Logo" width={40} height={40} className="object-contain" data-ai-hint="logo" />
+            <span className="font-headline text-sidebar-foreground">ProDvor</span>
+        </Link>
+    </div>
+);
+
 export function AdminLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
-  return (
-    <div className="bg-background min-h-screen text-foreground">
-      {children}
-    </div>
-  );
+    const pathname = usePathname();
+
+    return (
+        <SidebarProvider>
+            <Sidebar>
+                 <SidebarHeader>
+                    <Logo />
+                </SidebarHeader>
+                <SidebarContent>
+                    <SidebarMenu>
+                         <SidebarMenuItem>
+                            <Link href="/admin">
+                                <SidebarMenuButton isActive={pathname === '/admin'}>
+                                    <Home />
+                                    <span>Главная</span>
+                                </SidebarMenuButton>
+                            </Link>
+                        </SidebarMenuItem>
+                         <SidebarMenuItem>
+                            <Link href="/admin/statistics">
+                                <SidebarMenuButton isActive={pathname.startsWith('/admin/statistics')}>
+                                    <BarChart />
+                                    <span>Статистика</span>
+                                </SidebarMenuButton>
+                            </Link>
+                        </SidebarMenuItem>
+                         <SidebarMenuItem>
+                            <Link href="/admin/advertising">
+                                <SidebarMenuButton isActive={pathname.startsWith('/admin/advertising')}>
+                                    <DollarSign />
+                                    <span>Ad-CRM</span>
+                                </SidebarMenuButton>
+                            </Link>
+                        </SidebarMenuItem>
+                    </SidebarMenu>
+                </SidebarContent>
+                <SidebarFooter>
+                     <Link href="/dashboard" className="w-full">
+                        <Button variant="outline" className="w-full">
+                            Вернуться на платформу
+                        </Button>
+                    </Link>
+                </SidebarFooter>
+            </Sidebar>
+            <SidebarInset>
+                <DashboardHeader />
+                <main className="flex-1 bg-background/95 p-4 md:p-6 lg:p-8">
+                    {children}
+                </main>
+                <DashboardFooter />
+            </SidebarInset>
+        </SidebarProvider>
+    );
 }
