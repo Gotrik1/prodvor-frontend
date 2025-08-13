@@ -1,1 +1,2 @@
-export { LogoGeneratorWidget as LogoGenerator } from './ui/logo-generator-widget';
+
+export { LogoGeneratorWidget } from './ui/logo-generator-widget';

@@ -1,3 +1,4 @@
+
 import { teams, users } from "@/mocks";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { Badge } from "@/shared/ui/badge";
@@ -11,7 +12,7 @@ export function TeamPublicPage({ team }: { team: (typeof teams)[0] | undefined})
 
     if (!team) {
        return (
-            <div className="flex flex-col min-h-screen items-center justify-center">
+            <div className="flex flex-col min-h-[80vh] items-center justify-center">
                 <Card className="text-center max-w-md w-full">
                     <CardHeader>
                         <CardTitle>Ошибка 404</CardTitle>

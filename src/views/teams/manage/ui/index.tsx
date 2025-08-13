@@ -12,7 +12,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { Badge } from "@/shared/ui/badge";
 import { Input } from "@/shared/ui/input";
 import { Separator } from "@/shared/ui/separator";
-import { LogoGeneratorWidget } from "@/widgets/logo-generator/ui/logo-generator-widget";
+import { LogoGeneratorWidget } from "@/widgets/logo-generator";
 
 const mockApplications = users.slice(2, 4).map(u => ({ ...u, status: 'pending' }));
 

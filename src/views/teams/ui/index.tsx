@@ -1,3 +1,4 @@
+
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/shared/ui/card";
 import { Input } from "@/shared/ui/input";
@@ -6,6 +7,7 @@ import { BarChart, Search, UserPlus, Users } from "lucide-react";
 import Image from "next/image";
 import { teams, sportCategories } from "@/mocks";
 import { Badge } from "@/shared/ui/badge";
+import Link from "next/link";
 
 export function TeamsPage() {
     return (
@@ -55,12 +57,14 @@ export function TeamsPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                 {teams.map(team => (
                     <Card key={team.id} className="flex flex-col">
-                        <CardHeader className="flex-row items-center gap-4">
-                            <Image src={team.logoUrl} alt={`${team.name} logo`} width={64} height={64} className="rounded-lg border" data-ai-hint="team logo" />
-                            <div>
-                                <CardTitle className="text-xl">{team.name}</CardTitle>
-                                <CardDescription>{team.game}</CardDescription>
-                            </div>
+                        <CardHeader>
+                            <Link href={`/teams/${team.id}`} className="flex-row items-center gap-4">
+                                <Image src={team.logoUrl} alt={`${team.name} logo`} width={64} height={64} className="rounded-lg border" data-ai-hint="team logo" />
+                                <div>
+                                    <CardTitle className="text-xl hover:text-primary transition-colors">{team.name}</CardTitle>
+                                    <CardDescription>{team.game}</CardDescription>
+                                </div>
+                            </Link>
                         </CardHeader>
                         <CardContent className="flex-grow space-y-2">
                             <div className="flex items-center gap-2 text-sm text-muted-foreground">
