@@ -27,7 +27,7 @@ export function AudienceManager() {
     });
 
     const handleFilterChange = (key: keyof typeof filters, value: string | number[]) => {
-        setFilters(prev => ({ ...prev, [key]: value }));
+        setFilters(prev => ({ ...prev, [key]: value === 'all' ? '' : value }));
     };
     
     const filteredUsers = useMemo(() => {
@@ -68,7 +68,7 @@ export function AudienceManager() {
                             <Select onValueChange={(value) => handleFilterChange('discipline', value)}>
                                 <SelectTrigger><SelectValue placeholder="Любая" /></SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="">Любая</SelectItem>
+                                    <SelectItem value="all">Любая</SelectItem>
                                     {allDisciplines.slice(0,10).map(d => <SelectItem key={d} value={d}>{d}</SelectItem>)}
                                 </SelectContent>
                             </Select>
@@ -78,7 +78,7 @@ export function AudienceManager() {
                             <Select onValueChange={(value) => handleFilterChange('role', value)}>
                                 <SelectTrigger><SelectValue placeholder="Любая" /></SelectTrigger>
                                 <SelectContent>
-                                     <SelectItem value="">Любая</SelectItem>
+                                     <SelectItem value="all">Любая</SelectItem>
                                      {allRoles.map(r => <SelectItem key={r} value={r}>{r}</SelectItem>)}
                                 </SelectContent>
                             </Select>
@@ -88,7 +88,7 @@ export function AudienceManager() {
                              <Select onValueChange={(value) => handleFilterChange('city', value)}>
                                 <SelectTrigger><SelectValue placeholder="Любой" /></SelectTrigger>
                                 <SelectContent>
-                                     <SelectItem value="">Любой</SelectItem>
+                                     <SelectItem value="all">Любой</SelectItem>
                                      {allCities.map(c => <SelectItem key={c} value={c}>{c}</SelectItem>)}
                                 </SelectContent>
                             </Select>
