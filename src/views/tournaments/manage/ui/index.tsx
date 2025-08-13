@@ -1,3 +1,4 @@
+
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
 import { ArrowLeft, Users, Calendar, Megaphone, Settings, Bot, GanttChartIcon, CheckCircle, XCircle, Clock, Search, Shield, Award, PlusCircle, Send, UserPlus, Film, UploadCloud, Video } from "lucide-react";
@@ -20,9 +21,8 @@ const myTournaments = [
       game: 'Дворовый футбол',
       status: 'РЕГИСТРАЦИЯ' as const,
       prizePool: '100 000 руб.',
-      participants: 5,
+      participants: 8,
       maxParticipants: 16,
-      startDate: '2025-08-01',
       bannerUrl: 'https://placehold.co/1200x300.png',
       dataAiHint: 'soccer street'
     },
@@ -41,7 +41,16 @@ const myTournaments = [
 ];
 
 const allTournaments = [...tournaments, ...myTournaments];
-const registeredTeams = teams.slice(0, 5);
+const registeredTeams = [
+    ...teams,
+    { id: 'team3', name: 'Стальные Ястребы', logoUrl: 'https://placehold.co/100x100.png', captainId: 'user1', members: ['user1'], game: 'Дворовый футбол', rank: 1450 },
+    { id: 'team4', name: 'Бетонные Тигры', logoUrl: 'https://placehold.co/100x100.png', captainId: 'user2', members: ['user2'], game: 'Дворовый футбол', rank: 1550 },
+    { id: 'team5', name: 'Разрушители', logoUrl: 'https://placehold.co/100x100.png', captainId: 'user3', members: ['user3'], game: 'Дворовый футбол', rank: 1600 },
+    { id: 'team6', name: 'Фортуна', logoUrl: 'https://placehold.co/100x100.png', captainId: 'user4', members: ['user4'], game: 'Дворовый футбол', rank: 1300 },
+    { id: 'team7', name: 'Красная Фурия', logoUrl: 'https://placehold.co/100x100.png', captainId: 'user1', members: ['user1'], game: 'Дворовый футбол', rank: 1700 },
+    { id: 'team8', name: 'Легион', logoUrl: 'https://placehold.co/100x100.png', captainId: 'user2', members: ['user2'], game: 'Дворовый футбол', rank: 1650 },
+];
+
 
 const statusColors = {
     'РЕГИСТРАЦИЯ': 'bg-blue-500/20 text-blue-300 border-blue-500/30',
@@ -84,7 +93,7 @@ function OverviewTab({ tournament }: { tournament: (typeof allTournaments)[0] })
                       <Button variant="ghost" size="sm">Обновить</Button>
                     </CardHeader>
                     <CardContent>
-                      <p className="text-muted-foreground">До конца регистрации осталось 3 дня. Рекомендуем сделать анонс, чтобы привлечь больше команд. На данный момент заполнено 31% слотов. Прогнозируемое количество участников: 10 из 16.</p>
+                      <p className="text-muted-foreground">До конца регистрации осталось 3 дня. Рекомендуем сделать анонс, чтобы привлечь больше команд. На данный момент заполнено {Math.round((tournament.participants/tournament.maxParticipants)*100)}% слотов. Прогнозируемое количество участников: 10 из 16.</p>
                     </CardContent>
                  </Card>
             </CardContent>
@@ -115,7 +124,7 @@ function ParticipantsTab() {
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                           {registeredTeams.map((team, index) => (
+                           {registeredTeams.slice(0, 8).map((team, index) => (
                                 <TableRow key={team.id}>
                                     <TableCell className="font-medium">
                                         <div className="flex items-center gap-3">
@@ -128,13 +137,13 @@ function ParticipantsTab() {
                                     </TableCell>
                                     <TableCell>{new Date(Date.now() - index * 86400000).toLocaleDateString('ru-RU')}</TableCell>
                                     <TableCell>
-                                        <Badge variant={index < 3 ? "secondary" : "default"} className={index >= 3 ? "bg-amber-500/20 text-amber-300 border-amber-500/30" : ""}>
-                                            {index < 3 ? <CheckCircle className="mr-1 h-3 w-3"/> : <Clock className="mr-1 h-3 w-3"/>}
-                                            {index < 3 ? 'Подтверждена' : 'Ожидает'}
+                                        <Badge variant={index < 5 ? "secondary" : "default"} className={index >= 5 ? "bg-amber-500/20 text-amber-300 border-amber-500/30" : ""}>
+                                            {index < 5 ? <CheckCircle className="mr-1 h-3 w-3"/> : <Clock className="mr-1 h-3 w-3"/>}
+                                            {index < 5 ? 'Подтверждена' : 'Ожидает'}
                                         </Badge>
                                     </TableCell>
                                     <TableCell className="text-right">
-                                        {index < 3 ? (
+                                        {index < 5 ? (
                                              <Button variant="destructive" size="sm"><XCircle className="mr-2 h-4 w-4"/>Отозвать</Button>
                                         ) : (
                                             <div className="flex gap-2 justify-end">
@@ -154,22 +163,74 @@ function ParticipantsTab() {
 }
 
 function BracketTab() {
+    // Pair teams for the first round
+    const matches = [];
+    const teamsCopy = [...registeredTeams];
+    for (let i = 0; i < teamsCopy.length; i += 2) {
+        if (teamsCopy[i + 1]) {
+            matches.push([teamsCopy[i], teamsCopy[i + 1]]);
+        }
+    }
+
     return (
         <Card>
             <CardHeader>
                 <CardTitle>Турнирная сетка</CardTitle>
-                <CardDescription>Визуальное представление плей-офф стадии.</CardDescription>
+                <CardDescription>Вводите результаты матчей для автоматического обновления сетки.</CardDescription>
             </CardHeader>
-            <CardContent className="min-h-[50vh] flex items-center justify-center bg-muted/30 rounded-lg">
-                <div className="text-center">
-                    <GanttChartIcon className="mx-auto h-12 w-12 text-muted-foreground" />
-                    <h3 className="mt-4 text-lg font-semibold">Турнирная сетка еще не сгенерирована</h3>
-                    <p className="mt-1 text-sm text-muted-foreground">Сетка будет создана автоматически после окончания регистрации.</p>
+            <CardContent className="space-y-8">
+                <div>
+                    <h3 className="text-lg font-semibold mb-4 text-center text-muted-foreground">1-й Раунд</h3>
+                    <div className="space-y-4 max-w-2xl mx-auto">
+                        {matches.map(([team1, team2], index) => (
+                            <Card key={index} className="bg-muted/50">
+                                <CardContent className="flex items-center justify-between p-4">
+                                    {/* Team 1 */}
+                                    <div className="flex items-center gap-3 w-2/5">
+                                        <Avatar>
+                                            <AvatarImage src={team1.logoUrl} alt={team1.name} />
+                                            <AvatarFallback>{team1.name.slice(0, 2)}</AvatarFallback>
+                                        </Avatar>
+                                        <span className="font-medium truncate">{team1.name}</span>
+                                    </div>
+
+                                    {/* Score Input */}
+                                    <div className="flex items-center gap-2">
+                                        <Input type="number" className="w-12 h-8 text-center" />
+                                        <span className="text-muted-foreground font-bold">VS</span>
+                                        <Input type="number" className="w-12 h-8 text-center" />
+                                    </div>
+
+                                    {/* Team 2 */}
+                                    <div className="flex items-center gap-3 w-2/5 justify-end">
+                                        <span className="font-medium truncate text-right">{team2.name}</span>
+                                        <Avatar>
+                                            <AvatarImage src={team2.logoUrl} alt={team2.name} />
+                                            <AvatarFallback>{team2.name.slice(0, 2)}</AvatarFallback>
+                                        </Avatar>
+                                    </div>
+                                </CardContent>
+                                <div className="px-4 pb-2 text-center">
+                                     <Button size="sm" variant="secondary">Сохранить результат</Button>
+                                </div>
+                            </Card>
+                        ))}
+                    </div>
+                </div>
+
+                {/* Placeholder for subsequent rounds */}
+                <div className="flex items-center justify-center bg-muted/30 rounded-lg p-8 border-dashed border-2">
+                    <div className="text-center">
+                        <GanttChartIcon className="mx-auto h-12 w-12 text-muted-foreground" />
+                        <h3 className="mt-4 text-lg font-semibold">Следующие раунды</h3>
+                        <p className="mt-1 text-sm text-muted-foreground">Победители появятся здесь после завершения всех матчей 1-го раунда.</p>
+                    </div>
                 </div>
             </CardContent>
         </Card>
     );
 }
+
 
 function ScheduleTab() {
     return (
