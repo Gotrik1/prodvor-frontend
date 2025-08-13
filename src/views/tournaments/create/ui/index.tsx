@@ -1,7 +1,11 @@
 import { Button } from "@/shared/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
-import { ArrowLeft, Construction } from "lucide-react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
+import { ArrowLeft, Bot, HardDrive } from "lucide-react";
 import Link from "next/link";
+import { CreateTournamentForm } from "./create-tournament-form";
+import { AiAssistantForm } from "./ai-assistant-form";
+
 
 export function CreateTournamentPage() {
     return (
@@ -17,20 +21,27 @@ export function CreateTournamentPage() {
                     <h1 className="text-lg font-semibold">Создание нового турнира</h1>
                 </div>
             </header>
-            <main className="flex-1 flex items-center justify-center p-4">
-                <Card className="text-center max-w-lg w-full">
-                    <CardHeader>
-                        <div className="mx-auto bg-primary/10 text-primary p-4 rounded-full w-fit">
-                        <Construction className="h-12 w-12" />
-                        </div>
-                        <CardTitle className="mt-4 text-2xl font-headline">Раздел в разработке</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        <p className="text-muted-foreground">
-                            Интерфейс для создания и настройки турнира появится здесь в ближайшее время.
-                        </p>
-                    </CardContent>
-                </Card>
+            <main className="flex-1 p-4 md:p-6 lg:p-8">
+                <div className="container mx-auto max-w-4xl">
+                    <Tabs defaultValue="manual">
+                        <TabsList className="grid w-full grid-cols-2">
+                            <TabsTrigger value="ai">
+                                <Bot className="mr-2 h-4 w-4"/>
+                                AI-Мастер
+                            </TabsTrigger>
+                            <TabsTrigger value="manual">
+                                <HardDrive className="mr-2 h-4 w-4"/>
+                                Ручной режим
+                            </TabsTrigger>
+                        </TabsList>
+                        <TabsContent value="ai">
+                           <AiAssistantForm />
+                        </TabsContent>
+                        <TabsContent value="manual">
+                            <CreateTournamentForm />
+                        </TabsContent>
+                    </Tabs>
+                </div>
             </main>
         </div>
     );
