@@ -180,7 +180,9 @@ export function AuthPage() {
             </div>
 
             <div className="space-y-2">
-                <Button variant="outline" className="w-full font-bold">Создать аккаунт</Button>
+                <Button asChild variant="outline" className="w-full font-bold">
+                  <Link href="/auth/register">Создать аккаунт</Link>
+                </Button>
                 <div className="grid grid-cols-4 gap-2">
                     <SocialButton>
                         <YandexIcon className="h-8 w-8" />
