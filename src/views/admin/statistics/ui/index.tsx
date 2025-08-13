@@ -1,3 +1,6 @@
+
+'use client';
+
 import { users, teams, sponsors } from '@/mocks';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import { Badge } from '@/shared/ui/badge';
