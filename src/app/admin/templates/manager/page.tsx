@@ -1,4 +1,4 @@
-import { PlaceholderTemplate } from '@/views/admin/ui/templates/placeholder-template';
+import { ManagerPageTemplate } from '@/views/admin/ui/templates/manager-page-template';
 import type { Metadata } from 'next';
 import { Button } from '@/shared/ui/button';
 import Link from 'next/link';
@@ -25,7 +25,7 @@ export default function ManagerTemplatePage() {
         </header>
         <main className="p-4 md:p-6 lg:p-8">
             <div className="container mx-auto">
-                <PlaceholderTemplate roleName="Менеджер" />
+                <ManagerPageTemplate />
             </div>
         </main>
     </div>

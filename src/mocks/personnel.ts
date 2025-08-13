@@ -2,14 +2,15 @@ export interface Staff {
     id: string;
     name: string;
     avatarUrl: string;
-    role: 'Судья' | 'Организатор';
+    role: 'Судья' | 'Организатор' | 'Менеджер' | 'Тренер';
     status: 'Приглашен' | 'Принято';
 }
 
 export const staff: Staff[] = [
     { id: 'staff1', name: 'Игорь Вольнов', avatarUrl: 'https://i.pravatar.cc/150?u=staff1', role: 'Судья', status: 'Принято' },
     { id: 'staff2', name: 'Елена Павлова', avatarUrl: 'https://i.pravatar.cc/150?u=staff2', role: 'Судья', status: 'Принято' },
-    { id: 'staff3', name: 'Олег Тихонов', avatarUrl: 'https://i.pravatar.cc/150?u=staff3', role: 'Организатор', status: 'Приглашен' },
+    { id: 'staff3', name: 'Федерация Спорта', avatarUrl: 'https://placehold.co/150x150.png', role: 'Организатор', status: 'Приглашен' },
+    { id: 'staff4', name: 'Александр Громов', avatarUrl: 'https://i.pravatar.cc/150?u=staff4', role: 'Менеджер', status: 'Принято' },
 ];
 
 export interface Sponsor {

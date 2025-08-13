@@ -6,6 +6,8 @@ import { staff } from '@/mocks/personnel';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
 import { PlaceholderTemplate } from '@/views/admin/ui/templates/placeholder-template';
 import { RefereePageTemplate } from '@/views/admin/ui/templates/referee-page-template';
+import { CoachPageTemplate } from '@/views/admin/ui/templates/coach-page-template';
+import { ManagerPageTemplate } from '@/views/admin/ui/templates/manager-page-template';
 
 export async function generateMetadata({ params }: { params: { userId: string } }): Promise<Metadata> {
   const user = staff.find(s => s.id === params.userId);
@@ -43,6 +45,10 @@ export default function UserPage({ params }: { params: { userId: string } }) {
     switch (user.role) {
         case 'Судья':
             return <RefereePageTemplate user={user} />;
+        case 'Тренер':
+            return <CoachPageTemplate user={user} />;
+        case 'Менеджер':
+            return <ManagerPageTemplate user={user} />;
         case 'Организатор':
             return <PlaceholderTemplate roleName={user.role} />;
         default:
