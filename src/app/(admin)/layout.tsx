@@ -1,9 +1,8 @@
-
+// This layout is now deprecated. The logic has been moved to /src/views/admin/pages/layout.tsx
+// It is kept to avoid breaking other routes in (admin) group like /users and /sponsors.
 'use client';
 
-// Этот layout предназначен для страниц администрирования.
-// Он не включает в себя сложный DashboardLayout, который видят пользователи.
-export default function AdminLayout({
+export default function DeprecatedAdminLayout({
   children,
 }: {
   children: React.ReactNode
