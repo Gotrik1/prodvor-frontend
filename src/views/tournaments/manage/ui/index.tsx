@@ -800,15 +800,17 @@ function StaffTab() {
                 <CardContent>
                     <ul className="space-y-3">
                         {initialStaff.filter(s => s.role === 'Судья').map(person => (
-                            <li key={person.id} className="flex items-center justify-between">
-                                <div className="flex items-center gap-3">
-                                    <Avatar>
-                                        <AvatarImage src={person.avatarUrl} />
-                                        <AvatarFallback>{person.name.charAt(0)}</AvatarFallback>
-                                    </Avatar>
-                                    <span>{person.name}</span>
-                                </div>
-                                <Badge variant={person.status === 'Принято' ? 'secondary' : 'default'}>{person.status}</Badge>
+                            <li key={person.id}>
+                                <Link href={`/users/${person.id}`} className="flex items-center justify-between p-2 rounded-md hover:bg-muted/50 transition-colors">
+                                    <div className="flex items-center gap-3">
+                                        <Avatar>
+                                            <AvatarImage src={person.avatarUrl} />
+                                            <AvatarFallback>{person.name.charAt(0)}</AvatarFallback>
+                                        </Avatar>
+                                        <span>{person.name}</span>
+                                    </div>
+                                    <Badge variant={person.status === 'Принято' ? 'secondary' : 'default'}>{person.status}</Badge>
+                                </Link>
                             </li>
                         ))}
                     </ul>
@@ -838,7 +840,7 @@ function StaffTab() {
                 <CardContent>
                      <ul className="space-y-3">
                         {initialStaff.filter(s => s.role === 'Организатор').map(person => (
-                            <li key={person.id} className="flex items-center justify-between">
+                            <li key={person.id} className="flex items-center justify-between p-2 rounded-md">
                                 <div className="flex items-center gap-3">
                                     <Avatar>
                                         <AvatarImage src={person.avatarUrl} />
@@ -1016,7 +1018,7 @@ export function TournamentManagementPage({ tournamentId }: { tournamentId: strin
             </header>
             <main className="flex-1 p-4 md:p-6 lg:p-8">
                 <div className="container mx-auto">
-                    <Tabs defaultValue="overview" className="w-full">
+                    <Tabs defaultValue="staff" className="w-full">
                          <TabsList className="grid w-full grid-cols-5 md:grid-cols-10 mb-4">
                             {crmTabs.map(tab => (
                                 <TabsTrigger key={tab.value} value={tab.value}>

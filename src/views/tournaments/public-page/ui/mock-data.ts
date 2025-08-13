@@ -136,9 +136,9 @@ export const registeredTeams: Team[] = [
 ];
 
 export const staff = [
-    { id: 'staff1', name: 'Игорь Вольнов', avatarUrl: 'https://i.pravatar.cc/150?u=staff1', role: 'Судья' as const, status: 'Принято' as const },
-    { id: 'staff2', name: 'Елена Павлова', avatarUrl: 'https://i.pravatar.cc/150?u=staff2', role: 'Судья' as const, status: 'Принято' as const },
-    { id: 'staff3', name: 'Олег Тихонов', avatarUrl: 'https://i.pravatar.cc/150?u=staff3', role: 'Организатор' as const, status: 'Приглашен' as const },
+    { id: 'staff1', name: 'Игорь Вольнов', avatarUrl: 'https://i.pravatar.cc/150?u=staff2', role: 'Судья' as const, status: 'Принято' as const },
+    { id: 'staff2', name: 'Елена Павлова', avatarUrl: 'https://i.pravatar.cc/150?u=staff1', role: 'Судья' as const, status: 'Принято' as const },
+    { id: 'staff3', name: 'Федерация Спорта', avatarUrl: 'https://placehold.co/150x150.png', role: 'Организатор' as const, status: 'Приглашен' as const },
 ];
 
 export const sponsors = [
