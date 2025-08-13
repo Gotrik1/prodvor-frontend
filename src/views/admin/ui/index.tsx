@@ -2,7 +2,7 @@ import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
 import Link from "next/link";
 import type { LucideIcon } from "lucide-react";
-import { User, Users, ClipboardList, Gavel, Briefcase, Shield, Megaphone, Handshake, Star } from "lucide-react";
+import { User, Users, ClipboardList, Gavel, Briefcase, Shield, Megaphone, Handshake, Star, PlusCircle, GanttChart } from "lucide-react";
 
 const roles = [
     {
@@ -116,6 +116,35 @@ export function AdminPage() {
                                 {roles.map((role) => (
                                     <TemplateCardLink key={role.name} {...role} />
                                 ))}
+
+                                <Link href="/tournaments/create">
+                                    <Card className="cursor-pointer h-full hover:border-primary transition-colors hover:shadow-lg">
+                                        <CardHeader className="flex flex-row items-center gap-4">
+                                            <div className="p-3 rounded-md bg-primary/10 text-primary">
+                                                <PlusCircle className="w-6 h-6" />
+                                            </div>
+                                            <CardTitle>Создание турнира</CardTitle>
+                                        </CardHeader>
+                                        <CardContent>
+                                            <p className="text-sm text-muted-foreground">Страница с формой для создания нового турнира.</p>
+                                        </CardContent>
+                                    </Card>
+                                </Link>
+
+                                 <Link href="/tournaments/mytourney1/manage">
+                                    <Card className="cursor-pointer h-full hover:border-primary transition-colors hover:shadow-lg">
+                                        <CardHeader className="flex flex-row items-center gap-4">
+                                            <div className="p-3 rounded-md bg-primary/10 text-primary">
+                                                <GanttChart className="w-6 h-6" />
+                                            </div>
+                                            <CardTitle>Управление турниром</CardTitle>
+                                        </CardHeader>
+                                        <CardContent>
+                                            <p className="text-sm text-muted-foreground">Страница CRM для управления существующим турниром.</p>
+                                        </CardContent>
+                                    </Card>
+                                </Link>
+
                             </div>
                         </CardContent>
                     </Card>
