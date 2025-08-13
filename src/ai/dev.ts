@@ -1,4 +1,5 @@
 import { config } from 'dotenv';
 config();
 
-import '@/ai/flows/generate-team-logo-variations.ts';
+// DEPRECATED: This file is deprecated and will be removed in a future version.
+// Please use src/shared/api/dev.ts instead.

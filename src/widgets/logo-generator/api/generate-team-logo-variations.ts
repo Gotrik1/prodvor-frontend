@@ -1,10 +1,13 @@
 'use server';
 /**
- * @fileOverview DEPRECATED - This file is deprecated.
- * Please use src/widgets/logo-generator/api/generate-team-logo-variations.ts instead.
+ * @fileOverview Generates variations of a team logo using AI image generation.
+ *
+ * - generateTeamLogoVariations - A function that generates logo variations.
+ * - GenerateTeamLogoVariationsInput - The input type for the generateTeamLogoVariations function.
+ * - GenerateTeamLogoVariationsOutput - The return type for the generateTeamLogoVariations function.
  */
 
-import {ai} from '@/ai/genkit';
+import {ai} from '@/shared/api/genkit';
 import {z} from 'genkit';
 
 const GenerateTeamLogoVariationsInputSchema = z.object({
