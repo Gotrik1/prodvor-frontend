@@ -3,7 +3,7 @@
 
 import { generateTeamLogoVariations } from "@/shared/api/generate-team-logo-variations";
 import { generateNewsDigest } from "@/shared/api/generate-news-digest";
-import { sendTournamentAnnouncement } from "@/shared/api/send-tournament-announcement";
+import { sendTournamentAnnouncement, SendTournamentAnnouncementInput } from "@/shared/api/send-tournament-announcement";
 // import { generateTournamentPromo } from "@/shared/api/generate-tournament-promo";
 
 
@@ -18,7 +18,7 @@ export async function generateNewsDigestAction() {
 }
 
 
-export async function sendTournamentAnnouncementAction(input: any) {
+export async function sendTournamentAnnouncementAction(input: SendTournamentAnnouncementInput) {
     return await sendTournamentAnnouncement(input);
 }
 

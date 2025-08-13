@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import { Button } from "@/shared/ui/button";
@@ -29,7 +28,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/shared/ui/form";
-import { sendTournamentAnnouncementAction, generateTournamentPromoAction } from "@/app/actions";
+import { sendTournamentAnnouncementAction } from "@/app/actions";
 import { useToast } from "@/shared/hooks/use-toast";
 
 const SendTournamentAnnouncementInputSchema = z.object({
@@ -42,7 +41,7 @@ const SendTournamentAnnouncementInputSchema = z.object({
 const statusColors: Record<string, string> = {
     'АНОНС': 'bg-purple-500/20 text-purple-300 border-purple-500/30',
     'ПРЕДРЕГИСТРАЦИЯ': 'bg-cyan-500/20 text-cyan-300 border-cyan-500/30',
-    'РЕГИСТРАЦИЯ': 'bg-blue-500/20 text-blue-300 border-blue-500/30',
+    'РЕГИСТРАЦИЯ': 'bg-blue-500/20 text-blue-300 border-blue-300/30',
     'ИДЕТ': 'bg-green-500/20 text-green-300 border-green-500/30',
     'ЗАВЕРШЕН': 'bg-muted text-muted-foreground border-border',
     'ПРИОСТАНОВЛЕН': 'bg-amber-500/20 text-amber-300 border-amber-500/30',
@@ -1021,7 +1020,7 @@ export function TournamentManagementPage({ tournamentId }: { tournamentId: strin
             </header>
             <main className="flex-1 p-4 md:p-6 lg:p-8">
                 <div className="container mx-auto">
-                    <Tabs defaultValue="staff" className="w-full">
+                    <Tabs defaultValue="announcements" className="w-full">
                          <TabsList className="grid w-full grid-cols-5 md:grid-cols-10 mb-4">
                             {crmTabs.map(tab => (
                                 <TabsTrigger key={tab.value} value={tab.value}>
