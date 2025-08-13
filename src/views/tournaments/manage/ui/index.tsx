@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { Button } from "@/shared/ui/button";
@@ -52,12 +53,20 @@ const StatCard = ({ title, value }: { title: string, value: string | React.React
 );
 
 
-function OverviewTab({ tournament, onStatusChange }: { tournament: Tournament, onStatusChange: (status: Tournament['status']) => void }) {
+function OverviewTab({ tournament, onStatusChange, confirmedCount }: { tournament: Tournament, onStatusChange: (status: Tournament['status']) => void, confirmedCount: number }) {
     
     const getAiAdvice = () => {
+        const registrationProgress = Math.round((confirmedCount / tournament.maxParticipants) * 100);
+
         switch(tournament.status) {
             case 'РЕГИСТРАЦИЯ':
-                return `До конца регистрации осталось 3 дня. Рекомендуем сделать анонс, чтобы привлечь больше команд. На данный момент заполнено ${Math.round((tournament.participants/tournament.maxParticipants)*100)}% слотов. Прогнозируемое количество участников: 10 из 16.`;
+                if (registrationProgress < 50) {
+                    return `Регистрация идет не очень активно. Заполнено всего ${registrationProgress}% слотов. Рекомендуем сделать анонс, чтобы привлечь больше команд.`;
+                }
+                if (registrationProgress >= 90) {
+                     return `Отличная работа! Заполнено ${registrationProgress}% слотов. Скоро полный комплект! Можно сделать финальный анонс о последних местах.`;
+                }
+                return `До конца регистрации осталось 3 дня. На данный момент заполнено ${registrationProgress}% слотов. Прогнозируемое количество участников: ${Math.round(confirmedCount * 1.2)} из ${tournament.maxParticipants}.`;
             case 'ИДЕТ':
                 return `Турнир в активной фазе! Не забывайте своевременно вносить результаты матчей. Совет: опубликуйте фото самых ярких моментов в медиа-центре для повышения вовлеченности.`;
             case 'ЗАВЕРШЕН':
@@ -94,7 +103,7 @@ function OverviewTab({ tournament, onStatusChange }: { tournament: Tournament, o
                                     </SelectContent>
                                 </Select>
                             </div>
-                            <StatCard title="Участники" value={`${tournament.participants}/${tournament.maxParticipants}`} />
+                            <StatCard title="Участники" value={`${confirmedCount}/${tournament.maxParticipants}`} />
                             <StatCard title="Призовой фонд" value={<span className="text-primary">{tournament.prizePool}</span>} />
                             <StatCard title="Дата начала" value={new Date(tournament.startDate).toLocaleDateString('ru-RU')} />
                         </div>
@@ -576,7 +585,9 @@ function AnnouncementsTab({ tournamentId }: { tournamentId: string }) {
 }
 
 function SettingsTab({ tournament, onTournamentChange }: { tournament: Tournament, onTournamentChange: (data: Partial<Tournament>) => void }) {
+    const { toast } = useToast();
     const [selectedRequirements, setSelectedRequirements] = useState<string[]>([]);
+    const [isSaving, setIsSaving] = useState(false);
     
     const handleRequirementChange = (reqId: string, checked: boolean) => {
         setSelectedRequirements(prev =>
@@ -586,6 +597,18 @@ function SettingsTab({ tournament, onTournamentChange }: { tournament: Tournamen
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         onTournamentChange({ [e.target.id]: e.target.value });
+    };
+
+    const handleSave = () => {
+        setIsSaving(true);
+        // Simulate API call
+        setTimeout(() => {
+            setIsSaving(false);
+            toast({
+                title: "Настройки сохранены",
+                description: "Все изменения были успешно применены.",
+            });
+        }, 1500);
     };
 
     return (
@@ -641,7 +664,19 @@ function SettingsTab({ tournament, onTournamentChange }: { tournament: Tournamen
                         <Textarea id="rules" placeholder="Опишите основные правила и регламент турнира..." rows={10} defaultValue="1. Все матчи играются до 2 побед (Best of 3). 2. Опоздание на матч более чем на 15 минут карается техническим поражением. 3. Запрещено использование любого стороннего ПО."/>
                     </div>
                      <div className="flex justify-end pt-4">
-                        <Button type="submit" size="lg">Сохранить изменения</Button>
+                        <Button type="submit" size="lg" onClick={handleSave} disabled={isSaving}>
+                             {isSaving ? (
+                                <>
+                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                    Сохранение...
+                                </>
+                            ) : (
+                                <>
+                                    <Save className="mr-2 h-4 w-4" />
+                                    Сохранить изменения
+                                </>
+                            )}
+                        </Button>
                     </div>
                 </CardContent>
             </Card>
@@ -669,10 +704,29 @@ function SettingsTab({ tournament, onTournamentChange }: { tournament: Tournamen
                 </Card>
                 <Card>
                     <CardHeader>
-                        <CardTitle>Опасная зона</CardTitle>
+                        <CardTitle className="flex items-center gap-2 text-destructive">
+                            <AlertTriangle className="h-5 w-5" />
+                            Опасная зона
+                        </CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-4">
-                         <Button variant="destructive" className="w-full">Отменить турнир</Button>
+                        <Dialog>
+                            <DialogTrigger asChild>
+                                <Button variant="destructive" className="w-full">Отменить турнир</Button>
+                            </DialogTrigger>
+                            <DialogContent>
+                                <DialogHeader>
+                                    <DialogTitle>Вы уверены, что хотите отменить турнир?</DialogTitle>
+                                    <DialogDescription>
+                                        Это действие необратимо. Все данные о турнире, включая регистрации, будут удалены. Введите название турнира, чтобы подтвердить.
+                                    </DialogDescription>
+                                </DialogHeader>
+                                <Input placeholder={tournament.name} className="my-4"/>
+                                <DialogFooter>
+                                    <Button variant="destructive">Я понимаю, отменить турнир</Button>
+                                </DialogFooter>
+                            </DialogContent>
+                        </Dialog>
                          <p className="text-xs text-muted-foreground">Это действие необратимо. Все данные о турнире, включая регистрации, будут удалены.</p>
                     </CardContent>
                 </Card>
@@ -922,7 +976,7 @@ export function TournamentManagementPage({ tournamentId }: { tournamentId: strin
                             ))}
                         </TabsList>
                         <TabsContent value="overview">
-                           <OverviewTab tournament={tournament} onStatusChange={(status) => handleTournamentChange({ status })} />
+                           <OverviewTab tournament={tournament} onStatusChange={(status) => handleTournamentChange({ status })} confirmedCount={confirmedTeams.length} />
                         </TabsContent>
                         <TabsContent value="participants">
                            <ParticipantsTab teams={teams} setTeams={setTeams} />
