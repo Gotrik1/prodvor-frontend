@@ -146,7 +146,7 @@ export function TournamentsPage() {
                                     </CardContent>
                                     <CardFooter>
                                         <Button className="w-full" asChild>
-                                        <Link href="#">Подробнее</Link>
+                                        <Link href="#">Подать заявку</Link>
                                         </Button>
                                     </CardFooter>
                                 </Card>
