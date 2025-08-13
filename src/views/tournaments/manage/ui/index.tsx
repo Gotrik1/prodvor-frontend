@@ -840,15 +840,17 @@ function StaffTab() {
                 <CardContent>
                      <ul className="space-y-3">
                         {initialStaff.filter(s => s.role === 'Организатор').map(person => (
-                            <li key={person.id} className="flex items-center justify-between p-2 rounded-md">
-                                <div className="flex items-center gap-3">
-                                    <Avatar>
-                                        <AvatarImage src={person.avatarUrl} />
-                                        <AvatarFallback>{person.name.charAt(0)}</AvatarFallback>
-                                    </Avatar>
-                                    <span>{person.name}</span>
-                                </div>
-                                <Badge variant={person.status === 'Принято' ? 'secondary' : 'default'}>{person.status}</Badge>
+                             <li key={person.id}>
+                                <Link href={`/users/${person.id}`} className="flex items-center justify-between p-2 rounded-md hover:bg-muted/50 transition-colors">
+                                    <div className="flex items-center gap-3">
+                                        <Avatar>
+                                            <AvatarImage src={person.avatarUrl} />
+                                            <AvatarFallback>{person.name.charAt(0)}</AvatarFallback>
+                                        </Avatar>
+                                        <span>{person.name}</span>
+                                    </div>
+                                    <Badge variant={person.status === 'Принято' ? 'secondary' : 'default'}>{person.status}</Badge>
+                                </Link>
                             </li>
                         ))}
                     </ul>
