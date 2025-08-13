@@ -22,12 +22,13 @@ export function Logo(
 ) {
   return (
     <Image
-      src="https://prodvor.website/_next/image?url=%2Fimages%2Fyour-logo.png&w=64&q=75"
+      src="/images/your-logo.png"
       alt="ProDvor Logo"
       width={40}
       height={40}
       {...props}
       className="object-contain"
+      data-ai-hint="logo"
     />
   );
 }
@@ -171,10 +172,6 @@ export function AuthPage() {
             </Tabs>
             
             <div className="space-y-4 mt-6">
-                <Button asChild variant="outline" className="w-full font-bold">
-                  <Link href="/auth/register">Создать аккаунт</Link>
-                </Button>
-
                 <div className="relative">
                     <div className="absolute inset-0 flex items-center">
                         <span className="w-full border-t" />
@@ -198,6 +195,10 @@ export function AuthPage() {
                         <GosuslugiIcon className="w-24 h-auto" />
                     </SocialButton>
                 </div>
+
+                <Button asChild variant="outline" className="w-full font-bold">
+                  <Link href="/auth/register">Создать аккаунт</Link>
+                </Button>
 
                 <Button variant="outline" className="w-full" asChild>
                   <Link href="/">Вернуться на главную</Link>
