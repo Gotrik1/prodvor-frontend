@@ -7,7 +7,8 @@ import { LogoGeneratorWidget } from '@/widgets/logo-generator/ui/logo-generator-
 
 const Logo = () => (
     <Image 
-      src="/logo.png"
+      src="https://placehold.co/40x40.png"
+      data-ai-hint="logo"
       alt="ProDvor Logo" 
       width={40} 
       height={40} 
