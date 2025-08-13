@@ -1,5 +1,3 @@
-
-
 import type { SVGProps } from 'react';
 import { Button } from "@/shared/ui/button";
 import {
@@ -141,7 +139,7 @@ export function AuthPage() {
                             <Input id="phone" type="tel" placeholder="+7 (___) ___-__-__" required />
                         </div>
                         <Button asChild type="submit" className="w-full">
-                            <Link href="/">Продолжить</Link>
+                            <Link href="/dashboard">Продолжить</Link>
                         </Button>
                     </div>
                 </TabsContent>
@@ -166,7 +164,7 @@ export function AuthPage() {
                             </a>
                         </div>
                         <Button asChild type="submit" className="w-full">
-                           <Link href="/">Продолжить</Link>
+                           <Link href="/dashboard">Продолжить</Link>
                         </Button>
                     </div>
                 </TabsContent>
@@ -194,7 +192,7 @@ export function AuthPage() {
                         <TelegramIcon className="h-8 w-8" />
                     </SocialButton>
                     <SocialButton>
-                        <GosuslugiIcon className="h-auto w-24" />
+                        <GosuslugiIcon className="w-24 h-auto" />
                     </SocialButton>
                 </div>
             </div>
