@@ -179,13 +179,13 @@ export function AuthPage() {
                 <Button variant="outline" className="w-full font-bold">Создать аккаунт</Button>
                 <div className="grid grid-cols-4 gap-2">
                     <SocialButton>
-                        <YandexIcon className="h-10 w-10" />
+                        <YandexIcon className="h-8 w-8" />
                     </SocialButton>
                     <SocialButton>
-                        <VkIcon className="h-10 w-10" />
+                        <VkIcon className="h-8 w-8" />
                     </SocialButton>
                     <SocialButton>
-                        <TelegramIcon className="h-10 w-10" />
+                        <TelegramIcon className="h-8 w-8" />
                     </SocialButton>
                     <SocialButton>
                         <GosuslugiIcon className="h-auto w-24" />
@@ -197,3 +197,5 @@ export function AuthPage() {
     </div>
   );
 }
+
+    
