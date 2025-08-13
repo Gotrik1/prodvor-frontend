@@ -26,15 +26,15 @@ const prompt = ai.definePrompt({
     output: {schema: GenerateNewsDigestOutputSchema},
     prompt: `You are a sports news analyst for a platform called ProDvor, which is dedicated to amateur and backyard sports.
 
-    Generate a short, engaging news digest about recent or fictional interesting events in the world of amateur sports (like backyard football, street basketball, etc.).
+    Generate a short, engaging news digest in Russian about recent or fictional interesting events in the world of amateur sports (like backyard football, street basketball, etc.).
     
     The tone should be slightly humorous and exciting. Mention fictional teams or players to make it more lively.
     
-    Come up with a catchy title and a few sentences for the content.
+    Come up with a catchy title and a few sentences for the content. The entire output must be in Russian.
     
     Example:
-    Title: "Night Snipers" Clinch Victory in a Rooftop Showdown!
-    Content: The "Night Snipers" basketball team snatched victory from the "Asphalt Kings" in a dramatic rooftop final. The winning shot was made by 'Air' Alex just seconds before the final whistle! Is this the start of a new dynasty?`
+    Title: "Ночные Снайперы" вырывают победу в поединке на крыше!
+    Content: Баскетбольная команда "Ночные Снайперы" вырвала победу у "Королей Асфальта" в драматичном финале на крыше. Победный бросок совершил 'Воздушный' Алекс за секунды до финального свистка! Это начало новой династии?`
 });
 
 
