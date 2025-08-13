@@ -105,6 +105,7 @@ function GosuslugiIcon(props: SVGProps<SVGSVGElement>) {
   return (
      <svg xmlns="http://www.w3.org/2000/svg" 
      {...props}
+     className={props.className}
      viewBox="-100 0 620 34.7"><path fill="#EE3F58" 
      d="M143.6.8h-18c-.2 0-.3.1-.3.3-.5 8.1-2 16.9-4.2 24v.3c.1.1.2.1.3.1h6.2c.1 0 
      .3-.1.3-.2 1.7-5.5 3.1-12.7 3.6-18.8h5.9v18.7c0 .2.1.3.3.3h5.9c.2 0 
@@ -203,4 +204,6 @@ export function AuthPage() {
     </div>
   );
 }
+    
+
     
