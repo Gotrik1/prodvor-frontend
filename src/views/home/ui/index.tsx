@@ -1,9 +1,8 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '@/shared/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Cpu, Users, Trophy, Bot, Construction } from 'lucide-react';
-// import { LogoGeneratorWidget } from '@/widgets/logo-generator/ui/logo-generator-widget';
 
 const Logo = () => (
     <Image 

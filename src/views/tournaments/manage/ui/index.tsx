@@ -481,10 +481,11 @@ function PromoTab({ tournament, onPromoAdd }: { tournament: Tournament, onPromoA
     const handleGeneratePromo = async () => {
         setIsLoading(true);
         setGeneratedVideo(null);
-        const result = await generateTournamentPromoAction({
-            tournamentName: tournament.name,
-            tournamentDescription: tournament.game, // Using game as description for now
-        });
+        // const result = await generateTournamentPromoAction({
+        //     tournamentName: tournament.name,
+        //     tournamentDescription: tournament.game, // Using game as description for now
+        // });
+        const result = { videoDataUri: null, error: "AI functionality is temporarily disabled." };
         setIsLoading(false);
 
         if (result.videoDataUri) {
