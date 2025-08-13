@@ -4,6 +4,9 @@ import { Alert, AlertDescription, AlertTitle } from "@/shared/ui/alert";
 import { Button } from "@/shared/ui/button";
 import { Trophy, Bot } from "lucide-react";
 import { CreatePost } from "./create-post";
+import { users } from "@/mocks";
+
+const currentUser = users[0]; // Assuming user1 is the logged-in user for the main dashboard
 
 function AiDigest() {
     return (
@@ -30,7 +33,7 @@ export function DashboardFeed() {
           <AiDigest />
         </CardContent>
       </Card>
-      <CreatePost />
+      <CreatePost user={currentUser} />
     </>
   );
 }

@@ -3,15 +3,18 @@
 import { Card, CardContent } from "@/shared/ui/card";
 import { Button } from "@/shared/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
+import type { User } from "@/mocks/users";
 
-export function CreatePost() {
+export function CreatePost({ user }: { user: User }) {
+  if (!user) return null;
+
   return (
     <Card className="bg-card">
       <CardContent className="p-4">
         <div className="flex items-start gap-4">
           <Avatar>
-            <AvatarImage src="https://i.pravatar.cc/150?u=a042581f4e29026024d" />
-            <AvatarFallback>G</AvatarFallback>
+            <AvatarImage src={user.avatarUrl} />
+            <AvatarFallback>{user.nickname?.charAt(0) || 'U'}</AvatarFallback>
           </Avatar>
           <div className="w-full">
             <textarea
