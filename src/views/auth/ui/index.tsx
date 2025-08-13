@@ -198,6 +198,10 @@ export function AuthPage() {
                         <GosuslugiIcon className="w-24 h-auto" />
                     </SocialButton>
                 </div>
+
+                <Button variant="outline" className="w-full" asChild>
+                  <Link href="/">Вернуться на главную</Link>
+                </Button>
             </div>
         </CardContent>
       </Card>
