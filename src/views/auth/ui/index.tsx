@@ -13,19 +13,26 @@ import { Label } from "@/shared/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 import { HelpCircle } from "lucide-react";
 import Image from 'next/image';
+import type { ComponentProps } from "react";
 
-const Logo = () => (
-    <Image 
-      src="https://prodvor.website/_next/image?url=%2Fimages%2Fyour-logo.png&w=64&q=75" 
-      alt="ProDvor Logo" 
-      width={40} 
-      height={40} 
+// ------------------ Логотип ------------------
+export function Logo(
+  props: Omit<ComponentProps<typeof Image>, "src" | "alt" | "width" | "height">
+) {
+  return (
+    <Image
+      src="https://prodvor.website/_next/image?url=%2Fimages%2Fyour-logo.png&w=64&q=75"
+      alt="ProDvor Logo"
+      width={40}
+      height={40}
+      {...props}
       className="object-contain"
     />
-);
+  );
+}
 
 // ------------------ Yandex ------------------
-function YandexIcon(props: SVGProps<SVGSVGElement>) {
+export function YandexIcon(props: SVGProps<SVGSVGElement>) {
   return (
     <svg
       {...props}
@@ -43,7 +50,7 @@ function YandexIcon(props: SVGProps<SVGSVGElement>) {
 }
 
 // ------------------ VK ------------------
-function VkIcon(props: SVGProps<SVGSVGElement>) {
+export function VkIcon(props: SVGProps<SVGSVGElement>) {
   return (
     <svg
       {...props}
@@ -71,7 +78,7 @@ function VkIcon(props: SVGProps<SVGSVGElement>) {
 }
 
 // ------------------ Telegram ------------------
-function TelegramIcon(props: SVGProps<SVGSVGElement>) {
+export function TelegramIcon(props: SVGProps<SVGSVGElement>) {
   return (
     <svg
       {...props}
@@ -101,10 +108,9 @@ function TelegramIcon(props: SVGProps<SVGSVGElement>) {
 }
 
 // ------------------ Госуслуги ------------------
-function GosuslugiIcon(props: SVGProps<SVGSVGElement>) {
+export function GosuslugiIcon(props: SVGProps<SVGSVGElement>) {
   return (
-     <svg xmlns="http://www.w3.org/2000/svg" 
-     {...props}
+     <svg {...props} xmlns="http://www.w3.org/2000/svg" 
      viewBox="-100 0 620 34.7"><path fill="#EE3F58" 
      d="M143.6.8h-18c-.2 0-.3.1-.3.3-.5 8.1-2 16.9-4.2 24v.3c.1.1.2.1.3.1h6.2c.1 0 
      .3-.1.3-.2 1.7-5.5 3.1-12.7 3.6-18.8h5.9v18.7c0 .2.1.3.3.3h5.9c.2 0 
@@ -128,7 +134,6 @@ function GosuslugiIcon(props: SVGProps<SVGSVGElement>) {
      .3-.1.3-.3V6.6h9.1c.1 0 .2-.1.3-.2.7-1.6 1.4-3.4 2.1-5.1V1c-.1-.1-.2-.2-.3-.2"/></svg>
   );
 }
-
 
 export function AuthPage() {
   return (
@@ -192,10 +197,10 @@ export function AuthPage() {
             <div className="space-y-2">
                 <Button variant="outline" className="w-full font-bold">Создать аккаунт</Button>
                 <div className="grid grid-cols-4 gap-2">
-                    <Button variant="outline" size="icon" className="h-12 w-full"><YandexIcon className="h-8 w-8" /></Button>
-                    <Button variant="outline" size="icon" className="h-12 w-full"><VkIcon className="h-8 w-8" /></Button>
-                    <Button variant="outline" size="icon" className="h-12 w-full"><TelegramIcon className="h-8 w-8" /></Button>
-                    <Button variant="outline" size="icon" className="h-12 w-full"><GosuslugiIcon className="h-8 w-8" /></Button>
+                    <Button variant="outline" size="icon" className="h-12 w-full"><YandexIcon className="h-10 w-10" /></Button>
+                    <Button variant="outline" size="icon" className="h-12 w-full"><VkIcon className="h-10 w-10" /></Button>
+                    <Button variant="outline" size="icon" className="h-12 w-full"><TelegramIcon className="h-10 w-10" /></Button>
+                    <Button variant="outline" size="icon" className="h-12 w-full"><GosuslugiIcon className="h-10 w-10" /></Button>
                 </div>
             </div>
         </CardContent>
@@ -206,3 +211,4 @@ export function AuthPage() {
     
 
     
+
