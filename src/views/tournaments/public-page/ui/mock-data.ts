@@ -73,7 +73,7 @@ export const tournaments: Tournament[] = [
     },
   ];
 
-export const myTournaments: Tournament[] = [
+export const mockMyTournaments: Tournament[] = [
     {
       id: 'mytourney1',
       name: 'Летний Кубок ProDvor',
@@ -100,7 +100,7 @@ export const myTournaments: Tournament[] = [
     },
 ];
 
-export const allTournaments: Tournament[] = [...tournaments, ...myTournaments];
+export const allTournaments: Tournament[] = [...tournaments, ...mockMyTournaments];
 
 export const teams: Team[] = [
   {
