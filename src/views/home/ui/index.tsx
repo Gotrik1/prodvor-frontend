@@ -170,7 +170,9 @@ export function HomePage() {
             <p className="text-lg text-muted-foreground mt-4 max-w-2xl mx-auto">
               Присоединяйтесь к тысячам игроков, которые уже соревнуются и побеждают на ProDvor.
             </p>
-            <Button size="lg" className="mt-8 bg-accent hover:bg-accent/90 text-accent-foreground font-bold">Создать аккаунт</Button>
+            <Button asChild size="lg" className="mt-8 bg-accent hover:bg-accent/90 text-accent-foreground font-bold">
+              <Link href="/auth">Создать аккаунт</Link>
+            </Button>
           </div>
         </section>
       </main>
