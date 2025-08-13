@@ -2,8 +2,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '@/shared/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
-import { Cpu, Users, Trophy } from 'lucide-react';
-import { LogoGeneratorWidget } from '@/widgets/logo-generator/ui/logo-generator-widget';
+import { Cpu, Users, Trophy, Bot, Construction } from 'lucide-react';
+// import { LogoGeneratorWidget } from '@/widgets/logo-generator/ui/logo-generator-widget';
 
 const Logo = () => (
     <Image 
@@ -15,6 +15,28 @@ const Logo = () => (
       data-ai-hint="logo"
     />
 );
+
+const LogoGeneratorWidget = () => (
+    <Card className="w-full max-w-2xl mx-auto bg-card/80 border-border/60 shadow-lg">
+      <CardHeader>
+        <div className="flex items-center gap-4">
+            <div className="p-3 rounded-md bg-accent/10 text-accent">
+                <Bot className="w-8 h-8" />
+            </div>
+            <div>
+                <CardTitle className="font-headline text-2xl">AI-генератор логотипов</CardTitle>
+                <CardDescription>Опишите логотип вашей мечты</CardDescription>
+            </div>
+        </div>
+      </CardHeader>
+      <CardContent className="flex flex-col items-center justify-center text-center min-h-[15vh]">
+            <Construction className="h-10 w-10 text-muted-foreground mb-4" />
+            <p className="text-muted-foreground">
+                AI-генератор временно недоступен.
+            </p>
+      </CardContent>
+    </Card>
+)
 
 export function HomePage() {
   return (

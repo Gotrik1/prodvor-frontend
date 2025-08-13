@@ -1,10 +1,11 @@
+
 "use client";
 
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Bot, Loader2, AlertTriangle } from "lucide-react";
+import { Bot, Loader2, AlertTriangle, Construction } from "lucide-react";
 import Image from "next/image";
 
 import { Button } from "@/shared/ui/button";
@@ -59,72 +60,12 @@ export function LogoGenerator() {
 
   return (
     <>
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-            <FormField
-              control={form.control}
-              name="prompt"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="sr-only">Описание логотипа</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="Например: 'Агрессивный орел с баскетбольным мячом'"
-                      {...field}
-                      className="text-base"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <Button type="submit" disabled={isLoading} size="lg" className="w-full font-bold bg-accent hover:bg-accent/90 text-accent-foreground">
-              {isLoading ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Генерация...
-                </>
-              ) : (
-                "Сгенерировать логотип"
-              )}
-            </Button>
-          </form>
-        </Form>
-        
-        {error && (
-            <Alert variant="destructive" className="mt-6">
-                <AlertTriangle className="h-4 w-4" />
-                <AlertTitle>Ошибка</AlertTitle>
-                <AlertDescription>{error}</AlertDescription>
-            </Alert>
-        )}
-
-        {isLoading && (
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-8">
-            <div className="w-full aspect-square bg-muted/50 rounded-lg animate-pulse"></div>
-            <div className="w-full aspect-square bg-muted/50 rounded-lg animate-pulse" style={{ animationDelay: '200ms' }}></div>
-            <div className="w-full aspect-square bg-muted/50 rounded-lg animate-pulse" style={{ animationDelay: '400ms' }}></div>
-          </div>
-        )}
-
-        {logoUrls.length > 0 && !isLoading && (
-          <div className="mt-8">
-            <h3 className="text-lg font-semibold mb-4 text-center">Ваши варианты логотипов:</h3>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              {logoUrls.map((url, index) => (
-                <div key={index} className="relative aspect-square w-full overflow-hidden rounded-lg border-2 border-primary/50 shadow-lg transition-transform hover:scale-105">
-                  <Image
-                    src={url}
-                    alt={`Generated Logo ${index + 1}`}
-                    fill
-                    className="object-cover"
-                    unoptimized
-                  />
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
+       <div className="flex flex-col items-center justify-center text-center">
+            <Construction className="h-10 w-10 text-muted-foreground mb-4" />
+            <p className="text-muted-foreground">
+                AI-генератор временно недоступен.
+            </p>
+        </div>
     </>
   );
 }

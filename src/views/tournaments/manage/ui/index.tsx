@@ -4,7 +4,7 @@
 
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
-import { ArrowLeft, Users, Calendar, Megaphone, Settings, Bot, GanttChartIcon, CheckCircle, XCircle, Clock, Search, Shield, Award, PlusCircle, Send, UserPlus, Film, UploadCloud, Video, PlayCircle, StopCircle, Ban, ListChecks, LucideIcon, Trash2, Save, Loader2, AlertTriangle, Wand2, RefreshCw } from "lucide-react";
+import { ArrowLeft, Users, Calendar, Megaphone, Settings, Bot, GanttChartIcon, CheckCircle, XCircle, Clock, Search, Shield, Award, PlusCircle, Send, UserPlus, Film, UploadCloud, Video, PlayCircle, StopCircle, Ban, ListChecks, LucideIcon, Trash2, Save, Loader2, AlertTriangle, Wand2, RefreshCw, Construction } from "lucide-react";
 import Link from "next/link";
 import { myTournaments, allTournaments, registeredTeams as initialRegisteredTeams, staff as initialStaff, sponsors as initialSponsors, requirements as initialRequirements } from '@/views/tournaments/public-page/ui/mock-data';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
@@ -30,7 +30,12 @@ import { z } from "zod";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/shared/ui/form";
 import { sendTournamentAnnouncementAction, generateTournamentPromoAction } from "@/app/actions";
 import { useToast } from "@/shared/hooks/use-toast";
-import { SendTournamentAnnouncementInputSchema } from "@/shared/api/schemas/tournament-announcement-schema";
+
+const SendTournamentAnnouncementInputSchema = z.object({
+  tournamentId: z.string().describe("The ID of the tournament."),
+  subject: z.string().min(5, { message: "Тема должна содержать не менее 5 символов." }).describe('The subject of the announcement.'),
+  message: z.string().min(20, { message: "Сообщение должно содержать не менее 20 символов." }).describe('The content of the announcement message.'),
+});
 
 
 const statusColors: Record<string, string> = {
@@ -56,24 +61,7 @@ const StatCard = ({ title, value }: { title: string, value: string | React.React
 function OverviewTab({ tournament, onStatusChange, confirmedCount }: { tournament: Tournament, onStatusChange: (status: Tournament['status']) => void, confirmedCount: number }) {
     
     const getAiAdvice = () => {
-        const registrationProgress = Math.round((confirmedCount / tournament.maxParticipants) * 100);
-
-        switch(tournament.status) {
-            case 'РЕГИСТРАЦИЯ':
-                if (registrationProgress < 50) {
-                    return `Регистрация идет не очень активно. Заполнено всего ${registrationProgress}% слотов. Рекомендуем сделать анонс, чтобы привлечь больше команд.`;
-                }
-                if (registrationProgress >= 90) {
-                     return `Отличная работа! Заполнено ${registrationProgress}% слотов. Скоро полный комплект! Можно сделать финальный анонс о последних местах.`;
-                }
-                return `До конца регистрации осталось 3 дня. На данный момент заполнено ${registrationProgress}% слотов. Прогнозируемое количество участников: ${Math.round(confirmedCount * 1.2)} из ${tournament.maxParticipants}.`;
-            case 'ИДЕТ':
-                return `Турнир в активной фазе! Не забывайте своевременно вносить результаты матчей. Совет: опубликуйте фото самых ярких моментов в медиа-центре для повышения вовлеченности.`;
-            case 'ЗАВЕРШЕН':
-                return `Турнир завершен! Поздравляем победителей. Рекомендуем написать итоговый анонс с благодарностью участникам и спонсорам.`;
-            default:
-                 return `Статус турнира: ${tournament.status}. Убедитесь, что все участники оповещены об изменениях.`;
-        }
+        return `AI-Советник временно недоступен.`;
     }
 
 
@@ -526,32 +514,13 @@ function PromoTab({ tournament, onPromoAdd }: { tournament: Tournament, onPromoA
                 <CardDescription>Используйте AI для создания рекламных материалов для вашего турнира.</CardDescription>
             </CardHeader>
             <CardContent>
-                <div className="flex flex-col items-center justify-center p-6 border-2 border-dashed rounded-lg">
-                    <Wand2 className="h-12 w-12 text-primary mb-4" />
-                    <h3 className="text-xl font-bold mb-2">Создать промо-ролик с Veo</h3>
+                 <div className="flex flex-col items-center justify-center text-center p-6 border-2 border-dashed rounded-lg">
+                    <Construction className="h-12 w-12 text-muted-foreground mb-4" />
+                    <h3 className="text-xl font-bold mb-2">Функция временно отключена</h3>
                     <p className="text-muted-foreground text-center mb-6 max-w-md">
-                        Автоматически сгенерируйте короткое, динамичное видео для привлечения внимания к вашему турниру. Генерация может занять до минуты.
+                        AI-генерация промо-роликов недоступна для устранения неполадок.
                     </p>
-                    <Button onClick={handleGeneratePromo} disabled={isLoading} size="lg">
-                        {isLoading ? (
-                            <>
-                                <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                                Генерация...
-                            </>
-                        ) : (
-                            "Сгенерировать видео"
-                        )}
-                    </Button>
                 </div>
-
-                {generatedVideo && (
-                    <div className="mt-6">
-                         <h3 className="text-lg font-semibold mb-4 text-center">Результат:</h3>
-                         <div className="aspect-video w-full max-w-2xl mx-auto rounded-lg overflow-hidden border">
-                            <video src={generatedVideo} controls autoPlay className="w-full h-full bg-black"></video>
-                         </div>
-                    </div>
-                )}
             </CardContent>
         </Card>
     )

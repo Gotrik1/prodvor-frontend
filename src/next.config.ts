@@ -24,18 +24,6 @@ const nextConfig: NextConfig = {
         }
     ],
   },
-  webpack: (config, { isServer }) => {
-    if (!isServer) {
-      // Это предотвращает ошибку "Module not found: Can't resolve 'async_hooks'"
-      // для клиентской сборки.
-      config.resolve.fallback = {
-        ...config.resolve.fallback,
-        async_hooks: false,
-      };
-    }
-
-    return config;
-  },
 };
 
 export default nextConfig;

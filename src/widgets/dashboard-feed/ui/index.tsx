@@ -1,34 +1,22 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
-import { generateNewsDigestAction } from "@/app/actions";
+// import { generateNewsDigestAction } from "@/app/actions";
 import { Alert, AlertDescription, AlertTitle } from "@/shared/ui/alert";
 import { Button } from "@/shared/ui/button";
-import { Trophy } from "lucide-react";
+import { Trophy, Bot } from "lucide-react";
 import { CreatePost } from "./create-post";
 
-async function AiDigest() {
-  const digest = await generateNewsDigestAction();
-
-  if (digest.error) {
+function AiDigest() {
     return (
-      <Alert variant="destructive">
-        <AlertTitle>{digest.title}</AlertTitle>
-        <AlertDescription>
-          {digest.content}
-          <Button variant="link" className="p-0 h-auto text-destructive">
-            Попробовать снова
-          </Button>
-        </AlertDescription>
-      </Alert>
+        <Alert variant="destructive">
+            <Bot className="h-4 w-4" />
+            <AlertTitle>AI-Дайджест временно недоступен</AlertTitle>
+            <AlertDescription>
+            Эта функция отключена для устранения неполадок.
+            </AlertDescription>
+        </Alert>
     );
-  }
-
-  return (
-    <div>
-      <h3 className="font-bold text-lg mb-2">{digest.title}</h3>
-      <p className="text-muted-foreground whitespace-pre-wrap">{digest.content}</p>
-    </div>
-  );
 }
+
 
 export function DashboardFeed() {
   return (
