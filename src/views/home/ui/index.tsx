@@ -54,7 +54,9 @@ export function HomePage() {
                 ProDvor — это социальная платформа, объединяющая дворовый спорт и любительский киберспорт. Создавай команду, находи соперников, участвуй в турнирах и строй свою спортивную карьеру.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button size="lg" className="font-bold">Начать побеждать</Button>
+                <Button asChild size="lg" className="font-bold">
+                  <Link href="/auth/register">Начать побеждать</Link>
+                </Button>
                 <Button size="lg" variant="outline" className="font-bold">Подробнее</Button>
               </div>
             </div>
