@@ -170,19 +170,20 @@ export function AuthPage() {
                 </TabsContent>
             </Tabs>
             
-            <div className="relative my-6">
-                <div className="absolute inset-0 flex items-center">
-                    <span className="w-full border-t" />
-                </div>
-                <div className="relative flex justify-center text-xs uppercase">
-                    <span className="bg-card px-2 text-muted-foreground">Или войдите с помощью</span>
-                </div>
-            </div>
-
-            <div className="space-y-2">
+            <div className="space-y-4 mt-6">
                 <Button asChild variant="outline" className="w-full font-bold">
                   <Link href="/auth/register">Создать аккаунт</Link>
                 </Button>
+
+                <div className="relative">
+                    <div className="absolute inset-0 flex items-center">
+                        <span className="w-full border-t" />
+                    </div>
+                    <div className="relative flex justify-center text-xs uppercase">
+                        <span className="bg-card px-2 text-muted-foreground">Или войдите с помощью</span>
+                    </div>
+                </div>
+                
                 <div className="grid grid-cols-4 gap-2">
                     <SocialButton>
                         <YandexIcon className="h-8 w-8" />
