@@ -1,5 +1,6 @@
 
 import Image from 'next/image';
+import Link from 'next/link';
 import { Button } from '@/shared/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Cpu, Users, Trophy } from 'lucide-react';
@@ -24,7 +25,9 @@ export default function Home() {
             <Logo />
             <span className="font-headline">ProDvor</span>
           </a>
-          <Button>Войти</Button>
+          <Button asChild>
+            <Link href="/auth">Войти</Link>
+          </Button>
         </div>
       </header>
       
