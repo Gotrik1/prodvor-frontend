@@ -24,11 +24,12 @@ import {
   Warehouse,
 } from "lucide-react";
 import Link from 'next/link';
+import Image from "next/image";
 
 const Logo = () => (
     <div className="flex items-center gap-2 font-bold text-xl">
         <Link href="/" className="flex items-center gap-2">
-            <img src="https://prodvor.website/_next/image?url=%2Fimages%2Fyour-logo.png&w=64&q=75" alt="ProDvor Logo" width={40} height={40} className="object-contain" />
+            <Image src="/logo.png" alt="ProDvor Logo" width={40} height={40} className="object-contain" />
             <span className="font-headline text-sidebar-foreground">ProDvor</span>
         </Link>
     </div>

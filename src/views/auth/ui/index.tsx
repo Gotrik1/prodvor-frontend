@@ -22,7 +22,7 @@ export function Logo(
 ) {
   return (
     <Image
-      src="https://prodvor.website/_next/image?url=%2Fimages%2Fyour-logo.png&w=64&q=75"
+      src="/logo.png"
       alt="ProDvor Logo"
       width={40}
       height={40}
@@ -109,7 +109,7 @@ export function GosuslugiIcon(props: SVGProps<SVGSVGElement>) {
 
 const SocialButton = ({ className, children }: { className?: string, children: React.ReactNode }) => (
     <button className={cn(
-        "inline-flex items-center justify-center rounded-md border border-input bg-background transition-colors h-14 hover:bg-accent hover:text-accent-foreground",
+        "inline-flex items-center justify-center rounded-md border border-input bg-background transition-colors h-14 hover:bg-accent hover:text-accent-foreground p-0",
         className
     )}>
         {children}
