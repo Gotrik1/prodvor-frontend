@@ -1,8 +1,9 @@
+
 'use client';
 
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
-import { ArrowLeft, Users, Calendar, Megaphone, Settings, GanttChartIcon, Shield, Award, Film, Wand2, ListChecks } from "lucide-react";
+import { ArrowLeft, Users, Calendar, Megaphone, Settings, GanttChartIcon, Shield, Award, Film, Wand2 } from "lucide-react";
 import Link from "next/link";
 import { allTournaments, registeredTeams as initialRegisteredTeams } from '@/views/tournaments/public-page/ui/mock-data';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";

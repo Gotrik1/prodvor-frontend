@@ -5,7 +5,7 @@
  */
 import { ai } from '@/shared/lib/genkit';
 import { z } from 'zod';
-import { googleAI } from 'genkit/googleai';
+import { googleAI } from '@genkit-ai/googleai';
 
 const GenerateTournamentPromoInputSchema = z.object({
   tournamentName: z.string().describe("The name of the tournament."),
