@@ -1,3 +1,4 @@
+
 import type { Metadata } from 'next';
 import { Button } from '@/shared/ui/button';
 import Link from 'next/link';
@@ -8,6 +9,7 @@ import { PlaceholderTemplate } from '@/views/admin/ui/templates/placeholder-temp
 import { RefereePageTemplate } from '@/views/admin/ui/templates/referee-page-template';
 import { CoachPageTemplate } from '@/views/admin/ui/templates/coach-page-template';
 import { ManagerPageTemplate } from '@/views/admin/ui/templates/manager-page-template';
+import { OrganizerPageTemplate } from '@/views/admin/ui/templates/organizer-page-template';
 
 export async function generateMetadata({ params }: { params: { userId: string } }): Promise<Metadata> {
   const user = staff.find(s => s.id === params.userId);
@@ -50,7 +52,7 @@ export default function UserPage({ params }: { params: { userId: string } }) {
         case 'Менеджер':
             return <ManagerPageTemplate user={user} />;
         case 'Организатор':
-            return <PlaceholderTemplate roleName={user.role} />;
+            return <OrganizerPageTemplate user={user} />;
         default:
             return <PlaceholderTemplate roleName="Неизвестная роль" />;
     }

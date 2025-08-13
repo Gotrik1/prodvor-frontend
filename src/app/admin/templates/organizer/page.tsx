@@ -1,4 +1,5 @@
-import { PlaceholderTemplate } from '@/views/admin/ui/templates/placeholder-template';
+
+import { OrganizerPageTemplate } from '@/views/admin/ui/templates/organizer-page-template';
 import type { Metadata } from 'next';
 import { Button } from '@/shared/ui/button';
 import Link from 'next/link';
@@ -25,7 +26,7 @@ export default function OrganizerTemplatePage() {
         </header>
         <main className="p-4 md:p-6 lg:p-8">
             <div className="container mx-auto">
-                <PlaceholderTemplate roleName="Организатор" />
+                <OrganizerPageTemplate />
             </div>
         </main>
     </div>
