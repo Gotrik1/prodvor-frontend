@@ -2,7 +2,7 @@ import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
 import Link from "next/link";
 import type { LucideIcon } from "lucide-react";
-import { User, Users, ClipboardList, Gavel, Briefcase, Shield, Megaphone, Handshake, Star, PlusCircle, GanttChart, BarChart } from "lucide-react";
+import { User, Users, ClipboardList, Gavel, Briefcase, Shield, Megaphone, Handshake, Star, PlusCircle, GanttChart, BarChart, DollarSign } from "lucide-react";
 
 const roles = [
     {
@@ -168,6 +168,19 @@ export function AdminPage() {
                                             </CardHeader>
                                             <CardContent>
                                                 <p className="text-sm text-muted-foreground">Просмотр списков всех пользователей, команд и спонсоров.</p>
+                                            </CardContent>
+                                        </Card>
+                                    </Link>
+                                     <Link href="/admin/advertising">
+                                        <Card className="cursor-pointer h-full hover:border-primary transition-colors hover:shadow-lg">
+                                            <CardHeader className="flex flex-row items-center gap-4">
+                                                <div className="p-3 rounded-md bg-primary/10 text-primary">
+                                                    <DollarSign className="w-6 h-6" />
+                                                </div>
+                                                <CardTitle>Ad-CRM</CardTitle>
+                                            </CardHeader>
+                                            <CardContent>
+                                                <p className="text-sm text-muted-foreground">Управление рекламой, аналитика и прогнозирование.</p>
                                             </CardContent>
                                         </Card>
                                     </Link>

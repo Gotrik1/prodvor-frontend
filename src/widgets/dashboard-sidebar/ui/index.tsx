@@ -13,6 +13,7 @@ import {
   Calendar,
   ClipboardList,
   Cog,
+  DollarSign,
   Flame,
   HelpCircle,
   Home,
