@@ -1,8 +1,9 @@
 
 'use client';
 
-import { myTournaments, staff } from "@/views/tournaments/public-page/ui/mock-data";
-import type { Staff } from "@/mocks/personnel";
+import { myTournaments } from "@/views/tournaments/public-page/ui/mock-data";
+import { users } from "@/mocks";
+import type { User } from "@/mocks/users";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { Badge } from "@/shared/ui/badge";
 import { Button } from "@/shared/ui/button";
@@ -12,7 +13,7 @@ import { Award, Calendar, DollarSign, ExternalLink, GanttChart, Megaphone, PlusC
 import Link from "next/link";
 import { Progress } from "@/shared/ui/progress";
 
-const defaultOrganizer: Staff = staff.find(s => s.role === 'Организатор')!;
+const defaultOrganizer = users.find(s => s.role === 'Организатор')!;
 
 const statusColors: Record<string, string> = {
     'РЕГИСТРАЦИЯ': 'bg-blue-500/20 text-blue-300 border-blue-500/30',
@@ -20,19 +21,19 @@ const statusColors: Record<string, string> = {
 };
 
 
-export function OrganizerPageTemplate({ user }: { user?: Staff }) {
+export function OrganizerPageTemplate({ user }: { user?: User }) {
     const organizer = user || defaultOrganizer;
 
     return (
         <div className="border rounded-lg p-4 md:p-6 space-y-6 bg-muted/20">
             <header className="flex flex-col md:flex-row items-center gap-6">
                 <Avatar className="h-24 w-24 border-4 border-primary">
-                    <AvatarImage src={organizer.avatarUrl} alt={organizer.name} />
-                    <AvatarFallback>{organizer.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+                    <AvatarImage src={organizer.avatarUrl} alt={`${organizer.firstName} ${organizer.lastName}`} />
+                    <AvatarFallback>{organizer.firstName.charAt(0)}{organizer.lastName.charAt(0)}</AvatarFallback>
                 </Avatar>
                 <div className="text-center md:text-left">
-                    <h1 className="text-3xl font-bold font-headline">{organizer.name}</h1>
-                    <p className="text-muted-foreground text-lg">Роль: Организатор</p>
+                    <h1 className="text-3xl font-bold font-headline">{organizer.firstName} {organizer.lastName}</h1>
+                    <p className="text-muted-foreground text-lg">Роль: {organizer.role}</p>
                 </div>
                  <div className="md:ml-auto">
                     <Button asChild>

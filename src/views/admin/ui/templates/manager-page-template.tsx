@@ -2,7 +2,7 @@
 'use client';
 
 import { teams, users } from "@/mocks";
-import type { Staff } from "@/mocks/personnel";
+import type { User } from "@/mocks/users";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { Badge } from "@/shared/ui/badge";
 import { Button } from "@/shared/ui/button";
@@ -12,29 +12,23 @@ import { BarChart, Briefcase, DollarSign, ExternalLink, Trophy, Users } from "lu
 import Link from "next/link";
 import Image from 'next/image';
 
-const defaultManager: Staff = {
-    id: 'staff4',
-    name: 'Александр Громов',
-    avatarUrl: 'https://i.pravatar.cc/150?u=staff4',
-    role: 'Менеджер',
-    status: 'Принято'
-};
+const defaultManager = users.find(u => u.role === 'Менеджер')!;
 
 const managedTeams = teams.slice(0, 3);
 
-export function ManagerPageTemplate({ user }: { user?: Staff }) {
+export function ManagerPageTemplate({ user }: { user?: User }) {
     const manager = user || defaultManager;
 
     return (
         <div className="border rounded-lg p-4 md:p-6 space-y-6 bg-muted/20">
             <header className="flex flex-col md:flex-row items-center gap-6">
                 <Avatar className="h-24 w-24 border-4 border-primary">
-                    <AvatarImage src={manager.avatarUrl} alt={manager.name} />
-                    <AvatarFallback>{manager.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+                    <AvatarImage src={manager.avatarUrl} alt={`${manager.firstName} ${manager.lastName}`} />
+                    <AvatarFallback>{manager.firstName.charAt(0)}{manager.lastName.charAt(0)}</AvatarFallback>
                 </Avatar>
                 <div className="text-center md:text-left">
-                    <h1 className="text-3xl font-bold font-headline">{manager.name}</h1>
-                    <p className="text-muted-foreground text-lg">Роль: Менеджер</p>
+                    <h1 className="text-3xl font-bold font-headline">{manager.firstName} {manager.lastName}</h1>
+                    <p className="text-muted-foreground text-lg">Роль: {manager.role}</p>
                     <div className="flex items-center gap-2 mt-2 justify-center md:justify-start">
                         <Badge variant="secondary">Агентство: Pro-Players Management</Badge>
                     </div>

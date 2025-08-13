@@ -1,6 +1,7 @@
 'use client';
 
 import { users, teams } from "@/mocks";
+import type { User } from "@/mocks/users";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { Badge } from "@/shared/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
@@ -10,9 +11,8 @@ import { Button } from "@/shared/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/shared/ui/table";
 import { ChartContainer, ChartTooltip, ChartTooltipContent, ChartLegend, ChartLegendContent } from "@/shared/ui/chart";
 import { Bar, BarChart as RechartsBarChart, XAxis, YAxis, CartesianGrid } from "recharts";
-import type { Staff } from "@/mocks/personnel";
 
-const defaultCoach = users.find(u => u.id === 'user4')!; // Let's assign a coach from mocks
+const defaultCoach = users.find(u => u.role === 'Тренер')!;
 const coachTeam = teams[0];
 const teamMembers = users.filter(u => coachTeam.members.includes(u.id));
 
@@ -32,22 +32,18 @@ const chartConfig = {
   },
 };
 
-export function CoachPageTemplate({ user }: { user?: Staff }) {
-    const coach = user || {
-        name: `${defaultCoach.firstName} ${defaultCoach.lastName}`,
-        avatarUrl: defaultCoach.avatarUrl,
-    };
-    const coachNickname = defaultCoach.nickname;
-
+export function CoachPageTemplate({ user }: { user?: User }) {
+    const coach = user || defaultCoach;
+    
     return (
         <div className="border rounded-lg p-4 md:p-6 space-y-6 bg-muted/20">
             <header className="flex flex-col md:flex-row items-center gap-6">
                 <Avatar className="h-24 w-24 border-4 border-primary">
-                    <AvatarImage src={coach.avatarUrl} alt={coach.name} />
-                    <AvatarFallback>{coach.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+                    <AvatarImage src={coach.avatarUrl} alt={`${coach.firstName} ${coach.lastName}`} />
+                    <AvatarFallback>{coach.firstName.charAt(0)}{coach.lastName.charAt(0)}</AvatarFallback>
                 </Avatar>
                 <div className="text-center md:text-left">
-                    <h1 className="text-3xl font-bold font-headline">{coach.name.split(' ')[0]} "{coachNickname}" {coach.name.split(' ')[1]}</h1>
+                    <h1 className="text-3xl font-bold font-headline">{coach.firstName} "{coach.nickname}" {coach.lastName}</h1>
                     <p className="text-muted-foreground text-lg">Главный тренер, <span className="font-semibold text-foreground">{coachTeam.name}</span></p>
                     <div className="flex items-center gap-2 mt-2 justify-center md:justify-start">
                         <Badge variant="secondary">Специализация: Тактика</Badge>

@@ -1,14 +1,17 @@
 import { users, teams } from "@/mocks";
+import type { User } from "@/mocks/users";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { Badge } from "@/shared/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
 import { BarChart, Shield, Star, Swords, Trophy } from "lucide-react";
 import Image from 'next/image';
 
-const player = users[0];
-const playerTeam = teams.find(t => t.members.includes(player.id));
+const defaultPlayer = users.find(u => u.role === 'Игрок')!;
+const playerTeam = teams.find(t => t.members.includes(defaultPlayer.id));
 
-export function PlayerPageTemplate() {
+export function PlayerPageTemplate({ user }: { user?: User }) {
+    const player = user || defaultPlayer;
+
     return (
         <div className="border rounded-lg p-4 md:p-6 space-y-6 bg-muted/20">
             <header className="flex flex-col md:flex-row items-center gap-6">
@@ -18,7 +21,7 @@ export function PlayerPageTemplate() {
                 </Avatar>
                 <div className="text-center md:text-left">
                     <h1 className="text-3xl font-bold font-headline">{player.firstName} "{player.nickname}" {player.lastName}</h1>
-                    <p className="text-muted-foreground text-lg">Роль: Игрок</p>
+                    <p className="text-muted-foreground text-lg">Роль: {player.role}</p>
                     {playerTeam && (
                         <div className="flex items-center gap-2 mt-2 justify-center md:justify-start">
                             <Image src={playerTeam.logoUrl} alt={playerTeam.name} width={24} height={24} className="rounded-sm" data-ai-hint="team logo"/>

@@ -6,7 +6,8 @@ import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
 import { ArrowLeft, Users, Calendar, Megaphone, Settings, Bot, GanttChartIcon, CheckCircle, XCircle, Clock, Search, Shield, Award, PlusCircle, Send, UserPlus, Film, UploadCloud, Video, PlayCircle, StopCircle, Ban, ListChecks, LucideIcon, Trash2, Save, Loader2, AlertTriangle, Wand2, RefreshCw, Construction } from "lucide-react";
 import Link from "next/link";
-import { myTournaments, allTournaments, registeredTeams as initialRegisteredTeams, staff as initialStaff, sponsors as initialSponsors, requirements as initialRequirements } from '@/views/tournaments/public-page/ui/mock-data';
+import { myTournaments, allTournaments, registeredTeams as initialRegisteredTeams, sponsors as initialSponsors, requirements as initialRequirements } from '@/views/tournaments/public-page/ui/mock-data';
+import { users } from '@/mocks';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 import { Badge } from "@/shared/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/shared/ui/table";
@@ -799,17 +800,17 @@ function StaffTab() {
                 </CardHeader>
                 <CardContent>
                     <ul className="space-y-3">
-                        {initialStaff.filter(s => s.role === 'Судья').map(person => (
+                        {users.filter(s => s.role === 'Судья').map(person => (
                             <li key={person.id}>
                                 <Link href={`/users/${person.id}`} className="flex items-center justify-between p-2 rounded-md hover:bg-muted/50 transition-colors">
                                     <div className="flex items-center gap-3">
                                         <Avatar>
                                             <AvatarImage src={person.avatarUrl} />
-                                            <AvatarFallback>{person.name.charAt(0)}</AvatarFallback>
+                                            <AvatarFallback>{person.firstName.charAt(0)}</AvatarFallback>
                                         </Avatar>
-                                        <span>{person.name}</span>
+                                        <span>{person.firstName} {person.lastName}</span>
                                     </div>
-                                    <Badge variant={person.status === 'Принято' ? 'secondary' : 'default'}>{person.status}</Badge>
+                                    <Badge variant={'secondary'}>Принято</Badge>
                                 </Link>
                             </li>
                         ))}
@@ -839,17 +840,17 @@ function StaffTab() {
                 </CardHeader>
                 <CardContent>
                      <ul className="space-y-3">
-                        {initialStaff.filter(s => s.role === 'Организатор').map(person => (
+                        {users.filter(s => s.role === 'Организатор').map(person => (
                              <li key={person.id}>
                                 <Link href={`/users/${person.id}`} className="flex items-center justify-between p-2 rounded-md hover:bg-muted/50 transition-colors">
                                     <div className="flex items-center gap-3">
                                         <Avatar>
                                             <AvatarImage src={person.avatarUrl} />
-                                            <AvatarFallback>{person.name.charAt(0)}</AvatarFallback>
+                                            <AvatarFallback>{person.firstName.charAt(0)}</AvatarFallback>
                                         </Avatar>
-                                        <span>{person.name}</span>
+                                        <span>{person.firstName} {person.lastName}</span>
                                     </div>
-                                    <Badge variant={person.status === 'Принято' ? 'secondary' : 'default'}>{person.status}</Badge>
+                                    <Badge variant={'default'}>Приглашен</Badge>
                                 </Link>
                             </li>
                         ))}

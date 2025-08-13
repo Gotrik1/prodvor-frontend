@@ -9,14 +9,15 @@ import Image from "next/image";
 import Link from "next/link";
 import { CreatePost } from "@/widgets/dashboard-feed/ui/create-post";
 
-const fanUser: User = users[3]; // 'Amazonka'
+const defaultFan: User = users.find(u => u.role === 'Болельщик') || users[3];
 const favoriteTeams = teams.slice(0, 4);
 const upcomingMatches = [
     { team1: teams[0], team2: teams[1], tournament: tournaments[0] },
     { team1: teams[2], team2: teams[3], tournament: tournaments[0] },
 ];
 
-export function FanPageTemplate() {
+export function FanPageTemplate({ user }: { user?: User }) {
+    const fanUser = user || defaultFan;
 
     return (
         <div className="border rounded-lg p-4 md:p-6 space-y-6 bg-muted/20">
@@ -27,7 +28,7 @@ export function FanPageTemplate() {
                 </Avatar>
                 <div className="text-center md:text-left">
                     <h1 className="text-3xl font-bold font-headline">{fanUser.nickname}</h1>
-                    <p className="text-muted-foreground text-lg">Роль: Болельщик</p>
+                    <p className="text-muted-foreground text-lg">Роль: {fanUser.role}</p>
                     <div className="flex items-center gap-2 mt-2 justify-center md:justify-start">
                         <Badge variant="secondary">Уровень поддержки: Легенда</Badge>
                     </div>

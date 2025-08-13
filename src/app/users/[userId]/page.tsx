@@ -3,18 +3,20 @@ import type { Metadata } from 'next';
 import { Button } from '@/shared/ui/button';
 import Link from 'next/link';
 import { ArrowLeft, User as UserIcon } from 'lucide-react';
-import { staff } from '@/mocks/personnel';
+import { users } from '@/mocks';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
 import { PlaceholderTemplate } from '@/views/admin/ui/templates/placeholder-template';
 import { RefereePageTemplate } from '@/views/admin/ui/templates/referee-page-template';
 import { CoachPageTemplate } from '@/views/admin/ui/templates/coach-page-template';
 import { ManagerPageTemplate } from '@/views/admin/ui/templates/manager-page-template';
 import { OrganizerPageTemplate } from '@/views/admin/ui/templates/organizer-page-template';
+import { PlayerPageTemplate } from '@/views/admin/ui/templates/player-page-template';
+import { FanPageTemplate } from '@/views/admin/ui/templates/fan-page-template';
 
 export async function generateMetadata({ params }: { params: { userId: string } }): Promise<Metadata> {
-  const user = staff.find(s => s.id === params.userId);
-  const title = user ? `${user.name} (${user.role}) | ProDvor` : 'Пользователь не найден | ProDvor';
-  const description = user ? `Персональная страница пользователя ${user.name}.` : 'Запрошенный пользователь не найден.';
+  const user = users.find(s => s.id === params.userId);
+  const title = user ? `${user.firstName} ${user.lastName} (${user.role}) | ProDvor` : 'Пользователь не найден | ProDvor';
+  const description = user ? `Персональная страница пользователя ${user.firstName} ${user.lastName}.` : 'Запрошенный пользователь не найден.';
 
   return {
     title,
@@ -23,7 +25,7 @@ export async function generateMetadata({ params }: { params: { userId: string } 
 }
 
 export default function UserPage({ params }: { params: { userId: string } }) {
-  const user = staff.find(s => s.id === params.userId);
+  const user = users.find(s => s.id === params.userId);
 
   if (!user) {
     return (
@@ -53,8 +55,12 @@ export default function UserPage({ params }: { params: { userId: string } }) {
             return <ManagerPageTemplate user={user} />;
         case 'Организатор':
             return <OrganizerPageTemplate user={user} />;
+        case 'Игрок':
+            return <PlayerPageTemplate user={user} />;
+        case 'Болельщик':
+            return <FanPageTemplate user={user} />;
         default:
-            return <PlaceholderTemplate roleName="Неизвестная роль" />;
+            return <PlaceholderTemplate roleName={user.role} />;
     }
   }
 
@@ -70,7 +76,7 @@ export default function UserPage({ params }: { params: { userId: string } }) {
                 </Button>
                 <div className="flex items-center gap-2">
                     <UserIcon className="h-5 w-5 text-muted-foreground" />
-                    <h1 className="text-lg font-semibold">{user.name}</h1>
+                    <h1 className="text-lg font-semibold">{user.firstName} {user.lastName}</h1>
                 </div>
             </div>
         </header>
