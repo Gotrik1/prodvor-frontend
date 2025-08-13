@@ -16,11 +16,12 @@ import {
     growthLevers,
     quarterlyForecast as initialQuarterlyForecast
 } from '../lib/mock-data';
-import React, { useState, useMemo, useCallback } from 'react';
+import React, { useState, useMemo, useCallback, useEffect } from 'react';
 import { Slider } from '@/shared/ui/slider';
 import { Input } from '@/shared/ui/input';
 import { Label } from '@/shared/ui/label';
 import { Tooltip as UiTooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/shared/ui/tooltip';
+import { Switch } from '@/shared/ui/switch';
 
 const formatCurrency = (value: number) => {
     return `${value.toFixed(1)} млн ₽`;
@@ -34,23 +35,45 @@ export function AdvertisingPage() {
         fillRate: initialAssumptions.find(a => a.parameter === 'Fill-rate')?.value.replace(' %', '') || '70',
         ecpm: initialAssumptions.find(a => a.parameter === 'Смешанный eCPM')?.value.replace(' ₽', '') || '110',
     });
+    
+    const [activeLevers, setActiveLevers] = useState<Record<string, boolean>>({});
 
     const handleAssumptionChange = (key: keyof typeof assumptions, value: string) => {
         setAssumptions(prev => ({ ...prev, [key]: value }));
     };
 
+    const handleLeverToggle = (leverId: string) => {
+        setActiveLevers(prev => ({...prev, [leverId]: !prev[leverId]}));
+    }
+
+    const calculatedModifiers = useMemo(() => {
+        const ecpmBonus = growthLevers
+            .filter(lever => activeLevers[lever.id] && lever.type === 'ecpm')
+            .reduce((sum, lever) => sum + lever.value, 0);
+
+        const fillRateBonus = growthLevers
+            .filter(lever => activeLevers[lever.id] && lever.type === 'fill')
+            .reduce((sum, lever) => sum + lever.value, 0);
+        
+        return { ecpmBonus, fillRateBonus };
+    }, [activeLevers]);
+
+    const modifiedEcpm = Number(assumptions.ecpm) + calculatedModifiers.ecpmBonus;
+    const modifiedFillRate = Number(assumptions.fillRate) + calculatedModifiers.fillRateBonus;
+
+
     const calculateAnnualRevenue = useCallback(() => {
-        const { mau, sessions, impressions, fillRate, ecpm } = assumptions;
+        const { mau, sessions, impressions } = assumptions;
         const revenue = (
             (Number(mau) || 0) *
             (Number(sessions) || 0) *
             (Number(impressions) || 0) *
             12 *
-            ((Number(fillRate) || 0) / 100) *
-            (Number(ecpm) || 0)
+            ((modifiedFillRate || 0) / 100) *
+            (modifiedEcpm || 0)
         ) / 1000;
         return revenue / 1000000; // Convert to millions
-    }, [assumptions]);
+    }, [assumptions, modifiedEcpm, modifiedFillRate]);
 
     const annualRevenue = useMemo(calculateAnnualRevenue, [calculateAnnualRevenue]);
 
@@ -62,8 +85,8 @@ export function AdvertisingPage() {
     }, [annualRevenue]);
 
     const sensitivityAnalysis = useMemo(() => {
-        const baseEcpm = Number(assumptions.ecpm);
-        const baseFill = Number(assumptions.fillRate);
+        const baseEcpm = modifiedEcpm;
+        const baseFill = modifiedFillRate;
 
         const calculateRevenue = (ecpm: number, fill: number) => 
             ((Number(assumptions.mau) * Number(assumptions.sessions) * Number(assumptions.impressions) * 12 * (fill / 100) * ecpm) / 1000) / 1000000;
@@ -75,11 +98,9 @@ export function AdvertisingPage() {
             { scenario: 'Fill –15%', ecpm: baseEcpm.toFixed(1), fill: `${(baseFill * 0.85).toFixed(1)}%`, revenue: calculateRevenue(baseEcpm, baseFill * 0.85) },
             { scenario: 'Fill +15%', ecpm: baseEcpm.toFixed(1), fill: `${(baseFill * 1.15).toFixed(1)}%`, revenue: calculateRevenue(baseEcpm, baseFill * 1.15) },
         ];
-    }, [assumptions]);
+    }, [assumptions, modifiedEcpm, modifiedFillRate]);
     
      const quarterlyForecast = useMemo(() => {
-        // This is a simplified forecast that scales based on the main revenue calculation.
-        // A real model would be more complex.
         const baseTotalRevenue = initialQuarterlyForecast.reduce((sum, q) => sum + q.revenue, 0);
         const newTotalRevenue = annualRevenue * (baseTotalRevenue / 22.2); // Adjust based on initial base
         
@@ -125,7 +146,7 @@ export function AdvertisingPage() {
                         <div className="lg:col-span-1 space-y-8">
                              <Card>
                                 <CardHeader>
-                                    <CardTitle>Параметры прогноза</CardTitle>
+                                    <CardTitle>Базовые параметры</CardTitle>
                                     <CardDescription>Изменяйте значения, чтобы увидеть их влияние на доход.</CardDescription>
                                 </CardHeader>
                                 <CardContent className="space-y-6">
@@ -151,25 +172,23 @@ export function AdvertisingPage() {
                             </Card>
                              <Card>
                                 <CardHeader>
-                                    <CardTitle>Рыночные ориентиры</CardTitle>
+                                    <CardTitle>Рычаги роста</CardTitle>
+                                    <CardDescription>Активируйте стратегии для увеличения дохода.</CardDescription>
                                 </CardHeader>
-                                <CardContent>
-                                    <Table>
-                                        <TableHeader>
-                                            <TableRow>
-                                                <TableHead>Метрика</TableHead>
-                                                <TableHead>2024</TableHead>
-                                            </TableRow>
-                                        </TableHeader>
-                                        <TableBody>
-                                            {marketBenchmarks.map((item) => (
-                                                <TableRow key={item.metric}>
-                                                    <TableCell className="font-medium">{item.metric}</TableCell>
-                                                    <TableCell>{item.value}</TableCell>
-                                                </TableRow>
-                                            ))}
-                                        </TableBody>
-                                    </Table>
+                                <CardContent className="space-y-4">
+                                    {growthLevers.map(lever => (
+                                        <div key={lever.id} className="flex items-center justify-between">
+                                            <Label htmlFor={lever.id} className="flex flex-col gap-1">
+                                                <span>{lever.lever}</span>
+                                                <span className="font-bold text-green-400">{lever.effect}</span>
+                                            </Label>
+                                            <Switch
+                                                id={lever.id}
+                                                checked={!!activeLevers[lever.id]}
+                                                onCheckedChange={() => handleLeverToggle(lever.id)}
+                                            />
+                                        </div>
+                                    ))}
                                 </CardContent>
                             </Card>
                         </div>
@@ -177,6 +196,10 @@ export function AdvertisingPage() {
                             <Card>
                                 <CardHeader>
                                     <CardTitle>Прогноз годовой выручки</CardTitle>
+                                    <CardDescription>
+                                        Итоговые метрики с учетом базовых параметров и рычагов роста.
+                                        <span className="block mt-1 font-medium">eCPM: <span className="text-primary">{modifiedEcpm.toFixed(1)} ₽</span> | Fill-rate: <span className="text-primary">{modifiedFillRate.toFixed(1)}%</span></span>
+                                    </CardDescription>
                                 </CardHeader>
                                 <CardContent className="flex flex-col items-center justify-center space-y-4">
                                      <div className="text-6xl font-black text-primary tracking-tighter">
@@ -240,32 +263,8 @@ export function AdvertisingPage() {
                         </CardContent>
                     </Card>
 
-                     <Card>
-                        <CardHeader>
-                            <CardTitle>Рычаги увеличения eCPM и fill-rate</CardTitle>
-                             <CardDescription>Рекомендации для повышения рекламных доходов.</CardDescription>
-                        </CardHeader>
-                        <CardContent>
-                            <div className="border rounded-lg">
-                                <Table>
-                                    <TableHeader><TableRow><TableHead>Рычаг</TableHead><TableHead>Эффект</TableHead><TableHead>Как внедряем</TableHead></TableRow></TableHeader>
-                                    <TableBody>
-                                        {growthLevers.map((item) => (
-                                            <TableRow key={item.lever}>
-                                                <TableCell className="font-medium">{item.lever}</TableCell>
-                                                <TableCell className="text-green-400 font-semibold">{item.effect}</TableCell>
-                                                <TableCell>{item.implementation}</TableCell>
-                                            </TableRow>
-                                        ))}
-                                    </TableBody>
-                                </Table>
-                            </div>
-                        </CardContent>
-                    </Card>
-
                 </div>
             </main>
         </div>
     );
 }
-
