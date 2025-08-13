@@ -155,13 +155,13 @@ function ParticipantsTab({teams, setTeams}: {teams: any[], setTeams: React.Dispa
                            {teams.map((team) => (
                                 <TableRow key={team.id}>
                                     <TableCell className="font-medium">
-                                        <div className="flex items-center gap-3">
+                                        <Link href={`/teams/${team.id}`} className="flex items-center gap-3 group">
                                             <Avatar>
                                                 <AvatarImage src={team.logoUrl} />
                                                 <AvatarFallback>{team.name.charAt(0)}</AvatarFallback>
                                             </Avatar>
-                                            {team.name}
-                                        </div>
+                                            <span className="group-hover:text-primary transition-colors">{team.name}</span>
+                                        </Link>
                                     </TableCell>
                                     <TableCell>{team.date}</TableCell>
                                     <TableCell>
@@ -902,13 +902,13 @@ function SponsorsTab() {
                            {initialSponsors.map((sponsor) => (
                                 <TableRow key={sponsor.id}>
                                     <TableCell className="font-medium">
-                                        <div className="flex items-center gap-3">
+                                        <Link href={`/sponsors/${sponsor.id}`} className="flex items-center gap-3 group">
                                             <Avatar>
                                                 <AvatarImage src={sponsor.logoUrl} />
                                                 <AvatarFallback>{sponsor.name.charAt(0)}</AvatarFallback>
                                             </Avatar>
-                                            {sponsor.name}
-                                        </div>
+                                            <span className="group-hover:text-primary transition-colors">{sponsor.name}</span>
+                                        </Link>
                                     </TableCell>
                                     <TableCell>{sponsor.contribution}</TableCell>
                                     <TableCell className="text-right">
