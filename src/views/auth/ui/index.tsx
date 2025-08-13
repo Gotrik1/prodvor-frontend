@@ -108,92 +108,92 @@ export function GosuslugiIcon(props: SVGProps<SVGSVGElement>) {
 }
 
 const SocialButton = ({ className, children }: { className?: string, children: React.ReactNode }) => (
-    &lt;button className={cn(
+    <button className={cn(
         "inline-flex items-center justify-center rounded-md border border-input bg-background transition-colors h-14 hover:bg-accent hover:text-accent-foreground",
         className
-    )}&gt;
+    )}>
         {children}
-    &lt;/button&gt;
+    </button>
 )
 
 export function AuthPage() {
   return (
-    &lt;div className="flex items-center justify-center min-h-screen bg-background p-4 dark"&gt;
-      &lt;Card className="w-full max-w-sm mx-auto shadow-xl border-border/60 bg-card"&gt;
-        &lt;CardHeader className="text-center"&gt;
-            &lt;div className="flex justify-center mb-4"&gt;
-                &lt;Logo /&gt;
-            &lt;/div&gt;
-            &lt;CardTitle className="text-2xl font-bold"&gt;Вход в ProDvor ID&lt;/CardTitle&gt;
-        &lt;/CardHeader&gt;
-        &lt;CardContent&gt;
-            &lt;Tabs defaultValue="email"&gt;
-                &lt;TabsList className="grid w-full grid-cols-2"&gt;
-                    &lt;TabsTrigger value="phone"&gt;Телефон&lt;/TabsTrigger&gt;
-                    &lt;TabsTrigger value="email"&gt;Почта&lt;/TabsTrigger&gt;
-                &lt;/TabsList&gt;
-                &lt;TabsContent value="phone" className="pt-4"&gt;
-                     &lt;div className="space-y-4"&gt;
-                        &lt;div className="space-y-2"&gt;
-                            &lt;Label htmlFor="phone"&gt;Телефон&lt;/Label&gt;
-                            &lt;Input id="phone" type="tel" placeholder="+7 (___) ___-__-__" required /&gt;
-                        &lt;/div&gt;
-                        &lt;Button type="submit" className="w-full"&gt;Продолжить&lt;/Button&gt;
-                    &lt;/div&gt;
-                &lt;/TabsContent&gt;
-                &lt;TabsContent value="email" className="pt-4"&gt;
-                    &lt;div className="space-y-4"&gt;
-                        &lt;div className="space-y-2"&gt;
-                            &lt;Label htmlFor="email"&gt;Email&lt;/Label&gt;
-                            &lt;Input id="email" type="email" placeholder="admin@example.com" required /&gt;
-                        &lt;/div&gt;
-                        &lt;div className="space-y-2"&gt;
-                            &lt;Label htmlFor="password"&gt;Пароль&lt;/Label&gt;
-                            &lt;Input id="password" type="password" required /&gt;
-                        &lt;/div&gt;
-                        &lt;div className="flex items-center justify-between"&gt;
-                            &lt;div className="flex items-center space-x-2"&gt;
-                                &lt;Checkbox id="remember" /&gt;
-                                &lt;Label htmlFor="remember" className="text-sm font-normal text-muted-foreground"&gt;Сохранить вход&lt;/Label&gt;
-                            &lt;/div&gt;
-                            &lt;a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors"&gt;
-                                &lt;HelpCircle className="inline h-4 w-4 mr-1" /&gt;
+    <div className="flex items-center justify-center min-h-screen bg-background p-4 dark">
+      <Card className="w-full max-w-sm mx-auto shadow-xl border-border/60 bg-card">
+        <CardHeader className="text-center">
+            <div className="flex justify-center mb-4">
+                <Logo />
+            </div>
+            <CardTitle className="text-2xl font-bold">Вход в ProDvor ID</CardTitle>
+        </CardHeader>
+        <CardContent>
+            <Tabs defaultValue="email">
+                <TabsList className="grid w-full grid-cols-2">
+                    <TabsTrigger value="phone">Телефон</TabsTrigger>
+                    <TabsTrigger value="email">Почта</TabsTrigger>
+                </TabsList>
+                <TabsContent value="phone" className="pt-4">
+                     <div className="space-y-4">
+                        <div className="space-y-2">
+                            <Label htmlFor="phone">Телефон</Label>
+                            <Input id="phone" type="tel" placeholder="+7 (___) ___-__-__" required />
+                        </div>
+                        <Button type="submit" className="w-full">Продолжить</Button>
+                    </div>
+                </TabsContent>
+                <TabsContent value="email" className="pt-4">
+                    <div className="space-y-4">
+                        <div className="space-y-2">
+                            <Label htmlFor="email">Email</Label>
+                            <Input id="email" type="email" placeholder="admin@example.com" required />
+                        </div>
+                        <div className="space-y-2">
+                            <Label htmlFor="password">Пароль</Label>
+                            <Input id="password" type="password" required />
+                        </div>
+                        <div className="flex items-center justify-between">
+                            <div className="flex items-center space-x-2">
+                                <Checkbox id="remember" />
+                                <Label htmlFor="remember" className="text-sm font-normal text-muted-foreground">Сохранить вход</Label>
+                            </div>
+                            <a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                                <HelpCircle className="inline h-4 w-4 mr-1" />
                                 Забыли пароль?
-                            &lt;/a&gt;
-                        &lt;/div&gt;
-                        &lt;Button type="submit" className="w-full"&gt;Продолжить&lt;/Button&gt;
-                    &lt;/div&gt;
-                &lt;/TabsContent&gt;
-            &lt;/Tabs&gt;
+                            </a>
+                        </div>
+                        <Button type="submit" className="w-full">Продолжить</Button>
+                    </div>
+                </TabsContent>
+            </Tabs>
             
-            &lt;div className="relative my-6"&gt;
-                &lt;div className="absolute inset-0 flex items-center"&gt;
-                    &lt;span className="w-full border-t" /&gt;
-                &lt;/div&gt;
-                &lt;div className="relative flex justify-center text-xs uppercase"&gt;
-                    &lt;span className="bg-card px-2 text-muted-foreground"&gt;Или войдите с помощью&lt;/span&gt;
-                &lt;/div&gt;
-            &lt;/div&gt;
+            <div className="relative my-6">
+                <div className="absolute inset-0 flex items-center">
+                    <span className="w-full border-t" />
+                </div>
+                <div className="relative flex justify-center text-xs uppercase">
+                    <span className="bg-card px-2 text-muted-foreground">Или войдите с помощью</span>
+                </div>
+            </div>
 
-            &lt;div className="space-y-2"&gt;
-                &lt;Button variant="outline" className="w-full font-bold"&gt;Создать аккаунт&lt;/Button&gt;
-                &lt;div className="grid grid-cols-4 gap-2"&gt;
-                    &lt;SocialButton&gt;
-                        &lt;YandexIcon className="h-10 w-10" /&gt;
-                    &lt;/SocialButton&gt;
-                    &lt;SocialButton&gt;
-                        &lt;VkIcon className="h-10 w-10" /&gt;
-                    &lt;/SocialButton&gt;
-                    &lt;SocialButton&gt;
-                        &lt;TelegramIcon className="h-10 w-10" /&gt;
-                    &lt;/SocialButton&gt;
-                    &lt;SocialButton&gt;
-                        &lt;GosuslugiIcon className="w-24 h-auto" /&gt;
-                    &lt;/SocialButton&gt;
-                &lt;/div&gt;
-            &lt;/div&gt;
-        &lt;/CardContent&gt;
-      &lt;/Card&gt;
-    &lt;/div&gt;
+            <div className="space-y-2">
+                <Button variant="outline" className="w-full font-bold">Создать аккаунт</Button>
+                <div className="grid grid-cols-4 gap-2">
+                    <SocialButton>
+                        <YandexIcon className="h-10 w-10" />
+                    </SocialButton>
+                    <SocialButton>
+                        <VkIcon className="h-10 w-10" />
+                    </SocialButton>
+                    <SocialButton>
+                        <TelegramIcon className="h-10 w-10" />
+                    </SocialButton>
+                    <SocialButton>
+                        <GosuslugiIcon className="h-auto w-24" />
+                    </SocialButton>
+                </div>
+            </div>
+        </CardContent>
+      </Card>
+    </div>
   );
 }
