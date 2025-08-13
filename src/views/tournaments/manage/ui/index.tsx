@@ -4,7 +4,7 @@
 
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
-import { ArrowLeft, Users, Calendar, Megaphone, Settings, Bot, GanttChartIcon, CheckCircle, XCircle, Clock, Search, Shield, Award, PlusCircle, Send, UserPlus, Film, UploadCloud, Video, PlayCircle, StopCircle, Ban, ListChecks } from "lucide-react";
+import { ArrowLeft, Users, Calendar, Megaphone, Settings, Bot, GanttChartIcon, CheckCircle, XCircle, Clock, Search, Shield, Award, PlusCircle, Send, UserPlus, Film, UploadCloud, Video, PlayCircle, StopCircle, Ban, ListChecks, LucideIcon } from "lucide-react";
 import Link from "next/link";
 import { tournaments, teams, staff, sponsors, requirements } from '@/mocks';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
@@ -71,6 +71,13 @@ const statusColors: Record<string, string> = {
 
 const statusOptions = ['АНОНС', 'ПРЕДРЕГИСТРАЦИЯ', 'РЕГИСТРАЦИЯ', 'ИДЕТ', 'ЗАВЕРШЕН', 'ПРИОСТАНОВЛЕН', 'ОТМЕНЕН'];
 
+const StatCard = ({ title, value, icon: Icon }: { title: string, value: string | React.ReactNode, icon: LucideIcon }) => (
+    <div className="p-4 bg-muted rounded-lg flex flex-col items-center justify-center text-center h-full">
+        <p className="text-sm text-muted-foreground mb-2">{title}</p>
+        <div className="text-2xl font-bold">{value}</div>
+    </div>
+);
+
 
 function OverviewTab({ tournament }: { tournament: (typeof allTournaments)[0] }) {
     const [currentStatus, setCurrentStatus] = useState(tournament.status);
@@ -101,8 +108,8 @@ function OverviewTab({ tournament }: { tournament: (typeof allTournaments)[0] })
                         <div className="relative w-full h-48 md:h-64 rounded-lg overflow-hidden">
                             <Image src={tournament.bannerUrl} alt={tournament.name} layout="fill" objectFit="cover" data-ai-hint={tournament.dataAiHint} />
                         </div>
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
-                           <div className="p-4 bg-muted rounded-lg">
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                           <div className="p-4 bg-muted rounded-lg flex flex-col items-center justify-center text-center h-full">
                                 <p className="text-sm text-muted-foreground mb-2">Статус</p>
                                 <Select value={currentStatus} onValueChange={(value) => setCurrentStatus(value as typeof currentStatus)}>
                                     <SelectTrigger className={`w-full font-semibold ${statusColors[currentStatus]}`}>
@@ -115,18 +122,9 @@ function OverviewTab({ tournament }: { tournament: (typeof allTournaments)[0] })
                                     </SelectContent>
                                 </Select>
                             </div>
-                            <div className="p-4 bg-muted rounded-lg">
-                                <p className="text-sm text-muted-foreground">Участники</p>
-                                <p className="text-2xl font-bold">{tournament.participants}/{tournament.maxParticipants}</p>
-                            </div>
-                            <div className="p-4 bg-muted rounded-lg">
-                                <p className="text-sm text-muted-foreground">Призовой фонд</p>
-                                <p className="text-2xl font-bold text-primary">{tournament.prizePool}</p>
-                            </div>
-                            <div className="p-4 bg-muted rounded-lg">
-                                <p className="text-sm text-muted-foreground">Дата начала</p>
-                                <p className="text-2xl font-bold">{new Date(tournament.startDate).toLocaleDateString('ru-RU')}</p>
-                            </div>
+                            <StatCard title="Участники" value={`${tournament.participants}/${tournament.maxParticipants}`} icon={Users} />
+                            <StatCard title="Призовой фонд" value={<span className="text-primary">{tournament.prizePool}</span>} icon={Award} />
+                            <StatCard title="Дата начала" value={new Date(tournament.startDate).toLocaleDateString('ru-RU')} icon={Calendar} />
                         </div>
                     </CardContent>
                 </Card>
