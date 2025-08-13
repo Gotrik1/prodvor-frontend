@@ -9,7 +9,6 @@ import { CoachPageTemplate } from '@/views/admin/ui/templates/coach-page-templat
 import { ManagerPageTemplate } from '@/views/admin/ui/templates/manager-page-template';
 import { FanPageTemplate } from '@/views/admin/ui/templates/fan-page-template';
 import { PlaceholderTemplate } from '@/views/admin/ui/templates/placeholder-template';
-import { SponsorPageTemplate } from '@/views/admin/ui/templates/sponsor-page-template';
 
 // --- Mock current user ---
 // To test different roles, change the ID here to one from `src/mocks/users.ts`

@@ -45,7 +45,7 @@ export const users: User[] = [
     nickname: 'Amazonka',
     avatarUrl: 'https://i.pravatar.cc/150?u=a042581f4e29026704e',
     email: 'amazonka@example.com',
-    role: 'Тренер',
+    role: 'Болельщик',
     },
     { 
     id: 'staff1', 
@@ -63,7 +63,7 @@ export const users: User[] = [
     nickname: 'GlavSudya',
     avatarUrl: 'https://i.pravatar.cc/150?u=staff2', 
     email: 'referee2@example.com',
-    role: 'Судья' 
+    role: 'Тренер' 
     },
     { 
     id: 'staff3', 
