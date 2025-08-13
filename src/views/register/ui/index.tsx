@@ -58,7 +58,6 @@ export function RegisterPage() {
                         </SelectTrigger>
                         <SelectContent>
                             <SelectItem value="player">Игрок</SelectItem>
-                            <SelectItem value="captain">Капитан</SelectItem>
                             <SelectItem value="referee">Судья</SelectItem>
                             <SelectItem value="fan">Болельщик</SelectItem>
                             <SelectItem value="coach">Тренер</SelectItem>
