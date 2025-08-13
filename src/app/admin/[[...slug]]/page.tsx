@@ -7,6 +7,21 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Button } from '@/shared/ui/button';
 import Link from 'next/link';
 
+// --- Template Imports ---
+import { CoachPageTemplate } from '@/views/admin/ui/templates/coach-page-template';
+import { FanPageTemplate } from '@/views/admin/ui/templates/fan-page-template';
+import { ManagerPageTemplate } from '@/views/admin/ui/templates/manager-page-template';
+import { PlaceholderTemplate } from '@/views/admin/ui/templates/placeholder-template';
+import { OrganizerPageTemplate } from '@/views/admin/ui/templates/organizer-page-template';
+import { PlayerPageTemplate } from '@/views/admin/ui/templates/player-page-template';
+import { RefereePageTemplate } from '@/views/admin/ui/templates/referee-page-template';
+import { SponsorPageTemplate } from '@/views/admin/ui/templates/sponsor-page-template';
+import { TeamPageTemplate } from '@/views/admin/ui/templates/team-page-template';
+import { UserPage } from './users/[userId]/page';
+import { SponsorPage } from './sponsors/[sponsorId]/page';
+import { TemplatePreviewPage } from './templates/TemplatePreviewPage';
+
+
 export const metadata: Metadata = {
     title: 'Администрирование | ProDvor',
     description: 'Панель администратора ProDvor',
@@ -32,10 +47,23 @@ function NotFoundAdminPage() {
     );
 }
 
+const templateMap = {
+    coach: CoachPageTemplate,
+    fan: FanPageTemplate,
+    manager: ManagerPageTemplate,
+    moderator: () => <PlaceholderTemplate roleName="Модератор" />,
+    organizer: OrganizerPageTemplate,
+    player: PlayerPageTemplate,
+    referee: RefereePageTemplate,
+    sponsor: SponsorPageTemplate,
+    team: TeamPageTemplate,
+};
 
 export default function AdminPage({ params }: { params: { slug: string[] } }) {
   const { slug } = params;
   const page = slug?.[0] || 'dashboard';
+  const subpage = slug?.[1];
+  const id = slug?.[2];
 
   const renderPage = () => {
     switch (page) {
@@ -45,6 +73,14 @@ export default function AdminPage({ params }: { params: { slug: string[] } }) {
         return <AdminStatisticsPage />;
       case 'advertising':
         return <AdminAdvertisingPage />;
+      case 'users':
+        return <UserPage params={{ userId: subpage }} />;
+      case 'sponsors':
+        return <SponsorPage params={{ sponsorId: subpage }} />;
+      case 'templates':
+        const TemplateComponent = templateMap[subpage as keyof typeof templateMap];
+        const title = subpage.charAt(0).toUpperCase() + subpage.slice(1);
+        return TemplateComponent ? <TemplatePreviewPage title={`Шаблон: ${title}`}><TemplateComponent /></TemplatePreviewPage> : <NotFoundAdminPage />;
       default:
         return <NotFoundAdminPage />;
     }

@@ -1,7 +1,28 @@
-'use server';
-/**
- * @fileOverview This file is now located at src/shared/api/generate-team-logo-variations.ts
- * This file is deprecated and will be removed in a future version.
- */
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  /* config options here */
+  typescript: {
+    ignoreBuildErrors: true,
+  },
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+  images: {
+    remotePatterns: [
+        {
+            protocol: 'https',
+            hostname: 'placehold.co',
+        },
+        {
+            protocol: 'https',
+            hostname: 'prodvor.website',
+        },
+        {
+            protocol: 'https',
+            hostname: 'i.pravatar.cc',
+        }
+    ],
+  },
+};
 
-export * from '@/shared/api/generate-team-logo-variations';
+export default nextConfig;
