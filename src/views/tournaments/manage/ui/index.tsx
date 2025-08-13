@@ -1,7 +1,9 @@
 
+'use client';
+
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
-import { ArrowLeft, Users, Calendar, Megaphone, Settings, Bot, GanttChartIcon, CheckCircle, XCircle, Clock, Search, Shield, Award, PlusCircle, Send, UserPlus, Film, UploadCloud, Video } from "lucide-react";
+import { ArrowLeft, Users, Calendar, Megaphone, Settings, Bot, GanttChartIcon, CheckCircle, XCircle, Clock, Search, Shield, Award, PlusCircle, Send, UserPlus, Film, UploadCloud, Video, PlayCircle, StopCircle, Ban } from "lucide-react";
 import Link from "next/link";
 import { tournaments, teams, staff, sponsors } from '@/mocks';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
@@ -13,6 +15,8 @@ import { Input } from "@/shared/ui/input";
 import { Textarea } from "@/shared/ui/textarea";
 import { Label } from "@/shared/ui/label";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/shared/ui/dialog";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/select";
+import React, { useState } from "react";
 
 const myTournaments = [
     {
@@ -23,6 +27,7 @@ const myTournaments = [
       prizePool: '100 000 руб.',
       participants: 8,
       maxParticipants: 16,
+      startDate: '2025-08-01',
       bannerUrl: 'https://placehold.co/1200x300.png',
       dataAiHint: 'soccer street'
     },
@@ -52,52 +57,98 @@ const registeredTeams = [
 ];
 
 
-const statusColors = {
+const statusColors: Record<string, string> = {
     'РЕГИСТРАЦИЯ': 'bg-blue-500/20 text-blue-300 border-blue-500/30',
     'ИДЕТ': 'bg-green-500/20 text-green-300 border-green-500/30',
     'ЗАВЕРШЕН': 'bg-muted text-muted-foreground border-border',
+    'ПРИОСТАНОВЛЕН': 'bg-amber-500/20 text-amber-300 border-amber-500/30',
+    'ОТМЕНЕН': 'bg-red-500/20 text-red-300 border-red-500/30',
 }
 
+const statusOptions = ['РЕГИСТРАЦИЯ', 'ИДЕТ', 'ЗАВЕРШЕН', 'ПРИОСТАНОВЛЕН', 'ОТМЕНЕН'];
+
+
 function OverviewTab({ tournament }: { tournament: (typeof allTournaments)[0] }) {
+    const [currentStatus, setCurrentStatus] = useState(tournament.status);
+    
+    const getAiAdvice = () => {
+        switch(currentStatus) {
+            case 'РЕГИСТРАЦИЯ':
+                return `До конца регистрации осталось 3 дня. Рекомендуем сделать анонс, чтобы привлечь больше команд. На данный момент заполнено ${Math.round((tournament.participants/tournament.maxParticipants)*100)}% слотов. Прогнозируемое количество участников: 10 из 16.`;
+            case 'ИДЕТ':
+                return `Турнир в активной фазе! Не забывайте своевременно вносить результаты матчей. Совет: опубликуйте фото самых ярких моментов в медиа-центре для повышения вовлеченности.`;
+            case 'ЗАВЕРШЕН':
+                return `Турнир завершен! Поздравляем победителей. Рекомендуем написать итоговый анонс с благодарностью участникам и спонсорам.`;
+            default:
+                 return `Статус турнира: ${currentStatus}. Убедитесь, что все участники оповещены об изменениях.`;
+        }
+    }
+
+
     return (
-        <Card>
-            <CardHeader>
-                <CardTitle>Обзор турнира</CardTitle>
-                <CardDescription>Ключевая информация о вашем мероприятии.</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-6">
-                <div className="relative w-full h-48 md:h-64 rounded-lg overflow-hidden">
-                    <Image src={tournament.bannerUrl} alt={tournament.name} layout="fill" objectFit="cover" data-ai-hint={tournament.dataAiHint} />
-                </div>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
-                    <div className="p-4 bg-muted rounded-lg">
-                        <p className="text-sm text-muted-foreground">Статус</p>
-                        <Badge className={`mt-1 text-lg ${statusColors[tournament.status]}`}>{tournament.status}</Badge>
-                    </div>
-                    <div className="p-4 bg-muted rounded-lg">
-                        <p className="text-sm text-muted-foreground">Участники</p>
-                        <p className="text-2xl font-bold">{tournament.participants}/{tournament.maxParticipants}</p>
-                    </div>
-                    <div className="p-4 bg-muted rounded-lg">
-                        <p className="text-sm text-muted-foreground">Призовой фонд</p>
-                        <p className="text-2xl font-bold text-primary">{tournament.prizePool}</p>
-                    </div>
-                    <div className="p-4 bg-muted rounded-lg">
-                        <p className="text-sm text-muted-foreground">Дата начала</p>
-                        <p className="text-2xl font-bold">{new Date(tournament.startDate).toLocaleDateString('ru-RU')}</p>
-                    </div>
-                </div>
-                 <Card>
-                    <CardHeader className="flex flex-row items-center justify-between">
-                      <CardTitle className="text-lg flex items-center gap-2"><Bot />AI-Советник</CardTitle>
-                      <Button variant="ghost" size="sm">Обновить</Button>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="lg:col-span-2 space-y-6">
+                <Card>
+                    <CardHeader>
+                        <CardTitle>Обзор турнира</CardTitle>
+                        <CardDescription>Ключевая информация о вашем мероприятии.</CardDescription>
                     </CardHeader>
-                    <CardContent>
-                      <p className="text-muted-foreground">До конца регистрации осталось 3 дня. Рекомендуем сделать анонс, чтобы привлечь больше команд. На данный момент заполнено {Math.round((tournament.participants/tournament.maxParticipants)*100)}% слотов. Прогнозируемое количество участников: 10 из 16.</p>
+                    <CardContent className="space-y-6">
+                        <div className="relative w-full h-48 md:h-64 rounded-lg overflow-hidden">
+                            <Image src={tournament.bannerUrl} alt={tournament.name} layout="fill" objectFit="cover" data-ai-hint={tournament.dataAiHint} />
+                        </div>
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+                           <div className="p-4 bg-muted rounded-lg">
+                                <p className="text-sm text-muted-foreground mb-2">Статус</p>
+                                <Select value={currentStatus} onValueChange={(value) => setCurrentStatus(value as typeof currentStatus)}>
+                                    <SelectTrigger className={`w-full font-semibold ${statusColors[currentStatus]}`}>
+                                        <SelectValue />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {statusOptions.map(option => (
+                                            <SelectItem key={option} value={option}>{option}</SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                            </div>
+                            <div className="p-4 bg-muted rounded-lg">
+                                <p className="text-sm text-muted-foreground">Участники</p>
+                                <p className="text-2xl font-bold">{tournament.participants}/{tournament.maxParticipants}</p>
+                            </div>
+                            <div className="p-4 bg-muted rounded-lg">
+                                <p className="text-sm text-muted-foreground">Призовой фонд</p>
+                                <p className="text-2xl font-bold text-primary">{tournament.prizePool}</p>
+                            </div>
+                            <div className="p-4 bg-muted rounded-lg">
+                                <p className="text-sm text-muted-foreground">Дата начала</p>
+                                <p className="text-2xl font-bold">{new Date(tournament.startDate).toLocaleDateString('ru-RU')}</p>
+                            </div>
+                        </div>
+                    </CardContent>
+                </Card>
+            </div>
+             <div className="space-y-6">
+                 <Card>
+                    <CardHeader>
+                      <CardTitle className="text-lg flex items-center gap-2">Быстрые действия</CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-2">
+                      <Button className="w-full justify-start" variant="secondary"><PlayCircle className="mr-2 h-4 w-4"/>Начать турнир</Button>
+                      <Button className="w-full justify-start" variant="secondary"><StopCircle className="mr-2 h-4 w-4"/>Завершить турнир</Button>
+                      <Button className="w-full justify-start" variant="destructive"><Ban className="mr-2 h-4 w-4"/>Отменить турнир</Button>
                     </CardContent>
                  </Card>
-            </CardContent>
-        </Card>
+                 <Card>
+                    <CardHeader className="flex flex-row items-center justify-between pb-2">
+                      <CardTitle className="text-lg flex items-center gap-2"><Bot />AI-Советник</CardTitle>
+                      <Button variant="ghost" size="icon" className="h-7 w-7"><Search className="h-4 w-4"/></Button>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-sm text-muted-foreground">{getAiAdvice()}</p>
+                    </CardContent>
+                 </Card>
+            </div>
+        </div>
     )
 }
 
