@@ -1,0 +1,1 @@
+export { TeamPublicPage } from './ui';

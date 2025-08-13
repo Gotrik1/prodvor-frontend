@@ -5,6 +5,7 @@ import { registeredTeams } from './mock-data';
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import { Trophy } from 'lucide-react';
+import Link from 'next/link';
 
 // Simple pseudo-random generator to ensure same results on server and client
 const createSeededRandom = (seed: number) => () => {
@@ -51,11 +52,13 @@ export function TournamentBracket() {
                                     <CardContent className="flex items-center justify-between p-4">
                                         {/* Team 1 */}
                                         <div className={`flex items-center gap-3 w-2/5 transition-opacity ${winner !== 'team1' && 'opacity-50'}`}>
-                                            <Avatar>
-                                                <AvatarImage src={match.team1.logoUrl} alt={match.team1.name} />
-                                                <AvatarFallback>{match.team1.name.slice(0, 2)}</AvatarFallback>
-                                            </Avatar>
-                                            <span className="font-medium truncate">{match.team1.name}</span>
+                                            <Link href={`/teams/${match.team1.id}`} className="flex items-center gap-3 group">
+                                                <Avatar>
+                                                    <AvatarImage src={match.team1.logoUrl} alt={match.team1.name} />
+                                                    <AvatarFallback>{match.team1.name.slice(0, 2)}</AvatarFallback>
+                                                </Avatar>
+                                                <span className="font-medium truncate group-hover:text-primary transition-colors">{match.team1.name}</span>
+                                            </Link>
                                         </div>
 
                                         {/* Score */}
@@ -67,11 +70,13 @@ export function TournamentBracket() {
 
                                         {/* Team 2 */}
                                         <div className={`flex items-center gap-3 w-2/5 justify-end transition-opacity ${winner !== 'team2' && 'opacity-50'}`}>
-                                            <span className="font-medium truncate text-right">{match.team2.name}</span>
-                                            <Avatar>
-                                                <AvatarImage src={match.team2.logoUrl} alt={match.team2.name} />
-                                                <AvatarFallback>{match.team2.name.slice(0, 2)}</AvatarFallback>
-                                            </Avatar>
+                                            <Link href={`/teams/${match.team2.id}`} className="flex items-center gap-3 group">
+                                                <span className="font-medium truncate text-right group-hover:text-primary transition-colors">{match.team2.name}</span>
+                                                <Avatar>
+                                                    <AvatarImage src={match.team2.logoUrl} alt={match.team2.name} />
+                                                    <AvatarFallback>{match.team2.name.slice(0, 2)}</AvatarFallback>
+                                                </Avatar>
+                                            </Link>
                                         </div>
                                     </CardContent>
                                     {winner && (
