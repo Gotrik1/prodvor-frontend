@@ -1,10 +1,11 @@
-import { PlaceholderTemplate } from '@/views/admin/ui/templates/placeholder-template';
 import type { Metadata } from 'next';
 import { Button } from '@/shared/ui/button';
 import Link from 'next/link';
 import { ArrowLeft, User as UserIcon } from 'lucide-react';
 import { staff } from '@/mocks/personnel';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
+import { PlaceholderTemplate } from '@/views/admin/ui/templates/placeholder-template';
+import { RefereePageTemplate } from '@/views/admin/ui/templates/referee-page-template';
 
 export async function generateMetadata({ params }: { params: { userId: string } }): Promise<Metadata> {
   const user = staff.find(s => s.id === params.userId);
@@ -37,6 +38,17 @@ export default function UserPage({ params }: { params: { userId: string } }) {
       </div>
     );
   }
+  
+  const renderTemplate = () => {
+    switch (user.role) {
+        case 'Судья':
+            return <RefereePageTemplate user={user} />;
+        case 'Организатор':
+            return <PlaceholderTemplate roleName={user.role} />;
+        default:
+            return <PlaceholderTemplate roleName="Неизвестная роль" />;
+    }
+  }
 
   return (
     <div className="bg-background min-h-screen">
@@ -56,7 +68,7 @@ export default function UserPage({ params }: { params: { userId: string } }) {
         </header>
         <main className="p-4 md:p-6 lg:p-8">
             <div className="container mx-auto">
-                <PlaceholderTemplate roleName={user.role} />
+                {renderTemplate()}
             </div>
         </main>
     </div>
