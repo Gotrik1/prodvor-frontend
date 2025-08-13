@@ -127,14 +127,14 @@ export function FanPageTemplate() {
                                 <div key={index} className="p-3 rounded-lg bg-muted/50">
                                     <p className="text-xs text-muted-foreground">{match.tournament.name}</p>
                                     <div className="flex items-center justify-between mt-1">
-                                        <div className="flex items-center gap-2 text-sm font-medium">
-                                            <Image src={match.team1.logoUrl} alt={match.team1.name} width={20} height={20} className="rounded-sm" data-ai-hint="team logo"/>
-                                            {match.team1.name}
+                                        <div className="flex items-center gap-2 text-sm font-medium w-2/5">
+                                            <Image src={match.team1.logoUrl} alt={match.team1.name} width={24} height={24} className="rounded-sm" data-ai-hint="team logo"/>
+                                            <span className="truncate">{match.team1.name}</span>
                                         </div>
                                          <span className="text-xs font-bold text-primary">VS</span>
-                                         <div className="flex items-center gap-2 text-sm font-medium">
-                                            {match.team2.name}
-                                            <Image src={match.team2.logoUrl} alt={match.team2.name} width={20} height={20} className="rounded-sm" data-ai-hint="team logo"/>
+                                         <div className="flex items-center gap-2 text-sm font-medium w-2/5 justify-end text-right">
+                                            <span className="truncate">{match.team2.name}</span>
+                                            <Image src={match.team2.logoUrl} alt={match.team2.name} width={24} height={24} className="rounded-sm" data-ai-hint="team logo"/>
                                         </div>
                                     </div>
                                 </div>
