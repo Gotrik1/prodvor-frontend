@@ -20,6 +20,7 @@ import { Input } from '@/shared/ui/input';
 import { Label } from '@/shared/ui/label';
 import { Switch } from '@/shared/ui/switch';
 import { AudienceManager } from './audience-manager';
+import { CampaignManager } from './campaign-manager';
 
 
 const formatCurrency = (value: number) => {
@@ -240,6 +241,8 @@ export function AdvertisingPage() {
                     </div>
 
                     <AudienceManager />
+
+                    <CampaignManager />
 
                     <Card>
                         <CardHeader>

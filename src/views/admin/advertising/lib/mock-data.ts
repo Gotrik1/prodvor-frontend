@@ -50,8 +50,8 @@ export const initialQuarterlyForecast = [
 ];
 
 export const growthLevers = [
-    { id: 'segmentation', lever: "Сегментация аудиторий VK Target Hash", effect: "+12.5 ₽ eCPM", type: 'ecpm' as const, value: 12.5 },
-    { id: 'native', lever: "Нативные спецпроекты со спонсорами", effect: "+8 ₽ eCPM", type: 'ecpm' as const, value: 8 },
+    { id: 'segmentation', lever: "Сегментация аудиторий", effect: "+12.5 ₽ eCPM", type: 'ecpm' as const, value: 12.5 },
+    { id: 'native', lever: "Нативные спецпроекты", effect: "+8 ₽ eCPM", type: 'ecpm' as const, value: 8 },
     { id: 'auction', lever: "A/B-аукцион (price-floor)", effect: "+5 ₽ eCPM", type: 'ecpm' as const, value: 5 },
     { id: 'premium', lever: "Премиум-пакет (частота ≤ 3)", effect: "+8% fill", type: 'fill' as const, value: 8 },
     { id: 'api', lever: "API-маркировка РК", effect: "+5% fill", type: 'fill' as const, value: 5 },
