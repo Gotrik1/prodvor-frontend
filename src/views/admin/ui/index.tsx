@@ -1,108 +1,74 @@
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/shared/ui/dialog";
 import Link from "next/link";
-import { PlayerPageTemplate } from "./templates/player-page-template";
-import { TeamPageTemplate } from "./templates/team-page-template";
 import type { LucideIcon } from "lucide-react";
 import { User, Users, ClipboardList, Gavel, Briefcase, Shield, Megaphone, Handshake, Star } from "lucide-react";
-import React from "react";
-import { ScrollArea } from "@/shared/ui/scroll-area";
 
 const roles = [
-    // This card will now be a link
-    // {
-    //     name: "Игрок",
-    //     description: "Персональная страница игрока со статистикой и достижениями.",
-    //     icon: User,
-    //     template: <PlayerPageTemplate />,
-    // },
     {
         name: "Команда",
+        slug: "team",
         description: "Публичная страница команды с составом, матчами и статистикой.",
         icon: Users,
-        template: <TeamPageTemplate />,
     },
     {
         name: "Тренер",
+        slug: "coach",
         description: "Инструменты для управления тренировками и аналитики команды.",
         icon: ClipboardList,
-        template: <div className="text-center p-8">Шаблон для тренера в разработке.</div>,
     },
     {
         name: "Судья",
+        slug: "referee",
         description: "Управление матчами, фиксация результатов и просмотр расписания.",
         icon: Gavel,
-        template: <div className="text-center p-8">Шаблон для судьи в разработке.</div>,
     },
     {
         name: "Менеджер",
+        slug: "manager",
         description: "Инструменты для управления несколькими командами и игроками.",
         icon: Briefcase,
-        template: <div className="text-center p-8">Шаблон для менеджера в разработке.</div>,
     },
     {
         name: "Модератор",
+        slug: "moderator",
         description: "Инструменты для управления контентом и пользователями.",
         icon: Shield,
-        template: <div className="text-center p-8">Шаблон для модератора в разработке.</div>,
     },
     {
         name: "Организатор",
+        slug: "organizer",
         description: "Создание и управление турнирами, лигами и мероприятиями.",
         icon: Megaphone,
-        template: <div className="text-center p-8">Шаблон для организатора в разработке.</div>,
     },
     {
         name: "Спонсор",
+        slug: "sponsor",
         description: "Страница с информацией о спонсируемых командах и турнирах.",
         icon: Handshake,
-        template: <div className="text-center p-8">Шаблон для спонсора в разработке.</div>,
     },
     {
         name: "Болельщик",
+        slug: "fan",
         description: "Лента новостей, отслеживаемые команды и предстоящие матчи.",
         icon: Star,
-        template: <div className="text-center p-8">Шаблон для болельщика в разработке.</div>,
     },
 ];
 
-const TemplateCardAsDialog = ({
-    name,
-    description,
-    icon: Icon,
-    template,
-}: {
-    name: string;
-    description: string;
-    icon: LucideIcon;
-    template: React.ReactNode;
-}) => (
-    <Dialog>
-        <DialogTrigger asChild>
-            <Card className="cursor-pointer hover:border-primary transition-colors hover:shadow-lg">
-                <CardHeader className="flex flex-row items-center gap-4">
-                    <div className="p-3 rounded-md bg-primary/10 text-primary">
-                        <Icon className="w-6 h-6" />
-                    </div>
-                    <CardTitle>{name}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                    <p className="text-sm text-muted-foreground">{description}</p>
-                </CardContent>
-            </Card>
-        </DialogTrigger>
-        <DialogContent className="max-w-4xl h-[90vh]">
-            <DialogHeader>
-                <DialogTitle>Предпросмотр шаблона: {name}</DialogTitle>
-            </DialogHeader>
-            <ScrollArea className="h-full pr-6">
-                <div className="py-4">
-                  {template}
+const TemplateCardLink = ({ name, description, icon: Icon, slug }: { name: string; description: string; icon: LucideIcon; slug: string; }) => (
+    <Link href={`/admin/templates/${slug}`}>
+        <Card className="cursor-pointer h-full hover:border-primary transition-colors hover:shadow-lg">
+            <CardHeader className="flex flex-row items-center gap-4">
+                <div className="p-3 rounded-md bg-primary/10 text-primary">
+                    <Icon className="w-6 h-6" />
                 </div>
-            </ScrollArea>
-        </DialogContent>
-    </Dialog>
+                <CardTitle>{name}</CardTitle>
+            </CardHeader>
+            <CardContent>
+                <p className="text-sm text-muted-foreground">{description}</p>
+            </CardContent>
+        </Card>
+    </Link>
 );
 
 
@@ -140,22 +106,15 @@ export function AdminPage() {
                         </CardHeader>
                         <CardContent>
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                                <Link href="/admin/templates/player">
-                                    <Card className="cursor-pointer h-full hover:border-primary transition-colors hover:shadow-lg">
-                                        <CardHeader className="flex flex-row items-center gap-4">
-                                            <div className="p-3 rounded-md bg-primary/10 text-primary">
-                                                <User className="w-6 h-6" />
-                                            </div>
-                                            <CardTitle>Игрок</CardTitle>
-                                        </CardHeader>
-                                        <CardContent>
-                                            <p className="text-sm text-muted-foreground">Персональная страница игрока со статистикой и достижениями.</p>
-                                        </CardContent>
-                                    </Card>
-                                </Link>
+                                <TemplateCardLink
+                                    name="Игрок"
+                                    description="Персональная страница игрока со статистикой и достижениями."
+                                    icon={User}
+                                    slug="player"
+                                />
 
                                 {roles.map((role) => (
-                                    <TemplateCardAsDialog key={role.name} {...role} />
+                                    <TemplateCardLink key={role.name} {...role} />
                                 ))}
                             </div>
                         </CardContent>
