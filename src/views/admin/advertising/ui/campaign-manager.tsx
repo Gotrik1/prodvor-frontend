@@ -5,8 +5,13 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/sha
 import { Button } from "@/shared/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/shared/ui/table";
 import { Badge } from "@/shared/ui/badge";
-import { MoreHorizontal, PlusCircle, Megaphone } from "lucide-react";
+import { MoreHorizontal, PlusCircle, Megaphone, Send, UploadCloud } from "lucide-react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/shared/ui/dropdown-menu";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/shared/ui/dialog";
+import { Input } from "@/shared/ui/input";
+import { Label } from "@/shared/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/select";
+import { Textarea } from "@/shared/ui/textarea";
 
 const mockCampaigns = [
     { id: 'camp1', name: 'Летний Кубок - Регистрация', status: 'Активна', segment: 'Игроки в футбол (Москва)', impressions: '1.2M', clicks: '2,450', ctr: '0.20%' },
@@ -27,12 +32,71 @@ export function CampaignManager() {
             <CardHeader className="flex flex-row items-center justify-between">
                 <div>
                     <CardTitle className="flex items-center gap-2"><Megaphone /> Менеджер Кампаний</CardTitle>
-                    <CardDescription>Создавайте, отслеживайте и управляйте всеми рекламными кампаниями.</CardDescription>
+                    <CardDescription>Создавайте, отслеживайте и управляйте всеми рекламными кампаниями для продажи инвентаря.</CardDescription>
                 </div>
-                <Button>
-                    <PlusCircle className="mr-2 h-4 w-4" />
-                    Создать кампанию
-                </Button>
+                <Dialog>
+                    <DialogTrigger asChild>
+                        <Button>
+                            <PlusCircle className="mr-2 h-4 w-4" />
+                            Создать кампанию
+                        </Button>
+                    </DialogTrigger>
+                    <DialogContent className="sm:max-w-[625px]">
+                        <DialogHeader>
+                            <DialogTitle>Новая рекламная кампания</DialogTitle>
+                            <DialogDescription>
+                                Настройте параметры для нового рекламного размещения на платформе.
+                            </DialogDescription>
+                        </DialogHeader>
+                        <div className="grid gap-4 py-4">
+                            <div className="grid grid-cols-4 items-center gap-4">
+                                <Label htmlFor="name" className="text-right">Название</Label>
+                                <Input id="name" placeholder="Напр., Спонсорская интеграция 'Brand X'" className="col-span-3" />
+                            </div>
+                            <div className="grid grid-cols-4 items-center gap-4">
+                                <Label htmlFor="segment" className="text-right">Аудитория</Label>
+                                <Select>
+                                    <SelectTrigger className="col-span-3">
+                                        <SelectValue placeholder="Выберите сегмент" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="all">Все пользователи</SelectItem>
+                                        <SelectItem value="football_moscow">Игроки в футбол (Москва)</SelectItem>
+                                        <SelectItem value="cs2_players">Игроки CS2</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            </div>
+                             <div className="grid grid-cols-4 items-center gap-4">
+                                <Label htmlFor="type" className="text-right">Тип</Label>
+                                <Select>
+                                    <SelectTrigger className="col-span-3">
+                                        <SelectValue placeholder="Выберите тип кампании" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="banner">Баннер в ленте</SelectItem>
+                                        <SelectItem value="native">Нативная интеграция</SelectItem>
+                                        <SelectItem value="challenge">Брендированный челлендж</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            </div>
+                             <div className="grid grid-cols-4 items-start gap-4">
+                                <Label className="text-right pt-2">Креатив</Label>
+                                <div className="col-span-3">
+                                    <label htmlFor="dropzone-file" className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed rounded-lg cursor-pointer bg-muted/50 hover:bg-muted">
+                                        <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                                            <UploadCloud className="w-8 h-8 mb-4 text-muted-foreground"/>
+                                            <p className="mb-2 text-sm text-muted-foreground"><span className="font-semibold">Загрузите баннер</span></p>
+                                        </div>
+                                        <input id="dropzone-file" type="file" className="hidden" />
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <DialogFooter>
+                            <Button type="submit">Запустить кампанию</Button>
+                        </DialogFooter>
+                    </DialogContent>
+                </Dialog>
             </CardHeader>
             <CardContent>
                 <div className="border rounded-lg">
