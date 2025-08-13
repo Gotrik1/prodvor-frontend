@@ -1,3 +1,4 @@
+
 "use server";
 
 import {
@@ -7,6 +8,8 @@ import {
 import { generateNewsDigest } from "@/shared/api/generate-news-digest";
 import { sendTournamentAnnouncement } from "@/shared/api/send-tournament-announcement";
 import type { SendTournamentAnnouncementInput } from "@/shared/api/schemas/tournament-announcement-schema";
+import { generateTournamentPromo } from "@/shared/api/generate-tournament-promo";
+import type { GenerateTournamentPromoInput } from "@/shared/api/schemas/tournament-promo-schema";
 
 export async function generateLogosAction(
   input: GenerateTeamLogoVariationsInput
@@ -41,3 +44,14 @@ export async function sendTournamentAnnouncementAction(input: SendTournamentAnno
         return { success: false, error: "Failed to send announcement." };
     }
 }
+
+export async function generateTournamentPromoAction(input: GenerateTournamentPromoInput) {
+  try {
+    const result = await generateTournamentPromo(input);
+    return result;
+  } catch (error) {
+    console.error("Error generating promo:", error);
+    return { videoDataUri: null, error: "Failed to generate promo video." };
+  }
+}
+

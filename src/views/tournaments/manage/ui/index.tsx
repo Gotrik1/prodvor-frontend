@@ -4,7 +4,7 @@
 
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
-import { ArrowLeft, Users, Calendar, Megaphone, Settings, Bot, GanttChartIcon, CheckCircle, XCircle, Clock, Search, Shield, Award, PlusCircle, Send, UserPlus, Film, UploadCloud, Video, PlayCircle, StopCircle, Ban, ListChecks, LucideIcon, Trash2, Save, Loader2, AlertTriangle } from "lucide-react";
+import { ArrowLeft, Users, Calendar, Megaphone, Settings, Bot, GanttChartIcon, CheckCircle, XCircle, Clock, Search, Shield, Award, PlusCircle, Send, UserPlus, Film, UploadCloud, Video, PlayCircle, StopCircle, Ban, ListChecks, LucideIcon, Trash2, Save, Loader2, AlertTriangle, Wand2, RefreshCw } from "lucide-react";
 import Link from "next/link";
 import { myTournaments, allTournaments, registeredTeams as initialRegisteredTeams, staff as initialStaff, sponsors as initialSponsors, requirements as initialRequirements } from '@/views/tournaments/public-page/ui/mock-data';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
@@ -28,7 +28,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/shared/ui/form";
-import { sendTournamentAnnouncementAction } from "@/app/actions";
+import { sendTournamentAnnouncementAction, generateTournamentPromoAction } from "@/app/actions";
 import { useToast } from "@/shared/hooks/use-toast";
 import { SendTournamentAnnouncementInputSchema } from "@/shared/api/schemas/tournament-announcement-schema";
 
@@ -124,7 +124,7 @@ function OverviewTab({ tournament, onStatusChange, confirmedCount }: { tournamen
                  <Card>
                     <CardHeader className="flex flex-row items-center justify-between pb-2">
                       <CardTitle className="text-lg flex items-center gap-2"><Bot />AI-Советник</CardTitle>
-                      <Button variant="ghost" size="icon" className="h-7 w-7"><Search className="h-4 w-4"/></Button>
+                      <Button variant="ghost" size="icon" className="h-7 w-7"><RefreshCw className="h-4 w-4"/></Button>
                     </CardHeader>
                     <CardContent>
                       <p className="text-sm text-muted-foreground">{getAiAdvice()}</p>
@@ -408,13 +408,7 @@ function ScheduleTab() {
     )
 }
 
-function MediaTab() {
-    const mockMedia = [
-        { type: 'image', src: 'https://placehold.co/600x400.png', title: 'Фото с открытия', dataAiHint: 'tournament opening' },
-        { type: 'image', src: 'https://placehold.co/600x400.png', title: 'Лучший момент дня', dataAiHint: 'sports highlight' },
-        { type: 'video', src: 'https://www.youtube.com/embed/dQw4w9WgXcQ', title: 'Прямая трансляция - Финал' },
-        { type: 'image', src: 'https://placehold.co/600x400.png', title: 'Награждение', dataAiHint: 'award ceremony' },
-    ];
+function MediaTab({ mediaItems, onMediaAdd }: { mediaItems: any[], onMediaAdd: (item: any) => void }) {
 
     return (
         <Card>
@@ -448,13 +442,14 @@ function MediaTab() {
 
                 <div>
                     <h3 className="text-lg font-semibold mb-4 border-t pt-6">Галерея</h3>
-                    {mockMedia.length > 0 ? (
+                    {mediaItems.length > 0 ? (
                         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                            {mockMedia.map((media, index) => (
+                            {mediaItems.map((media, index) => (
                                 <div key={index} className="group relative aspect-video w-full overflow-hidden rounded-lg">
-                                    {media.type === 'image' ? (
+                                    {media.type === 'image' && (
                                         <Image src={media.src} alt={media.title} layout="fill" objectFit="cover" data-ai-hint={media.dataAiHint}/>
-                                    ) : (
+                                    )}
+                                    {media.type === 'video' && media.src.includes('youtube.com') && (
                                         <iframe
                                             className="w-full h-full"
                                             src={media.src}
@@ -462,6 +457,9 @@ function MediaTab() {
                                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                                             allowFullScreen
                                         ></iframe>
+                                    )}
+                                     {media.type === 'promo-video' && (
+                                        <video controls src={media.src} className="w-full h-full object-cover" />
                                     )}
                                     <div className="absolute bottom-0 left-0 right-0 bg-black/50 text-white p-2 text-sm truncate opacity-0 group-hover:opacity-100 transition-opacity">
                                         {media.title}
@@ -487,28 +485,98 @@ function MediaTab() {
     )
 }
 
+function PromoTab({ tournament, onPromoAdd }: { tournament: Tournament, onPromoAdd: (item: any) => void }) {
+    const { toast } = useToast();
+    const [isLoading, setIsLoading] = useState(false);
+    const [generatedVideo, setGeneratedVideo] = useState<string | null>(null);
+
+    const handleGeneratePromo = async () => {
+        setIsLoading(true);
+        setGeneratedVideo(null);
+        const result = await generateTournamentPromoAction({
+            tournamentName: tournament.name,
+            tournamentDescription: tournament.game, // Using game as description for now
+        });
+        setIsLoading(false);
+
+        if (result.videoDataUri) {
+            toast({
+                title: "Промо-видео готово!",
+                description: "Ролик был успешно сгенерирован и добавлен в медиа-центр.",
+            });
+            setGeneratedVideo(result.videoDataUri);
+            onPromoAdd({
+                type: 'promo-video',
+                src: result.videoDataUri,
+                title: `${tournament.name} - Промо-ролик`
+            });
+        } else {
+            toast({
+                variant: "destructive",
+                title: "Ошибка генерации",
+                description: result.error || "Не удалось создать видео. Попробуйте позже.",
+            });
+        }
+    };
+
+    return (
+        <Card>
+            <CardHeader>
+                <CardTitle>Промо-материалы</CardTitle>
+                <CardDescription>Используйте AI для создания рекламных материалов для вашего турнира.</CardDescription>
+            </CardHeader>
+            <CardContent>
+                <div className="flex flex-col items-center justify-center p-6 border-2 border-dashed rounded-lg">
+                    <Wand2 className="h-12 w-12 text-primary mb-4" />
+                    <h3 className="text-xl font-bold mb-2">Создать промо-ролик с Veo</h3>
+                    <p className="text-muted-foreground text-center mb-6 max-w-md">
+                        Автоматически сгенерируйте короткое, динамичное видео для привлечения внимания к вашему турниру. Генерация может занять до минуты.
+                    </p>
+                    <Button onClick={handleGeneratePromo} disabled={isLoading} size="lg">
+                        {isLoading ? (
+                            <>
+                                <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                                Генерация...
+                            </>
+                        ) : (
+                            "Сгенерировать видео"
+                        )}
+                    </Button>
+                </div>
+
+                {generatedVideo && (
+                    <div className="mt-6">
+                         <h3 className="text-lg font-semibold mb-4 text-center">Результат:</h3>
+                         <div className="aspect-video w-full max-w-2xl mx-auto rounded-lg overflow-hidden border">
+                            <video src={generatedVideo} controls autoPlay className="w-full h-full bg-black"></video>
+                         </div>
+                    </div>
+                )}
+            </CardContent>
+        </Card>
+    )
+}
+
 function AnnouncementsTab({ tournamentId }: { tournamentId: string }) {
   const { toast } = useToast();
   const form = useForm<z.infer<typeof SendTournamentAnnouncementInputSchema>>({
-    resolver: zodResolver(SendTournamentAnnouncementInputSchema.omit({ tournamentId: true })),
+    resolver: zodResolver(SendTournamentAnnouncementInputSchema),
     defaultValues: {
+      tournamentId,
       subject: "",
       message: "",
     },
   });
 
-  async function onSubmit(values: z.infer<typeof SendTournamentAnnouncementInputSchema.omit<{tournamentId: true}>>) {
-    const result = await sendTournamentAnnouncementAction({
-      tournamentId,
-      ...values,
-    });
+  async function onSubmit(values: z.infer<typeof SendTournamentAnnouncementInputSchema>) {
+    const result = await sendTournamentAnnouncementAction(values);
 
     if (result.success) {
       toast({
         title: "Успех!",
         description: "Ваш анонс был успешно отправлен всем участникам.",
       });
-      form.reset();
+      form.reset({ tournamentId, subject: '', message: '' });
     } else {
       toast({
         variant: "destructive",
@@ -892,6 +960,17 @@ export function TournamentManagementPage({ tournamentId }: { tournamentId: strin
         status: index < 5 ? 'Подтверждена' : 'Ожидает'
     })));
 
+    const [mediaItems, setMediaItems] = useState<any[]>([
+        { type: 'image', src: 'https://placehold.co/600x400.png', title: 'Фото с открытия', dataAiHint: 'tournament opening' },
+        { type: 'image', src: 'https://placehold.co/600x400.png', title: 'Лучший момент дня', dataAiHint: 'sports highlight' },
+        { type: 'video', src: 'https://www.youtube.com/embed/dQw4w9WgXcQ', title: 'Прямая трансляция - Финал' },
+        { type: 'image', src: 'https://placehold.co/600x400.png', title: 'Награждение', dataAiHint: 'award ceremony' },
+    ]);
+
+    const handleAddMedia = (item: any) => {
+        setMediaItems(prev => [item, ...prev]);
+    };
+
     const confirmedTeams = useMemo(() => teams.filter(t => t.status === 'Подтверждена'), [teams]);
 
     const handleTournamentChange = (data: Partial<Tournament>) => {
@@ -936,6 +1015,7 @@ export function TournamentManagementPage({ tournamentId }: { tournamentId: strin
         { value: "bracket", icon: GanttChartIcon, label: "Сетка" },
         { value: "schedule", icon: Calendar, label: "Расписание" },
         { value: "media", icon: Film, label: "Медиа" },
+        { value: "promo", icon: Wand2, label: "Промо" },
         { value: "staff", icon: Shield, label: "Персонал" },
         { value: "sponsors", icon: Award, label: "Спонсоры" },
         { value: "announcements", icon: Megaphone, label: "Анонсы" },
@@ -967,7 +1047,7 @@ export function TournamentManagementPage({ tournamentId }: { tournamentId: strin
             <main className="flex-1 p-4 md:p-6 lg:p-8">
                 <div className="container mx-auto">
                     <Tabs defaultValue="overview" className="w-full">
-                         <TabsList className="grid w-full grid-cols-3 sm:grid-cols-5 md:grid-cols-9 mb-4">
+                         <TabsList className="grid w-full grid-cols-5 md:grid-cols-10 mb-4">
                             {crmTabs.map(tab => (
                                 <TabsTrigger key={tab.value} value={tab.value}>
                                     <tab.icon className="mr-0 md:mr-2 h-4 w-4" />
@@ -988,7 +1068,10 @@ export function TournamentManagementPage({ tournamentId }: { tournamentId: strin
                             <ScheduleTab />
                         </TabsContent>
                         <TabsContent value="media">
-                            <MediaTab />
+                            <MediaTab mediaItems={mediaItems} onMediaAdd={handleAddMedia} />
+                        </TabsContent>
+                        <TabsContent value="promo">
+                            <PromoTab tournament={tournament} onPromoAdd={handleAddMedia} />
                         </TabsContent>
                         <TabsContent value="staff">
                             <StaffTab />
