@@ -5,7 +5,7 @@ import Link from "next/link";
 import { PlayerPageTemplate } from "./templates/player-page-template";
 import { TeamPageTemplate } from "./templates/team-page-template";
 import type { LucideIcon } from "lucide-react";
-import { User, Users, ClipboardList, Whistle, Briefcase, Shield, Megaphone, Handshake, Star } from "lucide-react";
+import { User, Users, ClipboardList, Gavel, Briefcase, Shield, Megaphone, Handshake, Star } from "lucide-react";
 import React from "react";
 import { ScrollArea } from "@/shared/ui/scroll-area";
 
@@ -31,7 +31,7 @@ const roles = [
     {
         name: "Судья",
         description: "Управление матчами, фиксация результатов и просмотр расписания.",
-        icon: Whistle,
+        icon: Gavel,
         template: <div className="text-center p-8">Шаблон для судьи в разработке.</div>,
     },
     {
