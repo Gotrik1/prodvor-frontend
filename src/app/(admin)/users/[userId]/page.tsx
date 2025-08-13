@@ -1,9 +1,9 @@
 
 import type { Metadata } from 'next';
-import { Button } from '@/shared/ui/button';
-import Link from 'next/link';
 import { users } from '@/mocks';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
+import { Button } from '@/shared/ui/button';
+import Link from 'next/link';
 import { PlaceholderTemplate } from '@/views/admin/ui/templates/placeholder-template';
 import { RefereePageTemplate } from '@/views/admin/ui/templates/referee-page-template';
 import { CoachPageTemplate } from '@/views/admin/ui/templates/coach-page-template';
@@ -28,7 +28,7 @@ export default function UserPage({ params }: { params: { userId: string } }) {
 
   if (!user) {
     return (
-       <div className="flex flex-col min-h-screen items-center justify-center">
+       <div className="flex flex-col min-h-[80vh] items-center justify-center">
         <Card className="text-center max-w-md w-full">
           <CardHeader>
             <CardTitle>Ошибка 404</CardTitle>
