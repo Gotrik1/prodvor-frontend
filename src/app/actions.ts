@@ -5,6 +5,8 @@ import {
   type GenerateTeamLogoVariationsInput,
 } from "@/shared/api/generate-team-logo-variations";
 import { generateNewsDigest } from "@/shared/api/generate-news-digest";
+import { sendTournamentAnnouncement } from "@/shared/api/send-tournament-announcement";
+import type { SendTournamentAnnouncementInput } from "@/shared/api/schemas/tournament-announcement-schema";
 
 export async function generateLogosAction(
   input: GenerateTeamLogoVariationsInput
@@ -27,4 +29,15 @@ export async function generateNewsDigestAction() {
     console.error("Error generating news digest:", error);
     return { title: "Ошибка", content: "Не удалось загрузить новостную сводку.", error: true };
   }
+}
+
+
+export async function sendTournamentAnnouncementAction(input: SendTournamentAnnouncementInput) {
+    try {
+        const result = await sendTournamentAnnouncement(input);
+        return result;
+    } catch (error) {
+        console.error("Error sending announcement:", error);
+        return { success: false, error: "Failed to send announcement." };
+    }
 }

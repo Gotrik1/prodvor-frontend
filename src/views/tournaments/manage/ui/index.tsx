@@ -1,10 +1,8 @@
-
-
 'use client';
 
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
-import { ArrowLeft, Users, Calendar, Megaphone, Settings, Bot, GanttChartIcon, CheckCircle, XCircle, Clock, Search, Shield, Award, PlusCircle, Send, UserPlus, Film, UploadCloud, Video, PlayCircle, StopCircle, Ban, ListChecks, LucideIcon, Trash2, Save } from "lucide-react";
+import { ArrowLeft, Users, Calendar, Megaphone, Settings, Bot, GanttChartIcon, CheckCircle, XCircle, Clock, Search, Shield, Award, PlusCircle, Send, UserPlus, Film, UploadCloud, Video, PlayCircle, StopCircle, Ban, ListChecks, LucideIcon, Trash2, Save, Loader2, AlertTriangle } from "lucide-react";
 import Link from "next/link";
 import { myTournaments, allTournaments, registeredTeams as initialRegisteredTeams, staff as initialStaff, sponsors as initialSponsors, requirements as initialRequirements } from '@/views/tournaments/public-page/ui/mock-data';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
@@ -24,6 +22,13 @@ import { cn } from "@/shared/lib/utils";
 import { Calendar as CalendarIcon } from 'lucide-react';
 import { Calendar as CalendarComponent } from "@/shared/ui/calendar";
 import { Team, BracketMatch, Tournament } from '@/views/tournaments/public-page/ui/mock-data';
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/shared/ui/form";
+import { sendTournamentAnnouncementAction } from "@/app/actions";
+import { useToast } from "@/shared/hooks/use-toast";
+import { SendTournamentAnnouncementInputSchema } from "@/shared/api/schemas/tournament-announcement-schema";
 
 
 const statusColors: Record<string, string> = {
@@ -476,28 +481,101 @@ function MediaTab() {
     )
 }
 
-function AnnouncementsTab() {
-    return (
-        <Card>
-            <CardHeader>
-                <CardTitle>Анонсы для участников</CardTitle>
-                <CardDescription>Отправляйте важные сообщения всем зарегистрированным командам.</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-                 <div>
-                    <Label htmlFor="announcement-subject">Тема</Label>
-                    <Input id="announcement-subject" placeholder="Например: Изменение в расписании"/>
-                </div>
-                <div>
-                    <Label htmlFor="announcement-message">Сообщение</Label>
-                    <Textarea id="announcement-message" placeholder="Введите текст вашего анонса..." rows={8}/>
-                </div>
-                <div className="flex justify-end">
-                    <Button><Megaphone className="mr-2 h-4 w-4"/>Отправить анонс</Button>
-                </div>
-            </CardContent>
-        </Card>
-    )
+function AnnouncementsTab({ tournamentId }: { tournamentId: string }) {
+  const { toast } = useToast();
+  const form = useForm<z.infer<typeof SendTournamentAnnouncementInputSchema>>({
+    resolver: zodResolver(SendTournamentAnnouncementInputSchema.omit({ tournamentId: true })),
+    defaultValues: {
+      subject: "",
+      message: "",
+    },
+  });
+
+  async function onSubmit(values: z.infer<typeof SendTournamentAnnouncementInputSchema.omit<{tournamentId: true}>>) {
+    const result = await sendTournamentAnnouncementAction({
+      tournamentId,
+      ...values,
+    });
+
+    if (result.success) {
+      toast({
+        title: "Успех!",
+        description: "Ваш анонс был успешно отправлен всем участникам.",
+      });
+      form.reset();
+    } else {
+      toast({
+        variant: "destructive",
+        title: "Ошибка",
+        description: result.error || "Не удалось отправить анонс. Попробуйте снова.",
+      });
+    }
+  }
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>Анонсы для участников</CardTitle>
+        <CardDescription>
+          Отправляйте важные сообщения всем зарегистрированным командам.
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            <FormField
+              control={form.control}
+              name="subject"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Тема</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="Например: Изменение в расписании"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="message"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Сообщение</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      placeholder="Введите текст вашего анонса..."
+                      rows={8}
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <div className="flex justify-end">
+              <Button type="submit" disabled={form.formState.isSubmitting}>
+                {form.formState.isSubmitting ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Отправка...
+                  </>
+                ) : (
+                  <>
+                    <Megaphone className="mr-2 h-4 w-4" />
+                    Отправить анонс
+                  </>
+                )}
+              </Button>
+            </div>
+          </form>
+        </Form>
+      </CardContent>
+    </Card>
+  );
 }
 
 function SettingsTab({ tournament, onTournamentChange }: { tournament: Tournament, onTournamentChange: (data: Partial<Tournament>) => void }) {
@@ -860,7 +938,7 @@ export function TournamentManagementPage({ tournamentId }: { tournamentId: strin
                             <SponsorsTab />
                         </TabsContent>
                         <TabsContent value="announcements">
-                            <AnnouncementsTab />
+                            <AnnouncementsTab tournamentId={tournament.id} />
                         </TabsContent>
                         <TabsContent value="settings">
                             <SettingsTab tournament={tournament} onTournamentChange={handleTournamentChange} />
