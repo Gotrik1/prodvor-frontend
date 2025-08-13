@@ -65,11 +65,11 @@ export function TeamPublicPage({ team }: { team: (typeof teams)[0] | undefined})
                             <h1 className="text-3xl font-bold font-headline">{team.name}</h1>
                             <p className="text-muted-foreground text-lg">Дисциплина: {team.game}</p>
                         </div>
-                        <div className="md:ml-auto flex gap-4">
-                            <Button>
+                        <div className="md:ml-auto flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
+                            <Button className="w-full">
                                <Swords className="mr-2 h-4 w-4" /> Бросить вызов
                             </Button>
-                             <Button variant="outline">
+                             <Button variant="outline" className="w-full">
                                <UserPlus className="mr-2 h-4 w-4" /> Вступить в команду
                             </Button>
                         </div>
