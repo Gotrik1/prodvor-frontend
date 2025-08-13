@@ -7,6 +7,8 @@ import { tournaments } from "@/mocks";
 import { Badge } from "@/shared/ui/badge";
 import { Progress } from "@/shared/ui/progress";
 
+type TournamentStatus = 'АНОНС' | 'ПРЕДРЕГИСТРАЦИЯ' | 'РЕГИСТРАЦИЯ' | 'ИДЕТ' | 'ЗАВЕРШЕН';
+
 const statusColors: Record<TournamentStatus, string> = {
     'АНОНС': 'bg-purple-500/20 text-purple-300 border-purple-500/30',
     'ПРЕДРЕГИСТРАЦИЯ': 'bg-cyan-500/20 text-cyan-300 border-cyan-500/30',
@@ -15,7 +17,6 @@ const statusColors: Record<TournamentStatus, string> = {
     'ЗАВЕРШЕН': 'bg-muted text-muted-foreground border-border',
 };
 
-type TournamentStatus = 'АНОНС' | 'ПРЕДРЕГИСТРАЦИЯ' | 'РЕГИСТРАЦИЯ' | 'ИДЕТ' | 'ЗАВЕРШЕН';
 
 const myTournaments = [
     {
@@ -72,16 +73,16 @@ const allTournaments = [
     },
 ];
 
-const TournamentCardActionButton = ({ status }: { status: TournamentStatus }) => {
+const TournamentCardActionButton = ({ id, status }: { id: string, status: TournamentStatus }) => {
     switch(status) {
         case 'АНОНС':
-            return <Button className="w-full" variant="outline"><Bell className="mr-2 h-4 w-4"/>Уведомить о начале</Button>;
+            return <Button asChild className="w-full" variant="outline"><Link href={`/tournaments/${id}`}><Bell className="mr-2 h-4 w-4"/>Уведомить о начале</Link></Button>;
         case 'ПРЕДРЕГИСТРАЦИЯ':
-            return <Button className="w-full" variant="secondary"><CheckSquare className="mr-2 h-4 w-4"/>Принять участие</Button>;
+            return <Button asChild className="w-full" variant="secondary"><Link href={`/tournaments/${id}`}><CheckSquare className="mr-2 h-4 w-4"/>Принять участие</Link></Button>;
         case 'РЕГИСТРАЦИЯ':
-            return <Button className="w-full">Подать заявку</Button>;
+            return <Button asChild className="w-full"><Link href={`/tournaments/${id}`}>Подать заявку</Link></Button>;
         default:
-             return <Button className="w-full" disabled>Подробнее</Button>;
+             return <Button asChild className="w-full" disabled><Link href={`/tournaments/${id}`}>Подробнее</Link></Button>;
     }
 }
 
@@ -191,7 +192,7 @@ export function TournamentsPage() {
                                         </div>
                                     </CardContent>
                                     <CardFooter>
-                                        <TournamentCardActionButton status={tournament.status} />
+                                        <TournamentCardActionButton id={tournament.id} status={tournament.status} />
                                     </CardFooter>
                                 </Card>
                             ))}
