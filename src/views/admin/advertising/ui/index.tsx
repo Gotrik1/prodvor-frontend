@@ -1,7 +1,7 @@
 
 'use client';
 
-import { ArrowLeft, BarChart, LineChart, Target, TrendingUp, DollarSign, Info } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/shared/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
@@ -9,19 +9,18 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/shared/ui/chart";
 import { Bar, BarChart as RechartsBarChart, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Line, ComposedChart } from "recharts";
 import {
-    marketBenchmarks,
-    ecpmBenchmarks,
-    platformAssumptions as initialAssumptions,
+    initialAssumptions,
     revenueDistribution as initialRevenueDistribution,
     growthLevers,
-    quarterlyForecast as initialQuarterlyForecast
+    initialQuarterlyForecast
 } from '../lib/mock-data';
-import React, { useState, useMemo, useCallback, useEffect } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import { Slider } from '@/shared/ui/slider';
 import { Input } from '@/shared/ui/input';
 import { Label } from '@/shared/ui/label';
-import { Tooltip as UiTooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/shared/ui/tooltip';
 import { Switch } from '@/shared/ui/switch';
+import { AudienceManager } from './audience-manager';
+
 
 const formatCurrency = (value: number) => {
     return `${value.toFixed(1)} млн ₽`;
@@ -178,7 +177,7 @@ export function AdvertisingPage() {
                                 <CardContent className="space-y-4">
                                     {growthLevers.map(lever => (
                                         <div key={lever.id} className="flex items-center justify-between">
-                                            <Label htmlFor={lever.id} className="flex flex-col gap-1">
+                                            <Label htmlFor={lever.id} className="flex flex-col gap-1 pr-2">
                                                 <span>{lever.lever}</span>
                                                 <span className="font-bold text-green-400">{lever.effect}</span>
                                             </Label>
@@ -239,6 +238,8 @@ export function AdvertisingPage() {
                             </Card>
                         </div>
                     </div>
+
+                    <AudienceManager />
 
                     <Card>
                         <CardHeader>

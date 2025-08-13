@@ -12,7 +12,7 @@ export const ecpmBenchmarks = [
     { platform: 'Нативные пост-интеграции VK', ecpm: 'экв. 50–80 ₽', source: 'Блог Click.ru' },
 ];
 
-export const platformAssumptions = [
+export const initialAssumptions = [
     { parameter: 'MAU', value: '500 000', confirmation: 'типичный горизонт 2-го года для нишевых сетей' },
     { parameter: 'Сессий / месяц', value: '12', confirmation: '≈0,4 DAU' },
     { parameter: 'Показов рекламы / сессию', value: '4', confirmation: 'комфортно без видео' },
@@ -42,7 +42,7 @@ export const sensitivityAnalysis = [
     { scenario: 'Оба +15 %', ecpm: '126,5', fill: '80,5%', revenue: 29.3 },
 ];
 
-export const quarterlyForecast = [
+export const initialQuarterlyForecast = [
     { quarter: "2025-Q1", mau: 320, impressions: 36.9, ecpm: 105, fill: 60, revenue: 9.3, ebitda: -2.7 },
     { quarter: "2025-Q2", mau: 380, impressions: 43.8, ecpm: 110, fill: 65, revenue: 12.4, ebitda: 1.7 },
     { quarter: "2025-Q3", mau: 440, impressions: 50.6, ecpm: 112, fill: 72, revenue: 15.7, ebitda: 7.4 },
