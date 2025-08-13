@@ -1,0 +1,1 @@
+export { TournamentPublicPage } from './ui';

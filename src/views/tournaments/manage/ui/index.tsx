@@ -656,7 +656,7 @@ export function TournamentManagementPage({ tournamentId }: { tournamentId: strin
                         <h1 className="text-lg font-semibold truncate">{tournament.name}</h1>
                     </div>
                      <Button asChild>
-                        <Link href="#">
+                        <Link href={`/tournaments/${tournament.id}`}>
                             На страницу турнира
                         </Link>
                     </Button>

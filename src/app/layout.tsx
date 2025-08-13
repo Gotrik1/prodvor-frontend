@@ -46,10 +46,12 @@ function AppLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   // Define routes that should NOT have the sidebar
   const noSidebarRoutes = ['/', '/about'];
-  // Check if the current path starts with /auth
+  // Check if the current path is an auth route
   const isAuthRoute = pathname.startsWith('/auth');
+  // Check if the current path is a public tournament page
+  const isPublicTournamentPage = /^\/tournaments\/[^/]+$/.test(pathname);
   
-  const showDashboardLayout = !noSidebarRoutes.includes(pathname) && !isAuthRoute;
+  const showDashboardLayout = !noSidebarRoutes.includes(pathname) && !isAuthRoute && !isPublicTournamentPage;
 
   return (
       <>
