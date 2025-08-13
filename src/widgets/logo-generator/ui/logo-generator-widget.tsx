@@ -1,3 +1,5 @@
+"use client";
+
 import { Bot } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
 import { LogoGenerator } from "./logo-generator";

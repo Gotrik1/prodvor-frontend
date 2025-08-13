@@ -3,7 +3,7 @@ import { generateNewsDigestAction } from "@/app/actions";
 import { Alert, AlertDescription, AlertTitle } from "@/shared/ui/alert";
 import { Button } from "@/shared/ui/button";
 import { Trophy } from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
+import { CreatePost } from "./create-post";
 
 async function AiDigest() {
   const digest = await generateNewsDigestAction();
@@ -42,26 +42,7 @@ export function DashboardFeed() {
           <AiDigest />
         </CardContent>
       </Card>
-      <Card className="bg-card">
-        <CardContent className="p-4">
-          <div className="flex items-start gap-4">
-            <Avatar>
-              <AvatarImage src="https://i.pravatar.cc/150?u=a042581f4e29026024d" />
-              <AvatarFallback>G</AvatarFallback>
-            </Avatar>
-            <div className="w-full">
-              <textarea
-                placeholder="Что у вас нового?"
-                className="w-full bg-transparent border-0 focus:ring-0 resize-none text-base p-0"
-                rows={2}
-              ></textarea>
-              <div className="flex justify-end mt-2">
-                <Button>Опубликовать</Button>
-              </div>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+      <CreatePost />
     </>
   );
 }
