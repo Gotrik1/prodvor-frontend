@@ -97,8 +97,10 @@ export function TournamentsPage() {
                                     </div>
                                 </CardContent>
                                 <CardFooter>
-                                    <Button className="w-full" variant="secondary">
-                                      <GanttChart className="mr-2 h-4 w-4" /> Управлять
+                                    <Button className="w-full" variant="secondary" asChild>
+                                        <Link href={`/tournaments/${tournament.id}/manage`}>
+                                            <GanttChart className="mr-2 h-4 w-4" /> Управлять
+                                        </Link>
                                     </Button>
                                 </CardFooter>
                             </Card>

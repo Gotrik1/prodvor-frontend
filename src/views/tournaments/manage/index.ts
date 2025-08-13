@@ -1,0 +1,1 @@
+export { TournamentManagementPage } from './ui';
