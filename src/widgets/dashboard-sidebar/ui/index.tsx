@@ -18,6 +18,7 @@ import {
   Home,
   MessageSquare,
   Search,
+  Shield,
   ShoppingCart,
   Trophy,
   Users,
@@ -130,6 +131,12 @@ export function DashboardSidebar() {
                         <SidebarMenuButton href="#">
                             <Cog />
                             <span>Настройки</span>
+                        </SidebarMenuButton>
+                    </SidebarMenuItem>
+                     <SidebarMenuItem>
+                        <SidebarMenuButton href="/admin">
+                            <Shield />
+                            <span>Администрирование</span>
                         </SidebarMenuButton>
                     </SidebarMenuItem>
                 </SidebarMenu>
