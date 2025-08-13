@@ -6,10 +6,11 @@ import { Alert, AlertDescription, AlertTitle } from "@/shared/ui/alert";
 import { Button } from "@/shared/ui/button";
 import { Trophy, Bot, Loader2, ListChecks, RefreshCw } from "lucide-react";
 import { CreatePost } from "./create-post";
-import { users } from "@/mocks";
+import { users, posts } from "@/mocks";
 import { useEffect, useState } from "react";
 import { generateNewsDigestAction } from "@/app/actions";
 import type { NewsDigestOutput } from "@/shared/api/generate-news-digest";
+import { PostCard } from "./post-card";
 
 const currentUser = users[0]; // Assuming user1 is the logged-in user for the main dashboard
 
@@ -87,6 +88,11 @@ export function DashboardFeed() {
         </CardContent>
       </Card>
       <CreatePost user={currentUser} />
+      <div className="space-y-4">
+        {posts.map(post => (
+          <PostCard key={post.id} post={post} />
+        ))}
+      </div>
     </>
   );
 }
