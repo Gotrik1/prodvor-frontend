@@ -6,7 +6,7 @@ import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
 import { ArrowLeft, Users, Calendar, Megaphone, Settings, Bot, GanttChartIcon, CheckCircle, XCircle, Clock, Search, Shield, Award, PlusCircle, Send, UserPlus, Film, UploadCloud, Video, PlayCircle, StopCircle, Ban, ListChecks, LucideIcon, Trash2 } from "lucide-react";
 import Link from "next/link";
-import { myTournaments, allTournaments, registeredTeams, staff, sponsors, requirements } from '@/views/tournaments/public-page/ui/mock-data';
+import { myTournaments, allTournaments, registeredTeams as initialRegisteredTeams, staff as initialStaff, sponsors as initialSponsors, requirements as initialRequirements } from '@/views/tournaments/public-page/ui/mock-data';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 import { Badge } from "@/shared/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/shared/ui/table";
@@ -122,6 +122,19 @@ function OverviewTab({ tournament }: { tournament: (typeof allTournaments)[0] })
 }
 
 function ParticipantsTab() {
+    const [teams, setTeams] = useState(initialRegisteredTeams.slice(0, 8).map((team, index) => ({
+        ...team,
+        date: new Date(Date.now() - index * 86400000).toLocaleDateString('ru-RU'),
+        status: index < 5 ? 'Подтверждена' : 'Ожидает'
+    })));
+
+    const handleStatusChange = (teamId: string, newStatus: 'Подтверждена' | 'Отклонена') => {
+        setTeams(currentTeams => currentTeams.map(team =>
+            team.id === teamId ? { ...team, status: newStatus } : team
+        ));
+    };
+
+
     return (
         <Card>
             <CardHeader>
@@ -144,7 +157,7 @@ function ParticipantsTab() {
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                           {registeredTeams.slice(0, 8).map((team, index) => (
+                           {teams.map((team) => (
                                 <TableRow key={team.id}>
                                     <TableCell className="font-medium">
                                         <div className="flex items-center gap-3">
@@ -155,21 +168,31 @@ function ParticipantsTab() {
                                             {team.name}
                                         </div>
                                     </TableCell>
-                                    <TableCell>{new Date(Date.now() - index * 86400000).toLocaleDateString('ru-RU')}</TableCell>
+                                    <TableCell>{team.date}</TableCell>
                                     <TableCell>
-                                        <Badge variant={index < 5 ? "secondary" : "default"} className={index >= 5 ? "bg-amber-500/20 text-amber-300 border-amber-500/30" : ""}>
-                                            {index < 5 ? <CheckCircle className="mr-1 h-3 w-3"/> : <Clock className="mr-1 h-3 w-3"/>}
-                                            {index < 5 ? 'Подтверждена' : 'Ожидает'}
+                                        <Badge variant={
+                                            team.status === 'Подтверждена' ? "secondary" : 
+                                            team.status === 'Отклонена' ? "destructive" : "default"
+                                        } className={
+                                            team.status === 'Подтверждена' ? "bg-green-500/20 text-green-300 border-green-500/30" :
+                                            team.status === 'Ожидает' ? "bg-amber-500/20 text-amber-300 border-amber-500/30" : ""
+                                        }>
+                                            {team.status === 'Подтверждена' && <CheckCircle className="mr-1 h-3 w-3"/>}
+                                            {team.status === 'Ожидает' && <Clock className="mr-1 h-3 w-3"/>}
+                                            {team.status === 'Отклонена' && <XCircle className="mr-1 h-3 w-3"/>}
+                                            {team.status}
                                         </Badge>
                                     </TableCell>
                                     <TableCell className="text-right">
-                                        {index < 5 ? (
-                                             <Button variant="destructive" size="sm"><XCircle className="mr-2 h-4 w-4"/>Отозвать</Button>
-                                        ) : (
+                                        {team.status === 'Подтверждена' ? (
+                                             <Button variant="destructive" size="sm" onClick={() => handleStatusChange(team.id, 'Отклонена')}><XCircle className="mr-2 h-4 w-4"/>Отозвать</Button>
+                                        ) : team.status === 'Ожидает' ? (
                                             <div className="flex gap-2 justify-end">
-                                                <Button variant="outline" size="sm" className="bg-green-500/10 border-green-500/20 text-green-300 hover:bg-green-500/20 hover:text-green-200"><CheckCircle className="mr-2 h-4 w-4"/>Принять</Button>
-                                                <Button variant="outline" size="sm" className="bg-red-500/10 border-red-500/20 text-red-300 hover:bg-red-500/20 hover:text-red-200"><XCircle className="mr-2 h-4 w-4"/>Отклонить</Button>
+                                                <Button variant="outline" size="sm" className="bg-green-500/10 border-green-500/20 text-green-300 hover:bg-green-500/20 hover:text-green-200" onClick={() => handleStatusChange(team.id, 'Подтверждена')}><CheckCircle className="mr-2 h-4 w-4"/>Принять</Button>
+                                                <Button variant="outline" size="sm" className="bg-red-500/10 border-red-500/20 text-red-300 hover:bg-red-500/20 hover:text-red-200" onClick={() => handleStatusChange(team.id, 'Отклонена')}><XCircle className="mr-2 h-4 w-4"/>Отклонить</Button>
                                             </div>
+                                        ) : (
+                                           <p className="text-sm text-muted-foreground">Действий нет</p>
                                         )}
                                     </TableCell>
                                 </TableRow>
@@ -185,7 +208,7 @@ function ParticipantsTab() {
 function BracketTab() {
     // Pair teams for the first round
     const matches = [];
-    const teamsCopy = [...registeredTeams];
+    const teamsCopy = [...initialRegisteredTeams];
     for (let i = 0; i < teamsCopy.length; i += 2) {
         if (teamsCopy[i + 1]) {
             matches.push([teamsCopy[i], teamsCopy[i + 1]]);
@@ -374,6 +397,14 @@ function AnnouncementsTab() {
 }
 
 function SettingsTab({ tournament }: { tournament: (typeof allTournaments)[0] }) {
+    const [selectedRequirements, setSelectedRequirements] = useState<string[]>([]);
+    
+    const handleRequirementChange = (reqId: string, checked: boolean) => {
+        setSelectedRequirements(prev =>
+            checked ? [...prev, reqId] : prev.filter(id => id !== reqId)
+        );
+    };
+
     return (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <Card className="lg:col-span-2">
@@ -439,9 +470,13 @@ function SettingsTab({ tournament }: { tournament: (typeof allTournaments)[0] })
                         <CardDescription>Установите правила для регистрации команд.</CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-4">
-                        {requirements.map((req) => (
+                        {initialRequirements.map((req) => (
                              <div key={req.id} className="flex items-center space-x-2">
-                                <Checkbox id={req.id} />
+                                <Checkbox 
+                                    id={req.id} 
+                                    checked={selectedRequirements.includes(req.id)}
+                                    onCheckedChange={(checked) => handleRequirementChange(req.id, !!checked)}
+                                />
                                 <Label htmlFor={req.id} className="text-sm font-normal leading-snug">
                                     {req.name}
                                 </Label>
@@ -489,7 +524,7 @@ function StaffTab() {
                 </CardHeader>
                 <CardContent>
                     <ul className="space-y-3">
-                        {staff.filter(s => s.role === 'Судья').map(person => (
+                        {initialStaff.filter(s => s.role === 'Судья').map(person => (
                             <li key={person.id} className="flex items-center justify-between">
                                 <div className="flex items-center gap-3">
                                     <Avatar>
@@ -527,7 +562,7 @@ function StaffTab() {
                 </CardHeader>
                 <CardContent>
                      <ul className="space-y-3">
-                        {staff.filter(s => s.role === 'Организатор').map(person => (
+                        {initialStaff.filter(s => s.role === 'Организатор').map(person => (
                             <li key={person.id} className="flex items-center justify-between">
                                 <div className="flex items-center gap-3">
                                     <Avatar>
@@ -585,7 +620,7 @@ function SponsorsTab() {
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                           {sponsors.map((sponsor) => (
+                           {initialSponsors.map((sponsor) => (
                                 <TableRow key={sponsor.id}>
                                     <TableCell className="font-medium">
                                         <div className="flex items-center gap-3">
@@ -643,6 +678,17 @@ export function TournamentManagementPage({ tournamentId }: { tournamentId: strin
         )
     }
 
+    const tabsConfig = [
+        { value: "overview", icon: Settings, label: "Обзор" },
+        { value: "participants", icon: Users, label: "Участники" },
+        { value: "bracket", icon: GanttChartIcon, label: "Сетка" },
+        { value: "schedule", icon: Calendar, label: "Расписание" },
+        { value: "media", icon: Film, label: "Медиа" },
+        { value: "staff", icon: Shield, label: "Персонал" },
+        { value: "sponsors", icon: Award, label: "Спонсоры" },
+        { value: "announcements", icon: Megaphone, label: "Анонсы" },
+    ]
+
     return (
         <div className="flex flex-col min-h-screen bg-background text-foreground">
             <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -667,16 +713,12 @@ export function TournamentManagementPage({ tournamentId }: { tournamentId: strin
             <main className="flex-1 p-4 md:p-6 lg:p-8">
                 <div className="container mx-auto">
                     <Tabs defaultValue="overview" className="w-full">
-                        <TabsList className="grid w-full grid-cols-3 sm:grid-cols-5 md:grid-cols-9 mb-4">
-                            <TabsTrigger value="overview">Обзор</TabsTrigger>
-                            <TabsTrigger value="participants"><Users className="mr-2 h-4 w-4" />Участники</TabsTrigger>
-                            <TabsTrigger value="bracket">Сетка</TabsTrigger>
-                            <TabsTrigger value="schedule"><Calendar className="mr-2 h-4 w-4" />Расписание</TabsTrigger>
-                            <TabsTrigger value="media"><Film className="mr-2 h-4 w-4" />Медиа</TabsTrigger>
-                            <TabsTrigger value="staff"><Shield className="mr-2 h-4 w-4" />Персонал</TabsTrigger>
-                            <TabsTrigger value="sponsors"><Award className="mr-2 h-4 w-4" />Спонсоры</TabsTrigger>
-                            <TabsTrigger value="announcements"><Megaphone className="mr-2 h-4 w-4" />Анонсы</TabsTrigger>
-                            <TabsTrigger value="settings"><Settings className="mr-2 h-4 w-4" />Настройки</TabsTrigger>
+                         <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 md:grid-cols-8 mb-4">
+                            {tabsConfig.map(tab => (
+                                <TabsTrigger key={tab.value} value={tab.value}>
+                                    <tab.icon className="mr-2 h-4 w-4" />{tab.label}
+                                </TabsTrigger>
+                            ))}
                         </TabsList>
                         <TabsContent value="overview">
                            <OverviewTab tournament={tournament} />

@@ -102,7 +102,64 @@ export const registeredTeams = [
     { id: 'team8', name: 'Легион', logoUrl: 'https://placehold.co/100x100.png', captainId: 'user2', members: ['user2'], game: 'Дворовый футбол', rank: 1650 },
 ];
 
+export const staff = [
+    { id: 'staff1', name: 'Игорь Вольнов', avatarUrl: 'https://i.pravatar.cc/150?u=staff1', role: 'Судья' as const, status: 'Принято' as const },
+    { id: 'staff2', name: 'Елена Павлова', avatarUrl: 'https://i.pravatar.cc/150?u=staff2', role: 'Судья' as const, status: 'Принято' as const },
+    { id: 'staff3', name: 'Олег Тихонов', avatarUrl: 'https://i.pravatar.cc/150?u=staff3', role: 'Организатор' as const, status: 'Приглашен' as const },
+];
+
 export const sponsors = [
     { id: 'sponsor1', name: 'Red Energy', logoUrl: 'https://placehold.co/100x100.png', contribution: '50 000 руб.' },
     { id: 'sponsor2', name: 'GigaGaming Gear', logoUrl: 'https://placehold.co/100x100.png', contribution: 'Игровые девайсы' },
+];
+
+export const requirements = [
+    {
+        id: 'req1',
+        name: 'Минимальное количество игроков в команде',
+        description: 'Устанавливает минимальный порог для основного состава.',
+        category: 'Состав',
+    },
+    {
+        id: 'req2',
+        name: 'Максимальное количество игроков в команде',
+        description: 'Устанавливает максимальное количество игроков, включая запасных.',
+        category: 'Состав',
+    },
+     {
+        id: 'req3',
+        name: 'Минимальный возраст участника',
+        description: 'Все участники команды должны быть не младше указанного возраста.',
+        category: 'Возраст',
+    },
+    {
+        id: 'req4',
+        name: 'Максимальный возраст участника',
+        description: 'Все участники команды должны быть не старше указанного возраста.',
+        category: 'Возраст',
+    },
+     {
+        id: 'req5',
+        name: 'Минимальный командный рейтинг (ELO)',
+        description: 'Команда должна иметь рейтинг не ниже указанного значения.',
+        category: 'Рейтинг',
+    },
+    {
+        id: 'req6',
+        name: 'Максимальный командный рейтинг (ELO)',
+        description: 'Ограничение для турниров новичков, команда должна иметь рейтинг не выше указанного.',
+        category: 'Рейтинг',
+    },
+     {
+        id: 'req7',
+        name: 'Подтвержденный ProDvor ID',
+        description: 'Все участники должны иметь верифицированный аккаунт.',
+        category: 'Прочее',
+    },
+    {
+        id: 'req8',
+        name: 'Наличие судьи в команде',
+        description: 'В составе команды должен быть как минимум один игрок с ролью "Судья".',
+        category: 'Состав',
+    }
 ];
