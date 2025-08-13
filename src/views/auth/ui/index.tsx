@@ -5,6 +5,7 @@ import {
   CardContent,
   CardHeader,
   CardTitle,
+  CardDescription
 } from "@/shared/ui/card";
 import { Checkbox } from "@/shared/ui/checkbox";
 import { Input } from "@/shared/ui/input";
@@ -119,13 +120,19 @@ const SocialButton = ({ className, children }: { className?: string, children: R
 
 export function AuthPage() {
   return (
-    <div className="flex items-center justify-center min-h-screen bg-background p-4 dark">
+    <div className="flex items-center justify-center min-h-screen bg-background p-4">
       <Card className="w-full max-w-sm mx-auto shadow-xl border-border/60 bg-card">
         <CardHeader className="text-center">
             <div className="flex justify-center mb-4">
                 <Logo />
             </div>
             <CardTitle className="text-2xl font-bold">Вход в ProDvor ID</CardTitle>
+            <CardDescription>
+                Нет аккаунта?{" "}
+                <Link href="/auth/register" className="text-primary hover:underline">
+                    Зарегистрироваться
+                </Link>
+            </CardDescription>
         </CardHeader>
         <CardContent>
             <Tabs defaultValue="email">
@@ -172,10 +179,6 @@ export function AuthPage() {
             </Tabs>
             
             <div className="space-y-4 mt-6">
-                <Button asChild variant="outline" className="w-full font-bold">
-                  <Link href="/auth/register">Создать аккаунт</Link>
-                </Button>
-
                 <div className="relative">
                     <div className="absolute inset-0 flex items-center">
                         <span className="w-full border-t" />
