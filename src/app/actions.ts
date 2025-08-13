@@ -25,4 +25,3 @@ export async function sendTournamentAnnouncementAction(input: SendTournamentAnno
 export async function generateTournamentPromoAction(input: GenerateTournamentPromoInput) {
   return await generateTournamentPromo(input);
 }
-
