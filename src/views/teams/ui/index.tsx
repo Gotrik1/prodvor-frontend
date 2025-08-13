@@ -1,10 +1,10 @@
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/shared/ui/card";
 import { Input } from "@/shared/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/select";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/shared/ui/select";
 import { BarChart, Search, UserPlus, Users } from "lucide-react";
 import Image from "next/image";
-import { teams } from "@/mocks";
+import { teams, sportCategories } from "@/mocks";
 import { Badge } from "@/shared/ui/badge";
 
 export function TeamsPage() {
@@ -36,10 +36,16 @@ export function TeamsPage() {
                                 <Select>
                                     <SelectTrigger><SelectValue placeholder="Дисциплина" /></SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem value="football">Дворовый футбол</SelectItem>
-                                        <SelectItem value="basketball">Стритбол</SelectItem>
-                                        <SelectItem value="cs">CS:GO</SelectItem>
-                                        <SelectItem value="dota">Dota 2</SelectItem>
+                                        {sportCategories.map((category) => (
+                                            <SelectGroup key={category.name}>
+                                                <SelectLabel>{category.name}</SelectLabel>
+                                                {category.sports.map((sport) => (
+                                                    <SelectItem key={sport.name} value={sport.name.toLowerCase().replace(/\s/g, '-')}>
+                                                        {sport.name}
+                                                    </SelectItem>
+                                                ))}
+                                            </SelectGroup>
+                                        ))}
                                     </SelectContent>
                                 </Select>
                                 <Select>
@@ -65,7 +71,7 @@ export function TeamsPage() {
                                     <Image src={team.logoUrl} alt={`${team.name} logo`} width={64} height={64} className="rounded-lg border" data-ai-hint="team logo" />
                                     <div>
                                         <CardTitle className="text-xl">{team.name}</CardTitle>
-                                        <CardDescription>Дворовый футбол</CardDescription>
+                                        <CardDescription>{team.game}</CardDescription>
                                     </div>
                                 </CardHeader>
                                 <CardContent className="flex-grow space-y-2">
@@ -75,7 +81,7 @@ export function TeamsPage() {
                                     </div>
                                     <div className="flex items-center gap-2 text-sm text-muted-foreground">
                                         <BarChart className="h-4 w-4" />
-                                        <span>1480 ELO</span>
+                                        <span>{team.rank} ELO</span>
                                     </div>
                                     <div>
                                         <Badge variant="secondary">Ищет игроков</Badge>
