@@ -51,7 +51,7 @@ export function DashboardSidebar() {
                     </SidebarMenuButton>
                 </SidebarMenuItem>
                  <SidebarMenuItem>
-                    <SidebarMenuButton href="#">
+                    <SidebarMenuButton href="/teams">
                         <Users />
                         <span>Команды</span>
                     </SidebarMenuButton>
