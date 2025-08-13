@@ -22,8 +22,7 @@ export function Logo(
 ) {
   return (
     <Image
-      src="https://placehold.co/40x40.png"
-      data-ai-hint="logo"
+      src="https://prodvor.website/_next/image?url=%2Fimages%2Fyour-logo.png&w=64&q=75"
       alt="ProDvor Logo"
       width={40}
       height={40}
