@@ -1,9 +1,109 @@
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/shared/ui/dialog";
 import Link from "next/link";
 import { PlayerPageTemplate } from "./templates/player-page-template";
 import { TeamPageTemplate } from "./templates/team-page-template";
+import type { LucideIcon } from "lucide-react";
+import { User, Users, ClipboardList, Whistle, Briefcase, Shield, Megaphone, Handshake, Star } from "lucide-react";
+import React from "react";
+import { ScrollArea } from "@/shared/ui/scroll-area";
+
+const roles = [
+    {
+        name: "Игрок",
+        description: "Персональная страница игрока со статистикой и достижениями.",
+        icon: User,
+        template: <PlayerPageTemplate />,
+    },
+    {
+        name: "Команда",
+        description: "Публичная страница команды с составом, матчами и статистикой.",
+        icon: Users,
+        template: <TeamPageTemplate />,
+    },
+    {
+        name: "Тренер",
+        description: "Инструменты для управления тренировками и аналитики команды.",
+        icon: ClipboardList,
+        template: <div className="text-center p-8">Шаблон для тренера в разработке.</div>,
+    },
+    {
+        name: "Судья",
+        description: "Управление матчами, фиксация результатов и просмотр расписания.",
+        icon: Whistle,
+        template: <div className="text-center p-8">Шаблон для судьи в разработке.</div>,
+    },
+    {
+        name: "Менеджер",
+        description: "Инструменты для управления несколькими командами и игроками.",
+        icon: Briefcase,
+        template: <div className="text-center p-8">Шаблон для менеджера в разработке.</div>,
+    },
+    {
+        name: "Модератор",
+        description: "Инструменты для управления контентом и пользователями.",
+        icon: Shield,
+        template: <div className="text-center p-8">Шаблон для модератора в разработке.</div>,
+    },
+    {
+        name: "Организатор",
+        description: "Создание и управление турнирами, лигами и мероприятиями.",
+        icon: Megaphone,
+        template: <div className="text-center p-8">Шаблон для организатора в разработке.</div>,
+    },
+    {
+        name: "Спонсор",
+        description: "Страница с информацией о спонсируемых командах и турнирах.",
+        icon: Handshake,
+        template: <div className="text-center p-8">Шаблон для спонсора в разработке.</div>,
+    },
+    {
+        name: "Болельщик",
+        description: "Лента новостей, отслеживаемые команды и предстоящие матчи.",
+        icon: Star,
+        template: <div className="text-center p-8">Шаблон для болельщика в разработке.</div>,
+    },
+];
+
+const TemplateCard = ({
+    name,
+    description,
+    icon: Icon,
+    template,
+}: {
+    name: string;
+    description: string;
+    icon: LucideIcon;
+    template: React.ReactNode;
+}) => (
+    <Dialog>
+        <DialogTrigger asChild>
+            <Card className="cursor-pointer hover:border-primary transition-colors hover:shadow-lg">
+                <CardHeader className="flex flex-row items-center gap-4">
+                    <div className="p-3 rounded-md bg-primary/10 text-primary">
+                        <Icon className="w-6 h-6" />
+                    </div>
+                    <CardTitle>{name}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <p className="text-sm text-muted-foreground">{description}</p>
+                </CardContent>
+            </Card>
+        </DialogTrigger>
+        <DialogContent className="max-w-4xl h-[90vh]">
+            <DialogHeader>
+                <DialogTitle>Предпросмотр шаблона: {name}</DialogTitle>
+            </DialogHeader>
+            <ScrollArea className="h-full pr-6">
+                <div className="py-4">
+                  {template}
+                </div>
+            </ScrollArea>
+        </DialogContent>
+    </Dialog>
+);
+
 
 export function AdminPage() {
     return (
@@ -25,8 +125,8 @@ export function AdminPage() {
                         <h1 className="text-4xl md:text-5xl lg:text-7xl font-black tracking-tighter mb-4 font-headline">
                             Панель администратора
                         </h1>
-                        <p className="text-lg md:text-xl text-muted-foreground mt-4">
-                            Этот раздел предназначен для управления платформой и просмотра шаблонов страниц.
+                        <p className="text-lg md:text-xl text-muted-foreground mt-4 max-w-3xl mx-auto">
+                            Этот раздел предназначен для управления платформой и просмотра шаблонов страниц для различных ролей и сущностей. Нажмите на карточку для предпросмотра.
                         </p>
                     </div>
 
@@ -38,18 +138,11 @@ export function AdminPage() {
                             </CardDescription>
                         </CardHeader>
                         <CardContent>
-                            <Tabs defaultValue="player">
-                                <TabsList className="mb-4">
-                                    <TabsTrigger value="player">Страница игрока</TabsTrigger>
-                                    <TabsTrigger value="team">Страница команды</TabsTrigger>
-                                </TabsList>
-                                <TabsContent value="player">
-                                    <PlayerPageTemplate />
-                                </TabsContent>
-                                <TabsContent value="team">
-                                    <TeamPageTemplate />
-                                </TabsContent>
-                            </Tabs>
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                {roles.map((role) => (
+                                    <TemplateCard key={role.name} {...role} />
+                                ))}
+                            </div>
                         </CardContent>
                     </Card>
                 </div>
