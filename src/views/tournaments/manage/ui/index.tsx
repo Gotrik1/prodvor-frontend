@@ -23,7 +23,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/shared/ui/popover";
 import { cn } from "@/shared/lib/utils";
 import { Calendar as CalendarIcon } from 'lucide-react';
 import { Calendar as CalendarComponent } from "@/shared/ui/calendar";
-import { Team, BracketMatch } from '@/views/tournaments/public-page/ui/mock-data';
+import { Team, BracketMatch, Tournament } from '@/views/tournaments/public-page/ui/mock-data';
 
 
 const statusColors: Record<string, string> = {
@@ -46,11 +46,10 @@ const StatCard = ({ title, value }: { title: string, value: string | React.React
 );
 
 
-function OverviewTab({ tournament }: { tournament: (typeof allTournaments)[0] }) {
-    const [currentStatus, setCurrentStatus] = useState(tournament.status);
+function OverviewTab({ tournament, onStatusChange }: { tournament: Tournament, onStatusChange: (status: Tournament['status']) => void }) {
     
     const getAiAdvice = () => {
-        switch(currentStatus) {
+        switch(tournament.status) {
             case 'РЕГИСТРАЦИЯ':
                 return `До конца регистрации осталось 3 дня. Рекомендуем сделать анонс, чтобы привлечь больше команд. На данный момент заполнено ${Math.round((tournament.participants/tournament.maxParticipants)*100)}% слотов. Прогнозируемое количество участников: 10 из 16.`;
             case 'ИДЕТ':
@@ -58,7 +57,7 @@ function OverviewTab({ tournament }: { tournament: (typeof allTournaments)[0] })
             case 'ЗАВЕРШЕН':
                 return `Турнир завершен! Поздравляем победителей. Рекомендуем написать итоговый анонс с благодарностью участникам и спонсорам.`;
             default:
-                 return `Статус турнира: ${currentStatus}. Убедитесь, что все участники оповещены об изменениях.`;
+                 return `Статус турнира: ${tournament.status}. Убедитесь, что все участники оповещены об изменениях.`;
         }
     }
 
@@ -78,8 +77,8 @@ function OverviewTab({ tournament }: { tournament: (typeof allTournaments)[0] })
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                            <div className="p-4 bg-muted rounded-lg flex flex-col items-center justify-center text-center h-full">
                                 <p className="text-sm text-muted-foreground mb-2">Статус</p>
-                                <Select value={currentStatus} onValueChange={(value) => setCurrentStatus(value as typeof currentStatus)}>
-                                    <SelectTrigger className={`w-full font-semibold ${statusColors[currentStatus]}`}>
+                                <Select value={tournament.status} onValueChange={(value) => onStatusChange(value as Tournament['status'])}>
+                                    <SelectTrigger className={`w-full font-semibold ${statusColors[tournament.status]}`}>
                                         <SelectValue />
                                     </SelectTrigger>
                                     <SelectContent>
@@ -501,13 +500,17 @@ function AnnouncementsTab() {
     )
 }
 
-function SettingsTab({ tournament }: { tournament: (typeof allTournaments)[0] }) {
+function SettingsTab({ tournament, onTournamentChange }: { tournament: Tournament, onTournamentChange: (data: Partial<Tournament>) => void }) {
     const [selectedRequirements, setSelectedRequirements] = useState<string[]>([]);
     
     const handleRequirementChange = (reqId: string, checked: boolean) => {
         setSelectedRequirements(prev =>
             checked ? [...prev, reqId] : prev.filter(id => id !== reqId)
         );
+    };
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        onTournamentChange({ [e.target.id]: e.target.value });
     };
 
     return (
@@ -520,7 +523,7 @@ function SettingsTab({ tournament }: { tournament: (typeof allTournaments)[0] })
                 <CardContent className="space-y-6">
                     <div className="space-y-2">
                         <Label htmlFor="name">Название турнира</Label>
-                        <Input id="name" defaultValue={tournament.name} />
+                        <Input id="name" value={tournament.name} onChange={handleInputChange} />
                     </div>
                     <div>
                          <Label>Ключевые даты</Label>
@@ -550,13 +553,13 @@ function SettingsTab({ tournament }: { tournament: (typeof allTournaments)[0] })
                                     <span>Начало турнира</span>
                                 </Button>
                                 </PopoverTrigger>
-                                <PopoverContent className="w-auto p-0"><CalendarComponent mode="single" initialFocus /></PopoverContent>
+                                <PopoverContent className="w-auto p-0"><CalendarComponent mode="single" selected={new Date(tournament.startDate)} onSelect={(date) => onTournamentChange({ startDate: date?.toISOString() || '' })} initialFocus /></PopoverContent>
                             </Popover>
                         </div>
                     </div>
                     <div className="space-y-2">
-                        <Label htmlFor="prize">Призовой фонд</Label>
-                        <Input id="prize" defaultValue={tournament.prizePool} />
+                        <Label htmlFor="prizePool">Призовой фонд</Label>
+                        <Input id="prizePool" value={tournament.prizePool} onChange={handleInputChange} />
                     </div>
                     <div className="space-y-2">
                         <Label htmlFor="rules">Правила</Label>
@@ -751,7 +754,14 @@ function SponsorsTab() {
 }
 
 export function TournamentManagementPage({ tournamentId }: { tournamentId: string }) {
-    const tournament = allTournaments.find(t => t.id === tournamentId);
+    const initialTournament = allTournaments.find(t => t.id === tournamentId);
+    const [tournament, setTournament] = useState<Tournament | undefined>(initialTournament);
+
+    const handleTournamentChange = (data: Partial<Tournament>) => {
+        if (tournament) {
+            setTournament(prev => ({ ...prev!, ...data }));
+        }
+    };
 
     if (!tournament) {
         return (
@@ -783,8 +793,8 @@ export function TournamentManagementPage({ tournamentId }: { tournamentId: strin
         )
     }
 
-    const tabsConfig: {value: string, icon: LucideIcon, label: string}[] = [
-        { value: "overview", icon: Settings, label: "Обзор" },
+    const crmTabs: {value: string, icon: LucideIcon, label: string}[] = [
+        { value: "overview", icon: GanttChartIcon, label: "Обзор" },
         { value: "participants", icon: Users, label: "Участники" },
         { value: "bracket", icon: GanttChartIcon, label: "Сетка" },
         { value: "schedule", icon: Calendar, label: "Расписание" },
@@ -792,9 +802,9 @@ export function TournamentManagementPage({ tournamentId }: { tournamentId: strin
         { value: "staff", icon: Shield, label: "Персонал" },
         { value: "sponsors", icon: Award, label: "Спонсоры" },
         { value: "announcements", icon: Megaphone, label: "Анонсы" },
+        { value: "settings", icon: Settings, label: "Настройки" },
     ];
 
-    const crmTabs = [...tabsConfig, { value: "settings", icon: Cog, label: "Настройки" }];
 
     return (
         <div className="flex flex-col min-h-screen bg-background text-foreground">
@@ -829,7 +839,7 @@ export function TournamentManagementPage({ tournamentId }: { tournamentId: strin
                             ))}
                         </TabsList>
                         <TabsContent value="overview">
-                           <OverviewTab tournament={tournament} />
+                           <OverviewTab tournament={tournament} onStatusChange={(status) => handleTournamentChange({ status })} />
                         </TabsContent>
                         <TabsContent value="participants">
                            <ParticipantsTab />
@@ -853,7 +863,7 @@ export function TournamentManagementPage({ tournamentId }: { tournamentId: strin
                             <AnnouncementsTab />
                         </TabsContent>
                         <TabsContent value="settings">
-                            <SettingsTab tournament={tournament} />
+                            <SettingsTab tournament={tournament} onTournamentChange={handleTournamentChange} />
                         </TabsContent>
                     </Tabs>
                 </div>

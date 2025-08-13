@@ -19,8 +19,22 @@ export interface BracketMatch {
   score2: number | null;
 }
 
+export type TournamentStatus = 'АНОНС' | 'ПРЕДРЕГИСТРАЦИЯ' | 'РЕГИСТРАЦИЯ' | 'ИДЕТ' | 'ЗАВЕРШЕН' | 'ПРИОСТАНОВЛЕН' | 'ОТМЕНЕН';
 
-export const tournaments = [
+export interface Tournament {
+    id: string;
+    name: string;
+    game: string;
+    status: TournamentStatus;
+    prizePool: string;
+    participants: number;
+    maxParticipants: number;
+    startDate: string;
+    bannerUrl: string;
+    dataAiHint: string;
+}
+
+export const tournaments: Tournament[] = [
     {
       id: 'tourney1',
       name: 'Летний Кубок по Стритболу',
@@ -59,7 +73,7 @@ export const tournaments = [
     },
   ];
 
-export const myTournaments = [
+export const myTournaments: Tournament[] = [
     {
       id: 'mytourney1',
       name: 'Летний Кубок ProDvor',
@@ -86,9 +100,9 @@ export const myTournaments = [
     },
 ];
 
-export const allTournaments = [...tournaments, ...myTournaments];
+export const allTournaments: Tournament[] = [...tournaments, ...myTournaments];
 
-export const teams = [
+export const teams: Team[] = [
   {
     id: 'team1',
     name: 'Ночные Снайперы',
