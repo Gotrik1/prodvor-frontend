@@ -1,7 +1,7 @@
 
 'use client';
 
-import { ArrowLeft, BarChart, LineChart, Target, TrendingUp, DollarSign } from 'lucide-react';
+import { ArrowLeft, BarChart, LineChart, Target, TrendingUp, DollarSign, Info } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/shared/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
@@ -11,15 +11,90 @@ import { Bar, BarChart as RechartsBarChart, XAxis, YAxis, CartesianGrid, Tooltip
 import {
     marketBenchmarks,
     ecpmBenchmarks,
-    platformAssumptions,
-    annualRevenue,
-    revenueDistribution,
-    sensitivityAnalysis,
-    quarterlyForecast,
-    growthLevers
+    platformAssumptions as initialAssumptions,
+    revenueDistribution as initialRevenueDistribution,
+    growthLevers,
+    quarterlyForecast as initialQuarterlyForecast
 } from '../lib/mock-data';
+import React, { useState, useMemo, useCallback } from 'react';
+import { Slider } from '@/shared/ui/slider';
+import { Input } from '@/shared/ui/input';
+import { Label } from '@/shared/ui/label';
+import { Tooltip as UiTooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/shared/ui/tooltip';
+
+const formatCurrency = (value: number) => {
+    return `${value.toFixed(1)} млн ₽`;
+};
 
 export function AdvertisingPage() {
+    const [assumptions, setAssumptions] = useState({
+        mau: initialAssumptions.find(a => a.parameter === 'MAU')?.value.replace(/\s/g, '') || '500000',
+        sessions: initialAssumptions.find(a => a.parameter === 'Сессий / месяц')?.value || '12',
+        impressions: initialAssumptions.find(a => a.parameter === 'Показов рекламы / сессию')?.value || '4',
+        fillRate: initialAssumptions.find(a => a.parameter === 'Fill-rate')?.value.replace(' %', '') || '70',
+        ecpm: initialAssumptions.find(a => a.parameter === 'Смешанный eCPM')?.value.replace(' ₽', '') || '110',
+    });
+
+    const handleAssumptionChange = (key: keyof typeof assumptions, value: string) => {
+        setAssumptions(prev => ({ ...prev, [key]: value }));
+    };
+
+    const calculateAnnualRevenue = useCallback(() => {
+        const { mau, sessions, impressions, fillRate, ecpm } = assumptions;
+        const revenue = (
+            (Number(mau) || 0) *
+            (Number(sessions) || 0) *
+            (Number(impressions) || 0) *
+            12 *
+            ((Number(fillRate) || 0) / 100) *
+            (Number(ecpm) || 0)
+        ) / 1000;
+        return revenue / 1000000; // Convert to millions
+    }, [assumptions]);
+
+    const annualRevenue = useMemo(calculateAnnualRevenue, [calculateAnnualRevenue]);
+
+    const revenueDistribution = useMemo(() => {
+        return initialRevenueDistribution.map(item => ({
+            ...item,
+            revenue: formatCurrency(annualRevenue * (parseFloat(item.share) / 100)),
+        }));
+    }, [annualRevenue]);
+
+    const sensitivityAnalysis = useMemo(() => {
+        const baseEcpm = Number(assumptions.ecpm);
+        const baseFill = Number(assumptions.fillRate);
+
+        const calculateRevenue = (ecpm: number, fill: number) => 
+            ((Number(assumptions.mau) * Number(assumptions.sessions) * Number(assumptions.impressions) * 12 * (fill / 100) * ecpm) / 1000) / 1000000;
+
+        return [
+            { scenario: 'База', ecpm: baseEcpm.toFixed(1), fill: `${baseFill.toFixed(1)}%`, revenue: calculateRevenue(baseEcpm, baseFill) },
+            { scenario: 'eCPM –15%', ecpm: (baseEcpm * 0.85).toFixed(1), fill: `${baseFill.toFixed(1)}%`, revenue: calculateRevenue(baseEcpm * 0.85, baseFill) },
+            { scenario: 'eCPM +15%', ecpm: (baseEcpm * 1.15).toFixed(1), fill: `${baseFill.toFixed(1)}%`, revenue: calculateRevenue(baseEcpm * 1.15, baseFill) },
+            { scenario: 'Fill –15%', ecpm: baseEcpm.toFixed(1), fill: `${(baseFill * 0.85).toFixed(1)}%`, revenue: calculateRevenue(baseEcpm, baseFill * 0.85) },
+            { scenario: 'Fill +15%', ecpm: baseEcpm.toFixed(1), fill: `${(baseFill * 1.15).toFixed(1)}%`, revenue: calculateRevenue(baseEcpm, baseFill * 1.15) },
+        ];
+    }, [assumptions]);
+    
+     const quarterlyForecast = useMemo(() => {
+        // This is a simplified forecast that scales based on the main revenue calculation.
+        // A real model would be more complex.
+        const baseTotalRevenue = initialQuarterlyForecast.reduce((sum, q) => sum + q.revenue, 0);
+        const newTotalRevenue = annualRevenue * (baseTotalRevenue / 22.2); // Adjust based on initial base
+        
+        return initialQuarterlyForecast.map(q => {
+            const ratio = q.revenue / baseTotalRevenue;
+            const newRevenue = newTotalRevenue * ratio;
+            const newEbitda = q.ebitda + (newRevenue - q.revenue); // Simplified EBITDA adjustment
+            return {
+                ...q,
+                revenue: newRevenue,
+                ebitda: newEbitda,
+            }
+        });
+
+    }, [annualRevenue]);
 
     const chartConfig = {
         revenue: { label: "Выручка", color: "hsl(var(--primary))" },
@@ -46,147 +121,106 @@ export function AdvertisingPage() {
 
             <main className="flex-1 p-4 md:p-6 lg:p-8">
                 <div className="container mx-auto space-y-8">
-                    {/* Section 1: Market Benchmarks */}
-                    <Card>
-                        <CardHeader>
-                            <CardTitle>1. Рыночные ориентиры (РФ, без видео)</CardTitle>
-                        </CardHeader>
-                        <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div className="border rounded-lg">
-                                <Table>
-                                    <TableHeader>
-                                        <TableRow>
-                                            <TableHead>Метрика</TableHead>
-                                            <TableHead>2024</TableHead>
-                                            <TableHead>Δ к 2023</TableHead>
-                                        </TableRow>
-                                    </TableHeader>
-                                    <TableBody>
-                                        {marketBenchmarks.map((item) => (
-                                            <TableRow key={item.metric}>
-                                                <TableCell className="font-medium">{item.metric} <span className="text-xs text-muted-foreground">({item.source})</span></TableCell>
-                                                <TableCell>{item.value}</TableCell>
-                                                <TableCell className="text-green-400">{item.change}</TableCell>
-                                            </TableRow>
-                                        ))}
-                                    </TableBody>
-                                </Table>
-                            </div>
-                            <div className="border rounded-lg">
-                                 <Table>
-                                    <TableHeader>
-                                        <TableRow>
-                                            <TableHead>Средние цены за 1000 показов (eCPM)</TableHead>
-                                            <TableHead>eCPM, ₽</TableHead>
-                                        </TableRow>
-                                    </TableHeader>
-                                    <TableBody>
-                                        {ecpmBenchmarks.map((item) => (
-                                            <TableRow key={item.platform}>
-                                                <TableCell className="font-medium">{item.platform} <span className="text-xs text-muted-foreground">({item.source})</span></TableCell>
-                                                <TableCell>{item.ecpm}</TableCell>
-                                            </TableRow>
-                                        ))}
-                                    </TableBody>
-                                </Table>
-                            </div>
-                        </CardContent>
-                    </Card>
-
-                    {/* Section 2 & 3: Assumptions and Revenue */}
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                        <Card>
-                             <CardHeader>
-                                <CardTitle>2. Проверка допущений «ПроДвор»</CardTitle>
-                            </CardHeader>
-                            <CardContent>
-                                <div className="border rounded-lg">
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                        <div className="lg:col-span-1 space-y-8">
+                             <Card>
+                                <CardHeader>
+                                    <CardTitle>Параметры прогноза</CardTitle>
+                                    <CardDescription>Изменяйте значения, чтобы увидеть их влияние на доход.</CardDescription>
+                                </CardHeader>
+                                <CardContent className="space-y-6">
+                                    <div className="space-y-2">
+                                        <Label htmlFor="ecpm">Смешанный eCPM, ₽</Label>
+                                        <div className="flex items-center gap-4">
+                                            <Slider id="ecpm" value={[Number(assumptions.ecpm)]} onValueChange={([value]) => handleAssumptionChange('ecpm', String(value))} max={200} step={1} />
+                                            <Input className="w-20" value={assumptions.ecpm} onChange={(e) => handleAssumptionChange('ecpm', e.target.value)} />
+                                        </div>
+                                    </div>
+                                    <div className="space-y-2">
+                                        <Label htmlFor="fillRate">Fill-rate, %</Label>
+                                        <div className="flex items-center gap-4">
+                                            <Slider id="fillRate" value={[Number(assumptions.fillRate)]} onValueChange={([value]) => handleAssumptionChange('fillRate', String(value))} max={100} step={1} />
+                                            <Input className="w-20" value={assumptions.fillRate} onChange={(e) => handleAssumptionChange('fillRate', e.target.value)} />
+                                        </div>
+                                    </div>
+                                    <div className="space-y-2">
+                                        <Label htmlFor="mau">MAU (Месячная аудитория)</Label>
+                                        <Input id="mau" value={assumptions.mau} onChange={(e) => handleAssumptionChange('mau', e.target.value)} />
+                                    </div>
+                                </CardContent>
+                            </Card>
+                             <Card>
+                                <CardHeader>
+                                    <CardTitle>Рыночные ориентиры</CardTitle>
+                                </CardHeader>
+                                <CardContent>
                                     <Table>
                                         <TableHeader>
                                             <TableRow>
-                                                <TableHead>Параметр</TableHead>
-                                                <TableHead>Значение</TableHead>
+                                                <TableHead>Метрика</TableHead>
+                                                <TableHead>2024</TableHead>
                                             </TableRow>
                                         </TableHeader>
                                         <TableBody>
-                                            {platformAssumptions.map((item) => (
-                                                <TableRow key={item.parameter}>
-                                                    <TableCell className="font-medium">{item.parameter}</TableCell>
+                                            {marketBenchmarks.map((item) => (
+                                                <TableRow key={item.metric}>
+                                                    <TableCell className="font-medium">{item.metric}</TableCell>
                                                     <TableCell>{item.value}</TableCell>
                                                 </TableRow>
                                             ))}
                                         </TableBody>
                                     </Table>
-                                </div>
-                            </CardContent>
-                        </Card>
-                        <Card>
-                            <CardHeader>
-                                <CardTitle>3. Расчёт годовой выручки</CardTitle>
-                            </CardHeader>
-                            <CardContent className="space-y-4">
-                                <div className="p-4 bg-muted rounded-md">
-                                    <p className="text-sm font-mono text-muted-foreground">{annualRevenue.formula}</p>
-                                    <p className="text-sm font-mono mt-2">{annualRevenue.calculation}</p>
-                                </div>
-                                <div className="border rounded-lg">
-                                    <Table>
-                                        <TableHeader><TableRow><TableHead>Формат</TableHead><TableHead>Доля</TableHead><TableHead>Выручка</TableHead></TableRow></TableHeader>
-                                        <TableBody>
-                                            {revenueDistribution.map((item) => (
-                                                <TableRow key={item.format}>
-                                                    <TableCell>{item.format}</TableCell>
-                                                    <TableCell>{item.share}</TableCell>
-                                                    <TableCell className="font-semibold">{item.revenue}</TableCell>
-                                                </TableRow>
-                                            ))}
-                                        </TableBody>
-                                    </Table>
-                                </div>
-                            </CardContent>
-                        </Card>
+                                </CardContent>
+                            </Card>
+                        </div>
+                        <div className="lg:col-span-2 space-y-8">
+                            <Card>
+                                <CardHeader>
+                                    <CardTitle>Прогноз годовой выручки</CardTitle>
+                                </CardHeader>
+                                <CardContent className="flex flex-col items-center justify-center space-y-4">
+                                     <div className="text-6xl font-black text-primary tracking-tighter">
+                                        {formatCurrency(annualRevenue)}
+                                    </div>
+                                    <div className="w-full border rounded-lg">
+                                        <Table>
+                                            <TableHeader><TableRow><TableHead>Формат</TableHead><TableHead>Доля</TableHead><TableHead className="text-right">Выручка</TableHead></TableRow></TableHeader>
+                                            <TableBody>
+                                                {revenueDistribution.map((item) => (
+                                                    <TableRow key={item.format}>
+                                                        <TableCell>{item.format}</TableCell>
+                                                        <TableCell>{item.share}</TableCell>
+                                                        <TableCell className="font-semibold text-right">{item.revenue}</TableCell>
+                                                    </TableRow>
+                                                ))}
+                                            </TableBody>
+                                        </Table>
+                                    </div>
+                                </CardContent>
+                            </Card>
+                            <Card>
+                                <CardHeader>
+                                    <CardTitle>Анализ чувствительности</CardTitle>
+                                </CardHeader>
+                                <CardContent>
+                                    <ChartContainer config={sensitivityChartConfig} className="h-64 w-full">
+                                        <RechartsBarChart data={sensitivityAnalysis} accessibilityLayer>
+                                            <CartesianGrid vertical={false} />
+                                            <XAxis dataKey="scenario" tickLine={false} tickMargin={10} axisLine={false} />
+                                            <YAxis unit=" M" />
+                                            <Tooltip content={<ChartTooltipContent />} />
+                                            <Bar dataKey="revenue" fill="var(--color-revenue)" radius={4} name="Выручка, млн ₽" />
+                                        </RechartsBarChart>
+                                    </ChartContainer>
+                                </CardContent>
+                            </Card>
+                        </div>
                     </div>
-                    
-                     {/* Section 4: Sensitivity */}
-                    <Card>
-                        <CardHeader>
-                            <CardTitle>4. Анализ чувствительности (±15 % к eCPM и fill-rate)</CardTitle>
-                        </CardHeader>
-                        <CardContent className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-                             <div className="border rounded-lg">
-                                <Table>
-                                    <TableHeader><TableRow><TableHead>Сценарий</TableHead><TableHead>eCPM, ₽</TableHead><TableHead>Fill</TableHead><TableHead>Выручка, млн ₽</TableHead></TableRow></TableHeader>
-                                    <TableBody>
-                                        {sensitivityAnalysis.map((item) => (
-                                            <TableRow key={item.scenario} className={item.scenario === 'База' ? 'bg-primary/10' : ''}>
-                                                <TableCell className="font-medium">{item.scenario}</TableCell>
-                                                <TableCell>{item.ecpm}</TableCell>
-                                                <TableCell>{item.fill}</TableCell>
-                                                <TableCell className="font-semibold">{item.revenue.toFixed(1)}</TableCell>
-                                            </TableRow>
-                                        ))}
-                                    </TableBody>
-                                </Table>
-                            </div>
-                            <div>
-                                <ChartContainer config={sensitivityChartConfig} className="h-64 w-full">
-                                    <RechartsBarChart data={sensitivityAnalysis} accessibilityLayer>
-                                        <CartesianGrid vertical={false} />
-                                        <XAxis dataKey="scenario" tickLine={false} tickMargin={10} axisLine={false} />
-                                        <YAxis />
-                                        <Tooltip content={<ChartTooltipContent />} />
-                                        <Bar dataKey="revenue" fill="var(--color-revenue)" radius={4} />
-                                    </RechartsBarChart>
-                                </ChartContainer>
-                            </div>
-                        </CardContent>
-                    </Card>
 
-                    {/* Section 6: Quarterly Forecast */}
                     <Card>
                         <CardHeader>
-                            <CardTitle>6. Квартальный график окупаемости</CardTitle>
-                            <CardDescription>Окупаемость достигается к концу Q2-2025 при сохранении расходов 1,5 млн ₽/мес.</CardDescription>
+                            <CardTitle>Квартальный график окупаемости</CardTitle>
+                            <CardDescription>Прогноз доходов и EBITDA на основе текущих параметров. Окупаемость достигается при расходах ~1.5 млн ₽/мес.</CardDescription>
                         </CardHeader>
                         <CardContent>
                             <ChartContainer config={chartConfig} className="h-80 w-full">
@@ -194,11 +228,11 @@ export function AdvertisingPage() {
                                     <ComposedChart data={quarterlyForecast}>
                                         <CartesianGrid vertical={false} />
                                         <XAxis dataKey="quarter" />
-                                        <YAxis yAxisId="left" stroke="hsl(var(--primary))" />
-                                        <YAxis yAxisId="right" orientation="right" stroke="hsl(var(--accent))" />
-                                        <Tooltip content={<ChartTooltipContent />} />
+                                        <YAxis yAxisId="left" stroke="hsl(var(--primary))" unit=" M" />
+                                        <YAxis yAxisId="right" orientation="right" stroke="hsl(var(--accent))" unit=" M" />
+                                        <Tooltip formatter={(value: number) => value.toFixed(1)} content={<ChartTooltipContent />} />
                                         <Legend />
-                                        <Bar yAxisId="left" dataKey="revenue" fill="hsl(var(--primary))" name="Доход, млн ₽" />
+                                        <Bar yAxisId="left" dataKey="revenue" fill="hsl(var(--primary))" name="Доход, млн ₽" radius={[4, 4, 0, 0]} />
                                         <Line yAxisId="right" type="monotone" dataKey="ebitda" stroke="hsl(var(--accent))" strokeWidth={2} name="Cum EBITDA, млн ₽" />
                                     </ComposedChart>
                                 </ResponsiveContainer>
@@ -206,10 +240,10 @@ export function AdvertisingPage() {
                         </CardContent>
                     </Card>
 
-                    {/* Section 7: Growth Levers */}
-                    <Card>
+                     <Card>
                         <CardHeader>
-                            <CardTitle>7. Рычаги увеличения eCPM и fill-rate</CardTitle>
+                            <CardTitle>Рычаги увеличения eCPM и fill-rate</CardTitle>
+                             <CardDescription>Рекомендации для повышения рекламных доходов.</CardDescription>
                         </CardHeader>
                         <CardContent>
                             <div className="border rounded-lg">
@@ -228,9 +262,10 @@ export function AdvertisingPage() {
                             </div>
                         </CardContent>
                     </Card>
-                    
+
                 </div>
             </main>
         </div>
     );
 }
+
