@@ -3,7 +3,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { PlusCircle, Trophy, GanttChart, Bell, CheckSquare } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
-import { tournaments } from "@/mocks";
+import { tournaments, myTournaments as myMockTournaments } from "@/mocks";
 import { Badge } from "@/shared/ui/badge";
 import { Progress } from "@/shared/ui/progress";
 
@@ -18,32 +18,7 @@ const statusColors: Record<TournamentStatus, string> = {
 };
 
 
-const myTournaments = [
-    {
-      id: 'mytourney1',
-      name: 'Летний Кубок ProDvor',
-      game: 'Дворовый футбол',
-      status: 'РЕГИСТРАЦИЯ' as TournamentStatus,
-      prizePool: '100 000 руб.',
-      participants: 5,
-      maxParticipants: 16,
-      startDate: '2025-08-01',
-      bannerUrl: 'https://placehold.co/600x400.png',
-      dataAiHint: 'soccer street'
-    },
-    {
-      id: 'mytourney2',
-      name: 'Осенний марафон по Dota 2',
-      game: 'Dota 2',
-      status: 'ИДЕТ' as TournamentStatus,
-      prizePool: 'Эксклюзивные скины',
-      participants: 30,
-      maxParticipants: 32,
-      startDate: '2025-09-10',
-      bannerUrl: 'https://placehold.co/600x400.png',
-      dataAiHint: 'esports dota'
-    },
-];
+const myTournaments = myMockTournaments;
 
 const allTournaments = [
     ...tournaments,
@@ -78,11 +53,11 @@ const TournamentCardActionButton = ({ id, status }: { id: string, status: Tourna
         case 'АНОНС':
             return <Button asChild className="w-full" variant="outline"><Link href={`/tournaments/${id}`}><Bell className="mr-2 h-4 w-4"/>Уведомить о начале</Link></Button>;
         case 'ПРЕДРЕГИСТРАЦИЯ':
-            return <Button asChild className="w-full" variant="secondary"><Link href={`/tournaments/${id}`}><CheckSquare className="mr-2 h-4 w-4"/>Принять участие</Link></Button>;
+            return <Button asChild className="w-full" variant="secondary"><Link href={`/tournaments/${id}/register`}><CheckSquare className="mr-2 h-4 w-4"/>Принять участие</Link></Button>;
         case 'РЕГИСТРАЦИЯ':
-            return <Button asChild className="w-full"><Link href={`/tournaments/${id}`}>Подать заявку</Link></Button>;
+            return <Button asChild className="w-full"><Link href={`/tournaments/${id}/register`}>Подать заявку</Link></Button>;
         default:
-             return <Button asChild className="w-full" disabled><Link href={`/tournaments/${id}`}>Подробнее</Link></Button>;
+             return <Button asChild className="w-full"><Link href={`/tournaments/${id}`}>Подробнее</Link></Button>;
     }
 }
 

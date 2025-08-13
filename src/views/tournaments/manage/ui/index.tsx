@@ -4,7 +4,7 @@
 
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
-import { ArrowLeft, Users, Calendar, Megaphone, Settings, Bot, GanttChartIcon, CheckCircle, XCircle, Clock, Search, Shield, Award, PlusCircle, Send, UserPlus, Film, UploadCloud, Video, PlayCircle, StopCircle, Ban, ListChecks, LucideIcon, Trash2 } from "lucide-react";
+import { ArrowLeft, Users, Calendar, Megaphone, Settings, Bot, GanttChartIcon, CheckCircle, XCircle, Clock, Search, Shield, Award, PlusCircle, Send, UserPlus, Film, UploadCloud, Video, PlayCircle, StopCircle, Ban, ListChecks, LucideIcon, Trash2, Save } from "lucide-react";
 import Link from "next/link";
 import { myTournaments, allTournaments, registeredTeams as initialRegisteredTeams, staff as initialStaff, sponsors as initialSponsors, requirements as initialRequirements } from '@/views/tournaments/public-page/ui/mock-data';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
@@ -17,13 +17,13 @@ import { Textarea } from "@/shared/ui/textarea";
 import { Label } from "@/shared/ui/label";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/shared/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/select";
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { Checkbox } from "@/shared/ui/checkbox";
 import { Popover, PopoverContent, PopoverTrigger } from "@/shared/ui/popover";
 import { cn } from "@/shared/lib/utils";
 import { Calendar as CalendarIcon } from 'lucide-react';
 import { Calendar as CalendarComponent } from "@/shared/ui/calendar";
-
+import { Team, BracketMatch } from '@/views/tournaments/public-page/ui/mock-data';
 
 
 const statusColors: Record<string, string> = {
@@ -206,14 +206,94 @@ function ParticipantsTab() {
 }
 
 function BracketTab() {
-    // Pair teams for the first round
-    const matches = [];
-    const teamsCopy = [...initialRegisteredTeams];
-    for (let i = 0; i < teamsCopy.length; i += 2) {
-        if (teamsCopy[i + 1]) {
-            matches.push([teamsCopy[i], teamsCopy[i + 1]]);
+    // 1. Initial State Setup
+    const initialRound = useMemo(() => {
+        const confirmedTeams = initialRegisteredTeams.slice(0, 8); // Example: 8 teams
+        const firstRoundMatches: BracketMatch[] = [];
+        for (let i = 0; i < confirmedTeams.length; i += 2) {
+            if (confirmedTeams[i + 1]) {
+                firstRoundMatches.push({
+                    id: `rd1-match${i / 2}`,
+                    team1: confirmedTeams[i],
+                    team2: confirmedTeams[i + 1],
+                    score1: null,
+                    score2: null,
+                });
+            }
         }
-    }
+        return firstRoundMatches;
+    }, []);
+
+    const [rounds, setRounds] = useState<BracketMatch[][]>([initialRound]);
+    const [scores, setScores] = useState<Record<string, { score1: string, score2: string }>>({});
+
+    const handleScoreChange = (matchId: string, team: 'team1' | 'team2', value: string) => {
+        setScores(prev => ({
+            ...prev,
+            [matchId]: {
+                ...prev[matchId],
+                [team === 'team1' ? 'score1' : 'score2']: value,
+            }
+        }));
+    };
+
+    const handleSaveResult = (roundIndex: number, matchIndex: number) => {
+        const matchId = rounds[roundIndex][matchIndex].id;
+        const matchScores = scores[matchId] || { score1: '0', score2: '0' };
+        
+        const score1 = parseInt(matchScores.score1, 10);
+        const score2 = parseInt(matchScores.score2, 10);
+        
+        if (isNaN(score1) || isNaN(score2)) return; // Or show an error
+
+        // Update the match result in the state
+        const newRounds = [...rounds];
+        newRounds[roundIndex][matchIndex].score1 = score1;
+        newRounds[roundIndex][matchIndex].score2 = score2;
+        
+        // Check if all matches in the current round are finished
+        const currentRoundFinished = newRounds[roundIndex].every(m => m.score1 !== null && m.score2 !== null);
+        
+        if (currentRoundFinished) {
+            const winners: Team[] = newRounds[roundIndex]
+                .map(m => m.score1! > m.score2! ? m.team1 : m.team2)
+                .filter(Boolean) as Team[];
+
+            if (winners.length > 1) {
+                const nextRoundMatches: BracketMatch[] = [];
+                for (let i = 0; i < winners.length; i += 2) {
+                    if (winners[i + 1]) {
+                        nextRoundMatches.push({
+                            id: `rd${roundIndex + 1}-match${i / 2}`,
+                            team1: winners[i],
+                            team2: winners[i + 1],
+                            score1: null,
+                            score2: null,
+                        });
+                    } else {
+                        // Handle solo winner in case of odd numbers
+                    }
+                }
+                // Add the new round, but prevent duplicates
+                if (rounds.length === roundIndex + 1) {
+                    newRounds.push(nextRoundMatches);
+                } else {
+                    // Update existing next round if it was already generated
+                     newRounds[roundIndex + 1] = nextRoundMatches;
+                }
+            }
+        }
+
+        setRounds(newRounds);
+    };
+
+    const getRoundTitle = (index: number) => {
+        const roundCount = rounds[0].length;
+        if (roundCount === Math.pow(2, index)) return "Финал";
+        if (roundCount / 2 === Math.pow(2, index)) return "Полуфинал";
+        if (roundCount / 4 === Math.pow(2, index)) return "Четвертьфинал";
+        return `Раунд ${index + 1}`;
+    };
 
     return (
         <Card>
@@ -222,57 +302,82 @@ function BracketTab() {
                 <CardDescription>Вводите результаты матчей для автоматического обновления сетки.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-8">
-                <div>
-                    <h3 className="text-lg font-semibold mb-4 text-center text-muted-foreground">1-й Раунд</h3>
-                    <div className="space-y-4 max-w-2xl mx-auto">
-                        {matches.map(([team1, team2], index) => (
-                            <Card key={index} className="bg-muted/50">
-                                <CardContent className="flex items-center justify-between p-4">
-                                    {/* Team 1 */}
-                                    <div className="flex items-center gap-3 w-2/5">
-                                        <Avatar>
-                                            <AvatarImage src={team1.logoUrl} alt={team1.name} />
-                                            <AvatarFallback>{team1.name.slice(0, 2)}</AvatarFallback>
-                                        </Avatar>
-                                        <span className="font-medium truncate">{team1.name}</span>
-                                    </div>
+                {rounds.map((round, roundIndex) => (
+                    <div key={roundIndex}>
+                        <h3 className="text-lg font-semibold mb-4 text-center text-muted-foreground">{getRoundTitle(roundIndex)}</h3>
+                        <div className="space-y-4 max-w-2xl mx-auto">
+                            {round.map((match, matchIndex) => {
+                                const isFinished = match.score1 !== null && match.score2 !== null;
+                                const winner = isFinished ? (match.score1! > match.score2! ? 'team1' : 'team2') : null;
+                                return (
+                                <Card key={match.id} className="bg-muted/50">
+                                    <CardContent className="flex items-center justify-between p-4">
+                                        {/* Team 1 */}
+                                        <div className={`flex items-center gap-3 w-2/5 transition-opacity ${winner && winner !== 'team1' && 'opacity-50'}`}>
+                                            {match.team1 ? (
+                                                <>
+                                                <Avatar>
+                                                    <AvatarImage src={match.team1.logoUrl} alt={match.team1.name} />
+                                                    <AvatarFallback>{match.team1.name.slice(0, 2)}</AvatarFallback>
+                                                </Avatar>
+                                                <span className="font-medium truncate">{match.team1.name}</span>
+                                                </>
+                                            ) : (
+                                                <span className="text-sm text-muted-foreground">Ожидает...</span>
+                                            )}
+                                        </div>
 
-                                    {/* Score Input */}
-                                    <div className="flex items-center gap-2">
-                                        <Input type="number" className="w-12 h-8 text-center" />
-                                        <span className="text-muted-foreground font-bold">VS</span>
-                                        <Input type="number" className="w-12 h-8 text-center" />
-                                    </div>
+                                        {/* Score Input */}
+                                        <div className="flex items-center gap-2">
+                                            <Input 
+                                                type="number" 
+                                                className="w-12 h-8 text-center" 
+                                                value={scores[match.id]?.score1 ?? ''}
+                                                onChange={(e) => handleScoreChange(match.id, 'team1', e.target.value)}
+                                                disabled={isFinished}
+                                            />
+                                            <span className="text-muted-foreground font-bold">VS</span>
+                                            <Input 
+                                                type="number" 
+                                                className="w-12 h-8 text-center" 
+                                                value={scores[match.id]?.score2 ?? ''}
+                                                onChange={(e) => handleScoreChange(match.id, 'team2', e.target.value)}
+                                                disabled={isFinished}
+                                            />
+                                        </div>
 
-                                    {/* Team 2 */}
-                                    <div className="flex items-center gap-3 w-2/5 justify-end">
-                                        <span className="font-medium truncate text-right">{team2.name}</span>
-                                        <Avatar>
-                                            <AvatarImage src={team2.logoUrl} alt={team2.name} />
-                                            <AvatarFallback>{team2.name.slice(0, 2)}</AvatarFallback>
-                                        </Avatar>
-                                    </div>
-                                </CardContent>
-                                <div className="px-4 pb-2 text-center">
-                                     <Button size="sm" variant="secondary">Сохранить результат</Button>
-                                </div>
-                            </Card>
-                        ))}
+                                        {/* Team 2 */}
+                                        <div className={`flex items-center gap-3 w-2/5 justify-end transition-opacity ${winner && winner !== 'team2' && 'opacity-50'}`}>
+                                             {match.team2 ? (
+                                                <>
+                                                <span className="font-medium truncate text-right">{match.team2.name}</span>
+                                                <Avatar>
+                                                    <AvatarImage src={match.team2.logoUrl} alt={match.team2.name} />
+                                                    <AvatarFallback>{match.team2.name.slice(0, 2)}</AvatarFallback>
+                                                </Avatar>
+                                                </>
+                                            ) : (
+                                                <span className="text-sm text-muted-foreground">Ожидает...</span>
+                                            )}
+                                        </div>
+                                    </CardContent>
+                                    {!isFinished && match.team1 && match.team2 && (
+                                        <div className="px-4 pb-2 text-center">
+                                            <Button size="sm" variant="secondary" onClick={() => handleSaveResult(roundIndex, matchIndex)}>
+                                                <Save className="mr-2 h-4 w-4"/>Сохранить результат
+                                            </Button>
+                                        </div>
+                                    )}
+                                </Card>
+                            )})}
+                        </div>
                     </div>
-                </div>
-
-                {/* Placeholder for subsequent rounds */}
-                <div className="flex items-center justify-center bg-muted/30 rounded-lg p-8 border-dashed border-2">
-                    <div className="text-center">
-                        <GanttChartIcon className="mx-auto h-12 w-12 text-muted-foreground" />
-                        <h3 className="mt-4 text-lg font-semibold">Следующие раунды</h3>
-                        <p className="mt-1 text-sm text-muted-foreground">Победители появятся здесь после завершения всех матчей 1-го раунда.</p>
-                    </div>
-                </div>
+                ))}
             </CardContent>
         </Card>
     );
 }
+
 
 
 function ScheduleTab() {
@@ -678,7 +783,7 @@ export function TournamentManagementPage({ tournamentId }: { tournamentId: strin
         )
     }
 
-    const tabsConfig = [
+    const tabsConfig: {value: string, icon: LucideIcon, label: string}[] = [
         { value: "overview", icon: Settings, label: "Обзор" },
         { value: "participants", icon: Users, label: "Участники" },
         { value: "bracket", icon: GanttChartIcon, label: "Сетка" },
@@ -687,7 +792,9 @@ export function TournamentManagementPage({ tournamentId }: { tournamentId: strin
         { value: "staff", icon: Shield, label: "Персонал" },
         { value: "sponsors", icon: Award, label: "Спонсоры" },
         { value: "announcements", icon: Megaphone, label: "Анонсы" },
-    ]
+    ];
+
+    const crmTabs = [...tabsConfig, { value: "settings", icon: Cog, label: "Настройки" }];
 
     return (
         <div className="flex flex-col min-h-screen bg-background text-foreground">
@@ -713,10 +820,11 @@ export function TournamentManagementPage({ tournamentId }: { tournamentId: strin
             <main className="flex-1 p-4 md:p-6 lg:p-8">
                 <div className="container mx-auto">
                     <Tabs defaultValue="overview" className="w-full">
-                         <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 md:grid-cols-8 mb-4">
-                            {tabsConfig.map(tab => (
+                         <TabsList className="grid w-full grid-cols-3 sm:grid-cols-5 md:grid-cols-9 mb-4">
+                            {crmTabs.map(tab => (
                                 <TabsTrigger key={tab.value} value={tab.value}>
-                                    <tab.icon className="mr-2 h-4 w-4" />{tab.label}
+                                    <tab.icon className="mr-0 md:mr-2 h-4 w-4" />
+                                    <span className="hidden md:inline">{tab.label}</span>
                                 </TabsTrigger>
                             ))}
                         </TabsList>

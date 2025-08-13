@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { registeredTeams } from './mock-data';
@@ -28,8 +29,8 @@ for (let i = 0; i < teamsCopy.length; i += 2) {
             score2: Math.floor(seededRandom() * 5)
         };
         // Ensure scores are not equal to have a clear winner
-        while(match.score1 === match.score2) {
-            match.score2 = Math.floor(seededRandom() * 5);
+        if (match.score1 === match.score2) {
+            match.score2 = (match.score2 + 1) % 5;
         }
         matches.push(match);
     }

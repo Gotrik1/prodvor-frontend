@@ -1,6 +1,25 @@
 // This file is to avoid circular dependencies that can happen
 // when importing from @/mocks in a page file that also generates metadata.
 
+export interface Team {
+  id: string;
+  name: string;
+  logoUrl: string;
+  captainId: string;
+  members: string[]; // array of user IDs
+  game: string;
+  rank: number;
+}
+
+export interface BracketMatch {
+  id: string;
+  team1: Team | null;
+  team2: Team | null;
+  score1: number | null;
+  score2: number | null;
+}
+
+
 export const tournaments = [
     {
       id: 'tourney1',
@@ -45,10 +64,10 @@ export const myTournaments = [
       id: 'mytourney1',
       name: 'Летний Кубок ProDvor',
       game: 'Дворовый футбол',
-      status: 'РЕГИСТРАЦИЯ' as const,
+      status: 'ИДЕТ' as const,
       prizePool: '100 000 руб.',
       participants: 8,
-      maxParticipants: 16,
+      maxParticipants: 8,
       startDate: '2025-08-01',
       bannerUrl: 'https://placehold.co/1200x300.png',
       dataAiHint: 'soccer street'
@@ -57,9 +76,9 @@ export const myTournaments = [
       id: 'mytourney2',
       name: 'Осенний марафон по Dota 2',
       game: 'Dota 2',
-      status: 'ИДЕТ' as const,
+      status: 'РЕГИСТРАЦИЯ' as const,
       prizePool: 'Эксклюзивные скины',
-      participants: 8,
+      participants: 4,
       maxParticipants: 8,
       startDate: '2025-09-10',
       bannerUrl: 'https://placehold.co/1200x300.png',
@@ -91,7 +110,7 @@ export const teams = [
 ];
 
 
-export const registeredTeams = [
+export const registeredTeams: Team[] = [
     { id: 'team1', name: 'Ночные Снайперы', logoUrl: 'https://placehold.co/100x100.png', captainId: 'user1', members: ['user1', 'user2'], game: 'Дворовый футбол', rank: 1, },
     { id: 'team2', name: 'Короли Асфальта', logoUrl: 'https://placehold.co/100x100.png', captainId: 'user3', members: ['user3', 'user4'], game: 'Стритбол', rank: 2, },
     { id: 'team3', name: 'Стальные Ястребы', logoUrl: 'https://placehold.co/100x100.png', captainId: 'user1', members: ['user1'], game: 'Дворовый футбол', rank: 1450 },
