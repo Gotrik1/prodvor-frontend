@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import { registeredTeams } from './mock-data';
@@ -7,36 +6,65 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import { Trophy } from 'lucide-react';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 
-// Simple pseudo-random generator to ensure same results on server and client
-const createSeededRandom = (seed: number) => () => {
-  let t = seed += 0x6D2B79F5;
-  t = Math.imul(t ^ t >>> 15, t | 1);
-  t ^= t + Math.imul(t ^ t >>> 7, t | 61);
-  return ((t ^ t >>> 14) >>> 0) / 4294967296;
-};
-
-// Pair teams for the first round and generate predictable scores
-const matches = [];
-const teamsCopy = [...registeredTeams];
-for (let i = 0; i < teamsCopy.length; i += 2) {
-    if (teamsCopy[i + 1]) {
-        const seededRandom = createSeededRandom(i); // Use loop index as seed
-        const match = {
-            team1: teamsCopy[i],
-            team2: teamsCopy[i + 1],
-            score1: Math.floor(seededRandom() * 5),
-            score2: Math.floor(seededRandom() * 5)
-        };
-        // Ensure scores are not equal to have a clear winner
-        if (match.score1 === match.score2) {
-            match.score2 = (match.score2 + 1) % 5;
-        }
-        matches.push(match);
-    }
+interface Match {
+    team1: (typeof registeredTeams)[0];
+    team2: (typeof registeredTeams)[0];
+    score1: number;
+    score2: number;
 }
 
 export function TournamentBracket() {
+    const [matches, setMatches] = useState<Match[]>([]);
+
+    useEffect(() => {
+        // This logic runs on the client to avoid hydration mismatch
+        // Simple pseudo-random generator to ensure same results on client renders
+        const createSeededRandom = (seed: number) => () => {
+          let t = seed += 0x6D2B79F5;
+          t = Math.imul(t ^ t >>> 15, t | 1);
+          t ^= t + Math.imul(t ^ t >>> 7, t | 61);
+          return ((t ^ t >>> 14) >>> 0) / 4294967296;
+        };
+
+        const generatedMatches: Match[] = [];
+        const teamsCopy = [...registeredTeams].sort(() => 0.5 - Math.random()); // Shuffle teams
+
+        for (let i = 0; i < teamsCopy.length; i += 2) {
+            if (teamsCopy[i + 1]) {
+                const seededRandom = createSeededRandom(i); // Use loop index as seed
+                const match: Match = {
+                    team1: teamsCopy[i],
+                    team2: teamsCopy[i + 1],
+                    score1: Math.floor(seededRandom() * 5),
+                    score2: Math.floor(seededRandom() * 5)
+                };
+                // Ensure scores are not equal to have a clear winner
+                if (match.score1 === match.score2) {
+                    match.score2 = (match.score2 + 1) % 5;
+                }
+                generatedMatches.push(match);
+            }
+        }
+        setMatches(generatedMatches);
+    }, []);
+    
+    if (matches.length === 0) {
+        return (
+             <Card>
+                <CardHeader>
+                    <CardTitle>Ход турнира</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                    <div className="text-center p-8 text-muted-foreground">
+                        Генерация сетки...
+                    </div>
+                </CardContent>
+            </Card>
+        )
+    }
+
     return (
         <Card>
             <CardHeader>
