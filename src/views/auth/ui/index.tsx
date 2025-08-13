@@ -166,16 +166,16 @@ export function AuthPage() {
             <div className="space-y-2">
                 <Button variant="outline" className="w-full font-bold">Создать аккаунт</Button>
                 <div className="grid grid-cols-4 gap-2">
-                    <Button variant="outline" className="p-2 h-14 flex items-center justify-center">
+                    <Button variant="outline" className="h-14 flex items-center justify-center">
                         <YandexIcon className="h-10 w-10" />
                     </Button>
-                    <Button variant="outline" className="p-2 h-14 flex items-center justify-center">
+                    <Button variant="outline" className="h-14 flex items-center justify-center">
                         <VkIcon className="h-10 w-10" />
                     </Button>
-                    <Button variant="outline" className="p-2 h-14 flex items-center justify-center">
+                    <Button variant="outline" className="h-14 flex items-center justify-center">
                         <TelegramIcon className="h-10 w-10" />
                     </Button>
-                    <Button variant="outline" className="p-2 h-14 flex items-center justify-center">
+                    <Button variant="outline" className="h-14 flex items-center justify-center">
                         <GosuslugiIcon className="w-24 h-auto" />
                     </Button>
                 </div>
@@ -188,6 +188,7 @@ export function AuthPage() {
     
 
     
+
 
 
 
