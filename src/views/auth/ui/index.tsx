@@ -54,8 +54,8 @@ const GosuslugiIcon = () => (
 
 export function AuthPage() {
   return (
-    <div className="flex items-center justify-center min-h-screen bg-muted/40">
-      <Card className="w-full max-w-sm mx-4 shadow-xl border-none">
+    <div className="flex items-center justify-center min-h-screen bg-background">
+      <Card className="w-full max-w-sm mx-4 shadow-xl border-border/60">
         <CardHeader className="text-center">
             <div className="flex justify-center mb-4">
                 <Logo />
@@ -64,7 +64,7 @@ export function AuthPage() {
         </CardHeader>
         <CardContent>
             <Tabs defaultValue="email">
-                <TabsList className="grid w-full grid-cols-2 bg-secondary">
+                <TabsList className="grid w-full grid-cols-2">
                     <TabsTrigger value="phone">Телефон</TabsTrigger>
                     <TabsTrigger value="email">Почта</TabsTrigger>
                 </TabsList>
@@ -72,20 +72,20 @@ export function AuthPage() {
                      <div className="space-y-4">
                         <div className="space-y-2">
                             <Label htmlFor="phone">Телефон</Label>
-                            <Input id="phone" type="tel" placeholder="+7 (___) ___-__-__" required className="bg-secondary border-border" />
+                            <Input id="phone" type="tel" placeholder="+7 (___) ___-__-__" required />
                         </div>
-                        <Button type="submit" className="w-full bg-primary hover:bg-primary/90">Продолжить</Button>
+                        <Button type="submit" className="w-full">Продолжить</Button>
                     </div>
                 </TabsContent>
                 <TabsContent value="email" className="pt-4">
                     <div className="space-y-4">
                         <div className="space-y-2">
                             <Label htmlFor="email">Email</Label>
-                            <Input id="email" type="email" placeholder="admin@example.com" required className="bg-secondary border-border" />
+                            <Input id="email" type="email" placeholder="admin@example.com" required />
                         </div>
                         <div className="space-y-2">
                             <Label htmlFor="password">Пароль</Label>
-                            <Input id="password" type="password" required className="bg-secondary border-border" />
+                            <Input id="password" type="password" required />
                         </div>
                         <div className="flex items-center justify-between">
                             <div className="flex items-center space-x-2">
@@ -94,34 +94,28 @@ export function AuthPage() {
                             </div>
                             <HelpCircle className="h-4 w-4 text-muted-foreground" />
                         </div>
-                        <Button type="submit" className="w-full bg-primary hover:bg-primary/90">Продолжить</Button>
+                        <Button type="submit" className="w-full">Продолжить</Button>
                     </div>
                 </TabsContent>
             </Tabs>
             
             <div className="relative my-6">
                 <div className="absolute inset-0 flex items-center">
-                    <span className="w-full border-t border-border" />
+                    <span className="w-full border-t" />
                 </div>
                 <div className="relative flex justify-center text-xs uppercase">
-                    <span className="bg-card px-2 text-muted-foreground"></span>
+                    <span className="bg-card px-2 text-muted-foreground">Или войдите с помощью</span>
                 </div>
             </div>
 
             <div className="space-y-2">
-                <Button variant="secondary" className="w-full font-bold">Создать аккаунт</Button>
-                <Button variant="secondary" className="w-full">
-                    <YandexIcon /> Войти через Yandex
-                </Button>
-                 <Button variant="secondary" className="w-full">
-                    <VkontakteIcon /> Войти через VK ID
-                </Button>
-                 <Button variant="secondary" className="w-full">
-                    <TelegramIcon /> Войти через Telegram
-                </Button>
-                 <Button variant="secondary" className="w-full">
-                    <GosuslugiIcon />
-                </Button>
+                <Button variant="outline" className="w-full font-bold">Создать аккаунт</Button>
+                <div className="grid grid-cols-4 gap-2">
+                    <Button variant="outline" size="icon"><YandexIcon /></Button>
+                    <Button variant="outline" size="icon"><VkontakteIcon /></Button>
+                    <Button variant="outline" size="icon"><TelegramIcon /></Button>
+                    <Button variant="outline" size="icon"><GosuslugiIcon /></Button>
+                </div>
             </div>
         </CardContent>
       </Card>
