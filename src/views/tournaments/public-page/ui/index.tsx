@@ -1,4 +1,5 @@
 
+
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/shared/ui/button";
@@ -8,6 +9,7 @@ import { allTournaments, registeredTeams, sponsors } from './mock-data';
 import { Badge } from "@/shared/ui/badge";
 import { Separator } from "@/shared/ui/separator";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
+import { TournamentBracket } from "./tournament-bracket";
 
 const Logo = () => (
     <Image 
@@ -51,7 +53,7 @@ const ParticipateButton = ({ tournament }: { tournament: (typeof allTournaments)
     }
 
     const buttonText = isRegistrationActive ? "Подать заявку" : "Принять участие";
-    const href = isRegistrationActive ? `/tournaments/${tournament.id}/register` : "#";
+    const href = isRegistrationActive ? `/tournaments/${tournament.id}/register` : `/tournaments/${tournament.id}/register`;
 
     return (
         <Button asChild size="lg" className="font-bold text-lg h-14 px-10">
@@ -136,20 +138,24 @@ export function TournamentPublicPage({ tournament }: { tournament: (typeof allTo
 
                         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 md:gap-12">
                             <div className="lg:col-span-2">
-                                <Card>
-                                    <CardHeader><CardTitle>Описание турнира</CardTitle></CardHeader>
-                                    <CardContent className="prose prose-invert max-w-none text-muted-foreground">
-                                        <p>Добро пожаловать на главный турнир этого лета - {tournament.name}! Мы собираем лучшие команды, чтобы выяснить, кто достоин звания чемпиона. Вас ждут напряженные матчи, незабываемые эмоции и, конечно же, ценные призы.</p>
-                                        <h4>Правила и регламент:</h4>
-                                        <ul>
-                                            <li>Формат проведения: Single Elimination (проигрыш в одном матче означает вылет из турнира).</li>
-                                            <li>Все матчи до финала играются в формате Best-of-1. Финал - Best-of-3.</li>
-                                            <li>Опоздание на матч более 15 минут карается техническим поражением.</li>
-                                            <li>Запрещено любое неспортивное поведение и использование стороннего ПО.</li>
-                                        </ul>
-                                        <p>Готовьтесь к битве! Пусть победит сильнейший!</p>
-                                    </CardContent>
-                                </Card>
+                                {tournament.status === 'ИДЕТ' ? (
+                                    <TournamentBracket />
+                                ) : (
+                                     <Card>
+                                        <CardHeader><CardTitle>Описание турнира</CardTitle></CardHeader>
+                                        <CardContent className="prose prose-invert max-w-none text-muted-foreground">
+                                            <p>Добро пожаловать на главный турнир этого лета - {tournament.name}! Мы собираем лучшие команды, чтобы выяснить, кто достоин звания чемпиона. Вас ждут напряженные матчи, незабываемые эмоции и, конечно же, ценные призы.</p>
+                                            <h4>Правила и регламент:</h4>
+                                            <ul>
+                                                <li>Формат проведения: Single Elimination (проигрыш в одном матче означает вылет из турнира).</li>
+                                                <li>Все матчи до финала играются в формате Best-of-1. Финал - Best-of-3.</li>
+                                                <li>Опоздание на матч более 15 минут карается техническим поражением.</li>
+                                                <li>Запрещено любое неспортивное поведение и использование стороннего ПО.</li>
+                                            </ul>
+                                            <p>Готовьтесь к битве! Пусть победит сильнейший!</p>
+                                        </CardContent>
+                                    </Card>
+                                )}
                             </div>
                             <div>
                                 <Card>
