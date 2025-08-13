@@ -1,3 +1,7 @@
+// This component is deprecated and will be removed in a future version.
+// The logic has been moved to /src/app/(main)/dashboard/page.tsx to implement role-based dashboards.
+// It is kept temporarily to avoid breaking imports, but it is no longer in use.
+
 import { DashboardFeed } from "@/widgets/dashboard-feed";
 import { DashboardAside } from "@/widgets/dashboard-aside";
 
