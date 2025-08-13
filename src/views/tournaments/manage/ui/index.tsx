@@ -3,7 +3,7 @@
 
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
-import { ArrowLeft, Users, Calendar, Megaphone, Settings, Bot, GanttChartIcon, CheckCircle, XCircle, Clock, Search, Shield, Award, PlusCircle, Send, UserPlus, Film, UploadCloud, Video, PlayCircle, StopCircle, Ban, ListChecks, LucideIcon, Trash2, Save, Loader2, AlertTriangle, Wand2, RefreshCw, Construction } from "lucide-react";
+import { ArrowLeft, Users, Calendar, Megaphone, Settings, Bot, GanttChartIcon, CheckCircle, XCircle, Clock, Search, Shield, Award, PlusCircle, Send, UserPlus, Film, UploadCloud, Video, PlayCircle, StopCircle, Ban, ListChecks, LucideIcon, Trash2, Save, Loader2, AlertTriangle, Wand2, RefreshCw, Construction, Pencil } from "lucide-react";
 import Link from "next/link";
 import { myTournaments, allTournaments, registeredTeams as initialRegisteredTeams, sponsors as initialSponsors, requirements as initialRequirements } from '@/views/tournaments/public-page/ui/mock-data';
 import { users } from '@/mocks';
@@ -34,7 +34,8 @@ import { useToast } from "@/shared/hooks/use-toast";
 const SendTournamentAnnouncementInputSchema = z.object({
   tournamentId: z.string().describe("The ID of the tournament."),
   subject: z.string().min(5, { message: "Тема должна содержать не менее 5 символов." }).describe('The subject of the announcement.'),
-  message: z.string().min(20, { message: "Сообщение должно содержать не менее 20 символов." }).describe('The content of the announcement message.'),
+  message: z.string().min(10, { message: "Сообщение или промпт должно содержать не менее 10 символов." }).describe('The content of the announcement message or a prompt for the AI.'),
+  isAiEnhanced: z.boolean().default(false).describe("Whether to use AI to enhance the message.")
 });
 
 
@@ -535,6 +536,7 @@ function AnnouncementsTab({ tournamentId }: { tournamentId: string }) {
       tournamentId,
       subject: "",
       message: "",
+      isAiEnhanced: false,
     },
   });
 
@@ -546,7 +548,7 @@ function AnnouncementsTab({ tournamentId }: { tournamentId: string }) {
         title: "Успех!",
         description: "Ваш анонс был успешно отправлен всем участникам.",
       });
-      form.reset({ tournamentId, subject: '', message: '' });
+      form.reset({ tournamentId, subject: '', message: '', isAiEnhanced: values.isAiEnhanced });
     } else {
       toast({
         variant: "destructive",
@@ -555,6 +557,8 @@ function AnnouncementsTab({ tournamentId }: { tournamentId: string }) {
       });
     }
   }
+
+  const isAiMode = form.watch("isAiEnhanced");
 
   return (
     <Card>
@@ -567,39 +571,53 @@ function AnnouncementsTab({ tournamentId }: { tournamentId: string }) {
       <CardContent>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-            <FormField
-              control={form.control}
-              name="subject"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Тема</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="Например: Изменение в расписании"
-                      {...field}
+            <Tabs 
+                defaultValue="manual" 
+                className="w-full" 
+                onValueChange={(value) => form.setValue("isAiEnhanced", value === 'ai')}
+            >
+                <TabsList className="grid w-full grid-cols-2">
+                    <TabsTrigger value="manual"><Pencil className="mr-2 h-4 w-4" />Ручной режим</TabsTrigger>
+                    <TabsTrigger value="ai"><Bot className="mr-2 h-4 w-4" />AI-помощник</TabsTrigger>
+                </TabsList>
+
+                <div className="pt-6 space-y-6">
+                     <FormField
+                        control={form.control}
+                        name="subject"
+                        render={({ field }) => (
+                            <FormItem>
+                            <FormLabel>Тема</FormLabel>
+                            <FormControl>
+                                <Input
+                                placeholder="Например: Изменение в расписании"
+                                {...field}
+                                />
+                            </FormControl>
+                            <FormMessage />
+                            </FormItem>
+                        )}
+                        />
+                    <FormField
+                        control={form.control}
+                        name="message"
+                        render={({ field }) => (
+                            <FormItem>
+                            <FormLabel>{isAiMode ? "Опишите суть анонса (промпт)" : "Сообщение"}</FormLabel>
+                            <FormControl>
+                                <Textarea
+                                placeholder={isAiMode ? "Например: напиши яркий анонс, что турнир начнется через 3 дня, и пожелай удачи" : "Введите текст вашего анонса..."}
+                                rows={8}
+                                {...field}
+                                />
+                            </FormControl>
+                            <FormMessage />
+                            </FormItem>
+                        )}
                     />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="message"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Сообщение</FormLabel>
-                  <FormControl>
-                    <Textarea
-                      placeholder="Введите текст вашего анонса..."
-                      rows={8}
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+                </div>
+            </Tabs>
+            
             <div className="flex justify-end">
               <Button type="submit" disabled={form.formState.isSubmitting}>
                 {form.formState.isSubmitting ? (

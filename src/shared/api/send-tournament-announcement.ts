@@ -24,7 +24,8 @@ async function getTournamentParticipants(tournamentId: string): Promise<{ email:
 const SendTournamentAnnouncementInputSchema = z.object({
   tournamentId: z.string().describe("The ID of the tournament."),
   subject: z.string().describe('The subject of the announcement.'),
-  message: z.string().describe('The content of the announcement message.'),
+  message: z.string().describe('The content of the announcement message or a prompt for the AI.'),
+  isAiEnhanced: z.boolean().describe("Whether to use AI to enhance the message.")
 });
 export type SendTournamentAnnouncementInput = z.infer<typeof SendTournamentAnnouncementInputSchema>;
 
@@ -69,20 +70,30 @@ const announcementFlow = ai.defineFlow(
         return { success: false, error: 'No participants found for this tournament.' };
       }
 
-      const { output } = await ai.generate({
-        prompt: `
-          You are a helpful assistant for the ProDvor platform.
-          Your task is to send an announcement to all tournament participants.
-          Use the sendEmail tool for each participant.
-          The subject is: "${input.subject}"
-          The message is: "${input.message}"
-          The list of participants is: ${JSON.stringify(participants)}
-        `,
-        tools: [sendEmailTool],
-      });
+      let finalMessage = input.message;
 
-      // The AI will call the tool, but we confirm success here.
-      // In a more robust implementation, we would check the tool outputs.
+      if (input.isAiEnhanced) {
+        const { text } = await ai.generate({
+          prompt: `You are an expert copywriter for a gaming platform.
+          Rewrite and enhance the following announcement message to make it more engaging, clear, and exciting.
+          The original message is: "${input.message}"
+          Keep the core meaning, but improve the tone and style.
+          The final output should be only the rewritten message text.`,
+        });
+        finalMessage = text;
+      }
+
+      // We will now call the tool for each participant with the final message
+      const toolPromises = participants.map(participant =>
+        sendEmailTool({
+          to: participant.email,
+          subject: input.subject,
+          body: `Привет, ${participant.name}!\n\n${finalMessage}`
+        })
+      );
+      
+      await Promise.all(toolPromises);
+
       return { success: true };
 
     } catch (e: any) {
