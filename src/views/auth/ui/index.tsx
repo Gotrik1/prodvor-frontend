@@ -1,4 +1,5 @@
 
+
 import type { SVGProps } from 'react';
 import { Button } from "@/shared/ui/button";
 import {
@@ -15,6 +16,7 @@ import { HelpCircle } from "lucide-react";
 import Image from 'next/image';
 import type { ComponentProps } from "react";
 import { cn } from '@/shared/lib/utils';
+import Link from 'next/link';
 
 // ------------------ Логотип ------------------
 export function Logo(
@@ -138,7 +140,9 @@ export function AuthPage() {
                             <Label htmlFor="phone">Телефон</Label>
                             <Input id="phone" type="tel" placeholder="+7 (___) ___-__-__" required />
                         </div>
-                        <Button type="submit" className="w-full">Продолжить</Button>
+                        <Button asChild type="submit" className="w-full">
+                            <Link href="/">Продолжить</Link>
+                        </Button>
                     </div>
                 </TabsContent>
                 <TabsContent value="email" className="pt-4">
@@ -161,7 +165,9 @@ export function AuthPage() {
                                 Забыли пароль?
                             </a>
                         </div>
-                        <Button type="submit" className="w-full">Продолжить</Button>
+                        <Button asChild type="submit" className="w-full">
+                           <Link href="/">Продолжить</Link>
+                        </Button>
                     </div>
                 </TabsContent>
             </Tabs>
@@ -197,5 +203,3 @@ export function AuthPage() {
     </div>
   );
 }
-
-    
