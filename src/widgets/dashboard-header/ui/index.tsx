@@ -1,8 +1,10 @@
 import { SidebarTrigger } from "@/shared/ui/sidebar";
-import { Search, ShoppingCart, Bell, Cog } from "lucide-react";
+import { Search, ShoppingCart, Bell } from "lucide-react";
 import { Input } from "@/shared/ui/input";
 import { Button } from "@/shared/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
+import { ThemeToggle } from "@/shared/ui/theme-toggle";
+import Link from "next/link";
 
 export function DashboardHeader() {
   return (
@@ -17,16 +19,14 @@ export function DashboardHeader() {
           </kbd>
         </div>
       </div>
-      <div className="flex items-center gap-4">
-        <Button variant="ghost" size="icon">
-          <ShoppingCart />
+      <div className="flex items-center gap-2">
+        <Button variant="ghost" size="icon" asChild>
+          <Link href="/store"><ShoppingCart /></Link>
         </Button>
         <Button variant="ghost" size="icon">
           <Bell />
         </Button>
-        <Button variant="ghost" size="icon">
-          <Cog />
-        </Button>
+        <ThemeToggle />
         <Avatar>
           <AvatarImage src="https://i.pravatar.cc/150?u=a042581f4e29026024d" />
           <AvatarFallback>G</AvatarFallback>
