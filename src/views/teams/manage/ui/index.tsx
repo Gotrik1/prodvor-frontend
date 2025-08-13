@@ -1,3 +1,4 @@
+
 'use client';
 
 import { teams, users } from "@/mocks";
@@ -11,6 +12,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { Badge } from "@/shared/ui/badge";
 import { Input } from "@/shared/ui/input";
 import { Separator } from "@/shared/ui/separator";
+import { LogoGeneratorWidget } from "@/widgets/logo-generator/ui/logo-generator-widget";
 
 const mockApplications = users.slice(2, 4).map(u => ({ ...u, status: 'pending' }));
 
@@ -63,6 +65,7 @@ export function TeamManagementPage({ team }: { team: Team | undefined }) {
                 <div className="container mx-auto">
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                         <div className="lg:col-span-2 space-y-8">
+                            <LogoGeneratorWidget />
                            <Card>
                                 <CardHeader>
                                     <CardTitle className="flex items-center gap-2"><Users />Состав команды ({teamMembers.length})</CardTitle>

@@ -7,7 +7,7 @@ import { LogoGenerator } from "./logo-generator";
 
 export function LogoGeneratorWidget() {
   return (
-    <Card className="w-full max-w-2xl mx-auto bg-card/80 border-border/60 shadow-lg">
+    <Card className="w-full bg-card/80 border-border/60 shadow-lg">
       <CardHeader>
         <div className="flex items-center gap-4">
             <div className="p-3 rounded-md bg-accent/10 text-accent">
@@ -15,7 +15,7 @@ export function LogoGeneratorWidget() {
             </div>
             <div>
                 <CardTitle className="font-headline text-2xl">AI-генератор логотипов</CardTitle>
-                <CardDescription>Опишите логотип вашей мечты</CardDescription>
+                <CardDescription>Опишите логотип вашей мечты, и AI создаст 4 варианта.</CardDescription>
             </div>
         </div>
       </CardHeader>
