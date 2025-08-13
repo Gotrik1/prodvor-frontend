@@ -4,3 +4,4 @@ export * from './posts';
 export * from './sports';
 export * from './tournaments';
 export * from './personnel';
+export * from './requirements';

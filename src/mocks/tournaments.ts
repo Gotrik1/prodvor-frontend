@@ -1,8 +1,10 @@
+export type TournamentStatus = 'АНОНС' | 'ПРЕДРЕГИСТРАЦИЯ' | 'РЕГИСТРАЦИЯ' | 'ИДЕТ' | 'ЗАВЕРШЕН';
+
 export interface Tournament {
     id: string;
     name: string;
     game: string;
-    status: 'РЕГИСТРАЦИЯ' | 'ИДЕТ' | 'ЗАВЕРШЕН';
+    status: TournamentStatus;
     prizePool: string;
     participants: number;
     maxParticipants: number;

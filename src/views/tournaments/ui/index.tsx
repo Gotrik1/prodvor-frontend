@@ -1,24 +1,28 @@
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/shared/ui/card";
-import { PlusCircle, Trophy, GanttChart } from "lucide-react";
+import { PlusCircle, Trophy, GanttChart, Bell, CheckSquare } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { tournaments } from "@/mocks";
 import { Badge } from "@/shared/ui/badge";
 import { Progress } from "@/shared/ui/progress";
 
-const statusColors = {
+const statusColors: Record<TournamentStatus, string> = {
+    'АНОНС': 'bg-purple-500/20 text-purple-300 border-purple-500/30',
+    'ПРЕДРЕГИСТРАЦИЯ': 'bg-cyan-500/20 text-cyan-300 border-cyan-500/30',
     'РЕГИСТРАЦИЯ': 'bg-blue-500/20 text-blue-300 border-blue-500/30',
     'ИДЕТ': 'bg-green-500/20 text-green-300 border-green-500/30',
     'ЗАВЕРШЕН': 'bg-muted text-muted-foreground border-border',
-}
+};
+
+type TournamentStatus = 'АНОНС' | 'ПРЕДРЕГИСТРАЦИЯ' | 'РЕГИСТРАЦИЯ' | 'ИДЕТ' | 'ЗАВЕРШЕН';
 
 const myTournaments = [
     {
       id: 'mytourney1',
       name: 'Летний Кубок ProDvor',
       game: 'Дворовый футбол',
-      status: 'РЕГИСТРАЦИЯ' as const,
+      status: 'РЕГИСТРАЦИЯ' as TournamentStatus,
       prizePool: '100 000 руб.',
       participants: 5,
       maxParticipants: 16,
@@ -30,7 +34,7 @@ const myTournaments = [
       id: 'mytourney2',
       name: 'Осенний марафон по Dota 2',
       game: 'Dota 2',
-      status: 'ИДЕТ' as const,
+      status: 'ИДЕТ' as TournamentStatus,
       prizePool: 'Эксклюзивные скины',
       participants: 30,
       maxParticipants: 32,
@@ -38,7 +42,49 @@ const myTournaments = [
       bannerUrl: 'https://placehold.co/600x400.png',
       dataAiHint: 'esports dota'
     },
-]
+];
+
+const allTournaments = [
+    ...tournaments,
+     {
+      id: 'tourney4',
+      name: 'Зимний спринт',
+      game: 'CS2',
+      status: 'АНОНС' as TournamentStatus,
+      prizePool: '15 000 руб.',
+      participants: 0,
+      maxParticipants: 16,
+      startDate: '2025-12-01',
+      bannerUrl: 'https://placehold.co/600x400.png',
+      dataAiHint: 'cybersport cs2'
+    },
+     {
+      id: 'tourney5',
+      name: 'Кубок новичков',
+      game: 'Дворовый футбол',
+      status: 'ПРЕДРЕГИСТРАЦИЯ' as TournamentStatus,
+      prizePool: 'Медали и грамоты',
+      participants: 4,
+      maxParticipants: 8,
+      startDate: '2025-07-25',
+      bannerUrl: 'https://placehold.co/600x400.png',
+      dataAiHint: 'amateur soccer'
+    },
+];
+
+const TournamentCardActionButton = ({ status }: { status: TournamentStatus }) => {
+    switch(status) {
+        case 'АНОНС':
+            return <Button className="w-full" variant="outline"><Bell className="mr-2 h-4 w-4"/>Уведомить о начале</Button>;
+        case 'ПРЕДРЕГИСТРАЦИЯ':
+            return <Button className="w-full" variant="secondary"><CheckSquare className="mr-2 h-4 w-4"/>Принять участие</Button>;
+        case 'РЕГИСТРАЦИЯ':
+            return <Button className="w-full">Подать заявку</Button>;
+        default:
+             return <Button className="w-full" disabled>Подробнее</Button>;
+    }
+}
+
 
 export function TournamentsPage() {
     return (
@@ -111,7 +157,7 @@ export function TournamentsPage() {
                     <section>
                         <h2 className="text-2xl font-bold mb-4">Все турниры</h2>
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                            {tournaments.map(tournament => (
+                            {allTournaments.map(tournament => (
                                 <Card key={tournament.id} className="flex flex-col hover:border-primary/50 transition-colors">
                                     <CardHeader className="p-0">
                                         <div className="relative h-40 w-full">
@@ -145,9 +191,7 @@ export function TournamentsPage() {
                                         </div>
                                     </CardContent>
                                     <CardFooter>
-                                        <Button className="w-full" asChild>
-                                        <Link href="#">Подать заявку</Link>
-                                        </Button>
+                                        <TournamentCardActionButton status={tournament.status} />
                                     </CardFooter>
                                 </Card>
                             ))}

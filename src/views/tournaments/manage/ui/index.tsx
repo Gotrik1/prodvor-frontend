@@ -1,11 +1,12 @@
 
+
 'use client';
 
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
-import { ArrowLeft, Users, Calendar, Megaphone, Settings, Bot, GanttChartIcon, CheckCircle, XCircle, Clock, Search, Shield, Award, PlusCircle, Send, UserPlus, Film, UploadCloud, Video, PlayCircle, StopCircle, Ban } from "lucide-react";
+import { ArrowLeft, Users, Calendar, Megaphone, Settings, Bot, GanttChartIcon, CheckCircle, XCircle, Clock, Search, Shield, Award, PlusCircle, Send, UserPlus, Film, UploadCloud, Video, PlayCircle, StopCircle, Ban, ListChecks } from "lucide-react";
 import Link from "next/link";
-import { tournaments, teams, staff, sponsors } from '@/mocks';
+import { tournaments, teams, staff, sponsors, requirements } from '@/mocks';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 import { Badge } from "@/shared/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/shared/ui/table";
@@ -17,6 +18,7 @@ import { Label } from "@/shared/ui/label";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/shared/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/select";
 import React, { useState } from "react";
+import { Checkbox } from "@/shared/ui/checkbox";
 
 const myTournaments = [
     {
@@ -58,6 +60,8 @@ const registeredTeams = [
 
 
 const statusColors: Record<string, string> = {
+    'АНОНС': 'bg-purple-500/20 text-purple-300 border-purple-500/30',
+    'ПРЕДРЕГИСТРАЦИЯ': 'bg-cyan-500/20 text-cyan-300 border-cyan-500/30',
     'РЕГИСТРАЦИЯ': 'bg-blue-500/20 text-blue-300 border-blue-500/30',
     'ИДЕТ': 'bg-green-500/20 text-green-300 border-green-500/30',
     'ЗАВЕРШЕН': 'bg-muted text-muted-foreground border-border',
@@ -65,7 +69,7 @@ const statusColors: Record<string, string> = {
     'ОТМЕНЕН': 'bg-red-500/20 text-red-300 border-red-500/30',
 }
 
-const statusOptions = ['РЕГИСТРАЦИЯ', 'ИДЕТ', 'ЗАВЕРШЕН', 'ПРИОСТАНОВЛЕН', 'ОТМЕНЕН'];
+const statusOptions = ['АНОНС', 'ПРЕДРЕГИСТРАЦИЯ', 'РЕГИСТРАЦИЯ', 'ИДЕТ', 'ЗАВЕРШЕН', 'ПРИОСТАНОВЛЕН', 'ОТМЕНЕН'];
 
 
 function OverviewTab({ tournament }: { tournament: (typeof allTournaments)[0] }) {
@@ -406,30 +410,56 @@ function AnnouncementsTab() {
 
 function SettingsTab({ tournament }: { tournament: (typeof allTournaments)[0] }) {
     return (
-        <Card>
-            <CardHeader>
-                <CardTitle>Настройки турнира</CardTitle>
-                <CardDescription>Редактирование основных параметров вашего мероприятия.</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-6">
-                <div className="space-y-2">
-                    <Label htmlFor="name">Название турнира</Label>
-                    <Input id="name" defaultValue={tournament.name} />
-                </div>
-                <div className="space-y-2">
-                    <Label htmlFor="prize">Призовой фонд</Label>
-                    <Input id="prize" defaultValue={tournament.prizePool} />
-                </div>
-                <div className="space-y-2">
-                    <Label htmlFor="rules">Правила</Label>
-                    <Textarea id="rules" placeholder="Опишите основные правила и регламент турнира..." rows={10} defaultValue="1. Все матчи играются до 2 побед (Best of 3). 2. Опоздание на матч более чем на 15 минут карается техническим поражением. 3. Запрещено использование любого стороннего ПО."/>
-                </div>
-                <div className="flex justify-between items-center pt-4 border-t">
-                    <Button variant="destructive">Отменить турнир</Button>
-                    <Button size="lg">Сохранить изменения</Button>
-                </div>
-            </CardContent>
-        </Card>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <Card className="lg:col-span-2">
+                <CardHeader>
+                    <CardTitle>Основные настройки</CardTitle>
+                    <CardDescription>Редактирование ключевых параметров вашего мероприятия.</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                    <div className="space-y-2">
+                        <Label htmlFor="name">Название турнира</Label>
+                        <Input id="name" defaultValue={tournament.name} />
+                    </div>
+                    <div className="space-y-2">
+                        <Label htmlFor="prize">Призовой фонд</Label>
+                        <Input id="prize" defaultValue={tournament.prizePool} />
+                    </div>
+                    <div className="space-y-2">
+                        <Label htmlFor="rules">Правила</Label>
+                        <Textarea id="rules" placeholder="Опишите основные правила и регламент турнира..." rows={10} defaultValue="1. Все матчи играются до 2 побед (Best of 3). 2. Опоздание на матч более чем на 15 минут карается техническим поражением. 3. Запрещено использование любого стороннего ПО."/>
+                    </div>
+                </CardContent>
+            </Card>
+
+            <div className="space-y-6">
+                <Card>
+                    <CardHeader>
+                        <CardTitle className="flex items-center gap-2"><ListChecks /> Требования к участникам</CardTitle>
+                        <CardDescription>Установите правила для регистрации команд.</CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                        {requirements.map((req) => (
+                             <div key={req.id} className="flex items-center space-x-2">
+                                <Checkbox id={req.id} />
+                                <Label htmlFor={req.id} className="text-sm font-normal leading-snug">
+                                    {req.name}
+                                </Label>
+                            </div>
+                        ))}
+                    </CardContent>
+                </Card>
+                <Card>
+                    <CardHeader>
+                        <CardTitle>Опасная зона</CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                         <Button variant="destructive" className="w-full">Отменить турнир</Button>
+                         <p className="text-xs text-muted-foreground">Это действие необратимо. Все данные о турнире, включая регистрации, будут удалены.</p>
+                    </CardContent>
+                </Card>
+            </div>
+        </div>
     )
 }
 
