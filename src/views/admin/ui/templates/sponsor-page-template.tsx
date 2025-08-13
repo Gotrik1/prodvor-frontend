@@ -1,6 +1,6 @@
 'use client';
 
-import { sponsors } from "@/mocks/personnel";
+import type { Sponsor } from "@/mocks/personnel";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/shared/ui/card";
@@ -8,20 +8,40 @@ import { Input } from "@/shared/ui/input";
 import { Label } from "@/shared/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 import { Award, Building, Handshake, Save, User } from "lucide-react";
+import Link from "next/link";
 
-const defaultSponsor = sponsors[0];
+export function SponsorPageTemplate({ sponsor }: { sponsor: Sponsor | undefined }) {
 
-export function SponsorPageTemplate() {
+    if (!sponsor) {
+        return (
+             <div className="flex flex-col min-h-[80vh] items-center justify-center">
+                <Card className="text-center max-w-md w-full">
+                    <CardHeader>
+                        <CardTitle>Ошибка 404</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <p className="text-muted-foreground">
+                            Спонсор не найден.
+                        </p>
+                        <Button asChild className="mt-6">
+                            <Link href="/dashboard">Вернуться на платформу</Link>
+                        </Button>
+                    </CardContent>
+                </Card>
+            </div>
+        )
+    }
+
 
     return (
         <div className="border rounded-lg p-4 md:p-6 space-y-6 bg-muted/20">
             <header className="flex flex-col md:flex-row items-center gap-6">
                 <Avatar className="h-24 w-24 border-4 border-primary">
-                    <AvatarImage src={defaultSponsor.logoUrl} alt={defaultSponsor.name} />
-                    <AvatarFallback>{defaultSponsor.name.charAt(0)}</AvatarFallback>
+                    <AvatarImage src={sponsor.logoUrl} alt={sponsor.name} />
+                    <AvatarFallback>{sponsor.name.charAt(0)}</AvatarFallback>
                 </Avatar>
                 <div className="text-center md:text-left">
-                    <h1 className="text-3xl font-bold font-headline">{defaultSponsor.name}</h1>
+                    <h1 className="text-3xl font-bold font-headline">{sponsor.name}</h1>
                     <p className="text-muted-foreground text-lg">Роль: Спонсор</p>
                 </div>
             </header>
@@ -66,7 +86,7 @@ export function SponsorPageTemplate() {
                             <div className="space-y-4">
                                 <div className="space-y-2">
                                     <Label htmlFor="org-name">Название организации</Label>
-                                    <Input id="org-name" defaultValue={defaultSponsor.name} />
+                                    <Input id="org-name" defaultValue={sponsor.name} />
                                 </div>
                                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <div className="space-y-2">

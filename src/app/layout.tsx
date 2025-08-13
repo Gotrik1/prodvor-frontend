@@ -48,10 +48,8 @@ function AppLayout({ children }: { children: React.ReactNode }) {
   const noSidebarRoutes = ['/', '/about'];
   // Check if the current path is an auth route
   const isAuthRoute = pathname.startsWith('/auth');
-  // Check if the current path is a public page (tournament, team, sponsor)
-  const isPublicPage = /^\/(tournaments|teams|sponsors)\/[^/]+$/.test(pathname);
   
-  const showDashboardLayout = !noSidebarRoutes.includes(pathname) && !isAuthRoute && !isPublicPage;
+  const showDashboardLayout = !noSidebarRoutes.includes(pathname) && !isAuthRoute;
 
   return (
       <>
