@@ -34,6 +34,32 @@ const StatCard = ({ title, value, icon: Icon }: { title: string, value: string |
     </Card>
 );
 
+const statusColors: Record<string, string> = {
+    'АНОНС': 'bg-purple-500/20 text-purple-300 border-purple-500/30',
+    'ПРЕДРЕГИСТРАЦИЯ': 'bg-cyan-500/20 text-cyan-300 border-cyan-500/30',
+    'РЕГИСТРАЦИЯ': 'bg-blue-500/20 text-blue-300 border-blue-300/30',
+    'ИДЕТ': 'bg-green-500/20 text-green-300 border-green-500/30',
+    'ЗАВЕРШЕН': 'bg-muted text-muted-foreground border-border',
+};
+
+const ParticipateButton = ({ tournament }: { tournament: (typeof allTournaments)[0] }) => {
+    const isRegistrationActive = tournament.status === 'РЕГИСТРАЦИЯ';
+    const isPreRegistrationActive = tournament.status === 'ПРЕДРЕГИСТРАЦИЯ';
+
+    if (!isRegistrationActive && !isPreRegistrationActive) {
+        return null;
+    }
+
+    const buttonText = isRegistrationActive ? "Подать заявку" : "Принять участие";
+    const href = isRegistrationActive ? `/tournaments/${tournament.id}/register` : "#";
+
+    return (
+        <Button asChild size="lg" className="font-bold text-lg h-14 px-10">
+            <Link href={href}>{buttonText}</Link>
+        </Button>
+    )
+}
+
 export function TournamentPublicPage({ tournament }: { tournament: (typeof allTournaments)[0] | undefined}) {
     if (!tournament) {
         return (
@@ -82,12 +108,15 @@ export function TournamentPublicPage({ tournament }: { tournament: (typeof allTo
                     <div className="absolute inset-0 bg-gradient-to-t from-background via-background/70 to-transparent" />
                     <div className="absolute bottom-0 left-0 right-0 pb-8 md:pb-12">
                          <div className="container mx-auto px-4 md:px-6 text-center">
-                            <Badge variant="secondary" className="text-base mb-4">{tournament.game}</Badge>
+                            <div className="flex justify-center items-center gap-4 mb-4">
+                               <Badge variant="secondary" className="text-base">{tournament.game}</Badge>
+                               <Badge className={`text-base ${statusColors[tournament.status]}`}>{tournament.status}</Badge>
+                            </div>
                             <h1 className="text-4xl md:text-6xl lg:text-7xl font-black tracking-tighter mb-4 font-headline">
                                 {tournament.name}
                             </h1>
                             <div className="max-w-3xl mx-auto">
-                                <Button size="lg" className="font-bold text-lg h-14 px-10">Принять участие</Button>
+                                <ParticipateButton tournament={tournament} />
                             </div>
                         </div>
                     </div>
