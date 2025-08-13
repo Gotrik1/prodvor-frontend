@@ -1,3 +1,4 @@
+
 'use client';
 
 import { allTournaments, teams } from '@/views/tournaments/public-page/ui/mock-data';
@@ -71,7 +72,7 @@ export function TournamentRegisterPage({ tournament }: { tournament: (typeof all
                                     <SelectContent>
                                         <SelectItem value={mockUserTeam.id}>
                                             <div className="flex items-center gap-2">
-                                                <Image src={mockUserTeam.logoUrl} alt={mockUserTeam.name} width={20} height={20} className="rounded-sm" />
+                                                <Image src={mockUserTeam.logoUrl} alt={mockUserTeam.name} width={20} height={20} className="rounded-sm" data-ai-hint="team logo" />
                                                 {mockUserTeam.name}
                                             </div>
                                         </SelectItem>
