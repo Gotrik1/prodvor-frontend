@@ -5,3 +5,4 @@ export * from './sports';
 export * from './tournaments';
 export * from './personnel';
 export * from './requirements';
+export * from './challenges';
