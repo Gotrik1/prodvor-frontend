@@ -4,14 +4,14 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/shared/ui/chart";
 import { Bar, BarChart as RechartsBarChart, XAxis, YAxis, CartesianGrid, Tooltip } from "recharts";
-import { useAdSettings } from '../lib/use-ad-settings';
+import { useAdSettingsContext } from './index';
 
 const sensitivityChartConfig = {
     revenue: { label: "Выручка", color: "hsl(var(--primary))" },
 };
 
 export function SensitivityAnalysisCard() {
-    const { sensitivityAnalysis } = useAdSettings();
+    const { sensitivityAnalysis } = useAdSettingsContext();
     return (
         <Card>
             <CardHeader>

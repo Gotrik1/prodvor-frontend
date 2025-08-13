@@ -1,6 +1,7 @@
 
 'use client';
 
+import React, { createContext, useContext } from 'react';
 import { useAdSettings } from '../lib/use-ad-settings';
 import { AssumptionsCard } from './assumptions-card';
 import { AudienceManager } from './audience-manager';
@@ -9,6 +10,28 @@ import { GrowthLeversCard } from './growth-levers-card';
 import { PaybackChartCard } from './payback-chart-card';
 import { RevenueForecastCard } from './revenue-forecast-card';
 import { SensitivityAnalysisCard } from './sensitivity-analysis-card';
+
+// Create a context and a hook to use it
+type AdSettingsContextType = ReturnType<typeof useAdSettings>;
+const AdSettingsContext = createContext<AdSettingsContextType | null>(null);
+
+export const useAdSettingsContext = () => {
+    const context = useContext(AdSettingsContext);
+    if (!context) {
+        throw new Error('useAdSettingsContext must be used within an AdSettingsProvider');
+    }
+    return context;
+};
+
+// Create a provider to share the state between components
+function AdSettingsProvider({ children }: { children: React.ReactNode }) {
+    const adSettings = useAdSettings();
+    return (
+        <AdSettingsContext.Provider value={adSettings}>
+            {children}
+        </AdSettingsContext.Provider>
+    );
+}
 
 export function AdvertisingPage() {
     return (
@@ -26,32 +49,9 @@ export function AdvertisingPage() {
                 </div>
 
                 <AudienceManager />
-
                 <CampaignManager />
-
                 <PaybackChartCard />
             </div>
         </AdSettingsProvider>
     );
 }
-
-// Create a provider to share the state between components
-function AdSettingsProvider({ children }: { children: React.ReactNode }) {
-    const adSettings = useAdSettings();
-    return (
-        <AdSettingsContext.Provider value={adSettings}>
-            {children}
-        </AdSettingsContext.Provider>
-    );
-}
-
-// Create a context and a hook to use it
-import React, { createContext, useContext } from 'react';
-const AdSettingsContext = createContext<ReturnType<typeof useAdSettings> | null>(null);
-export const useAdSettingsContext = () => {
-    const context = useContext(AdSettingsContext);
-    if (!context) {
-        throw new Error('useAdSettingsContext must be used within an AdSettingsProvider');
-    }
-    return context;
-};

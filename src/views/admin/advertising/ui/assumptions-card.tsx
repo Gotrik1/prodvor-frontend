@@ -5,10 +5,10 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/sha
 import { Input } from "@/shared/ui/input";
 import { Label } from "@/shared/ui/label";
 import { Slider } from "@/shared/ui/slider";
-import { useAdSettings } from '../lib/use-ad-settings';
+import { useAdSettingsContext } from './index';
 
 export function AssumptionsCard() {
-    const { assumptions, handleAssumptionChange } = useAdSettings();
+    const { assumptions, handleAssumptionChange } = useAdSettingsContext();
 
     return (
         <Card>

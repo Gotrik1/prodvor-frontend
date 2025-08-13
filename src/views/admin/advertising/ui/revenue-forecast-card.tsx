@@ -3,14 +3,14 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/shared/ui/table";
-import { useAdSettings } from '../lib/use-ad-settings';
+import { useAdSettingsContext } from './index';
 
 const formatCurrency = (value: number) => {
     return `${value.toFixed(1)} млн ₽`;
 };
 
 export function RevenueForecastCard() {
-    const { modifiedEcpm, modifiedFillRate, annualRevenue, revenueDistribution } = useAdSettings();
+    const { modifiedEcpm, modifiedFillRate, annualRevenue, revenueDistribution } = useAdSettingsContext();
 
     return (
         <Card>

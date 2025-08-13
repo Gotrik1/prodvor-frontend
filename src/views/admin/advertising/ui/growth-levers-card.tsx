@@ -5,10 +5,10 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/sha
 import { Label } from "@/shared/ui/label";
 import { Switch } from "@/shared/ui/switch";
 import { growthLevers } from '../lib/mock-data';
-import { useAdSettings } from '../lib/use-ad-settings';
+import { useAdSettingsContext } from './index';
 
 export function GrowthLeversCard() {
-    const { activeLevers, handleLeverToggle } = useAdSettings();
+    const { activeLevers, handleLeverToggle } = useAdSettingsContext();
 
     return (
         <Card>

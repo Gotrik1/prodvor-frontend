@@ -4,7 +4,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/shared/ui/chart";
 import { Bar, ComposedChart, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Line } from "recharts";
-import { useAdSettings } from '../lib/use-ad-settings';
+import { useAdSettingsContext } from './index';
 
 const chartConfig = {
     revenue: { label: "Выручка", color: "hsl(var(--primary))" },
@@ -12,7 +12,7 @@ const chartConfig = {
 };
 
 export function PaybackChartCard() {
-    const { quarterlyForecast } = useAdSettings();
+    const { quarterlyForecast } = useAdSettingsContext();
 
     return (
         <Card>
