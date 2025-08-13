@@ -27,6 +27,7 @@ import {
   Warehouse,
   Flame,
   ClipboardList,
+  Loader2,
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { Button } from "@/shared/ui/button";
@@ -34,6 +35,8 @@ import { Input } from "@/shared/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
 import { Badge } from "@/shared/ui/badge";
 import Link from 'next/link';
+import { generateNewsDigestAction } from "@/app/actions";
+import { Alert, AlertDescription, AlertTitle } from "@/shared/ui/alert";
 
 const Logo = () => (
     <div className="flex items-center gap-2 font-bold text-xl">
@@ -44,7 +47,32 @@ const Logo = () => (
     </div>
 );
 
-export function DashboardPage() {
+async function AiDigest() {
+    const digest = await generateNewsDigestAction();
+
+    if (digest.error) {
+        return (
+            <Alert variant="destructive">
+                <AlertTitle>{digest.title}</AlertTitle>
+                <AlertDescription>
+                    {digest.content}
+                    <Button variant="link" className="p-0 h-auto text-destructive">Попробовать снова</Button>
+                </AlertDescription>
+            </Alert>
+        )
+    }
+
+    return (
+        <div>
+            <h3 className="font-bold text-lg mb-2">{digest.title}</h3>
+            <p className="text-muted-foreground whitespace-pre-wrap">{digest.content}</p>
+        </div>
+    )
+}
+
+export async function DashboardPage() {
+  const newsDigest = await generateNewsDigestAction();
+
   return (
     <SidebarProvider>
       <Sidebar collapsible="icon">
@@ -183,11 +211,7 @@ export function DashboardPage() {
                             <CardTitle>AI-Дайджест</CardTitle>
                         </CardHeader>
                         <CardContent>
-                            <div className="p-4 rounded-lg border border-destructive/50 bg-destructive/10 text-destructive">
-                                <p className="font-bold">Ошибка</p>
-                                <p>Не удалось загрузить новостную сводку.</p>
-                                <Button variant="link" className="p-0 h-auto text-destructive">Попробовать снова</Button>
-                            </div>
+                            <AiDigest />
                         </CardContent>
                     </Card>
                      <Card className="bg-card">
