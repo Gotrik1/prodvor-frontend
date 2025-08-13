@@ -34,52 +34,52 @@ export function Logo(
 
 // ------------------ Yandex ------------------
 export function YandexIcon(props: SVGProps<SVGSVGElement>) {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      {...props}
-    >
-      <circle cx="12" cy="12" r="12" fill="#FC3F1D" />
-      <path
-        d="M13.32 7.666h-.924c-1.694 0-2.585.858-2.585 2.123 0 1.43.616 2.1 1.881 2.959l1.045.704-3.003 4.487H7.49l2.695-4.014c-1.55-1.111-2.42-2.19-2.42-4.015 0-2.288 1.595-3.85 4.62-3.85h3.003v11.868H13.32V7.666z"
-        fill="#fff"
-      />
-    </svg>
-  );
+    return (
+        <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            {...props}
+        >
+            <circle cx="12" cy="12" r="12" fill="#FC3F1D" />
+            <path
+                d="M13.32 7.666h-.924c-1.694 0-2.585.858-2.585 2.123 0 1.43.616 2.1 1.881 2.959l1.045.704-3.003 4.487H7.49l2.695-4.014c-1.55-1.111-2.42-2.19-2.42-4.015 0-2.288 1.595-3.85 4.62-3.85h3.003v11.868H13.32V7.666z"
+                fill="#fff"
+            />
+        </svg>
+    );
 }
 
 // ------------------ VK ------------------
 export function VkIcon(props: SVGProps<SVGSVGElement>) {
-  return (
-    <svg
-      viewBox="0 0 100 100"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      {...props}
-    >
-        <rect width="100" height="100" rx="20" fill="#0077FF"/>
-        <path
-          d="M53.71 72.04C30.92 72.04 17.92 56.42 17.38 30.42h11.42c0.38 19.08 8.8 27.17 15.47 28.83V30.42h10.75v16.46c6.58-0.71 13.5-8.21 15.83-16.46h10.75c-1.79 10.17-9.29 17.67-14.62 20.75 5.33 2.5 13.87 9.04 17.12 20.87H72.25c-2.54-7.92-8.87-14.05-17.25-14.88v14.87h-1.31z"
-          fill="white"
-        />
-    </svg>
-  );
+    return (
+        <svg
+            viewBox="0 0 100 100"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            {...props}
+        >
+            <rect width="100" height="100" rx="20" fill="#0077FF"/>
+            <path
+                d="M53.71 72.04C30.92 72.04 17.92 56.42 17.38 30.42h11.42c0.38 19.08 8.8 27.17 15.47 28.83V30.42h10.75v16.46c6.58-0.71 13.5-8.21 15.83-16.46h10.75c-1.79 10.17-9.29 17.67-14.62 20.75 5.33 2.5 13.87 9.04 17.12 20.87H72.25c-2.54-7.92-8.87-14.05-17.25-14.88v14.87h-1.31z"
+                fill="white"
+            />
+        </svg>
+    );
 }
 
 // ------------------ Telegram ------------------
 export function TelegramIcon(props: SVGProps<SVGSVGElement>) {
-  return (
-    <svg
-      viewBox="0 0 240 240"
-      xmlns="http://www.w3.org/2000/svg"
-      {...props}
-    >
-      <circle fill="#2AABEE" cx="120" cy="120" r="120" />
-      <path
-        fill="#FFFFFF"
-        d="M54.3,118.8c35-15.2,58.3-25.3,70-30.2c33.3-13.9,40.3-16.3,44.8-16.4
+    return (
+        <svg
+            viewBox="0 0 240 240"
+            xmlns="http://www.w3.org/2000/svg"
+            {...props}
+        >
+            <circle fill="#2AABEE" cx="120" cy="120" r="120" />
+            <path
+                fill="#FFFFFF"
+                d="M54.3,118.8c35-15.2,58.3-25.3,70-30.2c33.3-13.9,40.3-16.3,44.8-16.4
         c1,0,3.2,0.2,4.7,1.4c1.2,1,1.5,2.3,1.7,3.3s0.4,3.1,0.2,4.7c-1.8,19-9.6,65.1-13.6,86.3
         c-1.7,9-5,12-8.2,12.3c-7,0.6-12.3-4.6-19-9c-10.6-6.9-16.5-11.2-26.8-18
         c-11.9-7.8-4.2-12.1,2.6-19.1c1.8-1.8,32.5-29.8,33.1-32.3
@@ -87,9 +87,9 @@ export function TelegramIcon(props: SVGProps<SVGSVGElement>) {
         c-1.1,0.2-17.9,11.4-50.6,33.5c-4.8,3.3-9.1,4.9-13,4.8
         c-4.3-0.1-12.5-2.4-18.7-4.4c-7.5-2.4-13.5-3.7-13-7.9
         C45.7,123.3,48.7,121.1,54.3,118.8z"
-      />
-    </svg>
-  );
+            />
+        </svg>
+    );
 }
 
 // ------------------ Госуслуги ------------------
@@ -109,7 +109,7 @@ export function GosuslugiIcon(props: SVGProps<SVGSVGElement>) {
 
 const SocialButton = ({ className, children }: { className?: string, children: React.ReactNode }) => (
     <button className={cn(
-        "inline-flex items-center justify-center rounded-md border border-input bg-background transition-colors h-14 hover:bg-accent hover:text-accent-foreground p-0",
+        "inline-flex items-center justify-center rounded-md border border-input bg-background transition-colors h-14 hover:bg-accent hover:text-accent-foreground",
         className
     )}>
         {children}

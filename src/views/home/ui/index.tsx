@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { Button } from '@/shared/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Cpu, Users, Trophy } from 'lucide-react';
-import { LogoGenerator } from '@/widgets/logo-generator';
+import { LogoGeneratorWidget } from '@/widgets/logo-generator/ui/logo-generator-widget';
 
 const Logo = () => (
     <Image 
@@ -122,7 +122,7 @@ export function HomePage() {
                         Нет идей для лого? Просто опишите, что вы хотите видеть, и наш AI-помощник создаст несколько вариантов для вас.
                     </p>
                 </div>
-                <LogoGenerator />
+                <LogoGeneratorWidget />
             </div>
         </section>
 
