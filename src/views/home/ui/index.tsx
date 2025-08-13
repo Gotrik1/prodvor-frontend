@@ -173,7 +173,7 @@ export function HomePage() {
               Присоединяйтесь к тысячам игроков, которые уже соревнуются и побеждают на ProDvor.
             </p>
             <Button asChild size="lg" className="mt-8 bg-accent hover:bg-accent/90 text-accent-foreground font-bold">
-              <Link href="/auth">Создать аккаунт</Link>
+              <Link href="/auth/register">Создать аккаунт</Link>
             </Button>
           </div>
         </section>
