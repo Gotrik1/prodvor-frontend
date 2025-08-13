@@ -46,7 +46,7 @@ export function DashboardSidebar() {
             <SidebarMenu>
                 <SidebarMenuItem>
                     <Link href="/dashboard">
-                        <SidebarMenuButton isActive>
+                        <SidebarMenuButton>
                             <Home />
                             <span>Лента</span>
                         </SidebarMenuButton>
@@ -61,7 +61,7 @@ export function DashboardSidebar() {
                     </Link>
                 </SidebarMenuItem>
                 <SidebarMenuItem>
-                    <Link href="#">
+                    <Link href="/tournaments">
                         <SidebarMenuButton>
                             <Trophy />
                             <span>Турниры</span>
@@ -69,7 +69,7 @@ export function DashboardSidebar() {
                     </Link>
                 </SidebarMenuItem>
                 <SidebarMenuItem>
-                    <Link href="#">
+                    <Link href="/leagues">
                         <SidebarMenuButton>
                             <Flame />
                             <span>Лиги</span>
@@ -77,7 +77,7 @@ export function DashboardSidebar() {
                     </Link>
                 </SidebarMenuItem>
                  <SidebarMenuItem>
-                    <Link href="#">
+                    <Link href="/challenges">
                         <SidebarMenuButton>
                             <Calendar />
                             <span>Вызовы</span>
@@ -85,7 +85,7 @@ export function DashboardSidebar() {
                     </Link>
                 </SidebarMenuItem>
                 <SidebarMenuItem>
-                    <Link href="#">
+                    <Link href="/lfg">
                         <SidebarMenuButton>
                             <Search />
                             <span>Поиск игры</span>
@@ -93,7 +93,7 @@ export function DashboardSidebar() {
                     </Link>
                 </SidebarMenuItem>
                  <SidebarMenuItem>
-                    <Link href="#">
+                    <Link href="/messages">
                         <SidebarMenuButton>
                             <MessageSquare />
                             <span>Сообщения</span>
@@ -101,7 +101,7 @@ export function DashboardSidebar() {
                     </Link>
                 </SidebarMenuItem>
                 <SidebarMenuItem>
-                    <Link href="#">
+                    <Link href="/training">
                         <SidebarMenuButton>
                             <ClipboardList />
                             <span>Тренировки</span>
@@ -109,7 +109,7 @@ export function DashboardSidebar() {
                     </Link>
                 </SidebarMenuItem>
                 <SidebarMenuItem>
-                    <Link href="#">
+                    <Link href="/playgrounds">
                         <SidebarMenuButton>
                             <Building />
                             <span>Площадки</span>
@@ -117,7 +117,7 @@ export function DashboardSidebar() {
                     </Link>
                 </SidebarMenuItem>
                 <SidebarMenuItem>
-                    <Link href="#">
+                    <Link href="/inventory">
                         <SidebarMenuButton>
                             <Warehouse />
                             <span>Инвентарь</span>
@@ -125,7 +125,7 @@ export function DashboardSidebar() {
                     </Link>
                 </SidebarMenuItem>
                 <SidebarMenuItem>
-                    <Link href="#">
+                    <Link href="/store">
                         <SidebarMenuButton>
                             <ShoppingCart />
                             <span>Магазин</span>
@@ -133,7 +133,7 @@ export function DashboardSidebar() {
                     </Link>
                 </SidebarMenuItem>
                 <SidebarMenuItem>
-                    <Link href="#">
+                    <Link href="/quests">
                         <SidebarMenuButton>
                             <HelpCircle />
                             <span>Квесты</span>
@@ -146,7 +146,7 @@ export function DashboardSidebar() {
              <SidebarGroup>
                 <SidebarMenu>
                     <SidebarMenuItem>
-                        <Link href="#">
+                        <Link href="/support">
                             <SidebarMenuButton>
                                 <HelpCircle />
                                 <span>Поддержка</span>
@@ -154,7 +154,7 @@ export function DashboardSidebar() {
                         </Link>
                     </SidebarMenuItem>
                     <SidebarMenuItem>
-                        <Link href="#">
+                        <Link href="/settings">
                             <SidebarMenuButton>
                                 <Cog />
                                 <span>Настройки</span>
