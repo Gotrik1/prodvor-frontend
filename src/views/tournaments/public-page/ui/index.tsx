@@ -164,7 +164,7 @@ export function TournamentPublicPage({ tournament }: { tournament: (typeof allTo
                                         {registeredTeams.length > 0 ? (
                                             <div className="grid grid-cols-4 gap-3">
                                                 {registeredTeams.slice(0, 12).map(team => (
-                                                    <Link href="#" key={team.id} className="block group">
+                                                    <Link href={`/teams/${team.id}`} key={team.id} className="block group">
                                                          <Avatar className="h-12 w-12 transition-transform group-hover:scale-110">
                                                             <AvatarImage src={team.logoUrl} alt={team.name} />
                                                             <AvatarFallback>{team.name.charAt(0)}</AvatarFallback>
@@ -182,12 +182,14 @@ export function TournamentPublicPage({ tournament }: { tournament: (typeof allTo
                                      <CardContent>
                                         <ul className="space-y-4">
                                             {sponsors.map(sponsor => (
-                                                <li key={sponsor.id} className="flex items-center gap-4">
-                                                    <Avatar className="h-10 w-10">
-                                                        <AvatarImage src={sponsor.logoUrl} alt={sponsor.name}/>
-                                                        <AvatarFallback>{sponsor.name.charAt(0)}</AvatarFallback>
-                                                    </Avatar>
-                                                    <span className="font-medium">{sponsor.name}</span>
+                                                <li key={sponsor.id}>
+                                                    <Link href={`/sponsors/${sponsor.id}`} className="flex items-center gap-4 group">
+                                                        <Avatar className="h-10 w-10 transition-transform group-hover:scale-110">
+                                                            <AvatarImage src={sponsor.logoUrl} alt={sponsor.name}/>
+                                                            <AvatarFallback>{sponsor.name.charAt(0)}</AvatarFallback>
+                                                        </Avatar>
+                                                        <span className="font-medium group-hover:text-primary transition-colors">{sponsor.name}</span>
+                                                    </Link>
                                                 </li>
                                             ))}
                                         </ul>
