@@ -4,6 +4,8 @@ export interface Team {
   logoUrl: string;
   captainId: string;
   members: string[]; // array of user IDs
+  game: string;
+  rank: number;
 }
 
 export const teams: Team[] = [
@@ -13,6 +15,8 @@ export const teams: Team[] = [
     logoUrl: 'https://placehold.co/100x100.png',
     captainId: 'user1',
     members: ['user1', 'user2'],
+    game: 'Дворовый футбол',
+    rank: 1,
   },
   {
     id: 'team2',
@@ -20,5 +24,7 @@ export const teams: Team[] = [
     logoUrl: 'https://placehold.co/100x100.png',
     captainId: 'user3',
     members: ['user3', 'user4'],
+    game: 'Стритбол',
+    rank: 2,
   },
 ];
