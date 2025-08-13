@@ -2,7 +2,7 @@ import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
 import Link from "next/link";
 import type { LucideIcon } from "lucide-react";
-import { User, Users, ClipboardList, Gavel, Briefcase, Shield, Megaphone, Handshake, Star, PlusCircle, GanttChart } from "lucide-react";
+import { User, Users, ClipboardList, Gavel, Briefcase, Shield, Megaphone, Handshake, Star, PlusCircle, GanttChart, BarChart } from "lucide-react";
 
 const roles = [
     {
@@ -97,57 +97,84 @@ export function AdminPage() {
                         </p>
                     </div>
 
-                    <Card>
-                        <CardHeader>
-                            <CardTitle>Шаблоны страниц</CardTitle>
-                            <CardDescription>
-                                Здесь можно увидеть, как выглядят страницы для разных ролей и сущностей с использованием моковых данных.
-                            </CardDescription>
-                        </CardHeader>
-                        <CardContent>
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                                <TemplateCardLink
-                                    name="Игрок"
-                                    description="Персональная страница игрока со статистикой и достижениями."
-                                    icon={User}
-                                    slug="player"
-                                />
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <Card>
+                            <CardHeader>
+                                <CardTitle>Шаблоны страниц</CardTitle>
+                                <CardDescription>
+                                    Здесь можно увидеть, как выглядят страницы для разных ролей и сущностей с использованием моковых данных.
+                                </CardDescription>
+                            </CardHeader>
+                            <CardContent>
+                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                    <TemplateCardLink
+                                        name="Игрок"
+                                        description="Персональная страница игрока со статистикой и достижениями."
+                                        icon={User}
+                                        slug="player"
+                                    />
 
-                                {roles.map((role) => (
-                                    <TemplateCardLink key={role.name} {...role} />
-                                ))}
+                                    {roles.map((role) => (
+                                        <TemplateCardLink key={role.name} {...role} />
+                                    ))}
 
-                                <Link href="/tournaments/create">
-                                    <Card className="cursor-pointer h-full hover:border-primary transition-colors hover:shadow-lg">
-                                        <CardHeader className="flex flex-row items-center gap-4">
-                                            <div className="p-3 rounded-md bg-primary/10 text-primary">
-                                                <PlusCircle className="w-6 h-6" />
-                                            </div>
-                                            <CardTitle>Создание турнира</CardTitle>
-                                        </CardHeader>
-                                        <CardContent>
-                                            <p className="text-sm text-muted-foreground">Страница с формой для создания нового турнира.</p>
-                                        </CardContent>
-                                    </Card>
-                                </Link>
+                                    <Link href="/tournaments/create">
+                                        <Card className="cursor-pointer h-full hover:border-primary transition-colors hover:shadow-lg">
+                                            <CardHeader className="flex flex-row items-center gap-4">
+                                                <div className="p-3 rounded-md bg-primary/10 text-primary">
+                                                    <PlusCircle className="w-6 h-6" />
+                                                </div>
+                                                <CardTitle>Создание турнира</CardTitle>
+                                            </CardHeader>
+                                            <CardContent>
+                                                <p className="text-sm text-muted-foreground">Страница с формой для создания нового турнира.</p>
+                                            </CardContent>
+                                        </Card>
+                                    </Link>
 
-                                 <Link href="/tournaments/mytourney1/manage">
-                                    <Card className="cursor-pointer h-full hover:border-primary transition-colors hover:shadow-lg">
-                                        <CardHeader className="flex flex-row items-center gap-4">
-                                            <div className="p-3 rounded-md bg-primary/10 text-primary">
-                                                <GanttChart className="w-6 h-6" />
-                                            </div>
-                                            <CardTitle>Управление турниром</CardTitle>
-                                        </CardHeader>
-                                        <CardContent>
-                                            <p className="text-sm text-muted-foreground">Страница CRM для управления существующим турниром.</p>
-                                        </CardContent>
-                                    </Card>
-                                </Link>
+                                    <Link href="/tournaments/mytourney1/manage">
+                                        <Card className="cursor-pointer h-full hover:border-primary transition-colors hover:shadow-lg">
+                                            <CardHeader className="flex flex-row items-center gap-4">
+                                                <div className="p-3 rounded-md bg-primary/10 text-primary">
+                                                    <GanttChart className="w-6 h-6" />
+                                                </div>
+                                                <CardTitle>Управление турниром</CardTitle>
+                                            </CardHeader>
+                                            <CardContent>
+                                                <p className="text-sm text-muted-foreground">Страница CRM для управления существующим турниром.</p>
+                                            </CardContent>
+                                        </Card>
+                                    </Link>
 
-                            </div>
-                        </CardContent>
-                    </Card>
+                                </div>
+                            </CardContent>
+                        </Card>
+                         <Card>
+                            <CardHeader>
+                                <CardTitle>Инструменты</CardTitle>
+                                <CardDescription>
+                                    Разделы для управления данными и просмотра статистики.
+                                </CardDescription>
+                            </CardHeader>
+                            <CardContent>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                     <Link href="/admin/statistics">
+                                        <Card className="cursor-pointer h-full hover:border-primary transition-colors hover:shadow-lg">
+                                            <CardHeader className="flex flex-row items-center gap-4">
+                                                <div className="p-3 rounded-md bg-primary/10 text-primary">
+                                                    <BarChart className="w-6 h-6" />
+                                                </div>
+                                                <CardTitle>Статистика</CardTitle>
+                                            </CardHeader>
+                                            <CardContent>
+                                                <p className="text-sm text-muted-foreground">Просмотр списков всех пользователей, команд и спонсоров.</p>
+                                            </CardContent>
+                                        </Card>
+                                    </Link>
+                                </div>
+                            </CardContent>
+                        </Card>
+                    </div>
                 </div>
             </main>
 
