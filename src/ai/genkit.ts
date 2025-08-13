@@ -1,3 +1,5 @@
+// DEPRECATED: This file is deprecated.
+// Please use src/shared/api/genkit.ts instead.
 import {genkit} from 'genkit';
 import {googleAI} from '@genkit-ai/googleai';
 

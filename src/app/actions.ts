@@ -3,7 +3,7 @@
 import {
   generateTeamLogoVariations,
   type GenerateTeamLogoVariationsInput,
-} from "@/widgets/logo-generator/api/generate-team-logo-variations";
+} from "@/shared/api/generate-team-logo-variations";
 import { generateNewsDigest } from "@/shared/api/generate-news-digest";
 
 export async function generateLogosAction(
