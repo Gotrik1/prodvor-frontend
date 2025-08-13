@@ -176,7 +176,7 @@ export function AuthPage() {
                         <TelegramIcon className="h-10 w-10" />
                     </Button>
                     <Button variant="outline" className="p-2 h-14 flex items-center justify-center">
-                        <GosuslugiIcon className="w-full max-w-[40px] h-auto" />
+                        <GosuslugiIcon className="w-24 h-auto" />
                     </Button>
                 </div>
             </div>
@@ -188,6 +188,7 @@ export function AuthPage() {
     
 
     
+
 
 
 
