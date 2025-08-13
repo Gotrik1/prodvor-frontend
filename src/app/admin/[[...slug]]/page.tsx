@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { AdminLayout } from '@/views/admin/pages/layout';
 import { AdminDashboardPage } from '@/views/admin/pages/dashboard';
 import { AdminStatisticsPage } from '@/views/admin/pages/statistics';
-import { AdminAdvertisingPage } from '@/views/admin/pages/advertising';
+import { AdminAdvertisingPage } from '@/views/admin/advertising';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Button } from '@/shared/ui/button';
 import Link from 'next/link';
@@ -17,8 +17,8 @@ import { PlayerPageTemplate } from '@/views/admin/ui/templates/player-page-templ
 import { RefereePageTemplate } from '@/views/admin/ui/templates/referee-page-template';
 import { SponsorPageTemplate } from '@/views/admin/ui/templates/sponsor-page-template';
 import { TeamPageTemplate } from '@/views/admin/ui/templates/team-page-template';
-import { UserPage } from './users/[userId]/page';
-import { SponsorPage } from './sponsors/[sponsorId]/page';
+import { UserPage } from '@/app/(admin)/users/[userId]/page';
+import { SponsorPage } from '@/app/(admin)/sponsors/[sponsorId]/page';
 import { TemplatePreviewPage } from './templates/TemplatePreviewPage';
 
 
@@ -63,7 +63,6 @@ export default function AdminPage({ params }: { params: { slug: string[] } }) {
   const { slug } = params;
   const page = slug?.[0] || 'dashboard';
   const subpage = slug?.[1];
-  const id = slug?.[2];
 
   const renderPage = () => {
     switch (page) {
@@ -78,6 +77,7 @@ export default function AdminPage({ params }: { params: { slug: string[] } }) {
       case 'sponsors':
         return <SponsorPage params={{ sponsorId: subpage }} />;
       case 'templates':
+        if (!subpage) return <NotFoundAdminPage />;
         const TemplateComponent = templateMap[subpage as keyof typeof templateMap];
         const title = subpage.charAt(0).toUpperCase() + subpage.slice(1);
         return TemplateComponent ? <TemplatePreviewPage title={`Шаблон: ${title}`}><TemplateComponent /></TemplatePreviewPage> : <NotFoundAdminPage />;

@@ -1,4 +1,5 @@
 import { AdvertisingPage } from '@/views/admin/advertising';
+import { AdminLayout } from '@/views/admin/pages/layout';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -7,5 +8,9 @@ export const metadata: Metadata = {
 };
 
 export default function Page() {
-  return <AdvertisingPage />;
+  return (
+    <AdminLayout>
+      <AdvertisingPage />
+    </AdminLayout>
+  );
 }

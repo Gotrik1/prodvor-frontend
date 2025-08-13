@@ -7,6 +7,7 @@ import Image from "next/image";
 import { DashboardHeader } from "@/widgets/dashboard-header";
 import { DashboardFooter } from "@/widgets/dashboard-footer";
 import { usePathname } from "next/navigation";
+import { Button } from "@/shared/ui/button";
 
 const Logo = () => (
     <div className="flex items-center gap-2 font-bold text-xl">
