@@ -1,8 +1,8 @@
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
-import { ArrowLeft, Users, Calendar, Megaphone, Settings, Bot, GanttChartIcon, CheckCircle, XCircle, Clock, Search } from "lucide-react";
+import { ArrowLeft, Users, Calendar, Megaphone, Settings, Bot, GanttChartIcon, CheckCircle, XCircle, Clock, Search, Shield, Award, PlusCircle, Send, UserPlus } from "lucide-react";
 import Link from "next/link";
-import { tournaments, teams } from '@/mocks';
+import { tournaments, teams, staff, sponsors } from '@/mocks';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 import { Badge } from "@/shared/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/shared/ui/table";
@@ -11,6 +11,7 @@ import Image from "next/image";
 import { Input } from "@/shared/ui/input";
 import { Textarea } from "@/shared/ui/textarea";
 import { Label } from "@/shared/ui/label";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/shared/ui/dialog";
 
 const myTournaments = [
     {
@@ -169,6 +170,7 @@ function BracketTab() {
         </Card>
     );
 }
+
 function ScheduleTab() {
     return (
         <Card>
@@ -240,6 +242,153 @@ function SettingsTab({ tournament }: { tournament: (typeof allTournaments)[0] })
     )
 }
 
+function StaffTab() {
+    return (
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <Card>
+                <CardHeader className="flex flex-row items-center justify-between">
+                    <CardTitle>Судьи</CardTitle>
+                     <Dialog>
+                        <DialogTrigger asChild>
+                            <Button variant="outline" size="sm"><PlusCircle className="mr-2 h-4 w-4" />Пригласить</Button>
+                        </DialogTrigger>
+                        <DialogContent>
+                            <DialogHeader>
+                                <DialogTitle>Пригласить судью</DialogTitle>
+                                <DialogDescription>Найдите пользователя по никнейму и отправьте ему приглашение.</DialogDescription>
+                            </DialogHeader>
+                            <div className="space-y-4 py-4">
+                               <Input placeholder="Никнейм пользователя..." />
+                            </div>
+                            <DialogFooter>
+                                <Button><Send className="mr-2 h-4 w-4"/>Отправить приглашение</Button>
+                            </DialogFooter>
+                        </DialogContent>
+                    </Dialog>
+                </CardHeader>
+                <CardContent>
+                    <ul className="space-y-3">
+                        {staff.filter(s => s.role === 'Судья').map(person => (
+                            <li key={person.id} className="flex items-center justify-between">
+                                <div className="flex items-center gap-3">
+                                    <Avatar>
+                                        <AvatarImage src={person.avatarUrl} />
+                                        <AvatarFallback>{person.name.charAt(0)}</AvatarFallback>
+                                    </Avatar>
+                                    <span>{person.name}</span>
+                                </div>
+                                <Badge variant={person.status === 'Принято' ? 'secondary' : 'default'}>{person.status}</Badge>
+                            </li>
+                        ))}
+                    </ul>
+                </CardContent>
+            </Card>
+             <Card>
+                <CardHeader className="flex flex-row items-center justify-between">
+                    <CardTitle>Организаторы</CardTitle>
+                    <Dialog>
+                        <DialogTrigger asChild>
+                            <Button variant="outline" size="sm"><PlusCircle className="mr-2 h-4 w-4" />Пригласить</Button>
+                        </DialogTrigger>
+                        <DialogContent>
+                            <DialogHeader>
+                                <DialogTitle>Пригласить организатора</DialogTitle>
+                                <DialogDescription>Найдите пользователя по никнейму и отправьте ему приглашение.</DialogDescription>
+                            </DialogHeader>
+                            <div className="space-y-4 py-4">
+                               <Input placeholder="Никнейм пользователя..." />
+                            </div>
+                            <DialogFooter>
+                                <Button><Send className="mr-2 h-4 w-4"/>Отправить приглашение</Button>
+                            </DialogFooter>
+                        </DialogContent>
+                    </Dialog>
+                </CardHeader>
+                <CardContent>
+                     <ul className="space-y-3">
+                        {staff.filter(s => s.role === 'Организатор').map(person => (
+                            <li key={person.id} className="flex items-center justify-between">
+                                <div className="flex items-center gap-3">
+                                    <Avatar>
+                                        <AvatarImage src={person.avatarUrl} />
+                                        <AvatarFallback>{person.name.charAt(0)}</AvatarFallback>
+                                    </Avatar>
+                                    <span>{person.name}</span>
+                                </div>
+                                <Badge variant={person.status === 'Принято' ? 'secondary' : 'default'}>{person.status}</Badge>
+                            </li>
+                        ))}
+                    </ul>
+                </CardContent>
+            </Card>
+        </div>
+    )
+}
+
+
+function SponsorsTab() {
+    return (
+        <Card>
+            <CardHeader className="flex flex-row items-center justify-between">
+                <div>
+                    <CardTitle>Спонсоры</CardTitle>
+                    <CardDescription>Управление спонсорами и партнерами турнира.</CardDescription>
+                </div>
+                 <Dialog>
+                    <DialogTrigger asChild>
+                        <Button><UserPlus className="mr-2 h-4 w-4" />Привлечь спонсора</Button>
+                    </DialogTrigger>
+                    <DialogContent>
+                        <DialogHeader>
+                            <DialogTitle>Пригласить спонсора</DialogTitle>
+                            <DialogDescription>Отправьте предложение о сотрудничестве.</DialogDescription>
+                        </DialogHeader>
+                        <div className="space-y-4 py-4">
+                            <Input placeholder="Название компании-спонсора" />
+                            <Textarea placeholder="Текст предложения..." />
+                        </div>
+                        <DialogFooter>
+                            <Button><Send className="mr-2 h-4 w-4"/>Отправить предложение</Button>
+                        </DialogFooter>
+                    </DialogContent>
+                </Dialog>
+            </CardHeader>
+            <CardContent>
+                 <div className="border rounded-lg">
+                    <Table>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead>Спонсор</TableHead>
+                                <TableHead>Вклад</TableHead>
+                                <TableHead className="text-right">Действия</TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                           {sponsors.map((sponsor) => (
+                                <TableRow key={sponsor.id}>
+                                    <TableCell className="font-medium">
+                                        <div className="flex items-center gap-3">
+                                            <Avatar>
+                                                <AvatarImage src={sponsor.logoUrl} />
+                                                <AvatarFallback>{sponsor.name.charAt(0)}</AvatarFallback>
+                                            </Avatar>
+                                            {sponsor.name}
+                                        </div>
+                                    </TableCell>
+                                    <TableCell>{sponsor.contribution}</TableCell>
+                                    <TableCell className="text-right">
+                                        <Button variant="destructive" size="sm">Удалить</Button>
+                                    </TableCell>
+                                </TableRow>
+                           ))}
+                        </TableBody>
+                    </Table>
+                </div>
+            </CardContent>
+        </Card>
+    );
+}
+
 export function TournamentManagementPage({ tournamentId }: { tournamentId: string }) {
     const tournament = allTournaments.find(t => t.id === tournamentId);
 
@@ -297,11 +446,13 @@ export function TournamentManagementPage({ tournamentId }: { tournamentId: strin
             <main className="flex-1 p-4 md:p-6 lg:p-8">
                 <div className="container mx-auto">
                     <Tabs defaultValue="overview" className="w-full">
-                        <TabsList className="grid w-full grid-cols-2 md:grid-cols-6 mb-4">
+                        <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 md:grid-cols-8 mb-4">
                             <TabsTrigger value="overview">Обзор</TabsTrigger>
                             <TabsTrigger value="participants"><Users className="mr-2 h-4 w-4" />Участники</TabsTrigger>
                             <TabsTrigger value="bracket">Сетка</TabsTrigger>
                             <TabsTrigger value="schedule"><Calendar className="mr-2 h-4 w-4" />Расписание</TabsTrigger>
+                            <TabsTrigger value="staff"><Shield className="mr-2 h-4 w-4" />Персонал</TabsTrigger>
+                            <TabsTrigger value="sponsors"><Award className="mr-2 h-4 w-4" />Спонсоры</TabsTrigger>
                             <TabsTrigger value="announcements"><Megaphone className="mr-2 h-4 w-4" />Анонсы</TabsTrigger>
                             <TabsTrigger value="settings"><Settings className="mr-2 h-4 w-4" />Настройки</TabsTrigger>
                         </TabsList>
@@ -316,6 +467,12 @@ export function TournamentManagementPage({ tournamentId }: { tournamentId: strin
                         </TabsContent>
                         <TabsContent value="schedule">
                             <ScheduleTab />
+                        </TabsContent>
+                        <TabsContent value="staff">
+                            <StaffTab />
+                        </TabsContent>
+                        <TabsContent value="sponsors">
+                            <SponsorsTab />
                         </TabsContent>
                         <TabsContent value="announcements">
                             <AnnouncementsTab />
