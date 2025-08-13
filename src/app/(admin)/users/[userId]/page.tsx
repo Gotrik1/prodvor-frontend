@@ -2,7 +2,6 @@
 import type { Metadata } from 'next';
 import { Button } from '@/shared/ui/button';
 import Link from 'next/link';
-import { ArrowLeft, User as UserIcon } from 'lucide-react';
 import { users } from '@/mocks';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
 import { PlaceholderTemplate } from '@/views/admin/ui/templates/placeholder-template';
@@ -29,7 +28,7 @@ export default function UserPage({ params }: { params: { userId: string } }) {
 
   if (!user) {
     return (
-       <div className="flex flex-col min-h-screen bg-background text-foreground items-center justify-center">
+       <div className="flex flex-col min-h-screen items-center justify-center">
         <Card className="text-center max-w-md w-full">
           <CardHeader>
             <CardTitle>Ошибка 404</CardTitle>
@@ -65,26 +64,10 @@ export default function UserPage({ params }: { params: { userId: string } }) {
   }
 
   return (
-    <div className="bg-background min-h-screen">
-        <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-            <div className="container mx-auto flex h-16 items-center justify-between px-4 md:px-6">
-                 <Button asChild variant="outline">
-                    <Link href="/tournaments/mytourney1/manage">
-                        <ArrowLeft className="mr-2 h-4 w-4" />
-                        Назад к турниру
-                    </Link>
-                </Button>
-                <div className="flex items-center gap-2">
-                    <UserIcon className="h-5 w-5 text-muted-foreground" />
-                    <h1 className="text-lg font-semibold">{user.firstName} {user.lastName}</h1>
-                </div>
-            </div>
-        </header>
-        <main className="p-4 md:p-6 lg:p-8">
-            <div className="container mx-auto">
-                {renderTemplate()}
-            </div>
-        </main>
+    <div className="p-4 md:p-6 lg:p-8">
+        <div className="container mx-auto">
+            {renderTemplate()}
+        </div>
     </div>
   );
 }

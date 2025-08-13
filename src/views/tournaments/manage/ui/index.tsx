@@ -3,7 +3,7 @@
 
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
-import { ArrowLeft, Users, Calendar, Megaphone, Settings, GanttChartIcon, Shield, Award, Film, Wand2 } from "lucide-react";
+import { Users, Calendar, Megaphone, Settings, GanttChartIcon, Shield, Award, Film, Wand2 } from "lucide-react";
 import Link from "next/link";
 import { allTournaments, registeredTeams as initialRegisteredTeams } from '@/views/tournaments/public-page/ui/mock-data';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
@@ -66,99 +66,63 @@ export function TournamentManagementPage({ tournamentId }: { tournamentId: strin
 
     if (!tournament) {
         return (
-             <div className="flex flex-col min-h-screen bg-background text-foreground">
-                <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-                    <div className="container mx-auto flex h-16 items-center justify-between px-4 md:px-6">
-                        <Button asChild variant="outline">
-                            <Link href="/tournaments">
-                                <ArrowLeft className="mr-2 h-4 w-4" />
-                                Назад к турнирам
-                            </Link>
-                        </Button>
-                        <h1 className="text-lg font-semibold">Турнир не найден</h1>
-                    </div>
-                </header>
-                 <main className="flex-1 p-4 md:p-6 lg:p-8 flex items-center justify-center">
-                     <Card className="text-center max-w-md w-full">
-                        <CardHeader>
-                            <CardTitle>Ошибка</CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                            <p className="text-muted-foreground">
-                                Турнир с таким ID не был найден.
-                            </p>
-                        </CardContent>
-                    </Card>
-                </main>
+             <div className="flex flex-col min-h-[80vh] items-center justify-center">
+                 <Card className="text-center max-w-md w-full">
+                    <CardHeader>
+                        <CardTitle>Ошибка</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <p className="text-muted-foreground">
+                            Турнир с таким ID не был найден.
+                        </p>
+                    </CardContent>
+                </Card>
             </div>
         )
     }
 
     return (
-        <div className="flex flex-col min-h-screen bg-background text-foreground">
-            <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-                <div className="container mx-auto flex h-16 items-center justify-between px-4 md:px-6">
-                    <Button asChild variant="outline">
-                        <Link href="/tournaments">
-                            <ArrowLeft className="mr-2 h-4 w-4" />
-                            К списку турниров
-                        </Link>
-                    </Button>
-                    <div className="text-center overflow-hidden">
-                        <p className="text-sm text-muted-foreground">Панель управления</p>
-                        <h1 className="text-lg font-semibold truncate">{tournament.name}</h1>
-                    </div>
-                     <Button asChild>
-                        <Link href={`/tournaments/${tournament.id}`}>
-                            На страницу турнира
-                        </Link>
-                    </Button>
-                </div>
-            </header>
-            <main className="flex-1 p-4 md:p-6 lg:p-8">
-                <div className="container mx-auto">
-                    <Tabs defaultValue="announcements" className="w-full">
-                         <TabsList className="grid w-full grid-cols-5 md:grid-cols-10 mb-4">
-                            {crmTabs.map(tab => (
-                                <TabsTrigger key={tab.value} value={tab.value}>
-                                    <tab.icon className="mr-0 md:mr-2 h-4 w-4" />
-                                    <span className="hidden md:inline">{tab.label}</span>
-                                </TabsTrigger>
-                            ))}
-                        </TabsList>
-                        <TabsContent value="overview">
-                           <OverviewTab tournament={tournament} onStatusChange={(status) => handleTournamentChange({ status })} confirmedCount={confirmedTeams.length} />
-                        </TabsContent>
-                        <TabsContent value="participants">
-                           <ParticipantsTab teams={teams} setTeams={setTeams} />
-                        </TabsContent>
-                         <TabsContent value="bracket">
-                           <BracketTab confirmedTeams={confirmedTeams} />
-                        </TabsContent>
-                        <TabsContent value="schedule">
-                            <ScheduleTab />
-                        </TabsContent>
-                        <TabsContent value="media">
-                            <MediaTab mediaItems={mediaItems} onMediaAdd={handleAddMedia} />
-                        </TabsContent>
-                        <TabsContent value="promo">
-                            <PromoTab tournament={tournament} onPromoAdd={handleAddMedia} />
-                        </TabsContent>
-                        <TabsContent value="staff">
-                            <StaffTab />
-                        </TabsContent>
-                        <TabsContent value="sponsors">
-                            <SponsorsTab />
-                        </TabsContent>
-                        <TabsContent value="announcements">
-                            <AnnouncementsTab tournamentId={tournament.id} />
-                        </TabsContent>
-                        <TabsContent value="settings">
-                            <SettingsTab tournament={tournament} onTournamentChange={handleTournamentChange} />
-                        </TabsContent>
-                    </Tabs>
-                </div>
-            </main>
+        <div className="p-4 md:p-6 lg:p-8">
+            <Tabs defaultValue="announcements" className="w-full">
+                    <TabsList className="grid w-full grid-cols-5 md:grid-cols-10 mb-4">
+                    {crmTabs.map(tab => (
+                        <TabsTrigger key={tab.value} value={tab.value}>
+                            <tab.icon className="mr-0 md:mr-2 h-4 w-4" />
+                            <span className="hidden md:inline">{tab.label}</span>
+                        </TabsTrigger>
+                    ))}
+                </TabsList>
+                <TabsContent value="overview">
+                    <OverviewTab tournament={tournament} onStatusChange={(status) => handleTournamentChange({ status })} confirmedCount={confirmedTeams.length} />
+                </TabsContent>
+                <TabsContent value="participants">
+                    <ParticipantsTab teams={teams} setTeams={setTeams} />
+                </TabsContent>
+                    <TabsContent value="bracket">
+                    <BracketTab confirmedTeams={confirmedTeams} />
+                </TabsContent>
+                <TabsContent value="schedule">
+                    <ScheduleTab />
+                </TabsContent>
+                <TabsContent value="media">
+                    <MediaTab mediaItems={mediaItems} onMediaAdd={handleAddMedia} />
+                </TabsContent>
+                <TabsContent value="promo">
+                    <PromoTab tournament={tournament} onPromoAdd={handleAddMedia} />
+                </TabsContent>
+                <TabsContent value="staff">
+                    <StaffTab />
+                </TabsContent>
+                <TabsContent value="sponsors">
+                    <SponsorsTab />
+                </TabsContent>
+                <TabsContent value="announcements">
+                    <AnnouncementsTab tournamentId={tournament.id} />
+                </TabsContent>
+                <TabsContent value="settings">
+                    <SettingsTab tournament={tournament} onTournamentChange={handleTournamentChange} />
+                </TabsContent>
+            </Tabs>
         </div>
     );
 }

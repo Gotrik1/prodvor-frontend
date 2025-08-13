@@ -21,5 +21,11 @@ export default function SponsorPage({ params }: { params: { sponsorId: string } 
 
   // Note: We're not handling the 'not found' case here because the template does it.
   // In a real app, you might want to use the notFound() function from Next.js
-  return <SponsorPageTemplate sponsor={sponsor} />;
+  return (
+    <div className="p-4 md:p-6 lg:p-8">
+        <div className="container mx-auto">
+            <SponsorPageTemplate sponsor={sponsor} />
+        </div>
+    </div>
+  );
 }

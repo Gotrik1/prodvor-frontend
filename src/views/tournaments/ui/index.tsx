@@ -68,121 +68,102 @@ const TournamentCardActionButton = ({ id, status }: { id: string, status: Tourna
 
 export function TournamentsPage() {
     return (
-        <div className="flex flex-col min-h-screen bg-background text-foreground">
-            <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-                <div className="container mx-auto flex h-16 items-center justify-between px-4 md:px-6">
-                    <h1 className="text-2xl font-bold flex items-center gap-2">
-                        <Trophy className="h-6 w-6" />
-                        Турниры
-                    </h1>
-                    <Button asChild>
-                        <Link href="/tournaments/create">
-                            <PlusCircle className="mr-2 h-4 w-4" />
-                            Создать турнир
-                        </Link>
-                    </Button>
-                </div>
-            </header>
+        <div className="p-4 md:p-6 lg:p-8 space-y-12">
+            <section>
+                <h2 className="text-2xl font-bold mb-4">Мои турниры</h2>
+                {mockMyTournaments.length > 0 ? (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {mockMyTournaments.map(tournament => (
+                        <Card key={tournament.id} className="flex flex-col bg-card/80 border-primary/20 hover:border-primary/50 transition-colors">
+                            <CardHeader className="p-0">
+                                <div className="relative h-40 w-full">
+                                    <Image
+                                        src={tournament.bannerUrl}
+                                        alt={tournament.name}
+                                        fill
+                                        className="object-cover rounded-t-lg"
+                                        data-ai-hint={tournament.dataAiHint}
+                                    />
+                                    <Badge className={`absolute top-2 right-2 ${statusColors[tournament.status]}`}>
+                                        {tournament.status}
+                                    </Badge>
+                                </div>
+                                <div className="p-6">
+                                    <CardTitle className="text-xl">{tournament.name}</CardTitle>
+                                    <CardDescription>{tournament.game}</CardDescription>
+                                </div>
+                            </CardHeader>
+                            <CardContent className="flex-grow space-y-4">
+                                <div>
+                                    <p className="text-sm font-medium text-muted-foreground">Призовой фонд</p>
+                                    <p className="text-lg font-semibold text-primary">{tournament.prizePool}</p>
+                                </div>
+                                <div>
+                                    <div className="flex justify-between items-center mb-1">
+                                        <p className="text-sm font-medium text-muted-foreground">Участники</p>
+                                        <p className="text-sm font-semibold">{tournament.participants} / {tournament.maxParticipants}</p>
+                                    </div>
+                                    <Progress value={(tournament.participants / tournament.maxParticipants) * 100} />
+                                </div>
+                            </CardContent>
+                            <CardFooter>
+                                <Button className="w-full" variant="secondary" asChild>
+                                    <Link href={`/tournaments/${tournament.id}/manage`}>
+                                        <GanttChart className="mr-2 h-4 w-4" /> Управлять
+                                    </Link>
+                                </Button>
+                            </CardFooter>
+                        </Card>
+                    ))}
+                    </div>
+                ) : (
+                    <MyTournamentsEmptyState />
+                )}
+            </section>
 
-            <main className="flex-1 p-4 md:p-6 lg:p-8">
-                <div className="container mx-auto space-y-12">
-                    <section>
-                        <h2 className="text-2xl font-bold mb-4">Мои турниры</h2>
-                        {mockMyTournaments.length > 0 ? (
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                               {mockMyTournaments.map(tournament => (
-                                <Card key={tournament.id} className="flex flex-col bg-card/80 border-primary/20 hover:border-primary/50 transition-colors">
-                                    <CardHeader className="p-0">
-                                        <div className="relative h-40 w-full">
-                                            <Image
-                                                src={tournament.bannerUrl}
-                                                alt={tournament.name}
-                                                fill
-                                                className="object-cover rounded-t-lg"
-                                                data-ai-hint={tournament.dataAiHint}
-                                            />
-                                            <Badge className={`absolute top-2 right-2 ${statusColors[tournament.status]}`}>
-                                                {tournament.status}
-                                            </Badge>
-                                        </div>
-                                        <div className="p-6">
-                                          <CardTitle className="text-xl">{tournament.name}</CardTitle>
-                                          <CardDescription>{tournament.game}</CardDescription>
-                                        </div>
-                                    </CardHeader>
-                                    <CardContent className="flex-grow space-y-4">
-                                        <div>
-                                            <p className="text-sm font-medium text-muted-foreground">Призовой фонд</p>
-                                            <p className="text-lg font-semibold text-primary">{tournament.prizePool}</p>
-                                        </div>
-                                        <div>
-                                            <div className="flex justify-between items-center mb-1">
-                                              <p className="text-sm font-medium text-muted-foreground">Участники</p>
-                                              <p className="text-sm font-semibold">{tournament.participants} / {tournament.maxParticipants}</p>
-                                            </div>
-                                            <Progress value={(tournament.participants / tournament.maxParticipants) * 100} />
-                                        </div>
-                                    </CardContent>
-                                    <CardFooter>
-                                        <Button className="w-full" variant="secondary" asChild>
-                                            <Link href={`/tournaments/${tournament.id}/manage`}>
-                                                <GanttChart className="mr-2 h-4 w-4" /> Управлять
-                                            </Link>
-                                        </Button>
-                                    </CardFooter>
-                                </Card>
-                            ))}
-                            </div>
-                        ) : (
-                            <MyTournamentsEmptyState />
-                        )}
-                    </section>
-
-                    <section>
-                        <h2 className="text-2xl font-bold mb-4">Все турниры</h2>
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                            {allTournaments.map(tournament => (
-                                <Card key={tournament.id} className="flex flex-col hover:border-primary/50 transition-colors">
-                                    <CardHeader className="p-0">
-                                        <div className="relative h-40 w-full">
-                                            <Image
-                                                src={tournament.bannerUrl}
-                                                alt={tournament.name}
-                                                fill
-                                                className="object-cover rounded-t-lg"
-                                                data-ai-hint={tournament.dataAiHint}
-                                            />
-                                            <Badge className={`absolute top-2 right-2 ${statusColors[tournament.status]}`}>
-                                                {tournament.status}
-                                            </Badge>
-                                        </div>
-                                        <div className="p-6">
-                                        <CardTitle className="text-xl">{tournament.name}</CardTitle>
-                                        <CardDescription>{tournament.game}</CardDescription>
-                                        </div>
-                                    </CardHeader>
-                                    <CardContent className="flex-grow space-y-4">
-                                        <div>
-                                            <p className="text-sm font-medium text-muted-foreground">Призовой фонд</p>
-                                            <p className="text-lg font-semibold text-primary">{tournament.prizePool}</p>
-                                        </div>
-                                        <div>
-                                            <div className="flex justify-between items-center mb-1">
-                                            <p className="text-sm font-medium text-muted-foreground">Участники</p>
-                                            <p className="text-sm font-semibold">{tournament.participants} / {tournament.maxParticipants}</p>
-                                            </div>
-                                            <Progress value={(tournament.participants / tournament.maxParticipants) * 100} />
-                                        </div>
-                                    </CardContent>
-                                    <CardFooter>
-                                        <TournamentCardActionButton id={tournament.id} status={tournament.status} />
-                                    </CardFooter>
-                                </Card>
-                            ))}
-                        </div>
-                    </section>
+            <section>
+                <h2 className="text-2xl font-bold mb-4">Все турниры</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {allTournaments.map(tournament => (
+                        <Card key={tournament.id} className="flex flex-col hover:border-primary/50 transition-colors">
+                            <CardHeader className="p-0">
+                                <div className="relative h-40 w-full">
+                                    <Image
+                                        src={tournament.bannerUrl}
+                                        alt={tournament.name}
+                                        fill
+                                        className="object-cover rounded-t-lg"
+                                        data-ai-hint={tournament.dataAiHint}
+                                    />
+                                    <Badge className={`absolute top-2 right-2 ${statusColors[tournament.status]}`}>
+                                        {tournament.status}
+                                    </Badge>
+                                </div>
+                                <div className="p-6">
+                                <CardTitle className="text-xl">{tournament.name}</CardTitle>
+                                <CardDescription>{tournament.game}</CardDescription>
+                                </div>
+                            </CardHeader>
+                            <CardContent className="flex-grow space-y-4">
+                                <div>
+                                    <p className="text-sm font-medium text-muted-foreground">Призовой фонд</p>
+                                    <p className="text-lg font-semibold text-primary">{tournament.prizePool}</p>
+                                </div>
+                                <div>
+                                    <div className="flex justify-between items-center mb-1">
+                                    <p className="text-sm font-medium text-muted-foreground">Участники</p>
+                                    <p className="text-sm font-semibold">{tournament.participants} / {tournament.maxParticipants}</p>
+                                    </div>
+                                    <Progress value={(tournament.participants / tournament.maxParticipants) * 100} />
+                                </div>
+                            </CardContent>
+                            <CardFooter>
+                                <TournamentCardActionButton id={tournament.id} status={tournament.status} />
+                            </CardFooter>
+                        </Card>
+                    ))}
                 </div>
-            </main>
+            </section>
         </div>
     );
 }
