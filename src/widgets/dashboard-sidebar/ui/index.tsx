@@ -45,76 +45,100 @@ export function DashboardSidebar() {
         <SidebarContent>
             <SidebarMenu>
                 <SidebarMenuItem>
-                    <SidebarMenuButton href="/dashboard" isActive>
-                        <Home />
-                        <span>Лента</span>
-                    </SidebarMenuButton>
+                    <Link href="/dashboard" legacyBehavior passHref>
+                        <SidebarMenuButton as="a" isActive>
+                            <Home />
+                            <span>Лента</span>
+                        </SidebarMenuButton>
+                    </Link>
                 </SidebarMenuItem>
                  <SidebarMenuItem>
-                    <SidebarMenuButton href="/teams">
-                        <Users />
-                        <span>Команды</span>
-                    </SidebarMenuButton>
+                    <Link href="/teams" legacyBehavior passHref>
+                        <SidebarMenuButton as="a">
+                            <Users />
+                            <span>Команды</span>
+                        </SidebarMenuButton>
+                    </Link>
                 </SidebarMenuItem>
                 <SidebarMenuItem>
-                    <SidebarMenuButton href="#">
-                        <Trophy />
-                        <span>Турниры</span>
-                    </SidebarMenuButton>
+                    <Link href="#" legacyBehavior passHref>
+                        <SidebarMenuButton as="a">
+                            <Trophy />
+                            <span>Турниры</span>
+                        </SidebarMenuButton>
+                    </Link>
                 </SidebarMenuItem>
                 <SidebarMenuItem>
-                    <SidebarMenuButton href="#">
-                        <Flame />
-                        <span>Лиги</span>
-                    </SidebarMenuButton>
+                    <Link href="#" legacyBehavior passHref>
+                        <SidebarMenuButton as="a">
+                            <Flame />
+                            <span>Лиги</span>
+                        </SidebarMenuButton>
+                    </Link>
                 </SidebarMenuItem>
                  <SidebarMenuItem>
-                    <SidebarMenuButton href="#">
-                        <Calendar />
-                        <span>Вызовы</span>
-                    </SidebarMenuButton>
+                    <Link href="#" legacyBehavior passHref>
+                        <SidebarMenuButton as="a">
+                            <Calendar />
+                            <span>Вызовы</span>
+                        </SidebarMenuButton>
+                    </Link>
                 </SidebarMenuItem>
                 <SidebarMenuItem>
-                    <SidebarMenuButton href="#">
-                        <Search />
-                        <span>Поиск игры</span>
-                    </SidebarMenuButton>
+                    <Link href="#" legacyBehavior passHref>
+                        <SidebarMenuButton as="a">
+                            <Search />
+                            <span>Поиск игры</span>
+                        </SidebarMenuButton>
+                    </Link>
                 </SidebarMenuItem>
                  <SidebarMenuItem>
-                    <SidebarMenuButton href="#">
-                        <MessageSquare />
-                        <span>Сообщения</span>
-                    </SidebarMenuButton>
+                    <Link href="#" legacyBehavior passHref>
+                        <SidebarMenuButton as="a">
+                            <MessageSquare />
+                            <span>Сообщения</span>
+                        </SidebarMenuButton>
+                    </Link>
                 </SidebarMenuItem>
                 <SidebarMenuItem>
-                    <SidebarMenuButton href="#">
-                        <ClipboardList />
-                        <span>Тренировки</span>
-                    </SidebarMenuButton>
+                    <Link href="#" legacyBehavior passHref>
+                        <SidebarMenuButton as="a">
+                            <ClipboardList />
+                            <span>Тренировки</span>
+                        </SidebarMenuButton>
+                    </Link>
                 </SidebarMenuItem>
                 <SidebarMenuItem>
-                    <SidebarMenuButton href="#">
-                        <Building />
-                        <span>Площадки</span>
-                    </SidebarMenuButton>
+                    <Link href="#" legacyBehavior passHref>
+                        <SidebarMenuButton as="a">
+                            <Building />
+                            <span>Площадки</span>
+                        </SidebarMenuButton>
+                    </Link>
                 </SidebarMenuItem>
                 <SidebarMenuItem>
-                    <SidebarMenuButton href="#">
-                        <Warehouse />
-                        <span>Инвентарь</span>
-                    </SidebarMenuButton>
+                    <Link href="#" legacyBehavior passHref>
+                        <SidebarMenuButton as="a">
+                            <Warehouse />
+                            <span>Инвентарь</span>
+                        </SidebarMenuButton>
+                    </Link>
                 </SidebarMenuItem>
                 <SidebarMenuItem>
-                    <SidebarMenuButton href="#">
-                        <ShoppingCart />
-                        <span>Магазин</span>
-                    </SidebarMenuButton>
+                    <Link href="#" legacyBehavior passHref>
+                        <SidebarMenuButton as="a">
+                            <ShoppingCart />
+                            <span>Магазин</span>
+                        </SidebarMenuButton>
+                    </Link>
                 </SidebarMenuItem>
                 <SidebarMenuItem>
-                    <SidebarMenuButton href="#">
-                        <HelpCircle />
-                        <span>Квесты</span>
-                    </SidebarMenuButton>
+                    <Link href="#" legacyBehavior passHref>
+                        <SidebarMenuButton as="a">
+                            <HelpCircle />
+                            <span>Квесты</span>
+                        </SidebarMenuButton>
+                    </Link>
                 </SidebarMenuItem>
             </SidebarMenu>
         </SidebarContent>
@@ -122,22 +146,28 @@ export function DashboardSidebar() {
              <SidebarGroup>
                 <SidebarMenu>
                     <SidebarMenuItem>
-                        <SidebarMenuButton href="#">
-                            <HelpCircle />
-                            <span>Поддержка</span>
-                        </SidebarMenuButton>
+                        <Link href="#" legacyBehavior passHref>
+                            <SidebarMenuButton as="a">
+                                <HelpCircle />
+                                <span>Поддержка</span>
+                            </SidebarMenuButton>
+                        </Link>
                     </SidebarMenuItem>
                     <SidebarMenuItem>
-                        <SidebarMenuButton href="#">
-                            <Cog />
-                            <span>Настройки</span>
-                        </SidebarMenuButton>
+                        <Link href="#" legacyBehavior passHref>
+                            <SidebarMenuButton as="a">
+                                <Cog />
+                                <span>Настройки</span>
+                            </SidebarMenuButton>
+                        </Link>
                     </SidebarMenuItem>
                      <SidebarMenuItem>
-                        <SidebarMenuButton href="/admin">
-                            <Shield />
-                            <span>Администрирование</span>
-                        </SidebarMenuButton>
+                        <Link href="/admin" legacyBehavior passHref>
+                            <SidebarMenuButton as="a">
+                                <Shield />
+                                <span>Администрирование</span>
+                            </SidebarMenuButton>
+                        </Link>
                     </SidebarMenuItem>
                 </SidebarMenu>
              </SidebarGroup>
