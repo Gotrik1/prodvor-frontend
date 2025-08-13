@@ -57,7 +57,9 @@ export function HomePage() {
                 <Button asChild size="lg" className="font-bold">
                   <Link href="/auth/register">Начать побеждать</Link>
                 </Button>
-                <Button size="lg" variant="outline" className="font-bold">Подробнее</Button>
+                <Button asChild size="lg" variant="outline" className="font-bold">
+                  <Link href="/about">Подробнее</Link>
+                </Button>
               </div>
             </div>
           </div>
