@@ -116,6 +116,9 @@ export function RegisterPage() {
             <Button type="submit" className="w-full">
               Зарегистрироваться
             </Button>
+            <Button variant="outline" className="w-full" asChild>
+              <Link href="/">Вернуться на главную</Link>
+            </Button>
           </div>
         </CardContent>
       </Card>
