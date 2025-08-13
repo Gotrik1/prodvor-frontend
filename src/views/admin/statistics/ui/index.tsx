@@ -1,7 +1,7 @@
 
 'use client';
 
-import { users, teams, sponsors } from '@/mocks';
+import { users, teams, sponsors, tournaments } from '@/mocks';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import { Badge } from '@/shared/ui/badge';
 import { Button } from '@/shared/ui/button';
@@ -10,6 +10,15 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { ArrowLeft, Copy, ExternalLink } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { Progress } from '@/shared/ui/progress';
+
+const statusColors: Record<string, string> = {
+    'АНОНС': 'bg-purple-500/20 text-purple-300 border-purple-500/30',
+    'ПРЕДРЕГИСТРАЦИЯ': 'bg-cyan-500/20 text-cyan-300 border-cyan-500/30',
+    'РЕГИСТРАЦИЯ': 'bg-blue-500/20 text-blue-300 border-blue-300/30',
+    'ИДЕТ': 'bg-green-500/20 text-green-300 border-green-500/30',
+    'ЗАВЕРШЕН': 'bg-muted text-muted-foreground border-border',
+};
 
 export function StatisticsPage() {
     return (
@@ -72,6 +81,52 @@ export function StatisticsPage() {
                                                     <Button variant="outline" size="sm" asChild>
                                                         <Link href={`/users/${user.id}`}><ExternalLink className="mr-2 h-3 w-3" />Перейти</Link>
                                                     </Button>
+                                                </TableCell>
+                                            </TableRow>
+                                        ))}
+                                    </TableBody>
+                                </Table>
+                            </div>
+                        </CardContent>
+                    </Card>
+
+                     <Card>
+                        <CardHeader>
+                            <CardTitle>Турниры ({tournaments.length})</CardTitle>
+                            <CardDescription>Список всех созданных турниров.</CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                           <div className="border rounded-lg">
+                                <Table>
+                                    <TableHeader>
+                                        <TableRow>
+                                            <TableHead>Турнир</TableHead>
+                                            <TableHead>Дисциплина</TableHead>
+                                            <TableHead>Участники</TableHead>
+                                            <TableHead>Статус</TableHead>
+                                            <TableHead>ID</TableHead>
+                                        </TableRow>
+                                    </TableHeader>
+                                    <TableBody>
+                                        {tournaments.map((tournament) => (
+                                            <TableRow key={tournament.id}>
+                                                <TableCell className="font-medium">
+                                                    <Link href={`/tournaments/${tournament.id}`} className="hover:text-primary transition-colors">{tournament.name}</Link>
+                                                </TableCell>
+                                                <TableCell>{tournament.game}</TableCell>
+                                                <TableCell>
+                                                    <div className="flex items-center gap-2">
+                                                        <Progress value={(tournament.participants / tournament.maxParticipants) * 100} className="w-16" />
+                                                        <span>{tournament.participants}/{tournament.maxParticipants}</span>
+                                                    </div>
+                                                </TableCell>
+                                                <TableCell>
+                                                    <Badge className={statusColors[tournament.status]}>{tournament.status}</Badge>
+                                                </TableCell>
+                                                 <TableCell>
+                                                    <div className="flex items-center gap-2 font-mono text-xs">
+                                                        <span>{tournament.id}</span>
+                                                    </div>
                                                 </TableCell>
                                             </TableRow>
                                         ))}
