@@ -7,7 +7,7 @@ import { LogoGeneratorWidget } from '@/widgets/logo-generator/ui/logo-generator-
 
 const Logo = () => (
     <Image 
-      src="/images/your-logo.png"
+      src="https://prodvor.website/_next/image?url=%2Fimages%2Fyour-logo.png&w=64&q=75"
       alt="ProDvor Logo" 
       width={40} 
       height={40} 
@@ -37,7 +37,7 @@ export function HomePage() {
           <div className="container mx-auto px-4 md:px-6 z-10 relative">
             <div className="flex justify-center mb-8">
               <Image 
-                src="/images/hero-mascot.png"
+                src="https://prodvor.website/_next/image?url=%2Fimages%2Fbb80f999-29b3-433f-95d3-8b4cb0bd2604.png&w=1920&q=75"
                 alt="ProDvor Hero Image" 
                 width={250} 
                 height={250}
