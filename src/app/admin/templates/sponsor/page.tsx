@@ -1,3 +1,4 @@
+
 import { SponsorPageTemplate } from '@/views/admin/ui/templates/sponsor-page-template';
 import type { Metadata } from 'next';
 import { Button } from '@/shared/ui/button';

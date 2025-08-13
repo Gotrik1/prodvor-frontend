@@ -1,5 +1,7 @@
+
 'use client';
 
+import { sponsors } from "@/mocks";
 import type { Sponsor } from "@/mocks/personnel";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { Button } from "@/shared/ui/button";
@@ -10,7 +12,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 import { Award, Building, Handshake, Save, User } from "lucide-react";
 import Link from "next/link";
 
-export function SponsorPageTemplate({ sponsor }: { sponsor: Sponsor | undefined }) {
+const defaultSponsor = sponsors[0];
+
+export function SponsorPageTemplate({ sponsor: sponsorProp }: { sponsor?: Sponsor }) {
+    const sponsor = sponsorProp || defaultSponsor;
 
     if (!sponsor) {
         return (
