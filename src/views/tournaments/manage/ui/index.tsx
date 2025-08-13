@@ -10,6 +10,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import Image from "next/image";
 import { Input } from "@/shared/ui/input";
 import { Textarea } from "@/shared/ui/textarea";
+import { Label } from "@/shared/ui/label";
 
 const myTournaments = [
     {
