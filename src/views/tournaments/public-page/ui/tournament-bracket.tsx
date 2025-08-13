@@ -4,27 +4,26 @@
 import { registeredTeams } from './mock-data';
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
-import { Badge } from '@/shared/ui/badge';
 import { Trophy } from 'lucide-react';
 
-// Pair teams for the first round
+// Pair teams for the first round and generate random scores
 const matches = [];
 const teamsCopy = [...registeredTeams];
 for (let i = 0; i < teamsCopy.length; i += 2) {
     if (teamsCopy[i + 1]) {
-        matches.push({
+        const match = {
             team1: teamsCopy[i],
             team2: teamsCopy[i + 1],
             score1: Math.floor(Math.random() * 5),
             score2: Math.floor(Math.random() * 5)
-        });
+        };
+        // Ensure scores are not equal to have a clear winner
+        while(match.score1 === match.score2) {
+            match.score2 = Math.floor(Math.random() * 5);
+        }
+        matches.push(match);
     }
 }
-matches.forEach(match => {
-    while(match.score1 === match.score2) {
-        match.score2 = Math.floor(Math.random() * 5);
-    }
-})
 
 export function TournamentBracket() {
     return (

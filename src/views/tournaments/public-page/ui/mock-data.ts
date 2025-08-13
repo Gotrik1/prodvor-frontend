@@ -20,8 +20,8 @@ export const tournaments = [
       game: 'Counter-Strike 2',
       status: 'ИДЕТ' as const,
       prizePool: 'Игровые девайсы',
-      participants: 32,
-      maxParticipants: 32,
+      participants: 8,
+      maxParticipants: 8,
       startDate: '2025-06-20',
       bannerUrl: 'https://placehold.co/600x400.png',
       dataAiHint: 'cybersport tournament'
@@ -59,8 +59,8 @@ export const myTournaments = [
       game: 'Dota 2',
       status: 'ИДЕТ' as const,
       prizePool: 'Эксклюзивные скины',
-      participants: 30,
-      maxParticipants: 32,
+      participants: 8,
+      maxParticipants: 8,
       startDate: '2025-09-10',
       bannerUrl: 'https://placehold.co/1200x300.png',
       dataAiHint: 'esports dota'
@@ -92,7 +92,8 @@ export const teams = [
 
 
 export const registeredTeams = [
-    ...teams,
+    { id: 'team1', name: 'Ночные Снайперы', logoUrl: 'https://placehold.co/100x100.png', captainId: 'user1', members: ['user1', 'user2'], game: 'Дворовый футбол', rank: 1, },
+    { id: 'team2', name: 'Короли Асфальта', logoUrl: 'https://placehold.co/100x100.png', captainId: 'user3', members: ['user3', 'user4'], game: 'Стритбол', rank: 2, },
     { id: 'team3', name: 'Стальные Ястребы', logoUrl: 'https://placehold.co/100x100.png', captainId: 'user1', members: ['user1'], game: 'Дворовый футбол', rank: 1450 },
     { id: 'team4', name: 'Бетонные Тигры', logoUrl: 'https://placehold.co/100x100.png', captainId: 'user2', members: ['user2'], game: 'Дворовый футбол', rank: 1550 },
     { id: 'team5', name: 'Разрушители', logoUrl: 'https://placehold.co/100x100.png', captainId: 'user3', members: ['user3'], game: 'Дворовый футбол', rank: 1600 },
