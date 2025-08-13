@@ -36,12 +36,11 @@ export function HomePage() {
           <div className="container mx-auto px-4 md:px-6 z-10 relative">
             <div className="flex justify-center mb-8">
               <Image 
-                src="https://placehold.co/250x250.png"
-                alt="ProDvor Mascot" 
+                src="https://prodvor.website/_next/image?url=%2Fimages%2Fbb80f999-29b3-433f-95d3-8b4cb0bd2604.png&w=1920&q=75"
+                alt="ProDvor Hero Image" 
                 width={250} 
                 height={250}
                 className="object-contain"
-                data-ai-hint="robot soccer"
                 priority
               />
             </div>
