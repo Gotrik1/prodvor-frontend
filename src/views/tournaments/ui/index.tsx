@@ -3,7 +3,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { PlusCircle, Trophy, GanttChart, Bell, CheckSquare } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
-import { tournaments, myTournaments as myMockTournaments } from "@/mocks";
+import { tournaments } from "@/mocks";
 import { Badge } from "@/shared/ui/badge";
 import { Progress } from "@/shared/ui/progress";
 
@@ -12,13 +12,38 @@ type TournamentStatus = 'АНОНС' | 'ПРЕДРЕГИСТРАЦИЯ' | 'РЕ�
 const statusColors: Record<TournamentStatus, string> = {
     'АНОНС': 'bg-purple-500/20 text-purple-300 border-purple-500/30',
     'ПРЕДРЕГИСТРАЦИЯ': 'bg-cyan-500/20 text-cyan-300 border-cyan-500/30',
-    'РЕГИСТРАЦИЯ': 'bg-blue-500/20 text-blue-300 border-blue-500/30',
+    'РЕГИСТРАЦИЯ': 'bg-blue-500/20 text-blue-300 border-blue-300/30',
     'ИДЕТ': 'bg-green-500/20 text-green-300 border-green-500/30',
     'ЗАВЕРШЕН': 'bg-muted text-muted-foreground border-border',
 };
 
 
-const myTournaments = myMockTournaments;
+const myTournaments = [
+    {
+      id: 'mytourney1',
+      name: 'Летний Кубок ProDvor',
+      game: 'Дворовый футбол',
+      status: 'ИДЕТ' as const,
+      prizePool: '100 000 руб.',
+      participants: 8,
+      maxParticipants: 8,
+      startDate: '2025-08-01',
+      bannerUrl: 'https://placehold.co/600x400.png',
+      dataAiHint: 'soccer street'
+    },
+    {
+      id: 'mytourney2',
+      name: 'Осенний марафон по Dota 2',
+      game: 'Dota 2',
+      status: 'РЕГИСТРАЦИЯ' as const,
+      prizePool: 'Эксклюзивные скины',
+      participants: 4,
+      maxParticipants: 8,
+      startDate: '2025-09-10',
+      bannerUrl: 'https://placehold.co/600x400.png',
+      dataAiHint: 'esports dota'
+    },
+];
 
 const allTournaments = [
     ...tournaments,
