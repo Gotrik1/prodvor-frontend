@@ -10,12 +10,13 @@ import React from "react";
 import { ScrollArea } from "@/shared/ui/scroll-area";
 
 const roles = [
-    {
-        name: "Игрок",
-        description: "Персональная страница игрока со статистикой и достижениями.",
-        icon: User,
-        template: <PlayerPageTemplate />,
-    },
+    // This card will now be a link
+    // {
+    //     name: "Игрок",
+    //     description: "Персональная страница игрока со статистикой и достижениями.",
+    //     icon: User,
+    //     template: <PlayerPageTemplate />,
+    // },
     {
         name: "Команда",
         description: "Публичная страница команды с составом, матчами и статистикой.",
@@ -66,7 +67,7 @@ const roles = [
     },
 ];
 
-const TemplateCard = ({
+const TemplateCardAsDialog = ({
     name,
     description,
     icon: Icon,
@@ -139,8 +140,22 @@ export function AdminPage() {
                         </CardHeader>
                         <CardContent>
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                <Link href="/admin/templates/player">
+                                    <Card className="cursor-pointer h-full hover:border-primary transition-colors hover:shadow-lg">
+                                        <CardHeader className="flex flex-row items-center gap-4">
+                                            <div className="p-3 rounded-md bg-primary/10 text-primary">
+                                                <User className="w-6 h-6" />
+                                            </div>
+                                            <CardTitle>Игрок</CardTitle>
+                                        </CardHeader>
+                                        <CardContent>
+                                            <p className="text-sm text-muted-foreground">Персональная страница игрока со статистикой и достижениями.</p>
+                                        </CardContent>
+                                    </Card>
+                                </Link>
+
                                 {roles.map((role) => (
-                                    <TemplateCard key={role.name} {...role} />
+                                    <TemplateCardAsDialog key={role.name} {...role} />
                                 ))}
                             </div>
                         </CardContent>
