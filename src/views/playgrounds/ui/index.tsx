@@ -5,7 +5,7 @@
 import { useState } from 'react';
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
-import { PlusCircle, Search, Star } from "lucide-react";
+import { PlusCircle, Search, Star, MapPin } from "lucide-react";
 import Image from 'next/image';
 import Link from 'next/link';
 import { YandexMapV3 } from '@/widgets/yandex-map';
@@ -63,6 +63,43 @@ const FavoritePlaygrounds = () => {
         </Card>
     );
 };
+
+const NearbyPlaygrounds = () => {
+    // Mock data for nearby playgrounds. In a real app, this would come from a geolocation API.
+    const nearbyPlaygrounds = mockPlaygrounds.slice(0, 4);
+
+    return (
+        <Card>
+            <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                    <MapPin className="text-primary" />
+                    Площадки рядом
+                </CardTitle>
+            </CardHeader>
+            <CardContent>
+                <div className="space-y-4">
+                    {nearbyPlaygrounds.map(playground => (
+                         <Link href={`/playgrounds/${playground.id}`} key={playground.id} className="flex items-center gap-4 group p-2 rounded-md hover:bg-muted/50 transition-colors">
+                            <div className="relative w-16 h-12 rounded-md overflow-hidden shrink-0">
+                                <Image
+                                    src={playground.imageUrl}
+                                    alt={playground.name}
+                                    fill
+                                    className="object-cover"
+                                    data-ai-hint={playground.dataAiHint}
+                                />
+                            </div>
+                            <div>
+                                <p className="font-semibold leading-tight group-hover:text-primary transition-colors">{playground.name}</p>
+                                <p className="text-xs text-muted-foreground">{playground.address}</p>
+                            </div>
+                        </Link>
+                    ))}
+                </div>
+            </CardContent>
+        </Card>
+    )
+}
 
 
 export function PlaygroundsPage() {
@@ -123,8 +160,9 @@ export function PlaygroundsPage() {
                         </CardContent>
                     </Card>
                 </div>
-                <div className="lg:sticky top-24">
+                <div className="lg:sticky top-24 space-y-8">
                      <FavoritePlaygrounds />
+                     <NearbyPlaygrounds />
                 </div>
             </div>
         </div>
