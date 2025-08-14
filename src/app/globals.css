@@ -4,13 +4,13 @@
 
 @layer base {
   :root {
-    --background: 222 47% 11%; /* Dark Desaturated Blue */
+    --background: 224 20% 6%; /* Deep Space Blue */
     --foreground: 210 40% 98%;
 
-    --card: 222 47% 14%;
+    --card: 224 20% 6%;
     --card-foreground: 210 40% 98%;
  
-    --popover: 222 47% 11%;
+    --popover: 224 20% 6%;
     --popover-foreground: 210 40% 98%;
  
     --primary: 197 78% 52%; /* Vibrant Blue */
@@ -19,7 +19,7 @@
     --secondary: 217 33% 17%;
     --secondary-foreground: 210 40% 98%;
  
-    --muted: 217 33% 17%;
+    --muted: 217 33% 12%;
     --muted-foreground: 215 20.2% 65.1%;
  
     --accent: 33 100% 50%; /* Contrasting Orange */
@@ -28,50 +28,50 @@
     --destructive: 0 63% 31%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 217 33% 20%;
-    --input: 217 33% 20%;
+    --border: 224 20% 6%; /* Same as background */
+    --input: 217 33% 12%;
     --ring: 197 78% 52%;
  
     --radius: 0.5rem;
     
-    --sidebar-background: 222 47% 9%;
+    --sidebar-background: 224 20% 6%;
     --sidebar-foreground: 210 40% 98%;
     --sidebar-primary: 197 78% 52%;
     --sidebar-primary-foreground: 210 40% 98%;
-    --sidebar-accent: 222 47% 14%;
+    --sidebar-accent: 224 20% 10%;
     --sidebar-accent-foreground: 210 40% 98%;
-    --sidebar-border: 217 33% 20%;
+    --sidebar-border: 224 20% 6%; /* Same as background */
     --sidebar-ring: 197 78% 52%;
   }
 
   .dark {
-    --background: 222 47% 11%; /* Dark Desaturated Blue */
+    --background: 224 20% 6%; /* Deep Space Blue */
     --foreground: 210 40% 98%;
-    --card: 222 47% 14%;
+    --card: 224 20% 6%;
     --card-foreground: 210 40% 98%;
-    --popover: 222 47% 11%;
+    --popover: 224 20% 6%;
     --popover-foreground: 210 40% 98%;
     --primary: 197 78% 52%; /* Vibrant Blue */
     --primary-foreground: 210 40% 98%;
     --secondary: 217 33% 17%;
     --secondary-foreground: 210 40% 98%;
-    --muted: 217 33% 17%;
+    --muted: 217 33% 12%;
     --muted-foreground: 215 20.2% 65.1%;
     --accent: 33 100% 50%; /* Contrasting Orange */
     --accent-foreground: 210 40% 98%;
     --destructive: 0 63% 31%;
     --destructive-foreground: 210 40% 98%;
-    --border: 217 33% 20%;
-    --input: 217 33% 20%;
+    --border: 224 20% 6%; /* Same as background */
+    --input: 217 33% 12%;
     --ring: 197 78% 52%;
     
-    --sidebar-background: 222 47% 9%;
+    --sidebar-background: 224 20% 6%;
     --sidebar-foreground: 210 40% 98%;
     --sidebar-primary: 197 78% 52%;
     --sidebar-primary-foreground: 210 40% 98%;
-    --sidebar-accent: 222 47% 14%;
+    --sidebar-accent: 224 20% 10%;
     --sidebar-accent-foreground: 210 40% 98%;
-    --sidebar-border: 217 33% 20%;
+    --sidebar-border: 224 20% 6%; /* Same as background */
     --sidebar-ring: 197 78% 52%;
   }
 }
@@ -83,4 +83,10 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+@layer components {
+    .card {
+        @apply shadow-2xl shadow-black/40;
+    }
 }
