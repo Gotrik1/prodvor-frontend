@@ -3,7 +3,7 @@
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
 import { Tournament } from '@/views/tournaments/public-page/ui/mock-data';
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useToast } from "@/shared/hooks/use-toast";
 import { Button } from "@/shared/ui/button";
 import { Bot, Loader2, Wand2, Image as ImageIcon, CheckCircle } from "lucide-react";
@@ -12,6 +12,8 @@ import { generateTournamentImageAction } from "@/app/actions";
 import { Textarea } from "@/shared/ui/textarea";
 import Image from "next/image";
 
+const LOCAL_STORAGE_IMAGE_KEY_PREFIX = 'promo-image-';
+
 export function PromoTab({ tournament, onPromoAdd, onBannerChange }: { tournament: Tournament, onPromoAdd: (item: any) => void, onBannerChange: (url: string) => void }) {
     const { toast } = useToast();
     const [isVideoLoading, setIsVideoLoading] = useState(false);
@@ -19,6 +21,15 @@ export function PromoTab({ tournament, onPromoAdd, onBannerChange }: { tournamen
     const [imagePrompt, setImagePrompt] = useState(`Логотип турнира "${tournament.name}" на эпическом фоне, связанном с дисциплиной ${tournament.game}.`);
     const [generatedVideo, setGeneratedVideo] = useState<string | null>(null);
     const [generatedImage, setGeneratedImage] = useState<string | null>(null);
+    
+    const storageKey = `${LOCAL_STORAGE_IMAGE_KEY_PREFIX}${tournament.id}`;
+
+    useEffect(() => {
+        const savedImage = localStorage.getItem(storageKey);
+        if (savedImage) {
+            setGeneratedImage(savedImage);
+        }
+    }, [storageKey]);
 
     const handleGeneratePromo = async () => {
         setIsVideoLoading(true);
@@ -65,6 +76,7 @@ export function PromoTab({ tournament, onPromoAdd, onBannerChange }: { tournamen
                 description: "Картинка была успешно сгенерирована и добавлена в медиа-центр.",
             });
             setGeneratedImage(result.imageDataUri);
+            localStorage.setItem(storageKey, result.imageDataUri);
             onPromoAdd({
                 type: 'image',
                 src: result.imageDataUri,
@@ -83,6 +95,7 @@ export function PromoTab({ tournament, onPromoAdd, onBannerChange }: { tournamen
     const handleSetAsBanner = () => {
         if (generatedImage) {
             onBannerChange(generatedImage);
+            localStorage.setItem(storageKey, generatedImage);
             toast({
                 title: "Баннер обновлен!",
                 description: "Новое изображение установлено как основной баннер турнира.",
