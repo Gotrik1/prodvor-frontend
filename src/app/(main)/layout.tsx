@@ -29,8 +29,10 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   const noSidebarRoutes = ['/', '/about'];
   // Check if the current path is an auth route
   const isAuthRoute = pathname.startsWith('/auth');
-  
-  const showDashboardLayout = !noSidebarRoutes.includes(pathname) && !isAuthRoute;
+  // Check if it is a public tournament page
+  const isPublicTournamentRoute = /^\/tournaments\/[^/]+(\/(register|match\/.+))?$/.test(pathname);
+
+  const showDashboardLayout = !noSidebarRoutes.includes(pathname) && !isAuthRoute && !isPublicTournamentRoute;
 
   return (
       <>

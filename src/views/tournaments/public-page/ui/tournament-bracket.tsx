@@ -16,11 +16,8 @@ interface Match {
     score2: number;
 }
 
-export function TournamentBracket() {
+export function TournamentBracket({ tournamentId }: { tournamentId: string }) {
     const [matches, setMatches] = useState<Match[]>([]);
-    
-    // Hardcoded tournament ID for example
-    const tournamentId = 'mytourney1';
 
     useEffect(() => {
         // This logic runs on the client to avoid hydration mismatch
