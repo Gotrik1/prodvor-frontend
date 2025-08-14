@@ -58,7 +58,7 @@ export function TournamentManagementPage({ tournamentId }: { tournamentId: strin
 
     useEffect(() => {
         const savedBanner = localStorage.getItem(storageKey);
-        if (savedBanner && tournament) {
+        if (savedBanner && tournament && tournament.bannerUrl !== savedBanner) {
             setTournament(prev => ({...prev!, bannerUrl: savedBanner}));
         }
     }, [storageKey, tournament]);
