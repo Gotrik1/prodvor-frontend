@@ -2,7 +2,7 @@
 
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
-import { AlertTriangle, ListChecks, Loader2, Save } from "lucide-react";
+import { AlertTriangle, ListChecks, Loader2, Save, PlusCircle, MapPin, Trash2 } from "lucide-react";
 import { Input } from "@/shared/ui/input";
 import { Textarea } from "@/shared/ui/textarea";
 import { Label } from "@/shared/ui/label";
@@ -16,10 +16,19 @@ import { Calendar as CalendarComponent } from "@/shared/ui/calendar";
 import { Tournament, requirements as initialRequirements } from '@/views/tournaments/public-page/ui/mock-data';
 import { useToast } from "@/shared/hooks/use-toast";
 
+// Mock data for playgrounds
+const mockPlaygrounds = [
+    { id: 'p1', name: 'Стадион "Центральный"', address: 'ул. Ленина, 1' },
+    { id: 'p2', name: 'Спортивный комплекс "Олимп"', address: 'пр. Мира, 5' },
+    { id: 'p3', name: 'Коробка у школы №15', address: 'ул. Школьная, 15' },
+];
+
+
 export function SettingsTab({ tournament, onTournamentChange }: { tournament: Tournament, onTournamentChange: (data: Partial<Tournament>) => void }) {
     const { toast } = useToast();
     const [selectedRequirements, setSelectedRequirements] = useState<string[]>([]);
     const [isSaving, setIsSaving] = useState(false);
+    const [tournamentPlaygrounds, setTournamentPlaygrounds] = useState([mockPlaygrounds[0]]);
     
     const handleRequirementChange = (reqId: string, checked: boolean) => {
         setSelectedRequirements(prev =>
@@ -42,6 +51,16 @@ export function SettingsTab({ tournament, onTournamentChange }: { tournament: To
             });
         }, 1500);
     };
+    
+    const availablePlaygrounds = mockPlaygrounds.filter(p => !tournamentPlaygrounds.some(tp => tp.id === p.id));
+    
+    const addPlayground = (playground: typeof mockPlaygrounds[0]) => {
+        setTournamentPlaygrounds(prev => [...prev, playground]);
+    };
+
+    const removePlayground = (playgroundId: string) => {
+        setTournamentPlaygrounds(prev => prev.filter(p => p.id !== playgroundId));
+    };
 
     return (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -55,6 +74,55 @@ export function SettingsTab({ tournament, onTournamentChange }: { tournament: To
                         <Label htmlFor="name">Название турнира</Label>
                         <Input id="name" value={tournament.name} onChange={handleInputChange} />
                     </div>
+
+                     <div className="space-y-2">
+                        <Label>Места проведения</Label>
+                         <Card className="bg-muted/50">
+                             <CardContent className="p-4 space-y-3">
+                                 {tournamentPlaygrounds.map(pg => (
+                                     <div key={pg.id} className="flex items-center justify-between p-2 rounded-md bg-background">
+                                         <div>
+                                             <p className="font-medium">{pg.name}</p>
+                                             <p className="text-xs text-muted-foreground">{pg.address}</p>
+                                         </div>
+                                         <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-destructive" onClick={() => removePlayground(pg.id)}>
+                                             <Trash2 className="h-4 w-4" />
+                                         </Button>
+                                     </div>
+                                 ))}
+                                 <Dialog>
+                                     <DialogTrigger asChild>
+                                        <Button variant="outline" className="w-full mt-2">
+                                            <PlusCircle className="mr-2 h-4 w-4" />
+                                            Добавить площадку
+                                        </Button>
+                                     </DialogTrigger>
+                                     <DialogContent>
+                                         <DialogHeader>
+                                             <DialogTitle>Выбор площадки</DialogTitle>
+                                             <DialogDescription>Выберите место проведения из списка доступных на платформе.</DialogDescription>
+                                         </DialogHeader>
+                                         <div className="py-4 space-y-2">
+                                            {availablePlaygrounds.length > 0 ? availablePlaygrounds.map(pg => (
+                                                 <div key={pg.id} className="flex items-center justify-between p-2 rounded-md hover:bg-muted">
+                                                    <div>
+                                                         <p className="font-medium">{pg.name}</p>
+                                                         <p className="text-xs text-muted-foreground">{pg.address}</p>
+                                                    </div>
+                                                    <DialogFooter>
+                                                        <Button size="sm" onClick={() => addPlayground(pg)}>Выбрать</Button>
+                                                    </DialogFooter>
+                                                 </div>
+                                            )) : (
+                                                <p className="text-sm text-center text-muted-foreground py-4">Все доступные площадки уже добавлены.</p>
+                                            )}
+                                         </div>
+                                     </DialogContent>
+                                 </Dialog>
+                             </CardContent>
+                         </Card>
+                    </div>
+
                     <div>
                          <Label>Ключевые даты</Label>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-2">
