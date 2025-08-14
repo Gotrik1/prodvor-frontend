@@ -17,8 +17,8 @@ import { PlayerPageTemplate } from '@/views/admin/ui/templates/player-page-templ
 import { RefereePageTemplate } from '@/views/admin/ui/templates/referee-page-template';
 import { SponsorPageTemplate } from '@/views/admin/ui/templates/sponsor-page-template';
 import { TeamPageTemplate } from '@/views/admin/ui/templates/team-page-template';
-import UserPage from '@/app/(admin)/users/[userId]/page';
-import SponsorPage from '@/app/(admin)/sponsors/[sponsorId]/page';
+import { UserPage } from '@/app/admin/users/[userId]/page';
+import { SponsorPage } from '@/app/admin/sponsors/[sponsorId]/page';
 import { TemplatePreviewPage } from '../templates/TemplatePreviewPage';
 
 
