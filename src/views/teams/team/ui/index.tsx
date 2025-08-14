@@ -3,10 +3,11 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { Badge } from "@/shared/ui/badge";
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
-import { Crown, Home, Swords, Trophy, UserPlus, Check, X } from "lucide-react";
+import { Crown, Home, Swords, Trophy, UserPlus, Check, X, TrendingUp, TrendingDown, Minus } from "lucide-react";
 import Image from 'next/image';
 import Link from 'next/link';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
+import { Separator } from "@/shared/ui/separator";
 
 const TeamRoster = ({ teamMembers, captainId }: { teamMembers: typeof users, captainId: string }) => (
     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
@@ -97,6 +98,12 @@ const TeamChallenges = ({ teamId }: { teamId: string }) => {
     )
 };
 
+const FormBadge = ({ result }: { result: 'W' | 'L' | 'D' }) => {
+    const baseClasses = "flex items-center justify-center w-8 h-8 rounded-md font-bold";
+    if (result === 'W') return <div className={`${baseClasses} bg-green-500/20 text-green-300 border border-green-500/30`}>W</div>;
+    if (result === 'L') return <div className={`${baseClasses} bg-red-500/20 text-red-300 border border-red-500/30`}>L</div>;
+    return <div className={`${baseClasses} bg-gray-500/20 text-gray-300 border border-gray-500/30`}>D</div>;
+};
 
 export function TeamPublicPage({ team }: { team: (typeof teams)[0] | undefined}) {
 
@@ -123,6 +130,13 @@ export function TeamPublicPage({ team }: { team: (typeof teams)[0] | undefined})
     const teamMembers = users.filter(u => team.members.includes(u.id));
     const captain = users.find(u => u.id === team.captainId);
     const homePlayground = playgrounds.find(p => p.id === team.homePlaygroundId);
+
+    // Mock statistics
+    const wins = 45;
+    const losses = 12;
+    const winrate = Math.round((wins / (wins + losses)) * 100);
+    const currentStreak = { type: 'W', count: 3 };
+    const last5Form: ('W' | 'L' | 'D')[] = ['W', 'L', 'W', 'W', 'W'];
 
     return (
         <div className="p-4 md:p-6 lg:p-8">
@@ -157,32 +171,35 @@ export function TeamPublicPage({ team }: { team: (typeof teams)[0] | undefined})
                         <TabsTrigger value="challenges">Вызовы</TabsTrigger>
                     </TabsList>
                     <TabsContent value="overview" className="mt-6">
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                             <Card>
-                                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                                    <CardTitle className="text-sm font-medium">Побед / Поражений</CardTitle>
-                                    <Trophy className="h-4 w-4 text-muted-foreground" />
-                                </CardHeader>
+                                <CardHeader><CardTitle>Побед / Поражений</CardTitle></CardHeader>
                                 <CardContent>
-                                    <div className="text-2xl font-bold">45 / 12</div>
+                                    <p className="text-3xl font-bold">{wins} / {losses}</p>
+                                    <p className="text-sm text-muted-foreground">Процент побед: <span className="text-green-400 font-semibold">{winrate}%</span></p>
                                 </CardContent>
                             </Card>
                             <Card>
-                                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                                    <CardTitle className="text-sm font-medium">Место в лиге</CardTitle>
-                                        <Trophy className="h-4 w-4 text-muted-foreground" />
-                                </CardHeader>
+                                <CardHeader><CardTitle>Рейтинг ELO</CardTitle></CardHeader>
                                 <CardContent>
-                                    <div className="text-2xl font-bold">3-е</div>
+                                    <p className="text-3xl font-bold">{team.rank}</p>
+                                    <p className="text-sm text-muted-foreground">Место в лиге: <span className="text-primary font-semibold">3-е</span></p>
+                                </CardContent>
+                            </Card>
+                             <Card>
+                                <CardHeader><CardTitle>Текущая серия</CardTitle></CardHeader>
+                                <CardContent>
+                                    <div className="flex items-center gap-2">
+                                        {currentStreak.type === 'W' ? <TrendingUp className="h-8 w-8 text-green-500" /> : <TrendingDown className="h-8 w-8 text-red-500" />}
+                                        <p className="text-3xl font-bold">{currentStreak.count} {currentStreak.type === 'W' ? 'W' : 'L'}</p>
+                                    </div>
+                                    <p className="text-sm text-muted-foreground">Побед подряд</p>
                                 </CardContent>
                             </Card>
                             <Card>
-                                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                                    <CardTitle className="text-sm font-medium">Рейтинг</CardTitle>
-                                        <Trophy className="h-4 w-4 text-muted-foreground" />
-                                </CardHeader>
-                                <CardContent>
-                                    <div className="text-2xl font-bold">{team.rank} ELO</div>
+                                <CardHeader><CardTitle>Форма (5 матчей)</CardTitle></CardHeader>
+                                <CardContent className="flex items-center gap-2">
+                                    {last5Form.map((result, index) => <FormBadge key={index} result={result} />)}
                                 </CardContent>
                             </Card>
                         </div>
