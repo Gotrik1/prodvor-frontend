@@ -1,5 +1,5 @@
 
-import { teams, users } from "@/mocks";
+import { teams, users, tournaments } from "@/mocks";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { Badge } from "@/shared/ui/badge";
 import { Button } from "@/shared/ui/button";
@@ -112,18 +112,25 @@ export function TeamPublicPage({ team }: { team: (typeof teams)[0] | undefined})
 
                 <Card>
                     <CardHeader>
-                        <CardTitle>Последние матчи</CardTitle>
+                        <CardTitle>Участие в турнирах</CardTitle>
                     </CardHeader>
                     <CardContent>
-                        <ul className="space-y-2">
-                            <li className="flex justify-between items-center p-2 rounded-md hover:bg-muted/50">
-                                <span>vs Короли Асфальта</span>
-                                <Badge className="bg-green-500/20 text-green-300 border-green-500/30">Победа 5:3</Badge>
-                            </li>
-                            <li className="flex justify-between items-center p-2 rounded-md hover:bg-muted/50">
-                                <span>vs Дрим-Тим</span>
-                                    <Badge variant="destructive">Поражение 1:2</Badge>
-                            </li>
+                        <ul className="space-y-4">
+                            {tournaments.slice(0, 2).map(tournament => (
+                                <li key={tournament.id}>
+                                    <Link href={`/tournaments/${tournament.id}`} className="font-semibold hover:text-primary">{tournament.name}</Link>
+                                    <ul className="space-y-2 mt-2 pl-4 border-l">
+                                        <li className="flex justify-between items-center p-2 rounded-md hover:bg-muted/50 text-sm">
+                                            <span>vs Короли Асфальта</span>
+                                            <Badge className="bg-green-500/20 text-green-300 border-green-500/30">Победа 5:3</Badge>
+                                        </li>
+                                        <li className="flex justify-between items-center p-2 rounded-md hover:bg-muted/50 text-sm">
+                                            <span>vs Дрим-Тим</span>
+                                            <Badge variant="destructive">Поражение 1:2</Badge>
+                                        </li>
+                                    </ul>
+                                </li>
+                            ))}
                         </ul>
                     </CardContent>
                 </Card>

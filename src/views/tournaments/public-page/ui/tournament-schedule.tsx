@@ -4,9 +4,7 @@
 import { registeredTeams } from './mock-data';
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
-import { Button } from '@/shared/ui/button';
-import { Calendar, ExternalLink, MapPin } from 'lucide-react';
-import Link from 'next/link';
+import { Calendar, MapPin } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { allTournaments } from './mock-data';
 
@@ -85,14 +83,6 @@ export function TournamentSchedule({ tournamentId }: { tournamentId: string }) {
                                 <div className="flex-1 text-center border-y sm:border-y-0 sm:border-x py-2 sm:py-0 px-4">
                                     <p className="font-semibold">{match.date}, {match.time}</p>
                                     <p className="text-xs text-muted-foreground flex items-center justify-center gap-1"><MapPin className="h-3 w-3" /> {match.venue}</p>
-                                </div>
-                                <div className="flex-1 flex justify-center sm:justify-end">
-                                    <Button asChild variant="secondary">
-                                        <Link href={`/tournaments/${tournamentId}/match/${match.id}`}>
-                                            <ExternalLink className="mr-2 h-4 w-4" />
-                                            Протокол
-                                        </Link>
-                                    </Button>
                                 </div>
                             </CardContent>
                         </Card>
