@@ -1,6 +1,5 @@
 
 
-
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/shared/ui/button";
@@ -11,6 +10,7 @@ import { Badge } from "@/shared/ui/badge";
 import { Separator } from "@/shared/ui/separator";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { TournamentBracket } from "./tournament-bracket";
+import { TournamentSchedule } from "./tournament-schedule";
 
 const Logo = () => (
     <Image 
@@ -140,24 +140,10 @@ export function TournamentPublicPage({ tournament }: { tournament: (typeof allTo
 
                         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 md:gap-12">
                             <div className="lg:col-span-2">
-                                {tournament.status === 'ИДЕТ' ? (
+                                <TournamentSchedule tournamentId={tournament.id} />
+                                <div className="mt-8">
                                     <TournamentBracket tournamentId={tournament.id}/>
-                                ) : (
-                                        <Card>
-                                        <CardHeader><CardTitle>Описание турнира</CardTitle></CardHeader>
-                                        <CardContent className="prose prose-invert max-w-none text-muted-foreground">
-                                            <p>Добро пожаловать на главный турнир этого лета - {tournament.name}! Мы собираем лучшие команды, чтобы выяснить, кто достоин звания чемпиона. Вас ждут напряженные матчи, незабываемые эмоции и, конечно же, ценные призы.</p>
-                                            <h4>Правила и регламент:</h4>
-                                            <ul>
-                                                <li>Формат проведения: Single Elimination (проигрыш в одном матче означает вылет из турнира).</li>
-                                                <li>Все матчи до финала играются в формате Best-of-1. Финал - Best-of-3.</li>
-                                                <li>Опоздание на матч более 15 минут карается техническим поражением.</li>
-                                                <li>Запрещено любое неспортивное поведение и использование стороннего ПО.</li>
-                                            </ul>
-                                            <p>Готовьтесь к битве! Пусть победит сильнейший!</p>
-                                        </CardContent>
-                                    </Card>
-                                )}
+                                </div>
                             </div>
                             <div>
                                 <Card>
