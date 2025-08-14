@@ -1,3 +1,4 @@
+
 import { MatchPage } from '@/views/match';
 import { allTournaments as mockTournaments } from '@/views/tournaments/public-page/ui/mock-data';
 import type { Metadata } from 'next';

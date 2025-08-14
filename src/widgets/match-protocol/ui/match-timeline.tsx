@@ -1,3 +1,4 @@
+
 'use client';
 
 import React from 'react';
@@ -62,7 +63,6 @@ export function MatchTimeline({ events }: { events: MatchEvent[] }) {
   const secondHalfEvents = events.filter(e => e.minute > 45);
 
   const renderEvent = (event: MatchEvent) => {
-    const Icon = eventIcons[event.type];
     const position = (event.minute > 45 ? event.minute - 45 : event.minute) / 45 * 100;
 
     const tooltipContent = (
