@@ -63,6 +63,12 @@ export function TournamentManagementPage({ tournamentId }: { tournamentId: strin
             setTournament(prev => ({ ...prev!, ...data }));
         }
     };
+     const handleBannerChange = (url: string) => {
+        if (tournament) {
+            setTournament(prev => ({ ...prev!, bannerUrl: url }));
+        }
+    };
+
 
     if (!tournament) {
         return (
@@ -108,7 +114,7 @@ export function TournamentManagementPage({ tournamentId }: { tournamentId: strin
                     <MediaTab mediaItems={mediaItems} onMediaAdd={handleAddMedia} />
                 </TabsContent>
                 <TabsContent value="promo">
-                    <PromoTab tournament={tournament} onPromoAdd={handleAddMedia} />
+                    <PromoTab tournament={tournament} onPromoAdd={handleAddMedia} onBannerChange={handleBannerChange} />
                 </TabsContent>
                 <TabsContent value="staff">
                     <StaffTab />

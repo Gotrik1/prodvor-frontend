@@ -6,13 +6,13 @@ import { Tournament } from '@/views/tournaments/public-page/ui/mock-data';
 import { useState } from "react";
 import { useToast } from "@/shared/hooks/use-toast";
 import { Button } from "@/shared/ui/button";
-import { Bot, Loader2, Wand2, Image as ImageIcon } from "lucide-react";
+import { Bot, Loader2, Wand2, Image as ImageIcon, CheckCircle } from "lucide-react";
 import { generateTournamentPromoAction } from "@/app/actions";
 import { generateTournamentImageAction } from "@/app/actions";
 import { Textarea } from "@/shared/ui/textarea";
 import Image from "next/image";
 
-export function PromoTab({ tournament, onPromoAdd }: { tournament: Tournament, onPromoAdd: (item: any) => void }) {
+export function PromoTab({ tournament, onPromoAdd, onBannerChange }: { tournament: Tournament, onPromoAdd: (item: any) => void, onBannerChange: (url: string) => void }) {
     const { toast } = useToast();
     const [isVideoLoading, setIsVideoLoading] = useState(false);
     const [isImageLoading, setIsImageLoading] = useState(false);
@@ -80,6 +80,16 @@ export function PromoTab({ tournament, onPromoAdd }: { tournament: Tournament, o
         }
     };
 
+    const handleSetAsBanner = () => {
+        if (generatedImage) {
+            onBannerChange(generatedImage);
+            toast({
+                title: "Баннер обновлен!",
+                description: "Новое изображение установлено как основной баннер турнира.",
+            });
+        }
+    }
+
     return (
         <Card>
             <CardHeader>
@@ -117,11 +127,15 @@ export function PromoTab({ tournament, onPromoAdd }: { tournament: Tournament, o
                     </div>
 
                     {generatedImage && (
-                        <div className="mt-6 w-full max-w-lg">
-                            <h4 className="font-semibold mb-2">Результат:</h4>
-                            <div className="aspect-video relative">
-                               <Image src={generatedImage} alt="Сгенерированное промо-изображение" layout="fill" className="rounded-lg border" />
+                        <div className="mt-6 w-full max-w-lg space-y-4">
+                            <h4 className="font-semibold">Результат:</h4>
+                            <div className="aspect-video relative w-full rounded-lg overflow-hidden border">
+                               <Image src={generatedImage} alt="Сгенерированное промо-изображение" layout="fill" objectFit="cover" className="rounded-lg border" />
                             </div>
+                             <Button onClick={handleSetAsBanner} className="w-full">
+                                <CheckCircle className="mr-2 h-4 w-4" />
+                                Сделать баннером
+                            </Button>
                         </div>
                     )}
                 </div>
