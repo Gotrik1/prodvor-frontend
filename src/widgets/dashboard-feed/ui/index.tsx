@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
@@ -12,7 +13,7 @@ import { generateNewsDigestAction } from "@/app/actions";
 import type { NewsDigestOutput } from "@/shared/api/generate-news-digest";
 import { PostCard } from "./post-card";
 
-const currentUser = users[0]; // Assuming user1 is the logged-in user for the main dashboard
+const currentUser = users.find(u => u.id === 'user1')!; // Make sure currentUser is always found
 
 function AiDigest() {
     const [digestData, setDigestData] = useState<NewsDigestOutput | null>(null);

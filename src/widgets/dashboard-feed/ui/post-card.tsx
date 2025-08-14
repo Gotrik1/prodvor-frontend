@@ -5,6 +5,8 @@ import type { Post } from "@/mocks/posts";
 import { formatDistanceToNow } from 'date-fns';
 import { ru } from 'date-fns/locale';
 import { MessageCircle, Heart } from "lucide-react";
+import Link from 'next/link';
+import Image from "next/image";
 
 export function PostCard({ post }: { post: Post }) {
   const timeAgo = formatDistanceToNow(new Date(post.timestamp), { addSuffix: true, locale: ru });
@@ -20,6 +22,15 @@ export function PostCard({ post }: { post: Post }) {
           <div className="flex items-center gap-2">
             <p className="font-semibold">{post.author.firstName} {post.author.lastName}</p>
             <p className="text-sm text-muted-foreground">@{post.author.nickname}</p>
+            {post.team && (
+                <>
+                <span className="text-sm text-muted-foreground">в</span>
+                <Link href={`/teams/${post.team.id}`} className="flex items-center gap-1.5 group">
+                    <Image src={post.team.logoUrl} width={16} height={16} alt={post.team.name} className="rounded-sm" data-ai-hint="team logo" />
+                    <p className="text-sm text-muted-foreground group-hover:text-primary transition-colors">{post.team.name}</p>
+                </Link>
+                </>
+            )}
           </div>
           <p className="text-sm text-muted-foreground">{timeAgo}</p>
         </div>

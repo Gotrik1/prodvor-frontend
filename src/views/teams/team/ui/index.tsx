@@ -1,15 +1,17 @@
-import { teams, users, tournaments, playgrounds, challenges } from "@/mocks";
+import { teams, users, playgrounds, challenges, posts } from "@/mocks";
+import type { User } from "@/mocks";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { Badge } from "@/shared/ui/badge";
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
-import { Crown, Home, Swords, Trophy, UserPlus, Check, X, TrendingUp, TrendingDown, Minus } from "lucide-react";
+import { Crown, Home, Swords, Trophy, UserPlus, Check, X, TrendingUp, TrendingDown, Minus, Rss, Film, Star, Shield } from "lucide-react";
 import Image from 'next/image';
 import Link from 'next/link';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
-import { Separator } from "@/shared/ui/separator";
+import { TeamFeedTab } from "./team-feed-tab";
+import { TeamMediaTab } from "./team-media-tab";
 
-const TeamRoster = ({ teamMembers, captainId }: { teamMembers: typeof users, captainId: string }) => (
+const TeamRoster = ({ teamMembers, captainId }: { teamMembers: User[], captainId: string }) => (
     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
         {teamMembers.map(member => (
             <div key={member.id} className="flex flex-col items-center text-center gap-2">
@@ -54,8 +56,8 @@ const TeamMatches = () => (
 );
 
 const TeamChallenges = ({ teamId }: { teamId: string }) => {
-    const incomingChallenges = challenges.filter(c => c.challenged.id === teamId);
-    const outgoingChallenges = challenges.filter(c => c.challenger.id === teamId);
+    const incomingChallenges = challenges.filter(c => c.challenged.id === teamId && c.status === 'pending');
+    const outgoingChallenges = challenges.filter(c => c.challenger.id === teamId && c.status === 'pending');
 
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -76,6 +78,7 @@ const TeamChallenges = ({ teamId }: { teamId: string }) => {
                             </CardContent>
                         </Card>
                     ))}
+                    {incomingChallenges.length === 0 && <p className="text-sm text-muted-foreground">Нет входящих вызовов.</p>}
                 </div>
             </div>
              <div>
@@ -92,6 +95,7 @@ const TeamChallenges = ({ teamId }: { teamId: string }) => {
                             </CardContent>
                         </Card>
                     ))}
+                    {outgoingChallenges.length === 0 && <p className="text-sm text-muted-foreground">Нет исходящих вызовов.</p>}
                 </div>
             </div>
         </div>
@@ -104,6 +108,18 @@ const FormBadge = ({ result }: { result: 'W' | 'L' | 'D' }) => {
     if (result === 'L') return <div className={`${baseClasses} bg-red-500/20 text-red-300 border border-red-500/30`}>L</div>;
     return <div className={`${baseClasses} bg-gray-500/20 text-gray-300 border border-gray-500/30`}>D</div>;
 };
+
+const StatCard = ({ title, value, icon: Icon }: { title: string, value: string, icon: React.ElementType }) => (
+    <Card>
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">{title}</CardTitle>
+            <Icon className="h-4 w-4 text-muted-foreground" />
+        </CardHeader>
+        <CardContent>
+            <div className="text-2xl font-bold">{value}</div>
+        </CardContent>
+    </Card>
+);
 
 export function TeamPublicPage({ team }: { team: (typeof teams)[0] | undefined}) {
 
@@ -130,6 +146,7 @@ export function TeamPublicPage({ team }: { team: (typeof teams)[0] | undefined})
     const teamMembers = users.filter(u => team.members.includes(u.id));
     const captain = users.find(u => u.id === team.captainId);
     const homePlayground = playgrounds.find(p => p.id === team.homePlaygroundId);
+    const teamPosts = posts.filter(p => p.team?.id === team.id);
 
     // Mock statistics
     const wins = 45;
@@ -137,6 +154,8 @@ export function TeamPublicPage({ team }: { team: (typeof teams)[0] | undefined})
     const winrate = Math.round((wins / (wins + losses)) * 100);
     const currentStreak = { type: 'W', count: 3 };
     const last5Form: ('W' | 'L' | 'D')[] = ['W', 'L', 'W', 'W', 'W'];
+    const mvp = teamMembers[0];
+    const topScorer = teamMembers[1];
 
     return (
         <div className="p-4 md:p-6 lg:p-8">
@@ -157,21 +176,23 @@ export function TeamPublicPage({ team }: { team: (typeof teams)[0] | undefined})
                         <Button className="w-full">
                             <Swords className="mr-2 h-4 w-4" /> Бросить вызов
                         </Button>
-                            <Button variant="outline" className="w-full">
-                            <UserPlus className="mr-2 h-4 w-4" /> Вступить в команду
+                         <Button variant="outline" className="w-full">
+                            <Rss className="mr-2 h-4 w-4" /> Подписаться
                         </Button>
                     </div>
                 </header>
 
-                <Tabs defaultValue="overview">
-                    <TabsList className="grid w-full grid-cols-4">
+                <Tabs defaultValue="overview" className="w-full">
+                    <TabsList className="grid w-full grid-cols-3 md:grid-cols-6">
                         <TabsTrigger value="overview">Обзор</TabsTrigger>
                         <TabsTrigger value="roster">Состав</TabsTrigger>
                         <TabsTrigger value="matches">Матчи</TabsTrigger>
                         <TabsTrigger value="challenges">Вызовы</TabsTrigger>
+                        <TabsTrigger value="feed"><Rss className="md:mr-2 h-4 w-4" /><span className="hidden md:inline">Лента</span></TabsTrigger>
+                        <TabsTrigger value="media"><Film className="md:mr-2 h-4 w-4" /><span className="hidden md:inline">Медиа</span></TabsTrigger>
                     </TabsList>
                     <TabsContent value="overview" className="mt-6">
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
                             <Card>
                                 <CardHeader><CardTitle>Побед / Поражений</CardTitle></CardHeader>
                                 <CardContent>
@@ -203,11 +224,26 @@ export function TeamPublicPage({ team }: { team: (typeof teams)[0] | undefined})
                                 </CardContent>
                             </Card>
                         </div>
+                         <Card>
+                            <CardHeader>
+                                <CardTitle>Ключевые показатели</CardTitle>
+                            </CardHeader>
+                            <CardContent className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                <StatCard title="MVP команды" value={mvp.nickname} icon={Star} />
+                                <StatCard title="Лучший бомбардир" value={topScorer.nickname} icon={Trophy} />
+                                <StatCard title="Сухие матчи" value="12" icon={Shield} />
+                                <StatCard title="Средний рейтинг" value="1520" icon={Crown} />
+                            </CardContent>
+                        </Card>
                     </TabsContent>
                     <TabsContent value="roster" className="mt-6">
                          <Card>
                             <CardHeader>
                                 <CardTitle>Состав команды ({teamMembers.length})</CardTitle>
+                                 <CardDescription>
+                                    Игроки, представляющие команду в текущем сезоне.
+                                    <Button variant="outline" size="sm" className="ml-4"><UserPlus className="mr-2 h-4 w-4" /> Подать заявку</Button>
+                                </CardDescription>
                             </CardHeader>
                             <CardContent>
                                 <TeamRoster teamMembers={teamMembers} captainId={team.captainId} />
@@ -234,6 +270,12 @@ export function TeamPublicPage({ team }: { team: (typeof teams)[0] | undefined})
                                 <TeamChallenges teamId={team.id} />
                             </CardContent>
                         </Card>
+                    </TabsContent>
+                    <TabsContent value="feed" className="mt-6">
+                       <TeamFeedTab posts={teamPosts} team={team} />
+                    </TabsContent>
+                     <TabsContent value="media" className="mt-6">
+                        <TeamMediaTab team={team} />
                     </TabsContent>
                 </Tabs>
             </div>
