@@ -1,10 +1,11 @@
 
+
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/shared/ui/card";
 import { PlusCircle, Trophy, GanttChart, Bell, CheckSquare } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
-import { tournaments } from "@/mocks";
+import { allTournaments } from "../public-page/ui/mock-data";
 import { Badge } from "@/shared/ui/badge";
 import { Progress } from "@/shared/ui/progress";
 import { MyTournamentsEmptyState } from "./my-tournaments-empty-state";
@@ -23,34 +24,6 @@ const statusColors: Record<TournamentStatus, string> = {
 
 const mockMyTournaments = [
     // Empty for demonstration purposes. In a real app, this would be a user's data.
-];
-
-const allTournaments = [
-    ...tournaments,
-     {
-      id: 'tourney4',
-      name: 'Зимний спринт по футболу',
-      game: 'Дворовый футбол',
-      status: 'АНОНС' as TournamentStatus,
-      prizePool: '15 000 руб.',
-      participants: 0,
-      maxParticipants: 16,
-      startDate: '2025-12-01',
-      bannerUrl: 'https://placehold.co/600x400.png',
-      dataAiHint: 'winter soccer'
-    },
-     {
-      id: 'tourney5',
-      name: 'Кубок новичков',
-      game: 'Дворовый футбол',
-      status: 'ПРЕДРЕГИСТРАЦИЯ' as TournamentStatus,
-      prizePool: 'Медали и грамоты',
-      participants: 4,
-      maxParticipants: 8,
-      startDate: '2025-07-25',
-      bannerUrl: 'https://placehold.co/600x400.png',
-      dataAiHint: 'amateur soccer'
-    },
 ];
 
 const TournamentCardActionButton = ({ id, status }: { id: string, status: TournamentStatus }) => {

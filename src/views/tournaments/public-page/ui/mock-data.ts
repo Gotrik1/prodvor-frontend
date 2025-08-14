@@ -64,6 +64,32 @@ export const tournaments: Tournament[] = [
         dataAiHint: 'soccer futsal',
         playgrounds: [playgrounds[1]]
     },
+     {
+      id: 'tourney4',
+      name: 'Зимний спринт по футболу',
+      game: 'Дворовый футбол',
+      status: 'АНОНС' as TournamentStatus,
+      prizePool: '15 000 руб.',
+      participants: 0,
+      maxParticipants: 16,
+      startDate: '2025-12-01',
+      bannerUrl: 'https://placehold.co/600x400.png',
+      dataAiHint: 'winter soccer',
+      playgrounds: [playgrounds[0]]
+    },
+     {
+      id: 'tourney5',
+      name: 'Кубок новичков',
+      game: 'Дворовый футбол',
+      status: 'ПРЕДРЕГИСТРАЦИЯ' as TournamentStatus,
+      prizePool: 'Медали и грамоты',
+      participants: 4,
+      maxParticipants: 8,
+      startDate: '2025-07-25',
+      bannerUrl: 'https://placehold.co/600x400.png',
+      dataAiHint: 'amateur soccer',
+      playgrounds: [playgrounds[2]]
+    },
   ];
 
 export const mockMyTournaments: Tournament[] = [
