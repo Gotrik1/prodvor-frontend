@@ -5,7 +5,7 @@ import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
 import { Users, Calendar, Megaphone, Settings, GanttChartIcon, Shield, Award, Film, Wand2, FileText } from "lucide-react";
 import Link from "next/link";
-import { allTournaments, registeredTeams as initialRegisteredTeams } from '@/views/tournaments/public-page/ui/mock-data';
+import { allTournaments, teams as allTeamsData, registeredTeams as initialRegisteredTeams } from '@/views/tournaments/public-page/ui/mock-data';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 import React, { useState, useMemo, useEffect } from "react";
 import type { Tournament } from '@/views/tournaments/public-page/ui/mock-data';
@@ -22,6 +22,7 @@ import {
     SettingsTab,
     ProtocolTab,
 } from './tabs';
+import { useProtocol } from "@/widgets/protocol-editor/lib/use-protocol";
 
 const crmTabs = [
     { value: "overview", icon: GanttChartIcon, label: "Обзор" },
@@ -42,11 +43,12 @@ const LOCAL_STORAGE_BANNER_KEY_PREFIX = 'promo-banner-';
 export function TournamentManagementPage({ tournamentId }: { tournamentId: string }) {
     const initialTournament = allTournaments.find(t => t.id === tournamentId);
     
+    const { setActiveMatch } = useProtocol();
     const [tournament, setTournament] = useState<Tournament | undefined>(initialTournament);
-    const [teams, setTeams] = useState(initialRegisteredTeams.slice(0, 8).map((team, index) => ({
+    const [teams, setTeams] = useState(allTeamsData.slice(0, 10).map((team, index) => ({
         ...team,
         date: new Date(Date.now() - index * 86400000).toLocaleDateString('ru-RU'),
-        status: index < 5 ? 'Подтверждена' : 'Ожидает'
+        status: index < 8 ? 'Подтверждена' : 'Ожидает'
     })));
 
     const [mediaItems, setMediaItems] = useState<any[]>([
@@ -83,6 +85,13 @@ export function TournamentManagementPage({ tournamentId }: { tournamentId: strin
             localStorage.setItem(storageKey, url);
         }
     };
+
+    useEffect(() => {
+        // Reset active match when navigating away from the CRM page or changing tournament
+        return () => {
+            setActiveMatch(null);
+        };
+    }, [tournamentId, setActiveMatch]);
 
 
     if (!tournament) {
