@@ -2,11 +2,12 @@
 
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
-import { Bot, PlayCircle, StopCircle, Ban, RefreshCw } from "lucide-react";
+import { Bot, PlayCircle, StopCircle, Ban, RefreshCw, ExternalLink } from "lucide-react";
 import Image from "next/image";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/select";
 import React from "react";
 import { Tournament } from '@/views/tournaments/public-page/ui/mock-data';
+import Link from "next/link";
 
 const statusColors: Record<string, string> = {
     'АНОНС': 'bg-purple-500/20 text-purple-300 border-purple-500/30',
@@ -72,6 +73,11 @@ export function OverviewTab({ tournament, onStatusChange, confirmedCount }: { to
                       <CardTitle className="text-lg flex items-center gap-2">Быстрые действия</CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-2">
+                      <Button asChild className="w-full justify-start" variant="outline">
+                        <Link href={`/tournaments/${tournament.id}`}>
+                            <ExternalLink className="mr-2 h-4 w-4"/>Перейти на страницу турнира
+                        </Link>
+                      </Button>
                       <Button className="w-full justify-start" variant="secondary"><PlayCircle className="mr-2 h-4 w-4"/>Начать турнир</Button>
                       <Button className="w-full justify-start" variant="secondary"><StopCircle className="mr-2 h-4 w-4"/>Завершить турнир</Button>
                       <Button className="w-full justify-start" variant="destructive"><Ban className="mr-2 h-4 w-4"/>Отменить турнир</Button>
