@@ -35,7 +35,7 @@ const ChallengeCard = ({ challenge, type }: { challenge: TeamChallenge, type: 'i
                 <div className="flex items-center gap-2">
                     {type === 'incoming' ? (
                         <>
-                            <Button size="sm" variant="secondary">
+                            <Button size="sm" className="bg-green-500/20 hover:bg-green-500/30 text-green-300 border border-green-500/30">
                                 <Check className="mr-2 h-4 w-4" /> Принять
                             </Button>
                             <Button size="sm" variant="destructive">
