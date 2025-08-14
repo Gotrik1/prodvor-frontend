@@ -154,8 +154,8 @@ export function TeamPublicPage({ team }: { team: (typeof teams)[0] | undefined})
     const winrate = Math.round((wins / (wins + losses)) * 100);
     const currentStreak = { type: 'W', count: 3 };
     const last5Form: ('W' | 'L' | 'D')[] = ['W', 'L', 'W', 'W', 'W'];
-    const mvp = teamMembers[0];
-    const topScorer = teamMembers[1];
+    const mvp = teamMembers.length > 0 ? teamMembers[0] : null;
+    const topScorer = teamMembers.length > 1 ? teamMembers[1] : null;
 
     return (
         <div className="p-4 md:p-6 lg:p-8">
@@ -229,8 +229,8 @@ export function TeamPublicPage({ team }: { team: (typeof teams)[0] | undefined})
                                 <CardTitle>Ключевые показатели</CardTitle>
                             </CardHeader>
                             <CardContent className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                                <StatCard title="MVP команды" value={mvp.nickname} icon={Star} />
-                                <StatCard title="Лучший бомбардир" value={topScorer.nickname} icon={Trophy} />
+                                <StatCard title="MVP команды" value={mvp ? mvp.nickname : 'N/A'} icon={Star} />
+                                <StatCard title="Лучший бомбардир" value={topScorer ? topScorer.nickname : 'N/A'} icon={Trophy} />
                                 <StatCard title="Сухие матчи" value="12" icon={Shield} />
                                 <StatCard title="Средний рейтинг" value="1520" icon={Crown} />
                             </CardContent>
