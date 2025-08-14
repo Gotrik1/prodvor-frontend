@@ -8,6 +8,7 @@ import { Input } from "@/shared/ui/input";
 import { PlusCircle, Search } from "lucide-react";
 import { cn } from "@/shared/lib/utils";
 import Image from 'next/image';
+import Link from 'next/link';
 
 const mainFilters = ["Все", "Футбол", "Баскетбол", "Стритбол", "Воркаут", "Универсальная", "Фитнес-зал", "Бассейн", "Теннисный корт"];
 const secondaryFilters = ["Лыжная трасса", "Биатлонный комплекс", "Каток", "Сноуборд-парк", "Горнолыжный склон", "Стрельбище"];
@@ -34,9 +35,11 @@ export function PlaygroundsPage() {
                     </h1>
                     <p className="text-muted-foreground mt-1">Найдите или добавьте свое любимое место для игр и тренировок.</p>
                 </div>
-                <Button>
-                    <PlusCircle className="mr-2 h-4 w-4" />
-                    Добавить место
+                <Button asChild>
+                    <Link href="/playgrounds/add">
+                        <PlusCircle className="mr-2 h-4 w-4" />
+                        Добавить место
+                    </Link>
                 </Button>
             </div>
 

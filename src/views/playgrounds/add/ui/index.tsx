@@ -1,0 +1,131 @@
+import { Button } from "@/shared/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
+import { Checkbox } from "@/shared/ui/checkbox";
+import { Input } from "@/shared/ui/input";
+import { Label } from "@/shared/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/select";
+import { MapPin, UploadCloud } from "lucide-react";
+
+const features = [
+    { id: "lighting", label: "Освещение" },
+    { id: "changing_room", label: "Раздевалка с душем" },
+    { id: "hoops", label: "Кольца (баскетбол)" },
+    { id: "gym_equipment", label: "Силовые тренажеры" },
+    { id: "rentals", label: "Прокат инвентаря" },
+    { id: "fence", label: "Ограждение" },
+    { id: "water_source", label: "Источник воды" },
+    { id: "net_volleyball", label: "Сетка (волейбол)" },
+    { id: "cardio_zone", label: "Кардио-зона" },
+    { id: "targets", label: "Мишени" },
+    { id: "benches", label: "Скамейки" },
+    { id: "gates", label: "Ворота" },
+    { id: "horizontal_bars", label: "Турники" },
+    { id: "pull_up_bar", label: "Подъемник" },
+];
+
+
+export function AddPlaygroundPage() {
+    return (
+        <div className="p-4 md:p-6 lg:p-8">
+            <div className="max-w-4xl mx-auto">
+                <div className="mb-8">
+                    <h1 className="text-3xl md:text-4xl font-bold font-headline">Новое место для тренировок</h1>
+                    <p className="text-muted-foreground mt-2">Добавьте свою любимую площадку, зал или поле на карту ProDvor.</p>
+                </div>
+                
+                <Card>
+                    <CardHeader>
+                        <CardTitle>Информация о месте</CardTitle>
+                        <CardDescription>
+                            Добавьте новое место. Оно появится на карте и будет ожидать проверки модератором.
+                            За каждое уникальное место вы получите 1 месяц PRO-подписки!
+                        </CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-6">
+                        <div className="space-y-2">
+                            <Label htmlFor="name">Название</Label>
+                            <Input id="name" placeholder="Например, Коробка за домом или Фитнес-клуб 'Атлет'" />
+                        </div>
+                         <div className="space-y-2">
+                            <Label htmlFor="address">Адрес</Label>
+                            <Input id="address" placeholder="Город, улица, дом" />
+                            <p className="text-xs text-muted-foreground">Начните вводить адрес, а затем уточните положение на карте.</p>
+                        </div>
+
+                        <div className="space-y-2">
+                            <Label>Расположение на карте</Label>
+                            <div className="aspect-[16/9] w-full rounded-md bg-muted flex items-center justify-center">
+                                <MapPin className="h-10 w-10 text-muted-foreground" />
+                            </div>
+                            <Button variant="outline" className="w-full mt-2">
+                                <MapPin className="mr-2 h-4 w-4" />
+                                Уточнить на карте
+                            </Button>
+                        </div>
+                        
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div className="space-y-2">
+                                <Label htmlFor="place-type">Тип места</Label>
+                                <Select>
+                                    <SelectTrigger id="place-type">
+                                        <SelectValue placeholder="Выберите тип" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="outdoor">Открытая площадка</SelectItem>
+                                        <SelectItem value="indoor">Закрытое помещение</SelectItem>
+                                        <SelectItem value="stadium">Стадион</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="surface-type">Покрытие</Label>
+                                <Select>
+                                    <SelectTrigger id="surface-type">
+                                        <SelectValue placeholder="Выберите покрытие" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="asphalt">Асфальт</SelectItem>
+                                        <SelectItem value="rubber">Резиновое</SelectItem>
+                                        <SelectItem value="grass">Газон</SelectItem>
+                                        <SelectItem value="sand">Песок</SelectItem>
+                                        <SelectItem value="parquet">Паркет</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            </div>
+                        </div>
+
+                        <div className="space-y-2">
+                            <Label>Особенности</Label>
+                            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 pt-2">
+                               {features.map(feature => (
+                                    <div key={feature.id} className="flex items-center space-x-2">
+                                        <Checkbox id={feature.id} />
+                                        <Label htmlFor={feature.id} className="font-normal text-sm">{feature.label}</Label>
+                                    </div>
+                               ))}
+                            </div>
+                        </div>
+
+                        <div className="space-y-2">
+                            <Label htmlFor="photos">Фотография</Label>
+                            <div className="flex items-center justify-center w-full">
+                                <label htmlFor="dropzone-file" className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed rounded-lg cursor-pointer bg-muted/50 hover:bg-muted">
+                                    <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                                        <UploadCloud className="w-8 h-8 mb-4 text-muted-foreground"/>
+                                        <p className="mb-2 text-sm text-muted-foreground"><span className="font-semibold">Нажмите, чтобы загрузить фото</span></p>
+                                    </div>
+                                    <input id="dropzone-file" type="file" className="hidden" />
+                                </label>
+                            </div> 
+                        </div>
+
+                        <div className="flex justify-end pt-4">
+                            <Button size="lg">Добавить место</Button>
+                        </div>
+
+                    </CardContent>
+                </Card>
+            </div>
+        </div>
+    )
+}
