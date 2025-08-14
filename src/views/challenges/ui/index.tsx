@@ -1,9 +1,10 @@
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
 import { Button } from "@/shared/ui/button";
 import { Check, X, Send, Users, Trophy } from "lucide-react";
 import Image from "next/image";
 import { challenges, TeamChallenge } from '@/mocks/challenges';
-import { teams } from '@/mocks';
+import { teams, users } from '@/mocks';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/select";
 import { Input } from "@/shared/ui/input";
 import { Label } from "@/shared/ui/label";
@@ -74,6 +75,7 @@ const QuickTournamentCard = () => (
 export function ChallengesPage() {
     const incomingChallenges = challenges.filter(c => c.status === 'pending');
     const outgoingChallenges = challenges.filter(c => c.status === 'pending'); // Using same for demo
+    const referees = users.filter(u => u.role === 'Судья');
 
     return (
         <div className="p-4 md:p-6 lg:p-8 space-y-8">
@@ -119,8 +121,8 @@ export function ChallengesPage() {
                         <CardDescription>Создайте мини-турнир для нескольких команд.</CardDescription>
                     </CardHeader>
                     <CardContent>
-                        <form className="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
-                            <div className="space-y-2 md:col-span-2">
+                        <form className="grid grid-cols-1 md:grid-cols-2 gap-4 items-end">
+                            <div className="space-y-2">
                                 <Label htmlFor="quick-tourney-name">Название</Label>
                                 <Input id="quick-tourney-name" placeholder="Напр., Кубок нашего двора" />
                             </div>
@@ -131,6 +133,18 @@ export function ChallengesPage() {
                                     <SelectContent>
                                         <SelectItem value="4">4 команды</SelectItem>
                                         <SelectItem value="8">8 команд</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            </div>
+                             <div className="space-y-2">
+                                <Label htmlFor="quick-tourney-referee">Судья (необязательно)</Label>
+                                <Select>
+                                    <SelectTrigger id="quick-tourney-referee"><SelectValue placeholder="Не назначен" /></SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="none">Не назначен</SelectItem>
+                                        {referees.map(ref => (
+                                            <SelectItem key={ref.id} value={ref.id}>{ref.firstName} {ref.lastName}</SelectItem>
+                                        ))}
                                     </SelectContent>
                                 </Select>
                             </div>
