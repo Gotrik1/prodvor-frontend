@@ -1,11 +1,11 @@
 
 
-import { playgrounds } from "@/mocks";
+import { playgrounds, teams } from "@/mocks";
 import type { Playground } from "@/mocks";
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
 import { YandexMapV3 } from "@/widgets/yandex-map";
-import { ArrowLeft, CheckCircle, MapPin, Star } from "lucide-react";
+import { ArrowLeft, CheckCircle, Home, MapPin, Star, Users } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { Badge } from "@/shared/ui/badge";
@@ -38,6 +38,8 @@ export function PlaygroundPage({ playground }: { playground: Playground | undefi
             </div>
         )
     }
+    
+    const residentTeams = teams.filter(team => team.homePlaygroundId === playground.id);
 
     return (
         <div className="p-4 md:p-6 lg:p-8">
@@ -97,16 +99,48 @@ export function PlaygroundPage({ playground }: { playground: Playground | undefi
                     </div>
                 </div>
 
-                 <Card className="mt-8">
-                    <CardHeader>
-                        <CardTitle>Расположение на карте</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        <div className="h-[400px] w-full rounded-md overflow-hidden">
-                            <YandexMapV3 />
-                        </div>
-                    </CardContent>
-                </Card>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
+                    <Card>
+                        <CardHeader>
+                            <CardTitle>Расположение на карте</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            <div className="h-[400px] w-full rounded-md overflow-hidden">
+                                <YandexMapV3 />
+                            </div>
+                        </CardContent>
+                    </Card>
+                    <Card>
+                        <CardHeader>
+                             <CardTitle className="flex items-center gap-2">
+                                <Users />
+                                Команды-резиденты
+                            </CardTitle>
+                             <CardDescription>Команды, которые считают это место своей домашней площадкой.</CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                            {residentTeams.length > 0 ? (
+                                <ul className="space-y-3">
+                                    {residentTeams.map(team => (
+                                        <li key={team.id}>
+                                            <Link href={`/teams/${team.id}`} className="flex items-center gap-3 p-2 rounded-md hover:bg-muted/50 transition-colors group">
+                                                <Image src={team.logoUrl} alt={team.name} width={40} height={40} className="rounded-md" data-ai-hint="team logo" />
+                                                <div>
+                                                    <p className="font-semibold group-hover:text-primary">{team.name}</p>
+                                                    <p className="text-xs text-muted-foreground">{team.game}</p>
+                                                </div>
+                                            </Link>
+                                        </li>
+                                    ))}
+                                </ul>
+                            ) : (
+                                <p className="text-sm text-muted-foreground text-center py-10">
+                                    Пока ни одна команда не выбрала это место своим домом.
+                                </p>
+                            )}
+                        </CardContent>
+                    </Card>
+                </div>
             </div>
         </div>
     );
