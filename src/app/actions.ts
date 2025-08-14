@@ -5,6 +5,7 @@ import { generateTeamLogoVariations } from "@/shared/api/generate-team-logo-vari
 import { generateNewsDigest } from "@/shared/api/generate-news-digest";
 import { sendTournamentAnnouncement, SendTournamentAnnouncementInput } from "@/shared/api/send-tournament-announcement";
 import { generateTournamentPromo, GenerateTournamentPromoInput } from "@/shared/api/generate-tournament-promo";
+import { generateTournamentImage, GenerateTournamentImageInput } from "@/shared/api/generate-tournament-image";
 
 
 export async function generateLogosAction(
@@ -24,4 +25,8 @@ export async function sendTournamentAnnouncementAction(input: SendTournamentAnno
 
 export async function generateTournamentPromoAction(input: GenerateTournamentPromoInput) {
   return await generateTournamentPromo(input);
+}
+
+export async function generateTournamentImageAction(input: GenerateTournamentImageInput) {
+  return await generateTournamentImage(input);
 }
