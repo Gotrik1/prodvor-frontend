@@ -30,7 +30,7 @@ const generateImageFlow = ai.defineFlow(
         model: googleAI.model('gemini-2.0-flash-preview-image-generation'),
         prompt: `Epic, high-resolution, 4k, cinematic promotional poster for a sports tournament. Style: hyper-realistic, dramatic lighting. Description: "${prompt}"`,
         config: {
-          responseModalities: ['IMAGE'],
+          responseModalities: ['IMAGE', 'TEXT'],
         },
       });
 

@@ -31,7 +31,7 @@ const logoGenerationFlow = ai.defineFlow(
           model: googleAI.model('gemini-2.0-flash-preview-image-generation'),
           prompt: `A modern, vector-style, flat SVG logo for a sports team. The logo should be on a clean, solid dark background. Description: "${logoDescription}"`,
           config: {
-            responseModalities: ['IMAGE'],
+            responseModalities: ['IMAGE', 'TEXT'],
           },
         })
       );
