@@ -1,13 +1,35 @@
 
-
 'use client';
 
 import React from 'react';
-import { Futbol, ArrowUp, ArrowDown } from 'lucide-react';
+import { ArrowUp, ArrowDown } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/shared/ui/tooltip';
 
 // --- ICONS ---
-const GoalIcon = () => <Futbol className="h-5 w-5 text-foreground" />;
+const GoalIcon = () => (
+    <svg 
+        xmlns="http://www.w3.org/2000/svg" 
+        width="20" 
+        height="20" 
+        viewBox="0 0 24 24" 
+        fill="none" 
+        stroke="currentColor" 
+        strokeWidth="2" 
+        strokeLinecap="round" 
+        strokeLinejoin="round"
+        className="text-foreground"
+    >
+        <circle cx="12" cy="12" r="10"></circle>
+        <path d="M12 12l4.24 4.24"></path>
+        <path d="M12 12l-4.24 4.24"></path>
+        <path d="M12 12l-4.24-4.24"></path>
+        <path d="M12 12l4.24-4.24"></path>
+        <path d="M12 21.66V2"></path>
+        <path d="M2.34 12H21.66"></path>
+        <path d="M16.24 7.76l-8.48 8.48"></path>
+        <path d="M16.24 16.24l-8.48-8.48"></path>
+    </svg>
+);
 const YellowCardIcon = () => <div className="h-5 w-4 bg-yellow-400 rounded-sm" />;
 const RedCardIcon = () => <div className="h-5 w-4 bg-red-500 rounded-sm" />;
 const SubstitutionIcon = () => (
