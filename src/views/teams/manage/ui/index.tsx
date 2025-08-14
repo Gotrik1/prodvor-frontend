@@ -6,13 +6,14 @@ import type { Team, User } from "@/mocks";
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
 import Link from "next/link";
-import { ArrowLeft, CheckCircle, Crown, Edit, Mail, Shield, Trash2, UserPlus, Users, XCircle } from "lucide-react";
+import { ArrowLeft, CheckCircle, Crown, Edit, Mail, Shield, Trash2, UserPlus, Users, XCircle, MoreHorizontal, ArrowRightLeft, Handshake, LogOut } from "lucide-react";
 import Image from "next/image";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { Badge } from "@/shared/ui/badge";
 import { Input } from "@/shared/ui/input";
 import { Separator } from "@/shared/ui/separator";
 import { LogoGeneratorWidget } from "@/widgets/logo-generator";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/shared/ui/dropdown-menu";
 
 const mockApplications = users.slice(2, 4).map(u => ({ ...u, status: 'pending' }));
 
@@ -66,13 +67,24 @@ export function TeamManagementPage({ team }: { team: Team | undefined }) {
                                             </div>
                                         </div>
                                         <div className="flex items-center gap-3">
-                                                {member.id === captain?.id ? (
+                                            {member.id === captain?.id ? (
                                                 <Badge variant="default"><Crown className="mr-1 h-3 w-3" />Капитан</Badge>
-                                                ) : (
-                                                    <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-destructive">
-                                                    <Trash2 className="h-4 w-4" />
-                                                    </Button>
-                                                )}
+                                            ) : (
+                                                <DropdownMenu>
+                                                    <DropdownMenuTrigger asChild>
+                                                        <Button variant="ghost" size="icon" className="h-8 w-8">
+                                                            <MoreHorizontal className="h-4 w-4" />
+                                                        </Button>
+                                                    </DropdownMenuTrigger>
+                                                    <DropdownMenuContent align="end">
+                                                        <DropdownMenuItem><ArrowRightLeft className="mr-2 h-4 w-4" />Выставить на трансфер</DropdownMenuItem>
+                                                        <DropdownMenuItem><Handshake className="mr-2 h-4 w-4" />Отдать в аренду</DropdownMenuItem>
+                                                        <DropdownMenuItem className="text-destructive focus:bg-destructive/10 focus:text-destructive">
+                                                            <LogOut className="mr-2 h-4 w-4" />Исключить из команды
+                                                        </DropdownMenuItem>
+                                                    </DropdownMenuContent>
+                                                </DropdownMenu>
+                                            )}
                                         </div>
                                     </li>
                                 ))}
@@ -136,14 +148,22 @@ export function TeamManagementPage({ team }: { team: Team | undefined }) {
                     </Card>
                     <Card>
                         <CardHeader>
-                            <CardTitle className="flex items-center gap-2"><UserPlus />Пригласить игрока</CardTitle>
+                            <CardTitle className="flex items-center gap-2"><ArrowRightLeft />Трансферы и аренда</CardTitle>
+                             <CardDescription>Поиск и приглашение новых игроков в команду.</CardDescription>
                         </CardHeader>
                         <CardContent>
-                            <div className="space-y-2">
-                                <Label htmlFor="nickname-invite">Никнейм игрока</Label>
-                                <div className="flex gap-2">
-                                    <Input id="nickname-invite" placeholder="Player123" />
-                                    <Button variant="secondary">Найти</Button>
+                            <div className="space-y-4">
+                                <div className="space-y-2">
+                                    <Label htmlFor="nickname-invite">Никнейм игрока</Label>
+                                    <div className="flex gap-2">
+                                        <Input id="nickname-invite" placeholder="Player123" />
+                                        <Button variant="secondary">Найти</Button>
+                                    </div>
+                                </div>
+                                <Separator />
+                                <div className="flex flex-col gap-2">
+                                    <Button variant="outline"><UserPlus className="mr-2 h-4 w-4" />Пригласить в команду</Button>
+                                    <Button variant="outline"><Handshake className="mr-2 h-4 w-4" />Предложить аренду</Button>
                                 </div>
                             </div>
                         </CardContent>
