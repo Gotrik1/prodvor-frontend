@@ -42,7 +42,7 @@ const TeamMatches = () => (
                 <span className="font-medium">vs {teams[1].name}</span>
             </div>
             <p className="text-sm text-muted-foreground">Летний Кубок ProDvor</p>
-            <Badge className="bg-green-500/20 text-green-300 border-green-500/30">Победа 5:3</Badge>
+            <Badge variant="success">Победа 5:3</Badge>
         </li>
         <li className="flex justify-between items-center p-3 rounded-md hover:bg-muted/50">
             <div className="flex items-center gap-3">
@@ -104,9 +104,9 @@ const TeamChallenges = ({ teamId }: { teamId: string }) => {
 
 const FormBadge = ({ result }: { result: 'W' | 'L' | 'D' }) => {
     const baseClasses = "flex items-center justify-center w-8 h-8 rounded-md font-bold";
-    if (result === 'W') return <div className={`${baseClasses} bg-green-500/20 text-green-300 border border-green-500/30`}>W</div>;
-    if (result === 'L') return <div className={`${baseClasses} bg-red-500/20 text-red-300 border border-red-500/30`}>L</div>;
-    return <div className={`${baseClasses} bg-gray-500/20 text-gray-300 border border-gray-500/30`}>D</div>;
+    if (result === 'W') return <div className={`${baseClasses} bg-success text-success-foreground border border-success/30`}>W</div>;
+    if (result === 'L') return <div className={`${baseClasses} bg-destructive text-destructive-foreground border border-destructive/30`}>L</div>;
+    return <div className={`${baseClasses} bg-secondary text-secondary-foreground border border-secondary/30`}>D</div>;
 };
 
 const StatCard = ({ title, value, icon: Icon }: { title: string, value: string, icon: React.ElementType }) => (

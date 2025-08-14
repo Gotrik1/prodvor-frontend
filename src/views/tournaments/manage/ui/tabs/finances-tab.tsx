@@ -18,10 +18,17 @@ const mockFinances = [
     { teamId: 'team4', fee: 2000, fine: 1000, status: 'Оплачено' },
 ];
 
-const statusColors: Record<string, string> = {
-    'Оплачено': 'bg-green-500/20 text-green-300 border-green-500/30',
-    'Не оплачено': 'bg-red-500/20 text-red-300 border-red-500/30',
-    'Частично': 'bg-amber-500/20 text-amber-300 border-amber-500/30',
+const getStatusVariant = (status: string): 'success' | 'secondary' | 'destructive' => {
+    switch (status) {
+        case 'Оплачено':
+            return 'success';
+        case 'Частично':
+            return 'secondary';
+        case 'Не оплачено':
+            return 'destructive';
+        default:
+            return 'secondary';
+    }
 };
 
 export function FinancesTab({ teams }: { teams: Team[] }) {
@@ -65,7 +72,7 @@ export function FinancesTab({ teams }: { teams: Team[] }) {
                                     <TableCell className="text-center font-mono">{team.fine} ₽</TableCell>
                                     <TableCell className="text-center font-mono font-bold">{team.fee + team.fine} ₽</TableCell>
                                     <TableCell className="text-center">
-                                        <Badge className={statusColors[team.status]}>
+                                        <Badge variant={getStatusVariant(team.status)}>
                                             {team.status === 'Оплачено' && <CheckCircle className="mr-1 h-3 w-3" />}
                                             {team.status !== 'Оплачено' && <AlertCircle className="mr-1 h-3 w-3" />}
                                             {team.status}
