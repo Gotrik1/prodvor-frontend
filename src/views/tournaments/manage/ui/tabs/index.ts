@@ -1,3 +1,4 @@
+
 export * from './overview-tab';
 export * from './participants-tab';
 export * from './bracket-tab';
@@ -10,3 +11,4 @@ export * from './announcements-tab';
 export * from './settings-tab';
 export * from './protocol-tab';
 export * from './finances-tab';
+export * from './analytics-tab';
