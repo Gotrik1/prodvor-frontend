@@ -1,3 +1,4 @@
+
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/shared/ui/card";
 import { PlusCircle, Trophy, GanttChart, Bell, CheckSquare } from "lucide-react";
@@ -76,22 +77,24 @@ export function TournamentsPage() {
                         {mockMyTournaments.map(tournament => (
                         <Card key={tournament.id} className="flex flex-col bg-card/80 border-primary/20 hover:border-primary/50 transition-colors">
                             <CardHeader className="p-0">
-                                <div className="relative h-40 w-full">
-                                    <Image
-                                        src={tournament.bannerUrl}
-                                        alt={tournament.name}
-                                        fill
-                                        className="object-cover rounded-t-lg"
-                                        data-ai-hint={tournament.dataAiHint}
-                                    />
-                                    <Badge className={`absolute top-2 right-2 ${statusColors[tournament.status]}`}>
-                                        {tournament.status}
-                                    </Badge>
-                                </div>
-                                <div className="p-6">
-                                    <CardTitle className="text-xl">{tournament.name}</CardTitle>
-                                    <CardDescription>{tournament.game}</CardDescription>
-                                </div>
+                                <Link href={`/tournaments/${tournament.id}`}>
+                                    <div className="relative h-40 w-full">
+                                        <Image
+                                            src={tournament.bannerUrl}
+                                            alt={tournament.name}
+                                            fill
+                                            className="object-cover rounded-t-lg"
+                                            data-ai-hint={tournament.dataAiHint}
+                                        />
+                                        <Badge className={`absolute top-2 right-2 ${statusColors[tournament.status]}`}>
+                                            {tournament.status}
+                                        </Badge>
+                                    </div>
+                                    <div className="p-6">
+                                        <CardTitle className="text-xl group-hover:text-primary transition-colors">{tournament.name}</CardTitle>
+                                        <CardDescription>{tournament.game}</CardDescription>
+                                    </div>
+                                </Link>
                             </CardHeader>
                             <CardContent className="flex-grow space-y-4">
                                 <div>
@@ -125,24 +128,26 @@ export function TournamentsPage() {
                 <h2 className="text-2xl font-bold mb-4">Все турниры</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {allTournaments.map(tournament => (
-                        <Card key={tournament.id} className="flex flex-col hover:border-primary/50 transition-colors">
+                        <Card key={tournament.id} className="flex flex-col hover:border-primary/50 transition-colors group">
                             <CardHeader className="p-0">
-                                <div className="relative h-40 w-full">
-                                    <Image
-                                        src={tournament.bannerUrl}
-                                        alt={tournament.name}
-                                        fill
-                                        className="object-cover rounded-t-lg"
-                                        data-ai-hint={tournament.dataAiHint}
-                                    />
-                                    <Badge className={`absolute top-2 right-2 ${statusColors[tournament.status]}`}>
-                                        {tournament.status}
-                                    </Badge>
-                                </div>
-                                <div className="p-6">
-                                <CardTitle className="text-xl">{tournament.name}</CardTitle>
-                                <CardDescription>{tournament.game}</CardDescription>
-                                </div>
+                                <Link href={`/tournaments/${tournament.id}`}>
+                                    <div className="relative h-40 w-full">
+                                        <Image
+                                            src={tournament.bannerUrl}
+                                            alt={tournament.name}
+                                            fill
+                                            className="object-cover rounded-t-lg"
+                                            data-ai-hint={tournament.dataAiHint}
+                                        />
+                                        <Badge className={`absolute top-2 right-2 ${statusColors[tournament.status]}`}>
+                                            {tournament.status}
+                                        </Badge>
+                                    </div>
+                                    <div className="p-6">
+                                    <CardTitle className="text-xl group-hover:text-primary transition-colors">{tournament.name}</CardTitle>
+                                    <CardDescription>{tournament.game}</CardDescription>
+                                    </div>
+                                </Link>
                             </CardHeader>
                             <CardContent className="flex-grow space-y-4">
                                 <div>
