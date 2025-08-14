@@ -1,7 +1,7 @@
 
 'use client';
 
-import { myTournaments } from "@/views/tournaments/public-page/ui/mock-data";
+import { mockMyTournaments } from "@/views/tournaments/public-page/ui/mock-data";
 import { users } from "@/mocks";
 import type { User } from "@/mocks/users";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
@@ -52,7 +52,7 @@ export function OrganizerPageTemplate({ user }: { user?: User }) {
                         <Megaphone className="h-4 w-4 text-muted-foreground" />
                     </CardHeader>
                     <CardContent>
-                        <div className="text-2xl font-bold">{myTournaments.length}</div>
+                        <div className="text-2xl font-bold">{mockMyTournaments.length}</div>
                     </CardContent>
                 </Card>
                 <Card>
@@ -102,7 +102,7 @@ export function OrganizerPageTemplate({ user }: { user?: User }) {
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
-                                {myTournaments.map((tournament) => (
+                                {mockMyTournaments.map((tournament) => (
                                     <TableRow key={tournament.id}>
                                         <TableCell className="font-medium">
                                             <Link href={`/tournaments/${tournament.id}`} className="hover:text-primary transition-colors">

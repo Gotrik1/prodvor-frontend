@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { AdminLayout } from '@/views/admin/pages/layout';
 import { AdminDashboardPage } from '@/views/admin/pages/dashboard';
 import { AdminStatisticsPage } from '@/views/admin/pages/statistics';
-import { AdminAdvertisingPage } from '@/views/admin/advertising';
+import { AdvertisingPage } from '@/views/admin/advertising';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Button } from '@/shared/ui/button';
 import Link from 'next/link';
@@ -71,7 +71,7 @@ export default function AdminPage({ params }: { params: { slug: string[] } }) {
       case 'statistics':
         return <AdminStatisticsPage />;
       case 'advertising':
-        return <AdminAdvertisingPage />;
+        return <AdvertisingPage />;
       case 'users':
         return <UserPage params={{ userId: subpage }} />;
       case 'sponsors':
