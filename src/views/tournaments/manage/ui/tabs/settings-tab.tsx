@@ -78,6 +78,17 @@ export function SettingsTab({ tournament, onTournamentChange }: { tournament: To
                         <Input id="name" value={tournament.name} onChange={handleInputChange} />
                     </div>
 
+                    <div className="space-y-2">
+                        <Label htmlFor="description">Описание турнира</Label>
+                        <Textarea 
+                            id="description" 
+                            placeholder="Расскажите о вашем турнире: для кого он, какие цели, формат и т.д." 
+                            rows={5} 
+                            value={tournament.description}
+                            onChange={handleInputChange}
+                        />
+                    </div>
+
                      <div className="space-y-2">
                         <Label>Места проведения</Label>
                          <Card className="bg-muted/50">

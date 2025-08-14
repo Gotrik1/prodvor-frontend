@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
-import { Award, Calendar, GanttChartIcon, Trophy, Users } from "lucide-react";
+import { Award, Calendar, GanttChartIcon, Trophy, Users, Info } from "lucide-react";
 import { allTournaments, registeredTeams, sponsors } from './mock-data';
 import { Badge } from "@/shared/ui/badge";
 import { Separator } from "@/shared/ui/separator";
@@ -139,11 +139,17 @@ export function TournamentPublicPage({ tournament }: { tournament: (typeof allTo
                         <Separator className="my-12 md:my-16" />
 
                         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 md:gap-12">
-                            <div className="lg:col-span-2">
+                            <div className="lg:col-span-2 space-y-8">
+                                <Card>
+                                    <CardHeader>
+                                        <CardTitle className="flex items-center gap-2"><Info /> О турнире</CardTitle>
+                                    </CardHeader>
+                                    <CardContent className="prose prose-invert max-w-none text-muted-foreground">
+                                       <p>{tournament.description}</p>
+                                    </CardContent>
+                                </Card>
                                 <TournamentSchedule tournamentId={tournament.id} />
-                                <div className="mt-8">
-                                    <TournamentBracket tournamentId={tournament.id}/>
-                                </div>
+                                <TournamentBracket tournamentId={tournament.id}/>
                             </div>
                             <div>
                                 <Card>

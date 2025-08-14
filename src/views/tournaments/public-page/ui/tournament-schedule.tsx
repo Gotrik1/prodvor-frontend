@@ -66,21 +66,21 @@ export function TournamentSchedule({ tournamentId }: { tournamentId: string }) {
                         <Card key={match.id} className="bg-muted/50">
                             <CardContent className="p-4 flex flex-col sm:flex-row items-center justify-between gap-4">
                                 <div className="flex-1 flex items-center justify-between sm:justify-center gap-4">
-                                     <div className="flex items-center gap-2 w-2/5">
-                                        <Avatar className="h-8 w-8">
+                                     <Link href={`/teams/${match.team1.id}`} className="flex items-center gap-2 w-2/5 group">
+                                        <Avatar className="h-8 w-8 group-hover:scale-110 transition-transform">
                                             <AvatarImage src={match.team1.logoUrl} data-ai-hint="team logo" />
                                             <AvatarFallback>{match.team1.name.charAt(0)}</AvatarFallback>
                                         </Avatar>
-                                        <span className="font-medium truncate">{match.team1.name}</span>
-                                    </div>
+                                        <span className="font-medium truncate group-hover:text-primary transition-colors">{match.team1.name}</span>
+                                    </Link>
                                     <span className="text-muted-foreground font-bold">VS</span>
-                                    <div className="flex items-center gap-2 w-2/5 justify-end">
-                                        <span className="font-medium truncate text-right">{match.team2.name}</span>
-                                         <Avatar className="h-8 w-8">
+                                    <Link href={`/teams/${match.team2.id}`} className="flex items-center gap-2 w-2/5 justify-end group">
+                                        <span className="font-medium truncate text-right group-hover:text-primary transition-colors">{match.team2.name}</span>
+                                         <Avatar className="h-8 w-8 group-hover:scale-110 transition-transform">
                                             <AvatarImage src={match.team2.logoUrl} data-ai-hint="team logo" />
                                             <AvatarFallback>{match.team2.name.charAt(0)}</AvatarFallback>
                                         </Avatar>
-                                    </div>
+                                    </Link>
                                 </div>
                                 <div className="flex-1 text-center border-y sm:border-y-0 sm:border-x py-2 sm:py-0 px-4">
                                     <p className="font-semibold">{match.date}, {match.time}</p>

@@ -38,6 +38,7 @@ export interface Tournament {
     bannerUrl: string;
     dataAiHint: string;
     playgrounds: Playground[];
+    description: string;
 }
 
 export const tournaments: Tournament[] = [
@@ -52,7 +53,8 @@ export const tournaments: Tournament[] = [
       startDate: '2025-07-15',
       bannerUrl: 'https://placehold.co/600x400.png',
       dataAiHint: 'basketball court',
-      playgrounds: [playgrounds[2], playgrounds[3]]
+      playgrounds: [playgrounds[2], playgrounds[3]],
+      description: 'Главный турнир этого лета по стритболу! Собери свою команду из трех человек и докажи, что вы лучшие на асфальте. Игры пройдут на лучших уличных площадках города. Вас ждут напряженные матчи, отличная музыка и море эмоций.'
     },
     {
         id: 'tourney3',
@@ -65,7 +67,8 @@ export const tournaments: Tournament[] = [
         startDate: '2025-05-10',
         bannerUrl: 'https://placehold.co/600x400.png',
         dataAiHint: 'soccer futsal',
-        playgrounds: [playgrounds[1]]
+        playgrounds: [playgrounds[1]],
+        description: 'Классический турнир по футзалу в формате 5x5. Динамичные игры, техничные финты и бескомпромиссная борьба за звание "Королей Коробки".'
     },
      {
       id: 'tourney4',
@@ -78,7 +81,8 @@ export const tournaments: Tournament[] = [
       startDate: '2025-12-01',
       bannerUrl: 'https://placehold.co/600x400.png',
       dataAiHint: 'winter soccer',
-      playgrounds: [playgrounds[0]]
+      playgrounds: [playgrounds[0]],
+      description: 'Не дай себе замерзнуть этой зимой! Горячие футбольные баталии на свежем воздухе для самых стойких. Формат 7x7, игры на вылет.'
     },
      {
       id: 'tourney5',
@@ -91,7 +95,8 @@ export const tournaments: Tournament[] = [
       startDate: '2025-07-25',
       bannerUrl: 'https://placehold.co/600x400.png',
       dataAiHint: 'amateur soccer',
-      playgrounds: [playgrounds[2]]
+      playgrounds: [playgrounds[2]],
+      description: 'Твой первый шаг в большой спорт! Турнир для команд с рейтингом до 1400 ELO. Отличная возможность попробовать свои силы, набраться опыта и заявить о себе.'
     },
   ];
 
@@ -107,7 +112,8 @@ export const mockMyTournaments: Tournament[] = [
       startDate: '2025-08-01',
       bannerUrl: 'https://placehold.co/1200x300.png',
       dataAiHint: 'soccer street',
-      playgrounds: [playgrounds[0]]
+      playgrounds: [playgrounds[0]],
+      description: 'Главное событие лета для всех любителей дворового футбола! 8 лучших команд города сразятся за крупный денежный приз и звание чемпиона ProDvor. Напряженные матчи, яркие моменты и незабываемая атмосфера гарантированы. Следите за играми онлайн и приходите поддержать своих фаворитов!'
     },
 ];
 

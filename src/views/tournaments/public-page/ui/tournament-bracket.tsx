@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { Trophy } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 
 interface Match {
     id: string;
@@ -77,42 +78,48 @@ export function TournamentBracket({ tournamentId }: { tournamentId: string }) {
                     <div className="space-y-4 max-w-3xl mx-auto">
                         {matches.map((match) => {
                             const winner = match.score1 > match.score2 ? 'team1' : 'team2';
+                            const winnerTeam = winner === 'team1' ? match.team1 : match.team2;
                             return (
                                 <Card key={match.id} className="bg-muted/50 overflow-hidden">
-                                    <CardContent className="flex items-center justify-between p-4">
-                                        {/* Team 1 */}
-                                        <div className={`flex items-center gap-3 w-2/5 transition-opacity ${winner !== 'team1' && 'opacity-50'}`}>
-                                            <div className="flex items-center gap-3">
-                                                <Avatar>
-                                                    <AvatarImage src={match.team1.logoUrl} alt={match.team1.name} />
-                                                    <AvatarFallback>{match.team1.name.slice(0, 2)}</AvatarFallback>
-                                                </Avatar>
-                                                <span className="font-medium truncate">{match.team1.name}</span>
+                                     <Link href={`/tournaments/${tournamentId}/match/${match.id}`} className="block">
+                                        <CardContent className="flex items-center justify-between p-4">
+                                            {/* Team 1 */}
+                                            <div className={`flex items-center gap-3 w-2/5 transition-opacity ${winner !== 'team1' && 'opacity-50'}`}>
+                                                <Link href={`/teams/${match.team1.id}`} className="flex items-center gap-3 group">
+                                                    <Avatar className="group-hover:scale-110 transition-transform">
+                                                        <AvatarImage src={match.team1.logoUrl} alt={match.team1.name} />
+                                                        <AvatarFallback>{match.team1.name.slice(0, 2)}</AvatarFallback>
+                                                    </Avatar>
+                                                    <span className="font-medium truncate group-hover:text-primary transition-colors">{match.team1.name}</span>
+                                                </Link>
                                             </div>
-                                        </div>
 
-                                        {/* Score */}
-                                        <div className="flex items-center gap-3">
-                                            <span className={`text-2xl font-bold ${winner === 'team1' ? 'text-primary' : ''}`}>{match.score1}</span>
-                                            <span className="text-sm text-muted-foreground">VS</span>
-                                            <span className={`text-2xl font-bold ${winner === 'team2' ? 'text-primary' : ''}`}>{match.score2}</span>
-                                        </div>
-
-                                        {/* Team 2 */}
-                                        <div className={`flex items-center gap-3 w-2/5 justify-end transition-opacity ${winner !== 'team2' && 'opacity-50'}`}>
+                                            {/* Score */}
                                             <div className="flex items-center gap-3">
-                                                <span className="font-medium truncate text-right">{match.team2.name}</span>
-                                                <Avatar>
-                                                    <AvatarImage src={match.team2.logoUrl} alt={match.team2.name} />
-                                                    <AvatarFallback>{match.team2.name.slice(0, 2)}</AvatarFallback>
-                                                </Avatar>
+                                                <span className={`text-2xl font-bold ${winner === 'team1' ? 'text-primary' : ''}`}>{match.score1}</span>
+                                                <span className="text-sm text-muted-foreground">VS</span>
+                                                <span className={`text-2xl font-bold ${winner === 'team2' ? 'text-primary' : ''}`}>{match.score2}</span>
                                             </div>
-                                        </div>
-                                    </CardContent>
+
+                                            {/* Team 2 */}
+                                            <div className={`flex items-center gap-3 w-2/5 justify-end transition-opacity ${winner !== 'team2' && 'opacity-50'}`}>
+                                                <Link href={`/teams/${match.team2.id}`} className="flex items-center gap-3 group">
+                                                    <span className="font-medium truncate text-right group-hover:text-primary transition-colors">{match.team2.name}</span>
+                                                    <Avatar className="group-hover:scale-110 transition-transform">
+                                                        <AvatarImage src={match.team2.logoUrl} alt={match.team2.name} />
+                                                        <AvatarFallback>{match.team2.name.slice(0, 2)}</AvatarFallback>
+                                                    </Avatar>
+                                                </Link>
+                                            </div>
+                                        </CardContent>
+                                    </Link>
                                     {winner && (
                                         <div className="bg-card/50 px-4 py-1 text-xs text-center text-muted-foreground flex items-center justify-center gap-2">
                                         <Trophy className="w-3 h-3 text-amber-400" />
-                                        Победитель: <span className="font-bold text-foreground">{winner === 'team1' ? match.team1.name : match.team2.name}</span>
+                                        Победитель: 
+                                        <Link href={`/teams/${winnerTeam.id}`} className="font-bold text-foreground hover:text-primary transition-colors">
+                                            {winnerTeam.name}
+                                        </Link>
                                         </div>
                                     )}
                                 </Card>

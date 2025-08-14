@@ -5,6 +5,7 @@ import Image from "next/image";
 import { MatchTimeline, matchEvents } from "./match-timeline";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { Crown } from "lucide-react";
+import Link from "next/link";
 
 const team1 = registeredTeams[0];
 const team2 = registeredTeams[1];
@@ -18,18 +19,18 @@ export function MatchProtocol({ tournament, matchId }: { tournament: any, matchI
         <Card>
             <CardHeader>
                 <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-                    <div className="flex items-center gap-4">
-                        <Image src={team1.logoUrl} alt={team1.name} width={64} height={64} className="rounded-lg" data-ai-hint="team logo" />
-                        <h2 className="text-2xl font-bold">{team1.name}</h2>
-                    </div>
+                    <Link href={`/teams/${team1.id}`} className="flex items-center gap-4 group">
+                        <Image src={team1.logoUrl} alt={team1.name} width={64} height={64} className="rounded-lg group-hover:scale-105 transition-transform" data-ai-hint="team logo" />
+                        <h2 className="text-2xl font-bold group-hover:text-primary transition-colors">{team1.name}</h2>
+                    </Link>
                     <div className="text-center">
                         <p className="text-4xl font-black tracking-tighter">5 - 3</p>
                         <p className="text-sm text-muted-foreground">Финальный счет</p>
                     </div>
-                     <div className="flex items-center gap-4">
-                        <h2 className="text-2xl font-bold text-right">{team2.name}</h2>
-                        <Image src={team2.logoUrl} alt={team2.name} width={64} height={64} className="rounded-lg" data-ai-hint="team logo" />
-                    </div>
+                     <Link href={`/teams/${team2.id}`} className="flex items-center gap-4 group">
+                        <h2 className="text-2xl font-bold text-right group-hover:text-primary transition-colors">{team2.name}</h2>
+                        <Image src={team2.logoUrl} alt={team2.name} width={64} height={64} className="rounded-lg group-hover:scale-105 transition-transform" data-ai-hint="team logo" />
+                    </Link>
                 </div>
                  <CardDescription className="text-center pt-4">
                     {tournament.name} | Финал | {new Date(tournament.startDate).toLocaleDateString('ru-RU')}
