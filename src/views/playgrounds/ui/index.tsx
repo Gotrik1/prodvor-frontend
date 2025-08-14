@@ -9,6 +9,7 @@ import { PlusCircle, Search } from "lucide-react";
 import { cn } from "@/shared/lib/utils";
 import Image from 'next/image';
 import Link from 'next/link';
+import { YandexMapV3 } from '@/widgets/yandex-map';
 
 const mainFilters = ["Все", "Футбол", "Баскетбол", "Стритбол", "Воркаут", "Универсальная", "Фитнес-зал", "Бассейн", "Теннисный корт"];
 const secondaryFilters = ["Лыжная трасса", "Биатлонный комплекс", "Каток", "Сноуборд-парк", "Горнолыжный склон", "Стрельбище"];
@@ -73,14 +74,8 @@ export function PlaygroundsPage() {
 
             <Card>
                 <CardContent className="p-2">
-                    <div className="relative w-full aspect-[16/9] rounded-lg overflow-hidden">
-                        <Image
-                            src="https://placehold.co/1200x800.png"
-                            alt="Карта города с площадками"
-                            fill
-                            className="object-cover"
-                            data-ai-hint="city map"
-                        />
+                    <div className="relative w-full h-[600px] rounded-lg overflow-hidden">
+                       <YandexMapV3 />
                     </div>
                 </CardContent>
             </Card>

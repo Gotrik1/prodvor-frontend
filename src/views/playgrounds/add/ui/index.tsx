@@ -4,6 +4,7 @@ import { Checkbox } from "@/shared/ui/checkbox";
 import { Input } from "@/shared/ui/input";
 import { Label } from "@/shared/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/select";
+import { YandexMapV3 } from "@/widgets/yandex-map";
 import { MapPin, UploadCloud } from "lucide-react";
 
 const features = [
@@ -54,8 +55,8 @@ export function AddPlaygroundPage() {
 
                         <div className="space-y-2">
                             <Label>Расположение на карте</Label>
-                            <div className="aspect-[16/9] w-full rounded-md bg-muted flex items-center justify-center">
-                                <MapPin className="h-10 w-10 text-muted-foreground" />
+                            <div className="h-[400px] w-full rounded-md overflow-hidden">
+                                <YandexMapV3 />
                             </div>
                             <Button variant="outline" className="w-full mt-2">
                                 <MapPin className="mr-2 h-4 w-4" />
