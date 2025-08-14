@@ -11,12 +11,13 @@ export interface User {
 }
 
 export const users: User[] = [
+  // Players for team "Ночные Снайперы"
   {
     id: 'user1',
     firstName: 'Иван',
     lastName: 'Петров',
     nickname: 'Terminator',
-    avatarUrl: 'https://i.pravatar.cc/150?u=a042581f4e29026024d',
+    avatarUrl: 'https://i.pravatar.cc/150?u=user1',
     email: 'terminator@example.com',
     role: 'Игрок',
   },
@@ -25,29 +26,11 @@ export const users: User[] = [
     firstName: 'Мария',
     lastName: 'Сидорова',
     nickname: 'Valkyrie',
-    avatarUrl: 'https://i.pravatar.cc/150?u=a042581f4e29026704d',
+    avatarUrl: 'https://i.pravatar.cc/150?u=user2',
     email: 'valkyrie@example.com',
     role: 'Игрок',
   },
   {
-    id: 'user3',
-    firstName: 'Алексей',
-    lastName: 'Смирнов',
-    nickname: 'Destroyer',
-    avatarUrl: 'https://i.pravatar.cc/150?u=a04258114e29026702d',
-    email: 'destroyer@example.com',
-    role: 'Игрок',
-  },
-    {
-    id: 'user4',
-    firstName: 'Елена',
-    lastName: 'Кузнецова',
-    nickname: 'Amazonka',
-    avatarUrl: 'https://i.pravatar.cc/150?u=a042581f4e29026704e',
-    email: 'amazonka@example.com',
-    role: 'Болельщик',
-    },
-    {
     id: 'user5',
     firstName: 'Петр',
     lastName: 'Волков',
@@ -74,7 +57,48 @@ export const users: User[] = [
     email: 'frost@example.com',
     role: 'Игрок',
   },
-    { 
+
+  // Players for team "Короли Асфальта"
+  {
+    id: 'user3',
+    firstName: 'Алексей',
+    lastName: 'Смирнов',
+    nickname: 'Destroyer',
+    avatarUrl: 'https://i.pravatar.cc/150?u=user3',
+    email: 'destroyer@example.com',
+    role: 'Игрок',
+  },
+  {
+    id: 'user8',
+    firstName: 'Ольга',
+    lastName: 'Иванова',
+    nickname: 'Comet',
+    avatarUrl: 'https://i.pravatar.cc/150?u=user8',
+    email: 'comet@example.com',
+    role: 'Игрок',
+  },
+
+  // Fan
+  {
+    id: 'user4',
+    firstName: 'Елена',
+    lastName: 'Кузнецова',
+    nickname: 'Amazonka',
+    avatarUrl: 'https://i.pravatar.cc/150?u=user4',
+    email: 'amazonka@example.com',
+    role: 'Болельщик',
+  },
+
+  // Other Team Captains (for mock diversity)
+  { id: 'user9', firstName: 'Артур', lastName: 'Пирожков', nickname: 'Hawk', avatarUrl: 'https://i.pravatar.cc/150?u=user9', email: 'hawk@example.com', role: 'Игрок' },
+  { id: 'user10', firstName: 'Борис', lastName: 'Бритва', nickname: 'Tiger', avatarUrl: 'https://i.pravatar.cc/150?u=user10', email: 'tiger@example.com', role: 'Игрок' },
+  { id: 'user11', firstName: 'Виктор', lastName: 'Цой', nickname: 'Crusher', avatarUrl: 'https://i.pravatar.cc/150?u=user11', email: 'crusher@example.com', role: 'Игрок' },
+  { id: 'user12', firstName: 'Галина', lastName: 'Бланка', nickname: 'Fortune', avatarUrl: 'https://i.pravatar.cc/150?u=user12', email: 'fortune@example.com', role: 'Игрок' },
+  { id: 'user13', firstName: 'Дарья', lastName: 'Донцова', nickname: 'Fury', avatarUrl: 'https://i.pravatar.cc/150?u=user13', email: 'fury@example.com', role: 'Игрок' },
+  { id: 'user14', firstName: 'Евгений', lastName: 'Онегин', nickname: 'Legion', avatarUrl: 'https://i.pravatar.cc/150?u=user14', email: 'legion@example.com', role: 'Игрок' },
+
+  // Staff users
+  { 
     id: 'staff1', 
     firstName: 'Игорь', 
     lastName: 'Вольнов', 
@@ -82,17 +106,17 @@ export const users: User[] = [
     avatarUrl: 'https://i.pravatar.cc/150?u=staff1', 
     email: 'referee1@example.com',
     role: 'Судья' 
-    },
-    { 
+  },
+  { 
     id: 'staff2', 
     firstName: 'Елена', 
     lastName: 'Павлова', 
-    nickname: 'GlavSudya',
+    nickname: 'CoachElena',
     avatarUrl: 'https://i.pravatar.cc/150?u=staff2', 
-    email: 'referee2@example.com',
+    email: 'coach1@example.com',
     role: 'Тренер' 
-    },
-    { 
+  },
+  { 
     id: 'staff3', 
     firstName: 'Федерация', 
     lastName: 'Спорта',
@@ -100,8 +124,8 @@ export const users: User[] = [
     avatarUrl: 'https://placehold.co/150x150.png',
     email: 'org1@example.com', 
     role: 'Организатор'
-    },
-    { 
+  },
+  { 
     id: 'staff4', 
     firstName: 'Александр', 
     lastName: 'Громов',
@@ -109,5 +133,14 @@ export const users: User[] = [
     avatarUrl: 'https://i.pravatar.cc/150?u=staff4', 
     email: 'manager1@example.com',
     role: 'Менеджер'
-    },
+  },
+   { 
+    id: 'staff5', 
+    firstName: 'Марина', 
+    lastName: 'Строгая',
+    nickname: 'ModeratorM', 
+    avatarUrl: 'https://i.pravatar.cc/150?u=staff5', 
+    email: 'moderator1@example.com',
+    role: 'Модератор'
+  },
 ];

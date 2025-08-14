@@ -2,6 +2,9 @@
 // when importing from @/mocks in a page file that also generates metadata.
 import type { Playground } from '@/mocks/playgrounds';
 import { playgrounds } from '@/mocks/playgrounds';
+import { teams as allMockTeams } from '@/mocks/teams';
+import { sponsors as allMockSponsors } from '@/mocks/personnel';
+import { requirements as allMockRequirements } from '@/mocks/requirements';
 
 export interface Team {
   id: string;
@@ -110,90 +113,7 @@ export const mockMyTournaments: Tournament[] = [
 
 export const allTournaments: Tournament[] = [...tournaments, ...mockMyTournaments];
 
-export const teams: Team[] = [
-  {
-    id: 'team1',
-    name: 'Ночные Снайперы',
-    logoUrl: 'https://placehold.co/100x100.png',
-    captainId: 'user1',
-    members: ['user1', 'user2'], // array of user IDs
-    game: 'Дворовый футбол',
-    rank: 1,
-  },
-  {
-    id: 'team2',
-    name: 'Короли Асфальта',
-    logoUrl: 'https://placehold.co/100x100.png',
-    captainId: 'user3',
-    members: ['user3', 'user4'],
-    game: 'Стритбол',
-    rank: 2,
-  },
-];
-
-
-export const registeredTeams: Team[] = [
-    { id: 'team1', name: 'Ночные Снайперы', logoUrl: 'https://placehold.co/100x100.png', captainId: 'user1', members: ['user1', 'user2'], game: 'Дворовый футбол', rank: 1, },
-    { id: 'team2', name: 'Короли Асфальта', logoUrl: 'https://placehold.co/100x100.png', captainId: 'user3', members: ['user3', 'user4'], game: 'Стритбол', rank: 2, },
-    { id: 'team3', name: 'Стальные Ястребы', logoUrl: 'https://placehold.co/100x100.png', captainId: 'user1', members: ['user1'], game: 'Дворовый футбол', rank: 1450 },
-    { id: 'team4', name: 'Бетонные Тигры', logoUrl: 'https://placehold.co/100x100.png', captainId: 'user2', members: ['user2'], game: 'Дворовый футбол', rank: 1550 },
-    { id: 'team5', name: 'Разрушители', logoUrl: 'https://placehold.co/100x100.png', captainId: 'user3', members: ['user3'], game: 'Дворовый футбол', rank: 1600 },
-    { id: 'team6', name: 'Фортуна', logoUrl: 'https://placehold.co/100x100.png', captainId: 'user4', members: ['user4'], game: 'Дворовый футбол', rank: 1300 },
-    { id: 'team7', name: 'Красная Фурия', logoUrl: 'https://placehold.co/100x100.png', captainId: 'user1', members: ['user1'], game: 'Дворовый футбол', rank: 1700 },
-    { id: 'team8', name: 'Легион', logoUrl: 'https://placehold.co/100x100.png', captainId: 'user2', members: ['user2'], game: 'Дворовый футбол', rank: 1650 },
-];
-
-export const staff = [
-    { id: 'staff1', name: 'Игорь Вольнов', avatarUrl: 'https://i.pravatar.cc/150?u=staff2', role: 'Судья' as const, status: 'Принято' as const },
-    { id: 'staff2', name: 'Елена Павлова', avatarUrl: 'https://i.pravatar.cc/150?u=staff1', role: 'Судья' as const, status: 'Принято' as const },
-    { id: 'staff3', name: 'Федерация Спорта', avatarUrl: 'https://placehold.co/150x150.png', role: 'Организатор' as const, status: 'Приглашен' as const },
-];
-
-export const sponsors = [
-    { id: 'sponsor1', name: 'Red Energy', logoUrl: 'https://placehold.co/100x100.png', contribution: '50 000 руб.' },
-];
-
-export const requirements = [
-    {
-        id: 'req1',
-        name: 'Минимальное количество игроков в команде',
-        description: 'Устанавливает минимальный порог для основного состава.',
-        category: 'Состав',
-    },
-    {
-        id: 'req2',
-        name: 'Максимальное количество игроков в команде',
-        description: 'Устанавливает максимальное количество игроков, включая запасных.',
-        category: 'Состав',
-    },
-     {
-        id: 'req3',
-        name: 'Минимальный возраст участника',
-        description: 'Все участники команды должны быть не младше указанного возраста.',
-        category: 'Возраст',
-    },
-    {
-        id: 'req4',
-        name: 'Максимальный возраст участника',
-        description: 'Все участники команды должны быть не старше указанного возраста.',
-        category: 'Возраст',
-    },
-     {
-        id: 'req5',
-        name: 'Минимальный командный рейтинг (ELO)',
-        description: 'Команда должна иметь рейтинг не ниже указанного значения.',
-        category: 'Рейтинг',
-    },
-    {
-        id: 'req6',
-        name: 'Максимальный командный рейтинг (ELO)',
-        description: 'Ограничение для турниров новичков, команда должна иметь рейтинг не выше указанного.',
-        category: 'Рейтинг',
-    },
-     {
-        id: 'req7',
-        name: 'Подтвержденный ProDvor ID',
-        description: 'Все участники должны иметь верифицированный аккаунт.',
-        category: 'Прочее',
-    },
-];
+export const teams: Team[] = allMockTeams;
+export const registeredTeams: Team[] = allMockTeams;
+export const sponsors = allMockSponsors;
+export const requirements = allMockRequirements;

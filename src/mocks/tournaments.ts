@@ -27,6 +27,18 @@ export interface Tournament {
       dataAiHint: 'basketball court'
     },
     {
+      id: 'tourney2',
+      name: 'Осенний марафон ProDvor',
+      game: 'Дворовый футбол',
+      status: 'ИДЕТ',
+      prizePool: '100 000 руб.',
+      participants: 8,
+      maxParticipants: 8,
+      startDate: '2025-09-01',
+      bannerUrl: 'https://placehold.co/600x400.png',
+      dataAiHint: 'soccer autumn'
+    },
+    {
         id: 'tourney3',
         name: 'Короли Коробки: Футзал',
         game: 'Футзал',
@@ -39,4 +51,3 @@ export interface Tournament {
         dataAiHint: 'soccer futsal'
     },
   ];
-  
