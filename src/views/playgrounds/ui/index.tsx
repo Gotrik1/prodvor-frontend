@@ -101,6 +101,27 @@ const NearbyPlaygrounds = () => {
     )
 }
 
+const AdBanner = () => {
+    return (
+        <Card>
+            <CardContent className="p-2">
+                <Link href="#" className="block relative w-full aspect-[2/1] rounded-md overflow-hidden group">
+                    <Image
+                        src="https://placehold.co/400x200.png"
+                        alt="Рекламный баннер"
+                        fill
+                        className="object-cover group-hover:scale-105 transition-transform"
+                        data-ai-hint="advertisement banner"
+                    />
+                    <div className="absolute top-2 right-2 bg-black/50 text-white text-xs px-2 py-1 rounded">
+                        Реклама
+                    </div>
+                </Link>
+            </CardContent>
+        </Card>
+    )
+}
+
 
 export function PlaygroundsPage() {
     const [activeFilter, setActiveFilter] = useState("Все");
@@ -163,6 +184,7 @@ export function PlaygroundsPage() {
                 <div className="lg:sticky top-24 space-y-8">
                      <FavoritePlaygrounds />
                      <NearbyPlaygrounds />
+                     <AdBanner />
                 </div>
             </div>
         </div>
