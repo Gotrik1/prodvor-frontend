@@ -25,6 +25,7 @@ import {
     AnalyticsTab,
 } from './tabs';
 import { useProtocol } from "@/widgets/protocol-editor/lib/use-protocol";
+import { ScrollArea } from "@/shared/ui/scroll-area";
 
 const crmTabs = [
     { value: "overview", icon: GanttChartIcon, label: "Обзор" },
@@ -148,14 +149,16 @@ export function TournamentManagementPage({ tournamentId }: { tournamentId: strin
     return (
         <div className="p-4 md:p-6 lg:p-8">
             <Tabs defaultValue="overview" className="w-full">
-                    <TabsList className="grid w-full grid-cols-7 md:grid-cols-13 mb-4">
-                    {crmTabs.map(tab => (
-                        <TabsTrigger key={tab.value} value={tab.value}>
-                            <tab.icon className="mr-0 md:mr-2 h-4 w-4" />
-                            <span className="hidden md:inline">{tab.label}</span>
-                        </TabsTrigger>
-                    ))}
-                </TabsList>
+                <ScrollArea className="w-full whitespace-nowrap">
+                    <TabsList className="inline-flex h-auto mb-4">
+                        {crmTabs.map(tab => (
+                            <TabsTrigger key={tab.value} value={tab.value} className="flex-shrink-0">
+                                <tab.icon className="mr-2 h-4 w-4" />
+                                <span>{tab.label}</span>
+                            </TabsTrigger>
+                        ))}
+                    </TabsList>
+                </ScrollArea>
                 <TabsContent value="overview">
                     <OverviewTab tournament={tournament} onStatusChange={(status) => handleTournamentChange({ status })} confirmedCount={confirmedTeams.length} />
                 </TabsContent>
