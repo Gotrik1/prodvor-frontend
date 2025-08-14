@@ -31,7 +31,6 @@ const generateImageFlow = ai.defineFlow(
         prompt: `Epic, 4k, cinematic, ultra-high resolution promotional background image for a sports tournament banner. Style: photorealistic, dramatic lighting, NO TEXT, no words, no letters. The image should be a visually stunning background for a wide aspect ratio banner. Description: "${prompt}"`,
         config: {
           responseModalities: ['IMAGE', 'TEXT'],
-          aspectRatio: '16:9',
         },
       });
 
