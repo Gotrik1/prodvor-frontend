@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { users, teams, sponsors, tournaments } from '@/mocks';
@@ -79,7 +80,7 @@ export function StatisticsPage() {
                                                 </TableCell>
                                                 <TableCell className="text-right">
                                                     <Button variant="outline" size="sm" asChild>
-                                                        <Link href={`/users/${user.id}`}><ExternalLink className="mr-2 h-3 w-3" />Перейти</Link>
+                                                        <Link href={`/admin/users/${user.id}`}><ExternalLink className="mr-2 h-3 w-3" />Перейти</Link>
                                                     </Button>
                                                 </TableCell>
                                             </TableRow>
@@ -191,7 +192,7 @@ export function StatisticsPage() {
                                             {sponsors.map((sponsor) => (
                                                 <TableRow key={sponsor.id}>
                                                     <TableCell className="font-medium">
-                                                         <Link href={`/sponsors/${sponsor.id}`} className="flex items-center gap-3 group">
+                                                         <Link href={`/admin/sponsors/${sponsor.id}`} className="flex items-center gap-3 group">
                                                             <Image src={sponsor.logoUrl} alt={sponsor.name} width={36} height={36} className="rounded-md" />
                                                             <span className="group-hover:text-primary transition-colors">{sponsor.name}</span>
                                                         </Link>
