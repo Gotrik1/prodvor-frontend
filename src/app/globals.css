@@ -4,13 +4,13 @@
 
 @layer base {
   :root {
-    --background: 220 40% 20%; /* Deep Space Blue */
+    --background: 228 9% 10%; /* #18191c */
     --foreground: 210 40% 98%;
 
-    --card: 224 20% 6%;
+    --card: 228 9% 10%;
     --card-foreground: 210 40% 98%;
  
-    --popover: 224 20% 6%;
+    --popover: 228 9% 10%;
     --popover-foreground: 210 40% 98%;
  
     --primary: 197 78% 52%; /* Vibrant Blue */
@@ -28,28 +28,28 @@
     --destructive: 0 63% 31%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 224 20% 6%; /* Same as background */
+    --border: 228 9% 10%; /* Same as background */
     --input: 217 33% 12%;
     --ring: 197 78% 52%;
  
     --radius: 0.5rem;
     
-    --sidebar-background: 224 20% 6%;
+    --sidebar-background: 228 9% 10%;
     --sidebar-foreground: 210 40% 98%;
     --sidebar-primary: 197 78% 52%;
     --sidebar-primary-foreground: 210 40% 98%;
     --sidebar-accent: 224 20% 10%;
     --sidebar-accent-foreground: 210 40% 98%;
-    --sidebar-border: 224 20% 6%; /* Same as background */
+    --sidebar-border: 228 9% 10%;
     --sidebar-ring: 197 78% 52%;
   }
 
   .dark {
-    --background: 220 35% 20%; /* Deep Space Blue */
+    --background: 228 9% 10%;
     --foreground: 220 35% 98%;
-    --card: 220 35% 20%;
+    --card: 228 9% 10%;
     --card-foreground: 210 40% 98%;
-    --popover: 224 20% 6%;
+    --popover: 228 9% 10%;
     --popover-foreground: 210 40% 98%;
     --primary: 197 78% 52%; /* Vibrant Blue */
     --primary-foreground: 210 40% 98%;
@@ -61,11 +61,11 @@
     --accent-foreground: 210 40% 98%;
     --destructive: 0 63% 31%;
     --destructive-foreground: 210 40% 98%;
-    --border: 220 35% 20%; /* Same as background */
+    --border: 228 9% 10%;
     --input: 220 33% 20%;
     --ring: 197 78% 52%;
     
-    --sidebar-background: 220 35% 20%;
+    --sidebar-background: 228 9% 10%;
     --sidebar-foreground: 210 40% 98%;
     --sidebar-primary: 197 78% 52%;
     --sidebar-primary-foreground: 210 40% 98%;
@@ -83,10 +83,4 @@
   body {
     @apply bg-background text-foreground;
   }
-}
-
-@layer components {
-    .card {
-        @apply shadow-2xl shadow-black/40;
-    }
 }
