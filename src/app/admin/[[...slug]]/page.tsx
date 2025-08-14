@@ -19,7 +19,7 @@ import { SponsorPageTemplate } from '@/views/admin/ui/templates/sponsor-page-tem
 import { TeamPageTemplate } from '@/views/admin/ui/templates/team-page-template';
 import UserPage from '@/app/(admin)/users/[userId]/page';
 import SponsorPage from '@/app/(admin)/sponsors/[sponsorId]/page';
-import { TemplatePreviewPage } from './templates/TemplatePreviewPage';
+import { TemplatePreviewPage } from '../templates/TemplatePreviewPage';
 
 
 export const metadata: Metadata = {
