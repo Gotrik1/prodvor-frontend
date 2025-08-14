@@ -10,7 +10,7 @@ import { Label } from '@/shared/ui/label';
 import { Trash2, PlusCircle } from 'lucide-react';
 import { useProtocol } from '../lib/use-protocol';
 import { EventType, eventTypes } from '@/widgets/match-protocol/ui/match-timeline';
-import { users } from '@/views/tournaments/public-page/ui/mock-data';
+import { users } from '@/mocks';
 import type { BracketMatch } from '@/views/tournaments/public-page/ui/mock-data';
 
 const eventLabels: Record<EventType, string> = {

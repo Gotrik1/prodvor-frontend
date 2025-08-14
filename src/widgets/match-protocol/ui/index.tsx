@@ -3,7 +3,7 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
-import { registeredTeams, users } from '@/views/tournaments/public-page/ui/mock-data';
+import { users } from '@/mocks';
 import Image from "next/image";
 import { MatchTimeline } from "./match-timeline";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
