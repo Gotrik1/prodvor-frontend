@@ -1,10 +1,9 @@
-
-import { teams, users, tournaments } from "@/mocks";
+import { teams, users, tournaments, playgrounds } from "@/mocks";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { Badge } from "@/shared/ui/badge";
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
-import { Crown, Swords, Trophy, UserPlus } from "lucide-react";
+import { Crown, Home, Swords, Trophy, UserPlus } from "lucide-react";
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -32,6 +31,7 @@ export function TeamPublicPage({ team }: { team: (typeof teams)[0] | undefined})
 
     const teamMembers = users.filter(u => team.members.includes(u.id));
     const captain = users.find(u => u.id === team.captainId);
+    const homePlayground = playgrounds.find(p => p.id === team.homePlaygroundId);
 
     return (
         <div className="p-4 md:p-6 lg:p-8">
@@ -41,6 +41,12 @@ export function TeamPublicPage({ team }: { team: (typeof teams)[0] | undefined})
                     <div className="text-center md:text-left">
                         <h1 className="text-3xl font-bold font-headline">{team.name}</h1>
                         <p className="text-muted-foreground text-lg">Дисциплина: {team.game}</p>
+                         {homePlayground && (
+                            <Link href={`/playgrounds/${homePlayground.id}`} className="text-sm text-muted-foreground hover:text-primary transition-colors flex items-center gap-2 mt-1 justify-center md:justify-start">
+                                <Home className="h-4 w-4" />
+                                <span>{homePlayground.name}</span>
+                            </Link>
+                        )}
                     </div>
                     <div className="md:ml-auto flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
                         <Button className="w-full">
