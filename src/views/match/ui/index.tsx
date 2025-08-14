@@ -1,4 +1,5 @@
 
+
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
 import { ArrowLeft } from "lucide-react";
@@ -6,6 +7,7 @@ import Link from "next/link";
 import { MatchProtocol } from "@/widgets/match-protocol";
 import { allTournaments } from '@/views/tournaments/public-page/ui/mock-data';
 import Image from "next/image";
+import { ProtocolEditor } from "@/widgets/protocol-editor";
 
 const Logo = () => (
     <Image 
@@ -53,7 +55,7 @@ export function MatchPage({ tournament, matchId }: { tournament: (typeof allTour
                 </div>
             </header>
             <main className="flex-1 p-4 md:p-6 lg:p-8">
-                <div className="max-w-7xl mx-auto">
+                <div className="max-w-7xl mx-auto space-y-8">
                     <div className="mb-6">
                         <Button asChild variant="outline">
                             <Link href={`/tournaments/${tournament.id}/hub`}>
@@ -63,6 +65,7 @@ export function MatchPage({ tournament, matchId }: { tournament: (typeof allTour
                         </Button>
                     </div>
                     <MatchProtocol tournament={tournament} matchId={matchId} />
+                    <ProtocolEditor />
                 </div>
             </main>
              <footer className="border-t border-border/40">

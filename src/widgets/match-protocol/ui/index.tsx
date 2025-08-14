@@ -1,12 +1,16 @@
 
+
+'use client';
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 import { registeredTeams, users } from '@/views/tournaments/public-page/ui/mock-data';
 import Image from "next/image";
-import { MatchTimeline, matchEvents } from "./match-timeline";
+import { MatchTimeline, matchEvents as initialMatchEvents, MatchEvent } from "./match-timeline";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { Crown } from "lucide-react";
 import Link from "next/link";
+import { useProtocol } from "@/widgets/protocol-editor/lib/use-protocol";
 
 const team1 = registeredTeams[0];
 const team2 = registeredTeams[1];
@@ -15,6 +19,7 @@ const team2Members = users.filter(u => team2.members.includes(u.id));
 
 
 export function MatchProtocol({ tournament, matchId }: { tournament: any, matchId: string }) {
+    const { events } = useProtocol();
 
     return (
         <Card>
@@ -46,7 +51,7 @@ export function MatchProtocol({ tournament, matchId }: { tournament: any, matchI
                         <TabsTrigger value="history">История</TabsTrigger>
                     </TabsList>
                     <TabsContent value="protocol" className="mt-6">
-                        <MatchTimeline events={matchEvents} />
+                        <MatchTimeline events={events} />
                         <div className="mt-12">
                             <h3 className="text-xl font-bold text-center mb-6">Составы команд</h3>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">

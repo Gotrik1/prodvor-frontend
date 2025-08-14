@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import React from 'react';
@@ -16,17 +17,17 @@ const SubstitutionIcon = () => (
   </div>
 );
 
-// --- MOCK DATA ---
-const eventTypes = {
+// --- MOCK DATA & TYPES ---
+export const eventTypes = {
   GOAL: 'goal',
   YELLOW_CARD: 'yellow_card',
   RED_CARD: 'red_card',
   SUBSTITUTION: 'substitution',
 } as const;
 
-type EventType = typeof eventTypes[keyof typeof eventTypes];
+export type EventType = typeof eventTypes[keyof typeof eventTypes];
 
-interface MatchEvent {
+export interface MatchEvent {
   id: number;
   minute: number;
   type: EventType;
@@ -44,9 +45,8 @@ export const matchEvents: MatchEvent[] = [
   { id: 4, minute: 55, type: eventTypes.SUBSTITUTION, team: 'team2', playerIn: 'Матия Шполярич', playerOut: 'Фотис Папулис' },
   { id: 5, minute: 61, type: eventTypes.SUBSTITUTION, team: 'team1', playerIn: 'Федор Кудряшов', playerOut: 'Сергей Петров' },
   { id: 6, minute: 68, type: eventTypes.YELLOW_CARD, team: 'team2', player: 'Иоаннис Коусулос' },
-  { id: 7, minute: 74, type: eventTypes.SUBSTITUTION, team: 'team1', playerIn: 'Николай Комличенко', playerOut: 'Артем Дзюба' },
-  { id: 8, minute: 79, type: eventTypes.GOAL, team: 'team1', player: 'Александр Головин' },
-  { id: 9, minute: 89, type: eventTypes.GOAL, team: 'team1', player: 'Денис Черышев' },
+  { id: 7, minute: 79, type: eventTypes.GOAL, team: 'team1', player: 'Александр Головин' },
+  { id: 8, minute: 89, type: eventTypes.GOAL, team: 'team1', player: 'Денис Черышев' },
   { id: 10, minute: 91, type: eventTypes.GOAL, team: 'team1', player: 'Денис Черышев' },
 ];
 
@@ -60,10 +60,12 @@ const eventIcons: Record<EventType, React.ComponentType> = {
 // --- COMPONENT ---
 export function MatchTimeline({ events }: { events: MatchEvent[] }) {
   const firstHalfEvents = events.filter(e => e.minute <= 45);
-  const secondHalfEvents = events.filter(e => e.minute > 45);
+  const secondHalfEvents = events.filter(e => e.minute > 45 && e.minute <= 90);
+  const extraTimeEvents = events.filter(e => e.minute > 90);
 
-  const renderEvent = (event: MatchEvent) => {
-    const position = (event.minute > 45 ? event.minute - 45 : event.minute) / 45 * 100;
+  const renderEvent = (event: MatchEvent, halfDuration: number, timeOffset: number) => {
+    const position = ((event.minute - timeOffset) / halfDuration) * 100;
+    const Icon = eventIcons[event.type];
 
     const tooltipContent = (
       <>
@@ -95,15 +97,20 @@ export function MatchTimeline({ events }: { events: MatchEvent[] }) {
 
   return (
     <div className="w-full px-4 md:px-8">
+       <div className="grid grid-cols-2 text-center text-sm text-muted-foreground mb-1">
+        <span>1-й тайм</span>
+        <span>2-й тайм</span>
+      </div>
       <div className="flex items-center justify-center w-full gap-2">
         {/* First Half */}
         <div className="relative flex-1 h-2 bg-primary/50 rounded-l-full">
-          {firstHalfEvents.map(renderEvent)}
+          {firstHalfEvents.map(e => renderEvent(e, 45, 0))}
         </div>
         <div className="w-1 h-4 bg-muted-foreground/50"></div>
         {/* Second Half */}
         <div className="relative flex-1 h-2 bg-primary/50 rounded-r-full">
-          {secondHalfEvents.map(renderEvent)}
+          {secondHalfEvents.map(e => renderEvent(e, 45, 45))}
+          {extraTimeEvents.map(e => renderEvent(e, 45, 45))}
         </div>
       </div>
     </div>
