@@ -8,7 +8,7 @@ import Link from "next/link";
 import { allTournaments, teams as allTeamsData, registeredTeams as initialRegisteredTeams } from '@/views/tournaments/public-page/ui/mock-data';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 import React, { useState, useMemo, useEffect } from "react";
-import type { Tournament } from '@/views/tournaments/public-page/ui/mock-data';
+import type { Tournament, BracketMatch } from '@/views/tournaments/public-page/ui/mock-data';
 import {
     OverviewTab,
     ParticipantsTab,
@@ -40,15 +40,37 @@ const crmTabs = [
 
 const LOCAL_STORAGE_BANNER_KEY_PREFIX = 'promo-banner-';
 
+// Function to generate a predictable bracket for demonstration
+const generatePredictableBracket = (teams: (typeof allTeamsData)): BracketMatch[][] => {
+    if (teams.length < 2) return [];
+
+    const firstRoundMatches: BracketMatch[] = [];
+    const shuffledTeams = [...teams].sort((a,b) => a.id.localeCompare(b.id)); // Sort for predictability
+
+    for (let i = 0; i < shuffledTeams.length; i += 2) {
+        if (shuffledTeams[i+1]) {
+            firstRoundMatches.push({
+                id: `rd1-match${i / 2}`,
+                team1: shuffledTeams[i],
+                team2: shuffledTeams[i + 1],
+                score1: null,
+                score2: null,
+            });
+        }
+    }
+    return [firstRoundMatches];
+};
+
+
 export function TournamentManagementPage({ tournamentId }: { tournamentId: string }) {
     const initialTournament = allTournaments.find(t => t.id === tournamentId);
     
-    const { setActiveMatch } = useProtocol();
+    const { setActiveMatch, activeMatch } = useProtocol();
     const [tournament, setTournament] = useState<Tournament | undefined>(initialTournament);
     const [teams, setTeams] = useState(allTeamsData.slice(0, 10).map((team, index) => ({
         ...team,
         date: new Date(Date.now() - index * 86400000).toLocaleDateString('ru-RU'),
-        status: index < 8 ? 'Подтверждена' : 'Ожидает'
+        status: ['Подтверждена', 'Подтверждена', 'Подтверждена', 'Подтверждена', 'Ожидает', 'Подтверждена', 'Подтверждена', 'Ожидает', 'Подтверждена', 'Подтверждена'][index]
     })));
 
     const [mediaItems, setMediaItems] = useState<any[]>([
@@ -59,6 +81,16 @@ export function TournamentManagementPage({ tournamentId }: { tournamentId: strin
     ]);
 
     const storageKey = `${LOCAL_STORAGE_BANNER_KEY_PREFIX}${tournamentId}`;
+    
+    const confirmedTeams = useMemo(() => teams.filter(t => t.status === 'Подтверждена'), [teams]);
+    const generatedBracket = useMemo(() => generatePredictableBracket(confirmedTeams), [confirmedTeams]);
+
+    useEffect(() => {
+        // Set a default match for protocol demonstration
+        if (!activeMatch && generatedBracket.length > 0 && generatedBracket[0].length > 0) {
+            setActiveMatch(generatedBracket[0][0]);
+        }
+    }, [activeMatch, generatedBracket, setActiveMatch]);
 
     useEffect(() => {
         const savedBanner = localStorage.getItem(storageKey);
@@ -71,8 +103,6 @@ export function TournamentManagementPage({ tournamentId }: { tournamentId: strin
     const handleAddMedia = (item: any) => {
         setMediaItems(prev => [item, ...prev]);
     };
-
-    const confirmedTeams = useMemo(() => teams.filter(t => t.status === 'Подтверждена'), [teams]);
 
     const handleTournamentChange = (data: Partial<Tournament>) => {
         if (tournament) {
@@ -113,7 +143,7 @@ export function TournamentManagementPage({ tournamentId }: { tournamentId: strin
 
     return (
         <div className="p-4 md:p-6 lg:p-8">
-            <Tabs defaultValue="overview" className="w-full">
+            <Tabs defaultValue="protocol" className="w-full">
                     <TabsList className="grid w-full grid-cols-6 md:grid-cols-11 mb-4">
                     {crmTabs.map(tab => (
                         <TabsTrigger key={tab.value} value={tab.value}>
@@ -129,7 +159,7 @@ export function TournamentManagementPage({ tournamentId }: { tournamentId: strin
                     <ParticipantsTab teams={teams} setTeams={setTeams} />
                 </TabsContent>
                 <TabsContent value="bracket">
-                    <BracketTab confirmedTeams={confirmedTeams} />
+                    <BracketTab confirmedTeams={confirmedTeams} generatedBracket={generatedBracket} />
                 </TabsContent>
                 <TabsContent value="schedule">
                     <ScheduleTab />

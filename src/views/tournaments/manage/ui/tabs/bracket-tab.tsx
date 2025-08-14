@@ -6,16 +6,21 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/sha
 import { GanttChartIcon, Save, FileText } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { Input } from "@/shared/ui/input";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Team, BracketMatch } from '@/views/tournaments/public-page/ui/mock-data';
 import Link from "next/link";
 import { useProtocol } from "@/widgets/protocol-editor/lib/use-protocol";
 
-export function BracketTab({ confirmedTeams }: { confirmedTeams: Team[] }) {
+export function BracketTab({ confirmedTeams, generatedBracket }: { confirmedTeams: Team[], generatedBracket: BracketMatch[][] }) {
     const { setActiveMatch, activeMatch } = useProtocol();
-    const [rounds, setRounds] = useState<BracketMatch[][]>([]);
+    const [rounds, setRounds] = useState<BracketMatch[][]>(generatedBracket);
     const [scores, setScores] = useState<Record<string, { score1: string, score2: string }>>({});
     const [error, setError] = useState<string | null>(null);
+
+    useEffect(() => {
+        setRounds(generatedBracket);
+    }, [generatedBracket]);
+
 
     const handleGenerateBracket = () => {
         setError(null);

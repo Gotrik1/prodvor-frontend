@@ -15,7 +15,7 @@ interface ProtocolState {
 }
 
 export const useProtocol = create<ProtocolState>((set) => ({
-    events: initialMatchEvents.sort((a, b) => a.minute - b.minute),
+    events: [],
     activeMatch: null,
     addEvent: (newEvent) => set((state) => ({
         events: [...state.events, { ...newEvent, id: Date.now() }].sort((a, b) => a.minute - b.minute)
@@ -23,6 +23,10 @@ export const useProtocol = create<ProtocolState>((set) => ({
     removeEvent: (eventId) => set((state) => ({
         events: state.events.filter(event => event.id !== eventId)
     })),
-    setActiveMatch: (match) => set({ activeMatch: match, events: [] }), // Reset events when a new match is selected
+    setActiveMatch: (match) => set({ 
+        activeMatch: match, 
+        // For demonstration, load mock events for the first match, otherwise start fresh
+        events: match?.id === 'rd1-match0' ? initialMatchEvents.sort((a, b) => a.minute - b.minute) : [] 
+    }),
     resetEvents: () => set({ events: [] }),
 }));
