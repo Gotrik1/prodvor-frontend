@@ -95,7 +95,6 @@ export function PromoTab({ tournament, onPromoAdd, onBannerChange }: { tournamen
     const handleSetAsBanner = () => {
         if (generatedImage) {
             onBannerChange(generatedImage);
-            localStorage.setItem(storageKey, generatedImage);
             toast({
                 title: "Баннер обновлен!",
                 description: "Новое изображение установлено как основной баннер турнира.",

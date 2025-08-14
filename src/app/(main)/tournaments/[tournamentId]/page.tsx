@@ -1,4 +1,5 @@
 
+
 import { TournamentPublicPage } from '@/views/tournaments/public-page';
 import type { Metadata } from 'next';
 import { allTournaments as mockTournaments } from '@/views/tournaments/public-page/ui/mock-data';

@@ -1,3 +1,6 @@
+
+'use client';
+
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/shared/ui/button";
@@ -7,6 +10,10 @@ import { allTournaments, sponsors } from './mock-data';
 import { Badge } from "@/shared/ui/badge";
 import { Separator } from "@/shared/ui/separator";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
+import { useState, useEffect } from 'react';
+import type { Tournament } from './mock-data';
+
+const LOCAL_STORAGE_BANNER_KEY_PREFIX = 'promo-banner-';
 
 const Logo = () => (
     <Image 
@@ -57,7 +64,19 @@ const ParticipateButton = ({ tournament }: { tournament: (typeof allTournaments)
     )
 }
 
-export function TournamentPublicPage({ tournament }: { tournament: (typeof allTournaments)[0] | undefined}) {
+export function TournamentPublicPage({ tournament: initialTournament }: { tournament: (typeof allTournaments)[0] | undefined}) {
+    const [tournament, setTournament] = useState(initialTournament);
+
+    useEffect(() => {
+        if (initialTournament) {
+            const storageKey = `${LOCAL_STORAGE_BANNER_KEY_PREFIX}${initialTournament.id}`;
+            const savedBanner = localStorage.getItem(storageKey);
+            if (savedBanner) {
+                setTournament(prev => prev ? { ...prev, bannerUrl: savedBanner } : undefined);
+            }
+        }
+    }, [initialTournament]);
+
     if (!tournament) {
         return (
             <div className="flex flex-col min-h-screen items-center justify-center">

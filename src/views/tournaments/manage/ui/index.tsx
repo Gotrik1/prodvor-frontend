@@ -7,8 +7,8 @@ import { Users, Calendar, Megaphone, Settings, GanttChartIcon, Shield, Award, Fi
 import Link from "next/link";
 import { allTournaments, registeredTeams as initialRegisteredTeams } from '@/views/tournaments/public-page/ui/mock-data';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
-import React, { useState, useMemo } from "react";
-import { Tournament } from '@/views/tournaments/public-page/ui/mock-data';
+import React, { useState, useMemo, useEffect } from "react";
+import type { Tournament } from '@/views/tournaments/public-page/ui/mock-data';
 import {
     OverviewTab,
     ParticipantsTab,
@@ -35,6 +35,8 @@ const crmTabs = [
     { value: "settings", icon: Settings, label: "Настройки" },
 ];
 
+const LOCAL_STORAGE_BANNER_KEY_PREFIX = 'promo-banner-';
+
 export function TournamentManagementPage({ tournamentId }: { tournamentId: string }) {
     const initialTournament = allTournaments.find(t => t.id === tournamentId);
     
@@ -52,6 +54,16 @@ export function TournamentManagementPage({ tournamentId }: { tournamentId: strin
         { type: 'image', src: 'https://placehold.co/600x400.png', title: 'Награждение', dataAiHint: 'award ceremony' },
     ]);
 
+    const storageKey = `${LOCAL_STORAGE_BANNER_KEY_PREFIX}${tournamentId}`;
+
+    useEffect(() => {
+        const savedBanner = localStorage.getItem(storageKey);
+        if (savedBanner && tournament) {
+            setTournament(prev => ({...prev!, bannerUrl: savedBanner}));
+        }
+    }, [storageKey, tournament]);
+
+
     const handleAddMedia = (item: any) => {
         setMediaItems(prev => [item, ...prev]);
     };
@@ -66,6 +78,7 @@ export function TournamentManagementPage({ tournamentId }: { tournamentId: strin
      const handleBannerChange = (url: string) => {
         if (tournament) {
             setTournament(prev => ({ ...prev!, bannerUrl: url }));
+            localStorage.setItem(storageKey, url);
         }
     };
 
@@ -89,7 +102,7 @@ export function TournamentManagementPage({ tournamentId }: { tournamentId: strin
 
     return (
         <div className="p-4 md:p-6 lg:p-8">
-            <Tabs defaultValue="announcements" className="w-full">
+            <Tabs defaultValue="promo" className="w-full">
                     <TabsList className="grid w-full grid-cols-5 md:grid-cols-10 mb-4">
                     {crmTabs.map(tab => (
                         <TabsTrigger key={tab.value} value={tab.value}>
