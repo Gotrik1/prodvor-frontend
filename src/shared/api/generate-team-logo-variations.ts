@@ -6,7 +6,7 @@
  */
 import { ai } from '@/shared/lib/genkit';
 import { z } from 'zod';
-import { googleAI } from 'genkit/googleai';
+import { googleAI } from '@genkit-ai/googleai';
 
 const LogoGenerationInputSchema = z.object({
   logoDescription: z.string().describe("A detailed text description for a team logo."),
