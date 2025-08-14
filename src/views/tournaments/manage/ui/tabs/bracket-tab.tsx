@@ -7,6 +7,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { Input } from "@/shared/ui/input";
 import React, { useState } from "react";
 import { Team, BracketMatch } from '@/views/tournaments/public-page/ui/mock-data';
+import Link from "next/link";
 
 export function BracketTab({ confirmedTeams }: { confirmedTeams: Team[] }) {
     const [rounds, setRounds] = useState<BracketMatch[][]>([]);
@@ -99,13 +100,17 @@ export function BracketTab({ confirmedTeams }: { confirmedTeams: Team[] }) {
     };
 
     const getRoundTitle = (index: number) => {
-        const totalTeams = rounds[0].length * 2;
+        const totalTeams = rounds.length > 0 ? rounds[0].length * 2 : 0;
+        if (totalTeams === 0) return "Сетка";
         const teamsInRound = totalTeams / Math.pow(2, index);
         if (teamsInRound === 2) return "Финал";
         if (teamsInRound === 4) return "Полуфинал";
         if (teamsInRound === 8) return "Четвертьфинал";
         return `1/${teamsInRound / 2} финала`;
     };
+    
+    // Hardcoded tournament ID for example
+    const tournamentId = 'mytourney1';
 
     return (
         <Card>
@@ -134,46 +139,48 @@ export function BracketTab({ confirmedTeams }: { confirmedTeams: Team[] }) {
                                     const isFinished = match.score1 !== null && match.score2 !== null;
                                     const winner = isFinished ? (match.score1! > match.score2! ? 'team1' : 'team2') : null;
                                     return (
-                                    <Card key={match.id} className="bg-muted/50">
-                                        <CardContent className="flex items-center justify-between p-4">
-                                            <div className={`flex items-center gap-3 w-2/5 transition-opacity ${winner && winner !== 'team1' && 'opacity-50'}`}>
-                                                {match.team1 ? (
-                                                    <>
-                                                    <Avatar>
-                                                        <AvatarImage src={match.team1.logoUrl} alt={match.team1.name} />
-                                                        <AvatarFallback>{match.team1.name.slice(0, 2)}</AvatarFallback>
-                                                    </Avatar>
-                                                    <span className="font-medium truncate">{match.team1.name}</span>
-                                                    </>
-                                                ) : <span className="text-sm text-muted-foreground">Ожидает...</span>}
-                                            </div>
+                                    <Link href={`/tournaments/${tournamentId}/match/${match.id}`} key={match.id} className="block">
+                                        <Card className="bg-muted/50 hover:border-primary/50 transition-colors">
+                                            <CardContent className="flex items-center justify-between p-4">
+                                                <div className={`flex items-center gap-3 w-2/5 transition-opacity ${winner && winner !== 'team1' && 'opacity-50'}`}>
+                                                    {match.team1 ? (
+                                                        <>
+                                                        <Avatar>
+                                                            <AvatarImage src={match.team1.logoUrl} alt={match.team1.name} />
+                                                            <AvatarFallback>{match.team1.name.slice(0, 2)}</AvatarFallback>
+                                                        </Avatar>
+                                                        <span className="font-medium truncate">{match.team1.name}</span>
+                                                        </>
+                                                    ) : <span className="text-sm text-muted-foreground">Ожидает...</span>}
+                                                </div>
 
-                                            <div className="flex items-center gap-2">
-                                                <Input type="number" className="w-12 h-8 text-center" value={scores[match.id]?.score1 ?? ''} onChange={(e) => handleScoreChange(match.id, 'team1', e.target.value)} disabled={isFinished} />
-                                                <span className="text-muted-foreground font-bold">VS</span>
-                                                <Input type="number" className="w-12 h-8 text-center" value={scores[match.id]?.score2 ?? ''} onChange={(e) => handleScoreChange(match.id, 'team2', e.target.value)} disabled={isFinished} />
-                                            </div>
+                                                <div className="flex items-center gap-2">
+                                                    <Input type="number" className="w-12 h-8 text-center" value={scores[match.id]?.score1 ?? ''} onChange={(e) => {e.preventDefault(); handleScoreChange(match.id, 'team1', e.target.value)}} disabled={isFinished} />
+                                                    <span className="text-muted-foreground font-bold">VS</span>
+                                                    <Input type="number" className="w-12 h-8 text-center" value={scores[match.id]?.score2 ?? ''} onChange={(e) => {e.preventDefault(); handleScoreChange(match.id, 'team2', e.target.value)}} disabled={isFinished} />
+                                                </div>
 
-                                            <div className={`flex items-center gap-3 w-2/5 justify-end transition-opacity ${winner && winner !== 'team2' && 'opacity-50'}`}>
-                                                 {match.team2 ? (
-                                                    <>
-                                                    <span className="font-medium truncate text-right">{match.team2.name}</span>
-                                                    <Avatar>
-                                                        <AvatarImage src={match.team2.logoUrl} alt={match.team2.name} />
-                                                        <AvatarFallback>{match.team2.name.slice(0, 2)}</AvatarFallback>
-                                                    </Avatar>
-                                                    </>
-                                                ) : <span className="text-sm text-muted-foreground">Ожидает...</span>}
-                                            </div>
-                                        </CardContent>
-                                        {!isFinished && match.team1 && match.team2 && (
-                                            <div className="px-4 pb-2 text-center">
-                                                <Button size="sm" variant="secondary" onClick={() => handleSaveResult(roundIndex, matchIndex)}>
-                                                    <Save className="mr-2 h-4 w-4"/>Сохранить результат
-                                                </Button>
-                                            </div>
-                                        )}
-                                    </Card>
+                                                <div className={`flex items-center gap-3 w-2/5 justify-end transition-opacity ${winner && winner !== 'team2' && 'opacity-50'}`}>
+                                                    {match.team2 ? (
+                                                        <>
+                                                        <span className="font-medium truncate text-right">{match.team2.name}</span>
+                                                        <Avatar>
+                                                            <AvatarImage src={match.team2.logoUrl} alt={match.team2.name} />
+                                                            <AvatarFallback>{match.team2.name.slice(0, 2)}</AvatarFallback>
+                                                        </Avatar>
+                                                        </>
+                                                    ) : <span className="text-sm text-muted-foreground">Ожидает...</span>}
+                                                </div>
+                                            </CardContent>
+                                            {!isFinished && match.team1 && match.team2 && (
+                                                <div className="px-4 pb-2 text-center">
+                                                    <Button size="sm" variant="secondary" onClick={(e) => {e.preventDefault(); handleSaveResult(roundIndex, matchIndex)}}>
+                                                        <Save className="mr-2 h-4 w-4"/>Сохранить результат
+                                                    </Button>
+                                                </div>
+                                            )}
+                                        </Card>
+                                    </Link>
                                 )})}
                             </div>
                         </div>
