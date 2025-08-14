@@ -1,3 +1,4 @@
+
 'use client';
 
 import { Button } from "@/shared/ui/button";
@@ -26,7 +27,7 @@ const mockPlaygrounds = [
 
 export function SettingsTab({ tournament, onTournamentChange }: { tournament: Tournament, onTournamentChange: (data: Partial<Tournament>) => void }) {
     const { toast } = useToast();
-    const [selectedRequirements, setSelectedRequirements] = useState<string[]>([]);
+    const [selectedRequirements, setSelectedRequirements] = useState<string[]>(['req1', 'req2', 'req3', 'req4', 'req5']);
     const [isSaving, setIsSaving] = useState(false);
     const [tournamentPlaygrounds, setTournamentPlaygrounds] = useState([mockPlaygrounds[0]]);
     
@@ -61,6 +62,8 @@ export function SettingsTab({ tournament, onTournamentChange }: { tournament: To
     const removePlayground = (playgroundId: string) => {
         setTournamentPlaygrounds(prev => prev.filter(p => p.id !== playgroundId));
     };
+
+    const needsInput = (reqId: string) => !['req7'].includes(reqId);
 
     return (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -189,15 +192,24 @@ export function SettingsTab({ tournament, onTournamentChange }: { tournament: To
                     </CardHeader>
                     <CardContent className="space-y-4">
                         {initialRequirements.map((req) => (
-                             <div key={req.id} className="flex items-center space-x-2">
-                                <Checkbox 
-                                    id={req.id} 
-                                    checked={selectedRequirements.includes(req.id)}
-                                    onCheckedChange={(checked) => handleRequirementChange(req.id, !!checked)}
-                                />
-                                <Label htmlFor={req.id} className="text-sm font-normal leading-snug">
-                                    {req.name}
-                                </Label>
+                             <div key={req.id} className="flex items-center justify-between gap-4 p-2 rounded-md hover:bg-muted/50">
+                                <div className="flex items-center space-x-2">
+                                    <Checkbox 
+                                        id={req.id} 
+                                        checked={selectedRequirements.includes(req.id)}
+                                        onCheckedChange={(checked) => handleRequirementChange(req.id, !!checked)}
+                                    />
+                                    <Label htmlFor={req.id} className="text-sm font-normal leading-snug cursor-pointer">
+                                        {req.name}
+                                    </Label>
+                                </div>
+                                {needsInput(req.id) && (
+                                     <Input 
+                                        type="number" 
+                                        className="w-20 h-8"
+                                        disabled={!selectedRequirements.includes(req.id)}
+                                     />
+                                )}
                             </div>
                         ))}
                     </CardContent>
