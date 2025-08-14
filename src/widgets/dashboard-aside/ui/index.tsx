@@ -1,29 +1,37 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
 import { Button } from "@/shared/ui/button";
-import { Flame } from "lucide-react";
+import { Bot, Lightbulb } from "lucide-react";
 
 export function DashboardAside() {
   return (
     <>
       <Card className="bg-card">
         <CardHeader>
-          <CardTitle>Центр прогнозов</CardTitle>
+          <CardTitle className="flex items-center gap-2"><Lightbulb />Голосование дня</CardTitle>
+          <CardDescription>Кто выиграет Летний Кубок ProDvor?</CardDescription>
         </CardHeader>
-        <CardContent>
-          <p className="text-muted-foreground text-sm mb-4">
-            Сделайте прогноз и сравните с мнением AI-аналитика.
-          </p>
-          <Button className="w-full mb-4">
-            <Flame className="mr-2 h-4 w-4" /> Прогноз AI
-          </Button>
-          <p className="text-center text-muted-foreground text-sm">
-            Нет предстоящих матчей для прогноза.
-          </p>
+        <CardContent className="space-y-3">
+          <Button className="w-full justify-start" variant="outline">Ночные Снайперы</Button>
+          <Button className="w-full justify-start" variant="outline">Короли Асфальта</Button>
+          <Button className="w-full justify-start" variant="outline">Стальные Ястребы</Button>
+          <div className="flex items-center gap-2 pt-2">
+            <Button className="w-full">Проголосовать</Button>
+            <Button className="w-full" variant="secondary">
+                <Bot className="mr-2 h-4 w-4" /> AI-Прогноз
+            </Button>
+          </div>
         </CardContent>
       </Card>
-      <div className="h-64 bg-card rounded-lg border">
-        {/* Placeholder for another component */}
-      </div>
+       <Card>
+        <CardHeader>
+            <CardTitle>Партнерский блок</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="h-48 bg-muted rounded-lg border flex items-center justify-center">
+            <p className="text-sm text-muted-foreground">Место для баннера</p>
+          </div>
+        </CardContent>
+       </Card>
     </>
   );
 }
