@@ -150,7 +150,7 @@ export function TournamentManagementPage({ tournamentId }: { tournamentId: strin
         <div className="p-4 md:p-6 lg:p-8">
             <Tabs defaultValue="overview" className="w-full">
                 <ScrollArea className="w-full whitespace-nowrap">
-                    <TabsList className="inline-flex h-auto mb-4">
+                    <TabsList className="h-auto mb-4">
                         {crmTabs.map(tab => (
                             <TabsTrigger key={tab.value} value={tab.value} className="flex-shrink-0">
                                 <tab.icon className="mr-2 h-4 w-4" />
