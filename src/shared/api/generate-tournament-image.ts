@@ -28,9 +28,10 @@ const generateImageFlow = ai.defineFlow(
     try {
       const { media } = await ai.generate({
         model: googleAI.model('gemini-2.0-flash-preview-image-generation'),
-        prompt: `Epic, high-resolution, 4k, cinematic promotional poster for a sports tournament. Style: hyper-realistic, dramatic lighting. Description: "${prompt}"`,
+        prompt: `Epic, 4k, cinematic, ultra-high resolution promotional background image for a sports tournament banner. Style: photorealistic, dramatic lighting, NO TEXT, no words, no letters. The image should be a visually stunning background for a wide aspect ratio banner. Description: "${prompt}"`,
         config: {
           responseModalities: ['IMAGE', 'TEXT'],
+          aspectRatio: '16:9',
         },
       });
 
