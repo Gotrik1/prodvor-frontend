@@ -1,4 +1,5 @@
 
+
 import { teams, users, playgrounds, challenges, posts } from "@/mocks";
 import type { User } from "@/mocks";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
