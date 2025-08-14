@@ -48,18 +48,6 @@ export const tournaments: Tournament[] = [
       dataAiHint: 'basketball court'
     },
     {
-      id: 'tourney2',
-      name: 'ProDvor CS2 Open',
-      game: 'Counter-Strike 2',
-      status: 'ИДЕТ' as const,
-      prizePool: 'Игровые девайсы',
-      participants: 8,
-      maxParticipants: 8,
-      startDate: '2025-06-20',
-      bannerUrl: 'https://placehold.co/600x400.png',
-      dataAiHint: 'cybersport tournament'
-    },
-    {
         id: 'tourney3',
         name: 'Короли Коробки: Футзал',
         game: 'Футзал',
@@ -85,18 +73,6 @@ export const mockMyTournaments: Tournament[] = [
       startDate: '2025-08-01',
       bannerUrl: 'https://placehold.co/1200x300.png',
       dataAiHint: 'soccer street'
-    },
-    {
-      id: 'mytourney2',
-      name: 'Осенний марафон по Dota 2',
-      game: 'Dota 2',
-      status: 'РЕГИСТРАЦИЯ' as const,
-      prizePool: 'Эксклюзивные скины',
-      participants: 4,
-      maxParticipants: 8,
-      startDate: '2025-09-10',
-      bannerUrl: 'https://placehold.co/1200x300.png',
-      dataAiHint: 'esports dota'
     },
 ];
 
@@ -143,7 +119,6 @@ export const staff = [
 
 export const sponsors = [
     { id: 'sponsor1', name: 'Red Energy', logoUrl: 'https://placehold.co/100x100.png', contribution: '50 000 руб.' },
-    { id: 'sponsor2', name: 'GigaGaming Gear', logoUrl: 'https://placehold.co/100x100.png', contribution: 'Игровые девайсы' },
 ];
 
 export const requirements = [

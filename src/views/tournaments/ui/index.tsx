@@ -29,15 +29,15 @@ const allTournaments = [
     ...tournaments,
      {
       id: 'tourney4',
-      name: 'Зимний спринт',
-      game: 'CS2',
+      name: 'Зимний спринт по футболу',
+      game: 'Дворовый футбол',
       status: 'АНОНС' as TournamentStatus,
       prizePool: '15 000 руб.',
       participants: 0,
       maxParticipants: 16,
       startDate: '2025-12-01',
       bannerUrl: 'https://placehold.co/600x400.png',
-      dataAiHint: 'cybersport cs2'
+      dataAiHint: 'winter soccer'
     },
      {
       id: 'tourney5',

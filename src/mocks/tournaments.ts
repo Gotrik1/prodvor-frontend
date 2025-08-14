@@ -27,18 +27,6 @@ export interface Tournament {
       dataAiHint: 'basketball court'
     },
     {
-      id: 'tourney2',
-      name: 'ProDvor CS2 Open',
-      game: 'Counter-Strike 2',
-      status: 'ИДЕТ',
-      prizePool: 'Игровые девайсы',
-      participants: 32,
-      maxParticipants: 32,
-      startDate: '2025-06-20',
-      bannerUrl: 'https://placehold.co/600x400.png',
-      dataAiHint: 'cybersport tournament'
-    },
-    {
         id: 'tourney3',
         name: 'Короли Коробки: Футзал',
         game: 'Футзал',
