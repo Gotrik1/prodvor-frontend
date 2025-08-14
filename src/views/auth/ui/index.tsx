@@ -128,10 +128,7 @@ export function AuthPage() {
             </div>
             <CardTitle className="text-2xl font-bold">Вход в ProDvor ID</CardTitle>
             <CardDescription>
-                Нет аккаунта?{" "}
-                <Link href="/auth/register" className="text-primary hover:underline">
-                    Зарегистрироваться
-                </Link>
+                Войдите в свой аккаунт, чтобы продолжить.
             </CardDescription>
         </CardHeader>
         <CardContent>
@@ -202,6 +199,19 @@ export function AuthPage() {
                         <GosuslugiIcon className="w-24 h-auto" />
                     </SocialButton>
                 </div>
+
+                <div className="relative mt-6">
+                    <div className="absolute inset-0 flex items-center">
+                        <span className="w-full border-t" />
+                    </div>
+                    <div className="relative flex justify-center text-xs uppercase">
+                        <span className="bg-card px-2 text-muted-foreground">Нет аккаунта?</span>
+                    </div>
+                </div>
+
+                <Button variant="secondary" className="w-full" asChild>
+                  <Link href="/auth/register">Зарегистрироваться</Link>
+                </Button>
 
                 <Button variant="outline" className="w-full" asChild>
                   <Link href="/">Вернуться на главную</Link>
