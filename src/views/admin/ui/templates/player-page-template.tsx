@@ -3,11 +3,27 @@ import type { User } from "@/mocks/users";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { Badge } from "@/shared/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
-import { BarChart, Shield, Star, Swords, Trophy } from "lucide-react";
+import { BarChart, Shield, Star, Swords, Trophy, History } from "lucide-react";
 import Image from 'next/image';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/shared/ui/table";
 
 const defaultPlayer = users.find(u => u.role === 'Игрок')!;
 const playerTeam = teams.find(t => t.members.includes(defaultPlayer.id));
+
+const careerStats = {
+    '2025': { matches: 52, wins: 38, goals: 41, assists: 15, mvp: 12 },
+    '2024': { matches: 68, wins: 41, goals: 35, assists: 22, mvp: 18 },
+    'total': { matches: 120, wins: 79, goals: 76, assists: 37, mvp: 30 },
+};
+
+const StatRow = ({ label, value }: { label: string, value: string | number }) => (
+    <div className="flex justify-between items-center py-2 border-b border-border/50">
+        <span className="text-muted-foreground">{label}</span>
+        <span className="font-bold">{value}</span>
+    </div>
+);
+
 
 export function PlayerPageTemplate({ user }: { user?: User }) {
     const player = user || defaultPlayer;
@@ -78,15 +94,39 @@ export function PlayerPageTemplate({ user }: { user?: User }) {
                  <Card>
                     <CardHeader>
                         <CardTitle className="flex items-center gap-2">
-                            <BarChart className="h-5 w-5" />
-                            Статистика
+                            <History className="h-5 w-5" />
+                            Карьерная статистика
                         </CardTitle>
                     </CardHeader>
                     <CardContent>
-                       <p className="text-muted-foreground">Здесь будет график с подробной статистикой игрока.</p>
-                       <div className="h-48 bg-muted/50 mt-4 rounded-md flex items-center justify-center">
-                            Chart Placeholder
-                       </div>
+                        <Tabs defaultValue="2025">
+                            <TabsList className="grid w-full grid-cols-3">
+                                <TabsTrigger value="2025">Сезон 2025</TabsTrigger>
+                                <TabsTrigger value="2024">Сезон 2024</TabsTrigger>
+                                <TabsTrigger value="total">Всего</TabsTrigger>
+                            </TabsList>
+                            <TabsContent value="2025" className="mt-4">
+                               <StatRow label="Матчи" value={careerStats['2025'].matches} />
+                               <StatRow label="Победы" value={`${careerStats['2025'].wins} (${Math.round(careerStats['2025'].wins / careerStats['2025'].matches * 100)}%)`} />
+                               <StatRow label="Голы" value={careerStats['2025'].goals} />
+                               <StatRow label="Ассисты" value={careerStats['2025'].assists} />
+                               <StatRow label="MVP" value={careerStats['2025'].mvp} />
+                            </TabsContent>
+                             <TabsContent value="2024" className="mt-4">
+                               <StatRow label="Матчи" value={careerStats['2024'].matches} />
+                               <StatRow label="Победы" value={`${careerStats['2024'].wins} (${Math.round(careerStats['2024'].wins / careerStats['2024'].matches * 100)}%)`} />
+                               <StatRow label="Голы" value={careerStats['2024'].goals} />
+                               <StatRow label="Ассисты" value={careerStats['2024'].assists} />
+                               <StatRow label="MVP" value={careerStats['2024'].mvp} />
+                            </TabsContent>
+                             <TabsContent value="total" className="mt-4">
+                               <StatRow label="Матчи" value={careerStats['total'].matches} />
+                               <StatRow label="Победы" value={`${careerStats['total'].wins} (${Math.round(careerStats['total'].wins / careerStats['total'].matches * 100)}%)`} />
+                               <StatRow label="Голы" value={careerStats['total'].goals} />
+                               <StatRow label="Ассисты" value={careerStats['total'].assists} />
+                               <StatRow label="MVP" value={careerStats['total'].mvp} />
+                            </TabsContent>
+                        </Tabs>
                     </CardContent>
                 </Card>
                 <Card>

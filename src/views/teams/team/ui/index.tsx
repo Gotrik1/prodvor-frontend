@@ -4,7 +4,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { Badge } from "@/shared/ui/badge";
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
-import { Crown, Home, Swords, Trophy, UserPlus, Check, X, TrendingUp, TrendingDown, Minus, Rss, Film, Star, Shield } from "lucide-react";
+import { Crown, Home, Swords, Trophy, UserPlus, Check, X, TrendingUp, TrendingDown, Minus, Rss, Film, Star, Shield, History } from "lucide-react";
 import Image from 'next/image';
 import Link from 'next/link';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
@@ -121,6 +121,18 @@ const StatCard = ({ title, value, icon: Icon }: { title: string, value: string, 
     </Card>
 );
 
+const careerStats = {
+    '2025': { rank: '3-е', elo: 1520, wins: 45, losses: 12 },
+    '2024': { rank: '8-е', elo: 1410, wins: 38, losses: 21 },
+};
+
+const StatRow = ({ label, value }: { label: string, value: string | number }) => (
+    <div className="flex justify-between items-center py-2 border-b border-border/50">
+        <span className="text-muted-foreground">{label}</span>
+        <span className="font-bold">{value}</span>
+    </div>
+);
+
 export function TeamPublicPage({ team }: { team: (typeof teams)[0] | undefined}) {
 
     if (!team) {
@@ -183,11 +195,12 @@ export function TeamPublicPage({ team }: { team: (typeof teams)[0] | undefined})
                 </header>
 
                 <Tabs defaultValue="overview" className="w-full">
-                    <TabsList className="grid w-full grid-cols-3 md:grid-cols-6">
+                    <TabsList className="grid w-full grid-cols-4 md:grid-cols-7">
                         <TabsTrigger value="overview">Обзор</TabsTrigger>
                         <TabsTrigger value="roster">Состав</TabsTrigger>
                         <TabsTrigger value="matches">Матчи</TabsTrigger>
                         <TabsTrigger value="challenges">Вызовы</TabsTrigger>
+                        <TabsTrigger value="stats"><History className="md:mr-2 h-4 w-4" /><span className="hidden md:inline">Статистика</span></TabsTrigger>
                         <TabsTrigger value="feed"><Rss className="md:mr-2 h-4 w-4" /><span className="hidden md:inline">Лента</span></TabsTrigger>
                         <TabsTrigger value="media"><Film className="md:mr-2 h-4 w-4" /><span className="hidden md:inline">Медиа</span></TabsTrigger>
                     </TabsList>
@@ -268,6 +281,32 @@ export function TeamPublicPage({ team }: { team: (typeof teams)[0] | undefined})
                             </CardHeader>
                             <CardContent>
                                 <TeamChallenges teamId={team.id} />
+                            </CardContent>
+                        </Card>
+                    </TabsContent>
+                    <TabsContent value="stats" className="mt-6">
+                        <Card>
+                            <CardHeader>
+                                <CardTitle>Статистика по сезонам</CardTitle>
+                                <CardDescription>История выступлений команды в различных сезонах.</CardDescription>
+                            </CardHeader>
+                            <CardContent>
+                                <Tabs defaultValue="2025" className="w-full" orientation="vertical">
+                                    <TabsList>
+                                        <TabsTrigger value="2025">Сезон 2025</TabsTrigger>
+                                        <TabsTrigger value="2024">Сезон 2024</TabsTrigger>
+                                    </TabsList>
+                                    <TabsContent value="2025" className="pl-4">
+                                        <StatRow label="Место в лиге" value={careerStats['2025'].rank} />
+                                        <StatRow label="ELO на конец сезона" value={careerStats['2025'].elo} />
+                                        <StatRow label="Побед / Поражений" value={`${careerStats['2025'].wins} / ${careerStats['2025'].losses}`} />
+                                    </TabsContent>
+                                    <TabsContent value="2024" className="pl-4">
+                                        <StatRow label="Место в лиге" value={careerStats['2024'].rank} />
+                                        <StatRow label="ELO на конец сезона" value={careerStats['2024'].elo} />
+                                        <StatRow label="Побед / Поражений" value={`${careerStats['2024'].wins} / ${careerStats['2024'].losses}`} />
+                                    </TabsContent>
+                                </Tabs>
                             </CardContent>
                         </Card>
                     </TabsContent>
