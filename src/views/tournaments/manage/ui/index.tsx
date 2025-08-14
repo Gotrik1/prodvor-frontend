@@ -3,7 +3,7 @@
 
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
-import { Users, Calendar, Megaphone, Settings, GanttChartIcon, Shield, Award, Film, Wand2, FileText } from "lucide-react";
+import { Users, Calendar, Megaphone, Settings, GanttChartIcon, Shield, Award, Film, Wand2, FileText, DollarSign } from "lucide-react";
 import Link from "next/link";
 import { allTournaments, teams as allTeamsData, registeredTeams as initialRegisteredTeams } from '@/views/tournaments/public-page/ui/mock-data';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
@@ -21,6 +21,7 @@ import {
     AnnouncementsTab,
     SettingsTab,
     ProtocolTab,
+    FinancesTab,
 } from './tabs';
 import { useProtocol } from "@/widgets/protocol-editor/lib/use-protocol";
 
@@ -33,6 +34,7 @@ const crmTabs = [
     { value: "media", icon: Film, label: "Медиа" },
     { value: "promo", icon: Wand2, label: "Промо" },
     { value: "staff", icon: Shield, label: "Персонал" },
+    { value: "finances", icon: DollarSign, label: "Финансы" },
     { value: "sponsors", icon: Award, label: "Спонсоры" },
     { value: "announcements", icon: Megaphone, label: "Анонсы" },
     { value: "settings", icon: Settings, label: "Настройки" },
@@ -67,11 +69,11 @@ export function TournamentManagementPage({ tournamentId }: { tournamentId: strin
     
     const { setActiveMatch, activeMatch } = useProtocol();
     const [tournament, setTournament] = useState<Tournament | undefined>(initialTournament);
-    const [teams, setTeams] = useState(allTeamsData.slice(0, 10).map((team, index) => ({
+    const [teams, setTeams] = useState(initialRegisteredTeams.map((team) => ({
         ...team,
-        date: new Date(Date.now() - index * 86400000).toLocaleDateString('ru-RU'),
-        status: ['Подтверждена', 'Подтверждена', 'Подтверждена', 'Подтверждена', 'Ожидает', 'Подтверждена', 'Подтверждена', 'Ожидает', 'Подтверждена', 'Подтверждена'][index]
+        status: ['Подтверждена', 'Подтверждена', 'Ожидает', 'Подтверждена', 'Ожидает', 'Отклонена', 'Подтверждена', 'Подтверждена', 'Ожидает', 'Подтверждена'][team.id.charCodeAt(team.id.length - 1) % 10]
     })));
+
 
     const [mediaItems, setMediaItems] = useState<any[]>([
         { type: 'image', src: 'https://placehold.co/600x400.png', title: 'Фото с открытия', dataAiHint: 'tournament opening' },
@@ -143,8 +145,8 @@ export function TournamentManagementPage({ tournamentId }: { tournamentId: strin
 
     return (
         <div className="p-4 md:p-6 lg:p-8">
-            <Tabs defaultValue="protocol" className="w-full">
-                    <TabsList className="grid w-full grid-cols-6 md:grid-cols-11 mb-4">
+            <Tabs defaultValue="overview" className="w-full">
+                    <TabsList className="grid w-full grid-cols-6 md:grid-cols-12 mb-4">
                     {crmTabs.map(tab => (
                         <TabsTrigger key={tab.value} value={tab.value}>
                             <tab.icon className="mr-0 md:mr-2 h-4 w-4" />
@@ -175,6 +177,9 @@ export function TournamentManagementPage({ tournamentId }: { tournamentId: strin
                 </TabsContent>
                 <TabsContent value="staff">
                     <StaffTab />
+                </TabsContent>
+                <TabsContent value="finances">
+                    <FinancesTab teams={confirmedTeams} />
                 </TabsContent>
                 <TabsContent value="sponsors">
                     <SponsorsTab />

@@ -9,3 +9,4 @@ export * from './sponsors-tab';
 export * from './announcements-tab';
 export * from './settings-tab';
 export * from './protocol-tab';
+export * from './finances-tab';
