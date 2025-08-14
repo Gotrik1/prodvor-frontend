@@ -7,6 +7,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { Calendar, MapPin } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { allTournaments } from './mock-data';
+import type { Playground } from '@/mocks';
+import Link from 'next/link';
 
 interface Match {
     id: string;
@@ -14,7 +16,7 @@ interface Match {
     team2: (typeof registeredTeams)[0];
     date: string;
     time: string;
-    venue: string;
+    venue: Playground;
 }
 
 export function TournamentSchedule({ tournamentId }: { tournamentId: string }) {
@@ -28,7 +30,7 @@ export function TournamentSchedule({ tournamentId }: { tournamentId: string }) {
         const generateSchedule = () => {
             const matches: Match[] = [];
             const teamsCopy = [...registeredTeams]; 
-            const venues = tournament.playgrounds.map(p => p.name);
+            const venues = tournament.playgrounds;
             let date = new Date(tournament.startDate);
 
             for (let i = 0; i < teamsCopy.length; i += 2) {
@@ -40,7 +42,7 @@ export function TournamentSchedule({ tournamentId }: { tournamentId: string }) {
                         team2: teamsCopy[i + 1],
                         date: date.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long' }),
                         time: `${18 + Math.floor(i/4)}:00`,
-                        venue: venues.length > 0 ? venues[i/2 % venues.length] : "Площадка не назначена"
+                        venue: venues.length > 0 ? venues[i/2 % venues.length] : { id: 'unknown', name: "Площадка не назначена", address: '', type: 'Открытая площадка', surface: 'Асфальт', imageUrl: '', dataAiHint: '' }
                     });
                 }
             }
@@ -82,7 +84,10 @@ export function TournamentSchedule({ tournamentId }: { tournamentId: string }) {
                                 </div>
                                 <div className="flex-1 text-center border-y sm:border-y-0 sm:border-x py-2 sm:py-0 px-4">
                                     <p className="font-semibold">{match.date}, {match.time}</p>
-                                    <p className="text-xs text-muted-foreground flex items-center justify-center gap-1"><MapPin className="h-3 w-3" /> {match.venue}</p>
+                                    <Link href={`/playgrounds/${match.venue.id}`} className="text-xs text-muted-foreground flex items-center justify-center gap-1 hover:text-primary transition-colors">
+                                        <MapPin className="h-3 w-3" /> 
+                                        {match.venue.name}
+                                    </Link>
                                 </div>
                             </CardContent>
                         </Card>
