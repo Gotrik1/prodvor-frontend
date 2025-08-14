@@ -1,16 +1,20 @@
 
 
+'use client';
+
+import { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
 import { Button } from "@/shared/ui/button";
 import { Check, X, Send, Users, Trophy } from "lucide-react";
 import Image from "next/image";
 import { challenges, TeamChallenge } from '@/mocks/challenges';
-import { teams, users } from '@/mocks';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/select";
+import { teams, users, sportCategories } from '@/mocks';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, SelectGroup, SelectLabel } from "@/shared/ui/select";
 import { Input } from "@/shared/ui/input";
 import { Label } from "@/shared/ui/label";
 import { Separator } from "@/shared/ui/separator";
 import { Checkbox } from "@/shared/ui/checkbox";
+import { Slider } from '@/shared/ui/slider';
 
 const ChallengeCard = ({ challenge, type }: { challenge: TeamChallenge, type: 'incoming' | 'outgoing' }) => {
     const opponent = type === 'incoming' ? challenge.challenger : challenge.challenged;
@@ -78,6 +82,8 @@ export function ChallengesPage() {
     const incomingChallenges = challenges.filter(c => c.status === 'pending');
     const outgoingChallenges = challenges.filter(c => c.status === 'pending'); // Using same for demo
     const referees = users.filter(u => u.role === 'Судья');
+    const [ageRange, setAgeRange] = useState([16, 99]);
+    const [eloRange, setEloRange] = useState([800, 2500]);
 
     return (
         <div className="p-4 md:p-6 lg:p-8 space-y-8">
@@ -136,8 +142,37 @@ export function ChallengesPage() {
                                         <SelectContent>
                                             <SelectItem value="4">4 команды</SelectItem>
                                             <SelectItem value="8">8 команд</SelectItem>
+                                            <SelectItem value="16">16 команд</SelectItem>
                                         </SelectContent>
                                     </Select>
+                                </div>
+                            </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="discipline">Дисциплина</Label>
+                                <Select>
+                                    <SelectTrigger id="discipline"><SelectValue placeholder="Выберите дисциплину" /></SelectTrigger>
+                                    <SelectContent>
+                                        {sportCategories.map((category) => (
+                                            <SelectGroup key={category.name}>
+                                                <SelectLabel>{category.name}</SelectLabel>
+                                                {category.sports.map((sport) => (
+                                                    <SelectItem key={sport.name} value={sport.name.toLowerCase().replace(/\s/g, '-')}>
+                                                        {sport.name}
+                                                    </SelectItem>
+                                                ))}
+                                            </SelectGroup>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                            </div>
+                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                 <div className="space-y-2">
+                                    <Label>Возраст: от {ageRange[0]} до {ageRange[1]}</Label>
+                                    <Slider value={ageRange} onValueChange={setAgeRange} min={12} max={99} step={1} />
+                                </div>
+                                <div className="space-y-2">
+                                    <Label>Рейтинг ELO: от {eloRange[0]} до {eloRange[1]}</Label>
+                                    <Slider value={eloRange} onValueChange={setEloRange} min={500} max={3000} step={50} />
                                 </div>
                             </div>
                             <div className="space-y-2">
@@ -152,13 +187,13 @@ export function ChallengesPage() {
                                     </SelectContent>
                                 </Select>
                             </div>
-                             <div className="flex items-center space-x-2">
+                             <div className="flex items-center space-x-2 pt-2">
                                 <Checkbox id="publish-feed" />
                                 <Label htmlFor="publish-feed" className="text-sm font-normal">
                                     Опубликовать в ленте города
                                 </Label>
                             </div>
-                            <Button className="w-full">
+                            <Button className="w-full !mt-6">
                                 <Trophy className="mr-2 h-4 w-4" /> Создать
                             </Button>
                         </form>
@@ -169,9 +204,15 @@ export function ChallengesPage() {
             <Separator />
             
             <div>
-                 <h2 className="text-2xl font-bold mb-4">Активные события</h2>
+                 <h2 className="text-2xl font-bold mb-4">Быстрые турниры</h2>
                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                     <section>
+                        <div className="space-y-4">
+                            <QuickTournamentCard />
+                            <QuickTournamentCard />
+                        </div>
+                    </section>
+                     <section>
                         <h3 className="text-xl font-semibold mb-4">Входящие вызовы ({incomingChallenges.length})</h3>
                         <div className="space-y-4">
                             {incomingChallenges.length > 0 ? (
@@ -181,13 +222,6 @@ export function ChallengesPage() {
                             ) : (
                                 <p className="text-muted-foreground">У вас нет активных вызовов.</p>
                             )}
-                        </div>
-                    </section>
-                    <section>
-                        <h3 className="text-xl font-semibold mb-4">Быстрые турниры</h3>
-                        <div className="space-y-4">
-                            <QuickTournamentCard />
-                             <QuickTournamentCard />
                         </div>
                     </section>
                 </div>
