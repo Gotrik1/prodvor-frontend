@@ -6,20 +6,9 @@ import { AdvertisingPage } from '@/views/admin/advertising';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Button } from '@/shared/ui/button';
 import Link from 'next/link';
-
-// --- Template Imports ---
-import { CoachPageTemplate } from '@/views/admin/ui/templates/coach-page-template';
-import { FanPageTemplate } from '@/views/admin/ui/templates/fan-page-template';
-import { ManagerPageTemplate } from '@/views/admin/ui/templates/manager-page-template';
-import { PlaceholderTemplate } from '@/views/admin/ui/templates/placeholder-template';
-import { OrganizerPageTemplate } from '@/views/admin/ui/templates/organizer-page-template';
-import { PlayerPageTemplate } from '@/views/admin/ui/templates/player-page-template';
-import { RefereePageTemplate } from '@/views/admin/ui/templates/referee-page-template';
-import { SponsorPageTemplate } from '@/views/admin/ui/templates/sponsor-page-template';
-import { TeamPageTemplate } from '@/views/admin/ui/templates/team-page-template';
-import { UserPage } from '@/app/admin/users/[userId]/page';
-import { SponsorPage } from '@/app/admin/sponsors/[sponsorId]/page';
-import { TemplatePreviewPage } from '../templates/TemplatePreviewPage';
+import { UserPage } from '@/views/admin/pages/users';
+import { SponsorPage } from '@/views/admin/pages/sponsors';
+import { TemplatePreviewPage, templateMap } from '@/views/admin/pages/templates';
 
 
 export const metadata: Metadata = {
@@ -47,17 +36,6 @@ function NotFoundAdminPage() {
     );
 }
 
-const templateMap = {
-    coach: CoachPageTemplate,
-    fan: FanPageTemplate,
-    manager: ManagerPageTemplate,
-    moderator: () => <PlaceholderTemplate roleName="Модератор" />,
-    organizer: OrganizerPageTemplate,
-    player: PlayerPageTemplate,
-    referee: RefereePageTemplate,
-    sponsor: SponsorPageTemplate,
-    team: TeamPageTemplate,
-};
 
 export default function AdminPage({ params }: { params: { slug: string[] } }) {
   const { slug } = params;
@@ -73,9 +51,9 @@ export default function AdminPage({ params }: { params: { slug: string[] } }) {
       case 'advertising':
         return <AdvertisingPage />;
       case 'users':
-        return <UserPage params={{ userId: subpage }} />;
+        return <UserPage userId={subpage} />;
       case 'sponsors':
-        return <SponsorPage params={{ sponsorId: subpage }} />;
+        return <SponsorPage sponsorId={subpage} />;
       case 'templates':
         if (!subpage) return <NotFoundAdminPage />;
         const TemplateComponent = templateMap[subpage as keyof typeof templateMap];
