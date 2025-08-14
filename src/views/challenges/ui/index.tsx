@@ -1,4 +1,5 @@
 
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
 import { Button } from "@/shared/ui/button";
 import { Check, X, Send, Users, Trophy } from "lucide-react";
@@ -9,6 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Input } from "@/shared/ui/input";
 import { Label } from "@/shared/ui/label";
 import { Separator } from "@/shared/ui/separator";
+import { Checkbox } from "@/shared/ui/checkbox";
 
 const ChallengeCard = ({ challenge, type }: { challenge: TeamChallenge, type: 'incoming' | 'outgoing' }) => {
     const opponent = type === 'incoming' ? challenge.challenger : challenge.challenged;
@@ -121,22 +123,24 @@ export function ChallengesPage() {
                         <CardDescription>Создайте мини-турнир для нескольких команд.</CardDescription>
                     </CardHeader>
                     <CardContent>
-                        <form className="grid grid-cols-1 md:grid-cols-2 gap-4 items-end">
-                            <div className="space-y-2">
-                                <Label htmlFor="quick-tourney-name">Название</Label>
-                                <Input id="quick-tourney-name" placeholder="Напр., Кубок нашего двора" />
+                        <form className="space-y-4">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div className="space-y-2">
+                                    <Label htmlFor="quick-tourney-name">Название</Label>
+                                    <Input id="quick-tourney-name" placeholder="Напр., Кубок нашего двора" />
+                                </div>
+                                <div className="space-y-2">
+                                    <Label htmlFor="quick-tourney-teams">Команды</Label>
+                                    <Select>
+                                        <SelectTrigger id="quick-tourney-teams"><SelectValue placeholder="Кол-во" /></SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="4">4 команды</SelectItem>
+                                            <SelectItem value="8">8 команд</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                </div>
                             </div>
                             <div className="space-y-2">
-                                <Label htmlFor="quick-tourney-teams">Команды</Label>
-                                <Select>
-                                    <SelectTrigger id="quick-tourney-teams"><SelectValue placeholder="Кол-во" /></SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem value="4">4 команды</SelectItem>
-                                        <SelectItem value="8">8 команд</SelectItem>
-                                    </SelectContent>
-                                </Select>
-                            </div>
-                             <div className="space-y-2">
                                 <Label htmlFor="quick-tourney-referee">Судья (необязательно)</Label>
                                 <Select>
                                     <SelectTrigger id="quick-tourney-referee"><SelectValue placeholder="Не назначен" /></SelectTrigger>
@@ -147,6 +151,12 @@ export function ChallengesPage() {
                                         ))}
                                     </SelectContent>
                                 </Select>
+                            </div>
+                             <div className="flex items-center space-x-2">
+                                <Checkbox id="publish-feed" />
+                                <Label htmlFor="publish-feed" className="text-sm font-normal">
+                                    Опубликовать в ленте города
+                                </Label>
                             </div>
                             <Button className="w-full">
                                 <Trophy className="mr-2 h-4 w-4" /> Создать
