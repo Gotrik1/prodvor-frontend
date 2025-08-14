@@ -1,10 +1,11 @@
 
+
 import { playgrounds } from "@/mocks";
 import type { Playground } from "@/mocks";
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
 import { YandexMapV3 } from "@/widgets/yandex-map";
-import { ArrowLeft, CheckCircle, MapPin } from "lucide-react";
+import { ArrowLeft, CheckCircle, MapPin, Star } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { Badge } from "@/shared/ui/badge";
@@ -41,12 +42,16 @@ export function PlaygroundPage({ playground }: { playground: Playground | undefi
     return (
         <div className="p-4 md:p-6 lg:p-8">
             <div className="max-w-5xl mx-auto">
-                <div className="mb-6">
+                <div className="mb-6 flex justify-between items-center">
                     <Button asChild variant="outline">
                         <Link href="/playgrounds">
                             <ArrowLeft className="mr-2 h-4 w-4" />
                             Назад ко всем площадкам
                         </Link>
+                    </Button>
+                    <Button variant="outline">
+                        <Star className="mr-2 h-4 w-4" />
+                        Добавить в избранное
                     </Button>
                 </div>
 
