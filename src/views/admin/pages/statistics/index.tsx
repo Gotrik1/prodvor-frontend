@@ -2,13 +2,13 @@
 
 'use client';
 
-import { users, teams, sponsors, tournaments } from '@/mocks';
+import { users, teams, sponsors, tournaments, playgrounds } from '@/mocks';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import { Badge } from '@/shared/ui/badge';
 import { Button } from '@/shared/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/shared/ui/table';
-import { Copy, ExternalLink } from 'lucide-react';
+import { Copy, ExternalLink, MapPin } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Progress } from '@/shared/ui/progress';
@@ -124,6 +124,41 @@ export function AdminStatisticsPage() {
                     </CardContent>
                 </Card>
 
+                <Card>
+                    <CardHeader>
+                        <CardTitle>Площадки ({playgrounds.length})</CardTitle>
+                        <CardDescription>Список всех добавленных спортивных объектов.</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <div className="border rounded-lg">
+                            <Table>
+                                <TableHeader>
+                                    <TableRow>
+                                        <TableHead>Название</TableHead>
+                                        <TableHead>Адрес</TableHead>
+                                        <TableHead>Тип</TableHead>
+                                        <TableHead>ID</TableHead>
+                                    </TableRow>
+                                </TableHeader>
+                                <TableBody>
+                                    {playgrounds.map((playground) => (
+                                        <TableRow key={playground.id}>
+                                            <TableCell className="font-medium">{playground.name}</TableCell>
+                                            <TableCell>{playground.address}</TableCell>
+                                            <TableCell><Badge variant="outline">{playground.type}</Badge></TableCell>
+                                            <TableCell>
+                                                <div className="flex items-center gap-2 font-mono text-xs">
+                                                    <span>{playground.id}</span>
+                                                </div>
+                                            </TableCell>
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </div>
+                    </CardContent>
+                </Card>
+
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                     <Card>
                         <CardHeader>
@@ -144,7 +179,7 @@ export function AdminStatisticsPage() {
                                             <TableRow key={team.id}>
                                                 <TableCell className="font-medium">
                                                     <Link href={`/teams/${team.id}`} className="flex items-center gap-3 group">
-                                                        <Image src={team.logoUrl} alt={team.name} width={36} height={36} className="rounded-md" />
+                                                        <Image src={team.logoUrl} alt={team.name} width={36} height={36} className="rounded-md" data-ai-hint="team logo" />
                                                         <span className="group-hover:text-primary transition-colors">{team.name}</span>
                                                     </Link>
                                                 </TableCell>
@@ -180,7 +215,7 @@ export function AdminStatisticsPage() {
                                             <TableRow key={sponsor.id}>
                                                 <TableCell className="font-medium">
                                                         <Link href={`/admin/sponsors/${sponsor.id}`} className="flex items-center gap-3 group">
-                                                        <Image src={sponsor.logoUrl} alt={sponsor.name} width={36} height={36} className="rounded-md" />
+                                                        <Image src={sponsor.logoUrl} alt={sponsor.name} width={36} height={36} className="rounded-md" data-ai-hint="logo" />
                                                         <span className="group-hover:text-primary transition-colors">{sponsor.name}</span>
                                                     </Link>
                                                 </TableCell>

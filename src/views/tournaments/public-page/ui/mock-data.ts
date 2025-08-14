@@ -1,5 +1,7 @@
 // This file is to avoid circular dependencies that can happen
 // when importing from @/mocks in a page file that also generates metadata.
+import type { Playground } from '@/mocks/playgrounds';
+import { playgrounds } from '@/mocks/playgrounds';
 
 export interface Team {
   id: string;
@@ -32,6 +34,7 @@ export interface Tournament {
     startDate: string;
     bannerUrl: string;
     dataAiHint: string;
+    playgrounds: Playground[];
 }
 
 export const tournaments: Tournament[] = [
@@ -45,7 +48,8 @@ export const tournaments: Tournament[] = [
       maxParticipants: 16,
       startDate: '2025-07-15',
       bannerUrl: 'https://placehold.co/600x400.png',
-      dataAiHint: 'basketball court'
+      dataAiHint: 'basketball court',
+      playgrounds: [playgrounds[2], playgrounds[3]]
     },
     {
         id: 'tourney3',
@@ -57,7 +61,8 @@ export const tournaments: Tournament[] = [
         maxParticipants: 8,
         startDate: '2025-05-10',
         bannerUrl: 'https://placehold.co/600x400.png',
-        dataAiHint: 'soccer futsal'
+        dataAiHint: 'soccer futsal',
+        playgrounds: [playgrounds[1]]
     },
   ];
 
@@ -72,7 +77,8 @@ export const mockMyTournaments: Tournament[] = [
       maxParticipants: 8,
       startDate: '2025-08-01',
       bannerUrl: 'https://placehold.co/1200x300.png',
-      dataAiHint: 'soccer street'
+      dataAiHint: 'soccer street',
+      playgrounds: [playgrounds[0]]
     },
 ];
 

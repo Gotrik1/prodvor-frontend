@@ -6,3 +6,4 @@ export * from './tournaments';
 export * from './personnel';
 export * from './requirements';
 export * from './challenges';
+export * from './playgrounds';
