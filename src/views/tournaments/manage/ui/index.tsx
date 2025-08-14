@@ -3,7 +3,7 @@
 
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
-import { Users, Calendar, Megaphone, Settings, GanttChartIcon, Shield, Award, Film, Wand2 } from "lucide-react";
+import { Users, Calendar, Megaphone, Settings, GanttChartIcon, Shield, Award, Film, Wand2, FileText } from "lucide-react";
 import Link from "next/link";
 import { allTournaments, registeredTeams as initialRegisteredTeams } from '@/views/tournaments/public-page/ui/mock-data';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
@@ -20,6 +20,7 @@ import {
     SponsorsTab,
     AnnouncementsTab,
     SettingsTab,
+    ProtocolTab,
 } from './tabs';
 
 const crmTabs = [
@@ -27,6 +28,7 @@ const crmTabs = [
     { value: "participants", icon: Users, label: "Участники" },
     { value: "bracket", icon: GanttChartIcon, label: "Сетка" },
     { value: "schedule", icon: Calendar, label: "Расписание" },
+    { value: "protocol", icon: FileText, label: "Протоколы" },
     { value: "media", icon: Film, label: "Медиа" },
     { value: "promo", icon: Wand2, label: "Промо" },
     { value: "staff", icon: Shield, label: "Персонал" },
@@ -102,8 +104,8 @@ export function TournamentManagementPage({ tournamentId }: { tournamentId: strin
 
     return (
         <div className="p-4 md:p-6 lg:p-8">
-            <Tabs defaultValue="promo" className="w-full">
-                    <TabsList className="grid w-full grid-cols-5 md:grid-cols-10 mb-4">
+            <Tabs defaultValue="overview" className="w-full">
+                    <TabsList className="grid w-full grid-cols-6 md:grid-cols-11 mb-4">
                     {crmTabs.map(tab => (
                         <TabsTrigger key={tab.value} value={tab.value}>
                             <tab.icon className="mr-0 md:mr-2 h-4 w-4" />
@@ -117,11 +119,14 @@ export function TournamentManagementPage({ tournamentId }: { tournamentId: strin
                 <TabsContent value="participants">
                     <ParticipantsTab teams={teams} setTeams={setTeams} />
                 </TabsContent>
-                    <TabsContent value="bracket">
+                <TabsContent value="bracket">
                     <BracketTab confirmedTeams={confirmedTeams} />
                 </TabsContent>
                 <TabsContent value="schedule">
                     <ScheduleTab />
+                </TabsContent>
+                <TabsContent value="protocol">
+                    <ProtocolTab tournament={tournament} />
                 </TabsContent>
                 <TabsContent value="media">
                     <MediaTab mediaItems={mediaItems} onMediaAdd={handleAddMedia} />

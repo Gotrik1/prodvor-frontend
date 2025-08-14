@@ -1,2 +1,0 @@
-
-export { MatchPage } from './ui';

@@ -8,3 +8,4 @@ export * from './staff-tab';
 export * from './sponsors-tab';
 export * from './announcements-tab';
 export * from './settings-tab';
+export * from './protocol-tab';

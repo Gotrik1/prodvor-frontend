@@ -1,16 +1,17 @@
 
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
 import { Button } from '@/shared/ui/button';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shared/ui/select';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, SelectGroup, SelectLabel } from '@/shared/ui/select';
 import { Input } from '@/shared/ui/input';
 import { Label } from '@/shared/ui/label';
-import { Trash2 } from 'lucide-react';
+import { Trash2, PlusCircle } from 'lucide-react';
 import { useProtocol } from '../lib/use-protocol';
 import { EventType, eventTypes } from '@/widgets/match-protocol/ui/match-timeline';
-import { registeredTeams, users } from '@/views/tournaments/public-page/ui/mock-data';
+import { users } from '@/views/tournaments/public-page/ui/mock-data';
+import type { BracketMatch } from '@/views/tournaments/public-page/ui/mock-data';
 
 const eventLabels: Record<EventType, string> = {
     [eventTypes.GOAL]: 'Гол',
@@ -19,35 +20,40 @@ const eventLabels: Record<EventType, string> = {
     [eventTypes.SUBSTITUTION]: 'Замена',
 };
 
-const team1 = registeredTeams[0];
-const team2 = registeredTeams[1];
-const allPlayers = users.filter(u => team1.members.includes(u.id) || team2.members.includes(u.id));
-
-export function ProtocolEditor() {
+export function ProtocolEditor({ match }: { match: BracketMatch }) {
     const { events, addEvent, removeEvent } = useProtocol();
     const [eventType, setEventType] = useState<EventType>(eventTypes.GOAL);
     const [minute, setMinute] = useState('');
     const [player1, setPlayer1] = useState('');
     const [player2, setPlayer2] = useState('');
-    const [team, setTeam] = useState('team1');
+
+    const { team1, team2 } = match;
+
+    const team1Members = useMemo(() => team1 ? users.filter(u => team1.members.includes(u.id)) : [], [team1]);
+    const team2Members = useMemo(() => team2 ? users.filter(u => team2.members.includes(u.id)) : [], [team2]);
+    const allPlayersInMatch = useMemo(() => [...team1Members, ...team2Members], [team1Members, team2Members]);
+
 
     const handleAddEvent = () => {
-        if (!minute || !player1) return;
+        if (!minute || !player1 || (eventType === eventTypes.SUBSTITUTION && !player2)) return;
+
+        const p1 = allPlayersInMatch.find(p => p.id === player1);
+        if (!p1) return;
 
         const newEvent: Omit<any, 'id'> = {
             minute: parseInt(minute, 10),
             type: eventType,
-            team: allPlayers.find(p => p.id === player1)?.teamId === team1.id ? 'team1' : 'team2',
-            player: allPlayers.find(p => p.id === player1)?.nickname,
+            team: team1Members.some(m => m.id === p1.id) ? 'team1' : 'team2',
+            player: p1.nickname,
         };
 
         if (eventType === eventTypes.GOAL && player2) {
-            newEvent.assist = allPlayers.find(p => p.id === player2)?.nickname;
+            newEvent.assist = allPlayersInMatch.find(p => p.id === player2)?.nickname;
         }
 
         if (eventType === eventTypes.SUBSTITUTION && player2) {
-            newEvent.playerOut = allPlayers.find(p => p.id === player1)?.nickname;
-            newEvent.playerIn = allPlayers.find(p => p.id === player2)?.nickname;
+            newEvent.playerOut = p1.nickname;
+            newEvent.playerIn = allPlayersInMatch.find(p => p.id === player2)?.nickname;
             newEvent.player = ''; // Substitution doesn't have a single primary player
         }
 
@@ -77,7 +83,7 @@ export function ProtocolEditor() {
     };
 
     return (
-        <Card>
+        <Card className="border-t-4 border-primary">
             <CardHeader>
                 <CardTitle>Редактор протокола</CardTitle>
                 <CardDescription>Добавляйте ключевые события матча в реальном времени.</CardDescription>
@@ -104,7 +110,14 @@ export function ProtocolEditor() {
                         <Select value={player1} onValueChange={setPlayer1}>
                              <SelectTrigger><SelectValue placeholder="Выберите игрока" /></SelectTrigger>
                              <SelectContent>
-                                {allPlayers.map(p => <SelectItem key={p.id} value={p.id}>{p.nickname}</SelectItem>)}
+                                <SelectGroup>
+                                    <SelectLabel>{team1?.name}</SelectLabel>
+                                    {team1Members.map(p => <SelectItem key={p.id} value={p.id}>{p.nickname}</SelectItem>)}
+                                </SelectGroup>
+                                <SelectGroup>
+                                     <SelectLabel>{team2?.name}</SelectLabel>
+                                     {team2Members.map(p => <SelectItem key={p.id} value={p.id}>{p.nickname}</SelectItem>)}
+                                </SelectGroup>
                              </SelectContent>
                         </Select>
                     </div>
@@ -114,29 +127,40 @@ export function ProtocolEditor() {
                              <Select value={player2} onValueChange={setPlayer2}>
                                 <SelectTrigger><SelectValue placeholder="Выберите игрока" /></SelectTrigger>
                                 <SelectContent>
-                                    {allPlayers.map(p => <SelectItem key={p.id} value={p.id}>{p.nickname}</SelectItem>)}
+                                    <SelectGroup>
+                                        <SelectLabel>{team1?.name}</SelectLabel>
+                                        {team1Members.map(p => <SelectItem key={p.id} value={p.id}>{p.nickname}</SelectItem>)}
+                                    </SelectGroup>
+                                    <SelectGroup>
+                                        <SelectLabel>{team2?.name}</SelectLabel>
+                                        {team2Members.map(p => <SelectItem key={p.id} value={p.id}>{p.nickname}</SelectItem>)}
+                                    </SelectGroup>
                                 </SelectContent>
                             </Select>
                         </div>
                     )}
-                    <Button onClick={handleAddEvent} className="w-full">Добавить событие</Button>
+                    <Button onClick={handleAddEvent} className="w-full">
+                        <PlusCircle className="mr-2 h-4 w-4" />
+                        Добавить
+                    </Button>
                 </div>
 
                 <div>
                     <h3 className="text-lg font-semibold mb-2">Хронология событий</h3>
-                    <div className="space-y-2 max-h-60 overflow-y-auto pr-2">
+                    <div className="space-y-2 max-h-60 overflow-y-auto pr-2 border rounded-lg p-2">
                         {events.map(event => (
-                            <div key={event.id} className="flex items-center justify-between p-2 rounded-md bg-muted/50">
+                            <div key={event.id} className="flex items-center justify-between p-2 rounded-md bg-background hover:bg-muted">
                                 <div className="flex items-center gap-3">
                                     <span className="font-mono text-sm w-8">{event.minute}'</span>
                                     <span className="font-semibold">{eventLabels[event.type]}</span>
-                                    <span className="text-muted-foreground">{event.player}{event.assist ? ` (${event.assist})` : ''}{event.playerIn ? `↑${event.playerIn} / ↓${event.playerOut}` : ''}</span>
+                                    <span className="text-muted-foreground text-sm">{event.player}{event.assist ? ` (${event.assist})` : ''}{event.playerIn ? `↑${event.playerIn} / ↓${event.playerOut}` : ''}</span>
                                 </div>
                                 <Button variant="ghost" size="icon" className="h-7 w-7 text-muted-foreground hover:text-destructive" onClick={() => removeEvent(event.id)}>
                                     <Trash2 className="h-4 w-4" />
                                 </Button>
                             </div>
                         ))}
+                         {events.length === 0 && <p className="text-sm text-muted-foreground text-center py-4">Событий пока не добавлено.</p>}
                     </div>
                 </div>
             </CardContent>

@@ -3,14 +3,16 @@
 
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
-import { GanttChartIcon, Save } from "lucide-react";
+import { GanttChartIcon, Save, FileText } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { Input } from "@/shared/ui/input";
 import React, { useState } from "react";
 import { Team, BracketMatch } from '@/views/tournaments/public-page/ui/mock-data';
 import Link from "next/link";
+import { useProtocol } from "@/widgets/protocol-editor/lib/use-protocol";
 
 export function BracketTab({ confirmedTeams }: { confirmedTeams: Team[] }) {
+    const { setActiveMatch, activeMatch } = useProtocol();
     const [rounds, setRounds] = useState<BracketMatch[][]>([]);
     const [scores, setScores] = useState<Record<string, { score1: string, score2: string }>>({});
     const [error, setError] = useState<string | null>(null);
@@ -46,7 +48,7 @@ export function BracketTab({ confirmedTeams }: { confirmedTeams: Team[] }) {
         setScores(prev => ({
             ...prev,
             [matchId]: {
-                ...prev[matchId],
+                ...(prev[matchId] || { score1: '', score2: '' }),
                 [team === 'team1' ? 'score1' : 'score2']: value,
             }
         }));
@@ -61,19 +63,19 @@ export function BracketTab({ confirmedTeams }: { confirmedTeams: Team[] }) {
         
         if (isNaN(score1) || isNaN(score2)) return;
 
-        const newRounds = [...rounds];
+        const newRounds = JSON.parse(JSON.stringify(rounds)); // Deep copy
         newRounds[roundIndex][matchIndex] = {
             ...newRounds[roundIndex][matchIndex],
             score1: score1,
             score2: score2,
         };
         
-        const currentRoundFinished = newRounds[roundIndex].every(m => m.score1 !== null && m.score2 !== null);
+        const currentRoundFinished = newRounds[roundIndex].every((m: BracketMatch) => m.score1 !== null && m.score2 !== null);
         
         if (currentRoundFinished) {
             const winners: Team[] = newRounds[roundIndex]
-                .map(m => m.score1! > m.score2! ? m.team1 : m.team2)
-                .filter((t): t is Team => t !== null);
+                .map((m: BracketMatch) => m.score1! > m.score2! ? m.team1 : m.team2)
+                .filter((t: Team | null): t is Team => t !== null);
 
             if (winners.length >= 2) {
                 const nextRoundMatches: BracketMatch[] = [];
@@ -89,7 +91,7 @@ export function BracketTab({ confirmedTeams }: { confirmedTeams: Team[] }) {
                     }
                 }
                 
-                if (rounds.length === roundIndex + 1) {
+                if (newRounds.length === roundIndex + 1) {
                     newRounds.push(nextRoundMatches);
                 } else {
                      newRounds[roundIndex + 1] = nextRoundMatches;
@@ -110,14 +112,11 @@ export function BracketTab({ confirmedTeams }: { confirmedTeams: Team[] }) {
         return `1/${teamsInRound / 2} финала`;
     };
     
-    // Hardcoded tournament ID for example
-    const tournamentId = 'mytourney1';
-
     return (
         <Card>
             <CardHeader>
                 <CardTitle>Турнирная сетка</CardTitle>
-                <CardDescription>Сгенерируйте сетку и вводите результаты матчей для автоматического обновления.</CardDescription>
+                <CardDescription>Сгенерируйте сетку и вводите результаты матчей для автоматического обновления. Нажмите на матч для ведения протокола.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-8">
                 {rounds.length === 0 ? (
@@ -140,48 +139,46 @@ export function BracketTab({ confirmedTeams }: { confirmedTeams: Team[] }) {
                                     const isFinished = match.score1 !== null && match.score2 !== null;
                                     const winner = isFinished ? (match.score1! > match.score2! ? 'team1' : 'team2') : null;
                                     return (
-                                    <Link href={`/tournaments/${tournamentId}/match/${match.id}`} key={match.id} className="block">
-                                        <Card className="bg-muted/50 hover:border-primary/50 transition-colors">
-                                            <CardContent className="flex items-center justify-between p-4">
-                                                <div className={`flex items-center gap-3 w-2/5 transition-opacity ${winner && winner !== 'team1' && 'opacity-50'}`}>
-                                                    {match.team1 ? (
-                                                        <>
-                                                        <Avatar>
-                                                            <AvatarImage src={match.team1.logoUrl} alt={match.team1.name} />
-                                                            <AvatarFallback>{match.team1.name.slice(0, 2)}</AvatarFallback>
-                                                        </Avatar>
-                                                        <span className="font-medium truncate">{match.team1.name}</span>
-                                                        </>
-                                                    ) : <span className="text-sm text-muted-foreground">Ожидает...</span>}
-                                                </div>
+                                    <Card key={match.id} className={`bg-muted/50 transition-all ${activeMatch?.id === match.id ? 'border-primary' : 'hover:border-primary/50'}`}>
+                                        <CardContent className="flex items-center justify-between p-4 cursor-pointer" onClick={() => setActiveMatch(match)}>
+                                            <div className={`flex items-center gap-3 w-2/5 transition-opacity ${winner && winner !== 'team1' && 'opacity-50'}`}>
+                                                {match.team1 ? (
+                                                    <>
+                                                    <Avatar>
+                                                        <AvatarImage src={match.team1.logoUrl} alt={match.team1.name} />
+                                                        <AvatarFallback>{match.team1.name.slice(0, 2)}</AvatarFallback>
+                                                    </Avatar>
+                                                    <span className="font-medium truncate">{match.team1.name}</span>
+                                                    </>
+                                                ) : <span className="text-sm text-muted-foreground">Ожидает...</span>}
+                                            </div>
 
-                                                <div className="flex items-center gap-2">
-                                                    <Input type="number" className="w-12 h-8 text-center" value={scores[match.id]?.score1 ?? ''} onChange={(e) => {e.preventDefault(); handleScoreChange(match.id, 'team1', e.target.value)}} disabled={isFinished} />
-                                                    <span className="text-muted-foreground font-bold">VS</span>
-                                                    <Input type="number" className="w-12 h-8 text-center" value={scores[match.id]?.score2 ?? ''} onChange={(e) => {e.preventDefault(); handleScoreChange(match.id, 'team2', e.target.value)}} disabled={isFinished} />
-                                                </div>
+                                            <div className="flex items-center gap-2">
+                                                <Input type="number" className="w-12 h-8 text-center" value={scores[match.id]?.score1 ?? ''} onChange={(e) => {e.stopPropagation(); handleScoreChange(match.id, 'team1', e.target.value)}} onClick={(e) => e.stopPropagation()} disabled={isFinished} />
+                                                <span className="text-muted-foreground font-bold">VS</span>
+                                                <Input type="number" className="w-12 h-8 text-center" value={scores[match.id]?.score2 ?? ''} onChange={(e) => {e.stopPropagation(); handleScoreChange(match.id, 'team2', e.target.value)}} onClick={(e) => e.stopPropagation()} disabled={isFinished} />
+                                            </div>
 
-                                                <div className={`flex items-center gap-3 w-2/5 justify-end transition-opacity ${winner && winner !== 'team2' && 'opacity-50'}`}>
-                                                    {match.team2 ? (
-                                                        <>
-                                                        <span className="font-medium truncate text-right">{match.team2.name}</span>
-                                                        <Avatar>
-                                                            <AvatarImage src={match.team2.logoUrl} alt={match.team2.name} />
-                                                            <AvatarFallback>{match.team2.name.slice(0, 2)}</AvatarFallback>
-                                                        </Avatar>
-                                                        </>
-                                                    ) : <span className="text-sm text-muted-foreground">Ожидает...</span>}
-                                                </div>
-                                            </CardContent>
-                                            {!isFinished && match.team1 && match.team2 && (
-                                                <div className="px-4 pb-2 text-center">
-                                                    <Button size="sm" variant="secondary" onClick={(e) => {e.preventDefault(); handleSaveResult(roundIndex, matchIndex)}}>
-                                                        <Save className="mr-2 h-4 w-4"/>Сохранить результат
-                                                    </Button>
-                                                </div>
-                                            )}
-                                        </Card>
-                                    </Link>
+                                            <div className={`flex items-center gap-3 w-2/5 justify-end transition-opacity ${winner && winner !== 'team2' && 'opacity-50'}`}>
+                                                {match.team2 ? (
+                                                    <>
+                                                    <span className="font-medium truncate text-right">{match.team2.name}</span>
+                                                    <Avatar>
+                                                        <AvatarImage src={match.team2.logoUrl} alt={match.team2.name} />
+                                                        <AvatarFallback>{match.team2.name.slice(0, 2)}</AvatarFallback>
+                                                    </Avatar>
+                                                    </>
+                                                ) : <span className="text-sm text-muted-foreground">Ожидает...</span>}
+                                            </div>
+                                        </CardContent>
+                                        {!isFinished && match.team1 && match.team2 && (
+                                            <div className="px-4 pb-2 text-center">
+                                                <Button size="sm" variant="secondary" onClick={(e) => {e.stopPropagation(); handleSaveResult(roundIndex, matchIndex)}}>
+                                                    <Save className="mr-2 h-4 w-4"/>Сохранить результат
+                                                </Button>
+                                            </div>
+                                        )}
+                                    </Card>
                                 )})}
                             </div>
                         </div>
