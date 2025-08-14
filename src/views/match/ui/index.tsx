@@ -55,9 +55,9 @@ export function MatchPage({ tournament, matchId }: { tournament: (typeof allTour
                 <div className="max-w-7xl mx-auto">
                     <div className="mb-6">
                         <Button asChild variant="outline">
-                            <Link href={`/tournaments/${tournament.id}`}>
+                            <Link href={`/tournaments/${tournament.id}/hub`}>
                                 <ArrowLeft className="mr-2 h-4 w-4" />
-                                Назад к турниру
+                                Назад в хаб турнира
                             </Link>
                         </Button>
                     </div>

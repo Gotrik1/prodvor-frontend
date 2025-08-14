@@ -81,11 +81,11 @@ export function TournamentBracket({ tournamentId }: { tournamentId: string }) {
                             const winnerTeam = winner === 'team1' ? match.team1 : match.team2;
                             return (
                                 <Card key={match.id} className="bg-muted/50 overflow-hidden">
-                                     <Link href={`/tournaments/${tournamentId}/match/${match.id}`} className="block">
+                                     <Link href={`/tournaments/${tournamentId}/match/${match.id}`} className="block hover:bg-muted transition-colors">
                                         <CardContent className="flex items-center justify-between p-4">
                                             {/* Team 1 */}
                                             <div className={`flex items-center gap-3 w-2/5 transition-opacity ${winner !== 'team1' && 'opacity-50'}`}>
-                                                <Link href={`/teams/${match.team1.id}`} className="flex items-center gap-3 group">
+                                                <Link href={`/teams/${match.team1.id}`} className="flex items-center gap-3 group" onClick={(e) => e.stopPropagation()}>
                                                     <Avatar className="group-hover:scale-110 transition-transform">
                                                         <AvatarImage src={match.team1.logoUrl} alt={match.team1.name} />
                                                         <AvatarFallback>{match.team1.name.slice(0, 2)}</AvatarFallback>
@@ -103,7 +103,7 @@ export function TournamentBracket({ tournamentId }: { tournamentId: string }) {
 
                                             {/* Team 2 */}
                                             <div className={`flex items-center gap-3 w-2/5 justify-end transition-opacity ${winner !== 'team2' && 'opacity-50'}`}>
-                                                <Link href={`/teams/${match.team2.id}`} className="flex items-center gap-3 group">
+                                                <Link href={`/teams/${match.team2.id}`} className="flex items-center gap-3 group" onClick={(e) => e.stopPropagation()}>
                                                     <span className="font-medium truncate text-right group-hover:text-primary transition-colors">{match.team2.name}</span>
                                                     <Avatar className="group-hover:scale-110 transition-transform">
                                                         <AvatarImage src={match.team2.logoUrl} alt={match.team2.name} />
