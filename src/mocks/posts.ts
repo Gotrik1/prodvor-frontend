@@ -17,7 +17,7 @@ export const posts: Post[] = [
     author: users.find(u => u.nickname === 'Terminator')!,
     team: teams.find(t => t.id === 'team1'),
     content: 'Отличная игра сегодня! Всех с победой над "Стальными Ястребами"! Готовимся к следующему вызову.',
-    timestamp: new Date(Date.now() - 3600000).toISOString(), // 1 hour ago
+    timestamp: '2025-08-15T10:00:00.000Z',
     likes: 25,
     comments: 4,
   },
@@ -25,7 +25,7 @@ export const posts: Post[] = [
     id: 'post2',
     author: users.find(u => u.nickname === 'Valkyrie')!,
     content: 'Ищем вратаря в команду на постоянку. Пишите в ЛС.',
-    timestamp: new Date(Date.now() - 86400000).toISOString(), // 1 day ago
+    timestamp: '2025-08-14T11:30:00.000Z',
     likes: 12,
     comments: 8,
   },
@@ -33,7 +33,7 @@ export const posts: Post[] = [
     id: 'post3',
     author: users.find(u => u.nickname === 'Destroyer')!,
     content: 'Кто-нибудь знает, где можно купить хорошие футбольные бутсы?',
-    timestamp: new Date(Date.now() - 172800000).toISOString(), // 2 days ago
+    timestamp: '2025-08-13T14:00:00.000Z',
     likes: 5,
     comments: 1,
   },
@@ -42,7 +42,7 @@ export const posts: Post[] = [
     author: users.find(u => u.nickname === 'Terminator')!,
     team: teams.find(t => t.id === 'team1'),
     content: 'Тренировка завтра в 19:00 на нашей домашней площадке. Не опаздывать!',
-    timestamp: new Date(Date.now() - 2 * 86400000).toISOString(), // 2 days ago
+    timestamp: '2025-08-13T09:00:00.000Z',
     likes: 18,
     comments: 2,
   },
@@ -51,7 +51,7 @@ export const posts: Post[] = [
     author: users.find(u => u.nickname === 'Hawk')!,
     team: teams.find(t => t.id === 'team3'),
     content: 'Провели отличную тренировку по тактике. "Ночные Снайперы", ждите нас!',
-    timestamp: new Date(Date.now() - 3 * 86400000).toISOString(), // 3 days ago
+    timestamp: '2025-08-12T18:45:00.000Z',
     likes: 31,
     comments: 6,
   },
@@ -59,7 +59,7 @@ export const posts: Post[] = [
     id: 'post6',
     author: users.find(u => u.nickname === 'Tiger')!,
     content: 'Есть у кого-нибудь ненужный мяч? Наш приказал долго жить...',
-    timestamp: new Date(Date.now() - 4 * 86400000).toISOString(), // 4 days ago
+    timestamp: '2025-08-11T20:00:00.000Z',
     likes: 7,
     comments: 3,
   },
