@@ -2,7 +2,8 @@
 
 'use client';
 
-import { users, teams, sponsors, tournaments, playgrounds } from '@/mocks';
+import { users, teams, sponsors, playgrounds } from '@/mocks';
+import { allTournaments as tournaments } from '@/views/tournaments/public-page/ui/mock-data';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import { Badge } from '@/shared/ui/badge';
 import { Button } from '@/shared/ui/button';

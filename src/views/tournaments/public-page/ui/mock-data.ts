@@ -45,7 +45,7 @@ export interface Tournament {
     location: string;
 }
 
-export const tournaments: Tournament[] = [
+export const allTournaments: Tournament[] = [
     {
       id: 'tourney1',
       name: 'Летний Кубок по Стритболу',
@@ -55,7 +55,7 @@ export const tournaments: Tournament[] = [
       participants: 12,
       maxParticipants: 16,
       startDate: '2025-07-15',
-      bannerUrl: 'https://placehold.co/1200x400.png',
+      bannerUrl: 'https://prodvor.website/images/tournaments/streetball-summer.png',
       dataAiHint: 'basketball court sunset',
       playgrounds: [playgrounds[2], playgrounds[3]],
       description: 'Главный турнир этого лета по стритболу! Собери свою команду из трех человек и докажи, что вы лучшие на асфальте. Игры пройдут на лучших уличных площадках города. Вас ждут напряженные матчи, отличная музыка и море эмоций.',
@@ -71,7 +71,7 @@ export const tournaments: Tournament[] = [
         participants: 8,
         maxParticipants: 8,
         startDate: '2025-05-10',
-        bannerUrl: 'https://placehold.co/1200x400.png',
+        bannerUrl: 'https://prodvor.website/images/tournaments/futsal-kings.png',
         dataAiHint: 'futsal court lights',
         playgrounds: [playgrounds[1]],
         description: 'Классический турнир по футзалу в формате 5x5. Динамичные игры, техничные финты и бескомпромиссная борьба за звание "Королей Коробки".',
@@ -87,7 +87,7 @@ export const tournaments: Tournament[] = [
       participants: 0,
       maxParticipants: 16,
       startDate: '2025-12-01',
-      bannerUrl: 'https://placehold.co/1200x400.png',
+      bannerUrl: 'https://prodvor.website/images/tournaments/winter-sprint.png',
       dataAiHint: 'winter soccer snow',
       playgrounds: [playgrounds[0]],
       description: 'Не дай себе замерзнуть этой зимой! Горячие футбольные баталии на свежем воздухе для самых стойких. Формат 7x7, игры на вылет.',
@@ -103,14 +103,30 @@ export const tournaments: Tournament[] = [
       participants: 4,
       maxParticipants: 8,
       startDate: '2025-07-25',
-      bannerUrl: 'https://placehold.co/1200x400.png',
+      bannerUrl: 'https://prodvor.website/images/tournaments/newbie-cup.png',
       dataAiHint: 'amateur soccer players',
       playgrounds: [playgrounds[2]],
       description: 'Твой первый шаг в большой спорт! Турнир для команд с рейтингом до 1400 ELO. Отличная возможность попробовать свои силы, набраться опыта и заявить о себе.',
       level: 'Городской',
       location: 'Новосибирск',
     },
-  ];
+    {
+      id: 'mytourney1',
+      name: 'Летний Кубок ProDvor',
+      game: 'Дворовый футбол',
+      status: 'ИДЕТ' as const,
+      prizePool: '100 000 руб.',
+      participants: 8,
+      maxParticipants: 8,
+      startDate: '2025-08-01',
+      bannerUrl: 'https://prodvor.website/images/tournaments/summer-cup-banner.png',
+      dataAiHint: 'street soccer action',
+      playgrounds: [playgrounds[0]],
+      description: 'Главное событие лета для всех любителей дворового футбола! 8 лучших команд города сразятся за крупный денежный приз и звание чемпиона ProDvor. Напряженные матчи, яркие моменты и незабываемая атмосфера гарантированы. Следите за играми онлайн и приходите поддержать своих фаворитов!',
+      level: 'Федеральный',
+      location: 'Россия',
+    },
+];
 
 export const mockMyTournaments: Tournament[] = [
     {
@@ -122,7 +138,7 @@ export const mockMyTournaments: Tournament[] = [
       participants: 8,
       maxParticipants: 8,
       startDate: '2025-08-01',
-      bannerUrl: 'https://placehold.co/1200x400.png',
+      bannerUrl: 'https://prodvor.website/images/tournaments/summer-cup-banner.png',
       dataAiHint: 'street soccer action',
       playgrounds: [playgrounds[0]],
       description: 'Главное событие лета для всех любителей дворового футбола! 8 лучших команд города сразятся за крупный денежный приз и звание чемпиона ProDvor. Напряженные матчи, яркие моменты и незабываемая атмосфера гарантированы. Следите за играми онлайн и приходите поддержать своих фаворитов!',
@@ -131,9 +147,7 @@ export const mockMyTournaments: Tournament[] = [
     },
 ];
 
-export const allTournaments: Tournament[] = [...tournaments, ...mockMyTournaments];
-
 export const teams: Team[] = allMockTeams;
-export const registeredTeams: Team[] = allMockTeams;
+export const registeredTeams: Team[] = allMockTeams.slice(0, 8);
 export const sponsors = allMockSponsors;
 export const requirements = allMockRequirements;

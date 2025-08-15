@@ -1,19 +1,21 @@
-export type TournamentStatus = 'АНОНС' | 'ПРЕДРЕГИСТРАЦИЯ' | 'РЕГИСТРАЦИЯ' | 'ИДЕТ' | 'ЗАВЕРШЕН';
+import type { Playground } from './playgrounds';
+import { playgrounds } from './playgrounds';
 
 export interface Tournament {
     id: string;
     name: string;
     game: string;
-    status: TournamentStatus;
+    status: 'АНОНС' | 'ПРЕДРЕГИСТРАЦИЯ' | 'РЕГИСТРАЦИЯ' | 'ИДЕТ' | 'ЗАВЕРШЕН';
     prizePool: string;
     participants: number;
     maxParticipants: number;
     startDate: string;
     bannerUrl: string;
     dataAiHint: string;
-  }
-  
-  export const tournaments: Tournament[] = [
+    playgrounds: Playground[];
+}
+
+export const tournaments: Tournament[] = [
     {
       id: 'tourney1',
       name: 'Летний Кубок по Стритболу',
@@ -23,20 +25,9 @@ export interface Tournament {
       participants: 12,
       maxParticipants: 16,
       startDate: '2025-07-15',
-      bannerUrl: 'https://placehold.co/1200x400.png',
-      dataAiHint: 'basketball court sunset'
-    },
-    {
-      id: 'tourney2',
-      name: 'Осенний марафон ProDvor',
-      game: 'Дворовый футбол',
-      status: 'ИДЕТ',
-      prizePool: '100 000 руб.',
-      participants: 8,
-      maxParticipants: 8,
-      startDate: '2025-09-01',
-      bannerUrl: 'https://placehold.co/1200x400.png',
-      dataAiHint: 'soccer autumn'
+      bannerUrl: 'https://prodvor.website/images/tournaments/streetball-summer.png',
+      dataAiHint: 'basketball court sunset',
+      playgrounds: [playgrounds[2], playgrounds[3]]
     },
     {
         id: 'tourney3',
@@ -47,7 +38,47 @@ export interface Tournament {
         participants: 8,
         maxParticipants: 8,
         startDate: '2025-05-10',
-        bannerUrl: 'https://placehold.co/1200x400.png',
-        dataAiHint: 'futsal court lights'
+        bannerUrl: 'https://prodvor.website/images/tournaments/futsal-kings.png',
+        dataAiHint: 'futsal court lights',
+        playgrounds: [playgrounds[1]]
     },
-  ];
+     {
+      id: 'tourney4',
+      name: 'Зимний спринт по футболу',
+      game: 'Дворовый футбол',
+      status: 'АНОНС',
+      prizePool: '15 000 руб.',
+      participants: 0,
+      maxParticipants: 16,
+      startDate: '2025-12-01',
+      bannerUrl: 'https://prodvor.website/images/tournaments/winter-sprint.png',
+      dataAiHint: 'winter soccer snow',
+      playgrounds: [playgrounds[0]]
+    },
+     {
+      id: 'tourney5',
+      name: 'Кубок новичков',
+      game: 'Дворовый футбол',
+      status: 'ПРЕДРЕГИСТРАЦИЯ',
+      prizePool: 'Медали и грамоты',
+      participants: 4,
+      maxParticipants: 8,
+      startDate: '2025-07-25',
+      bannerUrl: 'https://prodvor.website/images/tournaments/newbie-cup.png',
+      dataAiHint: 'amateur soccer players',
+      playgrounds: [playgrounds[2]]
+    },
+    {
+      id: 'mytourney1',
+      name: 'Летний Кубок ProDvor',
+      game: 'Дворовый футбол',
+      status: 'ИДЕТ',
+      prizePool: '100 000 руб.',
+      participants: 8,
+      maxParticipants: 8,
+      startDate: '2025-08-01',
+      bannerUrl: 'https://prodvor.website/images/tournaments/summer-cup-banner.png',
+      dataAiHint: 'street soccer action',
+      playgrounds: [playgrounds[0]]
+    }
+];
