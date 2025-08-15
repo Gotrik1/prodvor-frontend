@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { teams, users } from "@/mocks";
@@ -24,7 +25,7 @@ export function RefereePageTemplate({ user }: { user?: User }) {
         <div className="border rounded-lg p-4 md:p-6 space-y-6 bg-muted/20">
             <header className="flex flex-col md:flex-row items-center gap-6">
                 <Avatar className="h-24 w-24 border-4 border-primary">
-                    <AvatarImage src={referee.avatarUrl} alt={`${referee.firstName} ${referee.lastName}`} data-ai-hint={referee.gender === 'мужской' ? 'male' : 'female'}/>
+                    <AvatarImage src={referee.avatarUrl} alt={`${referee.firstName} ${referee.lastName}`} />
                     <AvatarFallback>{referee.firstName.charAt(0)}{referee.lastName.charAt(0)}</AvatarFallback>
                 </Avatar>
                 <div className="text-center md:text-left">

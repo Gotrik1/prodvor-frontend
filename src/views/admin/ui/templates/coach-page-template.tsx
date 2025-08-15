@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { users, teams } from "@/mocks";
@@ -162,7 +163,7 @@ export function CoachPageTemplate({ user }: { user?: User }) {
                                     <TableCell>
                                         <div className="flex items-center gap-3">
                                             <Avatar className="h-9 w-9">
-                                                <AvatarImage src={member.avatarUrl} data-ai-hint={member.gender === 'мужской' ? 'male' : 'female'} />
+                                                <AvatarImage src={member.avatarUrl} />
                                                 <AvatarFallback>{member.firstName.charAt(0)}</AvatarFallback>
                                             </Avatar>
                                             <div>

@@ -154,7 +154,7 @@ const FollowersCard = () => (
                 {mockFollowers.map(follower => (
                     <Link href={`/admin/users/${follower.id}`} key={follower.id}>
                         <Avatar className="h-12 w-12 border-2 border-transparent hover:border-primary transition-colors">
-                            <AvatarImage src={follower.avatarUrl} alt={follower.nickname} data-ai-hint={follower.gender === 'мужской' ? 'male' : 'female'}/>
+                            <AvatarImage src={follower.avatarUrl} alt={follower.nickname} />
                             <AvatarFallback>{follower.nickname.charAt(0)}</AvatarFallback>
                         </Avatar>
                     </Link>
@@ -175,7 +175,7 @@ export function PlayerPageTemplate({ user: profileUser }: { user?: User }) {
         <div className="border rounded-lg p-4 md:p-6 space-y-6 bg-muted/20">
             <header className="flex flex-col md:flex-row items-center gap-6">
                 <Avatar className="h-24 w-24 border-4 border-primary">
-                    <AvatarImage src={player.avatarUrl} alt={player.nickname} data-ai-hint={player.gender === 'мужской' ? 'male' : 'female'}/>
+                    <AvatarImage src={player.avatarUrl} alt={player.nickname} />
                     <AvatarFallback>{player.firstName.charAt(0)}{player.lastName.charAt(0)}</AvatarFallback>
                 </Avatar>
                 <div className="text-center md:text-left flex-grow">
