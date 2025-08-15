@@ -9,7 +9,7 @@ import { Badge } from '@/shared/ui/badge';
 import { Button } from '@/shared/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/shared/ui/table';
-import { Copy, ExternalLink, Home, Crown, GanttChart, Eye, Database, Key, ListOrdered, Mail, MapPin, User as UserIcon, Phone, Heart, UserPlus, Rss, Dumbbell, BarChart3, Users2 } from 'lucide-react';
+import { Copy, ExternalLink, Home, Crown, GanttChart, Eye, Database, Key, ListOrdered, Mail, MapPin, User as UserIcon, Phone, Heart, UserPlus, Rss, Dumbbell, BarChart3, Users2, Trophy } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Progress } from '@/shared/ui/progress';
@@ -20,7 +20,7 @@ import { Tooltip, TooltipProvider, TooltipContent, TooltipTrigger } from '@/shar
 
 const statusColors: Record<string, string> = {
     'АНОНС': 'bg-purple-500/20 text-purple-300 border-purple-500/30',
-    'ПРЕДРЕГИСТРАЦИЯ': 'bg-cyan-500/20 text-cyan-300 border-cyan-500/30',
+    'ПРЕДРЕГИСТРАЦ': 'bg-cyan-500/20 text-cyan-300 border-cyan-500/30',
     'РЕГИСТРАЦИЯ': 'bg-blue-500/20 text-blue-300 border-blue-500/30',
     'ИДЕТ': 'bg-green-500/20 text-green-300 border-green-500/30',
     'ЗАВЕРШЕН': 'bg-muted text-muted-foreground border-border',
