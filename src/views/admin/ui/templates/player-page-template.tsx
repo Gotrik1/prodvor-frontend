@@ -152,7 +152,7 @@ const FollowersCard = () => (
         <CardContent>
             <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-4 gap-3">
                 {mockFollowers.map(follower => (
-                    <Link href={`/admin/users/${follower.id}`} key={follower.id}>
+                    <Link href={`/users/${follower.id}`} key={follower.id}>
                         <Avatar className="h-12 w-12 border-2 border-transparent hover:border-primary transition-colors">
                             <AvatarImage src={follower.avatarUrl} alt={follower.nickname} />
                             <AvatarFallback>{follower.nickname.charAt(0)}</AvatarFallback>
@@ -185,7 +185,7 @@ export function PlayerPageTemplate({ user: profileUser }: { user?: User }) {
                         {playerTeam && (
                             <div className="flex items-center gap-2">
                                 <Briefcase className="h-4 w-4" />
-                                <Image src={playerTeam.logoUrl} alt={playerTeam.name} width={16} height={16} className="rounded-sm" data-ai-hint="team logo"/>
+                                <Image src={playerTeam.logoUrl} alt={playerTeam.name} width={16} height={16} className="rounded-sm" />
                                 <span>{playerTeam.name}</span>
                             </div>
                         )}

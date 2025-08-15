@@ -11,6 +11,7 @@ import { FanPageTemplate } from '@/views/admin/ui/templates/fan-page-template';
 import { PlaceholderTemplate } from '@/views/admin/ui/templates/placeholder-template';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
 import { EyeOff } from 'lucide-react';
+import Link from 'next/link';
 
 export default function Dashboard() {
   const { user: currentUser } = useUserStore();
@@ -28,7 +29,7 @@ export default function Dashboard() {
                 </CardHeader>
                 <CardContent>
                     <p className="text-muted-foreground">
-                        Чтобы увидеть дашборд, выберите пользователя для симуляции в <a href="/admin/simulation" className="text-primary hover:underline">админ-панели</a>.
+                        Чтобы увидеть дашборд, выберите пользователя для симуляции в <Link href="/admin/simulation" className="text-primary hover:underline">админ-панели</Link>.
                     </p>
                 </CardContent>
             </Card>
