@@ -23,7 +23,7 @@ export interface Tournament {
       participants: 12,
       maxParticipants: 16,
       startDate: '2025-07-15',
-      bannerUrl: 'https://prodvor.website/images/tournaments/summer-streetball.png',
+      bannerUrl: 'https://placehold.co/1200x400.png',
       dataAiHint: 'basketball court sunset'
     },
     {
@@ -35,7 +35,7 @@ export interface Tournament {
       participants: 8,
       maxParticipants: 8,
       startDate: '2025-09-01',
-      bannerUrl: 'https://prodvor.website/images/tournaments/autumn-football.png',
+      bannerUrl: 'https://placehold.co/1200x400.png',
       dataAiHint: 'soccer autumn'
     },
     {
@@ -47,7 +47,7 @@ export interface Tournament {
         participants: 8,
         maxParticipants: 8,
         startDate: '2025-05-10',
-        bannerUrl: 'https://prodvor.website/images/tournaments/futsal-kings.png',
+        bannerUrl: 'https://placehold.co/1200x400.png',
         dataAiHint: 'futsal court lights'
     },
   ];
