@@ -102,7 +102,7 @@ export function TournamentsPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {allTournaments.map(tournament => (
                         <Card key={tournament.id} className="flex flex-col hover:border-primary/50 transition-colors group">
-                            <Link href={`/tournaments/${tournament.id}`} className="flex flex-col flex-grow">
+                            <Link href={`/tournaments/${tournament.id}`}>
                                 <div className="relative h-40 w-full">
                                     <Image
                                         src={tournament.bannerUrl}
@@ -115,11 +115,13 @@ export function TournamentsPage() {
                                         {tournament.status}
                                     </Badge>
                                 </div>
-                                <div className="p-6 overflow-hidden">
-                                <CardTitle className="text-xl group-hover:text-primary transition-colors">{tournament.name}</CardTitle>
-                                <CardDescription>{tournament.game}</CardDescription>
-                                </div>
                             </Link>
+                             <CardHeader>
+                                <Link href={`/tournaments/${tournament.id}`}>
+                                    <CardTitle className="text-xl group-hover:text-primary transition-colors">{tournament.name}</CardTitle>
+                                </Link>
+                                <CardDescription>{tournament.game}</CardDescription>
+                            </CardHeader>
                             <CardContent className="flex-grow space-y-4">
                                 <div>
                                     <p className="text-sm font-medium text-muted-foreground">Призовой фонд</p>
