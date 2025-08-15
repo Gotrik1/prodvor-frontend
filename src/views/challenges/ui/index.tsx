@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { useState } from 'react';
@@ -7,7 +8,7 @@ import { Button } from "@/shared/ui/button";
 import { Check, X, Send, Users, Trophy } from "lucide-react";
 import Image from "next/image";
 import { challenges, TeamChallenge } from '@/mocks/challenges';
-import { teams, users, sportCategories } from '@/mocks';
+import { teams, users, teamSports } from '@/mocks';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, SelectGroup, SelectLabel } from "@/shared/ui/select";
 import { Input } from "@/shared/ui/input";
 import { Label } from "@/shared/ui/label";
@@ -151,16 +152,14 @@ export function ChallengesPage() {
                                 <Select>
                                     <SelectTrigger id="discipline"><SelectValue placeholder="Выберите дисциплину" /></SelectTrigger>
                                     <SelectContent>
-                                        {sportCategories.map((category) => (
-                                            <SelectGroup key={category.name}>
-                                                <SelectLabel>{category.name}</SelectLabel>
-                                                {category.sports.map((sport) => (
-                                                    <SelectItem key={sport.name} value={sport.name.toLowerCase().replace(/\s/g, '-')}>
-                                                        {sport.name}
-                                                    </SelectItem>
-                                                ))}
-                                            </SelectGroup>
-                                        ))}
+                                        <SelectGroup>
+                                            <SelectLabel>Командные виды спорта</SelectLabel>
+                                            {teamSports.map((sport) => (
+                                                <SelectItem key={sport.id} value={sport.id}>
+                                                    {sport.name}
+                                                </SelectItem>
+                                            ))}
+                                        </SelectGroup>
                                     </SelectContent>
                                 </Select>
                             </div>

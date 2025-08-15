@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/sha
 import { Input } from "@/shared/ui/input";
 import { Label } from "@/shared/ui/label";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/shared/ui/select";
-import { sportCategories } from "@/mocks";
+import { allSports } from "@/mocks";
 import { Textarea } from "@/shared/ui/textarea";
 import { Popover, PopoverContent, PopoverTrigger } from "@/shared/ui/popover";
 import { CalendarIcon, UploadCloud } from "lucide-react";
@@ -15,6 +15,9 @@ import React from "react";
 
 
 export function CreateTournamentForm() {
+    const teamSports = allSports.filter(s => s.isTeamSport);
+    const individualSports = allSports.filter(s => !s.isTeamSport);
+
     return (
         <Card className="mt-4">
             <CardHeader>
@@ -37,16 +40,22 @@ export function CreateTournamentForm() {
                             <Select>
                                 <SelectTrigger id="discipline"><SelectValue placeholder="Выберите дисциплину" /></SelectTrigger>
                                 <SelectContent>
-                                    {sportCategories.map((category) => (
-                                        <SelectGroup key={category.name}>
-                                            <SelectLabel>{category.name}</SelectLabel>
-                                            {category.sports.map((sport) => (
-                                                <SelectItem key={sport.name} value={sport.name.toLowerCase().replace(/\s/g, '-')}>
-                                                    {sport.name}
-                                                </SelectItem>
-                                            ))}
-                                        </SelectGroup>
-                                    ))}
+                                    <SelectGroup>
+                                        <SelectLabel>Командные</SelectLabel>
+                                        {teamSports.map((sport) => (
+                                            <SelectItem key={sport.id} value={sport.id}>
+                                                {sport.name}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectGroup>
+                                    <SelectGroup>
+                                        <SelectLabel>Индивидуальные</SelectLabel>
+                                         {individualSports.map((sport) => (
+                                            <SelectItem key={sport.id} value={sport.id}>
+                                                {sport.name}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectGroup>
                                 </SelectContent>
                             </Select>
                         </div>

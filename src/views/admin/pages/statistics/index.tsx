@@ -1,7 +1,8 @@
 
+
 'use client';
 
-import { users, teams, sponsors, playgrounds, sportCategories, Team } from '@/mocks';
+import { users, teams, sponsors, playgrounds, allSports, Team } from '@/mocks';
 import { allTournaments as tournaments } from '@/views/tournaments/public-page/ui/mock-data';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import { Badge } from '@/shared/ui/badge';
@@ -51,7 +52,8 @@ export function AdminStatisticsPage() {
         return null; // or a loading skeleton
     }
     
-    const totalSports = sportCategories.reduce((sum, category) => sum + category.sports.length, 0);
+    const teamSports = allSports.filter(s => s.isTeamSport);
+    const individualSports = allSports.filter(s => !s.isTeamSport);
 
     return (
         <div className="space-y-8">
@@ -69,7 +71,7 @@ export function AdminStatisticsPage() {
                     <TabsTrigger value="users">Пользователи ({users.length})</TabsTrigger>
                     <TabsTrigger value="teams">Команды ({teams.length})</TabsTrigger>
                     <TabsTrigger value="tournaments">Турниры ({tournaments.length})</TabsTrigger>
-                    <TabsTrigger value="sports">Виды спорта ({totalSports})</TabsTrigger>
+                    <TabsTrigger value="sports">Виды спорта ({allSports.length})</TabsTrigger>
                     <TabsTrigger value="playgrounds">Площадки ({playgrounds.length})</TabsTrigger>
                     <TabsTrigger value="sponsors">Спонсоры ({sponsors.length})</TabsTrigger>
                 </TabsList>
@@ -285,31 +287,56 @@ export function AdminStatisticsPage() {
                             <CardDescription>Справочник всех видов спорта, доступных на платформе.</CardDescription>
                         </CardHeader>
                         <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            {sportCategories.map(category => (
-                                <div key={category.name}>
-                                    <h3 className="text-lg font-semibold mb-2 flex items-center gap-2"><Dumbbell className="h-5 w-5"/> {category.name}</h3>
-                                    <div className="border rounded-lg">
-                                        <Table>
-                                            <TableHeader>
-                                                <TableRow>
-                                                    <TableHead>Название</TableHead>
-                                                    <TableHead>Поддисциплины</TableHead>
+                            <div>
+                                <h3 className="text-lg font-semibold mb-2 flex items-center gap-2"><Dumbbell className="h-5 w-5"/> Командные ({teamSports.length})</h3>
+                                <div className="border rounded-lg">
+                                    <Table>
+                                        <TableHeader>
+                                            <TableRow>
+                                                <TableHead>ID</TableHead>
+                                                <TableHead>Название</TableHead>
+                                                <TableHead>Поддисциплины</TableHead>
+                                            </TableRow>
+                                        </TableHeader>
+                                        <TableBody>
+                                            {teamSports.map(sport => (
+                                                <TableRow key={sport.id}>
+                                                    <TableCell className="font-mono text-xs">{sport.id}</TableCell>
+                                                    <TableCell className="font-medium">{sport.name}</TableCell>
+                                                    <TableCell className="text-muted-foreground text-xs">
+                                                        {sport.subdisciplines?.join(', ') || '—'}
+                                                    </TableCell>
                                                 </TableRow>
-                                            </TableHeader>
-                                            <TableBody>
-                                                {category.sports.map(sport => (
-                                                    <TableRow key={sport.name}>
-                                                        <TableCell className="font-medium">{sport.name}</TableCell>
-                                                        <TableCell className="text-muted-foreground text-xs">
-                                                            {sport.subdisciplines?.join(', ') || '—'}
-                                                        </TableCell>
-                                                    </TableRow>
-                                                ))}
-                                            </TableBody>
-                                        </Table>
-                                    </div>
+                                            ))}
+                                        </TableBody>
+                                    </Table>
                                 </div>
-                            ))}
+                            </div>
+                             <div>
+                                <h3 className="text-lg font-semibold mb-2 flex items-center gap-2"><UserIcon className="h-5 w-5"/> Некомандные ({individualSports.length})</h3>
+                                <div className="border rounded-lg">
+                                    <Table>
+                                        <TableHeader>
+                                             <TableRow>
+                                                <TableHead>ID</TableHead>
+                                                <TableHead>Название</TableHead>
+                                                <TableHead>Поддисциплины</TableHead>
+                                            </TableRow>
+                                        </TableHeader>
+                                        <TableBody>
+                                            {individualSports.map(sport => (
+                                                <TableRow key={sport.id}>
+                                                    <TableCell className="font-mono text-xs">{sport.id}</TableCell>
+                                                    <TableCell className="font-medium">{sport.name}</TableCell>
+                                                    <TableCell className="text-muted-foreground text-xs">
+                                                        {sport.subdisciplines?.join(', ') || '—'}
+                                                    </TableCell>
+                                                </TableRow>
+                                            ))}
+                                        </TableBody>
+                                    </Table>
+                                </div>
+                            </div>
                         </CardContent>
                     </Card>
                 </TabsContent>

@@ -1,11 +1,12 @@
 
+
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/shared/ui/card";
 import { Input } from "@/shared/ui/input";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/shared/ui/select";
 import { BarChart, Search, UserPlus, Users } from "lucide-react";
 import Image from "next/image";
-import { teams, sportCategories } from "@/mocks";
+import { teams, teamSports } from "@/mocks";
 import { Badge } from "@/shared/ui/badge";
 import Link from "next/link";
 
@@ -26,16 +27,14 @@ export function TeamsPage() {
                         <Select>
                             <SelectTrigger><SelectValue placeholder="Дисциплина" /></SelectTrigger>
                             <SelectContent>
-                                {sportCategories.map((category) => (
-                                    <SelectGroup key={category.name}>
-                                        <SelectLabel>{category.name}</SelectLabel>
-                                        {category.sports.map((sport) => (
-                                            <SelectItem key={sport.name} value={sport.name.toLowerCase().replace(/\s/g, '-')}>
-                                                {sport.name}
-                                            </SelectItem>
-                                        ))}
-                                    </SelectGroup>
-                                ))}
+                                <SelectGroup>
+                                    <SelectLabel>Командные виды спорта</SelectLabel>
+                                    {teamSports.map((sport) => (
+                                        <SelectItem key={sport.id} value={sport.id}>
+                                            {sport.name}
+                                        </SelectItem>
+                                    ))}
+                                </SelectGroup>
                             </SelectContent>
                         </Select>
                         <Select>

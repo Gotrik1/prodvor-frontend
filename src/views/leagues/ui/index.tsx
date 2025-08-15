@@ -1,13 +1,14 @@
 
+
 'use client';
 
 import { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/shared/ui/table';
-import { teams as allTeams, sportCategories } from '@/mocks';
+import { teams as allTeams, teamSports } from '@/mocks';
 import { Crown, Trophy } from "lucide-react";
 import Image from 'next/image';
-import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/shared/ui/select';
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/shared/ui/select";
 import { Badge } from '@/shared/ui/badge';
 import Link from 'next/link';
 
@@ -42,16 +43,14 @@ export function LeaguesPage() {
                                 </SelectTrigger>
                                 <SelectContent>
                                     <SelectItem value="all">Все дисциплины</SelectItem>
-                                     {sportCategories.map((category) => (
-                                        <SelectGroup key={category.name}>
-                                            <SelectLabel>{category.name}</SelectLabel>
-                                            {category.sports.map((sport) => (
-                                                <SelectItem key={sport.name} value={sport.name}>
-                                                    {sport.name}
-                                                </SelectItem>
-                                            ))}
-                                        </SelectGroup>
-                                    ))}
+                                     <SelectGroup>
+                                        <SelectLabel>Командные виды спорта</SelectLabel>
+                                        {teamSports.map((sport) => (
+                                            <SelectItem key={sport.id} value={sport.name}>
+                                                {sport.name}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectGroup>
                                 </SelectContent>
                             </Select>
                         </div>
