@@ -34,6 +34,19 @@ const mockFollowers = [
     users.find(u => u.nickname === 'Comet')!, // Игрок
 ].filter(Boolean); // Filter out potential undefined values if a user isn't found
 
+const mockFollowing = {
+    users: [
+        users.find(u => u.nickname === 'Valkyrie')!,
+        users.find(u => u.role === 'Тренер')!,
+    ].filter(Boolean),
+    teams: [
+        teams.find(t => t.id === 'team2')!,
+        teams.find(t => t.id === 'team3')!,
+        teams.find(t => t.id === 'team4')!,
+    ].filter(Boolean),
+};
+
+
 const careerStats = {
     '2025': { matches: 52, wins: 38, goals: 41, assists: 15, mvp: 12 },
     '2024': { matches: 68, wins: 41, goals: 35, assists: 22, mvp: 18 },
@@ -165,6 +178,34 @@ const FollowersCard = () => (
     </Card>
 );
 
+const FollowingCard = () => (
+    <Card>
+        <CardHeader>
+             <CardTitle>Подписки ({mockFollowing.users.length + mockFollowing.teams.length})</CardTitle>
+        </CardHeader>
+         <CardContent>
+            <div className="flex flex-wrap gap-3">
+                {mockFollowing.users.map(user => (
+                    <Link href={`/users/${user.id}`} key={user.id}>
+                        <Avatar className="h-12 w-12 border-2 border-transparent hover:border-primary transition-colors">
+                            <AvatarImage src={user.avatarUrl} alt={user.nickname} />
+                            <AvatarFallback>{user.nickname.charAt(0)}</AvatarFallback>
+                        </Avatar>
+                    </Link>
+                ))}
+                 {mockFollowing.teams.map(team => (
+                    <Link href={`/teams/${team.id}`} key={team.id}>
+                         <Avatar className="h-12 w-12 border-2 border-transparent hover:border-primary transition-colors rounded-md">
+                            <AvatarImage src={team.logoUrl} alt={team.name} className="p-1" />
+                            <AvatarFallback>{team.name.charAt(0)}</AvatarFallback>
+                        </Avatar>
+                    </Link>
+                ))}
+            </div>
+        </CardContent>
+    </Card>
+);
+
 
 export function PlayerPageTemplate({ user: profileUser }: { user?: User }) {
     const player = profileUser || defaultPlayer;
@@ -221,6 +262,7 @@ export function PlayerPageTemplate({ user: profileUser }: { user?: User }) {
                 </div>
                  <div className="lg:col-span-1 space-y-6">
                     <FollowersCard />
+                    <FollowingCard />
                 </div>
             </div>
         </div>
