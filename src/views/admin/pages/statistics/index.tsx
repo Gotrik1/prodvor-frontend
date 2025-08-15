@@ -179,7 +179,7 @@ export function AdminStatisticsPage() {
                                             <TableRow key={team.id}>
                                                 <TableCell className="font-medium">
                                                     <Link href={`/teams/${team.id}`} className="flex items-center gap-3 group">
-                                                        <Image src={team.logoUrl} alt={team.name} width={36} height={36} className="rounded-md" data-ai-hint="team logo" />
+                                                        <Image src={team.logoUrl} alt={team.name} width={36} height={36} className="rounded-md" data-ai-hint={team.dataAiHint} />
                                                         <span className="group-hover:text-primary transition-colors">{team.name}</span>
                                                     </Link>
                                                 </TableCell>
@@ -215,7 +215,7 @@ export function AdminStatisticsPage() {
                                             <TableRow key={sponsor.id}>
                                                 <TableCell className="font-medium">
                                                         <Link href={`/admin/sponsors/${sponsor.id}`} className="flex items-center gap-3 group">
-                                                        <Image src={sponsor.logoUrl} alt={sponsor.name} width={36} height={36} className="rounded-md" data-ai-hint="logo" />
+                                                        <Image src={sponsor.logoUrl} alt={sponsor.name} width={36} height={36} className="rounded-md" data-ai-hint={sponsor.dataAiHint} />
                                                         <span className="group-hover:text-primary transition-colors">{sponsor.name}</span>
                                                     </Link>
                                                 </TableCell>
