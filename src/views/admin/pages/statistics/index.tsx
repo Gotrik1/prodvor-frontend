@@ -20,7 +20,7 @@ import { Tooltip, TooltipProvider, TooltipContent, TooltipTrigger } from '@/shar
 
 const statusColors: Record<string, string> = {
     'АНОНС': 'bg-purple-500/20 text-purple-300 border-purple-500/30',
-    'ПРЕДРЕГИСТРАЦ': 'bg-cyan-500/20 text-cyan-300 border-cyan-500/30',
+    'ПРЕДРЕГИСТРАЦИЯ': 'bg-cyan-500/20 text-cyan-300 border-cyan-500/30',
     'РЕГИСТРАЦИЯ': 'bg-blue-500/20 text-blue-300 border-blue-500/30',
     'ИДЕТ': 'bg-green-500/20 text-green-300 border-green-500/30',
     'ЗАВЕРШЕН': 'bg-muted text-muted-foreground border-border',
@@ -28,7 +28,7 @@ const statusColors: Record<string, string> = {
 
 
 const DataTable = ({ headers, data, renderRow }: { headers: string[], data: any[], renderRow: (item: any, index: number) => React.ReactNode }) => (
-    <div className="border rounded-lg">
+    <div className="border rounded-lg overflow-x-auto">
         <Table>
             <TableHeader><TableRow>{headers.map(h => <TableHead key={h}>{h}</TableHead>)}</TableRow></TableHeader>
             <TableBody>{data.map((item, index) => renderRow(item, index))}</TableBody>
@@ -83,7 +83,7 @@ export function AdminStatisticsPage() {
                             data={users}
                             renderRow={(user) => (
                                 <TableRow key={user.id}>
-                                    <TableCell className="font-mono text-xs">
+                                    <TableCell className="font-mono text-xs whitespace-nowrap">
                                         <div className="flex items-center gap-2">
                                             <span>{user.id}</span>
                                             <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => copyToClipboard(user.id, 'User')}><Copy className="h-3 w-3"/></Button>
@@ -96,13 +96,13 @@ export function AdminStatisticsPage() {
                                                 <AvatarFallback>{user.nickname.charAt(0)}</AvatarFallback>
                                             </Avatar>
                                             <div>
-                                                <p className="font-medium">{user.firstName} {user.lastName}</p>
+                                                <p className="font-medium whitespace-nowrap">{user.firstName} {user.lastName}</p>
                                                 <p className="text-xs text-muted-foreground">@{user.nickname}</p>
                                             </div>
                                         </div>
                                     </TableCell>
                                     <TableCell><Badge variant="outline">{user.role}</Badge></TableCell>
-                                    <TableCell className="max-w-[200px]">
+                                    <TableCell className="min-w-[200px] max-w-[250px]">
                                         <TooltipProvider>
                                             <Tooltip>
                                                 <TooltipTrigger>
@@ -118,19 +118,19 @@ export function AdminStatisticsPage() {
                                             </Tooltip>
                                         </TooltipProvider>
                                     </TableCell>
-                                    <TableCell className="text-xs">
+                                    <TableCell className="text-xs whitespace-nowrap">
                                         <div className="flex items-center gap-1"><Mail className="h-3 w-3"/>{user.email}</div>
                                         <div className="flex items-center gap-1"><Phone className="h-3 w-3"/>{user.phone}</div>
                                     </TableCell>
                                      <TableCell>
                                         <div className="flex flex-col gap-1 text-xs">
                                            {getTeamForUser(user.id).map(team => (
-                                                <Link key={team?.id} href={`/admin/templates/team`} className="text-blue-400 hover:underline">{team?.name} {team?.subdiscipline ? `(${team.subdiscipline})`: ''}</Link>
+                                                <Link key={team?.id} href={`/admin/templates/team`} className="text-blue-400 hover:underline whitespace-nowrap">{team?.name} {team?.subdiscipline ? `(${team.subdiscipline})`: ''}</Link>
                                            ))}
                                         </div>
                                     </TableCell>
                                     <TableCell>
-                                        <div className="flex items-center gap-3 text-xs">
+                                        <div className="flex items-center gap-3 text-xs whitespace-nowrap">
                                             <div className="flex items-center gap-1" title="Друзья"><Heart className="h-3 w-3"/>{user.friends.length}</div>
                                             <div className="flex items-center gap-1" title="Подписчики"><UserPlus className="h-3 w-3"/>{user.followers.length}</div>
                                             <div className="flex items-center gap-1" title="Подписки"><Rss className="h-3 w-3"/>{user.followingUsers.length + user.followingTeams.length}</div>
