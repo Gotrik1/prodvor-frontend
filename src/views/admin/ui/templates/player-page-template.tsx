@@ -11,6 +11,7 @@ import Image from 'next/image';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 import { Button } from "@/shared/ui/button";
 import Link from "next/link";
+import { useUserStore } from "@/widgets/dashboard-header/model/user-store";
 
 const defaultPlayer = users.find(u => u.role === 'Игрок')!;
 const playerTeam = teams.find(t => t.members.includes(defaultPlayer.id));
@@ -148,8 +149,11 @@ const FollowersCard = () => (
 );
 
 
-export function PlayerPageTemplate({ user }: { user?: User }) {
-    const player = user || defaultPlayer;
+export function PlayerPageTemplate({ user: profileUser }: { user?: User }) {
+    const player = profileUser || defaultPlayer;
+    const { user: currentUser } = useUserStore();
+
+    const isOwnProfile = currentUser?.id === player.id;
 
     return (
         <div className="border rounded-lg p-4 md:p-6 space-y-6 bg-muted/20">
@@ -174,10 +178,12 @@ export function PlayerPageTemplate({ user }: { user?: User }) {
                         {player.phone && <div className="flex items-center gap-2"><Phone className="h-4 w-4"/><span>{player.phone}</span></div>}
                     </div>
                 </div>
-                <div className="flex items-center gap-2">
-                    <Button><UserPlus className="mr-2 h-4 w-4" />Подписаться</Button>
-                    <Button variant="secondary"><MessageSquare className="mr-2 h-4 w-4" />Написать</Button>
-                </div>
+                {!isOwnProfile && (
+                    <div className="flex items-center gap-2">
+                        <Button><UserPlus className="mr-2 h-4 w-4" />Подписаться</Button>
+                        <Button variant="secondary"><MessageSquare className="mr-2 h-4 w-4" />Написать</Button>
+                    </div>
+                )}
             </header>
             
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
