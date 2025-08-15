@@ -1,10 +1,11 @@
 import { SidebarTrigger } from "@/shared/ui/sidebar";
-import { Search, ShoppingCart, Bell } from "lucide-react";
+import { Search, ShoppingCart, Bell, User, Settings, LifeBuoy, Share2, LogOut } from "lucide-react";
 import { Input } from "@/shared/ui/input";
 import { Button } from "@/shared/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { ThemeToggle } from "@/shared/ui/theme-toggle";
 import Link from "next/link";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/shared/ui/dropdown-menu";
 
 export function DashboardHeader() {
   return (
@@ -27,10 +28,44 @@ export function DashboardHeader() {
           <Bell />
         </Button>
         <ThemeToggle />
-        <Avatar>
-          <AvatarImage src="https://i.pravatar.cc/150?u=a042581f4e29026024d" />
-          <AvatarFallback>G</AvatarFallback>
-        </Avatar>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" className="relative h-10 w-10 rounded-full">
+              <Avatar>
+                <AvatarImage src="https://i.pravatar.cc/150?u=a042581f4e29026024d" />
+                <AvatarFallback>G</AvatarFallback>
+              </Avatar>
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="w-56" align="end" forceMount>
+            <DropdownMenuLabel className="font-normal">
+              <div className="flex flex-col space-y-1">
+                <p className="text-sm font-medium leading-none">Terminator</p>
+                <p className="text-xs leading-none text-muted-foreground">
+                  user1@example.com
+                </p>
+              </div>
+            </DropdownMenuLabel>
+            <DropdownMenuSeparator />
+             <DropdownMenuItem asChild>
+                <Link href="/dashboard"><User className="mr-2 h-4 w-4" /><span>Профиль</span></Link>
+            </DropdownMenuItem>
+             <DropdownMenuItem asChild>
+                <Link href="/settings"><Settings className="mr-2 h-4 w-4" /><span>Настройки</span></Link>
+            </DropdownMenuItem>
+             <DropdownMenuItem>
+                <Share2 className="mr-2 h-4 w-4" />
+                <span>Поделиться профилем</span>
+            </DropdownMenuItem>
+             <DropdownMenuItem asChild>
+                <Link href="/support"><LifeBuoy className="mr-2 h-4 w-4" /><span>Помощь</span></Link>
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem asChild>
+                <Link href="/auth"><LogOut className="mr-2 h-4 w-4" /><span>Выход</span></Link>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
     </header>
   );

@@ -17,29 +17,29 @@ html {
 
 @layer base {
   :root {
-    --background: 220 40% 6%;
-    --foreground: 210 40% 98%;
+    --background: 220 40% 100%;
+    --foreground: 220 50% 30%;
 
-    --muted: 220 40% 15%;
-    --muted-foreground: 215 20.2% 65.1%;
+    --muted: 220 40% 100%;
+    --muted-foreground: 220 50% 30%;
 
-    --popover: 222.2 84% 4.9%;
+    --popover: 222.2 84% 5%;
     --popover-foreground: 210 40% 98%;
 
-    --card: 220 40% 10%;
-    --card-foreground: 210 40% 98%;
+    --card: 220 40% 100%;
+    --card-foreground: 220 50% 30%;
 
-    --border: 220 40% 15%;
+    --border: 220 40% 100%;
     --input: 217.2 32.6% 10%;
 
     --primary: 198 93% 59%;
-    --primary-foreground: 220 40% 10%;
+    --primary-foreground: 220 50% 30%;
 
     --secondary: 217 33% 17%;
     --secondary-foreground: 210 40% 98%;
 
     --accent: 29 93% 57%;
-    --accent-foreground: 220 40% 10%;
+    --accent-foreground: 220 50% 30%;
 
     --destructive: 0 63% 31%;
     --destructive-foreground: 210 40% 98%;
@@ -52,7 +52,7 @@ html {
   }
 
   .dark {
-    --background: 220 40% 6%;
+    --background: 220 40% 20%;
     --foreground: 210 40% 98%;
 
     --muted: 220 40% 15%;
@@ -103,7 +103,7 @@ html {
     font-family: theme("fontFamily.headline");
   }
   .card {
-     box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2), 0 4px 6px -2px rgba(0, 0, 0, 0.1);
+     box-shadow: 0 10px 15px -3px rgba(235, 9, 9, 0.2), 0 4px 6px -2px rgba(243, 6, 6, 0.1);
   }
 }
 
