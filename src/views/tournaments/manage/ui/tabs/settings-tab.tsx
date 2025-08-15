@@ -3,7 +3,7 @@
 
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
-import { AlertTriangle, ListChecks, Loader2, Save, PlusCircle, MapPin, Trash2 } from "lucide-react";
+import { AlertTriangle, ListChecks, Loader2, Save, PlusCircle, MapPin, Trash2, Globe, Building, Flag } from "lucide-react";
 import { Input } from "@/shared/ui/input";
 import { Textarea } from "@/shared/ui/textarea";
 import { Label } from "@/shared/ui/label";
@@ -16,6 +16,7 @@ import { Calendar as CalendarIcon } from 'lucide-react';
 import { Calendar as CalendarComponent } from "@/shared/ui/calendar";
 import { Tournament, requirements as initialRequirements } from '@/views/tournaments/public-page/ui/mock-data';
 import { useToast } from "@/shared/hooks/use-toast";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/select";
 
 // Mock data for playgrounds
 const mockPlaygrounds = [
@@ -39,6 +40,10 @@ export function SettingsTab({ tournament, onTournamentChange }: { tournament: To
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         onTournamentChange({ [e.target.id]: e.target.value });
+    };
+    
+    const handleSelectChange = (id: 'level', value: Tournament['level']) => {
+        onTournamentChange({ [id]: value });
     };
 
     const handleSave = () => {
@@ -87,6 +92,26 @@ export function SettingsTab({ tournament, onTournamentChange }: { tournament: To
                             value={tournament.description}
                             onChange={handleInputChange}
                         />
+                    </div>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="space-y-2">
+                            <Label htmlFor="level">Уровень турнира</Label>
+                             <Select value={tournament.level} onValueChange={(value) => handleSelectChange('level', value as Tournament['level'])}>
+                                <SelectTrigger id="level">
+                                    <SelectValue placeholder="Выберите уровень" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="Городской"><Building className="mr-2 h-4 w-4"/>Городской</SelectItem>
+                                    <SelectItem value="Региональный"><MapPin className="mr-2 h-4 w-4"/>Региональный</SelectItem>
+                                    <SelectItem value="Федеральный"><Globe className="mr-2 h-4 w-4"/>Федеральный</SelectItem>
+                                </SelectContent>
+                            </Select>
+                        </div>
+                        <div className="space-y-2">
+                            <Label htmlFor="location">Локация</Label>
+                            <Input id="location" value={tournament.location} onChange={handleInputChange} placeholder="Напр. Москва" />
+                        </div>
                     </div>
 
                      <div className="space-y-2">

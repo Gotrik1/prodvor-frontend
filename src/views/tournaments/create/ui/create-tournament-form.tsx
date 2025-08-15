@@ -87,6 +87,23 @@ export function CreateTournamentForm() {
                             </Select>
                         </div>
                     </div>
+                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="space-y-2">
+                            <Label htmlFor="level">Уровень турнира</Label>
+                            <Select>
+                                <SelectTrigger id="level"><SelectValue placeholder="Выберите уровень" /></SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="city">Городской</SelectItem>
+                                    <SelectItem value="regional">Региональный</SelectItem>
+                                    <SelectItem value="federal">Федеральный</SelectItem>
+                                </SelectContent>
+                            </Select>
+                        </div>
+                         <div className="space-y-2">
+                            <Label htmlFor="location">Место проведения</Label>
+                            <Input id="location" placeholder="Онлайн или укажите город/регион" />
+                        </div>
+                    </div>
                     <div>
                          <Label>Ключевые даты</Label>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-2">
@@ -117,22 +134,6 @@ export function CreateTournamentForm() {
                                 </PopoverTrigger>
                                 <PopoverContent className="w-auto p-0"><Calendar mode="single" initialFocus /></PopoverContent>
                             </Popover>
-                        </div>
-                    </div>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div className="space-y-2">
-                            <Label htmlFor="category">Категория</Label>
-                            <Select>
-                                <SelectTrigger id="category"><SelectValue placeholder="Выберите категорию" /></SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="cybersport">Киберспорт</SelectItem>
-                                    <SelectItem value="real-sport">Реальный спорт</SelectItem>
-                                </SelectContent>
-                            </Select>
-                        </div>
-                         <div className="space-y-2">
-                            <Label htmlFor="location">Место проведения</Label>
-                            <Input id="location" placeholder="Онлайн или укажите адрес" />
                         </div>
                     </div>
                     <div className="space-y-2">

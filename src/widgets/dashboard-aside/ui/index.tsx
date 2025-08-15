@@ -1,25 +1,42 @@
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
 import { Button } from "@/shared/ui/button";
 import { Bot, Lightbulb, Trophy } from "lucide-react";
-import { tournaments } from "@/mocks";
+import { allTournaments } from "@/views/tournaments/public-page/ui/mock-data";
 import Link from "next/link";
 import { Progress } from "@/shared/ui/progress";
 import { Badge } from "@/shared/ui/badge";
 import Image from "next/image";
+import { useUserStore } from "@/widgets/dashboard-header/model/user-store";
 
 type TournamentStatus = 'АНОНС' | 'ПРЕДРЕГИСТРАЦИЯ' | 'РЕГИСТРАЦИЯ' | 'ИДЕТ' | 'ЗАВЕРШЕН';
 
 const statusColors: Record<TournamentStatus, string> = {
     'АНОНС': 'bg-purple-500/20 text-purple-300 border-purple-500/30',
     'ПРЕДРЕГИСТРАЦИЯ': 'bg-cyan-500/20 text-cyan-300 border-cyan-500/30',
-    'РЕГИСТРАЦИЯ': 'bg-blue-500/20 text-blue-300 border-blue-500/30',
+    'РЕГИСТРАЦИЯ': 'bg-blue-500/20 text-blue-300 border-blue-300/30',
     'ИДЕТ': 'bg-green-500/20 text-green-300 border-green-500/30',
     'ЗАВЕРШЕН': 'bg-muted text-muted-foreground border-border',
 };
 
-const activeTournaments = tournaments.filter(t => t.status === 'ИДЕТ' || t.status === 'РЕГИСТРАЦИЯ');
 
 export function DashboardAside() {
+  const { user } = useUserStore();
+
+  const activeTournaments = allTournaments.filter(t => {
+      const isActiveStatus = t.status === 'ИДЕТ' || t.status === 'РЕГИСТРАЦИЯ';
+      if (!isActiveStatus) return false;
+
+      // Show all federal tournaments
+      if (t.level === 'Федеральный') return true;
+      
+      // Show regional/city tournaments if user's city matches
+      if ((t.level === 'Региональный' || t.level === 'Городской') && user?.city === t.location) {
+          return true;
+      }
+
+      return false;
+  });
+
   return (
     <>
       <Card className="bg-card">
@@ -50,7 +67,7 @@ export function DashboardAside() {
               </Link>
             ))
           ) : (
-            <p className="text-sm text-muted-foreground text-center py-4">Сейчас нет активных турниров.</p>
+            <p className="text-sm text-muted-foreground text-center py-4">Сейчас нет активных турниров для вашего региона.</p>
           )}
         </CardContent>
       </Card>
