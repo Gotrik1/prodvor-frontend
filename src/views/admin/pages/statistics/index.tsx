@@ -8,12 +8,13 @@ import { Badge } from '@/shared/ui/badge';
 import { Button } from '@/shared/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/shared/ui/table';
-import { Copy, ExternalLink, Home, Crown, GanttChart, Eye, Database, Key, Link2, ListOrdered, Mail, MapPin, User as UserIcon, Phone, Heart, UserPlus, Rss } from 'lucide-react';
+import { Copy, ExternalLink, Home, Crown, GanttChart, Eye, Database, Key, ListOrdered, Mail, MapPin, User as UserIcon, Phone, Heart, UserPlus, Rss } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Progress } from '@/shared/ui/progress';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs';
 import { useToast } from '@/shared/hooks/use-toast';
+import { useEffect, useState } from 'react';
 
 const statusColors: Record<string, string> = {
     'АНОНС': 'bg-purple-500/20 text-purple-300 border-purple-500/30',
@@ -31,6 +32,12 @@ const findUserTeam = (userId: string): Team | undefined => {
 
 export function AdminStatisticsPage() {
     const { toast } = useToast();
+    const [isClient, setIsClient] = useState(false);
+
+    useEffect(() => {
+        setIsClient(true);
+    }, []);
+
 
     const copyToClipboard = (text: string, label: string) => {
         navigator.clipboard.writeText(text);
@@ -39,6 +46,10 @@ export function AdminStatisticsPage() {
             description: `${label} "${text}" скопирован в буфер обмена.`,
         });
     };
+
+    if (!isClient) {
+        return null; // or a loading skeleton
+    }
 
     return (
         <div className="space-y-8">
@@ -77,7 +88,7 @@ export function AdminStatisticsPage() {
                                             <TableHead>Возраст/Пол</TableHead>
                                             <TableHead>Город</TableHead>
                                             <TableHead>Контакты</TableHead>
-                                            <TableHead><Link2 className="inline h-3 w-3 mr-1"/>Команда</TableHead>
+                                            <TableHead>Команда</TableHead>
                                             <TableHead>Соц. связи</TableHead>
                                             <TableHead className="text-right">Действия</TableHead>
                                         </TableRow>
@@ -156,8 +167,8 @@ export function AdminStatisticsPage() {
                                         <TableRow>
                                             <TableHead><Key className="inline h-3 w-3 mr-1"/>ID (PK)</TableHead>
                                             <TableHead>Команда</TableHead>
-                                            <TableHead><Link2 className="inline h-3 w-3 mr-1"/>Капитан (FK)</TableHead>
-                                            <TableHead><Link2 className="inline h-3 w-3 mr-1"/>Дом. площадка (FK)</TableHead>
+                                            <TableHead>Капитан (FK)</TableHead>
+                                            <TableHead>Дом. площадка (FK)</TableHead>
                                             <TableHead className="text-right">Просмотр</TableHead>
                                         </TableRow>
                                     </TableHeader>
