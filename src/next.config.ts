@@ -18,8 +18,14 @@ const nextConfig: NextConfig = {
             protocol: 'https',
             hostname: 'prodvor.website',
         },
+        {
+            protocol: 'https',
+            hostname: 'i.pravatar.cc',
+        }
     ],
   },
 };
 
 export default nextConfig;
+
+    
