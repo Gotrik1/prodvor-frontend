@@ -1,4 +1,5 @@
 export type UserRole = 'Игрок' | 'Капитан' | 'Тренер' | 'Организатор' | 'Судья' | 'Менеджер' | 'Болельщик' | 'Модератор' | 'Администратор';
+export type UserGender = 'мужской' | 'женский';
 
 export interface User {
   id: string;
@@ -8,85 +9,86 @@ export interface User {
   avatarUrl: string;
   email: string;
   role: UserRole;
+  gender: UserGender;
 }
 
 export const users: User[] = [
   // --- Игроки ---
   // Team 1: Ночные Снайперы (5)
-  { id: 'user1', firstName: 'Иван', lastName: 'Петров', nickname: 'Terminator', avatarUrl: 'https://i.pravatar.cc/150?u=user1', email: 'user1@example.com', role: 'Игрок' },
-  { id: 'user2', firstName: 'Мария', lastName: 'Сидорова', nickname: 'Valkyrie', avatarUrl: 'https://i.pravatar.cc/150?u=user2', email: 'user2@example.com', role: 'Игрок' },
-  { id: 'user5', firstName: 'Петр', lastName: 'Волков', nickname: 'Wolf', avatarUrl: 'https://i.pravatar.cc/150?u=user5', email: 'user5@example.com', role: 'Игрок' },
-  { id: 'user6', firstName: 'Анна', lastName: 'Зайцева', nickname: 'Bunny', avatarUrl: 'https://i.pravatar.cc/150?u=user6', email: 'user6@example.com', role: 'Игрок' },
-  { id: 'user7', firstName: 'Дмитрий', lastName: 'Морозов', nickname: 'Frost', avatarUrl: 'https://i.pravatar.cc/150?u=user7', email: 'user7@example.com', role: 'Игрок' },
+  { id: 'user1', firstName: 'Иван', lastName: 'Петров', nickname: 'Terminator', avatarUrl: 'https://placehold.co/150x150.png', email: 'user1@example.com', role: 'Игрок', gender: 'мужской' },
+  { id: 'user2', firstName: 'Мария', lastName: 'Сидорова', nickname: 'Valkyrie', avatarUrl: 'https://placehold.co/150x150.png', email: 'user2@example.com', role: 'Игрок', gender: 'женский' },
+  { id: 'user5', firstName: 'Петр', lastName: 'Волков', nickname: 'Wolf', avatarUrl: 'https://placehold.co/150x150.png', email: 'user5@example.com', role: 'Игрок', gender: 'мужской' },
+  { id: 'user6', firstName: 'Анна', lastName: 'Зайцева', nickname: 'Bunny', avatarUrl: 'https://placehold.co/150x150.png', email: 'user6@example.com', role: 'Игрок', gender: 'женский' },
+  { id: 'user7', firstName: 'Дмитрий', lastName: 'Морозов', nickname: 'Frost', avatarUrl: 'https://placehold.co/150x150.png', email: 'user7@example.com', role: 'Игрок', gender: 'мужской' },
 
   // Team 2: Короли Асфальта (5)
-  { id: 'user3', firstName: 'Алексей', lastName: 'Смирнов', nickname: 'Destroyer', avatarUrl: 'https://i.pravatar.cc/150?u=user3', email: 'user3@example.com', role: 'Игрок' },
-  { id: 'user8', firstName: 'Ольга', lastName: 'Иванова', nickname: 'Comet', avatarUrl: 'https://i.pravatar.cc/150?u=user8', email: 'user8@example.com', role: 'Игрок' },
-  { id: 'user15', firstName: 'Сергей', lastName: 'Кузнецов', nickname: 'Serg', avatarUrl: 'https://i.pravatar.cc/150?u=user15', email: 'user15@example.com', role: 'Игрок' },
-  { id: 'user16', firstName: 'Ирина', lastName: 'Попова', nickname: 'Ira', avatarUrl: 'https://i.pravatar.cc/150?u=user16', email: 'user16@example.com', role: 'Игрок' },
-  { id: 'user17', firstName: 'Владимир', lastName: 'Соколов', nickname: 'Vova', avatarUrl: 'https://i.pravatar.cc/150?u=user17', email: 'user17@example.com', role: 'Игрок' },
+  { id: 'user3', firstName: 'Алексей', lastName: 'Смирнов', nickname: 'Destroyer', avatarUrl: 'https://placehold.co/150x150.png', email: 'user3@example.com', role: 'Игрок', gender: 'мужской' },
+  { id: 'user8', firstName: 'Ольга', lastName: 'Иванова', nickname: 'Comet', avatarUrl: 'https://placehold.co/150x150.png', email: 'user8@example.com', role: 'Игрок', gender: 'женский' },
+  { id: 'user15', firstName: 'Сергей', lastName: 'Кузнецов', nickname: 'Serg', avatarUrl: 'https://placehold.co/150x150.png', email: 'user15@example.com', role: 'Игрок', gender: 'мужской' },
+  { id: 'user16', firstName: 'Ирина', lastName: 'Попова', nickname: 'Ira', avatarUrl: 'https://placehold.co/150x150.png', email: 'user16@example.com', role: 'Игрок', gender: 'женский' },
+  { id: 'user17', firstName: 'Владимир', lastName: 'Соколов', nickname: 'Vova', avatarUrl: 'https://placehold.co/150x150.png', email: 'user17@example.com', role: 'Игрок', gender: 'мужской' },
 
   // Team 3: Стальные Ястребы (5)
-  { id: 'user9', firstName: 'Артур', lastName: 'Пирожков', nickname: 'Hawk', avatarUrl: 'https://i.pravatar.cc/150?u=user9', email: 'user9@example.com', role: 'Игрок' },
-  { id: 'user18', firstName: 'Кирилл', lastName: 'Новиков', nickname: 'Kirill', avatarUrl: 'https://i.pravatar.cc/150?u=user18', email: 'user18@example.com', role: 'Игрок' },
-  { id: 'user19', firstName: 'Екатерина', lastName: 'Федорова', nickname: 'Kat', avatarUrl: 'https://i.pravatar.cc/150?u=user19', email: 'user19@example.com', role: 'Игрок' },
-  { id: 'user20', firstName: 'Михаил', lastName: 'Козлов', nickname: 'Misha', avatarUrl: 'https://i.pravatar.cc/150?u=user20', email: 'user20@example.com', role: 'Игрок' },
-  { id: 'user21', firstName: 'Виктория', lastName: 'Лебедева', nickname: 'Vika', avatarUrl: 'https://i.pravatar.cc/150?u=user21', email: 'user21@example.com', role: 'Игрок' },
+  { id: 'user9', firstName: 'Артур', lastName: 'Пирожков', nickname: 'Hawk', avatarUrl: 'https://placehold.co/150x150.png', email: 'user9@example.com', role: 'Игрок', gender: 'мужской' },
+  { id: 'user18', firstName: 'Кирилл', lastName: 'Новиков', nickname: 'Kirill', avatarUrl: 'https://placehold.co/150x150.png', email: 'user18@example.com', role: 'Игрок', gender: 'мужской' },
+  { id: 'user19', firstName: 'Екатерина', lastName: 'Федорова', nickname: 'Kat', avatarUrl: 'https://placehold.co/150x150.png', email: 'user19@example.com', role: 'Игрок', gender: 'женский' },
+  { id: 'user20', firstName: 'Михаил', lastName: 'Козлов', nickname: 'Misha', avatarUrl: 'https://placehold.co/150x150.png', email: 'user20@example.com', role: 'Игрок', gender: 'мужской' },
+  { id: 'user21', firstName: 'Виктория', lastName: 'Лебедева', nickname: 'Vika', avatarUrl: 'https://placehold.co/150x150.png', email: 'user21@example.com', role: 'Игрок', gender: 'женский' },
 
   // Team 4: Бетонные Тигры (5)
-  { id: 'user10', firstName: 'Борис', lastName: 'Бритва', nickname: 'Tiger', avatarUrl: 'https://i.pravatar.cc/150?u=user10', email: 'user10@example.com', role: 'Игрок' },
-  { id: 'user22', firstName: 'Роман', lastName: 'Степанов', nickname: 'Roman', avatarUrl: 'https://i.pravatar.cc/150?u=user22', email: 'user22@example.com', role: 'Игрок' },
-  { id: 'user23', firstName: 'Алиса', lastName: 'Яковлева', nickname: 'Alice', avatarUrl: 'https://i.pravatar.cc/150?u=user23', email: 'user23@example.com', role: 'Игрок' },
-  { id: 'user24', firstName: 'Павел', lastName: 'Орлов', nickname: 'Pavel', avatarUrl: 'https://i.pravatar.cc/150?u=user24', email: 'user24@example.com', role: 'Игрок' },
-  { id: 'user25', firstName: 'Наталья', lastName: 'Николаева', nickname: 'Nataly', avatarUrl: 'https://i.pravatar.cc/150?u=user25', email: 'user25@example.com', role: 'Игрок' },
+  { id: 'user10', firstName: 'Борис', lastName: 'Бритва', nickname: 'Tiger', avatarUrl: 'https://placehold.co/150x150.png', email: 'user10@example.com', role: 'Игрок', gender: 'мужской' },
+  { id: 'user22', firstName: 'Роман', lastName: 'Степанов', nickname: 'Roman', avatarUrl: 'https://placehold.co/150x150.png', email: 'user22@example.com', role: 'Игрок', gender: 'мужской' },
+  { id: 'user23', firstName: 'Алиса', lastName: 'Яковлева', nickname: 'Alice', avatarUrl: 'https://placehold.co/150x150.png', email: 'user23@example.com', role: 'Игрок', gender: 'женский' },
+  { id: 'user24', firstName: 'Павел', lastName: 'Орлов', nickname: 'Pavel', avatarUrl: 'https://placehold.co/150x150.png', email: 'user24@example.com', role: 'Игрок', gender: 'мужской' },
+  { id: 'user25', firstName: 'Наталья', lastName: 'Николаева', nickname: 'Nataly', avatarUrl: 'https://placehold.co/150x150.png', email: 'user25@example.com', role: 'Игрок', gender: 'женский' },
   
   // Team 5: Разрушители (5)
-  { id: 'user11', firstName: 'Виктор', lastName: 'Цой', nickname: 'Crusher', avatarUrl: 'https://i.pravatar.cc/150?u=user11', email: 'user11@example.com', role: 'Игрок' },
-  { id: 'user26', firstName: 'Егор', lastName: 'Захаров', nickname: 'Egor', avatarUrl: 'https://i.pravatar.cc/150?u=user26', email: 'user26@example.com', role: 'Игрок' },
-  { id: 'user27', firstName: 'Юлия', lastName: 'Герасимова', nickname: 'Julia', avatarUrl: 'https://i.pravatar.cc/150?u=user27', email: 'user27@example.com', role: 'Игрок' },
-  { id: 'user28', firstName: 'Максим', lastName: 'Соловьев', nickname: 'Max', avatarUrl: 'https://i.pravatar.cc/150?u=user28', email: 'user28@example.com', role: 'Игрок' },
-  { id: 'user29', firstName: 'Светлана', lastName: 'Васильева', nickname: 'Sveta', avatarUrl: 'https://i.pravatar.cc/150?u=user29', email: 'user29@example.com', role: 'Игрок' },
+  { id: 'user11', firstName: 'Виктор', lastName: 'Цой', nickname: 'Crusher', avatarUrl: 'https://placehold.co/150x150.png', email: 'user11@example.com', role: 'Игрок', gender: 'мужской' },
+  { id: 'user26', firstName: 'Егор', lastName: 'Захаров', nickname: 'Egor', avatarUrl: 'https://placehold.co/150x150.png', email: 'user26@example.com', role: 'Игрок', gender: 'мужской' },
+  { id: 'user27', firstName: 'Юлия', lastName: 'Герасимова', nickname: 'Julia', avatarUrl: 'https://placehold.co/150x150.png', email: 'user27@example.com', role: 'Игрок', gender: 'женский' },
+  { id: 'user28', firstName: 'Максим', lastName: 'Соловьев', nickname: 'Max', avatarUrl: 'https://placehold.co/150x150.png', email: 'user28@example.com', role: 'Игрок', gender: 'мужской' },
+  { id: 'user29', firstName: 'Светлана', lastName: 'Васильева', nickname: 'Sveta', avatarUrl: 'https://placehold.co/150x150.png', email: 'user29@example.com', role: 'Игрок', gender: 'женский' },
   
   // Team 6: Фортуна (5)
-  { id: 'user12', firstName: 'Галина', lastName: 'Бланка', nickname: 'Fortune', avatarUrl: 'https://i.pravatar.cc/150?u=user12', email: 'user12@example.com', role: 'Игрок' },
-  { id: 'user30', firstName: 'Денис', lastName: 'Павлов', nickname: 'Denis', avatarUrl: 'https://i.pravatar.cc/150?u=user30', email: 'user30@example.com', role: 'Игрок' },
-  { id: 'user31', firstName: 'Людмила', lastName: 'Семенова', nickname: 'Luda', avatarUrl: 'https://i.pravatar.cc/150?u=user31', email: 'user31@example.com', role: 'Игрок' },
-  { id: 'user32', firstName: 'Олег', lastName: 'Виноградов', nickname: 'Oleg', avatarUrl: 'https://i.pravatar.cc/150?u=user32', email: 'user32@example.com', role: 'Игрок' },
-  { id: 'user33', firstName: 'Маргарита', lastName: 'Богданова', nickname: 'Rita', avatarUrl: 'https://i.pravatar.cc/150?u=user33', email: 'user33@example.com', role: 'Игрок' },
+  { id: 'user12', firstName: 'Галина', lastName: 'Бланка', nickname: 'Fortune', avatarUrl: 'https://placehold.co/150x150.png', email: 'user12@example.com', role: 'Игрок', gender: 'женский' },
+  { id: 'user30', firstName: 'Денис', lastName: 'Павлов', nickname: 'Denis', avatarUrl: 'https://placehold.co/150x150.png', email: 'user30@example.com', role: 'Игрок', gender: 'мужской' },
+  { id: 'user31', firstName: 'Людмила', lastName: 'Семенова', nickname: 'Luda', avatarUrl: 'https://placehold.co/150x150.png', email: 'user31@example.com', role: 'Игрок', gender: 'женский' },
+  { id: 'user32', firstName: 'Олег', lastName: 'Виноградов', nickname: 'Oleg', avatarUrl: 'https://placehold.co/150x150.png', email: 'user32@example.com', role: 'Игрок', gender: 'мужской' },
+  { id: 'user33', firstName: 'Маргарита', lastName: 'Богданова', nickname: 'Rita', avatarUrl: 'https://placehold.co/150x150.png', email: 'user33@example.com', role: 'Игрок', gender: 'женский' },
 
   // Team 7: Красная Фурия (5)
-  { id: 'user13', firstName: 'Дарья', lastName: 'Донцова', nickname: 'Fury', avatarUrl: 'https://i.pravatar.cc/150?u=user13', email: 'user13@example.com', role: 'Игрок' },
-  { id: 'user34', firstName: 'Андрей', lastName: 'Воробьев', nickname: 'Andrey', avatarUrl: 'https://i.pravatar.cc/150?u=user34', email: 'user34@example.com', role: 'Игрок' },
-  { id: 'user35', firstName: 'Ксения', lastName: 'Федотова', nickname: 'Ksenia', avatarUrl: 'https://i.pravatar.cc/150?u=user35', email: 'user35@example.com', role: 'Игрок' },
-  { id: 'user36', firstName: 'Илья', lastName: 'Михайлов', nickname: 'Ilya', avatarUrl: 'https://i.pravatar.cc/150?u=user36', email: 'user36@example.com', role: 'Игрок' },
-  { id: 'user37', firstName: 'Татьяна', lastName: 'Макарова', nickname: 'Tanya', avatarUrl: 'https://i.pravatar.cc/150?u=user37', email: 'user37@example.com', role: 'Игрок' },
+  { id: 'user13', firstName: 'Дарья', lastName: 'Донцова', nickname: 'Fury', avatarUrl: 'https://placehold.co/150x150.png', email: 'user13@example.com', role: 'Игрок', gender: 'женский' },
+  { id: 'user34', firstName: 'Андрей', lastName: 'Воробьев', nickname: 'Andrey', avatarUrl: 'https://placehold.co/150x150.png', email: 'user34@example.com', role: 'Игрок', gender: 'мужской' },
+  { id: 'user35', firstName: 'Ксения', lastName: 'Федотова', nickname: 'Ksenia', avatarUrl: 'https://placehold.co/150x150.png', email: 'user35@example.com', role: 'Игрок', gender: 'женский' },
+  { id: 'user36', firstName: 'Илья', lastName: 'Михайлов', nickname: 'Ilya', avatarUrl: 'https://placehold.co/150x150.png', email: 'user36@example.com', role: 'Игрок', gender: 'мужской' },
+  { id: 'user37', firstName: 'Татьяна', lastName: 'Макарова', nickname: 'Tanya', avatarUrl: 'https://placehold.co/150x150.png', email: 'user37@example.com', role: 'Игрок', gender: 'женский' },
 
   // Team 8: Легион (5)
-  { id: 'user14', firstName: 'Евгений', lastName: 'Онегин', nickname: 'Legion', avatarUrl: 'https://i.pravatar.cc/150?u=user14', email: 'user14@example.com', role: 'Игрок' },
-  { id: 'user38', firstName: 'Артем', lastName: 'Никитин', nickname: 'Artem', avatarUrl: 'https://i.pravatar.cc/150?u=user38', email: 'user38@example.com', role: 'Игрок' },
-  { id: 'user39', firstName: 'Вероника', lastName: 'Сорокина', nickname: 'Veronika', avatarUrl: 'https://i.pravatar.cc/150?u=user39', email: 'user39@example.com', role: 'Игрок' },
-  { id: 'user40', firstName: 'Григорий', lastName: 'Комаров', nickname: 'Grisha', avatarUrl: 'https://i.pravatar.cc/150?u=user40', email: 'user40@example.com', role: 'Игрок' },
-  { id: 'user41', firstName: 'Полина', lastName: 'Жукова', nickname: 'Polina', avatarUrl: 'https://i.pravatar.cc/150?u=user41', email: 'user41@example.com', role: 'Игрок' },
+  { id: 'user14', firstName: 'Евгений', lastName: 'Онегин', nickname: 'Legion', avatarUrl: 'https://placehold.co/150x150.png', email: 'user14@example.com', role: 'Игрок', gender: 'мужской' },
+  { id: 'user38', firstName: 'Артем', lastName: 'Никитин', nickname: 'Artem', avatarUrl: 'https://placehold.co/150x150.png', email: 'user38@example.com', role: 'Игрок', gender: 'мужской' },
+  { id: 'user39', firstName: 'Вероника', lastName: 'Сорокина', nickname: 'Veronika', avatarUrl: 'https://placehold.co/150x150.png', email: 'user39@example.com', role: 'Игрок', gender: 'женский' },
+  { id: 'user40', firstName: 'Григорий', lastName: 'Комаров', nickname: 'Grisha', avatarUrl: 'https://placehold.co/150x150.png', email: 'user40@example.com', role: 'Игрок', gender: 'мужской' },
+  { id: 'user41', firstName: 'Полина', lastName: 'Жукова', nickname: 'Polina', avatarUrl: 'https://placehold.co/150x150.png', email: 'user41@example.com', role: 'Игрок', gender: 'женский' },
   
   // Team 9: Неудержимые (5)
-  { id: 'user42', firstName: 'Станислав', lastName: 'Поляков', nickname: 'Stas', avatarUrl: 'https://i.pravatar.cc/150?u=user42', email: 'user42@example.com', role: 'Игрок' },
-  { id: 'user43', firstName: 'Диана', lastName: 'Филиппова', nickname: 'Diana', avatarUrl: 'https://i.pravatar.cc/150?u=user43', email: 'user43@example.com', role: 'Игрок' },
-  { id: 'user44', firstName: 'Тимур', lastName: 'Романов', nickname: 'Timur', avatarUrl: 'https://i.pravatar.cc/150?u=user44', email: 'user44@example.com', role: 'Игрок' },
-  { id: 'user45', firstName: 'Валерия', lastName: 'Давыдова', nickname: 'Valeria', avatarUrl: 'https://i.pravatar.cc/150?u=user45', email: 'user45@example.com', role: 'Игрок' },
-  { id: 'user46', firstName: 'Даниил', lastName: 'Беляев', nickname: 'Danil', avatarUrl: 'https://i.pravatar.cc/150?u=user46', email: 'user46@example.com', role: 'Игрок' },
+  { id: 'user42', firstName: 'Станислав', lastName: 'Поляков', nickname: 'Stas', avatarUrl: 'https://placehold.co/150x150.png', email: 'user42@example.com', role: 'Игрок', gender: 'мужской' },
+  { id: 'user43', firstName: 'Диана', lastName: 'Филиппова', nickname: 'Diana', avatarUrl: 'https://placehold.co/150x150.png', email: 'user43@example.com', role: 'Игрок', gender: 'женский' },
+  { id: 'user44', firstName: 'Тимур', lastName: 'Романов', nickname: 'Timur', avatarUrl: 'https://placehold.co/150x150.png', email: 'user44@example.com', role: 'Игрок', gender: 'мужской' },
+  { id: 'user45', firstName: 'Валерия', lastName: 'Давыдова', nickname: 'Valeria', avatarUrl: 'https://placehold.co/150x150.png', email: 'user45@example.com', role: 'Игрок', gender: 'женский' },
+  { id: 'user46', firstName: 'Даниил', lastName: 'Беляев', nickname: 'Danil', avatarUrl: 'https://placehold.co/150x150.png', email: 'user46@example.com', role: 'Игрок', gender: 'мужской' },
 
   // Team 10: Феникс (5)
-  { id: 'user47', firstName: 'Василий', lastName: 'Игнатьев', nickname: 'Vasya', avatarUrl: 'https://i.pravatar.cc/150?u=user47', email: 'user47@example.com', role: 'Игрок' },
-  { id: 'user48', firstName: 'Анастасия', lastName: 'Ефимова', nickname: 'Nastya', avatarUrl: 'https://i.pravatar.cc/150?u=user48', email: 'user48@example.com', role: 'Игрок' },
-  { id: 'user49', firstName: 'Марк', lastName: 'Титов', nickname: 'Mark', avatarUrl: 'https://i.pravatar.cc/150?u=user49', email: 'user49@example.com', role: 'Игрок' },
-  { id: 'user50', firstName: 'Александра', lastName: 'Карпова', nickname: 'Sasha', avatarUrl: 'https://i.pravatar.cc/150?u=user50', email: 'user50@example.com', role: 'Игрок' },
-  { id: 'user51', firstName: 'Никита', lastName: 'Абрамов', nickname: 'Nikita', avatarUrl: 'https://i.pravatar.cc/150?u=user51', email: 'user51@example.com', role: 'Игрок' },
+  { id: 'user47', firstName: 'Василий', lastName: 'Игнатьев', nickname: 'Vasya', avatarUrl: 'https://placehold.co/150x150.png', email: 'user47@example.com', role: 'Игрок', gender: 'мужской' },
+  { id: 'user48', firstName: 'Анастасия', lastName: 'Ефимова', nickname: 'Nastya', avatarUrl: 'https://placehold.co/150x150.png', email: 'user48@example.com', role: 'Игрок', gender: 'женский' },
+  { id: 'user49', firstName: 'Марк', lastName: 'Титов', nickname: 'Mark', avatarUrl: 'https://placehold.co/150x150.png', email: 'user49@example.com', role: 'Игрок', gender: 'мужской' },
+  { id: 'user50', firstName: 'Александра', lastName: 'Карпова', nickname: 'Sasha', avatarUrl: 'https://placehold.co/150x150.png', email: 'user50@example.com', role: 'Игрок', gender: 'женский' },
+  { id: 'user51', firstName: 'Никита', lastName: 'Абрамов', nickname: 'Nikita', avatarUrl: 'https://placehold.co/150x150.png', email: 'user51@example.com', role: 'Игрок', gender: 'мужской' },
 
   // --- Персонал ---
-  { id: 'user4', firstName: 'Елена', lastName: 'Кузнецова', nickname: 'Amazonka', avatarUrl: 'https://i.pravatar.cc/150?u=user4', email: 'user4@example.com', role: 'Болельщик' },
-  { id: 'staff1', firstName: 'Игорь', lastName: 'Вольнов', nickname: 'Sudya', avatarUrl: 'https://i.pravatar.cc/150?u=staff1', email: 'referee1@example.com', role: 'Судья' },
-  { id: 'staff2', firstName: 'Елена', lastName: 'Павлова', nickname: 'CoachElena', avatarUrl: 'https://i.pravatar.cc/150?u=staff2', email: 'coach1@example.com', role: 'Тренер' },
-  { id: 'staff3', firstName: 'Федерация', lastName: 'Спорта', nickname: 'FedSport', avatarUrl: 'https://placehold.co/150x150.png', email: 'org1@example.com', role: 'Организатор' },
-  { id: 'staff4', firstName: 'Александр', lastName: 'Громов', nickname: 'Grom', avatarUrl: 'https://i.pravatar.cc/150?u=staff4', email: 'manager1@example.com', role: 'Менеджер' },
-  { id: 'staff5', firstName: 'Марина', lastName: 'Строгая', nickname: 'ModeratorM', avatarUrl: 'https://i.pravatar.cc/150?u=staff5', email: 'moderator1@example.com', role: 'Модератор' },
+  { id: 'user4', firstName: 'Елена', lastName: 'Кузнецова', nickname: 'Amazonka', avatarUrl: 'https://placehold.co/150x150.png', email: 'user4@example.com', role: 'Болельщик', gender: 'женский' },
+  { id: 'staff1', firstName: 'Игорь', lastName: 'Вольнов', nickname: 'Sudya', avatarUrl: 'https://placehold.co/150x150.png', email: 'referee1@example.com', role: 'Судья', gender: 'мужской' },
+  { id: 'staff2', firstName: 'Елена', lastName: 'Павлова', nickname: 'CoachElena', avatarUrl: 'https://placehold.co/150x150.png', email: 'coach1@example.com', role: 'Тренер', gender: 'женский' },
+  { id: 'staff3', firstName: 'Федерация', lastName: 'Спорта', nickname: 'FedSport', avatarUrl: 'https://placehold.co/150x150.png', email: 'org1@example.com', role: 'Организатор', gender: 'мужской' },
+  { id: 'staff4', firstName: 'Александр', lastName: 'Громов', nickname: 'Grom', avatarUrl: 'https://placehold.co/150x150.png', email: 'manager1@example.com', role: 'Менеджер', gender: 'мужской' },
+  { id: 'staff5', firstName: 'Марина', lastName: 'Строгая', nickname: 'ModeratorM', avatarUrl: 'https://placehold.co/150x150.png', email: 'moderator1@example.com', role: 'Модератор', gender: 'женский' },
 ];

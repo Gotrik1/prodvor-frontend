@@ -31,11 +31,13 @@ import { Textarea } from '@/shared/ui/textarea';
 import { Switch } from '@/shared/ui/switch';
 import { ThemeToggle } from '@/shared/ui/theme-toggle';
 import { useToast } from '@/shared/hooks/use-toast';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shared/ui/select';
 
 const profileFormSchema = z.object({
   firstName: z.string().min(2, 'Имя должно содержать не менее 2 символов.'),
   lastName: z.string().min(2, 'Фамилия должна содержать не менее 2 символов.'),
   nickname: z.string().min(3, 'Никнейм должен содержать не менее 3 символов.'),
+  gender: z.enum(['мужской', 'женский']),
   bio: z.string().max(160, 'Биография не должна превышать 160 символов.').optional(),
 });
 
@@ -69,6 +71,7 @@ export function SettingsPage() {
             firstName: currentUser.firstName,
             lastName: currentUser.lastName,
             nickname: currentUser.nickname,
+            gender: currentUser.gender,
             bio: "Страстный игрок в дворовый футбол и CS2. Ищу команду для серьезных игр."
         }
     });
@@ -125,9 +128,28 @@ export function SettingsPage() {
                                     <FormItem><FormLabel>Фамилия</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
                                 )}/>
                             </div>
-                             <FormField control={profileForm.control} name="nickname" render={({ field }) => (
-                                <FormItem><FormLabel>Никнейм</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
-                            )}/>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <FormField control={profileForm.control} name="nickname" render={({ field }) => (
+                                    <FormItem><FormLabel>Никнейм</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+                                )}/>
+                                <FormField control={profileForm.control} name="gender" render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Пол</FormLabel>
+                                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                            <FormControl>
+                                                <SelectTrigger>
+                                                    <SelectValue placeholder="Выберите пол" />
+                                                </SelectTrigger>
+                                            </FormControl>
+                                            <SelectContent>
+                                                <SelectItem value="мужской">Мужской</SelectItem>
+                                                <SelectItem value="женский">Женский</SelectItem>
+                                            </SelectContent>
+                                        </Select>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}/>
+                            </div>
                              <FormField control={profileForm.control} name="bio" render={({ field }) => (
                                 <FormItem><FormLabel>О себе</FormLabel><FormControl><Textarea {...field} /></FormControl><FormDescription>Краткая информация о вас.</FormDescription><FormMessage /></FormItem>
                             )}/>
