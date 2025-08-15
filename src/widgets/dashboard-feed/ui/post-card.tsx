@@ -14,14 +14,14 @@ import { useState, useEffect } from "react";
 
 export function PostCard({ post }: { post: Post }) {
   const [timeAgo, setTimeAgo] = useState('');
-  
-  const postDate = new Date(post.timestamp);
-  const fullDateTime = format(postDate, "d MMM yyyy 'г. в' HH:mm", { locale: ru });
+  const [fullDateTime, setFullDateTime] = useState('');
   
   useEffect(() => {
-    // This runs only on the client, after hydration
+    // This runs only on the client, after hydration, preventing mismatch
+    const postDate = new Date(post.timestamp);
     setTimeAgo(formatDistanceToNow(postDate, { addSuffix: true, locale: ru }));
-  }, [postDate]);
+    setFullDateTime(format(postDate, "d MMM yyyy 'г. в' HH:mm", { locale: ru }));
+  }, [post.timestamp]);
 
 
   return (
