@@ -132,18 +132,6 @@ const FollowersTab = () => (
     </Card>
 );
 
-const ContactsTab = ({ player }: { player: User }) => (
-     <Card>
-        <CardHeader><CardTitle>Контактная информация</CardTitle></CardHeader>
-        <CardContent>
-            <StatRow label="Город" value={player.city || 'Не указан'} />
-            <StatRow label="Email" value={player.email} />
-            <StatRow label="Телефон" value={player.phone || 'Не указан'} />
-        </CardContent>
-    </Card>
-);
-
-
 export function PlayerPageTemplate({ user }: { user?: User }) {
     const player = user || defaultPlayer;
 
@@ -166,6 +154,8 @@ export function PlayerPageTemplate({ user }: { user?: User }) {
                         )}
                         {player.city && <div className="flex items-center gap-2"><MapPin className="h-4 w-4"/><span>{player.city}</span></div>}
                         {player.age && <div className="flex items-center gap-2"><span>Возраст: {player.age}</span></div>}
+                        {player.email && <div className="flex items-center gap-2"><Mail className="h-4 w-4"/><span>{player.email}</span></div>}
+                        {player.phone && <div className="flex items-center gap-2"><Phone className="h-4 w-4"/><span>{player.phone}</span></div>}
                     </div>
                 </div>
                 <div className="flex items-center gap-2">
@@ -175,20 +165,18 @@ export function PlayerPageTemplate({ user }: { user?: User }) {
             </header>
 
             <Tabs defaultValue="overview">
-                <TabsList className="grid w-full grid-cols-3 md:grid-cols-6">
+                <TabsList className="grid w-full grid-cols-2 md:grid-cols-5">
                     <TabsTrigger value="overview">Обзор</TabsTrigger>
                     <TabsTrigger value="stats">Статистика</TabsTrigger>
                     <TabsTrigger value="feed">Лента</TabsTrigger>
                     <TabsTrigger value="media">Медиа</TabsTrigger>
                     <TabsTrigger value="followers">Подписчики</TabsTrigger>
-                    <TabsTrigger value="contacts">Контакты</TabsTrigger>
                 </TabsList>
                 <TabsContent value="overview" className="mt-6"><OverviewTab player={player} /></TabsContent>
                 <TabsContent value="stats" className="mt-6"><StatsTab /></TabsContent>
                 <TabsContent value="feed" className="mt-6"><FeedTab player={player}/></TabsContent>
                 <TabsContent value="media" className="mt-6"><MediaTab /></TabsContent>
                 <TabsContent value="followers" className="mt-6"><FollowersTab /></TabsContent>
-                <TabsContent value="contacts" className="mt-6"><ContactsTab player={player} /></TabsContent>
             </Tabs>
         </div>
     )
