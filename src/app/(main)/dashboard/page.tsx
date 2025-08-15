@@ -1,9 +1,7 @@
 
 'use client';
 
-import { users } from '@/mocks';
-import { DashboardFeed } from '@/widgets/dashboard-feed';
-import { DashboardAside } from '@/widgets/dashboard-aside';
+import { useUserStore } from '@/widgets/dashboard-header/model/user-store';
 import { PlayerPageTemplate } from '@/views/admin/ui/templates/player-page-template';
 import { OrganizerPageTemplate } from '@/views/admin/ui/templates/organizer-page-template';
 import { RefereePageTemplate } from '@/views/admin/ui/templates/referee-page-template';
@@ -11,30 +9,31 @@ import { CoachPageTemplate } from '@/views/admin/ui/templates/coach-page-templat
 import { ManagerPageTemplate } from '@/views/admin/ui/templates/manager-page-template';
 import { FanPageTemplate } from '@/views/admin/ui/templates/fan-page-template';
 import { PlaceholderTemplate } from '@/views/admin/ui/templates/placeholder-template';
-import { useUserStore } from '@/widgets/dashboard-header/model/user-store';
-import { useEffect } from 'react';
-
-// --- Mock current user ---
-// To test different roles, change the ID here to one from `src/mocks/users.ts`
-// For example: 'user1' (Игрок), 'staff3' (Организатор), 'staff1' (Судья), etc.
-const CURRENT_USER_ID = 'user1'; 
-const currentUser = users.find(u => u.id === CURRENT_USER_ID);
-// -------------------------
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
+import { EyeOff } from 'lucide-react';
 
 export default function Dashboard() {
-  const { setUser } = useUserStore();
-
-  useEffect(() => {
-    if (currentUser) {
-      setUser(currentUser);
-    }
-  }, [setUser]);
-
+  const { user: currentUser } = useUserStore();
 
   const renderDashboardByRole = () => {
     if (!currentUser) {
-      // Fallback for unknown user
-      return <DefaultDashboard />;
+      return (
+        <div className="flex min-h-[80vh] items-center justify-center p-4">
+             <Card className="text-center max-w-md w-full">
+                <CardHeader>
+                    <div className="mx-auto bg-primary/10 text-primary p-4 rounded-full w-fit">
+                      <EyeOff className="h-12 w-12" />
+                    </div>
+                    <CardTitle className="mt-4 text-2xl font-headline">Пользователь не выбран</CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <p className="text-muted-foreground">
+                        Чтобы увидеть дашборд, выберите пользователя для симуляции в <a href="/admin/simulation" className="text-primary hover:underline">админ-панели</a>.
+                    </p>
+                </CardContent>
+            </Card>
+        </div>
+      );
     }
 
     const userRole = currentUser.role;
@@ -58,25 +57,13 @@ export default function Dashboard() {
       case 'Болельщик':
         return <DashboardContainer><FanPageTemplate user={currentUser} /></DashboardContainer>;
       case 'Модератор':
-        return <DashboardContainer><PlaceholderTemplate roleName="Модератор" /></DashboardContainer>;
+      case 'Администратор':
+        return <DashboardContainer><PlaceholderTemplate roleName={userRole} /></DashboardContainer>;
       default:
-        // Default dashboard with feed for roles without a specific template yet
-        return <DefaultDashboard />;
+        // Fallback for unknown user or roles without a specific template
+        return <DashboardContainer><PlaceholderTemplate roleName={userRole} /></DashboardContainer>;
     }
   };
-
-  const DefaultDashboard = () => (
-    <div className="p-4 md:p-6 lg:p-8">
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2 space-y-6">
-          <DashboardFeed />
-        </div>
-        <div className="space-y-6">
-          <DashboardAside />
-        </div>
-      </div>
-    </div>
-  );
 
   return renderDashboardByRole();
 }

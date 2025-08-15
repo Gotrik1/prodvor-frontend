@@ -9,6 +9,7 @@ import Link from 'next/link';
 import { UserPage } from '@/views/admin/pages/users';
 import { SponsorPage } from '@/views/admin/pages/sponsors';
 import { TemplatePreviewPage, templateMap } from '@/views/admin/pages/templates';
+import { SimulationPage } from '@/views/admin/pages/simulation';
 
 
 export const metadata: Metadata = {
@@ -50,6 +51,8 @@ export default function AdminPage({ params }: { params: { slug: string[] } }) {
         return <AdminStatisticsPage />;
       case 'advertising':
         return <AdvertisingPage />;
+      case 'simulation':
+        return <SimulationPage />;
       case 'users':
         return <UserPage userId={subpage} />;
       case 'sponsors':
