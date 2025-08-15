@@ -26,12 +26,6 @@ enum Role {
   ADMINISTRATOR
 }
 
-enum UserGender {
-  MALE
-  FEMALE
-  OTHER
-}
-
 enum UserStatus {
   ACTIVE
   BANNED
@@ -166,18 +160,18 @@ model User {
   passwordHash              String
   role                      Role                     @default(PLAYER)
   status                    UserStatus               @default(ACTIVE)
-  gender                    UserGender?
-  phone                     String?                  @unique
-  bio                       String?                  @db.Text
   xp                        Int                      @default(0)
   createdAt                 DateTime                 @default(now())
   updatedAt                 DateTime                 @updatedAt
   dateOfBirth               DateTime?
+  gender                    String?
   location                  String?
   mainSport                 String?
   preferredSports           String[]
+  phone                     String?
   telegram                  String?
   discord                   String?
+  bio                       String?                  @db.Text
   isVerified                Boolean                  @default(false)
   avatar                    String?
   bannerImage               String?
