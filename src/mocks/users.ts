@@ -146,6 +146,28 @@ export const users: User[] = [
   { id: 'user93', firstName: 'Светлана', lastName: 'Лобода', nickname: 'Loboda', avatarUrl: 'https://i.pravatar.cc/150?u=user93', email: 'user93@example.com', role: 'Администратор', gender: 'женский', age: 39, city: 'Рязань', phone: '+7 (910) 222-33-44', friends: [], followers: [], followingUsers: [], followingTeams: [] },
   { id: 'user94', firstName: 'Монатик', lastName: 'Дмитрий', nickname: 'Monatik', avatarUrl: 'https://i.pravatar.cc/150?u=user94', email: 'user94@example.com', role: 'Организатор', gender: 'мужской', age: 36, city: 'Астрахань', phone: '+7 (927) 333-44-55', friends: [], followers: [], followingUsers: [], followingTeams: [] },
   { id: 'user95', firstName: 'Тина', lastName: 'Кароль', nickname: 'Karol', avatarUrl: 'https://i.pravatar.cc/150?u=user95', email: 'user95@example.com', role: 'Игрок', gender: 'женский', age: 37, city: 'Астрахань', phone: '+7 (927) 444-55-66', friends: [], followers: [], followingUsers: [], followingTeams: [] },
+  // Additional Players to reach ~150
+  ...Array.from({ length: 50 }, (_, i) => {
+    const id = 96 + i;
+    const gender: UserGender = Math.random() > 0.5 ? 'мужской' : 'женский';
+    const firstNames = gender === 'мужской' ? ['Иван', 'Петр', 'Сидор', 'Алексей', 'Дмитрий'] : ['Анна', 'Мария', 'Елена', 'Ольга', 'Светлана'];
+    const lastNames = ['Смирнов', 'Иванов', 'Кузнецов', 'Попов', 'Васильев'];
+    const cities = ['Москва', 'Санкт-Петербург', 'Новосибирск', 'Екатеринбург', 'Казань', 'Нижний Новгород'];
+    return {
+      id: `user${id}`,
+      firstName: firstNames[Math.floor(Math.random() * firstNames.length)],
+      lastName: lastNames[Math.floor(Math.random() * lastNames.length)],
+      nickname: `Player${id}`,
+      avatarUrl: `https://i.pravatar.cc/150?u=user${id}`,
+      email: `user${id}@example.com`,
+      role: 'Игрок' as UserRole,
+      gender,
+      age: Math.floor(Math.random() * 20) + 18,
+      city: cities[Math.floor(Math.random() * cities.length)],
+      phone: `+7 (999) ${Math.floor(100 + Math.random() * 900)}-${Math.floor(10 + Math.random() * 90)}-${Math.floor(10 + Math.random() * 90)}`,
+      friends: [], followers: [], followingUsers: [], followingTeams: []
+    };
+  })
 ];
 
 // --- Helper function to populate social graph ---
