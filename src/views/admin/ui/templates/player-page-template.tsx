@@ -16,7 +16,22 @@ import { useUserStore } from "@/widgets/dashboard-header/model/user-store";
 
 const defaultPlayer = users.find(u => u.role === 'Игрок')!;
 const playerTeam = teams.find(t => t.members.includes(defaultPlayer.id));
-const mockFollowers = users.slice(10, 22);
+
+// Create a diverse list of followers with different roles
+const mockFollowers = [
+    users.find(u => u.nickname === 'Valkyrie')!, // Игрок
+    users.find(u => u.nickname === 'Destroyer')!, // Игрок
+    users.find(u => u.nickname === 'Hawk')!, // Игрок
+    users.find(u => u.nickname === 'Tiger')!, // Игрок
+    users.find(u => u.role === 'Болельщик')!, // Болельщик
+    users.find(u => u.role === 'Судья')!, // Судья
+    users.find(u => u.role === 'Тренер')!, // Тренер
+    users.find(u => u.role === 'Организатор')!, // Организатор
+    users.find(u => u.role === 'Менеджер')!, // Менеджер
+    users.find(u => u.nickname === 'Bunny')!, // Игрок
+    users.find(u => u.nickname === 'Frost')!, // Игрок
+    users.find(u => u.nickname === 'Comet')!, // Игрок
+].filter(Boolean); // Filter out potential undefined values if a user isn't found
 
 const careerStats = {
     '2025': { matches: 52, wins: 38, goals: 41, assists: 15, mvp: 12 },
