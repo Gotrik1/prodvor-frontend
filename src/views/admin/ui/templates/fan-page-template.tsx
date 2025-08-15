@@ -12,8 +12,8 @@ import { CreatePost } from "@/widgets/dashboard-feed/ui/create-post";
 const defaultFan: User = users.find(u => u.role === 'Болельщик') || users[3];
 const favoriteTeams = teams.slice(0, 4);
 const upcomingMatches = [
-    { team1: teams[0], team2: teams[1], tournament: tournaments[0] },
-    { team1: teams[2], team2: teams[3], tournament: tournaments[0] },
+    { team1: teams[0], team2: teams[1], tournament: tournaments.find(t => t.id === 'mytourney1')! },
+    { team1: teams[2], team2: teams[3], tournament: tournaments.find(t => t.id === 'mytourney1')! },
 ];
 
 export function FanPageTemplate({ user }: { user?: User }) {
