@@ -50,7 +50,7 @@ export function TournamentsPage() {
                         {mockMyTournaments.map(tournament => (
                         <Card key={tournament.id} className="flex flex-col bg-card/80 border-primary/20 hover:border-primary/50 transition-colors">
                             <CardHeader className="p-0">
-                                <Link href={`/tournaments/${tournament.id}`}>
+                                <Link href={`/tournaments/${tournament.id}`} className="flex flex-col flex-grow">
                                     <div className="relative h-40 w-full">
                                         <Image
                                             src={tournament.bannerUrl}
@@ -63,7 +63,7 @@ export function TournamentsPage() {
                                             {tournament.status}
                                         </Badge>
                                     </div>
-                                    <div className="p-6">
+                                    <div className="p-6 overflow-hidden">
                                         <CardTitle className="text-xl group-hover:text-primary transition-colors">{tournament.name}</CardTitle>
                                         <CardDescription>{tournament.game}</CardDescription>
                                     </div>
@@ -102,8 +102,8 @@ export function TournamentsPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {allTournaments.map(tournament => (
                         <Card key={tournament.id} className="flex flex-col hover:border-primary/50 transition-colors group">
-                            <CardHeader className="p-0">
-                                <Link href={`/tournaments/${tournament.id}`} className="block">
+                            <CardHeader className="p-0 flex-grow">
+                                <Link href={`/tournaments/${tournament.id}`} className="flex flex-col flex-grow">
                                     <div className="relative h-40 w-full">
                                         <Image
                                             src={tournament.bannerUrl}
@@ -116,7 +116,7 @@ export function TournamentsPage() {
                                             {tournament.status}
                                         </Badge>
                                     </div>
-                                    <div className="p-6">
+                                    <div className="p-6 overflow-hidden">
                                     <CardTitle className="text-xl group-hover:text-primary transition-colors">{tournament.name}</CardTitle>
                                     <CardDescription>{tournament.game}</CardDescription>
                                     </div>
