@@ -59,7 +59,7 @@ export function TeamsPage() {
                     <Card key={team.id} className="flex flex-col">
                         <CardHeader>
                             <Link href={`/teams/${team.id}`} className="flex-row items-center gap-4">
-                                <Image src={team.logoUrl} alt={`${team.name} logo`} width={64} height={64} className="rounded-lg border" data-ai-hint="team logo" />
+                                <Image src={team.logoUrl} alt={`${team.name} logo`} width={64} height={64} className="rounded-lg border" data-ai-hint={team.dataAiHint} />
                                 <div>
                                     <CardTitle className="text-xl hover:text-primary transition-colors">{team.name}</CardTitle>
                                     <CardDescription>{team.game}</CardDescription>

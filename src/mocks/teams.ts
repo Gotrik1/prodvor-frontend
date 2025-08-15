@@ -18,30 +18,37 @@ export interface Team {
 
 // --- Helper Data ---
 const players = users.filter(u => u.role === 'Игрок');
-const teamSports = ['Дворовый футбол', 'Стритбол', 'Волейбол'];
+const teamSports = ['Дворовый футбол', 'Стритбол', 'Волейбол', 'CS2', 'Dota 2', 'Пейнтбол'];
 const teamNamesBySport: Record<string, string[]> = {
-    'Дворовый футбол': ['Ночные Снайперы', 'Стальные Ястребы', 'Бетонные Тигры', 'Разрушители', 'Красная Фурия', 'Легион', 'Феникс'],
-    'Стритбол': ['Короли Асфальта', 'Неудержимые', 'Городские Грифоны'],
+    'Дворовый футбол': ['Ночные Снайперы', 'Стальные Ястребы'],
+    'Стритбол': ['Короли Асфальта', 'Бетонные Тигры'],
     'Волейбол': ['Высокий Полет', 'Песчаные Бури'],
+    'CS2': ['Red Fury', 'Legion'],
+    'Dota 2': ['Phoenix', 'Destroyers'],
+    'Пейнтбол': ['Фортуна', 'Неудержимые'],
 };
 const dataAiHints: Record<string, string[]> = {
-    'Дворовый футбол': ['sniper scope', 'steel hawk', 'concrete tiger', 'destroyer symbol', 'red fury', 'legion helmet', 'phoenix bird'],
-    'Стритбол': ['crown asphalt', 'unstoppable force', 'griffin basketball'],
+    'Дворовый футбол': ['sniper scope', 'steel hawk'],
+    'Стритбол': ['crown asphalt', 'concrete tiger'],
     'Волейбол': ['volleyball flight', 'sandstorm volleyball'],
+    'CS2': ['red fury', 'legion helmet'],
+    'Dota 2': ['phoenix bird', 'destroyer symbol'],
+    'Пейнтбол': ['fortune paintball', 'unstoppable force'],
 };
 
 let playerPool = [...players];
 
 const assignMembers = (captain: User, count: number): string[] => {
     const members = [captain.id];
-    for (let i = 0; i < count - 1; i++) {
-        if (playerPool.length > 0) {
-            const memberIndex = playerPool.findIndex(p => p.id !== captain.id && !members.includes(p.id));
-            if (memberIndex !== -1) {
-                members.push(playerPool[memberIndex].id);
-                playerPool.splice(memberIndex, 1);
-            }
+    let attempts = 0; // prevent infinite loops
+    while (members.length < count && playerPool.length > 0 && attempts < players.length) {
+        const memberIndex = Math.floor(Math.random() * playerPool.length);
+        const potentialMember = playerPool[memberIndex];
+        if (potentialMember.id !== captain.id && !members.includes(potentialMember.id)) {
+            members.push(potentialMember.id);
+            playerPool.splice(memberIndex, 1);
         }
+        attempts++;
     }
     return members;
 };
@@ -54,24 +61,29 @@ let teamIdCounter = 1;
 teamSports.forEach(sport => {
     const names = teamNamesBySport[sport];
     const hints = dataAiHints[sport];
-    for (let i = 0; i < 2; i++) {
-        if (playerPool.length > 0 && names[i]) {
-            const captain = playerPool.pop()!;
-            const team: Team = {
-                id: `team${teamIdCounter++}`,
-                name: names[i],
-                logoUrl: `https://placehold.co/100x100.png`,
-                dataAiHint: hints[i],
-                game: sport,
-                captainId: captain.id,
-                members: assignMembers(captain, sport === 'Стритбол' ? 3 : 5),
-                rank: 1400 + Math.floor(Math.random() * 300),
-                homePlaygroundId: playgrounds[i % playgrounds.length].id,
-                followers: [],
-                following: [],
-            };
-            generatedTeams.push(team);
-        }
+    if (names) {
+        names.forEach((name, i) => {
+            if (playerPool.length > 0) {
+                const captainIndex = Math.floor(Math.random() * playerPool.length);
+                const captain = playerPool[captainIndex];
+                playerPool.splice(captainIndex, 1); // Captain can't be a regular member elsewhere for now
+
+                const team: Team = {
+                    id: `team${teamIdCounter++}`,
+                    name: name,
+                    logoUrl: `https://placehold.co/100x100.png`,
+                    dataAiHint: hints[i] || 'team logo',
+                    game: sport,
+                    captainId: captain.id,
+                    members: assignMembers(captain, sport === 'Стритбол' ? 3 : 5),
+                    rank: 1400 + Math.floor(Math.random() * 300),
+                    homePlaygroundId: playgrounds[i % playgrounds.length].id,
+                    followers: [],
+                    following: [],
+                };
+                generatedTeams.push(team);
+            }
+        });
     }
 });
 

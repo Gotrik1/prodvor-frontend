@@ -3,7 +3,7 @@
 
 import { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/shared/ui/table';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/shared/ui/table';
 import { teams as allTeams, sportCategories } from '@/mocks';
 import { Crown, Trophy } from "lucide-react";
 import Image from 'next/image';
@@ -42,8 +42,15 @@ export function LeaguesPage() {
                                 </SelectTrigger>
                                 <SelectContent>
                                     <SelectItem value="all">Все дисциплины</SelectItem>
-                                    {allDisciplines.map(discipline => (
-                                        <SelectItem key={discipline} value={discipline}>{discipline}</SelectItem>
+                                     {sportCategories.map((category) => (
+                                        <SelectGroup key={category.name}>
+                                            <SelectLabel>{category.name}</SelectLabel>
+                                            {category.sports.map((sport) => (
+                                                <SelectItem key={sport.name} value={sport.name}>
+                                                    {sport.name}
+                                                </SelectItem>
+                                            ))}
+                                        </SelectGroup>
                                     ))}
                                 </SelectContent>
                             </Select>
@@ -69,7 +76,7 @@ export function LeaguesPage() {
                                         </TableCell>
                                         <TableCell>
                                             <Link href={`/teams/${team.id}`} className="flex items-center gap-3 group">
-                                                <Image src={team.logoUrl} alt={team.name} width={40} height={40} className="rounded-md" data-ai-hint="team logo"/>
+                                                <Image src={team.logoUrl} alt={team.name} width={40} height={40} className="rounded-md" data-ai-hint={team.dataAiHint}/>
                                                 <div className="flex items-center gap-2">
                                                     <span className="font-medium group-hover:text-primary transition-colors">{team.name}</span>
                                                     {index === 0 && <Crown className="h-4 w-4 text-amber-400" />}

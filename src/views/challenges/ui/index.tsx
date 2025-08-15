@@ -21,7 +21,7 @@ const ChallengeCard = ({ challenge, type }: { challenge: TeamChallenge, type: 'i
         <Card className="bg-muted/50">
             <CardContent className="p-4 flex flex-col sm:flex-row items-center justify-between gap-4">
                 <div className="flex items-center gap-4">
-                    <Image src={opponent.logoUrl} alt={opponent.name} width={48} height={48} className="rounded-md border" data-ai-hint="team logo" />
+                    <Image src={opponent.logoUrl} alt={opponent.name} width={48} height={48} className="rounded-md border" data-ai-hint={opponent.dataAiHint} />
                     <div>
                         <p className="font-semibold">{opponent.name}</p>
                         <p className="text-xs text-muted-foreground">{challenge.discipline}</p>
@@ -104,7 +104,7 @@ export function ChallengesPage() {
                                         {teams.map(team => (
                                             <SelectItem key={team.id} value={team.id}>
                                                 <div className="flex items-center gap-2">
-                                                    <Image src={team.logoUrl} alt={team.name} width={20} height={20} className="rounded-sm" data-ai-hint="team logo"/>
+                                                    <Image src={team.logoUrl} alt={team.name} width={20} height={20} className="rounded-sm" data-ai-hint={team.dataAiHint}/>
                                                     {team.name}
                                                 </div>
                                             </SelectItem>

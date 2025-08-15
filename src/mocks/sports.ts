@@ -30,6 +30,7 @@ export const sportCategories: SportCategory[] = [
       { name: 'Сепак такро' },
       { name: 'Алтимат фрисби' },
       { name: 'Пейнтбол / Лазертаг' },
+      { name: 'Киберспорт', subdisciplines: ['CS2', 'Dota 2', 'Valorant'] },
       { name: 'Командные беговые эстафеты' },
       { name: 'Дворовые игры', subdisciplines: ['вышибалы', 'лапта', 'казаки-разбойники', 'городки командные'] },
       { name: 'Командный туризм и ориентирование' },
