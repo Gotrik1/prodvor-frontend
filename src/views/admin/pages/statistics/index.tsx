@@ -16,6 +16,8 @@ import { Progress } from '@/shared/ui/progress';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs';
 import { useToast } from '@/shared/hooks/use-toast';
 import { useEffect, useState } from 'react';
+import { Tooltip, TooltipProvider, TooltipContent, TooltipTrigger } from '@/shared/ui/tooltip';
+
 
 const statusColors: Record<string, string> = {
     'АНОНС': 'bg-purple-500/20 text-purple-300 border-purple-500/30',
@@ -90,8 +92,7 @@ export function AdminStatisticsPage() {
                                             <TableHead><Key className="inline h-3 w-3 mr-1"/>ID</TableHead>
                                             <TableHead>Пользователь</TableHead>
                                             <TableHead><ListOrdered className="inline h-3 w-3 mr-1"/>Роль</TableHead>
-                                            <TableHead>Возраст/Пол</TableHead>
-                                            <TableHead>Город</TableHead>
+                                            <TableHead>Дисциплины</TableHead>
                                             <TableHead>Контакты</TableHead>
                                             <TableHead>Команда</TableHead>
                                             <TableHead>Соц. связи</TableHead>
@@ -101,6 +102,10 @@ export function AdminStatisticsPage() {
                                     <TableBody>
                                         {users.map((user) => {
                                             const team = findUserTeam(user.id);
+                                            const userSportNames = user.disciplines
+                                                .map(id => allSports.find(s => s.id === id)?.name)
+                                                .filter(Boolean)
+                                                .join(', ');
                                             return (
                                                 <TableRow key={user.id}>
                                                     <TableCell>
@@ -124,8 +129,18 @@ export function AdminStatisticsPage() {
                                                         </div>
                                                     </TableCell>
                                                     <TableCell><Badge variant="secondary">{user.role}</Badge></TableCell>
-                                                    <TableCell>{user.age ? `${user.age} / ${user.gender.charAt(0).toUpperCase()}` : '—'}</TableCell>
-                                                    <TableCell>{user.city || '—'}</TableCell>
+                                                    <TableCell className="text-xs max-w-[200px]">
+                                                         <TooltipProvider>
+                                                            <Tooltip>
+                                                                <TooltipTrigger>
+                                                                    <p className="truncate">{userSportNames || '—'}</p>
+                                                                </TooltipTrigger>
+                                                                <TooltipContent>
+                                                                    <p>{userSportNames}</p>
+                                                                </TooltipContent>
+                                                            </Tooltip>
+                                                        </TooltipProvider>
+                                                    </TableCell>
                                                     <TableCell className="text-xs text-muted-foreground space-y-1">
                                                         <div className="flex items-center gap-1.5"><Mail className="h-3 w-3" /><span>{user.email}</span></div>
                                                         {user.phone && <div className="flex items-center gap-1.5"><Phone className="h-3 w-3" /><span>{user.phone}</span></div>}
@@ -435,6 +450,3 @@ export function AdminStatisticsPage() {
         </div>
     );
 }
-
-    
-    

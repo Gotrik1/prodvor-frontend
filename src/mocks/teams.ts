@@ -10,8 +10,10 @@ export interface Team {
   logoUrl: string;
   captainId: string;
   members: string[]; // array of user IDs
-  game: string; // Main discipline for indexing, e.g., "Футбол"
-  subdiscipline?: string; // Sub-discipline, e.g., "мини-футбол"
+  /** Main discipline for indexing, e.g., "Футбол" */
+  game: string; 
+  /** Sub-discipline, e.g., "мини-футбол". A team in "Футбол" can join "мини-футбол" tournaments. */
+  subdiscipline?: string; 
   rank: number;
   homePlaygroundId?: string;
   dataAiHint: string;
@@ -82,7 +84,7 @@ const createTeam = (name: string, game: string, subdiscipline?: string) => {
         logoUrl: `https://placehold.co/100x100.png`,
         dataAiHint: dataAiHints[teamIdCounter % dataAiHints.length],
         game,
-        subdiscipline,
+        subdiscipline: subdiscipline,
         captainId: captain.id,
         members: assignMembers(captain, memberCount, game),
         rank: 1200 + Math.floor(Math.random() * 500),
@@ -107,7 +109,7 @@ teamSports.forEach(sport => {
         sport.subdisciplines.forEach(sub => {
             for (let i = 0; i < 2; i++) {
                  const prefix = teamNamePrefixes[Math.floor(Math.random() * teamNamePrefixes.length)];
-                 createTeam(`${prefix} (${sub})`, sport.name, sub);
+                 createTeam(`${prefix} (${sub.name})`, sport.name, sub.name);
             }
         });
     }
