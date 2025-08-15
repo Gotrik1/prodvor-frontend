@@ -1,12 +1,15 @@
-import { users, teams } from "@/mocks";
+
+'use client';
+
+import { users, teams, playgrounds, posts } from "@/mocks";
 import type { User } from "@/mocks/users";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { Badge } from "@/shared/ui/badge";
-import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
-import { BarChart, Shield, Star, Swords, Trophy, History } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
+import { BarChart, Shield, Star, Swords, Trophy, History, Rss, Film, Users as UsersIcon, Mail, Phone, MapPin, Dumbbell, UserPlus, MessageSquare, Briefcase } from "lucide-react";
 import Image from 'next/image';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/shared/ui/table";
+import { Button } from "@/shared/ui/button";
 
 const defaultPlayer = users.find(u => u.role === 'Игрок')!;
 const playerTeam = teams.find(t => t.members.includes(defaultPlayer.id));
@@ -24,6 +27,122 @@ const StatRow = ({ label, value }: { label: string, value: string | number }) =>
     </div>
 );
 
+const OverviewTab = ({ player }: { player: User }) => (
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <Card className="lg:col-span-2">
+            <CardHeader><CardTitle>Ключевые показатели</CardTitle></CardHeader>
+            <CardContent className="grid grid-cols-2 gap-4">
+                <StatRow label="Матчей сыграно" value={152} />
+                <StatRow label="Побед" value="101 (66%)" />
+                <StatRow label="MVP" value="34 раза" />
+                <StatRow label="Надежность" value="98%" />
+            </CardContent>
+        </Card>
+        <Card className="lg:col-span-2">
+            <CardHeader><CardTitle>Достижения</CardTitle></CardHeader>
+            <CardContent className="flex flex-wrap gap-2">
+                <Badge>Ветеран</Badge>
+                <Badge>Снайпер</Badge>
+                <Badge>Мастер камбэков</Badge>
+                <Badge variant="destructive">Горячая голова</Badge>
+            </CardContent>
+        </Card>
+        <Card className="lg:col-span-4">
+            <CardHeader><CardTitle>Любимые площадки</CardTitle></CardHeader>
+            <CardContent className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {playgrounds.slice(0, 3).map(p => (
+                    <div key={p.id} className="flex items-center gap-3 p-3 rounded-md border bg-muted/50">
+                        <Dumbbell className="h-5 w-5 text-primary" />
+                        <div>
+                            <p className="font-semibold">{p.name}</p>
+                            <p className="text-xs text-muted-foreground">{p.address}</p>
+                        </div>
+                    </div>
+                ))}
+            </CardContent>
+        </Card>
+    </div>
+);
+
+const StatsTab = () => (
+    <Card>
+        <CardHeader>
+            <CardTitle className="flex items-center gap-2"><History className="h-5 w-5" /> Карьерная статистика</CardTitle>
+        </CardHeader>
+        <CardContent>
+            <Tabs defaultValue="2025" orientation="vertical">
+                <TabsList>
+                    <TabsTrigger value="2025">Сезон 2025</TabsTrigger>
+                    <TabsTrigger value="2024">Сезон 2024</TabsTrigger>
+                    <TabsTrigger value="total">Всего</TabsTrigger>
+                </TabsList>
+                <TabsContent value="2025" className="ml-4 pl-4 border-l">
+                    <StatRow label="Матчи" value={careerStats['2025'].matches} />
+                    <StatRow label="Победы" value={`${careerStats['2025'].wins} (${Math.round(careerStats['2025'].wins / careerStats['2025'].matches * 100)}%)`} />
+                    <StatRow label="Голы" value={careerStats['2025'].goals} />
+                    <StatRow label="Ассисты" value={careerStats['2025'].assists} />
+                    <StatRow label="MVP" value={careerStats['2025'].mvp} />
+                </TabsContent>
+                <TabsContent value="2024" className="ml-4 pl-4 border-l">
+                    <StatRow label="Матчи" value={careerStats['2024'].matches} />
+                    <StatRow label="Победы" value={`${careerStats['2024'].wins} (${Math.round(careerStats['2024'].wins / careerStats['2024'].matches * 100)}%)`} />
+                    <StatRow label="Голы" value={careerStats['2024'].goals} />
+                    <StatRow label="Ассисты" value={careerStats['2024'].assists} />
+                    <StatRow label="MVP" value={careerStats['2024'].mvp} />
+                </TabsContent>
+                <TabsContent value="total" className="ml-4 pl-4 border-l">
+                    <StatRow label="Матчи" value={careerStats['total'].matches} />
+                    <StatRow label="Победы" value={`${careerStats['total'].wins} (${Math.round(careerStats['total'].wins / careerStats['total'].matches * 100)}%)`} />
+                    <StatRow label="Голы" value={careerStats['total'].goals} />
+                    <StatRow label="Ассисты" value={careerStats['total'].assists} />
+                    <StatRow label="MVP" value={careerStats['total'].mvp} />
+                </TabsContent>
+            </Tabs>
+        </CardContent>
+    </Card>
+);
+
+const FeedTab = ({ player }: { player: User }) => {
+    const playerPosts = posts.filter(p => p.author.id === player.id);
+    return (
+        <Card>
+            <CardHeader><CardTitle>Лента игрока</CardTitle></CardHeader>
+            <CardContent>
+                {playerPosts.length > 0 ? (
+                     <p>Компонент ленты будет здесь.</p>
+                ) : (
+                    <p className="text-muted-foreground">У игрока пока нет записей.</p>
+                )}
+            </CardContent>
+        </Card>
+    )
+};
+
+const MediaTab = () => (
+    <Card>
+        <CardHeader><CardTitle>Медиа</CardTitle></CardHeader>
+        <CardContent><p className="text-muted-foreground">Раздел с медиа в разработке.</p></CardContent>
+    </Card>
+);
+
+const FollowersTab = () => (
+    <Card>
+        <CardHeader><CardTitle>Подписчики</CardTitle></CardHeader>
+        <CardContent><p className="text-muted-foreground">Раздел с подписчиками в разработке.</p></CardContent>
+    </Card>
+);
+
+const ContactsTab = ({ player }: { player: User }) => (
+     <Card>
+        <CardHeader><CardTitle>Контактная информация</CardTitle></CardHeader>
+        <CardContent>
+            <StatRow label="Город" value={player.city || 'Не указан'} />
+            <StatRow label="Email" value={player.email} />
+            <StatRow label="Телефон" value={player.phone || 'Не указан'} />
+        </CardContent>
+    </Card>
+);
+
 
 export function PlayerPageTemplate({ user }: { user?: User }) {
     const player = user || defaultPlayer;
@@ -35,114 +154,42 @@ export function PlayerPageTemplate({ user }: { user?: User }) {
                     <AvatarImage src={player.avatarUrl} alt={player.nickname} />
                     <AvatarFallback>{player.firstName.charAt(0)}{player.lastName.charAt(0)}</AvatarFallback>
                 </Avatar>
-                <div className="text-center md:text-left">
+                <div className="text-center md:text-left flex-grow">
                     <h1 className="text-3xl font-bold font-headline">{player.firstName} "{player.nickname}" {player.lastName}</h1>
-                    <p className="text-muted-foreground text-lg">Роль: {player.role}</p>
-                    {playerTeam && (
-                        <div className="flex items-center gap-2 mt-2 justify-center md:justify-start">
-                            <Image src={playerTeam.logoUrl} alt={playerTeam.name} width={24} height={24} className="rounded-sm" data-ai-hint="team logo"/>
-                            <span>{playerTeam.name}</span>
-                        </div>
-                    )}
+                    <div className="flex flex-wrap items-center justify-center md:justify-start gap-x-4 gap-y-1 text-muted-foreground mt-2">
+                        {playerTeam && (
+                            <div className="flex items-center gap-2">
+                                <Briefcase className="h-4 w-4" />
+                                <Image src={playerTeam.logoUrl} alt={playerTeam.name} width={16} height={16} className="rounded-sm" data-ai-hint="team logo"/>
+                                <span>{playerTeam.name}</span>
+                            </div>
+                        )}
+                        {player.city && <div className="flex items-center gap-2"><MapPin className="h-4 w-4"/><span>{player.city}</span></div>}
+                        {player.age && <div className="flex items-center gap-2"><span>Возраст: {player.age}</span></div>}
+                    </div>
                 </div>
-                <div className="md:ml-auto flex gap-2">
-                    <Badge variant="secondary">Рейтинг: 1250 ELO</Badge>
-                    <Badge variant="outline">Уровень: Pro</Badge>
+                <div className="flex items-center gap-2">
+                    <Button><UserPlus className="mr-2 h-4 w-4" />Подписаться</Button>
+                    <Button variant="secondary"><MessageSquare className="mr-2 h-4 w-4" />Написать</Button>
                 </div>
             </header>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                <Card>
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium">Матчей сыграно</CardTitle>
-                        <Swords className="h-4 w-4 text-muted-foreground" />
-                    </CardHeader>
-                    <CardContent>
-                        <div className="text-2xl font-bold">152</div>
-                    </CardContent>
-                </Card>
-                <Card>
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium">Побед</CardTitle>
-                        <Trophy className="h-4 w-4 text-muted-foreground" />
-                    </CardHeader>
-                    <CardContent>
-                        <div className="text-2xl font-bold">101 (66%)</div>
-                    </CardContent>
-                </Card>
-                <Card>
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium">Лучший игрок матча</CardTitle>
-                        <Star className="h-4 w-4 text-muted-foreground" />
-                    </CardHeader>
-                    <CardContent>
-                        <div className="text-2xl font-bold">34 раза</div>
-                    </CardContent>
-                </Card>
-                <Card>
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium">Надежность</CardTitle>
-                        <Shield className="h-4 w-4 text-muted-foreground" />
-                    </CardHeader>
-                    <CardContent>
-                        <div className="text-2xl font-bold text-green-400">98%</div>
-                    </CardContent>
-                </Card>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                 <Card>
-                    <CardHeader>
-                        <CardTitle className="flex items-center gap-2">
-                            <History className="h-5 w-5" />
-                            Карьерная статистика
-                        </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        <Tabs defaultValue="2025">
-                            <TabsList className="grid w-full grid-cols-3">
-                                <TabsTrigger value="2025">Сезон 2025</TabsTrigger>
-                                <TabsTrigger value="2024">Сезон 2024</TabsTrigger>
-                                <TabsTrigger value="total">Всего</TabsTrigger>
-                            </TabsList>
-                            <TabsContent value="2025" className="mt-4">
-                               <StatRow label="Матчи" value={careerStats['2025'].matches} />
-                               <StatRow label="Победы" value={`${careerStats['2025'].wins} (${Math.round(careerStats['2025'].wins / careerStats['2025'].matches * 100)}%)`} />
-                               <StatRow label="Голы" value={careerStats['2025'].goals} />
-                               <StatRow label="Ассисты" value={careerStats['2025'].assists} />
-                               <StatRow label="MVP" value={careerStats['2025'].mvp} />
-                            </TabsContent>
-                             <TabsContent value="2024" className="mt-4">
-                               <StatRow label="Матчи" value={careerStats['2024'].matches} />
-                               <StatRow label="Победы" value={`${careerStats['2024'].wins} (${Math.round(careerStats['2024'].wins / careerStats['2024'].matches * 100)}%)`} />
-                               <StatRow label="Голы" value={careerStats['2024'].goals} />
-                               <StatRow label="Ассисты" value={careerStats['2024'].assists} />
-                               <StatRow label="MVP" value={careerStats['2024'].mvp} />
-                            </TabsContent>
-                             <TabsContent value="total" className="mt-4">
-                               <StatRow label="Матчи" value={careerStats['total'].matches} />
-                               <StatRow label="Победы" value={`${careerStats['total'].wins} (${Math.round(careerStats['total'].wins / careerStats['total'].matches * 100)}%)`} />
-                               <StatRow label="Голы" value={careerStats['total'].goals} />
-                               <StatRow label="Ассисты" value={careerStats['total'].assists} />
-                               <StatRow label="MVP" value={careerStats['total'].mvp} />
-                            </TabsContent>
-                        </Tabs>
-                    </CardContent>
-                </Card>
-                <Card>
-                    <CardHeader>
-                        <CardTitle>Достижения</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        <div className="flex flex-wrap gap-2">
-                            <Badge>Ветеран</Badge>
-                            <Badge>Снайпер</Badge>
-                            <Badge>Мастер камбэков</Badge>
-                            <Badge variant="destructive">Горячая голова</Badge>
-                        </div>
-                    </CardContent>
-                </Card>
-            </div>
+            <Tabs defaultValue="overview">
+                <TabsList className="grid w-full grid-cols-3 md:grid-cols-6">
+                    <TabsTrigger value="overview">Обзор</TabsTrigger>
+                    <TabsTrigger value="stats">Статистика</TabsTrigger>
+                    <TabsTrigger value="feed">Лента</TabsTrigger>
+                    <TabsTrigger value="media">Медиа</TabsTrigger>
+                    <TabsTrigger value="followers">Подписчики</TabsTrigger>
+                    <TabsTrigger value="contacts">Контакты</TabsTrigger>
+                </TabsList>
+                <TabsContent value="overview" className="mt-6"><OverviewTab player={player} /></TabsContent>
+                <TabsContent value="stats" className="mt-6"><StatsTab /></TabsContent>
+                <TabsContent value="feed" className="mt-6"><FeedTab player={player}/></TabsContent>
+                <TabsContent value="media" className="mt-6"><MediaTab /></TabsContent>
+                <TabsContent value="followers" className="mt-6"><FollowersTab /></TabsContent>
+                <TabsContent value="contacts" className="mt-6"><ContactsTab player={player} /></TabsContent>
+            </Tabs>
         </div>
     )
 }
