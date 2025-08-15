@@ -1,3 +1,4 @@
+
 import { playgrounds } from "./playgrounds";
 import type { User } from "./users";
 import { users } from "./users";
@@ -9,7 +10,7 @@ export interface Team {
   logoUrl: string;
   captainId: string;
   members: string[]; // array of user IDs
-  game: string; // Main discipline, e.g., "Футбол"
+  game: string; // Main discipline for indexing, e.g., "Футбол"
   subdiscipline?: string; // Sub-discipline, e.g., "мини-футбол"
   rank: number;
   homePlaygroundId?: string;
