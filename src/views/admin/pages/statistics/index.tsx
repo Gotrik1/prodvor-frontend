@@ -9,7 +9,7 @@ import { Badge } from '@/shared/ui/badge';
 import { Button } from '@/shared/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/shared/ui/table';
-import { Copy, ExternalLink, Home, Crown, GanttChart, Eye, Database, Key, Link2, ListOrdered, Mail, MapPin, User as UserIcon } from 'lucide-react';
+import { Copy, ExternalLink, Home, Crown, GanttChart, Eye, Database, Key, Link2, ListOrdered, Mail, MapPin, User as UserIcon, Phone } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Progress } from '@/shared/ui/progress';
@@ -110,7 +110,10 @@ export function AdminStatisticsPage() {
                                                     <TableCell><Badge variant="secondary">{user.role}</Badge></TableCell>
                                                     <TableCell>{user.age ? `${user.age} / ${user.gender.charAt(0).toUpperCase()}` : '—'}</TableCell>
                                                     <TableCell>{user.city || '—'}</TableCell>
-                                                    <TableCell className="text-xs text-muted-foreground">{user.email}</TableCell>
+                                                    <TableCell className="text-xs text-muted-foreground space-y-1">
+                                                        <div className="flex items-center gap-1.5"><Mail className="h-3 w-3" /><span>{user.email}</span></div>
+                                                        {user.phone && <div className="flex items-center gap-1.5"><Phone className="h-3 w-3" /><span>{user.phone}</span></div>}
+                                                    </TableCell>
                                                     <TableCell>
                                                         {team ? (
                                                             <Link href={`/teams/${team.id}`} className="text-primary hover:underline text-sm">{team.name}</Link>
