@@ -24,14 +24,14 @@ export interface User {
 export const users: User[] = [
   // --- Игроки ---
   // Team 1: Ночные Снайперы (5)
-  { id: 'user1', firstName: 'Иван', lastName: 'Петров', nickname: 'Terminator', avatarUrl: 'https://i.pravatar.cc/150?u=user1', email: 'user1@example.com', role: 'Игрок', gender: 'мужской', age: 28, city: 'Москва', phone: '+7 (916) 123-45-67', bio: 'Опытный нападающий, играю в футбол с детства.', friends: ['user2', 'user5', 'user52', 'user60'], followers: ['user3', 'user4', 'staff2', 'user77'], followingUsers: ['user2', 'user5', 'staff2', 'user80'], followingTeams: ['team2', 'team3'] },
-  { id: 'user2', firstName: 'Мария', lastName: 'Сидорова', nickname: 'Valkyrie', avatarUrl: 'https://i.pravatar.cc/150?u=user2', email: 'user2@example.com', role: 'Игрок', gender: 'женский', age: 25, city: 'Москва', phone: '+7 (916) 123-45-68', bio: 'Люблю командный дух и красивые победы. Играю в защите.', friends: ['user1', 'user65'], followers: ['user1', 'user88'], followingUsers: ['user1', 'user90'], followingTeams: [] },
-  { id: 'user5', firstName: 'Петр', lastName: 'Волков', nickname: 'Wolf', avatarUrl: 'https://i.pravatar.cc/150?u=user5', email: 'user5@example.com', role: 'Игрок', gender: 'мужской', age: 31, city: 'Санкт-Петербург', phone: '+7 (911) 555-01-05', friends: ['user1'], followers: ['user71'], followingUsers: ['user1'], followingTeams: [] },
+  { id: 'user1', firstName: 'Иван', lastName: 'Петров', nickname: 'Terminator', avatarUrl: 'https://i.pravatar.cc/150?u=user1', email: 'user1@example.com', role: 'Игрок', gender: 'мужской', age: 28, city: 'Москва', phone: '+7 (916) 123-45-67', bio: 'Опытный нападающий, играю в футбол с детства.', friends: [], followers: [], followingUsers: [], followingTeams: [] },
+  { id: 'user2', firstName: 'Мария', lastName: 'Сидорова', nickname: 'Valkyrie', avatarUrl: 'https://i.pravatar.cc/150?u=user2', email: 'user2@example.com', role: 'Игрок', gender: 'женский', age: 25, city: 'Москва', phone: '+7 (916) 123-45-68', bio: 'Люблю командный дух и красивые победы. Играю в защите.', friends: [], followers: [], followingUsers: [], followingTeams: [] },
+  { id: 'user5', firstName: 'Петр', lastName: 'Волков', nickname: 'Wolf', avatarUrl: 'https://i.pravatar.cc/150?u=user5', email: 'user5@example.com', role: 'Игрок', gender: 'мужской', age: 31, city: 'Санкт-Петербург', phone: '+7 (911) 555-01-05', friends: [], followers: [], followingUsers: [], followingTeams: [] },
   { id: 'user6', firstName: 'Анна', lastName: 'Зайцева', nickname: 'Bunny', avatarUrl: 'https://i.pravatar.cc/150?u=user6', email: 'user6@example.com', role: 'Игрок', gender: 'женский', age: 22, city: 'Москва', phone: '+7 (916) 555-01-06', friends: [], followers: [], followingUsers: [], followingTeams: [] },
   { id: 'user7', firstName: 'Дмитрий', lastName: 'Морозов', nickname: 'Frost', avatarUrl: 'https://i.pravatar.cc/150?u=user7', email: 'user7@example.com', role: 'Игрок', gender: 'мужской', age: 29, city: 'Екатеринбург', phone: '+7 (922) 555-01-07', friends: [], followers: [], followingUsers: [], followingTeams: [] },
 
   // Team 2: Короли Асфальта (5)
-  { id: 'user3', firstName: 'Алексей', lastName: 'Смирнов', nickname: 'Destroyer', avatarUrl: 'https://i.pravatar.cc/150?u=user3', email: 'user3@example.com', role: 'Игрок', gender: 'мужской', age: 27, city: 'Новосибирск', phone: '+7 (913) 555-01-03', friends: [], followers: [], followingUsers: ['user1'], followingTeams: ['team1'] },
+  { id: 'user3', firstName: 'Алексей', lastName: 'Смирнов', nickname: 'Destroyer', avatarUrl: 'https://i.pravatar.cc/150?u=user3', email: 'user3@example.com', role: 'Игрок', gender: 'мужской', age: 27, city: 'Новосибирск', phone: '+7 (913) 555-01-03', friends: [], followers: [], followingUsers: [], followingTeams: [] },
   { id: 'user8', firstName: 'Ольга', lastName: 'Иванова', nickname: 'Comet', avatarUrl: 'https://i.pravatar.cc/150?u=user8', email: 'user8@example.com', role: 'Игрок', gender: 'женский', age: 26, city: 'Москва', phone: '+7 (916) 555-01-08', friends: [], followers: [], followingUsers: [], followingTeams: [] },
   { id: 'user15', firstName: 'Сергей', lastName: 'Кузнецов', nickname: 'Serg', avatarUrl: 'https://i.pravatar.cc/150?u=user15', email: 'user15@example.com', role: 'Игрок', gender: 'мужской', age: 30, city: 'Санкт-Петербург', phone: '+7 (911) 555-01-15', friends: [], followers: [], followingUsers: [], followingTeams: [] },
   { id: 'user16', firstName: 'Ирина', lastName: 'Попова', nickname: 'Ira', avatarUrl: 'https://i.pravatar.cc/150?u=user16', email: 'user16@example.com', role: 'Игрок', gender: 'женский', age: 24, city: 'Москва', phone: '+7 (916) 555-01-16', friends: [], followers: [], followingUsers: [], followingTeams: [] },
@@ -94,43 +94,43 @@ export const users: User[] = [
   { id: 'user51', firstName: 'Никита', lastName: 'Абрамов', nickname: 'Nikita', avatarUrl: 'https://i.pravatar.cc/150?u=user51', email: 'user51@example.com', role: 'Игрок', gender: 'мужской', age: 25, city: 'Новосибирск', phone: '+7 (913) 555-01-51', friends: [], followers: [], followingUsers: [], followingTeams: [] },
 
   // --- Персонал ---
-  { id: 'user4', firstName: 'Елена', lastName: 'Кузнецова', nickname: 'Amazonka', avatarUrl: 'https://i.pravatar.cc/150?u=user4', email: 'user4@example.com', role: 'Болельщик', gender: 'женский', age: 30, city: 'Москва', phone: '+7 (916) 555-01-04', friends: [], followers: ['user1'], followingUsers: [], followingTeams: ['team1'] },
+  { id: 'user4', firstName: 'Елена', lastName: 'Кузнецова', nickname: 'Amazonka', avatarUrl: 'https://i.pravatar.cc/150?u=user4', email: 'user4@example.com', role: 'Болельщик', gender: 'женский', age: 30, city: 'Москва', phone: '+7 (916) 555-01-04', friends: [], followers: [], followingUsers: [], followingTeams: [] },
   { id: 'staff1', firstName: 'Игорь', lastName: 'Вольнов', nickname: 'Sudya', avatarUrl: 'https://i.pravatar.cc/150?u=staff1', email: 'referee1@example.com', role: 'Судья', gender: 'мужской', age: 45, city: 'Санкт-Петербург', phone: '+7 (911) 555-10-01', friends: [], followers: [], followingUsers: [], followingTeams: [] },
-  { id: 'staff2', firstName: 'Елена', lastName: 'Павлова', nickname: 'CoachElena', avatarUrl: 'https://i.pravatar.cc/150?u=staff2', email: 'coach1@example.com', role: 'Тренер', gender: 'женский', age: 38, city: 'Москва', phone: '+7 (916) 555-10-02', friends: [], followers: [], followingUsers: ['user1'], followingTeams: [] },
+  { id: 'staff2', firstName: 'Елена', lastName: 'Павлова', nickname: 'CoachElena', avatarUrl: 'https://i.pravatar.cc/150?u=staff2', email: 'coach1@example.com', role: 'Тренер', gender: 'женский', age: 38, city: 'Москва', phone: '+7 (916) 555-10-02', friends: [], followers: [], followingUsers: [], followingTeams: [] },
   { id: 'staff3', firstName: 'Федерация', lastName: 'Спорта', nickname: 'FedSport', avatarUrl: 'https://i.pravatar.cc/150?u=staff3', email: 'org1@example.com', role: 'Организатор', gender: 'мужской', age: 50, city: 'Москва', phone: '+7 (916) 555-10-03', friends: [], followers: [], followingUsers: [], followingTeams: [] },
   { id: 'staff4', firstName: 'Александр', lastName: 'Громов', nickname: 'Grom', avatarUrl: 'https://i.pravatar.cc/150?u=staff4', email: 'manager1@example.com', role: 'Менеджер', gender: 'мужской', age: 42, city: 'Екатеринбург', phone: '+7 (922) 555-10-04', friends: [], followers: [], followingUsers: [], followingTeams: [] },
   { id: 'staff5', firstName: 'Марина', lastName: 'Строгая', nickname: 'ModeratorM', avatarUrl: 'https://i.pravatar.cc/150?u=staff5', email: 'moderator1@example.com', role: 'Модератор', gender: 'женский', age: 35, city: 'Москва', phone: '+7 (916) 555-10-05', friends: [], followers: [], followingUsers: [], followingTeams: [] },
   
   // --- Новые пользователи (44) ---
-  { id: 'user52', firstName: 'Олег', lastName: 'Малышев', nickname: 'Beast', avatarUrl: 'https://i.pravatar.cc/150?u=user52', email: 'user52@example.com', role: 'Капитан', gender: 'мужской', age: 29, city: 'Казань', phone: '+7 (937) 111-22-33', friends: ['user53', 'user1'], followers: ['user54'], followingUsers: ['user55'], followingTeams: ['team1'] },
-  { id: 'user53', firstName: 'Анна', lastName: 'Белова', nickname: 'Arrow', avatarUrl: 'https://i.pravatar.cc/150?u=user53', email: 'user53@example.com', role: 'Игрок', gender: 'женский', age: 24, city: 'Казань', phone: '+7 (937) 222-33-44', friends: ['user52'], followers: [], followingUsers: [], followingTeams: [] },
-  { id: 'user54', firstName: 'Виктор', lastName: 'Рогов', nickname: 'Ranger', avatarUrl: 'https://i.pravatar.cc/150?u=user54', email: 'user54@example.com', role: 'Тренер', gender: 'мужской', age: 41, city: 'Сочи', phone: '+7 (988) 333-44-55', friends: [], followers: ['user52'], followingUsers: [], followingTeams: [] },
-  { id: 'user55', firstName: 'Светлана', lastName: 'Тихонова', nickname: 'Lana', avatarUrl: 'https://i.pravatar.cc/150?u=user55', email: 'user55@example.com', role: 'Болельщик', gender: 'женский', age: 33, city: 'Сочи', phone: '+7 (988) 444-55-66', friends: [], followers: [], followingUsers: ['user52'], followingTeams: [] },
-  { id: 'user56', firstName: 'Григорий', lastName: 'Лепс', nickname: 'Solo', avatarUrl: 'https://i.pravatar.cc/150?u=user56', email: 'user56@example.com', role: 'Игрок', gender: 'мужской', age: 26, city: 'Уфа', phone: '+7 (917) 555-66-77', friends: ['user57'], followers: [], followingUsers: [], followingTeams: [] },
-  { id: 'user57', firstName: 'Евгения', lastName: 'Васильева', nickname: 'Zhenya', avatarUrl: 'https://i.pravatar.cc/150?u=user57', email: 'user57@example.com', role: 'Игрок', gender: 'женский', age: 23, city: 'Уфа', phone: '+7 (917) 666-77-88', friends: ['user56'], followers: [], followingUsers: [], followingTeams: [] },
+  { id: 'user52', firstName: 'Олег', lastName: 'Малышев', nickname: 'Beast', avatarUrl: 'https://i.pravatar.cc/150?u=user52', email: 'user52@example.com', role: 'Капитан', gender: 'мужской', age: 29, city: 'Казань', phone: '+7 (937) 111-22-33', friends: [], followers: [], followingUsers: [], followingTeams: [] },
+  { id: 'user53', firstName: 'Анна', lastName: 'Белова', nickname: 'Arrow', avatarUrl: 'https://i.pravatar.cc/150?u=user53', email: 'user53@example.com', role: 'Игрок', gender: 'женский', age: 24, city: 'Казань', phone: '+7 (937) 222-33-44', friends: [], followers: [], followingUsers: [], followingTeams: [] },
+  { id: 'user54', firstName: 'Виктор', lastName: 'Рогов', nickname: 'Ranger', avatarUrl: 'https://i.pravatar.cc/150?u=user54', email: 'user54@example.com', role: 'Тренер', gender: 'мужской', age: 41, city: 'Сочи', phone: '+7 (988) 333-44-55', friends: [], followers: [], followingUsers: [], followingTeams: [] },
+  { id: 'user55', firstName: 'Светлана', lastName: 'Тихонова', nickname: 'Lana', avatarUrl: 'https://i.pravatar.cc/150?u=user55', email: 'user55@example.com', role: 'Болельщик', gender: 'женский', age: 33, city: 'Сочи', phone: '+7 (988) 444-55-66', friends: [], followers: [], followingUsers: [], followingTeams: [] },
+  { id: 'user56', firstName: 'Григорий', lastName: 'Лепс', nickname: 'Solo', avatarUrl: 'https://i.pravatar.cc/150?u=user56', email: 'user56@example.com', role: 'Игрок', gender: 'мужской', age: 26, city: 'Уфа', phone: '+7 (917) 555-66-77', friends: [], followers: [], followingUsers: [], followingTeams: [] },
+  { id: 'user57', firstName: 'Евгения', lastName: 'Васильева', nickname: 'Zhenya', avatarUrl: 'https://i.pravatar.cc/150?u=user57', email: 'user57@example.com', role: 'Игрок', gender: 'женский', age: 23, city: 'Уфа', phone: '+7 (917) 666-77-88', friends: [], followers: [], followingUsers: [], followingTeams: [] },
   { id: 'user58', firstName: 'Игорь', lastName: 'Крутой', nickname: 'Maestro', avatarUrl: 'https://i.pravatar.cc/150?u=user58', email: 'user58@example.com', role: 'Организатор', gender: 'мужской', age: 48, city: 'Ростов-на-Дону', phone: '+7 (928) 777-88-99', friends: [], followers: [], followingUsers: [], followingTeams: [] },
   { id: 'user59', firstName: 'Лариса', lastName: 'Долина', nickname: 'Diva', avatarUrl: 'https://i.pravatar.cc/150?u=user59', email: 'user59@example.com', role: 'Болельщик', gender: 'женский', age: 52, city: 'Ростов-на-Дону', phone: '+7 (928) 888-99-00', friends: [], followers: [], followingUsers: [], followingTeams: [] },
-  { id: 'user60', firstName: 'Николай', lastName: 'Басков', nickname: 'Golden', avatarUrl: 'https://i.pravatar.cc/150?u=user60', email: 'user60@example.com', role: 'Судья', gender: 'мужской', age: 45, city: 'Краснодар', phone: '+7 (918) 999-00-11', friends: ['user1'], followers: [], followingUsers: [], followingTeams: [] },
+  { id: 'user60', firstName: 'Николай', lastName: 'Басков', nickname: 'Golden', avatarUrl: 'https://i.pravatar.cc/150?u=user60', email: 'user60@example.com', role: 'Судья', gender: 'мужской', age: 45, city: 'Краснодар', phone: '+7 (918) 999-00-11', friends: [], followers: [], followingUsers: [], followingTeams: [] },
   { id: 'user61', firstName: 'Надежда', lastName: 'Кадышева', nickname: 'Nadezhda', avatarUrl: 'https://i.pravatar.cc/150?u=user61', email: 'user61@example.com', role: 'Менеджер', gender: 'женский', age: 49, city: 'Краснодар', phone: '+7 (918) 000-11-22', friends: [], followers: [], followingUsers: [], followingTeams: [] },
   { id: 'user62', firstName: 'Филипп', lastName: 'Киркоров', nickname: 'King', avatarUrl: 'https://i.pravatar.cc/150?u=user62', email: 'user62@example.com', role: 'Капитан', gender: 'мужской', age: 55, city: 'Воронеж', phone: '+7 (910) 111-22-33', friends: [], followers: [], followingUsers: [], followingTeams: [] },
   { id: 'user63', firstName: 'Алла', lastName: 'Пугачева', nickname: 'Prima', avatarUrl: 'https://i.pravatar.cc/150?u=user63', email: 'user63@example.com', role: 'Тренер', gender: 'женский', age: 73, city: 'Воронеж', phone: '+7 (910) 222-33-44', friends: [], followers: [], followingUsers: [], followingTeams: [] },
   { id: 'user64', firstName: 'Лев', lastName: 'Лещенко', nickname: 'Leo', avatarUrl: 'https://i.pravatar.cc/150?u=user64', email: 'user64@example.com', role: 'Игрок', gender: 'мужской', age: 80, city: 'Самара', phone: '+7 (927) 333-44-55', friends: [], followers: [], followingUsers: [], followingTeams: [] },
-  { id: 'user65', firstName: 'София', lastName: 'Ротару', nickname: 'Sofia', avatarUrl: 'https://i.pravatar.cc/150?u=user65', email: 'user65@example.com', role: 'Игрок', gender: 'женский', age: 75, city: 'Самара', phone: '+7 (927) 444-55-66', friends: ['user2'], followers: [], followingUsers: [], followingTeams: [] },
+  { id: 'user65', firstName: 'София', lastName: 'Ротару', nickname: 'Sofia', avatarUrl: 'https://i.pravatar.cc/150?u=user65', email: 'user65@example.com', role: 'Игрок', gender: 'женский', age: 75, city: 'Самара', phone: '+7 (927) 444-55-66', friends: [], followers: [], followingUsers: [], followingTeams: [] },
   { id: 'user66', firstName: 'Валерий', lastName: 'Меладзе', nickname: 'Valery', avatarUrl: 'https://i.pravatar.cc/150?u=user66', email: 'user66@example.com', role: 'Игрок', gender: 'мужской', age: 57, city: 'Нижний Новгород', phone: '+7 (903) 555-66-77', friends: [], followers: [], followingUsers: [], followingTeams: [] },
   { id: 'user67', firstName: 'Вера', lastName: 'Брежнева', nickname: 'Vera', avatarUrl: 'https://i.pravatar.cc/150?u=user67', email: 'user67@example.com', role: 'Болельщик', gender: 'женский', age: 40, city: 'Нижний Новгород', phone: '+7 (903) 666-77-88', friends: [], followers: [], followingUsers: [], followingTeams: [] },
   { id: 'user68', firstName: 'Дима', lastName: 'Билан', nickname: 'Bilan', avatarUrl: 'https://i.pravatar.cc/150?u=user68', email: 'user68@example.com', role: 'Игрок', gender: 'мужской', age: 40, city: 'Пермь', phone: '+7 (912) 777-88-99', friends: [], followers: [], followingUsers: [], followingTeams: [] },
   { id: 'user69', firstName: 'Полина', lastName: 'Гагарина', nickname: 'Gagarina', avatarUrl: 'https://i.pravatar.cc/150?u=user69', email: 'user69@example.com', role: 'Игрок', gender: 'женский', age: 35, city: 'Пермь', phone: '+7 (912) 888-99-00', friends: [], followers: [], followingUsers: [], followingTeams: [] },
   { id: 'user70', firstName: 'Сергей', lastName: 'Лазарев', nickname: 'Lazarev', avatarUrl: 'https://i.pravatar.cc/150?u=user70', email: 'user70@example.com', role: 'Игрок', gender: 'мужской', age: 39, city: 'Омск', phone: '+7 (913) 999-00-11', friends: [], followers: [], followingUsers: [], followingTeams: [] },
-  { id: 'user71', firstName: 'Ани', lastName: 'Лорак', nickname: 'Ani', avatarUrl: 'https://i.pravatar.cc/150?u=user71', email: 'user71@example.com', role: 'Болельщик', gender: 'женский', age: 43, city: 'Омск', phone: '+7 (913) 000-11-22', friends: [], followers: ['user5'], followingUsers: [], followingTeams: [] },
+  { id: 'user71', firstName: 'Ани', lastName: 'Лорак', nickname: 'Ani', avatarUrl: 'https://i.pravatar.cc/150?u=user71', email: 'user71@example.com', role: 'Болельщик', gender: 'женский', age: 43, city: 'Омск', phone: '+7 (913) 000-11-22', friends: [], followers: [], followingUsers: [], followingTeams: [] },
   { id: 'user72', firstName: 'Стас', lastName: 'Михайлов', nickname: 'Stas', avatarUrl: 'https://i.pravatar.cc/150?u=user72', email: 'user72@example.com', role: 'Игрок', gender: 'мужской', age: 53, city: 'Челябинск', phone: '+7 (908) 111-22-33', friends: [], followers: [], followingUsers: [], followingTeams: [] },
   { id: 'user73', firstName: 'Елена', lastName: 'Ваенга', nickname: 'Vaenga', avatarUrl: 'https://i.pravatar.cc/150?u=user73', email: 'user73@example.com', role: 'Игрок', gender: 'женский', age: 45, city: 'Челябинск', phone: '+7 (908) 222-33-44', friends: [], followers: [], followingUsers: [], followingTeams: [] },
   { id: 'user74', firstName: 'Григорий', lastName: 'Антипенко', nickname: 'Antipenko', avatarUrl: 'https://i.pravatar.cc/150?u=user74', email: 'user74@example.com', role: 'Судья', gender: 'мужской', age: 47, city: 'Волгоград', phone: '+7 (905) 333-44-55', friends: [], followers: [], followingUsers: [], followingTeams: [] },
   { id: 'user75', firstName: 'Юлия', lastName: 'Савичева', nickname: 'Savicheva', avatarUrl: 'https://i.pravatar.cc/150?u=user75', email: 'user75@example.com', role: 'Игрок', gender: 'женский', age: 35, city: 'Волгоград', phone: '+7 (905) 444-55-66', friends: [], followers: [], followingUsers: [], followingTeams: [] },
   { id: 'user76', firstName: 'Владимир', lastName: 'Пресняков', nickname: 'Presnyakov', avatarUrl: 'https://i.pravatar.cc/150?u=user76', email: 'user76@example.com', role: 'Игрок', gender: 'мужской', age: 54, city: 'Иркутск', phone: '+7 (902) 555-66-77', friends: [], followers: [], followingUsers: [], followingTeams: [] },
-  { id: 'user77', firstName: 'Наталья', lastName: 'Подольская', nickname: 'Podolskaya', avatarUrl: 'https://i.pravatar.cc/150?u=user77', email: 'user77@example.com', role: 'Болельщик', gender: 'женский', age: 40, city: 'Иркутск', phone: '+7 (902) 666-77-88', friends: [], followers: ['user1'], followingUsers: [], followingTeams: [] },
+  { id: 'user77', firstName: 'Наталья', lastName: 'Подольская', nickname: 'Podolskaya', avatarUrl: 'https://i.pravatar.cc/150?u=user77', email: 'user77@example.com', role: 'Болельщик', gender: 'женский', age: 40, city: 'Иркутск', phone: '+7 (902) 666-77-88', friends: [], followers: [], followingUsers: [], followingTeams: [] },
   { id: 'user78', firstName: 'Леонид', lastName: 'Агутин', nickname: 'Agutin', avatarUrl: 'https://i.pravatar.cc/150?u=user78', email: 'user78@example.com', role: 'Игрок', gender: 'мужской', age: 54, city: 'Хабаровск', phone: '+7 (924) 777-88-99', friends: [], followers: [], followingUsers: [], followingTeams: [] },
   { id: 'user79', firstName: 'Анжелика', lastName: 'Варум', nickname: 'Varum', avatarUrl: 'https://i.pravatar.cc/150?u=user79', email: 'user79@example.com', role: 'Игрок', gender: 'женский', age: 53, city: 'Хабаровск', phone: '+7 (924) 888-99-00', friends: [], followers: [], followingUsers: [], followingTeams: [] },
-  { id: 'user80', firstName: 'Александр', lastName: 'Ревва', nickname: 'Revva', avatarUrl: 'https://i.pravatar.cc/150?u=user80', email: 'user80@example.com', role: 'Менеджер', gender: 'мужской', age: 48, city: 'Ярославль', phone: '+7 (910) 999-00-11', friends: [], followers: [], followingUsers: ['user1'], followingTeams: [] },
+  { id: 'user80', firstName: 'Александр', lastName: 'Ревва', nickname: 'Revva', avatarUrl: 'https://i.pravatar.cc/150?u=user80', email: 'user80@example.com', role: 'Менеджер', gender: 'мужской', age: 48, city: 'Ярославль', phone: '+7 (910) 999-00-11', friends: [], followers: [], followingUsers: [], followingTeams: [] },
   { id: 'user81', firstName: 'Нюша', lastName: 'Шурочкина', nickname: 'Nyusha', avatarUrl: 'https://i.pravatar.cc/150?u=user81', email: 'user81@example.com', role: 'Игрок', gender: 'женский', age: 32, city: 'Ярославль', phone: '+7 (910) 000-11-22', friends: [], followers: [], followingUsers: [], followingTeams: [] },
   { id: 'user82', firstName: 'Тимати', lastName: 'Юнусов', nickname: 'Timati', avatarUrl: 'https://i.pravatar.cc/150?u=user82', email: 'user82@example.com', role: 'Игрок', gender: 'мужской', age: 39, city: 'Владивосток', phone: '+7 (914) 111-22-33', friends: [], followers: [], followingUsers: [], followingTeams: [] },
   { id: 'user83', firstName: 'Ольга', lastName: 'Бузова', nickname: 'Buzova', avatarUrl: 'https://i.pravatar.cc/150?u=user83', email: 'user83@example.com', role: 'Болельщик', gender: 'женский', age: 36, city: 'Владивосток', phone: '+7 (914) 222-33-44', friends: [], followers: [], followingUsers: [], followingTeams: [] },
@@ -138,12 +138,90 @@ export const users: User[] = [
   { id: 'user85', firstName: 'Клава', lastName: 'Кока', nickname: 'Koka', avatarUrl: 'https://i.pravatar.cc/150?u=user85', email: 'user85@example.com', role: 'Игрок', gender: 'женский', age: 26, city: 'Махачкала', phone: '+7 (928) 444-55-66', friends: [], followers: [], followingUsers: [], followingTeams: [] },
   { id: 'user86', firstName: 'Моргенштерн', lastName: 'Алишер', nickname: 'Morgen', avatarUrl: 'https://i.pravatar.cc/150?u=user86', email: 'user86@example.com', role: 'Игрок', gender: 'мужской', age: 24, city: 'Томск', phone: '+7 (913) 555-66-77', friends: [], followers: [], followingUsers: [], followingTeams: [] },
   { id: 'user87', firstName: 'Инстасамка', lastName: 'Дарья', nickname: 'Instasamka', avatarUrl: 'https://i.pravatar.cc/150?u=user87', email: 'user87@example.com', role: 'Болельщик', gender: 'женский', age: 22, city: 'Томск', phone: '+7 (913) 666-77-88', friends: [], followers: [], followingUsers: [], followingTeams: [] },
-  { id: 'user88', firstName: 'Элджей', lastName: 'Алексей', nickname: 'Allj', avatarUrl: 'https://i.pravatar.cc/150?u=user88', email: 'user88@example.com', role: 'Игрок', gender: 'мужской', age: 28, city: 'Оренбург', phone: '+7 (922) 777-88-99', friends: [], followers: ['user2'], followingUsers: [], followingTeams: [] },
+  { id: 'user88', firstName: 'Элджей', lastName: 'Алексей', nickname: 'Allj', avatarUrl: 'https://i.pravatar.cc/150?u=user88', email: 'user88@example.com', role: 'Игрок', gender: 'мужской', age: 28, city: 'Оренбург', phone: '+7 (922) 777-88-99', friends: [], followers: [], followingUsers: [], followingTeams: [] },
   { id: 'user89', firstName: 'Зиверт', lastName: 'Юлия', nickname: 'Zivert', avatarUrl: 'https://i.pravatar.cc/150?u=user89', email: 'user89@example.com', role: 'Игрок', gender: 'женский', age: 31, city: 'Оренбург', phone: '+7 (922) 888-99-00', friends: [], followers: [], followingUsers: [], followingTeams: [] },
-  { id: 'user90', firstName: 'Баста', lastName: 'Василий', nickname: 'Basta', avatarUrl: 'https://i.pravatar.cc/150?u=user90', email: 'user90@example.com', role: 'Модератор', gender: 'мужской', age: 42, city: 'Кемерово', phone: '+7 (905) 999-00-11', friends: [], followers: [], followingUsers: ['user2'], followingTeams: [] },
+  { id: 'user90', firstName: 'Баста', lastName: 'Василий', nickname: 'Basta', avatarUrl: 'https://i.pravatar.cc/150?u=user90', email: 'user90@example.com', role: 'Модератор', gender: 'мужской', age: 42, city: 'Кемерово', phone: '+7 (905) 999-00-11', friends: [], followers: [], followingUsers: [], followingTeams: [] },
   { id: 'user91', firstName: 'Мари', lastName: 'Краймбрери', nickname: 'Kraimbrery', avatarUrl: 'https://i.pravatar.cc/150?u=user91', email: 'user91@example.com', role: 'Игрок', gender: 'женский', age: 30, city: 'Кемерово', phone: '+7 (905) 000-11-22', friends: [], followers: [], followingUsers: [], followingTeams: [] },
   { id: 'user92', firstName: 'Макс', lastName: 'Барских', nickname: 'Barskih', avatarUrl: 'https://i.pravatar.cc/150?u=user92', email: 'user92@example.com', role: 'Администратор', gender: 'мужской', age: 32, city: 'Рязань', phone: '+7 (910) 111-22-33', friends: [], followers: [], followingUsers: [], followingTeams: [] },
   { id: 'user93', firstName: 'Светлана', lastName: 'Лобода', nickname: 'Loboda', avatarUrl: 'https://i.pravatar.cc/150?u=user93', email: 'user93@example.com', role: 'Администратор', gender: 'женский', age: 39, city: 'Рязань', phone: '+7 (910) 222-33-44', friends: [], followers: [], followingUsers: [], followingTeams: [] },
   { id: 'user94', firstName: 'Монатик', lastName: 'Дмитрий', nickname: 'Monatik', avatarUrl: 'https://i.pravatar.cc/150?u=user94', email: 'user94@example.com', role: 'Организатор', gender: 'мужской', age: 36, city: 'Астрахань', phone: '+7 (927) 333-44-55', friends: [], followers: [], followingUsers: [], followingTeams: [] },
   { id: 'user95', firstName: 'Тина', lastName: 'Кароль', nickname: 'Karol', avatarUrl: 'https://i.pravatar.cc/150?u=user95', email: 'user95@example.com', role: 'Игрок', gender: 'женский', age: 37, city: 'Астрахань', phone: '+7 (927) 444-55-66', friends: [], followers: [], followingUsers: [], followingTeams: [] },
 ];
+
+// --- Helper function to populate social graph ---
+function populateSocialGraph() {
+    const userIds = users.map(u => u.id);
+
+    const getRandomSubset = (arr: string[], currentUser: string, maxSize: number) => {
+        const otherUsers = arr.filter(id => id !== currentUser);
+        otherUsers.sort(() => 0.5 - Math.random());
+        return otherUsers.slice(0, Math.floor(Math.random() * (maxSize + 1)));
+    };
+
+    users.forEach(currentUser => {
+        // --- Following ---
+        currentUser.followingUsers = getRandomSubset(userIds, currentUser.id, 10);
+
+        // --- Followers --- (Derived from who is following this user)
+        users.forEach(otherUser => {
+            if (otherUser.followingUsers.includes(currentUser.id)) {
+                if (!currentUser.followers.includes(otherUser.id)) {
+                    currentUser.followers.push(otherUser.id);
+                }
+            }
+        });
+        
+        // --- Friends (mutual relationship) ---
+        const potentialFriends = getRandomSubset(userIds, currentUser.id, 5);
+        potentialFriends.forEach(friendId => {
+            const friend = users.find(u => u.id === friendId);
+            if (friend) {
+                // Add friend connection if not already present
+                if (!currentUser.friends.includes(friendId)) {
+                    currentUser.friends.push(friendId);
+                }
+                if (!friend.friends.includes(currentUser.id)) {
+                    friend.friends.push(currentUser.id);
+                }
+            }
+        });
+    });
+}
+
+// Run the function to populate the data
+populateSocialGraph();
+
+// A few manual overrides for key users to ensure they have connections
+const user1 = users.find(u => u.id === 'user1');
+if(user1) {
+    user1.friends = ['user2', 'user5', 'user52', 'user60'];
+    user1.followers = ['user3', 'user4', 'staff2', 'user77'];
+    user1.followingUsers = ['user2', 'user5', 'staff2', 'user80'];
+    user1.followingTeams = ['team2', 'team3'];
+}
+const user2 = users.find(u => u.id === 'user2');
+if(user2) {
+    user2.friends.push('user1'); // Ensure mutual friendship
+    user2.followers = ['user1', 'user88'];
+    user2.followingUsers = ['user1', 'user90'];
+}
+const user4 = users.find(u => u.id === 'user4');
+if(user4) {
+    user4.followingTeams = ['team1'];
+}
+
+// Ensure mutual relationships are consistent after manual overrides
+users.forEach(user => {
+    user.friends.forEach(friendId => {
+        const friend = users.find(u => u.id === friendId);
+        if (friend && !friend.friends.includes(user.id)) {
+            friend.friends.push(user.id);
+        }
+    });
+    user.followingUsers.forEach(followedId => {
+        const followed = users.find(u => u.id === followedId);
+        if (followed && !followed.followers.includes(user.id)) {
+            followed.followers.push(user.id);
+        }
+    });
+});
