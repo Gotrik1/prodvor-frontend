@@ -6,13 +6,15 @@ import type { User } from "@/mocks/users";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { Badge } from "@/shared/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
-import { BarChart, Shield, Star, Swords, Trophy, History, Rss, Film, Users as UsersIcon, Mail, Phone, MapPin, Dumbbell, UserPlus, MessageSquare, Briefcase } from "lucide-react";
+import { Briefcase, Dumbbell, Film, History, Mail, MapPin, MessageSquare, Phone, Rss, UserPlus, Users as UsersIcon } from "lucide-react";
 import Image from 'next/image';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 import { Button } from "@/shared/ui/button";
+import Link from "next/link";
 
 const defaultPlayer = users.find(u => u.role === 'Игрок')!;
 const playerTeam = teams.find(t => t.members.includes(defaultPlayer.id));
+const mockFollowers = users.slice(10, 22);
 
 const careerStats = {
     '2025': { matches: 52, wins: 38, goals: 41, assists: 15, mvp: 12 },
@@ -125,12 +127,26 @@ const MediaTab = () => (
     </Card>
 );
 
-const FollowersTab = () => (
+const FollowersCard = () => (
     <Card>
-        <CardHeader><CardTitle>Подписчики</CardTitle></CardHeader>
-        <CardContent><p className="text-muted-foreground">Раздел с подписчиками в разработке.</p></CardContent>
+        <CardHeader>
+            <CardTitle>Подписчики ({mockFollowers.length})</CardTitle>
+        </CardHeader>
+        <CardContent>
+            <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-4 gap-3">
+                {mockFollowers.map(follower => (
+                    <Link href="#" key={follower.id}>
+                        <Avatar className="h-12 w-12 border-2 border-transparent hover:border-primary transition-colors">
+                            <AvatarImage src={follower.avatarUrl} alt={follower.nickname} />
+                            <AvatarFallback>{follower.nickname.charAt(0)}</AvatarFallback>
+                        </Avatar>
+                    </Link>
+                ))}
+            </div>
+        </CardContent>
     </Card>
 );
+
 
 export function PlayerPageTemplate({ user }: { user?: User }) {
     const player = user || defaultPlayer;
@@ -163,21 +179,26 @@ export function PlayerPageTemplate({ user }: { user?: User }) {
                     <Button variant="secondary"><MessageSquare className="mr-2 h-4 w-4" />Написать</Button>
                 </div>
             </header>
-
-            <Tabs defaultValue="overview">
-                <TabsList className="grid w-full grid-cols-2 md:grid-cols-5">
-                    <TabsTrigger value="overview">Обзор</TabsTrigger>
-                    <TabsTrigger value="stats">Статистика</TabsTrigger>
-                    <TabsTrigger value="feed">Лента</TabsTrigger>
-                    <TabsTrigger value="media">Медиа</TabsTrigger>
-                    <TabsTrigger value="followers">Подписчики</TabsTrigger>
-                </TabsList>
-                <TabsContent value="overview" className="mt-6"><OverviewTab player={player} /></TabsContent>
-                <TabsContent value="stats" className="mt-6"><StatsTab /></TabsContent>
-                <TabsContent value="feed" className="mt-6"><FeedTab player={player}/></TabsContent>
-                <TabsContent value="media" className="mt-6"><MediaTab /></TabsContent>
-                <TabsContent value="followers" className="mt-6"><FollowersTab /></TabsContent>
-            </Tabs>
+            
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div className="lg:col-span-2">
+                    <Tabs defaultValue="overview">
+                        <TabsList className="grid w-full grid-cols-2 md:grid-cols-4">
+                            <TabsTrigger value="overview">Обзор</TabsTrigger>
+                            <TabsTrigger value="stats">Статистика</TabsTrigger>
+                            <TabsTrigger value="feed">Лента</TabsTrigger>
+                            <TabsTrigger value="media">Медиа</TabsTrigger>
+                        </TabsList>
+                        <TabsContent value="overview" className="mt-6"><OverviewTab player={player} /></TabsContent>
+                        <TabsContent value="stats" className="mt-6"><StatsTab /></TabsContent>
+                        <TabsContent value="feed" className="mt-6"><FeedTab player={player}/></TabsContent>
+                        <TabsContent value="media" className="mt-6"><MediaTab /></TabsContent>
+                    </Tabs>
+                </div>
+                 <div className="lg:col-span-1 space-y-6">
+                    <FollowersCard />
+                </div>
+            </div>
         </div>
     )
 }
