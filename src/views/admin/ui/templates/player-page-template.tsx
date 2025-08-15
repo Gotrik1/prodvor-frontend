@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import { users, teams, playgrounds, posts } from "@/mocks";
@@ -185,7 +184,7 @@ export function PlayerPageTemplate({ user: profileUser }: { user?: User }) {
                         {playerTeam && (
                             <div className="flex items-center gap-2">
                                 <Briefcase className="h-4 w-4" />
-                                <Image src={playerTeam.logoUrl} alt={playerTeam.name} width={16} height={16} className="rounded-sm" />
+                                <Image src={playerTeam.logoUrl} alt={playerTeam.name} width={16} height={16} className="rounded-sm" data-ai-hint="team logo" />
                                 <span>{playerTeam.name}</span>
                             </div>
                         )}
