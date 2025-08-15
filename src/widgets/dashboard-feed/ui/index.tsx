@@ -6,14 +6,12 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
 import { Alert, AlertDescription, AlertTitle } from "@/shared/ui/alert";
 import { Button } from "@/shared/ui/button";
 import { Trophy, Bot, Loader2, ListChecks, RefreshCw } from "lucide-react";
-import { CreatePost } from "./create-post";
-import { users, posts } from "@/mocks";
+import { posts } from "@/mocks";
 import { useEffect, useState } from "react";
 import { generateNewsDigestAction } from "@/app/actions";
 import type { NewsDigestOutput } from "@/shared/api/generate-news-digest";
 import { PostCard } from "./post-card";
 
-const currentUser = users.find(u => u.id === 'user1')!; // Make sure currentUser is always found
 
 function AiDigest() {
     const [digestData, setDigestData] = useState<NewsDigestOutput | null>(null);
@@ -88,7 +86,6 @@ export function DashboardFeed() {
           <AiDigest key={key} />
         </CardContent>
       </Card>
-      <CreatePost user={currentUser} />
       <div className="space-y-4">
         {posts.map(post => (
           <PostCard key={post.id} post={post} />

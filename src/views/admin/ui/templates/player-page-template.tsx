@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { users, teams, playgrounds, posts } from "@/mocks";
@@ -12,6 +13,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 import { Button } from "@/shared/ui/button";
 import Link from "next/link";
 import { useUserStore } from "@/widgets/dashboard-header/model/user-store";
+import { CreatePost } from "@/widgets/dashboard-feed/ui/create-post";
 
 const defaultPlayer = users.find(u => u.role === 'Игрок')!;
 const playerTeam = teams.find(t => t.members.includes(defaultPlayer.id));
@@ -120,19 +122,19 @@ const StatsTab = () => (
     </Card>
 );
 
-const FeedTab = ({ player }: { player: User }) => {
+const FeedTab = ({ player, isOwnProfile }: { player: User; isOwnProfile: boolean }) => {
     const playerPosts = posts.filter(p => p.author.id === player.id);
     return (
-        <Card>
-            <CardHeader><CardTitle>Лента игрока</CardTitle></CardHeader>
-            <CardContent>
-                {playerPosts.length > 0 ? (
-                     <p>Компонент ленты будет здесь.</p>
-                ) : (
+        <div className="space-y-4">
+            {isOwnProfile && <CreatePost user={player} />}
+            {playerPosts.length > 0 ? (
+                 <p>Компонент ленты будет здесь.</p>
+            ) : (
+                <Card className="flex items-center justify-center min-h-[200px]">
                     <p className="text-muted-foreground">У игрока пока нет записей.</p>
-                )}
-            </CardContent>
-        </Card>
+                </Card>
+            )}
+        </div>
     )
 };
 
@@ -213,7 +215,7 @@ export function PlayerPageTemplate({ user: profileUser }: { user?: User }) {
                         </TabsList>
                         <TabsContent value="overview" className="mt-6"><OverviewTab player={player} /></TabsContent>
                         <TabsContent value="stats" className="mt-6"><StatsTab /></TabsContent>
-                        <TabsContent value="feed" className="mt-6"><FeedTab player={player}/></TabsContent>
+                        <TabsContent value="feed" className="mt-6"><FeedTab player={player} isOwnProfile={isOwnProfile} /></TabsContent>
                         <TabsContent value="media" className="mt-6"><MediaTab /></TabsContent>
                     </Tabs>
                 </div>
