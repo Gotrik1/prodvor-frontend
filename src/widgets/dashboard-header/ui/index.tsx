@@ -1,3 +1,6 @@
+
+'use client';
+
 import { SidebarTrigger } from "@/shared/ui/sidebar";
 import { Search, ShoppingCart, Bell, User, Settings, LifeBuoy, Share2, LogOut } from "lucide-react";
 import { Input } from "@/shared/ui/input";
@@ -6,8 +9,11 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { ThemeToggle } from "@/shared/ui/theme-toggle";
 import Link from "next/link";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/shared/ui/dropdown-menu";
+import { useUserStore } from "../model/user-store";
 
 export function DashboardHeader() {
+  const { user } = useUserStore();
+
   return (
     <header className="flex h-16 items-center justify-between p-4 border-b bg-card">
       <div className="flex items-center gap-4">
@@ -32,17 +38,17 @@ export function DashboardHeader() {
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="relative h-10 w-10 rounded-full">
               <Avatar>
-                <AvatarImage src="https://i.pravatar.cc/150?u=a042581f4e29026024d" />
-                <AvatarFallback>G</AvatarFallback>
+                <AvatarImage src={user?.avatarUrl} />
+                <AvatarFallback>{user?.nickname?.charAt(0) || '?'}</AvatarFallback>
               </Avatar>
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-56" align="end" forceMount>
             <DropdownMenuLabel className="font-normal">
               <div className="flex flex-col space-y-1">
-                <p className="text-sm font-medium leading-none">Terminator</p>
+                <p className="text-sm font-medium leading-none">{user?.nickname}</p>
                 <p className="text-xs leading-none text-muted-foreground">
-                  user1@example.com
+                  {user?.email}
                 </p>
               </div>
             </DropdownMenuLabel>
