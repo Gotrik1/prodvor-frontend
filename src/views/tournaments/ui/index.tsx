@@ -49,7 +49,7 @@ export function TournamentsPage() {
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {mockMyTournaments.map(tournament => (
                         <Card key={tournament.id} className="flex flex-col bg-card/80 border-primary/20 hover:border-primary/50 transition-colors">
-                             <CardContent className="p-0">
+                            <CardContent className="p-0">
                                 <Link href={`/tournaments/${tournament.id}`}>
                                     <div className="relative h-40 w-full">
                                         <Image
@@ -104,8 +104,8 @@ export function TournamentsPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {allTournaments.map(tournament => (
                         <Card key={tournament.id} className="flex flex-col hover:border-primary/50 transition-colors group">
-                            <CardContent className="p-0">
-                                <Link href={`/tournaments/${tournament.id}`}>
+                            <CardContent className="p-0 pt-0">
+                                <Link href={`/tournaments/${tournament.id}`} className="block">
                                     <div className="relative h-40 w-full group-hover:scale-105 transition-transform duration-300">
                                         <Image
                                             src={tournament.bannerUrl}
