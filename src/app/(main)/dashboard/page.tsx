@@ -2,13 +2,6 @@
 'use client';
 
 import { useUserStore } from '@/widgets/dashboard-header/model/user-store';
-import { PlayerPageTemplate } from '@/views/admin/ui/templates/player-page-template';
-import { OrganizerPageTemplate } from '@/views/admin/ui/templates/organizer-page-template';
-import { RefereePageTemplate } from '@/views/admin/ui/templates/referee-page-template';
-import { CoachPageTemplate } from '@/views/admin/ui/templates/coach-page-template';
-import { ManagerPageTemplate } from '@/views/admin/ui/templates/manager-page-template';
-import { FanPageTemplate } from '@/views/admin/ui/templates/fan-page-template';
-import { PlaceholderTemplate } from '@/views/admin/ui/templates/placeholder-template';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
 import { EyeOff } from 'lucide-react';
 import Link from 'next/link';
