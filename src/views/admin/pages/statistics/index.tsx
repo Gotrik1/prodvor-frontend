@@ -9,7 +9,7 @@ import { Badge } from '@/shared/ui/badge';
 import { Button } from '@/shared/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/shared/ui/table';
-import { Copy, ExternalLink, Home, Crown, GanttChart, Eye, Database, Key, Link2, ListOrdered } from 'lucide-react';
+import { Copy, ExternalLink, Home, Crown, GanttChart, Eye, Database, Key, Link2, ListOrdered, Mail, MapPin, User as UserIcon } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Progress } from '@/shared/ui/progress';
@@ -72,11 +72,14 @@ export function AdminStatisticsPage() {
                                 <Table>
                                     <TableHeader>
                                         <TableRow>
-                                            <TableHead><Key className="inline h-3 w-3 mr-1"/>ID (PK)</TableHead>
+                                            <TableHead><Key className="inline h-3 w-3 mr-1"/>ID</TableHead>
                                             <TableHead>Пользователь</TableHead>
                                             <TableHead><ListOrdered className="inline h-3 w-3 mr-1"/>Роль</TableHead>
-                                            <TableHead><Link2 className="inline h-3 w-3 mr-1"/>Команда (FK)</TableHead>
-                                            <TableHead className="text-right">Просмотр</TableHead>
+                                            <TableHead>Возраст/Пол</TableHead>
+                                            <TableHead>Город</TableHead>
+                                            <TableHead>Контакты</TableHead>
+                                            <TableHead><Link2 className="inline h-3 w-3 mr-1"/>Команда</TableHead>
+                                            <TableHead className="text-right">Действия</TableHead>
                                         </TableRow>
                                     </TableHeader>
                                     <TableBody>
@@ -105,11 +108,14 @@ export function AdminStatisticsPage() {
                                                         </div>
                                                     </TableCell>
                                                     <TableCell><Badge variant="secondary">{user.role}</Badge></TableCell>
+                                                    <TableCell>{user.age ? `${user.age} / ${user.gender.charAt(0).toUpperCase()}` : '—'}</TableCell>
+                                                    <TableCell>{user.city || '—'}</TableCell>
+                                                    <TableCell className="text-xs text-muted-foreground">{user.email}</TableCell>
                                                     <TableCell>
                                                         {team ? (
                                                             <Link href={`/teams/${team.id}`} className="text-primary hover:underline text-sm">{team.name}</Link>
                                                         ) : (
-                                                            <span className="text-xs text-muted-foreground">N/A</span>
+                                                            <span className="text-xs text-muted-foreground">—</span>
                                                         )}
                                                     </TableCell>
                                                     <TableCell className="text-right">
