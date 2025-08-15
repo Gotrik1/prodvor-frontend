@@ -28,7 +28,7 @@ export function OrganizerPageTemplate({ user }: { user?: User }) {
         <div className="border rounded-lg p-4 md:p-6 space-y-6 bg-muted/20">
             <header className="flex flex-col md:flex-row items-center gap-6">
                 <Avatar className="h-24 w-24 border-4 border-primary">
-                    <AvatarImage src={organizer.avatarUrl} alt={`${organizer.firstName} ${organizer.lastName}`} />
+                    <AvatarImage src={organizer.avatarUrl} alt={`${organizer.firstName} ${organizer.lastName}`} data-ai-hint={organizer.gender === 'мужской' ? 'male' : 'female'}/>
                     <AvatarFallback>{organizer.firstName.charAt(0)}{organizer.lastName.charAt(0)}</AvatarFallback>
                 </Avatar>
                 <div className="text-center md:text-left">

@@ -1,3 +1,4 @@
+
 'use client';
 
 import { users, teams } from "@/mocks";
@@ -44,7 +45,7 @@ export function CoachPageTemplate({ user }: { user?: User }) {
                 </Avatar>
                 <div className="text-center md:text-left">
                     <h1 className="text-3xl font-bold font-headline">{coach.firstName} "{coach.nickname}" {coach.lastName}</h1>
-                    <p className="text-muted-foreground text-lg">Главный тренер, <span className="font-semibold text-foreground">{coachTeam.name}</span></p>
+                    <p className="text-muted-foreground text-lg">Роль: {coach.role}, <span className="font-semibold text-foreground">{coachTeam.name}</span></p>
                     <div className="flex items-center gap-2 mt-2 justify-center md:justify-start">
                         <Badge variant="secondary">Специализация: Тактика</Badge>
                         <Badge variant="outline">Опыт: 8 лет</Badge>
@@ -161,7 +162,7 @@ export function CoachPageTemplate({ user }: { user?: User }) {
                                     <TableCell>
                                         <div className="flex items-center gap-3">
                                             <Avatar className="h-9 w-9">
-                                                <AvatarImage src={member.avatarUrl} />
+                                                <AvatarImage src={member.avatarUrl} data-ai-hint={member.gender === 'мужской' ? 'male' : 'female'} />
                                                 <AvatarFallback>{member.firstName.charAt(0)}</AvatarFallback>
                                             </Avatar>
                                             <div>
