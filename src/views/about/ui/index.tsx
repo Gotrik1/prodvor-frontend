@@ -4,7 +4,7 @@ import Link from "next/link";
 
 const Logo = () => (
     <Image 
-      src="https://prodvor.website/_next/image?url=%2Fimages%2Fyour-logo.png&w=64&q=75"
+      src="https://placehold.co/64x64.png"
       alt="ProDvor Logo" 
       width={40} 
       height={40} 

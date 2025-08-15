@@ -4,7 +4,7 @@ import Image from "next/image";
 const Logo = () => (
     <div className="flex items-center gap-2 font-bold text-xl">
         <Link href="/" className="flex items-center gap-2">
-            <Image src="https://prodvor.website/_next/image?url=%2Fimages%2Fyour-logo.png&w=64&q=75" alt="ProDvor Logo" width={40} height={40} className="object-contain" data-ai-hint="logo" />
+            <Image src="https://placehold.co/64x64.png" alt="ProDvor Logo" width={40} height={40} className="object-contain" data-ai-hint="logo" />
         </Link>
     </div>
 );
