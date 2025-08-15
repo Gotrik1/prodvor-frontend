@@ -9,7 +9,7 @@ import { Badge } from '@/shared/ui/badge';
 import { Button } from '@/shared/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/shared/ui/table';
-import { Copy, ExternalLink, Home, Crown, GanttChart, Eye, Database, Key, Index, Link2 } from 'lucide-react';
+import { Copy, ExternalLink, Home, Crown, GanttChart, Eye, Database, Key, Link2, ListOrdered } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Progress } from '@/shared/ui/progress';
@@ -74,7 +74,7 @@ export function AdminStatisticsPage() {
                                         <TableRow>
                                             <TableHead><Key className="inline h-3 w-3 mr-1"/>ID (PK)</TableHead>
                                             <TableHead>Пользователь</TableHead>
-                                            <TableHead><Index className="inline h-3 w-3 mr-1"/>Роль</TableHead>
+                                            <TableHead><ListOrdered className="inline h-3 w-3 mr-1"/>Роль</TableHead>
                                             <TableHead><Link2 className="inline h-3 w-3 mr-1"/>Команда (FK)</TableHead>
                                             <TableHead className="text-right">Просмотр</TableHead>
                                         </TableRow>
@@ -207,7 +207,7 @@ export function AdminStatisticsPage() {
                                             <TableHead><Key className="inline h-3 w-3 mr-1"/>ID (PK)</TableHead>
                                             <TableHead>Турнир</TableHead>
                                             <TableHead>Участники</TableHead>
-                                            <TableHead><Index className="inline h-3 w-3 mr-1"/>Статус</TableHead>
+                                            <TableHead><ListOrdered className="inline h-3 w-3 mr-1"/>Статус</TableHead>
                                             <TableHead className="text-right">Действия</TableHead>
                                         </TableRow>
                                     </TableHeader>
@@ -261,7 +261,7 @@ export function AdminStatisticsPage() {
                                         <TableRow>
                                             <TableHead><Key className="inline h-3 w-3 mr-1"/>ID (PK)</TableHead>
                                             <TableHead>Название</TableHead>
-                                            <TableHead><Index className="inline h-3 w-3 mr-1"/>Адрес</TableHead>
+                                            <TableHead><ListOrdered className="inline h-3 w-3 mr-1"/>Адрес</TableHead>
                                             <TableHead>Тип</TableHead>
                                         </TableRow>
                                     </TableHeader>
