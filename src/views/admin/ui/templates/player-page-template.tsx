@@ -239,7 +239,7 @@ export function PlayerPageTemplate({ user: profileUser }: { user?: User }) {
                 </div>
                 {!isOwnProfile && (
                     <div className="flex items-center gap-2">
-                        <Button><UserPlus className="mr-2 h-4 w-4" />Подписаться</Button>
+                        <Button><UserPlus className="mr-2 h-4 w-4" />Добавить в друзья</Button>
                         <Button variant="secondary"><MessageSquare className="mr-2 h-4 w-4" />Написать</Button>
                     </div>
                 )}
