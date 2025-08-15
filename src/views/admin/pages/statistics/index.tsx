@@ -309,7 +309,7 @@ export function AdminStatisticsPage() {
                                                     <TableCell className="font-mono text-xs">{sport.id}</TableCell>
                                                     <TableCell className="font-medium">{sport.name}</TableCell>
                                                     <TableCell className="text-muted-foreground text-xs">
-                                                        {sport.subdisciplines?.join(', ') || '—'}
+                                                        {sport.subdisciplines?.map(s => s.name).join(', ') || '—'}
                                                     </TableCell>
                                                 </TableRow>
                                             ))}
@@ -334,7 +334,7 @@ export function AdminStatisticsPage() {
                                                     <TableCell className="font-mono text-xs">{sport.id}</TableCell>
                                                     <TableCell className="font-medium">{sport.name}</TableCell>
                                                     <TableCell className="text-muted-foreground text-xs">
-                                                        {sport.subdisciplines?.join(', ') || '—'}
+                                                        {sport.subdisciplines?.map(s => s.name).join(', ') || '—'}
                                                     </TableCell>
                                                 </TableRow>
                                             ))}

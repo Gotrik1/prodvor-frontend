@@ -1,11 +1,16 @@
+export interface Subdiscipline {
+  id: string;
+  name: string;
+}
+
 export interface Sport {
   id: string;
   name: string;
   isTeamSport: boolean;
-  subdisciplines?: string[];
+  subdisciplines?: Subdiscipline[];
 }
 
-export const allSports: Sport[] = [
+const sportsData: Omit<Sport, 'subdisciplines'> & { subdisciplines?: string[] }[] = [
   // Командные виды спорта
   { id: 'sport-1', name: 'Футбол', isTeamSport: true, subdisciplines: ['мини-футбол', 'пляжный футбол', 'футзал', 'уличный футбол'] },
   { id: 'sport-2', name: 'Баскетбол', isTeamSport: true, subdisciplines: ['3х3', 'стритбол', 'классический'] },
@@ -60,6 +65,14 @@ export const allSports: Sport[] = [
   { id: 'sport-49', name: 'Индивидуальные шахматы', isTeamSport: false },
   { id: 'sport-50', name: 'Настольные игры как спорт', isTeamSport: false, subdisciplines: ['го', 'шашки'] },
 ];
+
+export const allSports: Sport[] = sportsData.map(sport => ({
+  ...sport,
+  subdisciplines: sport.subdisciplines?.map((subName, index) => ({
+    id: `${sport.id}-${index + 1}`,
+    name: subName,
+  })),
+}));
 
 export const teamSports = allSports.filter(sport => sport.isTeamSport);
 export const individualSports = allSports.filter(sport => !sport.isTeamSport);
