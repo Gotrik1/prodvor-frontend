@@ -1,3 +1,6 @@
+
+"use client";
+
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { Card, CardContent, CardFooter, CardHeader } from "@/shared/ui/card";
 import { Button } from "@/shared/ui/button";
@@ -7,11 +10,19 @@ import { ru } from 'date-fns/locale';
 import { MessageCircle, Heart } from "lucide-react";
 import Link from 'next/link';
 import Image from "next/image";
+import { useState, useEffect } from "react";
 
 export function PostCard({ post }: { post: Post }) {
+  const [timeAgo, setTimeAgo] = useState('');
+  
   const postDate = new Date(post.timestamp);
-  const timeAgo = formatDistanceToNow(postDate, { addSuffix: true, locale: ru });
   const fullDateTime = format(postDate, "d MMM yyyy 'г. в' HH:mm", { locale: ru });
+  
+  useEffect(() => {
+    // This runs only on the client, after hydration
+    setTimeAgo(formatDistanceToNow(postDate, { addSuffix: true, locale: ru }));
+  }, [postDate]);
+
 
   return (
     <Card className="bg-card">
@@ -34,7 +45,7 @@ export function PostCard({ post }: { post: Post }) {
                 </>
             )}
           </div>
-          <p className="text-sm text-muted-foreground" title={fullDateTime}>{timeAgo}</p>
+          <p className="text-sm text-muted-foreground" title={fullDateTime}>{timeAgo || '...'}</p>
         </div>
       </CardHeader>
       <CardContent className="px-4 pb-2 pt-0">
