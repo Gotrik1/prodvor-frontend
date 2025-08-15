@@ -172,6 +172,7 @@ export function AdminStatisticsPage() {
                                         <TableRow>
                                             <TableHead><Key className="inline h-3 w-3 mr-1"/>ID (PK)</TableHead>
                                             <TableHead>Команда</TableHead>
+                                            <TableHead>Дисциплина</TableHead>
                                             <TableHead>Капитан (FK)</TableHead>
                                             <TableHead>Дом. площадка (FK)</TableHead>
                                             <TableHead className="text-right">Просмотр</TableHead>
@@ -196,6 +197,10 @@ export function AdminStatisticsPage() {
                                                             <Image src={team.logoUrl} alt={team.name} width={36} height={36} className="rounded-md" data-ai-hint={team.dataAiHint} />
                                                             <span>{team.name}</span>
                                                         </div>
+                                                    </TableCell>
+                                                    <TableCell>
+                                                        <Badge variant="outline">{team.game}</Badge>
+                                                        {team.subdiscipline && <p className="text-xs text-muted-foreground mt-1">{team.subdiscipline}</p>}
                                                     </TableCell>
                                                      <TableCell>
                                                         {captain ? (
@@ -431,4 +436,5 @@ export function AdminStatisticsPage() {
     );
 }
 
+    
     
