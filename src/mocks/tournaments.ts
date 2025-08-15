@@ -25,7 +25,7 @@ export const tournaments: Tournament[] = [
       participants: 12,
       maxParticipants: 16,
       startDate: '2025-07-15',
-      bannerUrl: 'https://prodvor.website/images/tournaments/streetball-summer.png',
+      bannerUrl: 'https://placehold.co/1200x400.png',
       dataAiHint: 'basketball court sunset',
       playgrounds: [playgrounds[2], playgrounds[3]]
     },
@@ -38,7 +38,7 @@ export const tournaments: Tournament[] = [
         participants: 8,
         maxParticipants: 8,
         startDate: '2025-05-10',
-        bannerUrl: 'https://prodvor.website/images/tournaments/futsal-kings.png',
+        bannerUrl: 'https://placehold.co/1200x400.png',
         dataAiHint: 'futsal court lights',
         playgrounds: [playgrounds[1]]
     },
@@ -51,7 +51,7 @@ export const tournaments: Tournament[] = [
       participants: 0,
       maxParticipants: 16,
       startDate: '2025-12-01',
-      bannerUrl: 'https://prodvor.website/images/tournaments/winter-sprint.png',
+      bannerUrl: 'https://placehold.co/1200x400.png',
       dataAiHint: 'winter soccer snow',
       playgrounds: [playgrounds[0]]
     },
@@ -64,7 +64,7 @@ export const tournaments: Tournament[] = [
       participants: 4,
       maxParticipants: 8,
       startDate: '2025-07-25',
-      bannerUrl: 'https://prodvor.website/images/tournaments/newbie-cup.png',
+      bannerUrl: 'https://placehold.co/1200x400.png',
       dataAiHint: 'amateur soccer players',
       playgrounds: [playgrounds[2]]
     },
@@ -77,7 +77,7 @@ export const tournaments: Tournament[] = [
       participants: 8,
       maxParticipants: 8,
       startDate: '2025-08-01',
-      bannerUrl: 'https://prodvor.website/images/tournaments/summer-cup-banner.png',
+      bannerUrl: 'https://placehold.co/1200x400.png',
       dataAiHint: 'street soccer action',
       playgrounds: [playgrounds[0]]
     }

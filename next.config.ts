@@ -15,10 +15,6 @@ const nextConfig = {
         },
         {
             protocol: 'https',
-            hostname: 'prodvor.website',
-        },
-        {
-            protocol: 'https',
             hostname: 'i.pravatar.cc',
         }
     ],
