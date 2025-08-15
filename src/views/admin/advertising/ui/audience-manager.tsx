@@ -7,13 +7,13 @@ import { Button } from "@/shared/ui/button";
 import { Input } from "@/shared/ui/input";
 import { Label } from "@/shared/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/select";
-import { users, teams, sportCategories } from '@/mocks';
+import { users, teams, allSports } from '@/mocks';
 import { BarChart, Filter, Users, DollarSign, Save } from 'lucide-react';
 import { Slider } from '@/shared/ui/slider';
 import { Badge } from '@/shared/ui/badge';
 import type { User } from '@/mocks';
 
-const allDisciplines = sportCategories.flatMap(cat => cat.sports.map(s => s.name));
+const allDisciplines = allSports.map(s => s.name);
 const allRoles = [...new Set(users.map(u => u.role))];
 const allCities = ["Москва", "Санкт-Петербург", "Новосибирск", "Екатеринбург"]; // Mock cities
 
