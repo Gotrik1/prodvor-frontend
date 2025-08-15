@@ -2,14 +2,16 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { Card, CardContent, CardFooter, CardHeader } from "@/shared/ui/card";
 import { Button } from "@/shared/ui/button";
 import type { Post } from "@/mocks/posts";
-import { formatDistanceToNow } from 'date-fns';
+import { format, formatDistanceToNow } from 'date-fns';
 import { ru } from 'date-fns/locale';
 import { MessageCircle, Heart } from "lucide-react";
 import Link from 'next/link';
 import Image from "next/image";
 
 export function PostCard({ post }: { post: Post }) {
-  const timeAgo = formatDistanceToNow(new Date(post.timestamp), { addSuffix: true, locale: ru });
+  const postDate = new Date(post.timestamp);
+  const timeAgo = formatDistanceToNow(postDate, { addSuffix: true, locale: ru });
+  const fullDateTime = format(postDate, "d MMM yyyy 'г. в' HH:mm", { locale: ru });
 
   return (
     <Card className="bg-card">
@@ -19,7 +21,7 @@ export function PostCard({ post }: { post: Post }) {
           <AvatarFallback>{post.author.nickname.charAt(0)}</AvatarFallback>
         </Avatar>
         <div className="flex-1">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-wrap">
             <p className="font-semibold">{post.author.firstName} {post.author.lastName}</p>
             <p className="text-sm text-muted-foreground">@{post.author.nickname}</p>
             {post.team && (
@@ -32,7 +34,7 @@ export function PostCard({ post }: { post: Post }) {
                 </>
             )}
           </div>
-          <p className="text-sm text-muted-foreground">{timeAgo}</p>
+          <p className="text-sm text-muted-foreground" title={fullDateTime}>{timeAgo}</p>
         </div>
       </CardHeader>
       <CardContent className="px-4 pb-2 pt-0">

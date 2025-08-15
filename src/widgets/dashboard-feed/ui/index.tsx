@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
@@ -11,7 +10,7 @@ import { useEffect, useState } from "react";
 import { generateNewsDigestAction } from "@/app/actions";
 import type { NewsDigestOutput } from "@/shared/api/generate-news-digest";
 import { PostCard } from "./post-card";
-
+import { useUserStore } from "@/widgets/dashboard-header/model/user-store";
 
 function AiDigest() {
     const [digestData, setDigestData] = useState<NewsDigestOutput | null>(null);
@@ -69,6 +68,10 @@ function AiDigest() {
 
 export function DashboardFeed() {
   const [key, setKey] = useState(0); // Add state to force re-render
+  const { user: currentUser } = useUserStore();
+
+  // Filter posts to show only those from other users
+  const feedPosts = posts.filter(post => post.author.id !== currentUser?.id);
 
   return (
     <>
@@ -87,7 +90,7 @@ export function DashboardFeed() {
         </CardContent>
       </Card>
       <div className="space-y-4">
-        {posts.map(post => (
+        {feedPosts.map(post => (
           <PostCard key={post.id} post={post} />
         ))}
       </div>
