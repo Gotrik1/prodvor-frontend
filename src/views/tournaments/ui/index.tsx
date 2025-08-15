@@ -103,13 +103,13 @@ export function TournamentsPage() {
                     {allTournaments.map(tournament => (
                         <Card key={tournament.id} className="flex flex-col hover:border-primary/50 transition-colors group">
                             <CardHeader className="p-0">
-                                <Link href={`/tournaments/${tournament.id}`}>
+                                <Link href={`/tournaments/${tournament.id}`} className="block">
                                     <div className="relative h-40 w-full">
                                         <Image
                                             src={tournament.bannerUrl}
                                             alt={tournament.name}
                                             fill
-                                            className="object-cover rounded-t-lg"
+                                            className="object-cover rounded-t-lg group-hover:scale-105 transition-transform"
                                             data-ai-hint={tournament.dataAiHint}
                                         />
                                         <Badge className={`absolute top-2 right-2 ${statusColors[tournament.status]}`}>
