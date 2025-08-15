@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import { users, teams, sponsors, playgrounds, Team } from '@/mocks';
@@ -9,7 +8,7 @@ import { Badge } from '@/shared/ui/badge';
 import { Button } from '@/shared/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/shared/ui/table';
-import { Copy, ExternalLink, Home, Crown, GanttChart, Eye, Database, Key, Link2, ListOrdered, Mail, MapPin, User as UserIcon, Phone } from 'lucide-react';
+import { Copy, ExternalLink, Home, Crown, GanttChart, Eye, Database, Key, Link2, ListOrdered, Mail, MapPin, User as UserIcon, Phone, Heart, UserPlus, Rss } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Progress } from '@/shared/ui/progress';
@@ -79,6 +78,7 @@ export function AdminStatisticsPage() {
                                             <TableHead>Город</TableHead>
                                             <TableHead>Контакты</TableHead>
                                             <TableHead><Link2 className="inline h-3 w-3 mr-1"/>Команда</TableHead>
+                                            <TableHead>Соц. связи</TableHead>
                                             <TableHead className="text-right">Действия</TableHead>
                                         </TableRow>
                                     </TableHeader>
@@ -120,6 +120,13 @@ export function AdminStatisticsPage() {
                                                         ) : (
                                                             <span className="text-xs text-muted-foreground">—</span>
                                                         )}
+                                                    </TableCell>
+                                                    <TableCell>
+                                                        <div className="flex items-center gap-3 text-xs">
+                                                            <div className="flex items-center gap-1" title="Друзья"><Heart className="h-3 w-3"/>{user.friends.length}</div>
+                                                            <div className="flex items-center gap-1" title="Подписчики"><UserPlus className="h-3 w-3"/>{user.followers.length}</div>
+                                                            <div className="flex items-center gap-1" title="Подписки"><Rss className="h-3 w-3"/>{user.followingUsers.length + user.followingTeams.length}</div>
+                                                        </div>
                                                     </TableCell>
                                                     <TableCell className="text-right">
                                                         <Button variant="outline" size="sm" asChild>
@@ -348,3 +355,5 @@ export function AdminStatisticsPage() {
         </div>
     );
 }
+
+    
