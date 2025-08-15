@@ -105,8 +105,8 @@ export function AdminStatisticsPage() {
                                     <TableCell className="min-w-[200px] max-w-[250px]">
                                         <TooltipProvider>
                                             <Tooltip>
-                                                <TooltipTrigger>
-                                                    <p className="truncate text-xs">
+                                                <TooltipTrigger asChild>
+                                                    <p className="text-xs truncate">
                                                         {user.disciplines.map(id => allSports.find(s => s.id === id)?.name).join(', ')}
                                                     </p>
                                                 </TooltipTrigger>
@@ -119,8 +119,10 @@ export function AdminStatisticsPage() {
                                         </TooltipProvider>
                                     </TableCell>
                                     <TableCell className="text-xs whitespace-nowrap">
-                                        <div className="flex items-center gap-1"><Mail className="h-3 w-3"/>{user.email}</div>
-                                        <div className="flex items-center gap-1"><Phone className="h-3 w-3"/>{user.phone}</div>
+                                        <div className="flex flex-col gap-1">
+                                            <div className="flex items-center gap-1"><Mail className="h-3 w-3"/>{user.email}</div>
+                                            <div className="flex items-center gap-1"><Phone className="h-3 w-3"/>{user.phone}</div>
+                                        </div>
                                     </TableCell>
                                      <TableCell>
                                         <div className="flex flex-col gap-1 text-xs">
