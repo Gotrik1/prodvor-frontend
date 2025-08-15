@@ -1,14 +1,14 @@
 
 'use client';
 
-import { users, teams, sponsors, playgrounds, Team } from '@/mocks';
+import { users, teams, sponsors, playgrounds, sportCategories, Team } from '@/mocks';
 import { allTournaments as tournaments } from '@/views/tournaments/public-page/ui/mock-data';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import { Badge } from '@/shared/ui/badge';
 import { Button } from '@/shared/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/shared/ui/table';
-import { Copy, ExternalLink, Home, Crown, GanttChart, Eye, Database, Key, ListOrdered, Mail, MapPin, User as UserIcon, Phone, Heart, UserPlus, Rss } from 'lucide-react';
+import { Copy, ExternalLink, Home, Crown, GanttChart, Eye, Database, Key, ListOrdered, Mail, MapPin, User as UserIcon, Phone, Heart, UserPlus, Rss, Dumbbell } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Progress } from '@/shared/ui/progress';
@@ -50,6 +50,8 @@ export function AdminStatisticsPage() {
     if (!isClient) {
         return null; // or a loading skeleton
     }
+    
+    const totalSports = sportCategories.reduce((sum, category) => sum + category.sports.length, 0);
 
     return (
         <div className="space-y-8">
@@ -63,10 +65,11 @@ export function AdminStatisticsPage() {
                 </div>
             </div>
              <Tabs defaultValue="users" className="w-full">
-                <TabsList className="grid w-full grid-cols-5">
+                <TabsList className="grid w-full grid-cols-6">
                     <TabsTrigger value="users">Пользователи ({users.length})</TabsTrigger>
                     <TabsTrigger value="teams">Команды ({teams.length})</TabsTrigger>
                     <TabsTrigger value="tournaments">Турниры ({tournaments.length})</TabsTrigger>
+                    <TabsTrigger value="sports">Виды спорта ({totalSports})</TabsTrigger>
                     <TabsTrigger value="playgrounds">Площадки ({playgrounds.length})</TabsTrigger>
                     <TabsTrigger value="sponsors">Спонсоры ({sponsors.length})</TabsTrigger>
                 </TabsList>
@@ -275,7 +278,41 @@ export function AdminStatisticsPage() {
                         </CardContent>
                     </Card>
                 </TabsContent>
-                
+                 <TabsContent value="sports">
+                    <Card className="mt-4">
+                        <CardHeader>
+                            <CardTitle>Таблица: Sports</CardTitle>
+                            <CardDescription>Справочник всех видов спорта, доступных на платформе.</CardDescription>
+                        </CardHeader>
+                        <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            {sportCategories.map(category => (
+                                <div key={category.name}>
+                                    <h3 className="text-lg font-semibold mb-2 flex items-center gap-2"><Dumbbell className="h-5 w-5"/> {category.name}</h3>
+                                    <div className="border rounded-lg">
+                                        <Table>
+                                            <TableHeader>
+                                                <TableRow>
+                                                    <TableHead>Название</TableHead>
+                                                    <TableHead>Поддисциплины</TableHead>
+                                                </TableRow>
+                                            </TableHeader>
+                                            <TableBody>
+                                                {category.sports.map(sport => (
+                                                    <TableRow key={sport.name}>
+                                                        <TableCell className="font-medium">{sport.name}</TableCell>
+                                                        <TableCell className="text-muted-foreground text-xs">
+                                                            {sport.subdisciplines?.join(', ') || '—'}
+                                                        </TableCell>
+                                                    </TableRow>
+                                                ))}
+                                            </TableBody>
+                                        </Table>
+                                    </div>
+                                </div>
+                            ))}
+                        </CardContent>
+                    </Card>
+                </TabsContent>
                  <TabsContent value="playgrounds">
                     <Card className="mt-4">
                         <CardHeader>
