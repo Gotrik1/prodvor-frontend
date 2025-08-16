@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { users, teams, sponsors, playgrounds, allSports, Team } from '@/mocks';
@@ -115,7 +116,7 @@ export function AdminStatisticsPage() {
                                          <TooltipProvider>
                                             <Tooltip>
                                                 <TooltipTrigger asChild>
-                                                    <p className="text-xs truncate">
+                                                    <p className="text-xs break-words">
                                                         {user.disciplines.map(id => allSports.find(s => s.id === id)?.name).join(', ')}
                                                     </p>
                                                 </TooltipTrigger>
@@ -137,7 +138,7 @@ export function AdminStatisticsPage() {
                                         <div className="flex flex-col gap-1 text-xs">
                                            {getTeamForUser(user.id).map(team => (
                                                 <Link key={team.id} href={`/admin/templates/team`} className="text-blue-400 hover:underline whitespace-nowrap">
-                                                    {team.name}
+                                                    {team.name} ({team.game})
                                                 </Link>
                                            ))}
                                         </div>
