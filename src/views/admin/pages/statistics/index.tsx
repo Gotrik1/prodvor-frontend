@@ -8,7 +8,7 @@ import { Badge } from '@/shared/ui/badge';
 import { Button } from '@/shared/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/shared/ui/table';
-import { Copy, ExternalLink, Heart, UserPlus, Rss, Dumbbell, BarChart3, Users2, Trophy, MapPin, User as UserIcon, Phone, Mail } from 'lucide-react';
+import { Copy, ExternalLink, Heart, UserPlus, Rss, BarChart3, Users2, Trophy, MapPin, User as UserIcon, Phone, Mail } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Progress } from '@/shared/ui/progress';
@@ -136,7 +136,7 @@ export function AdminStatisticsPage() {
                                      <TableCell className="align-top">
                                         <div className="flex flex-col gap-1 text-xs">
                                            {getTeamForUser(user.id).map(team => (
-                                                <Link key={team?.id} href={`/admin/templates/team`} className="text-blue-400 hover:underline whitespace-nowrap">{team?.name} {team?.subdiscipline ? `(${team.subdiscipline})`: ''}</Link>
+                                                <Link key={team?.id} href={`/admin/templates/team`} className="text-blue-400 hover:underline whitespace-nowrap">{team?.name}</Link>
                                            ))}
                                         </div>
                                     </TableCell>
