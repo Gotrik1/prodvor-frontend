@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import { users, teams, sponsors, playgrounds, allSports, Team } from '@/mocks';
@@ -9,7 +8,7 @@ import { Badge } from '@/shared/ui/badge';
 import { Button } from '@/shared/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/shared/ui/table';
-import { Copy, ExternalLink, Home, Crown, GanttChart, Eye, Database, Key, ListOrdered, Mail, MapPin, User as UserIcon, Phone, Heart, UserPlus, Rss, Dumbbell, BarChart3, Users2, Trophy } from 'lucide-react';
+import { Copy, ExternalLink, Heart, UserPlus, Rss, Dumbbell, BarChart3, Users2, Trophy, MapPin, User as UserIcon, Phone, Mail } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Progress } from '@/shared/ui/progress';
@@ -53,6 +52,16 @@ export function AdminStatisticsPage() {
     const getTeamForUser = (userId: string): (Team | undefined)[] => {
        return teams.filter(team => team.members.includes(userId));
     };
+    
+    const getUserSponsors = (sponsorIds?: string[]) => {
+        if (!sponsorIds || sponsorIds.length === 0) return 'Нет';
+        return sponsorIds.map(id => sponsors.find(s => s.id === id)?.name).filter(Boolean).join(', ');
+    };
+    
+    const getTeamSponsors = (sponsorIds?: string[]) => {
+        if (!sponsorIds || sponsorIds.length === 0) return 'Нет';
+        return sponsorIds.map(id => sponsors.find(s => s.id === id)?.name).filter(Boolean).join(', ');
+    }
 
     if (!isClient) {
         return null; // or a loading skeleton
@@ -79,17 +88,17 @@ export function AdminStatisticsPage() {
                     </CardHeader>
                     <CardContent>
                         <DataTable 
-                            headers={['ID', 'Пользователь', 'Роль', 'Дисциплины', 'Контакты', 'Команды', 'Соц. связи', '']}
+                            headers={['ID', 'Пользователь', 'Роль', 'Дисциплины', 'Контакты', 'Команды', 'Соц. связи', 'Спонсоры', '']}
                             data={users}
                             renderRow={(user) => (
                                 <TableRow key={user.id}>
-                                    <TableCell className="font-mono text-xs whitespace-nowrap">
+                                    <TableCell className="font-mono text-xs whitespace-nowrap align-top">
                                         <div className="flex items-center gap-2">
                                             <span>{user.id}</span>
                                             <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => copyToClipboard(user.id, 'User')}><Copy className="h-3 w-3"/></Button>
                                         </div>
                                     </TableCell>
-                                    <TableCell>
+                                    <TableCell className="align-top">
                                         <div className="flex items-center gap-3">
                                             <Avatar className="h-9 w-9">
                                                 <AvatarImage src={user.avatarUrl} />
@@ -101,9 +110,9 @@ export function AdminStatisticsPage() {
                                             </div>
                                         </div>
                                     </TableCell>
-                                    <TableCell><Badge variant="outline">{user.role}</Badge></TableCell>
-                                    <TableCell className="min-w-[200px] max-w-[250px]">
-                                        <TooltipProvider>
+                                    <TableCell className="align-top"><Badge variant="outline">{user.role}</Badge></TableCell>
+                                    <TableCell className="min-w-[150px] max-w-[200px] align-top">
+                                         <TooltipProvider>
                                             <Tooltip>
                                                 <TooltipTrigger asChild>
                                                     <p className="text-xs truncate">
@@ -118,28 +127,31 @@ export function AdminStatisticsPage() {
                                             </Tooltip>
                                         </TooltipProvider>
                                     </TableCell>
-                                    <TableCell className="text-xs whitespace-nowrap">
+                                    <TableCell className="text-xs whitespace-nowrap align-top">
                                         <div className="flex flex-col gap-1">
                                             <div className="flex items-center gap-1"><Mail className="h-3 w-3"/>{user.email}</div>
                                             <div className="flex items-center gap-1"><Phone className="h-3 w-3"/>{user.phone}</div>
                                         </div>
                                     </TableCell>
-                                     <TableCell>
+                                     <TableCell className="align-top">
                                         <div className="flex flex-col gap-1 text-xs">
                                            {getTeamForUser(user.id).map(team => (
                                                 <Link key={team?.id} href={`/admin/templates/team`} className="text-blue-400 hover:underline whitespace-nowrap">{team?.name} {team?.subdiscipline ? `(${team.subdiscipline})`: ''}</Link>
                                            ))}
                                         </div>
                                     </TableCell>
-                                    <TableCell>
+                                    <TableCell className="align-top">
                                         <div className="flex items-center gap-3 text-xs whitespace-nowrap">
                                             <div className="flex items-center gap-1" title="Друзья"><Heart className="h-3 w-3"/>{user.friends.length}</div>
                                             <div className="flex items-center gap-1" title="Подписчики"><UserPlus className="h-3 w-3"/>{user.followers.length}</div>
                                             <div className="flex items-center gap-1" title="Подписки"><Rss className="h-3 w-3"/>{user.followingUsers.length + user.followingTeams.length}</div>
                                         </div>
                                     </TableCell>
-                                    <TableCell className="text-right">
-                                        <Button asChild variant="ghost" size="sm"><Link href={`/admin/users/${user.id}`}><Eye className="mr-2 h-4 w-4"/>Просмотр</Link></Button>
+                                    <TableCell className="text-xs align-top">
+                                        {getUserSponsors(user.sponsorIds)}
+                                    </TableCell>
+                                    <TableCell className="text-right align-top">
+                                        <Button asChild variant="ghost" size="sm"><Link href={`/admin/users/${user.id}`}><ExternalLink className="mr-2 h-4 w-4"/>Просмотр</Link></Button>
                                     </TableCell>
                                 </TableRow>
                             )}
@@ -156,7 +168,7 @@ export function AdminStatisticsPage() {
                     </CardHeader>
                     <CardContent>
                         <DataTable 
-                            headers={['ID', 'Команда', 'Дисциплина', 'Капитан', 'Игроков', 'Рейтинг']}
+                            headers={['ID', 'Команда', 'Дисциплина', 'Капитан', 'Игроков', 'Рейтинг', 'Спонсоры']}
                             data={teams}
                             renderRow={(team) => (
                                 <TableRow key={team.id}>
@@ -171,6 +183,7 @@ export function AdminStatisticsPage() {
                                     <TableCell className="text-xs">{users.find(u => u.id === team.captainId)?.nickname || 'N/A'}</TableCell>
                                     <TableCell>{team.members.length}</TableCell>
                                     <TableCell className="font-mono">{team.rank}</TableCell>
+                                    <TableCell className="text-xs">{getTeamSponsors(team.sponsorIds)}</TableCell>
                                 </TableRow>
                             )}
                         />

@@ -3,6 +3,7 @@ import { playgrounds } from "./playgrounds";
 import type { User } from "./users";
 import { users } from "./users";
 import { teamSports } from "./sports";
+import { sponsors } from "./personnel";
 
 export interface Team {
   id: string;
@@ -19,6 +20,7 @@ export interface Team {
   dataAiHint: string;
   followers: string[]; // Array of user IDs
   following: string[]; // Array of team IDs
+  sponsorIds?: string[]; // Array of sponsor IDs
 }
 
 // --- Helper Data ---
@@ -39,7 +41,7 @@ const assignMembers = (captain: User, count: number, mainDiscipline: string): st
         playerAssignments[captain.id].push(mainDiscipline);
     }
     
-    // Filter available players
+    // Filter available players: they must not be assigned to this main sport discipline already
     const availablePlayers = players.filter(p => {
         if (p.id === captain.id) return false;
         const assignments = playerAssignments[p.id];
@@ -68,6 +70,7 @@ const generatedTeams: Team[] = [];
 let teamIdCounter = 1;
 
 const createTeam = (name: string, game: string, subdiscipline?: string) => {
+    // Find captains who are not yet assigned to this main sport
     const availableCaptains = players.filter(p => {
         const assignments = playerAssignments[p.id];
         return !assignments || !assignments.includes(game);
@@ -91,6 +94,7 @@ const createTeam = (name: string, game: string, subdiscipline?: string) => {
         homePlaygroundId: playgrounds[teamIdCounter % playgrounds.length].id,
         followers: [],
         following: [],
+        sponsorIds: [], // Initialize empty
     };
     generatedTeams.push(team);
 };
@@ -140,4 +144,14 @@ generatedTeams.forEach(team => {
     }
 });
 
+// --- Assign Sponsors to Teams ---
+// Assign one sponsor to roughly half of the teams
+generatedTeams.forEach((team, index) => {
+    if (index % 2 === 0 && sponsors.length > 0) {
+        team.sponsorIds = [sponsors[index % sponsors.length].id];
+    }
+});
+
+
 export const teams: Team[] = generatedTeams;
+export const assignedPlayerIds = new Set(Object.keys(playerAssignments));
