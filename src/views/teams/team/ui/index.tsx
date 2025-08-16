@@ -158,7 +158,7 @@ export function TeamPublicPage({ team }: { team: Team | undefined}) {
     }
 
     const teamMembers = users.filter(u => team.members.includes(u.id));
-    const homePlayground = playgrounds.find(p => p.id === team.homePlaygroundId);
+    const homePlaygrounds = team.homePlaygroundIds?.map(id => playgrounds.find(p => p.id === id)).filter(Boolean);
     const teamPosts = posts.filter(p => p.team?.id === team.id);
 
     // Mock statistics
@@ -178,11 +178,15 @@ export function TeamPublicPage({ team }: { team: Team | undefined}) {
                     <div className="text-center md:text-left">
                         <h1 className="text-3xl font-bold font-headline">{team.name}</h1>
                         <p className="text-muted-foreground text-lg">Дисциплина: {team.game}</p>
-                         {homePlayground && (
-                            <Link href={`/playgrounds/${homePlayground.id}`} className="text-sm text-muted-foreground hover:text-primary transition-colors flex items-center gap-2 mt-1 justify-center md:justify-start">
-                                <Home className="h-4 w-4" />
-                                <span>{homePlayground.name}</span>
-                            </Link>
+                         {homePlaygrounds && homePlaygrounds.length > 0 && (
+                            <div className="flex flex-col items-center md:items-start mt-1 space-y-1">
+                                {homePlaygrounds.map(pg => (
+                                    <Link key={pg.id} href={`/playgrounds/${pg.id}`} className="text-sm text-muted-foreground hover:text-primary transition-colors flex items-center gap-2">
+                                        <Home className="h-4 w-4" />
+                                        <span>{pg.name}</span>
+                                    </Link>
+                                ))}
+                            </div>
                         )}
                     </div>
                     <div className="md:ml-auto flex flex-col sm:flex-row gap-4 w-full sm:w-auto">

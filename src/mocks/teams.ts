@@ -1,4 +1,5 @@
 
+
 import { playgrounds } from "./playgrounds";
 import type { User } from "./users";
 import { users } from "./users";
@@ -13,7 +14,7 @@ export interface Team {
   members: string[]; // array of user IDs
   game: string; 
   rank: number;
-  homePlaygroundId?: string;
+  homePlaygroundIds?: string[];
   dataAiHint: string;
   followers: string[]; // Array of user IDs
   following: string[]; // Array of team IDs
@@ -46,8 +47,8 @@ teamSports.forEach(sport => {
     for (let i = 0; i < 4; i++) {
         // --- Find available captain ---
         const availableCaptains = players.filter(p => 
-            playerAssignments[p.id].size < MAX_TEAMS_PER_PLAYER && 
-            !playerAssignments[p.id].has(sport.name)
+            (playerAssignments[p.id]?.size || 0) < MAX_TEAMS_PER_PLAYER && 
+            !playerAssignments[p.id]?.has(sport.name)
         );
 
         if (availableCaptains.length === 0) break; // No more captains for this sport
@@ -56,8 +57,8 @@ teamSports.forEach(sport => {
         // --- Find available members ---
         const availableMembers = players.filter(p => 
             p.id !== captain.id &&
-            playerAssignments[p.id].size < MAX_TEAMS_PER_PLAYER &&
-            !playerAssignments[p.id].has(sport.name)
+            (playerAssignments[p.id]?.size || 0) < MAX_TEAMS_PER_PLAYER &&
+            !playerAssignments[p.id]?.has(sport.name)
         );
         
         const memberCount = 4; // 4 members + 1 captain = 5 players
@@ -65,9 +66,23 @@ teamSports.forEach(sport => {
 
         const newMembers = availableMembers.slice(0, memberCount);
         const teamMembersIds = [captain.id, ...newMembers.map(m => m.id)];
+        
+        // --- Assign Playgrounds ---
+        let homePlaygroundIds: string[] | undefined = undefined;
+        // ~80% chance to have a playground
+        if (Math.random() < 0.8 && playgrounds.length > 0) {
+            homePlaygroundIds = [];
+            const count = Math.floor(Math.random() * 3) + 1; // 1 to 3 playgrounds
+            const shuffledPlaygrounds = [...playgrounds].sort(() => 0.5 - Math.random());
+            for (let j = 0; j < count; j++) {
+                if(shuffledPlaygrounds[j]) {
+                    homePlaygroundIds.push(shuffledPlaygrounds[j].id);
+                }
+            }
+        }
 
         // --- Create team ---
-        const teamName = `${stableTeamNames[i % stableTeamNames.length]} ${sport.name.slice(0,3)}`;
+        const teamName = `${stableTeamNames[teamIdCounter % stableTeamNames.length]} ${sport.name.slice(0,3)}`;
 
         const team: Team = {
             id: `team${teamIdCounter++}`,
@@ -78,7 +93,7 @@ teamSports.forEach(sport => {
             captainId: captain.id,
             members: teamMembersIds,
             rank: 1200 + (teamIdCounter * 17 % 500), // Predictable rank
-            homePlaygroundId: playgrounds[teamIdCounter % playgrounds.length].id,
+            homePlaygroundIds,
             followers: [],
             following: [],
             sponsorIds: [],
@@ -88,6 +103,9 @@ teamSports.forEach(sport => {
 
         // --- Update assignments for all members ---
         teamMembersIds.forEach(memberId => {
+            if (!playerAssignments[memberId]) {
+                playerAssignments[memberId] = new Set();
+            }
             playerAssignments[memberId].add(sport.name);
         });
     }
@@ -130,7 +148,7 @@ export const teams: Team[] = generatedTeams;
 // A set of all user IDs that have been assigned to at least one team.
 export const assignedPlayerIds = new Set<string>();
 Object.entries(playerAssignments).forEach(([playerId, sports]) => {
-    if (sports.size > 0) {
+    if (sports && sports.size > 0) {
         assignedPlayerIds.add(playerId);
     }
 });
