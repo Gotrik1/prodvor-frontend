@@ -8,7 +8,7 @@ import { Badge } from '@/shared/ui/badge';
 import { Button } from '@/shared/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/shared/ui/table';
-import { Copy, ExternalLink, Heart, UserPlus, Rss, BarChart3, Users2, MapPin, User as UserIcon, Phone, Mail, Trophy } from 'lucide-react';
+import { Copy, ExternalLink, Heart, UserPlus, Rss, BarChart3, Users2, MapPin, User as UserIcon, Phone, Mail, Trophy, Home } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Progress } from '@/shared/ui/progress';
@@ -71,6 +71,11 @@ export function AdminStatisticsPage() {
     const getTeamSponsors = (sponsorIds?: string[]) => {
         if (!sponsorIds || sponsorIds.length === 0) return 'Нет';
         return sponsorIds.map(id => sponsors.find(s => s.id === id)?.name).filter(Boolean).join(', ');
+    }
+
+    const getTeamPlaygrounds = (playgroundIds?: string[]) => {
+        if (!playgroundIds || playgroundIds.length === 0) return 'Нет';
+        return playgroundIds.map(id => playgrounds.find(p => p.id === id)?.name).filter(Boolean).join(', ');
     }
 
     if (!isClient) {
@@ -180,7 +185,7 @@ export function AdminStatisticsPage() {
                     </CardHeader>
                     <CardContent>
                         <DataTable 
-                            headers={['ID', 'Команда', 'Дисциплина', 'Капитан', 'Игроков', 'Рейтинг', 'Спонсоры', '']}
+                            headers={['ID', 'Команда', 'Дисциплина', 'Капитан', 'Игроков', 'Рейтинг', 'Спонсоры', 'Домашние площадки', '']}
                             data={teams}
                             renderRow={(team) => (
                                 <TableRow key={team.id}>
@@ -196,6 +201,7 @@ export function AdminStatisticsPage() {
                                     <TableCell>{team.members.length}</TableCell>
                                     <TableCell className="font-mono">{team.rank}</TableCell>
                                     <TableCell className="text-xs">{getTeamSponsors(team.sponsorIds)}</TableCell>
+                                    <TableCell className="text-xs">{getTeamPlaygrounds(team.homePlaygroundIds)}</TableCell>
                                      <TableCell className="text-right align-top">
                                         <Button asChild variant="ghost" size="sm"><Link href={`/admin/teams/${team.id}`}><ExternalLink className="mr-2 h-4 w-4"/>Просмотр</Link></Button>
                                     </TableCell>
