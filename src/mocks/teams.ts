@@ -30,22 +30,15 @@ const teamNameSuffixes = ['Сити', 'Юнайтед', 'Динамо', 'Спа�
 const dataAiHints = ['aggressive eagle', 'flaming ball', 'abstract geometric', 'city skyline', 'powerful animal', 'sports emblem', 'dynamic shape', 'futuristic logo'];
 
 // --- Player Assignment Logic ---
-const playerAssignments: Record<string, string[]> = {}; // Key: userId, Value: array of main sport disciplines they are in
+// Key: userId, Value: array of main sport disciplines they are in
+const playerAssignments: Record<string, string[]> = {}; 
+players.forEach(p => { playerAssignments[p.id] = [] });
 
 const assignMembers = (captain: User, count: number, mainDiscipline: string): string[] => {
-    const members = [captain.id];
-    
-    // Mark captain's assignment
-    if (!playerAssignments[captain.id]) playerAssignments[captain.id] = [];
-    if (!playerAssignments[captain.id].includes(mainDiscipline)) {
-        playerAssignments[captain.id].push(mainDiscipline);
-    }
-    
     // Filter available players: they must not be assigned to this main sport discipline already
     const availablePlayers = players.filter(p => {
         if (p.id === captain.id) return false;
-        const assignments = playerAssignments[p.id];
-        return !assignments || !assignments.includes(mainDiscipline);
+        return !playerAssignments[p.id].includes(mainDiscipline);
     });
     
     // Shuffle and pick members
@@ -53,15 +46,12 @@ const assignMembers = (captain: User, count: number, mainDiscipline: string): st
     
     const newMembers = availablePlayers.slice(0, count - 1);
     
+    // Mark assignments for the new members
     newMembers.forEach(member => {
-        members.push(member.id);
-        if (!playerAssignments[member.id]) playerAssignments[member.id] = [];
-        if (!playerAssignments[member.id].includes(mainDiscipline)) {
-            playerAssignments[member.id].push(mainDiscipline);
-        }
+        playerAssignments[member.id].push(mainDiscipline);
     });
     
-    return members;
+    return [captain.id, ...newMembers.map(m => m.id)];
 };
 
 
@@ -71,14 +61,14 @@ let teamIdCounter = 1;
 
 const createTeam = (name: string, game: string, subdiscipline?: string) => {
     // Find captains who are not yet assigned to this main sport
-    const availableCaptains = players.filter(p => {
-        const assignments = playerAssignments[p.id];
-        return !assignments || !assignments.includes(game);
-    });
+    const availableCaptains = players.filter(p => !playerAssignments[p.id].includes(game));
 
     if (availableCaptains.length === 0) return; // No more available captains for this sport
 
     const captain = availableCaptains[Math.floor(Math.random() * availableCaptains.length)];
+    // Mark captain's assignment immediately to prevent reuse in the same loop
+    playerAssignments[captain.id].push(game);
+
     const memberCount = game === 'Стритбол' ? 3 : 5;
 
     const team: Team = {
@@ -154,4 +144,8 @@ generatedTeams.forEach((team, index) => {
 
 
 export const teams: Team[] = generatedTeams;
-export const assignedPlayerIds = new Set(Object.keys(playerAssignments));
+
+// A set of all user IDs that have been assigned to at least one team.
+export const assignedPlayerIds = new Set(
+    Object.keys(playerAssignments).filter(id => playerAssignments[id].length > 0)
+);
