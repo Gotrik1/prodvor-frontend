@@ -49,7 +49,7 @@ export function AdminStatisticsPage() {
         toast({ title: `Скопировано!`, description: `${entity} ID ${text} скопирован в буфер обмена.` });
     };
 
-    const getTeamForUser = (userId: string): (Team | undefined)[] => {
+    const getTeamForUser = (userId: string): Team[] => {
        return teams.filter(team => team.members.includes(userId));
     };
     
@@ -136,7 +136,9 @@ export function AdminStatisticsPage() {
                                      <TableCell className="align-top">
                                         <div className="flex flex-col gap-1 text-xs">
                                            {getTeamForUser(user.id).map(team => (
-                                                <Link key={team?.id} href={`/admin/templates/team`} className="text-blue-400 hover:underline whitespace-nowrap">{team?.name}</Link>
+                                                <Link key={team.id} href={`/admin/templates/team`} className="text-blue-400 hover:underline whitespace-nowrap">
+                                                    {team.name}
+                                                </Link>
                                            ))}
                                         </div>
                                     </TableCell>

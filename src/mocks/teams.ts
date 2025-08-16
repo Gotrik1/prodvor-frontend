@@ -34,42 +34,49 @@ const dataAiHints = ['aggressive eagle', 'flaming ball', 'abstract geometric', '
 const playerAssignments: Record<string, string[]> = {}; 
 players.forEach(p => { playerAssignments[p.id] = [] });
 
-const assignMembers = (captain: User, count: number, mainDiscipline: string): string[] => {
-    // Filter available players: they must not be assigned to this main sport discipline already
-    const availablePlayers = players.filter(p => {
-        if (p.id === captain.id) return false;
-        return !playerAssignments[p.id].includes(mainDiscipline);
-    });
-    
-    // Shuffle and pick members
-    availablePlayers.sort(() => Math.random() - 0.5);
-    
-    const newMembers = availablePlayers.slice(0, count - 1);
-    
-    // Mark assignments for the new members
-    newMembers.forEach(member => {
-        playerAssignments[member.id].push(mainDiscipline);
-    });
-    
-    return [captain.id, ...newMembers.map(m => m.id)];
-};
-
 
 // --- Team Generation Logic ---
 const generatedTeams: Team[] = [];
 let teamIdCounter = 1;
 
 const createTeam = (name: string, game: string, subdiscipline?: string) => {
-    // Find captains who are not yet assigned to this main sport
+    // Find a captain who is not yet assigned to this main sport
     const availableCaptains = players.filter(p => !playerAssignments[p.id].includes(game));
-
     if (availableCaptains.length === 0) return; // No more available captains for this sport
 
     const captain = availableCaptains[Math.floor(Math.random() * availableCaptains.length)];
-    // Mark captain's assignment immediately to prevent reuse in the same loop
+    
+    // Immediately mark captain's assignment
     playerAssignments[captain.id].push(game);
 
+    // Find members for the team
     const memberCount = game === 'Стритбол' ? 3 : 5;
+    const availablePlayers = players.filter(p => {
+        if (p.id === captain.id) return false; // Already captain
+        return !playerAssignments[p.id].includes(game); // Not in this sport yet
+    });
+
+    availablePlayers.sort(() => Math.random() - 0.5);
+    const newMembers = availablePlayers.slice(0, memberCount - 1);
+    
+    // Mark assignments for the new members
+    newMembers.forEach(member => {
+        playerAssignments[member.id].push(game);
+    });
+
+    const teamMembers = [captain.id, ...newMembers.map(m => m.id)];
+
+    // Check if we have enough players to form a team
+    if (teamMembers.length < memberCount) {
+        // Rollback assignments if team can't be formed
+        teamMembers.forEach(id => {
+            const index = playerAssignments[id].indexOf(game);
+            if (index > -1) {
+                playerAssignments[id].splice(index, 1);
+            }
+        });
+        return; 
+    }
 
     const team: Team = {
         id: `team${teamIdCounter++}`,
@@ -79,7 +86,7 @@ const createTeam = (name: string, game: string, subdiscipline?: string) => {
         game,
         subdiscipline: subdiscipline,
         captainId: captain.id,
-        members: assignMembers(captain, memberCount, game),
+        members: teamMembers,
         rank: 1200 + Math.floor(Math.random() * 500),
         homePlaygroundId: playgrounds[teamIdCounter % playgrounds.length].id,
         followers: [],
