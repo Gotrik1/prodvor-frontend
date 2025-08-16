@@ -11,7 +11,6 @@ export interface Team {
   logoUrl: string;
   captainId: string;
   members: string[]; // array of user IDs
-  /** Main discipline for indexing, e.g., "Футбол" */
   game: string; 
   rank: number;
   homePlaygroundId?: string;
@@ -21,86 +20,71 @@ export interface Team {
   sponsorIds?: string[]; // Array of sponsor IDs
 }
 
-// --- Helper Data ---
-const players = users.filter(u => u.role === 'Игрок');
-const teamNamePrefixes = ['Авангард', 'Легион', 'Гром', 'Молния', 'Вихрь', 'Соколы', 'Ястребы', 'Тигры', 'Медведи', 'Звезды'];
-const teamNameSuffixes = ['Сити', 'Юнайтед', 'Динамо', 'Спартак', 'Зенит', 'ЦСКА', 'Локомотив'];
-const dataAiHints = ['aggressive eagle', 'flaming ball', 'abstract geometric', 'city skyline', 'powerful animal', 'sports emblem', 'dynamic shape', 'futuristic logo'];
-
 // --- Player Assignment Logic ---
 // Key: userId, Value: array of main sport disciplines they are in
+const players = users.filter(u => u.role === 'Игрок');
 const playerAssignments: Record<string, string[]> = {}; 
 players.forEach(p => { playerAssignments[p.id] = [] });
 
 
-// --- Team Generation Logic ---
+// --- Stable Team Generation ---
 const generatedTeams: Team[] = [];
 let teamIdCounter = 1;
 
 const createTeam = (name: string, game: string) => {
     // Find a captain who is not yet assigned to this main sport
     const availableCaptains = players.filter(p => !playerAssignments[p.id].includes(game));
-    if (availableCaptains.length === 0) return; // No more available captains for this sport
+    if (availableCaptains.length === 0) return;
 
-    const captain = availableCaptains[Math.floor(Math.random() * availableCaptains.length)];
+    const captain = availableCaptains[0]; // Take the first available for predictability
     
-    // Immediately mark captain's assignment
     playerAssignments[captain.id].push(game);
 
-    // Find members for the team
-    const memberCount = 5; // Standard team size
-    const availablePlayers = players.filter(p => {
-        if (p.id === captain.id) return false; // Already captain
-        return !playerAssignments[p.id].includes(game); // Not in this sport yet
-    });
+    const memberCount = 5;
+    const availablePlayers = players.filter(p => p.id !== captain.id && !playerAssignments[p.id].includes(game));
 
-    availablePlayers.sort(() => Math.random() - 0.5);
+    if (availablePlayers.length < memberCount - 1) {
+        // Rollback if not enough players
+        playerAssignments[captain.id] = playerAssignments[captain.id].filter(g => g !== game);
+        return;
+    }
+
     const newMembers = availablePlayers.slice(0, memberCount - 1);
-    
-    // Mark assignments for the new members
     newMembers.forEach(member => {
         playerAssignments[member.id].push(game);
     });
 
     const teamMembers = [captain.id, ...newMembers.map(m => m.id)];
-
-    // Check if we have enough players to form a team
-    if (teamMembers.length < memberCount) {
-        // Rollback assignments if team can't be formed
-        teamMembers.forEach(id => {
-            const index = playerAssignments[id].indexOf(game);
-            if (index > -1) {
-                playerAssignments[id].splice(index, 1);
-            }
-        });
-        return; 
-    }
-
+    
     const team: Team = {
         id: `team${teamIdCounter++}`,
         name,
         logoUrl: `https://placehold.co/100x100.png`,
-        dataAiHint: dataAiHints[teamIdCounter % dataAiHints.length],
+        dataAiHint: 'sports emblem',
         game,
         captainId: captain.id,
         members: teamMembers,
-        rank: 1200 + Math.floor(Math.random() * 500),
+        rank: 1200 + (teamIdCounter * 17 % 500), // Predictable rank
         homePlaygroundId: playgrounds[teamIdCounter % playgrounds.length].id,
         followers: [],
         following: [],
-        sponsorIds: [], // Initialize empty
+        sponsorIds: [],
     };
     generatedTeams.push(team);
 };
 
-// Generate teams for each main discipline
+// --- Predefined, Stable Team Names ---
+const stableTeamNames = [
+    "Ночные Снайперы", "Короли Асфальта", "Стальные Ястребы", "Бетонные Тигры",
+    "Разрушители", "Фортуна", "Красная Фурия", "Легион", "Авангард", "Гром",
+    "Молния", "Вихрь", "Соколы", "Ястребы", "Тигры", "Медведи", "Звезды",
+    "Динамо", "Спартак", "Зенит", "ЦСКА", "Локомотив"
+];
+
+// Generate teams ensuring unique names per sport
 teamSports.forEach(sport => {
-    // 4 teams for the main discipline
-    for (let i = 0; i < 4; i++) {
-        const prefix = teamNamePrefixes[Math.floor(Math.random() * teamNamePrefixes.length)];
-        const suffix = teamNameSuffixes[Math.floor(Math.random() * teamNameSuffixes.length)];
-        createTeam(`${prefix} ${suffix}`, sport.name);
-    }
+    const sportTeams = stableTeamNames.slice(0, 4).map(name => `${name} ${sport.name.slice(0,3)}`);
+     sportTeams.forEach(name => createTeam(name, sport.name));
 });
 
 
@@ -108,28 +92,26 @@ teamSports.forEach(sport => {
 const allTeamIds = generatedTeams.map(t => t.id);
 const allUserIds = users.map(u => u.id);
 
-generatedTeams.forEach(team => {
-    // Assign followers (users)
-    const followersCount = Math.floor(Math.random() * 25) + 5;
+generatedTeams.forEach((team, index) => {
+    // Assign followers (users) - predictable
+    const followersCount = (index % 5) + 3;
     for (let i = 0; i < followersCount; i++) {
-        const randomUserId = allUserIds[Math.floor(Math.random() * allUserIds.length)];
-        if (!team.followers.includes(randomUserId)) {
-            team.followers.push(randomUserId);
-        }
+        const userIndex = (index + i) % allUserIds.length;
+        team.followers.push(allUserIds[userIndex]);
     }
 
-    // Assign following (other teams)
-    const followingCount = Math.floor(Math.random() * 5) + 1;
-    for (let i = 0; i < followingCount; i++) {
-        const randomTeamId = allTeamIds[Math.floor(Math.random() * allTeamIds.length)];
-        if (randomTeamId !== team.id && !team.following.includes(randomTeamId)) {
-            team.following.push(randomTeamId);
+    // Assign following (other teams) - predictable
+    const followingCount = (index % 3) + 1;
+     for (let i = 0; i < followingCount; i++) {
+        const teamIndex = (index + i + 1) % allTeamIds.length;
+        if (allTeamIds[teamIndex] !== team.id) {
+           team.following.push(allTeamIds[teamIndex]);
         }
     }
 });
 
-// --- Assign Sponsors to Teams ---
-// Assign one sponsor to roughly half of the teams
+
+// --- Assign Sponsors to Teams (predictable) ---
 generatedTeams.forEach((team, index) => {
     if (index % 2 === 0 && sponsors.length > 0) {
         team.sponsorIds = [sponsors[index % sponsors.length].id];
@@ -143,3 +125,4 @@ export const teams: Team[] = generatedTeams;
 export const assignedPlayerIds = new Set(
     Object.keys(playerAssignments).filter(id => playerAssignments[id].length > 0)
 );
+

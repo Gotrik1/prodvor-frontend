@@ -14,7 +14,7 @@ import Link from 'next/link';
 import { Progress } from '@/shared/ui/progress';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs';
 import { useToast } from '@/shared/hooks/use-toast';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { Tooltip, TooltipProvider, TooltipContent, TooltipTrigger } from '@/shared/ui/tooltip';
 
 const statusColors: Record<string, string> = {
@@ -43,14 +43,24 @@ export function AdminStatisticsPage() {
     useEffect(() => {
         setIsClient(true);
     }, []);
+    
+    // Memoize the calculation of user's teams to avoid re-computation on every render
+    const userTeamsMap = useMemo(() => {
+        const map = new Map<string, Team[]>();
+        users.forEach(user => {
+            const userTeams = teams.filter(team => team.members.includes(user.id));
+            map.set(user.id, userTeams);
+        });
+        return map;
+    }, []);
+
+    const getTeamForUser = (userId: string): Team[] => {
+       return userTeamsMap.get(userId) || [];
+    };
 
     const copyToClipboard = (text: string, entity: string) => {
         navigator.clipboard.writeText(text);
         toast({ title: `Скопировано!`, description: `${entity} ID ${text} скопирован в буфер обмена.` });
-    };
-
-    const getTeamForUser = (userId: string): Team[] => {
-       return teams.filter(team => team.members.includes(userId));
     };
     
     const getUserSponsors = (sponsorIds?: string[]) => {
