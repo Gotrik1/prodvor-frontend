@@ -23,9 +23,9 @@ export interface Team {
 
 // --- Player Assignment Logic ---
 const players = users.filter(u => u.role === 'Игрок');
-// Key: userId, Value: count of teams the player is in
-const playerTeamCount: Record<string, number> = {};
-players.forEach(p => { playerTeamCount[p.id] = 0 });
+// Key: userId, Value: Set of sport names the player is in
+const playerAssignments: Record<string, Set<string>> = {};
+players.forEach(p => { playerAssignments[p.id] = new Set() });
 
 const MAX_TEAMS_PER_PLAYER = 5;
 
@@ -42,27 +42,33 @@ const stableTeamNames = [
 
 
 teamSports.forEach(sport => {
-    const sportTeamsToCreate = stableTeamNames.slice(0, 4); // Create 4 teams per sport
-    
-    sportTeamsToCreate.forEach(baseName => {
-        const teamName = `${baseName} ${sport.name.slice(0,3)}`;
+    // Create up to 4 teams per sport, depending on available players
+    for (let i = 0; i < 4; i++) {
+        // --- Find available captain ---
+        const availableCaptains = players.filter(p => 
+            playerAssignments[p.id].size < MAX_TEAMS_PER_PLAYER && 
+            !playerAssignments[p.id].has(sport.name)
+        );
 
-        // Find available captain
-        const availableCaptains = players.filter(p => playerTeamCount[p.id] < MAX_TEAMS_PER_PLAYER);
-        if (availableCaptains.length === 0) return; // No more available players
-
+        if (availableCaptains.length === 0) break; // No more captains for this sport
         const captain = availableCaptains[0];
+
+        // --- Find available members ---
+        const availableMembers = players.filter(p => 
+            p.id !== captain.id &&
+            playerAssignments[p.id].size < MAX_TEAMS_PER_PLAYER &&
+            !playerAssignments[p.id].has(sport.name)
+        );
         
-        // Find available members
-        const availableMembers = players.filter(p => p.id !== captain.id && playerTeamCount[p.id] < MAX_TEAMS_PER_PLAYER);
+        const memberCount = 4; // 4 members + 1 captain = 5 players
+        if (availableMembers.length < memberCount) continue; // Not enough players for a full team
 
-        const memberCount = 5;
-        if (availableMembers.length < memberCount - 1) return; // Not enough players for a full team
-
-        const newMembers = availableMembers.slice(0, memberCount - 1);
+        const newMembers = availableMembers.slice(0, memberCount);
         const teamMembersIds = [captain.id, ...newMembers.map(m => m.id)];
 
-        // Create team and update counts
+        // --- Create team ---
+        const teamName = `${stableTeamNames[i % stableTeamNames.length]} ${sport.name.slice(0,3)}`;
+
         const team: Team = {
             id: `team${teamIdCounter++}`,
             name: teamName,
@@ -79,12 +85,12 @@ teamSports.forEach(sport => {
         };
         
         generatedTeams.push(team);
-        
-        // Increment team count for all members
+
+        // --- Update assignments for all members ---
         teamMembersIds.forEach(memberId => {
-            playerTeamCount[memberId]++;
+            playerAssignments[memberId].add(sport.name);
         });
-    });
+    }
 });
 
 
@@ -122,6 +128,9 @@ generatedTeams.forEach((team, index) => {
 export const teams: Team[] = generatedTeams;
 
 // A set of all user IDs that have been assigned to at least one team.
-export const assignedPlayerIds = new Set(
-    Object.keys(playerTeamCount).filter(id => playerTeamCount[id] > 0)
-);
+export const assignedPlayerIds = new Set<string>();
+Object.entries(playerAssignments).forEach(([playerId, sports]) => {
+    if (sports.size > 0) {
+        assignedPlayerIds.add(playerId);
+    }
+});
