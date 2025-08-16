@@ -135,10 +135,8 @@ const StatRow = ({ label, value }: { label: string, value: string | number }) =>
     </div>
 );
 
-// We use a default team for the template preview
-const defaultTeam = teams[0];
 
-export function TeamPageTemplate({ team = defaultTeam }: { team?: Team }) {
+export function TeamPageTemplate({ team }: { team: Team }) {
     const teamMembers = users.filter(u => team.members.includes(u.id));
     const homePlayground = playgrounds.find(p => p.id === team.homePlaygroundId);
     const teamPosts = posts.filter(p => p.team?.id === team.id);

@@ -170,22 +170,25 @@ export function AdminStatisticsPage() {
                     </CardHeader>
                     <CardContent>
                         <DataTable 
-                            headers={['ID', 'Команда', 'Дисциплина', 'Капитан', 'Игроков', 'Рейтинг', 'Спонсоры']}
+                            headers={['ID', 'Команда', 'Дисциплина', 'Капитан', 'Игроков', 'Рейтинг', 'Спонсоры', '']}
                             data={teams}
                             renderRow={(team) => (
                                 <TableRow key={team.id}>
                                     <TableCell className="font-mono text-xs">{team.id}</TableCell>
                                     <TableCell>
-                                        <div className="flex items-center gap-3">
+                                        <Link href={`/admin/teams/${team.id}`} className="flex items-center gap-3 group">
                                             <Image src={team.logoUrl} alt={team.name} width={32} height={32} className="rounded-md" data-ai-hint={team.dataAiHint}/>
-                                            <span className="font-medium">{team.name}</span>
-                                        </div>
+                                            <span className="font-medium group-hover:text-primary transition-colors">{team.name}</span>
+                                        </Link>
                                     </TableCell>
                                     <TableCell><Badge variant="secondary">{team.game}</Badge></TableCell>
                                     <TableCell className="text-xs">{users.find(u => u.id === team.captainId)?.nickname || 'N/A'}</TableCell>
                                     <TableCell>{team.members.length}</TableCell>
                                     <TableCell className="font-mono">{team.rank}</TableCell>
                                     <TableCell className="text-xs">{getTeamSponsors(team.sponsorIds)}</TableCell>
+                                     <TableCell className="text-right align-top">
+                                        <Button asChild variant="ghost" size="sm"><Link href={`/admin/teams/${team.id}`}><ExternalLink className="mr-2 h-4 w-4"/>Просмотр</Link></Button>
+                                    </TableCell>
                                 </TableRow>
                             )}
                         />
@@ -200,18 +203,21 @@ export function AdminStatisticsPage() {
                     </CardHeader>
                     <CardContent>
                         <DataTable 
-                            headers={['ID', 'Спонсор', 'Вклад']}
+                            headers={['ID', 'Спонсор', 'Вклад', '']}
                             data={sponsors}
                             renderRow={(sponsor) => (
                                 <TableRow key={sponsor.id}>
                                     <TableCell className="font-mono text-xs">{sponsor.id}</TableCell>
                                     <TableCell>
-                                        <div className="flex items-center gap-3">
+                                         <Link href={`/admin/sponsors/${sponsor.id}`} className="flex items-center gap-3 group">
                                             <Image src={sponsor.logoUrl} alt={sponsor.name} width={32} height={32} className="rounded-md" data-ai-hint={sponsor.dataAiHint}/>
-                                            <span className="font-medium">{sponsor.name}</span>
-                                        </div>
+                                            <span className="font-medium group-hover:text-primary transition-colors">{sponsor.name}</span>
+                                        </Link>
                                     </TableCell>
                                     <TableCell>{sponsor.contribution}</TableCell>
+                                    <TableCell className="text-right align-top">
+                                        <Button asChild variant="ghost" size="sm"><Link href={`/admin/sponsors/${sponsor.id}`}><ExternalLink className="mr-2 h-4 w-4"/>Просмотр</Link></Button>
+                                    </TableCell>
                                 </TableRow>
                             )}
                         />
