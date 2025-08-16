@@ -61,7 +61,7 @@ export function TeamsPage() {
                                 <Image src={team.logoUrl} alt={`${team.name} logo`} width={64} height={64} className="rounded-lg border" data-ai-hint={team.dataAiHint} />
                                 <div>
                                     <CardTitle className="text-xl hover:text-primary transition-colors">{team.name}</CardTitle>
-                                    <CardDescription>{team.game}</CardDescription>
+                                    <CardDescription>{team.game} {team.subdiscipline ? `(${team.subdiscipline})` : ''}</CardDescription>
                                 </div>
                             </Link>
                         </CardHeader>
