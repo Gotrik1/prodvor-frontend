@@ -136,7 +136,7 @@ export function AdminStatisticsPage() {
                                      <TableCell className="align-top">
                                         <div className="flex flex-col gap-1 text-xs">
                                            {getTeamForUser(user.id).map(team => (
-                                                <Link key={team.id} href={`/admin/templates/team`} className="text-blue-400 hover:underline whitespace-nowrap">
+                                                <Link key={team.id} href={`/admin/teams/${team.id}`} className="text-blue-400 hover:underline whitespace-nowrap">
                                                     {team.name} ({team.game})
                                                 </Link>
                                            ))}

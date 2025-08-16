@@ -8,8 +8,10 @@ import { Button } from '@/shared/ui/button';
 import Link from 'next/link';
 import { UserPage } from '@/views/admin/pages/users';
 import { SponsorPage } from '@/views/admin/pages/sponsors';
-import { TemplatePreviewPage, templateMap, templateMockData } from '@/views/admin/pages/templates';
+import { TemplatePreviewPage, templateMap } from '@/views/admin/pages/templates';
 import { SimulationPage } from '@/views/admin/pages/simulation';
+import { teams } from '@/mocks';
+import { TeamPageTemplate } from '@/views/admin/ui/templates/team-page-template';
 
 
 export const metadata: Metadata = {
@@ -55,14 +57,21 @@ export default function AdminPage({ params }: { params: { slug: string[] } }) {
         return <SimulationPage />;
       case 'users':
         return <UserPage userId={subpage} />;
+      case 'teams':
+        const team = teams.find(t => t.id === subpage);
+        return <TeamPageTemplate team={team} />;
       case 'sponsors':
         return <SponsorPage sponsorId={subpage} />;
       case 'templates':
         if (!subpage) return <NotFoundAdminPage />;
         const TemplateComponent = templateMap[subpage as keyof typeof templateMap];
-        const mockData = templateMockData[subpage as keyof typeof templateMockData];
         const title = subpage.charAt(0).toUpperCase() + subpage.slice(1);
-        return TemplateComponent ? <TemplatePreviewPage title={`Шаблон: ${title}`}><TemplateComponent {...mockData} /></TemplatePreviewPage> : <NotFoundAdminPage />;
+
+        if (subpage === 'team') {
+             return <TemplatePreviewPage title={`Шаблон: Команда`}><TeamPageTemplate team={teams[0]} /></TemplatePreviewPage>;
+        }
+
+        return TemplateComponent ? <TemplatePreviewPage title={`Шаблон: ${title}`}><TemplateComponent /></TemplatePreviewPage> : <NotFoundAdminPage />;
       default:
         return <NotFoundAdminPage />;
     }
