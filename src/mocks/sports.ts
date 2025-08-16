@@ -1,6 +1,7 @@
 export interface Subdiscipline {
   id: string;
   name: string;
+  parentId: string;
 }
 
 export interface Sport {
@@ -71,6 +72,7 @@ export const allSports: Sport[] = sportsData.map(sport => ({
   subdisciplines: sport.subdisciplines?.map((subName, index) => ({
     id: `${sport.id}-${index + 1}`,
     name: subName,
+    parentId: sport.id,
   })),
 }));
 
