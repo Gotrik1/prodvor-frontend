@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import { users, teams, sponsors, playgrounds, allSports, Team } from '@/mocks';
@@ -9,7 +8,7 @@ import { Badge } from '@/shared/ui/badge';
 import { Button } from '@/shared/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/shared/ui/table';
-import { Copy, ExternalLink, Heart, UserPlus, Rss, BarChart3, Users2, Trophy, MapPin, User as UserIcon, Phone, Mail } from 'lucide-react';
+import { Copy, ExternalLink, Heart, UserPlus, Rss, BarChart3, Users2, MapPin, User as UserIcon, Phone, Mail, Trophy } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Progress } from '@/shared/ui/progress';
@@ -116,7 +115,7 @@ export function AdminStatisticsPage() {
                                          <TooltipProvider>
                                             <Tooltip>
                                                 <TooltipTrigger asChild>
-                                                    <p className="text-xs break-words">
+                                                    <p className="text-xs break-words line-clamp-3">
                                                         {user.disciplines.map(id => allSports.find(s => s.id === id)?.name).join(', ')}
                                                     </p>
                                                 </TooltipTrigger>
@@ -182,7 +181,7 @@ export function AdminStatisticsPage() {
                                             <span className="font-medium">{team.name}</span>
                                         </div>
                                     </TableCell>
-                                    <TableCell><Badge variant="secondary">{team.game} {team.subdiscipline ? `(${team.subdiscipline})` : ''}</Badge></TableCell>
+                                    <TableCell><Badge variant="secondary">{team.game}</Badge></TableCell>
                                     <TableCell className="text-xs">{users.find(u => u.id === team.captainId)?.nickname || 'N/A'}</TableCell>
                                     <TableCell>{team.members.length}</TableCell>
                                     <TableCell className="font-mono">{team.rank}</TableCell>

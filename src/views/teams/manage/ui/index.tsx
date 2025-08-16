@@ -133,7 +133,7 @@ export function TeamManagementPage({ team }: { team: Team | undefined }) {
                             <Image src={team.logoUrl} alt={team.name} width={256} height={256} className="w-24 h-24 rounded-lg mx-auto border" data-ai-hint="team logo" />
                                 <div className="text-center">
                                 <p className="text-lg font-bold">{team.name}</p>
-                                <p className="text-sm text-muted-foreground">{team.game} {team.subdiscipline ? `(${team.subdiscipline})` : ''}</p>
+                                <p className="text-sm text-muted-foreground">{team.game}</p>
                             </div>
                             <Separator />
                             <div className="flex justify-between text-sm">

@@ -1,3 +1,4 @@
+
 import { teams, users, playgrounds, challenges, posts } from "@/mocks";
 import type { User } from "@/mocks";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
@@ -176,7 +177,7 @@ export function TeamPublicPage({ team }: { team: (typeof teams)[0] | undefined})
                     <Image src={team.logoUrl} alt={team.name} width={96} height={96} className="rounded-lg border-4 border-primary" data-ai-hint="team logo"/>
                     <div className="text-center md:text-left">
                         <h1 className="text-3xl font-bold font-headline">{team.name}</h1>
-                        <p className="text-muted-foreground text-lg">Дисциплина: {team.game} {team.subdiscipline ? `(${team.subdiscipline})` : ''}</p>
+                        <p className="text-muted-foreground text-lg">Дисциплина: {team.game}</p>
                          {homePlayground && (
                             <Link href={`/playgrounds/${homePlayground.id}`} className="text-sm text-muted-foreground hover:text-primary transition-colors flex items-center gap-2 mt-1 justify-center md:justify-start">
                                 <Home className="h-4 w-4" />

@@ -13,8 +13,6 @@ export interface Team {
   members: string[]; // array of user IDs
   /** Main discipline for indexing, e.g., "Футбол" */
   game: string; 
-  /** Sub-discipline, e.g., "мини-футбол". A team in "Футбол" can join "мини-футбол" tournaments. */
-  subdiscipline?: string; 
   rank: number;
   homePlaygroundId?: string;
   dataAiHint: string;
@@ -39,7 +37,7 @@ players.forEach(p => { playerAssignments[p.id] = [] });
 const generatedTeams: Team[] = [];
 let teamIdCounter = 1;
 
-const createTeam = (name: string, game: string, subdiscipline?: string) => {
+const createTeam = (name: string, game: string) => {
     // Find a captain who is not yet assigned to this main sport
     const availableCaptains = players.filter(p => !playerAssignments[p.id].includes(game));
     if (availableCaptains.length === 0) return; // No more available captains for this sport
@@ -50,7 +48,7 @@ const createTeam = (name: string, game: string, subdiscipline?: string) => {
     playerAssignments[captain.id].push(game);
 
     // Find members for the team
-    const memberCount = game === 'Стритбол' ? 3 : 5;
+    const memberCount = 5; // Standard team size
     const availablePlayers = players.filter(p => {
         if (p.id === captain.id) return false; // Already captain
         return !playerAssignments[p.id].includes(game); // Not in this sport yet
@@ -84,7 +82,6 @@ const createTeam = (name: string, game: string, subdiscipline?: string) => {
         logoUrl: `https://placehold.co/100x100.png`,
         dataAiHint: dataAiHints[teamIdCounter % dataAiHints.length],
         game,
-        subdiscipline: subdiscipline,
         captainId: captain.id,
         members: teamMembers,
         rank: 1200 + Math.floor(Math.random() * 500),
@@ -96,23 +93,13 @@ const createTeam = (name: string, game: string, subdiscipline?: string) => {
     generatedTeams.push(team);
 };
 
-// Generate teams for each discipline and sub-discipline
+// Generate teams for each main discipline
 teamSports.forEach(sport => {
     // 4 teams for the main discipline
     for (let i = 0; i < 4; i++) {
         const prefix = teamNamePrefixes[Math.floor(Math.random() * teamNamePrefixes.length)];
         const suffix = teamNameSuffixes[Math.floor(Math.random() * teamNameSuffixes.length)];
         createTeam(`${prefix} ${suffix}`, sport.name);
-    }
-
-    // 2 teams for each sub-discipline
-    if (sport.subdisciplines) {
-        sport.subdisciplines.forEach(sub => {
-            for (let i = 0; i < 2; i++) {
-                 const prefix = teamNamePrefixes[Math.floor(Math.random() * teamNamePrefixes.length)];
-                 createTeam(`${prefix} (${sub.name})`, sport.name, sub.name);
-            }
-        });
     }
 });
 
