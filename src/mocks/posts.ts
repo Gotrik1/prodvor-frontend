@@ -63,4 +63,4 @@ export const posts: Post[] = [
     likes: 7,
     comments: 3,
   },
-];
+].filter(p => p.author); // Ensure no posts with undefined authors are included

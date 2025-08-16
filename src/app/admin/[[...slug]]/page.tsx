@@ -19,7 +19,7 @@ export const metadata: Metadata = {
     description: 'Панель администратора ProDvor',
 };
 
-function NotFoundAdminPage() {
+function NotFoundAdminPage({ message, backLink, backLinkText }: { message: string, backLink: string, backLinkText: string }) {
     return (
         <div className="flex flex-col min-h-[80vh] items-center justify-center">
             <Card className="text-center max-w-md w-full">
@@ -28,10 +28,10 @@ function NotFoundAdminPage() {
                 </CardHeader>
                 <CardContent>
                     <p className="text-muted-foreground">
-                        Страница администрирования не найдена.
+                        {message}
                     </p>
                     <Button asChild className="mt-6">
-                        <Link href="/admin">Вернуться в админ-панель</Link>
+                        <Link href={backLink}>{backLinkText}</Link>
                     </Button>
                 </CardContent>
             </Card>
@@ -59,11 +59,14 @@ export default function AdminPage({ params }: { params: { slug: string[] } }) {
         return <UserPage userId={subpage} />;
       case 'teams':
         const team = teams.find(t => t.id === subpage);
+        if (!team) {
+            return <NotFoundAdminPage message={`Команда с ID "${subpage}" не найдена.`} backLink="/admin/statistics" backLinkText="Вернуться к списку" />;
+        }
         return <TeamPageTemplate team={team} />;
       case 'sponsors':
         return <SponsorPage sponsorId={subpage} />;
       case 'templates':
-        if (!subpage) return <NotFoundAdminPage />;
+        if (!subpage) return <NotFoundAdminPage message="Страница администрирования не найдена." backLink="/admin" backLinkText="Вернуться в админ-панель" />;
         const TemplateComponent = templateMap[subpage as keyof typeof templateMap];
         const title = subpage.charAt(0).toUpperCase() + subpage.slice(1);
 
@@ -71,9 +74,9 @@ export default function AdminPage({ params }: { params: { slug: string[] } }) {
              return <TemplatePreviewPage title={`Шаблон: Команда`}><TeamPageTemplate team={teams[0]} /></TemplatePreviewPage>;
         }
 
-        return TemplateComponent ? <TemplatePreviewPage title={`Шаблон: ${title}`}><TemplateComponent /></TemplatePreviewPage> : <NotFoundAdminPage />;
+        return TemplateComponent ? <TemplatePreviewPage title={`Шаблон: ${title}`}><TemplateComponent /></TemplatePreviewPage> : <NotFoundAdminPage message="Страница администрирования не найдена." backLink="/admin" backLinkText="Вернуться в админ-панель" />;
       default:
-        return <NotFoundAdminPage />;
+        return <NotFoundAdminPage message="Страница администрирования не найдена." backLink="/admin" backLinkText="Вернуться в админ-панель" />;
     }
   };
 

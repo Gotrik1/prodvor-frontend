@@ -22,5 +22,19 @@ export function SponsorPage({ sponsorId }: { sponsorId?: string }) {
   
   const sponsor = sponsors.find(s => s.id === sponsorId);
 
+  if (!sponsor) {
+    return (
+        <div className="flex flex-col min-h-[80vh] items-center justify-center">
+            <Card className="text-center max-w-md w-full">
+                <CardHeader><CardTitle>Ошибка 404</CardTitle></CardHeader>
+                <CardContent>
+                    <p className="text-muted-foreground">Спонсор с ID "{sponsorId}" не найден.</p>
+                    <Button asChild className="mt-6"><Link href="/admin/statistics">Вернуться к списку</Link></Button>
+                </CardContent>
+            </Card>
+        </div>
+    );
+  }
+
   return <SponsorPageTemplate sponsor={sponsor} />;
 }
