@@ -1,11 +1,12 @@
 
+
 import { teams, users, playgrounds, challenges, posts } from "@/mocks";
-import type { User } from "@/mocks";
+import type { User, Team } from "@/mocks";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { Badge } from "@/shared/ui/badge";
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
-import { Crown, Home, Swords, Trophy, UserPlus, Check, X, TrendingUp, TrendingDown, Minus, Rss, Film, Star, Shield, History } from "lucide-react";
+import { Crown, Home, Swords, Trophy, UserPlus, Check, X, TrendingUp, Rss, Film, Star, Shield, History } from "lucide-react";
 import Image from 'next/image';
 import Link from 'next/link';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
@@ -134,7 +135,7 @@ const StatRow = ({ label, value }: { label: string, value: string | number }) =>
     </div>
 );
 
-export function TeamPublicPage({ team }: { team: (typeof teams)[0] | undefined}) {
+export function TeamPublicPage({ team }: { team: Team | undefined}) {
 
     if (!team) {
        return (
@@ -157,7 +158,6 @@ export function TeamPublicPage({ team }: { team: (typeof teams)[0] | undefined})
     }
 
     const teamMembers = users.filter(u => team.members.includes(u.id));
-    const captain = users.find(u => u.id === team.captainId);
     const homePlayground = playgrounds.find(p => p.id === team.homePlaygroundId);
     const teamPosts = posts.filter(p => p.team?.id === team.id);
 
@@ -225,7 +225,7 @@ export function TeamPublicPage({ team }: { team: (typeof teams)[0] | undefined})
                                 <CardHeader><CardTitle>Текущая серия</CardTitle></CardHeader>
                                 <CardContent>
                                     <div className="flex items-center gap-2">
-                                        {currentStreak.type === 'W' ? <TrendingUp className="h-8 w-8 text-green-500" /> : <TrendingDown className="h-8 w-8 text-red-500" />}
+                                        {currentStreak.type === 'W' ? <TrendingUp className="h-8 w-8 text-green-500" /> : <TrendingUp className="h-8 w-8 text-red-500" />}
                                         <p className="text-3xl font-bold">{currentStreak.count} {currentStreak.type === 'W' ? 'W' : 'L'}</p>
                                     </div>
                                     <p className="text-sm text-muted-foreground">Побед подряд</p>

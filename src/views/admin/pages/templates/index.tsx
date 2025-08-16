@@ -11,6 +11,7 @@ import { RefereePageTemplate } from '@/views/admin/ui/templates/referee-page-tem
 import { SponsorPageTemplate } from '@/views/admin/ui/templates/sponsor-page-template';
 import { TeamPageTemplate } from '@/views/admin/ui/templates/team-page-template';
 import { TournamentPublicPageTemplate } from '@/views/admin/ui/templates/tournament-public-page-template';
+import { users, teams, sponsors } from '@/mocks';
 
 
 export const templateMap = {
@@ -25,6 +26,10 @@ export const templateMap = {
     team: TeamPageTemplate,
     'tournament-public': TournamentPublicPageTemplate,
 };
+
+export const templateMockData = {
+    team: { team: teams[0] }
+}
 
 
 export function TemplatePreviewPage({ title, children }: { title: string, children: React.ReactNode }) {

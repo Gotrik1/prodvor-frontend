@@ -8,7 +8,7 @@ import { Button } from '@/shared/ui/button';
 import Link from 'next/link';
 import { UserPage } from '@/views/admin/pages/users';
 import { SponsorPage } from '@/views/admin/pages/sponsors';
-import { TemplatePreviewPage, templateMap } from '@/views/admin/pages/templates';
+import { TemplatePreviewPage, templateMap, templateMockData } from '@/views/admin/pages/templates';
 import { SimulationPage } from '@/views/admin/pages/simulation';
 
 
@@ -60,8 +60,9 @@ export default function AdminPage({ params }: { params: { slug: string[] } }) {
       case 'templates':
         if (!subpage) return <NotFoundAdminPage />;
         const TemplateComponent = templateMap[subpage as keyof typeof templateMap];
+        const mockData = templateMockData[subpage as keyof typeof templateMockData];
         const title = subpage.charAt(0).toUpperCase() + subpage.slice(1);
-        return TemplateComponent ? <TemplatePreviewPage title={`Шаблон: ${title}`}><TemplateComponent /></TemplatePreviewPage> : <NotFoundAdminPage />;
+        return TemplateComponent ? <TemplatePreviewPage title={`Шаблон: ${title}`}><TemplateComponent {...mockData} /></TemplatePreviewPage> : <NotFoundAdminPage />;
       default:
         return <NotFoundAdminPage />;
     }
