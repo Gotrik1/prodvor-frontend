@@ -39,7 +39,6 @@ const mockCourses = [
     }
 ];
 
-// Dynamically generate rules for each team sport to show scalability
 const mockRules = teamSports.reduce((acc, sport) => {
     acc[sport.name] = [
         { id: `rules-${sport.id}-1`, title: `Официальные правила (ProDvor)`, icon: FileText },
