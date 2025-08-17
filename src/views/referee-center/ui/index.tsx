@@ -49,6 +49,7 @@ const mockRules = teamSports.reduce((acc, sport) => {
 
 
 export function RefereeCenterPage() {
+    const recommendedCourse = mockCourses[0];
     return (
         <div className="p-4 md:p-6 lg:p-8 space-y-8">
             <div>
@@ -71,17 +72,17 @@ export function RefereeCenterPage() {
                         <CardContent className="space-y-4">
                              <Card className="bg-muted/50">
                                 <CardHeader>
-                                    <CardTitle className="text-lg flex items-center gap-2"><course.icon className="h-5 w-5"/>{mockCourses[0].title}</CardTitle>
+                                    <CardTitle className="text-lg flex items-center gap-2"><recommendedCourse.icon className="h-5 w-5"/>{recommendedCourse.title}</CardTitle>
                                     <CardDescription>Рекомендовано для вас</CardDescription>
                                 </CardHeader>
                                 <CardContent>
-                                    <p className="text-sm text-muted-foreground mb-4">{mockCourses[0].description}</p>
+                                    <p className="text-sm text-muted-foreground mb-4">{recommendedCourse.description}</p>
                                     <div className="space-y-2">
                                         <div className="flex justify-between items-center text-sm mb-1">
                                             <span className="font-medium">Прогресс:</span>
-                                            <span className="font-bold text-primary">{mockCourses[0].progress}%</span>
+                                            <span className="font-bold text-primary">{recommendedCourse.progress}%</span>
                                         </div>
-                                        <Progress value={mockCourses[0].progress} />
+                                        <Progress value={recommendedCourse.progress} />
                                     </div>
                                     <Button className="mt-4">Продолжить курс <ArrowRight className="ml-2 h-4 w-4" /></Button>
                                 </CardContent>
