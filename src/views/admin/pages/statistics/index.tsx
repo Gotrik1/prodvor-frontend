@@ -471,5 +471,3 @@ export function AdminStatisticsPage() {
         </Tabs>
     );
 }
-
-    
