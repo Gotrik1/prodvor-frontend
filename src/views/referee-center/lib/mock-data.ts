@@ -78,4 +78,37 @@ export const knowledgeBaseData: KnowledgeSportCategory[] = [
             { id: 'doc-vb-2', title: 'Правила пляжного волейбола', icon: Book },
         ]
     },
+    {
+        id: 'hockey',
+        name: 'Хоккей и его разновидности',
+        documents: [
+            { id: 'doc-hk-1', title: 'Официальные правила хоккея на льду (IIHF)', icon: Book },
+            { id: 'doc-hk-2', title: 'Правила хоккея с мячом (Bandy)', icon: Book },
+        ]
+    },
+    {
+        id: 'rugby',
+        name: 'Регби',
+        documents: [
+            { id: 'doc-rg-1', title: 'Официальные правила регби (World Rugby)', icon: Book },
+        ]
+    },
+    {
+        id: 'esports',
+        name: 'Киберспорт',
+        documents: [
+            { id: 'doc-cs-1', title: 'Общий регламент киберспортивных турниров ProDvor', icon: FileText },
+            { id: 'doc-cs-2', title: 'Правила турниров по CS2', icon: Book },
+            { id: 'doc-cs-3', title: 'Правила турниров по Dota 2', icon: Book },
+        ]
+    },
+    {
+        id: 'tennis',
+        name: 'Теннис и единоборства',
+        documents: [
+            { id: 'doc-tn-1', title: 'Официальные правила тенниса (ITF)', icon: Book },
+            { id: 'doc-bx-1', title: 'Правила бокса (AIBA)', icon: Book },
+            { id: 'doc-jd-1', title: 'Правила дзюдо (IJF)', icon: Book },
+        ]
+    },
 ];
