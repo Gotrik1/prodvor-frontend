@@ -37,6 +37,10 @@ export function AdvertisingPage() {
     return (
         <AdSettingsProvider>
             <div className="space-y-8">
+                 <div className="text-center">
+                    <h1 className="text-4xl font-bold font-headline">Ad-CRM: Монетизация</h1>
+                    <p className="text-muted-foreground mt-2">Интерактивный симулятор для анализа и прогнозирования рекламных доходов платформы.</p>
+                </div>
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                     <div className="lg:col-span-1 space-y-8">
                         <AssumptionsCard />

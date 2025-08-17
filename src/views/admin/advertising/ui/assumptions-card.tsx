@@ -6,6 +6,7 @@ import { Input } from "@/shared/ui/input";
 import { Label } from "@/shared/ui/label";
 import { Slider } from "@/shared/ui/slider";
 import { useAdSettingsContext } from './index';
+import { BarChart3 } from "lucide-react";
 
 export function AssumptionsCard() {
     const { assumptions, handleAssumptionChange } = useAdSettingsContext();
@@ -13,7 +14,7 @@ export function AssumptionsCard() {
     return (
         <Card>
             <CardHeader>
-                <CardTitle>Базовые параметры</CardTitle>
+                <CardTitle className="flex items-center gap-2"><BarChart3 /> Базовые параметры</CardTitle>
                 <CardDescription>Изменяйте значения, чтобы увидеть их влияние на доход.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
