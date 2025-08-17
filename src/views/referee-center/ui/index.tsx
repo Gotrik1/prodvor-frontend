@@ -3,12 +3,14 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
 import { Button } from "@/shared/ui/button";
-import { BookOpen, ShieldCheck, FileText, ArrowRight, Video, GraduationCap, Star, BarChart, Calendar, Archive } from "lucide-react";
+import { BookOpen, ShieldCheck, FileText, ArrowRight, Video, GraduationCap, Star, BarChart, Calendar, Archive, Search } from "lucide-react";
 import Link from "next/link";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/shared/ui/accordion";
 import { Progress } from "@/shared/ui/progress";
 import { teamSports } from "@/mocks";
 import { Badge } from "@/shared/ui/badge";
+import { Input } from "@/shared/ui/input";
+import React from "react";
 
 const mockCourses = [
     {
@@ -58,6 +60,22 @@ const mockCases = [
 
 export function RefereeCenterPage() {
     const recommendedCourse = mockCourses[0];
+    const [searchTerm, setSearchTerm] = React.useState('');
+
+    const filteredRules = React.useMemo(() => {
+        if (!searchTerm) return mockRules;
+        const lowercasedFilter = searchTerm.toLowerCase();
+        
+        return Object.entries(mockRules).reduce((acc, [discipline, rules]) => {
+            const filtered = rules.filter(rule => rule.title.toLowerCase().includes(lowercasedFilter));
+            if (filtered.length > 0) {
+                acc[discipline] = filtered;
+            }
+            return acc;
+        }, {} as typeof mockRules);
+
+    }, [searchTerm]);
+
     return (
         <div className="p-4 md:p-6 lg:p-8 space-y-8">
             <div>
@@ -168,28 +186,37 @@ export function RefereeCenterPage() {
                              <CardDescription>Актуальные регламенты и правила по всем дисциплинам ProDvor.</CardDescription>
                         </CardHeader>
                         <CardContent>
-                           <Accordion type="single" collapsible className="w-full">
-                                {Object.entries(mockRules).map(([discipline, rules]) => (
-                                    <AccordionItem value={discipline} key={discipline}>
-                                        <AccordionTrigger>{discipline}</AccordionTrigger>
-                                        <AccordionContent>
-                                             <ul className="space-y-2 pt-2">
+                            <div className="relative mb-4">
+                                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                                <Input 
+                                    placeholder="Поиск по правилам..." 
+                                    className="pl-9"
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                />
+                            </div>
+                            <div className="space-y-4">
+                                {Object.keys(filteredRules).length > 0 ? (
+                                    Object.entries(filteredRules).map(([discipline, rules]) => (
+                                        <div key={discipline}>
+                                            <h4 className="font-semibold mb-2">{discipline}</h4>
+                                            <div className="space-y-2">
                                                 {rules.map(rule => (
-                                                    <li key={rule.id}>
-                                                        <Link href="#" className="flex items-center justify-between p-3 rounded-md hover:bg-muted transition-colors group">
-                                                            <div className="flex items-center gap-3">
-                                                                <rule.icon className="h-5 w-5 text-muted-foreground" />
-                                                                <span className="font-medium group-hover:text-primary">{rule.title}</span>
-                                                            </div>
-                                                            <ArrowRight className="h-4 w-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
-                                                        </Link>
-                                                    </li>
+                                                    <Link href="#" key={rule.id} className="flex items-center justify-between p-3 rounded-md border bg-background hover:border-primary/50 transition-colors group">
+                                                        <div className="flex items-center gap-3">
+                                                            <rule.icon className="h-5 w-5 text-muted-foreground" />
+                                                            <span className="font-medium group-hover:text-primary">{rule.title}</span>
+                                                        </div>
+                                                        <ArrowRight className="h-4 w-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
+                                                    </Link>
                                                 ))}
-                                            </ul>
-                                        </AccordionContent>
-                                    </AccordionItem>
-                                ))}
-                           </Accordion>
+                                            </div>
+                                        </div>
+                                    ))
+                                ) : (
+                                    <p className="text-sm text-muted-foreground text-center py-4">По вашему запросу ничего не найдено.</p>
+                                )}
+                            </div>
                         </CardContent>
                     </Card>
                 </div>
@@ -254,3 +281,5 @@ export function RefereeCenterPage() {
         </div>
     );
 }
+
+    
