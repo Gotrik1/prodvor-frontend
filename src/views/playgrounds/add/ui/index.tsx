@@ -1,3 +1,6 @@
+
+'use client';
+
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
 import { Checkbox } from "@/shared/ui/checkbox";
@@ -6,6 +9,10 @@ import { Label } from "@/shared/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/select";
 import { YandexMapV3 } from "@/widgets/yandex-map";
 import { MapPin, UploadCloud } from "lucide-react";
+import { allSports } from "@/mocks";
+import { MultiSelect } from "./multi-select";
+import { useState } from "react";
+
 
 const features = [
     { id: "lighting", label: "Освещение" },
@@ -24,8 +31,16 @@ const features = [
     { id: "pull_up_bar", label: "Подъемник" },
 ];
 
+const sportOptions = allSports.map(sport => ({
+    value: sport.id,
+    label: sport.name,
+    group: sport.isTeamSport ? 'Командные' : 'Индивидуальные',
+}));
+
 
 export function AddPlaygroundPage() {
+    const [selectedSports, setSelectedSports] = useState<string[]>([]);
+    
     return (
         <div className="p-4 md:p-6 lg:p-8">
             <div className="max-w-4xl mx-auto">
@@ -93,6 +108,17 @@ export function AddPlaygroundPage() {
                                     </SelectContent>
                                 </Select>
                             </div>
+                        </div>
+
+                         <div className="space-y-2">
+                            <Label>Виды спорта</Label>
+                            <MultiSelect
+                                options={sportOptions}
+                                selected={selectedSports}
+                                onChange={setSelectedSports}
+                                placeholder="Выберите один или несколько видов спорта..."
+                                className="w-full"
+                            />
                         </div>
 
                         <div className="space-y-2">
