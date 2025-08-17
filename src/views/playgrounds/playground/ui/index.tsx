@@ -1,4 +1,5 @@
 
+
 import { playgrounds, teams, users } from "@/mocks";
 import type { Playground, ServiceCategory } from "@/mocks";
 import { Button } from "@/shared/ui/button";
@@ -170,7 +171,7 @@ export function PlaygroundPage({ playground }: { playground: Playground | undefi
                             <CardTitle>Расположение на карте</CardTitle>
                         </CardHeader>
                         <CardContent>
-                            <div className="h-[400px] w-full rounded-md overflow-hidden">
+                            <div className="h-[400px] w-full rounded-md overflow-hidden border">
                                 <YandexMapV3 />
                             </div>
                         </CardContent>

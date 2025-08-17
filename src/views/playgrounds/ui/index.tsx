@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { useState } from 'react';
@@ -23,18 +24,6 @@ const allSportsFlat = allSports.reduce((acc, sport) => {
     return acc;
 }, [] as { id: string, name: string }[]);
 
-
-const mainFilters = ["Все", "Футбол", "Баскетбол", "Стритбол", "Воркаут", "Универсальная", "Фитнес-зал", "Бассейн", "Теннисный корт"];
-
-const FilterButton = ({ label, isActive, onClick }: { label: string, isActive: boolean, onClick: () => void }) => (
-    <Button
-        variant={isActive ? "default" : "secondary"}
-        onClick={onClick}
-        className="rounded-full h-8"
-    >
-        {label}
-    </Button>
-);
 
 const FavoritePlaygrounds = () => {
     const favoritePlaygrounds = mockPlaygrounds.slice(0, 3);
@@ -113,8 +102,6 @@ const NearbyPlaygrounds = () => {
 }
 
 export function PlaygroundsPage() {
-    const [activeFilter, setActiveFilter] = useState("Все");
-
     return (
         <div className="p-4 md:p-6 lg:p-8">
              <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
@@ -143,7 +130,7 @@ export function PlaygroundsPage() {
                     <TabsContent value="map">
                          <Card>
                             <CardContent className="p-2">
-                                <div className="relative w-full h-[600px] rounded-lg overflow-hidden">
+                                <div className="relative w-full h-[600px] rounded-lg overflow-hidden border">
                                     <YandexMapV3 />
                                 </div>
                             </CardContent>

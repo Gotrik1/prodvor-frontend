@@ -96,7 +96,7 @@ function MultiSelect({
         <Command className={className}>
           <CommandInput placeholder="Поиск..." />
           <CommandEmpty>Ничего не найдено.</CommandEmpty>
-          <CommandList>
+          <CommandList className="max-h-60">
             {Object.entries(groupedOptions).map(([groupName, groupOptions]) => (
                 <CommandGroup key={groupName} heading={groupName}>
                     {groupOptions.map((option) => (

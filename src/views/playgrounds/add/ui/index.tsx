@@ -70,13 +70,9 @@ export function AddPlaygroundPage() {
 
                         <div className="space-y-2">
                             <Label>Расположение на карте</Label>
-                            <div className="h-[400px] w-full rounded-md overflow-hidden">
+                            <div className="h-[400px] w-full rounded-md overflow-hidden border">
                                 <YandexMapV3 />
                             </div>
-                            <Button variant="outline" className="w-full mt-2">
-                                <MapPin className="mr-2 h-4 w-4" />
-                                Уточнить на карте
-                            </Button>
                         </div>
                         
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -90,6 +86,8 @@ export function AddPlaygroundPage() {
                                         <SelectItem value="outdoor">Открытая площадка</SelectItem>
                                         <SelectItem value="indoor">Закрытое помещение</SelectItem>
                                         <SelectItem value="stadium">Стадион</SelectItem>
+                                        <SelectItem value="center">Спортивный центр</SelectItem>
+                                        <SelectItem value="special">Специализированный объект</SelectItem>
                                     </SelectContent>
                                 </Select>
                             </div>
