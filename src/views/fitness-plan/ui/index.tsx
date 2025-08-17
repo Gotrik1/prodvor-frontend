@@ -15,6 +15,7 @@ import Link from 'next/link';
 import { Avatar, AvatarImage, AvatarFallback } from '@/shared/ui/avatar';
 import { Badge } from '@/shared/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shared/ui/select';
+import { cn } from '@/shared/lib/utils';
 
 interface Exercise {
   id: string;
@@ -185,7 +186,7 @@ export function FitnessPlanPage() {
     const { toast } = useToast();
     const [isPlanFormOpen, setIsPlanFormOpen] = useState(false);
     const [isGroupFormOpen, setIsGroupFormOpen] = useState(false);
-    const [selectedFitnessCenter, setSelectedFitnessCenter] = useState<string | null>(null);
+    const [selectedFitnessCenter, setSelectedFitnessCenter] = useState<string | null>('fc1');
 
     const handleSavePlan = (plan: WorkoutPlan) => {
         setPlans([...plans, plan]);
@@ -335,13 +336,15 @@ export function FitnessPlanPage() {
                                             <Building className="mx-auto h-12 w-12 text-muted-foreground" />
                                             <h3 className="mt-4 text-lg font-semibold">Фитнес-центр не выбран</h3>
                                             <p className="mt-1 text-sm text-muted-foreground">Добавьте свой фитнес-центр для синхронизации расписания.</p>
-                                            <Button className="mt-4" onClick={() => setSelectedFitnessCenter('fc1')}>
-                                                <PlusCircle className="mr-2 h-4 w-4"/> Выбрать фитнес-центр
+                                            <Button asChild className="mt-4">
+                                                <Link href="/playgrounds/add">
+                                                    <PlusCircle className="mr-2 h-4 w-4"/> Добавить фитнес-центр
+                                                </Link>
                                             </Button>
                                         </div>
                                     ) : (
                                         <div>
-                                            <div className="flex justify-between items-center mb-4">
+                                            <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4 mb-4">
                                                 <div>
                                                     <h3 className="text-lg font-semibold">Расписание: Фитнес-клуб "Pro-Forma"</h3>
                                                     <p className="text-sm text-muted-foreground">Последнее обновление: сегодня</p>
