@@ -1,14 +1,15 @@
 
 'use client';
 
-import React from 'react';
-import { Card, CardContent } from '@/shared/ui/card';
+import React, { useState } from 'react';
 import { scheduleData, ScheduleEvent } from '../lib/mock-data';
 import { Badge } from '@/shared/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import { Button } from '@/shared/ui/button';
 import { Clock, User, Users } from 'lucide-react';
 import Link from 'next/link';
+import { Activity, ActivityLibraryDialog, mockGroupSessions, mockRecovery, mockTemplates } from '@/views/fitness-plan/ui/activity-library';
+import { ScheduleActivityDialog, ScheduledActivity } from '@/views/fitness-plan/ui/schedule-activity-dialog';
 
 const categoryColors: Record<ScheduleEvent['category'], string> = {
     'Силовая': 'bg-red-500/10 text-red-300 border-red-500/20',
@@ -18,6 +19,12 @@ const categoryColors: Record<ScheduleEvent['category'], string> = {
     'Вода': 'bg-cyan-500/10 text-cyan-300 border-cyan-500/20',
 };
 
+const personalActivityColors: Record<Activity['type'], string> = {
+    'template': 'bg-amber-500/10 text-amber-300 border-amber-500/20',
+    'group': 'bg-purple-500/10 text-purple-300 border-purple-500/20',
+    'recovery': 'bg-green-500/10 text-green-300 border-green-500/20',
+    'other': 'bg-gray-500/10 text-gray-300 border-gray-500/20',
+};
 
 const EventCard = ({ event }: { event: ScheduleEvent }) => {
     const isFull = event.booked >= event.slots;
@@ -49,10 +56,52 @@ const EventCard = ({ event }: { event: ScheduleEvent }) => {
             </Button>
         </div>
     )
-}
+};
+
+const PersonalEventCard = ({ event }: { event: ScheduledActivity }) => (
+    <div className="p-3 rounded-lg bg-card border flex flex-col gap-3">
+         <div>
+            <Badge className={`${personalActivityColors[event.type]}`}>{event.type}</Badge>
+            <h4 className="font-semibold mt-2">{event.name}</h4>
+        </div>
+        <div className="text-sm text-muted-foreground space-y-2">
+            <div className="flex items-center gap-2">
+                <Clock className="h-4 w-4" />
+                <span>{event.time}</span>
+            </div>
+        </div>
+    </div>
+);
 
 export function FitnessSchedule() {
     const days = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота', 'Воскресенье'];
+    const [isScheduling, setIsScheduling] = useState(false);
+    const [selectedActivity, setSelectedActivity] = useState<Activity | null>(null);
+    const [personalSchedule, setPersonalSchedule] = useState<Record<string, ScheduledActivity[]>>({
+        'Понедельник': [], 'Вторник': [], 'Среда': [], 'Четверг': [], 'Пятница': [], 'Суббота': [], 'Воскресенье': []
+    });
+
+    const handleSelectActivity = (activity: Activity) => {
+        setSelectedActivity(activity);
+        setIsScheduling(true);
+    };
+    
+    const handleCloseScheduler = () => {
+        setIsScheduling(false);
+        setSelectedActivity(null);
+    };
+
+    const handleSchedule = (scheduledActivity: ScheduledActivity) => {
+        const dayOfWeek = new Date(scheduledActivity.startDate).toLocaleDateString('ru-RU', { weekday: 'long' });
+        const capitalizedDay = dayOfWeek.charAt(0).toUpperCase() + dayOfWeek.slice(1);
+        
+        setPersonalSchedule(prev => ({
+            ...prev,
+            [capitalizedDay]: [...prev[capitalizedDay], scheduledActivity]
+        }));
+
+        handleCloseScheduler();
+    };
 
     return (
         <div className="w-full">
@@ -61,17 +110,21 @@ export function FitnessSchedule() {
                     <div key={day} className="border-b border-r border-border min-h-[60vh]">
                         <h3 className="font-semibold text-center p-2 border-b border-border bg-muted/50">{day}</h3>
                         <div className="p-2 space-y-2">
-                            {scheduleData[day].length > 0 ? (
-                                scheduleData[day].map(event => <EventCard key={event.id} event={event} />)
-                            ) : (
-                                <div className="text-center text-xs text-muted-foreground pt-10">
-                                    Нет занятий
-                                </div>
-                            )}
+                            {personalSchedule[day].map(event => <PersonalEventCard key={event.id} event={event} />)}
+                            {scheduleData[day].map(event => <EventCard key={event.id} event={event} />)}
+                             <ActivityLibraryDialog onSelectActivity={handleSelectActivity} />
                         </div>
                     </div>
                 ))}
             </div>
+             {selectedActivity && (
+                <ScheduleActivityDialog
+                    isOpen={isScheduling}
+                    onClose={handleCloseScheduler}
+                    activity={selectedActivity}
+                    onSchedule={handleSchedule}
+                />
+            )}
         </div>
     );
 }

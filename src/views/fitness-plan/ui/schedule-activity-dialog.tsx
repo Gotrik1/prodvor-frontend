@@ -118,4 +118,3 @@ export function ScheduleActivityDialog({ isOpen, onClose, activity, onSchedule }
         </Dialog>
     );
 }
-

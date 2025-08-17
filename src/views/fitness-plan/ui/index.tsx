@@ -16,6 +16,7 @@ import { Avatar, AvatarImage, AvatarFallback } from '@/shared/ui/avatar';
 import { Badge } from '@/shared/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shared/ui/select';
 import { cn } from '@/shared/lib/utils';
+import { useUserStore } from '@/widgets/dashboard-header/model/user-store';
 
 interface Exercise {
   id: string;
@@ -187,6 +188,7 @@ export function FitnessPlanPage() {
     const [isPlanFormOpen, setIsPlanFormOpen] = useState(false);
     const [isGroupFormOpen, setIsGroupFormOpen] = useState(false);
     const [selectedFitnessCenter, setSelectedFitnessCenter] = useState<string | null>('fc1');
+    const { user } = useUserStore();
 
     const handleSavePlan = (plan: WorkoutPlan) => {
         setPlans([...plans, plan]);
