@@ -3,7 +3,7 @@
 
 import React, { useState } from 'react';
 import { Button } from '@/shared/ui/button';
-import { Dumbbell, Save, PlusCircle, Trash2, Calendar, Clock, BookOpen, Users } from 'lucide-react';
+import { Dumbbell, Save, PlusCircle, Trash2, Calendar, Clock, BookOpen, Users, Star, Building, Search, Info } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/shared/ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from '@/shared/ui/dialog';
 import { Input } from '@/shared/ui/input';
@@ -181,11 +181,11 @@ const NewGroupEventForm = ({ onSave }: { onSave: (event: GroupEvent) => void }) 
 
 export function FitnessPlanPage() {
     const [plans, setPlans] = useState<WorkoutPlan[]>([]);
-    const [groupEvents, setGroupEvents] = useState<GroupEvent[]>(initialGroupEvents);
+    const [favoriteEvents, setFavoriteEvents] = useState<GroupEvent[]>(initialGroupEvents.slice(0, 3));
     const { toast } = useToast();
     const [isPlanFormOpen, setIsPlanFormOpen] = useState(false);
     const [isGroupFormOpen, setIsGroupFormOpen] = useState(false);
-
+    const [selectedFitnessCenter, setSelectedFitnessCenter] = useState<string | null>(null);
 
     const handleSavePlan = (plan: WorkoutPlan) => {
         setPlans([...plans, plan]);
@@ -197,13 +197,22 @@ export function FitnessPlanPage() {
     };
     
     const handleSaveGroupEvent = (event: GroupEvent) => {
-        setGroupEvents([event, ...groupEvents]);
+        setFavoriteEvents([event, ...favoriteEvents]);
         setIsGroupFormOpen(false);
         toast({
             title: "Занятие добавлено!",
-            description: `Активность "${event.title}" добавлена в вашу библиотеку.`,
+            description: `Активность "${event.title}" добавлена в ваше избранное.`,
         });
     };
+    
+    const toggleFavorite = (event: GroupEvent) => {
+        if (favoriteEvents.some(fav => fav.id === event.id)) {
+            setFavoriteEvents(favoriteEvents.filter(fav => fav.id !== event.id));
+        } else {
+            setFavoriteEvents([...favoriteEvents, event]);
+        }
+    };
+
 
     return (
         <div className="p-4 md:p-6 lg:p-8 space-y-8">
@@ -275,44 +284,100 @@ export function FitnessPlanPage() {
                 <TabsContent value="group" className="mt-6">
                      <Card>
                         <CardHeader>
-                            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-                                <div>
-                                    <CardTitle>Библиотека групповых занятий</CardTitle>
-                                    <CardDescription>Найдите интересные занятия и добавьте их в свой календарь.</CardDescription>
-                                </div>
-                                <Dialog open={isGroupFormOpen} onOpenChange={setIsGroupFormOpen}>
-                                    <DialogTrigger asChild>
-                                        <Button variant="outline"><PlusCircle className="mr-2 h-4 w-4"/>Создать свое занятие</Button>
-                                    </DialogTrigger>
-                                    <DialogContent>
-                                        <DialogHeader>
-                                            <DialogTitle>Добавить свое групповое занятие</DialogTitle>
-                                        </DialogHeader>
-                                        <NewGroupEventForm onSave={handleSaveGroupEvent} />
-                                    </DialogContent>
-                                </Dialog>
-                            </div>
+                            <CardTitle>Библиотека групповых занятий</CardTitle>
+                            <CardDescription>Сохраняйте избранные занятия из фитнес-центров или создавайте свои для удобного планирования.</CardDescription>
                         </CardHeader>
-                        <CardContent className="space-y-4">
-                            {groupEvents.map(event => (
-                                <Card key={event.id} className="bg-muted/50">
-                                    <CardContent className="p-3 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                                        <div className="flex-1">
-                                            <Badge className={categoryColors[event.category]}>{event.category}</Badge>
-                                            <h4 className="font-semibold mt-1">{event.title}</h4>
-                                             <div className="flex items-center gap-2 group text-sm text-muted-foreground mt-1">
-                                                <Avatar className="h-5 w-5"><AvatarImage src={event.trainer.avatarUrl} /><AvatarFallback>{event.trainer.nickname.charAt(0)}</AvatarFallback></Avatar>
-                                                <span>{event.trainer.nickname}</span>
+                        <CardContent>
+                            <Tabs defaultValue="favorites">
+                                <TabsList className="grid w-full grid-cols-2">
+                                    <TabsTrigger value="favorites"><Star className="mr-2 h-4 w-4"/>Избранное</TabsTrigger>
+                                    <TabsTrigger value="centers"><Building className="mr-2 h-4 w-4"/>Фитнес-центры</TabsTrigger>
+                                </TabsList>
+                                <TabsContent value="favorites" className="mt-6">
+                                     <div className="flex justify-between items-center mb-4">
+                                        <div className="relative w-full max-w-sm">
+                                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                                            <Input placeholder="Поиск в избранном..." className="pl-9" />
+                                        </div>
+                                         <Dialog open={isGroupFormOpen} onOpenChange={setIsGroupFormOpen}>
+                                            <DialogTrigger asChild>
+                                                <Button variant="outline"><PlusCircle className="mr-2 h-4 w-4"/>Создать свое занятие</Button>
+                                            </DialogTrigger>
+                                            <DialogContent>
+                                                <DialogHeader>
+                                                    <DialogTitle>Добавить свое групповое занятие</DialogTitle>
+                                                </DialogHeader>
+                                                <NewGroupEventForm onSave={handleSaveGroupEvent} />
+                                            </DialogContent>
+                                        </Dialog>
+                                     </div>
+                                     <div className="space-y-4">
+                                        {favoriteEvents.map(event => (
+                                             <Card key={event.id} className="bg-muted/50">
+                                                <CardContent className="p-3 flex items-center justify-between gap-4">
+                                                     <div className="flex-1">
+                                                        <Badge className={categoryColors[event.category]}>{event.category}</Badge>
+                                                        <h4 className="font-semibold mt-1">{event.title}</h4>
+                                                         <div className="flex items-center gap-2 group text-sm text-muted-foreground mt-1">
+                                                            <Avatar className="h-5 w-5"><AvatarImage src={event.trainer.avatarUrl} /><AvatarFallback>{event.trainer.nickname.charAt(0)}</AvatarFallback></Avatar>
+                                                            <span>{event.trainer.nickname}</span>
+                                                        </div>
+                                                    </div>
+                                                    <Button><Calendar className="mr-2 h-4 w-4"/>Запланировать</Button>
+                                                </CardContent>
+                                            </Card>
+                                        ))}
+                                     </div>
+                                </TabsContent>
+                                <TabsContent value="centers" className="mt-6">
+                                    {!selectedFitnessCenter ? (
+                                        <div className="text-center py-10 px-4 border-2 border-dashed rounded-lg">
+                                            <Building className="mx-auto h-12 w-12 text-muted-foreground" />
+                                            <h3 className="mt-4 text-lg font-semibold">Фитнес-центр не выбран</h3>
+                                            <p className="mt-1 text-sm text-muted-foreground">Добавьте свой фитнес-центр для синхронизации расписания.</p>
+                                            <Button className="mt-4" onClick={() => setSelectedFitnessCenter('fc1')}>
+                                                <PlusCircle className="mr-2 h-4 w-4"/> Выбрать фитнес-центр
+                                            </Button>
+                                        </div>
+                                    ) : (
+                                        <div>
+                                            <div className="flex justify-between items-center mb-4">
+                                                <div>
+                                                    <h3 className="text-lg font-semibold">Расписание: Фитнес-клуб "Pro-Forma"</h3>
+                                                    <p className="text-sm text-muted-foreground">Последнее обновление: сегодня</p>
+                                                </div>
+                                                 <Dialog open={isGroupFormOpen} onOpenChange={setIsGroupFormOpen}>
+                                                    <DialogTrigger asChild>
+                                                        <Button variant="outline"><PlusCircle className="mr-2 h-4 w-4"/>Создать свое</Button>
+                                                    </DialogTrigger>
+                                                    <DialogContent>
+                                                        <DialogHeader>
+                                                            <DialogTitle>Добавить свое групповое занятие</DialogTitle>
+                                                        </DialogHeader>
+                                                        <NewGroupEventForm onSave={handleSaveGroupEvent} />
+                                                    </DialogContent>
+                                                </Dialog>
+                                            </div>
+                                            <div className="space-y-4">
+                                                 {initialGroupEvents.map(event => (
+                                                    <Card key={event.id} className="bg-muted/50">
+                                                        <CardContent className="p-3 flex items-center justify-between gap-4">
+                                                            <div className="flex-1">
+                                                                <Badge className={categoryColors[event.category]}>{event.category}</Badge>
+                                                                <h4 className="font-semibold mt-1">{event.title}</h4>
+                                                            </div>
+                                                            <Button variant="ghost" onClick={() => toggleFavorite(event)}>
+                                                                <Star className={cn("mr-2 h-4 w-4", favoriteEvents.some(fav => fav.id === event.id) ? "text-amber-400 fill-amber-400" : "text-muted-foreground")} />
+                                                                {favoriteEvents.some(fav => fav.id === event.id) ? "В избранном" : "В избранное"}
+                                                            </Button>
+                                                        </CardContent>
+                                                    </Card>
+                                                 ))}
                                             </div>
                                         </div>
-                                        <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                                            <Clock className="h-4 w-4" />
-                                            <span>{event.location}</span>
-                                        </div>
-                                        <Button><Calendar className="mr-2 h-4 w-4"/>Запланировать</Button>
-                                    </CardContent>
-                                </Card>
-                            ))}
+                                    )}
+                                </TabsContent>
+                            </Tabs>
                         </CardContent>
                     </Card>
                 </TabsContent>
