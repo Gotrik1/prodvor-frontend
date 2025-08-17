@@ -7,7 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs';
 import { Dumbbell, Users, HeartPulse, Sun, PlusCircle } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/shared/ui/dialog';
 import { Button } from '@/shared/ui/button';
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandList } from '@/shared/ui/command';
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/shared/ui/command';
 
 
 export interface Activity {
@@ -46,23 +46,6 @@ export const mockOther: Activity[] = [
     { id: 'other-2', name: 'Специальные программы', type: 'other' },
 ];
 
-const ActivityList = ({ activities, onSelect }: { activities: Activity[], onSelect: (activity: Activity) => void }) => (
-    <div className="space-y-2">
-        {activities.map(activity => (
-            <div
-                key={activity.id}
-                onClick={() => onSelect(activity)}
-                className="flex items-center justify-between p-2 rounded-md cursor-pointer hover:bg-muted"
-            >
-                <p className="font-medium text-sm">{activity.name}</p>
-                 <Button variant="ghost" size="icon" className="h-7 w-7">
-                    <PlusCircle className="h-4 w-4" />
-                </Button>
-            </div>
-        ))}
-    </div>
-)
-
 export function ActivityLibraryDialog({ onSelectActivity }: { onSelectActivity: (activity: Activity) => void }) {
     const [open, setOpen] = React.useState(false);
 
@@ -88,16 +71,32 @@ export function ActivityLibraryDialog({ onSelectActivity }: { onSelectActivity: 
                     <CommandList className="max-h-[400px]">
                         <CommandEmpty>Ничего не найдено.</CommandEmpty>
                         <CommandGroup heading="Мои шаблоны">
-                             <ActivityList activities={mockTemplates} onSelect={handleSelect} />
+                            {mockTemplates.map((activity) => (
+                                <CommandItem key={activity.id} onSelect={() => handleSelect(activity)}>
+                                    {activity.name}
+                                </CommandItem>
+                            ))}
                         </CommandGroup>
                         <CommandGroup heading="Групповые занятия">
-                            <ActivityList activities={mockGroupSessions} onSelect={handleSelect} />
+                            {mockGroupSessions.map((activity) => (
+                                <CommandItem key={activity.id} onSelect={() => handleSelect(activity)}>
+                                    {activity.name}
+                                </CommandItem>
+                            ))}
                         </CommandGroup>
                         <CommandGroup heading="Восстановление">
-                            <ActivityList activities={mockRecovery} onSelect={handleSelect} />
+                           {mockRecovery.map((activity) => (
+                                <CommandItem key={activity.id} onSelect={() => handleSelect(activity)}>
+                                    {activity.name}
+                                </CommandItem>
+                            ))}
                         </CommandGroup>
                         <CommandGroup heading="Прочее">
-                             <ActivityList activities={mockOther} onSelect={handleSelect} />
+                             {mockOther.map((activity) => (
+                                <CommandItem key={activity.id} onSelect={() => handleSelect(activity)}>
+                                    {activity.name}
+                                </CommandItem>
+                            ))}
                         </CommandGroup>
                     </CommandList>
                 </Command>
