@@ -13,7 +13,7 @@ import {
   Calendar,
   ClipboardList,
   Cog,
-  DollarSign,
+  Dumbbell,
   Flame,
   HelpCircle,
   Home,
@@ -86,6 +86,22 @@ export function DashboardSidebar() {
                     </Link>
                 </SidebarMenuItem>
                 <SidebarMenuItem>
+                    <Link href="/training">
+                        <SidebarMenuButton>
+                            <ClipboardList />
+                            <span>Тренировки</span>
+                        </SidebarMenuButton>
+                    </Link>
+                </SidebarMenuItem>
+                 <SidebarMenuItem>
+                    <Link href="/fitness-plan">
+                        <SidebarMenuButton>
+                            <Dumbbell />
+                            <span>Фитнес-план</span>
+                        </SidebarMenuButton>
+                    </Link>
+                </SidebarMenuItem>
+                <SidebarMenuItem>
                     <Link href="/lfg">
                         <SidebarMenuButton>
                             <Search />
@@ -98,14 +114,6 @@ export function DashboardSidebar() {
                         <SidebarMenuButton>
                             <MessageSquare />
                             <span>Сообщения</span>
-                        </SidebarMenuButton>
-                    </Link>
-                </SidebarMenuItem>
-                <SidebarMenuItem>
-                    <Link href="/training">
-                        <SidebarMenuButton>
-                            <ClipboardList />
-                            <span>Тренировки</span>
                         </SidebarMenuButton>
                     </Link>
                 </SidebarMenuItem>

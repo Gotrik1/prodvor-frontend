@@ -3,7 +3,7 @@
 
 import React, { useState } from 'react';
 import { Button } from '@/shared/ui/button';
-import { Dumbbell, Save, PlusCircle, Trash2, Calendar, Clock, BookOpen, Users, Star, Building, Search, Info } from 'lucide-react';
+import { Dumbbell, Save, PlusCircle, Trash2, Calendar, BookOpen, Users, Star, Building, Search } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/shared/ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from '@/shared/ui/dialog';
 import { Input } from '@/shared/ui/input';
@@ -317,8 +317,8 @@ export function FitnessPlanPage() {
                                              <Card key={event.id} className="bg-muted/50">
                                                 <CardContent className="p-3 flex items-center justify-between gap-4">
                                                      <div className="flex-1">
-                                                        <Badge className={categoryColors[event.category]}>{event.category}</Badge>
-                                                        <h4 className="font-semibold mt-1">{event.title}</h4>
+                                                        <Badge className={cn(categoryColors[event.category], "mb-1")}>{event.category}</Badge>
+                                                        <h4 className="font-semibold">{event.title}</h4>
                                                          <div className="flex items-center gap-2 group text-sm text-muted-foreground mt-1">
                                                             <Avatar className="h-5 w-5"><AvatarImage src={event.trainer.avatarUrl} /><AvatarFallback>{event.trainer.nickname.charAt(0)}</AvatarFallback></Avatar>
                                                             <span>{event.trainer.nickname}</span>
@@ -366,8 +366,8 @@ export function FitnessPlanPage() {
                                                     <Card key={event.id} className="bg-muted/50">
                                                         <CardContent className="p-3 flex items-center justify-between gap-4">
                                                             <div className="flex-1">
-                                                                <Badge className={categoryColors[event.category]}>{event.category}</Badge>
-                                                                <h4 className="font-semibold mt-1">{event.title}</h4>
+                                                                <Badge className={cn(categoryColors[event.category], "mb-1")}>{event.category}</Badge>
+                                                                <h4 className="font-semibold">{event.title}</h4>
                                                             </div>
                                                             <Button variant="ghost" onClick={() => toggleFavorite(event)}>
                                                                 <Star className={cn("mr-2 h-4 w-4", favoriteEvents.some(fav => fav.id === event.id) ? "text-amber-400 fill-amber-400" : "text-muted-foreground")} />

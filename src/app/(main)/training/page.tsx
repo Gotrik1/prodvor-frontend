@@ -3,7 +3,7 @@ import { TrainingPage } from '@/views/training';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-    title: 'Тренировки | ProDvor',
+    title: 'Мои тренировки | ProDvor',
     description: 'Планируйте и отслеживайте свои тренировки.',
 };
 
