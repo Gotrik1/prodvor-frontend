@@ -1,18 +1,17 @@
 
-
 'use client';
 
 import { useState } from 'react';
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
-import { PlusCircle, Search, Star, MapPin } from "lucide-react";
+import { PlusCircle, Search, Star, MapPin, List } from "lucide-react";
 import Image from 'next/image';
 import Link from 'next/link';
 import { YandexMapV3 } from '@/widgets/yandex-map';
 import { playgrounds as mockPlaygrounds, allSports } from '@/mocks';
 import { Badge } from '@/shared/ui/badge';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/shared/ui/table';
-
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs';
 
 const allSportsFlat = allSports.reduce((acc, sport) => {
     acc.push({ id: sport.id, name: sport.name });
@@ -26,25 +25,24 @@ const allSportsFlat = allSports.reduce((acc, sport) => {
 
 
 const mainFilters = ["Все", "Футбол", "Баскетбол", "Стритбол", "Воркаут", "Универсальная", "Фитнес-зал", "Бассейн", "Теннисный корт"];
-const secondaryFilters = ["Лыжная трасса", "Биатлонный комплекс", "Каток", "Сноуборд-парк", "Горнолыжный склон", "Стрельбище"];
 
 const FilterButton = ({ label, isActive, onClick }: { label: string, isActive: boolean, onClick: () => void }) => (
     <Button
         variant={isActive ? "default" : "secondary"}
         onClick={onClick}
-        className="rounded-full"
+        className="rounded-full h-8"
     >
         {label}
     </Button>
 );
 
 const FavoritePlaygrounds = () => {
-    const favoritePlaygrounds = mockPlaygrounds.slice(0, 3); // Mock data for now
+    const favoritePlaygrounds = mockPlaygrounds.slice(0, 3);
 
     return (
         <Card>
             <CardHeader>
-                <CardTitle className="flex items-center gap-2">
+                <CardTitle className="flex items-center gap-2 text-lg">
                     <Star className="text-amber-400" />
                     Избранные площадки
                 </CardTitle>
@@ -71,7 +69,7 @@ const FavoritePlaygrounds = () => {
                         ))}
                     </div>
                 ) : (
-                    <p className="text-sm text-muted-foreground text-center py-4">У вас пока нет избранных площадок. Добавьте их, нажав на звездочку на странице площадки.</p>
+                    <p className="text-sm text-muted-foreground text-center py-4">У вас пока нет избранных площадок.</p>
                 )}
             </CardContent>
         </Card>
@@ -79,13 +77,12 @@ const FavoritePlaygrounds = () => {
 };
 
 const NearbyPlaygrounds = () => {
-    // Mock data for nearby playgrounds. In a real app, this would come from a geolocation API.
     const nearbyPlaygrounds = mockPlaygrounds.slice(0, 4);
 
     return (
         <Card>
             <CardHeader>
-                <CardTitle className="flex items-center gap-2">
+                <CardTitle className="flex items-center gap-2 text-lg">
                     <MapPin className="text-primary" />
                     Площадки рядом
                 </CardTitle>
@@ -115,131 +112,92 @@ const NearbyPlaygrounds = () => {
     )
 }
 
-const AdBanner = () => {
-    return (
-        <Card>
-            <CardContent className="p-2">
-                <Link href="#" className="block relative w-full aspect-[2/1] rounded-md overflow-hidden group">
-                    <Image
-                        src="https://placehold.co/400x200.png"
-                        alt="Рекламный баннер"
-                        fill
-                        className="object-cover group-hover:scale-105 transition-transform"
-                        data-ai-hint="advertisement banner"
-                    />
-                    <div className="absolute top-2 right-2 bg-black/50 text-white text-xs px-2 py-1 rounded">
-                        Реклама
-                    </div>
-                </Link>
-            </CardContent>
-        </Card>
-    )
-}
-
-
 export function PlaygroundsPage() {
     const [activeFilter, setActiveFilter] = useState("Все");
 
     return (
         <div className="p-4 md:p-6 lg:p-8">
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
-                <div className="lg:col-span-2 space-y-6">
-                    <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                        <div>
-                            <h1 className="text-3xl font-bold font-headline flex items-center gap-2">
-                                Места для тренировок
-                            </h1>
-                            <p className="text-muted-foreground mt-1">Найдите или добавьте свое любимое место для игр и тренировок.</p>
-                        </div>
-                        <Button asChild>
-                            <Link href="/playgrounds/add">
-                                <PlusCircle className="mr-2 h-4 w-4" />
-                                Добавить место
-                            </Link>
-                        </Button>
-                    </div>
-
-                    <Card>
-                        <CardContent className="p-4 space-y-4">
-                            <div className="flex flex-wrap items-center gap-2">
-                                <Button variant="ghost" size="icon">
-                                    <Search className="h-5 w-5 text-muted-foreground" />
-                                </Button>
-                                {mainFilters.map(filter => (
-                                    <FilterButton
-                                        key={filter}
-                                        label={filter}
-                                        isActive={activeFilter === filter}
-                                        onClick={() => setActiveFilter(filter)}
-                                    />
-                                ))}
-                            </div>
-                            <div className="flex flex-wrap items-center gap-2 pl-12">
-                                {secondaryFilters.map(filter => (
-                                    <FilterButton
-                                        key={filter}
-                                        label={filter}
-                                        isActive={activeFilter === filter}
-                                        onClick={() => setActiveFilter(filter)}
-                                    />
-                                ))}
-                            </div>
-                        </CardContent>
-                    </Card>
-
-                    <Card>
-                        <CardContent className="p-2">
-                            <div className="relative w-full h-[600px] rounded-lg overflow-hidden">
-                            <YandexMapV3 />
-                            </div>
-                        </CardContent>
-                    </Card>
-                    <Card>
-                        <CardHeader>
-                            <CardTitle>Список площадок ({mockPlaygrounds.length})</CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                             <div className="border rounded-lg overflow-x-auto">
-                                <Table>
-                                    <TableHeader>
-                                        <TableRow>
-                                            <TableHead>ID</TableHead>
-                                            <TableHead>Название</TableHead>
-                                            <TableHead>Адрес</TableHead>
-                                            <TableHead>Тип</TableHead>
-                                            <TableHead>Покрытие</TableHead>
-                                            <TableHead>Виды спорта</TableHead>
-                                        </TableRow>
-                                    </TableHeader>
-                                    <TableBody>
-                                        {mockPlaygrounds.map((p) => (
-                                            <TableRow key={p.id}>
-                                                <TableCell className="font-mono text-xs">{p.id}</TableCell>
-                                                <TableCell className="font-medium">
-                                                    <Link href={`/playgrounds/${p.id}`} className="hover:text-primary transition-colors">
-                                                        {p.name}
-                                                    </Link>
-                                                </TableCell>
-                                                <TableCell>{p.address}</TableCell>
-                                                <TableCell><Badge variant="outline">{p.type}</Badge></TableCell>
-                                                <TableCell>{p.surface}</TableCell>
-                                                <TableCell className="text-xs">
-                                                    {p.sportIds.map((id: string) => allSportsFlat.find(s => s.id === id)?.name).filter(Boolean).join(', ')}
-                                                </TableCell>
-                                            </TableRow>
-                                        ))}
-                                    </TableBody>
-                                </Table>
-                            </div>
-                        </CardContent>
-                    </Card>
+             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
+                <div>
+                    <h1 className="text-3xl font-bold font-headline flex items-center gap-2">
+                        Места для тренировок
+                    </h1>
+                    <p className="text-muted-foreground mt-1">Найдите или добавьте свое любимое место для игр и тренировок.</p>
                 </div>
-                <div className="lg:sticky top-24 space-y-8">
-                     <FavoritePlaygrounds />
-                     <NearbyPlaygrounds />
-                     <AdBanner />
-                </div>
+                <Button asChild>
+                    <Link href="/playgrounds/add">
+                        <PlusCircle className="mr-2 h-4 w-4" />
+                        Добавить место
+                    </Link>
+                </Button>
             </div>
+
+            <Tabs defaultValue="map">
+                <TabsList className="grid w-full grid-cols-4">
+                    <TabsTrigger value="map"><MapPin className="mr-2 h-4 w-4"/>Карта</TabsTrigger>
+                    <TabsTrigger value="list"><List className="mr-2 h-4 w-4"/>Список</TabsTrigger>
+                    <TabsTrigger value="favorites"><Star className="mr-2 h-4 w-4"/>Избранное</TabsTrigger>
+                    <TabsTrigger value="nearby">Рядом</TabsTrigger>
+                </TabsList>
+                <div className="mt-6">
+                    <TabsContent value="map">
+                         <Card>
+                            <CardContent className="p-2">
+                                <div className="relative w-full h-[600px] rounded-lg overflow-hidden">
+                                    <YandexMapV3 />
+                                </div>
+                            </CardContent>
+                        </Card>
+                    </TabsContent>
+                    <TabsContent value="list">
+                         <Card>
+                            <CardHeader>
+                                <CardTitle>Список площадок ({mockPlaygrounds.length})</CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                                <div className="border rounded-lg overflow-x-auto">
+                                    <Table>
+                                        <TableHeader>
+                                            <TableRow>
+                                                <TableHead>Название</TableHead>
+                                                <TableHead>Адрес</TableHead>
+                                                <TableHead>Тип</TableHead>
+                                                <TableHead>Покрытие</TableHead>
+                                                <TableHead>Виды спорта</TableHead>
+                                            </TableRow>
+                                        </TableHeader>
+                                        <TableBody>
+                                            {mockPlaygrounds.map((p) => (
+                                                <TableRow key={p.id}>
+                                                    <TableCell className="font-medium">
+                                                        <Link href={`/playgrounds/${p.id}`} className="hover:text-primary transition-colors">
+                                                            {p.name}
+                                                        </Link>
+                                                    </TableCell>
+                                                    <TableCell>{p.address}</TableCell>
+                                                    <TableCell><Badge variant="outline">{p.type}</Badge></TableCell>
+                                                    <TableCell>{p.surface}</TableCell>
+                                                    <TableCell className="text-xs">
+                                                        {p.sportIds.map((id: string) => allSportsFlat.find(s => s.id === id)?.name).filter(Boolean).join(', ')}
+                                                    </TableCell>
+                                                </TableRow>
+                                            ))}
+                                        </TableBody>
+                                    </Table>
+                                </div>
+                            </CardContent>
+                        </Card>
+                    </TabsContent>
+                    <TabsContent value="favorites">
+                       <FavoritePlaygrounds />
+                    </TabsContent>
+                     <TabsContent value="nearby">
+                       <NearbyPlaygrounds />
+                    </TabsContent>
+                </div>
+            </Tabs>
         </div>
     );
 }
+
+    
