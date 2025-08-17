@@ -282,7 +282,11 @@ export function AdminStatisticsPage() {
                             renderRow={(p) => (
                                 <TableRow key={p.id}>
                                     <TableCell className="font-mono text-xs">{p.id}</TableCell>
-                                    <TableCell className="font-medium">{p.name}</TableCell>
+                                    <TableCell className="font-medium">
+                                        <Link href={`/playgrounds/${p.id}`} className="hover:text-primary transition-colors">
+                                            {p.name}
+                                        </Link>
+                                    </TableCell>
                                     <TableCell>{p.address}</TableCell>
                                     <TableCell><Badge variant="outline">{p.type}</Badge></TableCell>
                                     <TableCell>{p.surface}</TableCell>
@@ -364,5 +368,3 @@ export function AdminStatisticsPage() {
         </Tabs>
     );
 }
-
-    
