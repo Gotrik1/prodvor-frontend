@@ -42,7 +42,7 @@ export function TournamentSchedule({ tournamentId }: { tournamentId: string }) {
                         team2: teamsCopy[i + 1],
                         date: date.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long' }),
                         time: `${18 + Math.floor(i/4)}:00`,
-                        venue: venues.length > 0 ? venues[i/2 % venues.length] : { id: 'unknown', name: "Площадка не назначена", address: '', type: 'Открытая площадка', surface: 'Асфальт', imageUrl: '', dataAiHint: '' }
+                        venue: venues.length > 0 ? venues[i/2 % venues.length] : { id: 'unknown', name: "Площадка не назначена", address: '', type: 'Открытая площадка', surface: 'Асфальт', imageUrl: '', dataAiHint: '', sportIds: [], followers: [], residentTeamIds: [] }
                     });
                 }
             }
