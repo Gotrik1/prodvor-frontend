@@ -3,35 +3,21 @@
 
 import React, { useState } from 'react';
 import { Button } from '@/shared/ui/button';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/shared/ui/card';
-import { Dumbbell, PlusCircle, Save } from 'lucide-react';
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import { Dumbbell, Save } from 'lucide-react';
+import { DragDropContext } from 'react-beautiful-dnd';
 import type { DropResult } from 'react-beautiful-dnd';
 import { FitnessPlanCalendar, Day } from './fitness-plan-calendar';
-import { ActivityLibrary, Activity } from './activity-library';
+import { ActivityLibrary, Activity, mockTemplates, mockGroupSessions, mockRecovery, mockOther } from './activity-library';
 
-// Helper to move items between lists
-const move = (source: Activity[], destination: Activity[], droppableSource: any, droppableDestination: any): { [key: string]: Activity[] } => {
-  const sourceClone = Array.from(source);
-  const destClone = Array.from(destination);
-  const [removed] = sourceClone.splice(droppableSource.index, 1);
-
-  destClone.splice(droppableDestination.index, 0, removed);
-
-  const result: { [key: string]: Activity[] } = {};
-  result[droppableSource.droppableId] = sourceClone;
-  result[droppableDestination.droppableId] = destClone;
-
-  return result;
-};
-
-// Helper to reorder items in the same list
-const reorder = (list: Activity[], startIndex: number, endIndex: number): Activity[] => {
-    const result = Array.from(list);
-    const [removed] = result.splice(startIndex, 1);
-    result.splice(endIndex, 0, removed);
-    return result;
-};
+const allActivitiesMap = [
+    ...mockTemplates,
+    ...mockGroupSessions,
+    ...mockRecovery,
+    ...mockOther,
+].reduce((acc, activity) => {
+    acc[activity.id] = activity;
+    return acc;
+}, {} as Record<string, Activity>);
 
 
 export function FitnessPlanPage() {
@@ -53,7 +39,6 @@ export function FitnessPlanPage() {
     const onDragEnd = (result: DropResult) => {
         const { source, destination } = result;
 
-        // Dropped outside the list
         if (!destination) {
             return;
         }
@@ -61,40 +46,49 @@ export function FitnessPlanPage() {
         const sourceId = source.droppableId;
         const destId = destination.droppableId;
 
-        // Reordering within the same day
-        if (sourceId === destId) {
-            const dayIndex = weekSchedule.findIndex(day => day.id === sourceId);
-            if (dayIndex !== -1) {
-                const reorderedActivities = reorder(
-                    weekSchedule[dayIndex].activities,
-                    source.index,
-                    destination.index
-                );
-                const newWeekSchedule = [...weekSchedule];
-                newWeekSchedule[dayIndex].activities = reorderedActivities;
+        const newWeekSchedule = [...weekSchedule];
+        const sourceDayIndex = newWeekSchedule.findIndex(day => day.id === sourceId);
+        const destDayIndex = newWeekSchedule.findIndex(day => day.id === destId);
+
+        // --- Перетаскивание из библиотеки в календарь ---
+        if (sourceId.startsWith('library-')) {
+            const sourceActivity = allActivitiesMap[result.draggableId];
+            if (sourceActivity && destDayIndex !== -1) {
+                const destDay = newWeekSchedule[destDayIndex];
+                const newActivity = {
+                    ...sourceActivity,
+                    id: `instance-${Date.now()}-${Math.random()}`, // Create a unique ID for the new instance
+                };
+                const newActivities = Array.from(destDay.activities);
+                newActivities.splice(destination.index, 0, newActivity);
+                newWeekSchedule[destDayIndex] = { ...destDay, activities: newActivities };
                 setWeekSchedule(newWeekSchedule);
             }
+            return;
         }
-        
-        // Moving from library to a day
-        if (sourceId.startsWith('library-') && destId.startsWith('day-')) {
-             const dayIndex = weekSchedule.findIndex(day => day.id === destId);
-             if (dayIndex !== -1) {
-                const destActivities = Array.from(weekSchedule[dayIndex].activities);
-                // This is a simplified version. A real one would need access to library state.
-                // For now, we'll just mock adding a new item.
-                const newActivity: Activity = {
-                    id: `clone-${Date.now()}`,
-                    name: `Активность ${source.index + 1}`,
-                    type: 'template', // This should be dynamic
-                };
 
-                destActivities.splice(destination.index, 0, newActivity);
-
-                const newWeekSchedule = [...weekSchedule];
-                newWeekSchedule[dayIndex].activities = destActivities;
-                setWeekSchedule(newWeekSchedule);
-             }
+        // --- Перетаскивание внутри календаря ---
+        if (sourceDayIndex !== -1 && destDayIndex !== -1) {
+            // Reordering within the same day
+            if (sourceId === destId) {
+                const day = newWeekSchedule[sourceDayIndex];
+                const reorderedActivities = Array.from(day.activities);
+                const [removed] = reorderedActivities.splice(source.index, 1);
+                reorderedActivities.splice(destination.index, 0, removed);
+                newWeekSchedule[sourceDayIndex] = { ...day, activities: reorderedActivities };
+            } 
+            // Moving from one day to another
+            else {
+                const sourceDay = newWeekSchedule[sourceDayIndex];
+                const destDay = newWeekSchedule[destDayIndex];
+                const sourceActivities = Array.from(sourceDay.activities);
+                const destActivities = Array.from(destDay.activities);
+                const [removed] = sourceActivities.splice(source.index, 1);
+                destActivities.splice(destination.index, 0, removed);
+                newWeekSchedule[sourceDayIndex] = { ...sourceDay, activities: sourceActivities };
+                newWeekSchedule[destDayIndex] = { ...destDay, activities: destActivities };
+            }
+            setWeekSchedule(newWeekSchedule);
         }
     };
 

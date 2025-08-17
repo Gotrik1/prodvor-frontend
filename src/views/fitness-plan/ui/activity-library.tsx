@@ -13,7 +13,7 @@ export interface Activity {
     type: 'template' | 'group' | 'recovery' | 'other';
 }
 
-const mockTemplates: Activity[] = [
+export const mockTemplates: Activity[] = [
     { id: 'template-1', name: 'День ног', type: 'template' },
     { id: 'template-2', name: 'Грудь и трицепс', type: 'template' },
     { id: 'template-3', name: 'Кардио-интенсив', type: 'template' },
@@ -21,7 +21,7 @@ const mockTemplates: Activity[] = [
     { id: 'template-5', name: 'Персональный тренинг', type: 'template' },
 ];
 
-const mockGroupSessions: Activity[] = [
+export const mockGroupSessions: Activity[] = [
     { id: 'group-1', name: 'Силовой и функциональный', type: 'group' },
     { id: 'group-2', name: 'Водные программы', type: 'group' },
     { id: 'group-3', name: 'Танцевальные программы', type: 'group' },
@@ -31,14 +31,14 @@ const mockGroupSessions: Activity[] = [
     { id: 'group-7', name: 'Программы Outdoor', type: 'group' },
 ];
 
-const mockRecovery: Activity[] = [
+export const mockRecovery: Activity[] = [
     { id: 'recovery-1', name: 'Отдых', type: 'recovery' },
     { id: 'recovery-2', name: 'SPA / Баня', type: 'recovery' },
     { id: 'recovery-3', name: 'Массаж', type: 'recovery' },
     { id: 'recovery-4', name: 'Медицинское фитнес-тестирование', type: 'recovery' },
 ];
 
-const mockOther: Activity[] = [
+export const mockOther: Activity[] = [
     { id: 'other-1', name: 'Детский фитнес', type: 'other' },
     { id: 'other-2', name: 'Специальные программы', type: 'other' },
 ];
