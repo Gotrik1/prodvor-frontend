@@ -24,8 +24,8 @@ import {
   FormMessage,
 } from '@/shared/ui/form';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs';
-import { Bell, Brush, Lock, User as UserIcon, Save } from 'lucide-react';
-import { users } from '@/mocks';
+import { Bell, Brush, Lock, User as UserIcon, Save, Shield } from 'lucide-react';
+import { useUserStore } from '@/widgets/dashboard-header/model/user-store';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import { Textarea } from '@/shared/ui/textarea';
 import { Switch } from '@/shared/ui/switch';
@@ -60,26 +60,25 @@ const accountFormSchema = z.object({
 });
 
 
-const currentUser = users[0];
-
 export function SettingsPage() {
     const { toast } = useToast();
+    const { user: currentUser } = useUserStore();
     
     const profileForm = useForm<z.infer<typeof profileFormSchema>>({
         resolver: zodResolver(profileFormSchema),
         defaultValues: {
-            firstName: currentUser.firstName,
-            lastName: currentUser.lastName,
-            nickname: currentUser.nickname,
-            gender: currentUser.gender,
-            bio: "Страстный игрок в дворовый футбол и CS2. Ищу команду для серьезных игр."
+            firstName: currentUser?.firstName || '',
+            lastName: currentUser?.lastName || '',
+            nickname: currentUser?.nickname || '',
+            gender: currentUser?.gender || 'мужской',
+            bio: currentUser?.bio || "Страстный игрок в дворовый футбол и CS2. Ищу команду для серьезных игр."
         }
     });
 
     const accountForm = useForm<z.infer<typeof accountFormSchema>>({
         resolver: zodResolver(accountFormSchema),
         defaultValues: {
-            email: currentUser.email,
+            email: currentUser?.email || '',
         }
     });
 
@@ -100,11 +99,11 @@ export function SettingsPage() {
             <TabsTrigger value="account"><Lock className="mr-2 h-4 w-4" />Аккаунт</TabsTrigger>
             <TabsTrigger value="notifications"><Bell className="mr-2 h-4 w-4" />Уведомления</TabsTrigger>
             <TabsTrigger value="appearance"><Brush className="mr-2 h-4 w-4" />Внешний вид</TabsTrigger>
-            <TabsTrigger value="privacy">Конфиденциальность</TabsTrigger>
+            <TabsTrigger value="privacy"><Shield className="mr-2 h-4 w-4"/>Приватность</TabsTrigger>
           </TabsList>
           
           {/* Profile Tab */}
-          <TabsContent value="profile">
+          <TabsContent value="profile" className="mt-6">
             <Form {...profileForm}>
                 <form onSubmit={profileForm.handleSubmit(onProfileSubmit)}>
                     <Card>
@@ -115,8 +114,8 @@ export function SettingsPage() {
                         <CardContent className="space-y-6">
                             <div className="flex items-center gap-4">
                                 <Avatar className="h-20 w-20">
-                                    <AvatarImage src={currentUser.avatarUrl} />
-                                    <AvatarFallback>{currentUser.nickname.charAt(0)}</AvatarFallback>
+                                    <AvatarImage src={currentUser?.avatarUrl} />
+                                    <AvatarFallback>{currentUser?.nickname?.charAt(0)}</AvatarFallback>
                                 </Avatar>
                                 <Button type="button" variant="outline">Загрузить новый аватар</Button>
                             </div>
@@ -163,7 +162,7 @@ export function SettingsPage() {
           </TabsContent>
 
           {/* Account Tab */}
-          <TabsContent value="account">
+          <TabsContent value="account" className="mt-6">
              <Form {...accountForm}>
                 <form onSubmit={accountForm.handleSubmit(onAccountSubmit)}>
                     <Card>
@@ -195,7 +194,7 @@ export function SettingsPage() {
           </TabsContent>
 
           {/* Notifications Tab */}
-          <TabsContent value="notifications">
+          <TabsContent value="notifications" className="mt-6">
             <Card>
                 <CardHeader>
                     <CardTitle>Уведомления</CardTitle>
@@ -231,7 +230,7 @@ export function SettingsPage() {
           </TabsContent>
           
            {/* Appearance Tab */}
-          <TabsContent value="appearance">
+          <TabsContent value="appearance" className="mt-6">
             <Card>
                 <CardHeader>
                     <CardTitle>Внешний вид</CardTitle>
@@ -247,10 +246,10 @@ export function SettingsPage() {
           </TabsContent>
           
            {/* Privacy Tab */}
-          <TabsContent value="privacy">
+          <TabsContent value="privacy" className="mt-6">
              <Card>
                 <CardHeader>
-                    <CardTitle>Конфиденциальность</CardTitle>
+                    <CardTitle>Приватность</CardTitle>
                     <CardDescription>Управляйте видимостью вашего профиля.</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
