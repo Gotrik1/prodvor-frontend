@@ -1,0 +1,1 @@
+export { TrainingCenterPage } from './ui';

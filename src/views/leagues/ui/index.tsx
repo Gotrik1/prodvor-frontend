@@ -1,16 +1,15 @@
 
-
 'use client';
 
-import { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/shared/ui/table';
 import { teams as allTeams, teamSports } from '@/mocks';
 import { Crown, Trophy } from "lucide-react";
 import Image from 'next/image';
-import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/shared/ui/select";
 import { Badge } from '@/shared/ui/badge';
 import Link from 'next/link';
+import { useState } from 'react';
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem, SelectGroup, SelectLabel } from '@/shared/ui/select';
 
 const rankColors = [
     'text-amber-400', // 1st
@@ -26,7 +25,7 @@ export function LeaguesPage() {
         .sort((a, b) => b.rank - a.rank);
 
     return (
-        <div className="p-4 md:p-6 lg:p-8 space-y-8">
+        <div className="space-y-8">
             <Card>
                 <CardHeader>
                     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">

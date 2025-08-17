@@ -9,7 +9,6 @@ import {
   SidebarGroup,
 } from "@/shared/ui/sidebar";
 import {
-  Building,
   Calendar,
   ClipboardList,
   Cog,
@@ -67,42 +66,18 @@ export function DashboardSidebar() {
                     </Link>
                 </SidebarMenuItem>
                 <SidebarMenuItem>
-                    <Link href="/tournaments">
+                    <Link href="/competitions">
                         <SidebarMenuButton>
                             <Trophy />
-                            <span>Турниры</span>
+                            <span>Соревнования</span>
                         </SidebarMenuButton>
                     </Link>
                 </SidebarMenuItem>
                 <SidebarMenuItem>
-                    <Link href="/leagues">
-                        <SidebarMenuButton>
-                            <BarChart />
-                            <span>Лиги</span>
-                        </SidebarMenuButton>
-                    </Link>
-                </SidebarMenuItem>
-                 <SidebarMenuItem>
-                    <Link href="/challenges">
-                        <SidebarMenuButton>
-                            <Swords />
-                            <span>Вызовы</span>
-                        </SidebarMenuButton>
-                    </Link>
-                </SidebarMenuItem>
-                <SidebarMenuItem>
-                    <Link href="/training">
-                        <SidebarMenuButton>
-                            <Calendar />
-                            <span>Тренировки</span>
-                        </SidebarMenuButton>
-                    </Link>
-                </SidebarMenuItem>
-                 <SidebarMenuItem>
-                    <Link href="/fitness-plan">
+                    <Link href="/training-center">
                         <SidebarMenuButton>
                             <Dumbbell />
-                            <span>Фитнес-план</span>
+                            <span>Тренировки</span>
                         </SidebarMenuButton>
                     </Link>
                 </SidebarMenuItem>

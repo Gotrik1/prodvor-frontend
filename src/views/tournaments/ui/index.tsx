@@ -1,5 +1,4 @@
 
-
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/shared/ui/card";
 import { PlusCircle, Trophy, GanttChart, Bell, CheckSquare } from "lucide-react";
@@ -42,7 +41,7 @@ const TournamentCardActionButton = ({ id, status }: { id: string, status: Tourna
 
 export function TournamentsPage() {
     return (
-        <div className="p-4 md:p-6 lg:p-8 space-y-12">
+        <div className="space-y-12">
             <section>
                 <h2 className="text-2xl font-bold mb-4">Мои турниры</h2>
                 {mockMyTournaments.length > 0 ? (

@@ -216,31 +216,8 @@ export function FitnessPlanPage() {
 
 
     return (
-        <div className="p-4 md:p-6 lg:p-8 space-y-8">
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                <div>
-                    <h1 className="text-3xl font-bold font-headline flex items-center gap-3">
-                        <Dumbbell className="h-8 w-8" />
-                        Конструктор фитнес-плана
-                    </h1>
-                    <p className="text-muted-foreground mt-1">
-                        Создавайте личные шаблоны и добавляйте групповые занятия в свой календарь.
-                    </p>
-                </div>
-                 <Button size="lg" asChild>
-                    <Link href="/training">
-                        <Calendar className="mr-2 h-4 w-4" />
-                        К моему расписанию
-                    </Link>
-                </Button>
-            </div>
-
+        <div className="space-y-8">
             <Tabs defaultValue="templates">
-                <TabsList className="grid w-full grid-cols-2">
-                    <TabsTrigger value="templates"><BookOpen className="mr-2 h-4 w-4" />Мои шаблоны тренировок</TabsTrigger>
-                    <TabsTrigger value="group"><Users className="mr-2 h-4 w-4" />Групповые занятия</TabsTrigger>
-                </TabsList>
-                
                 <TabsContent value="templates" className="mt-6">
                     <Card>
                         <CardHeader>
