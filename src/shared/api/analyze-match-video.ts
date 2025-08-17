@@ -9,6 +9,7 @@
  */
 import { ai } from '@/shared/lib/genkit';
 import { z } from 'zod';
+import { googleAI } from '@genkit-ai/googleai';
 
 const AnalyzeMatchVideoInputSchema = z.object({
   videoDataUri: z
@@ -36,15 +37,20 @@ const analyzeVideoFlow = ai.defineFlow(
   async ({ videoDataUri, prompt }) => {
     try {
       const { text } = await ai.generate({
+        model: googleAI.model('gemini-1.5-flash'),
         prompt: [
           {
             text: `You are an expert sports analyst. Your task is to analyze the provided sports match video and answer the user's query.
-            Provide a detailed, structured analysis. Use markdown for formatting. Be insightful and offer tactical advice where appropriate.
+            Provide a detailed, structured analysis. Use markdown for formatting (e.g., ## Заголовок, **жирный текст**). Be insightful and offer tactical advice where appropriate.
+            The language of the response must be Russian.
             
             User's query: "${prompt}"`,
           },
           { media: { url: videoDataUri } },
         ],
+        config: {
+            temperature: 0.5,
+        }
       });
 
       return { analysis: text };
@@ -56,7 +62,5 @@ const analyzeVideoFlow = ai.defineFlow(
 );
 
 export async function analyzeMatchVideo(input: AnalyzeMatchVideoInput): Promise<AnalyzeMatchVideoOutput> {
-  // Add a delay to simulate a longer processing time for video
-  await new Promise(resolve => setTimeout(resolve, 2000));
   return await analyzeVideoFlow(input);
 }

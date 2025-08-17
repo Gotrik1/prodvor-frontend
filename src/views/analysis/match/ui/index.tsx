@@ -12,6 +12,7 @@ import { Alert, AlertDescription, AlertTitle } from '@/shared/ui/alert';
 import { AlertTriangle } from 'lucide-react';
 import { useUserStore } from '@/widgets/dashboard-header/model/user-store';
 import Link from 'next/link';
+import { MarkdownRenderer } from './markdown-renderer';
 
 export function MatchAnalysisPage() {
     const { toast } = useToast();
@@ -29,6 +30,14 @@ export function MatchAnalysisPage() {
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
         if (file) {
+            if (file.size > 50 * 1024 * 1024) { // 50MB limit
+                toast({
+                    variant: 'destructive',
+                    title: 'Файл слишком большой',
+                    description: 'Пожалуйста, выберите видеофайл размером до 50 МБ.',
+                });
+                return;
+            }
             setVideoFile(file);
             setVideoPreview(URL.createObjectURL(file));
             setAnalysisResult(null);
@@ -180,9 +189,7 @@ export function MatchAnalysisPage() {
                             <CardTitle className="flex items-center gap-3"><Bot className="h-6 w-6 text-primary"/>Результаты анализа</CardTitle>
                         </CardHeader>
                         <CardContent>
-                            <div className="prose prose-sm dark:prose-invert max-w-none whitespace-pre-wrap">
-                                {analysisResult}
-                            </div>
+                            <MarkdownRenderer content={analysisResult} />
                         </CardContent>
                     </Card>
                 )}
