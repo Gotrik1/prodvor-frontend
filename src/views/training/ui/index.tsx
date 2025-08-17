@@ -34,12 +34,11 @@ export function TrainingPage() {
                     <p className="text-muted-foreground mt-1">Планируйте свою активность и следите за командными занятиями.</p>
                 </div>
                 <div className="flex items-center gap-2">
-                    <Button size="lg" variant="outline" asChild>
-                        <Link href="/fitness-plan">Мой фитнес план</Link>
-                    </Button>
-                    <Button size="lg">
-                        <PlusCircle className="mr-2 h-4 w-4" />
-                        Запланировать тренировку
+                    <Button size="lg" asChild>
+                        <Link href="/fitness-plan">
+                             <PlusCircle className="mr-2 h-4 w-4" />
+                            Конструктор планов
+                        </Link>
                     </Button>
                 </div>
             </div>
@@ -59,7 +58,9 @@ export function TrainingPage() {
                             />
                         </CardContent>
                     </Card>
+                </div>
 
+                <div className="lg:sticky top-24 space-y-8">
                     <Card>
                         <CardHeader>
                             <CardTitle>Предстоящие тренировки</CardTitle>
@@ -106,11 +107,7 @@ export function TrainingPage() {
                             ))}
                         </CardContent>
                     </Card>
-
-                </div>
-
-                <div className="lg:sticky top-24 space-y-8">
-                    <Card className="bg-gradient-to-br from-primary/20 to-card border-primary/50">
+                     <Card className="bg-gradient-to-br from-primary/20 to-card border-primary/50">
                         <CardHeader>
                             <div className="flex items-center gap-3 text-primary">
                                 <Dumbbell className="h-6 w-6" />
@@ -122,21 +119,6 @@ export function TrainingPage() {
                         </CardHeader>
                         <CardContent>
                             <Button className="w-full bg-accent text-accent-foreground hover:bg-accent/90">Узнать больше</Button>
-                        </CardContent>
-                    </Card>
-                     <Card>
-                        <CardHeader>
-                            <CardTitle className="flex items-center gap-2"><Users />Новости команды</CardTitle>
-                        </CardHeader>
-                        <CardContent className="space-y-3">
-                            <div className="p-3 rounded-lg bg-muted/50">
-                                <p className="text-sm font-semibold">"Ночные Снайперы" отменили тренировку на 28.08</p>
-                                <p className="text-xs text-muted-foreground">Причина: плохие погодные условия.</p>
-                            </div>
-                             <div className="p-3 rounded-lg bg-muted/50">
-                                <p className="text-sm font-semibold">"Стальные Ястребы" ищут спарринг-партнера</p>
-                                <p className="text-xs text-muted-foreground">Дата: 30.08, время: 19:00.</p>
-                            </div>
                         </CardContent>
                     </Card>
                 </div>
