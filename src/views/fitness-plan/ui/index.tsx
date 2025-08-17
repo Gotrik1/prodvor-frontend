@@ -4,7 +4,7 @@
 import React, { useState } from 'react';
 import { Button } from '@/shared/ui/button';
 import { Dumbbell, Save, PlusCircle, Trash2, Calendar, BookOpen, Users, Star, Building, Search } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/shared/ui/card';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/shared/ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from '@/shared/ui/dialog';
 import { Input } from '@/shared/ui/input';
 import { Label } from '@/shared/ui/label';
@@ -227,6 +227,12 @@ export function FitnessPlanPage() {
                         Создавайте личные шаблоны и добавляйте групповые занятия в свой календарь.
                     </p>
                 </div>
+                 <Button size="lg" asChild>
+                    <Link href="/training">
+                        <Calendar className="mr-2 h-4 w-4" />
+                        К моему расписанию
+                    </Link>
+                </Button>
             </div>
 
             <Tabs defaultValue="templates">
@@ -256,9 +262,9 @@ export function FitnessPlanPage() {
                                                 {plan.exercises.length > 4 && <li>...и еще {plan.exercises.length - 4}</li>}
                                             </ul>
                                         </CardContent>
-                                        <CardContent>
+                                        <CardFooter>
                                              <Button className="w-full"><Calendar className="mr-2 h-4 w-4"/>Запланировать</Button>
-                                        </CardContent>
+                                        </CardFooter>
                                     </Card>
                                 ))}
                                  <Dialog open={isPlanFormOpen} onOpenChange={setIsPlanFormOpen}>
