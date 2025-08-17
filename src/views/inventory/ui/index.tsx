@@ -9,6 +9,7 @@ import Image from 'next/image';
 import { Badge } from '@/shared/ui/badge';
 import { cn } from '@/shared/lib/utils';
 import { useToast } from '@/shared/hooks/use-toast';
+import Link from 'next/link';
 
 const mockInventoryItems = [
     {
@@ -79,7 +80,7 @@ export function InventoryPage() {
                         const Icon = categoryIcons[item.category] || Gem;
                         const isActive = activeItemId === item.id && item.type !== 'consumable';
                         return (
-                            <Card key={item.id} className={cn("flex flex-col", isActive && "border-primary")}>
+                            <Card key={item.id} className={cn("flex flex-col", isActive && "border-primary shadow-primary/20 shadow-lg")}>
                                 <CardHeader className="relative p-0">
                                     <div className="aspect-video w-full relative">
                                         <Image 
