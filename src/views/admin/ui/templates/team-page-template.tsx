@@ -227,21 +227,27 @@ export function TeamPageTemplate({ team }: { team?: Team }) {
                 <TabsContent value="overview" className="mt-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
                         <Card>
-                            <CardHeader><CardTitle>Побед / Поражений</CardTitle></CardHeader>
+                            <CardHeader>
+                                <CardTitle>Побед / Поражений</CardTitle>
+                            </CardHeader>
                             <CardContent>
                                 <p className="text-3xl font-bold">{wins} / {losses}</p>
                                 <p className="text-sm text-muted-foreground">Процент побед: <span className="text-green-400 font-semibold">{winrate}%</span></p>
                             </CardContent>
                         </Card>
                         <Card>
-                            <CardHeader><CardTitle>Рейтинг ELO</CardTitle></CardHeader>
+                            <CardHeader>
+                                <CardTitle>Рейтинг ELO</CardTitle>
+                            </CardHeader>
                             <CardContent>
                                 <p className="text-3xl font-bold">{team.rank}</p>
                                 <p className="text-sm text-muted-foreground">Место в лиге: <span className="text-primary font-semibold">3-е</span></p>
                             </CardContent>
                         </Card>
                          <Card>
-                            <CardHeader><CardTitle>Текущая серия</CardTitle></CardHeader>
+                            <CardHeader>
+                                <CardTitle>Текущая серия</CardTitle>
+                            </CardHeader>
                             <CardContent>
                                 <div className="flex items-center gap-2">
                                     {currentStreak.type === 'W' ? <TrendingUp className="h-8 w-8 text-green-500" /> : <TrendingUp className="h-8 w-8 text-red-500" />}
@@ -251,7 +257,9 @@ export function TeamPageTemplate({ team }: { team?: Team }) {
                             </CardContent>
                         </Card>
                         <Card>
-                            <CardHeader><CardTitle>Форма (5 матчей)</CardTitle></CardHeader>
+                            <CardHeader>
+                                <CardTitle>Форма (5 матчей)</CardTitle>
+                            </CardHeader>
                             <CardContent className="flex items-center gap-2">
                                 {last5Form.map((result, index) => <FormBadge key={index} result={result} />)}
                             </CardContent>

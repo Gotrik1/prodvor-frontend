@@ -2,7 +2,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/shared/ui/card";
 import { Button } from '@/shared/ui/button';
 import { CheckCircle, Gem, Package, Palette, Sparkles, Wand2 } from "lucide-react";
 import Image from 'next/image';
@@ -100,7 +100,7 @@ export function InventoryPage() {
                                     <CardTitle className="text-lg mb-2">{item.name}</CardTitle>
                                     <CardDescription>{item.description}</CardDescription>
                                 </CardContent>
-                                <CardContent className="p-4 pt-0">
+                                <CardFooter className="p-4 pt-0">
                                     {item.type === 'consumable' ? (
                                         <div className="text-sm text-muted-foreground">Осталось: <span className="font-bold text-foreground">{item.quantity} шт.</span></div>
                                     ) : (
@@ -113,7 +113,7 @@ export function InventoryPage() {
                                             {isActive ? 'Активировано' : 'Активировать'}
                                         </Button>
                                     )}
-                                </CardContent>
+                                </CardFooter>
                             </Card>
                         )
                     })}
