@@ -2,7 +2,7 @@
 'use client';
 
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarProvider, SidebarInset } from "@/shared/ui/sidebar";
-import { BarChart, DollarSign, Home, Eye, Info } from "lucide-react";
+import { BarChart, DollarSign, Home, Eye, Info, Shield } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { DashboardHeader } from "@/widgets/dashboard-header";
@@ -72,6 +72,12 @@ export function AdminLayout({
                      <Link href="/dashboard" className="w-full">
                         <Button variant="outline" className="w-full">
                             Вернуться на платформу
+                        </Button>
+                    </Link>
+                    <Link href="/admin/docs" className="w-full">
+                        <Button variant="secondary" className="w-full">
+                           <Shield className="mr-2 h-4 w-4" />
+                            Тех. документация
                         </Button>
                     </Link>
                 </SidebarFooter>

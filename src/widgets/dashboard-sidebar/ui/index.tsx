@@ -162,7 +162,7 @@ export function DashboardSidebar() {
                         <Link href="/admin">
                             <SidebarMenuButton>
                                 <Shield />
-                                <span>Администрирование</span>
+                                <span>Админ-панель</span>
                             </SidebarMenuButton>
                         </Link>
                     </SidebarMenuItem>
