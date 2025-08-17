@@ -70,7 +70,7 @@ export function FitnessPlanCalendar({ weekSchedule, setWeekSchedule }: FitnessPl
                     {weekSchedule.map((day) => (
                         <div key={day.id}>
                             <h3 className="font-semibold text-center mb-2">{day.name}</h3>
-                            <Droppable droppableId={day.id}>
+                            <Droppable droppableId={day.id} isDropDisabled={false}>
                                 {(provided, snapshot) => (
                                     <div
                                         ref={provided.innerRef}
