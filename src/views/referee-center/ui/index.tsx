@@ -5,7 +5,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/sha
 import { Button } from "@/shared/ui/button";
 import { BookOpen, ShieldCheck, FileText, ArrowRight, Video, GraduationCap, Star, BarChart, Calendar, Archive, Search } from "lucide-react";
 import Link from "next/link";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/shared/ui/accordion";
 import { Progress } from "@/shared/ui/progress";
 import { teamSports } from "@/mocks";
 import { Badge } from "@/shared/ui/badge";
@@ -96,7 +95,7 @@ export function RefereeCenterPage() {
                             <CardDescription>Проходите курсы, чтобы повысить свою категорию и получать назначения на более важные матчи.</CardDescription>
                         </CardHeader>
                         <CardContent className="space-y-4">
-                             <Card className="bg-muted/50 border-primary/50">
+                            <Card className="bg-muted/50 border-primary/50">
                                 <CardHeader>
                                     <CardTitle className="text-lg flex items-center gap-2"><recommendedCourse.icon className="h-5 w-5"/>{recommendedCourse.title}</CardTitle>
                                     <CardDescription>Рекомендовано для вас</CardDescription>
@@ -113,39 +112,34 @@ export function RefereeCenterPage() {
                                     <Button className="mt-4">Продолжить курс <ArrowRight className="ml-2 h-4 w-4" /></Button>
                                 </CardContent>
                             </Card>
-                             <Accordion type="single" collapsible className="w-full">
-                                <AccordionItem value="item-1">
-                                    <AccordionTrigger>Все курсы ({mockCourses.length})</AccordionTrigger>
-                                    <AccordionContent className="space-y-4 pt-4">
-                                        {mockCourses.map(course => (
-                                            <Card key={course.id}>
-                                                <CardHeader>
-                                                    <CardTitle className="text-lg flex items-center gap-2">
-                                                        <course.icon className="h-5 w-5" />
-                                                        {course.title}
-                                                    </CardTitle>
-                                                     <CardDescription>{course.discipline}</CardDescription>
-                                                </CardHeader>
-                                                <CardContent>
-                                                    <p className="text-sm text-muted-foreground mb-4">{course.description}</p>
-                                                    {course.progress !== undefined && (
-                                                         <div className="space-y-2 mb-4">
-                                                            <div className="flex justify-between items-center text-sm mb-1">
-                                                                <span className="font-medium">Прогресс:</span>
-                                                                <span className="font-bold text-primary">{course.progress}%</span>
-                                                            </div>
-                                                            <Progress value={course.progress} />
-                                                        </div>
-                                                    )}
-                                                    <Button variant="secondary">
-                                                        {course.progress === 100 ? 'Повторить' : course.progress && course.progress > 0 ? 'Продолжить' : 'Начать'}
-                                                    </Button>
-                                                </CardContent>
-                                            </Card>
-                                        ))}
-                                    </AccordionContent>
-                                </AccordionItem>
-                            </Accordion>
+                            <div className="space-y-4 pt-4">
+                                {mockCourses.map(course => (
+                                    <Card key={course.id}>
+                                        <CardHeader>
+                                            <CardTitle className="text-lg flex items-center gap-2">
+                                                <course.icon className="h-5 w-5" />
+                                                {course.title}
+                                            </CardTitle>
+                                             <CardDescription>{course.discipline}</CardDescription>
+                                        </CardHeader>
+                                        <CardContent>
+                                            <p className="text-sm text-muted-foreground mb-4">{course.description}</p>
+                                            {course.progress !== undefined && (
+                                                 <div className="space-y-2 mb-4">
+                                                    <div className="flex justify-between items-center text-sm mb-1">
+                                                        <span className="font-medium">Прогресс:</span>
+                                                        <span className="font-bold text-primary">{course.progress}%</span>
+                                                    </div>
+                                                    <Progress value={course.progress} />
+                                                </div>
+                                            )}
+                                            <Button variant="secondary">
+                                                {course.progress === 100 ? 'Повторить' : course.progress && course.progress > 0 ? 'Продолжить' : 'Начать'}
+                                            </Button>
+                                        </CardContent>
+                                    </Card>
+                                ))}
+                            </div>
                         </CardContent>
                     </Card>
 
