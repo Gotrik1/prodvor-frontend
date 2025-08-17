@@ -1,0 +1,1 @@
+export { RefereeCenterPage } from './ui';
