@@ -44,7 +44,15 @@ export function TeamManagementPage({ team }: { team: Team | undefined }) {
 
     return (
         <div className="p-4 md:p-6 lg:p-8">
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="mb-6">
+                <Button asChild variant="outline">
+                    <Link href={`/teams/${team.id}`}>
+                        <ArrowLeft className="mr-2 h-4 w-4" />
+                        Назад к профилю команды
+                    </Link>
+                </Button>
+            </div>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
                 <div className="lg:col-span-2 space-y-8">
                     <LogoGeneratorWidget />
                     <Card>
@@ -124,7 +132,7 @@ export function TeamManagementPage({ team }: { team: Team | undefined }) {
                         </CardContent>
                     </Card>
                 </div>
-                <div className="space-y-8">
+                <div className="space-y-8 lg:sticky top-24">
                         <Card>
                         <CardHeader>
                             <CardTitle className="flex items-center gap-2"><Shield />Статус команды</CardTitle>

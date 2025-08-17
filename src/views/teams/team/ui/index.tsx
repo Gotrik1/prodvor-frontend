@@ -1,17 +1,20 @@
 
 
+'use client';
+
 import { teams, users, playgrounds, challenges, posts } from "@/mocks";
 import type { User, Team } from "@/mocks";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { Badge } from "@/shared/ui/badge";
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
-import { Crown, Home, Swords, Trophy, UserPlus, Check, X, TrendingUp, Rss, Film, Star, Shield, History } from "lucide-react";
+import { Crown, Home, Swords, Trophy, UserPlus, Check, X, TrendingUp, Rss, Film, Star, Shield, History, Settings } from "lucide-react";
 import Image from 'next/image';
 import Link from 'next/link';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 import { TeamFeedTab } from "./team-feed-tab";
 import { TeamMediaTab } from "./team-media-tab";
+import { useUserStore } from "@/widgets/dashboard-header/model/user-store";
 
 const TeamRoster = ({ teamMembers, captainId }: { teamMembers: User[], captainId: string }) => (
     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
@@ -136,6 +139,7 @@ const StatRow = ({ label, value }: { label: string, value: string | number }) =>
 );
 
 export function TeamPublicPage({ team }: { team: Team | undefined}) {
+    const { user: currentUser } = useUserStore();
 
     if (!team) {
        return (
@@ -160,6 +164,7 @@ export function TeamPublicPage({ team }: { team: Team | undefined}) {
     const teamMembers = users.filter(u => team.members.includes(u.id));
     const homePlaygrounds = team.homePlaygroundIds?.map(id => playgrounds.find(p => p.id === id)).filter(Boolean);
     const teamPosts = posts.filter(p => p.team?.id === team.id);
+    const isCaptain = currentUser?.id === team.captainId;
 
     // Mock statistics
     const wins = 45;
@@ -190,9 +195,17 @@ export function TeamPublicPage({ team }: { team: Team | undefined}) {
                         )}
                     </div>
                     <div className="md:ml-auto flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
-                        <Button className="w-full">
-                            <Swords className="mr-2 h-4 w-4" /> Бросить вызов
-                        </Button>
+                        {isCaptain ? (
+                            <Button asChild className="w-full">
+                                <Link href={`/teams/${team.id}/manage`}>
+                                    <Settings className="mr-2 h-4 w-4" /> Управлять
+                                </Link>
+                            </Button>
+                        ) : (
+                             <Button className="w-full">
+                                <Swords className="mr-2 h-4 w-4" /> Бросить вызов
+                            </Button>
+                        )}
                          <Button variant="outline" className="w-full">
                             <Rss className="mr-2 h-4 w-4" /> Подписаться
                         </Button>
