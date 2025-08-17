@@ -10,6 +10,7 @@ import { GrowthLeversCard } from './growth-levers-card';
 import { PaybackChartCard } from './payback-chart-card';
 import { RevenueForecastCard } from './revenue-forecast-card';
 import { SensitivityAnalysisCard } from './sensitivity-analysis-card';
+import { InventoryMap } from './inventory-map';
 
 // Create a context and a hook to use it
 type AdSettingsContextType = ReturnType<typeof useAdSettings>;
@@ -51,7 +52,8 @@ export function AdvertisingPage() {
                         <SensitivityAnalysisCard />
                     </div>
                 </div>
-
+                
+                <InventoryMap />
                 <AudienceManager />
                 <CampaignManager />
                 <PaybackChartCard />
