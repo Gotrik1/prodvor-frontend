@@ -106,6 +106,12 @@ export function initializeTeams(users: User[], allPlaygrounds: any[], allSportsL
 
     teams.forEach((team, index) => {
         team.followers = [...team.members];
+        
+        users.forEach(user => {
+            if (team.members.includes(user.id) && !user.following.includes(team.id)) {
+                user.following.push(team.id);
+            }
+        });
 
         const followingCount = (index % 3) + 1;
          for (let i = 0; i < followingCount; i++) {
