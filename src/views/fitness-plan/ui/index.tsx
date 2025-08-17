@@ -3,87 +3,127 @@
 
 import React, { useState } from 'react';
 import { Button } from '@/shared/ui/button';
-import { Dumbbell, Save, PlusCircle, Trash2, Calendar, Clock } from 'lucide-react';
+import { Dumbbell, Save, PlusCircle, Trash2, Calendar, Clock, BookOpen, Users } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/shared/ui/card';
-import { Activity } from './activity-library';
-import { ActivityLibraryDialog } from './activity-library';
-import { ScheduleActivityDialog, ScheduledActivity } from './schedule-activity-dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from '@/shared/ui/dialog';
+import { Input } from '@/shared/ui/input';
+import { Label } from '@/shared/ui/label';
+import { useToast } from '@/shared/hooks/use-toast';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs';
+import { scheduleData } from '@/widgets/fitness-schedule/lib/mock-data';
+import Link from 'next/link';
+import { Avatar, AvatarImage, AvatarFallback } from '@/shared/ui/avatar';
+import { Badge } from '@/shared/ui/badge';
 
-export interface PlanDay {
+interface Exercise {
   id: string;
   name: string;
-  activities: ScheduledActivity[];
+  sets: string;
+  reps: string;
+  weight: string;
 }
 
-export function FitnessPlanPage() {
-    const [planDays, setPlanDays] = useState<PlanDay[]>([
-        { id: 'day-1', name: 'День 1', activities: [] },
+interface WorkoutPlan {
+  id: string;
+  name: string;
+  exercises: Exercise[];
+}
+
+const categoryColors: Record<string, string> = {
+    'Силовая': 'bg-red-500/10 text-red-300 border-red-500/20',
+    'Кардио': 'bg-blue-500/10 text-blue-300 border-blue-500/20',
+    'Mind & Body': 'bg-green-500/10 text-green-300 border-green-500/20',
+    'Танцы': 'bg-purple-500/10 text-purple-300 border-purple-500/20',
+    'Вода': 'bg-cyan-500/10 text-cyan-300 border-cyan-500/20',
+};
+
+const NewPlanForm = ({ onSave }: { onSave: (plan: WorkoutPlan) => void }) => {
+    const [planName, setPlanName] = useState('');
+    const [exercises, setExercises] = useState<Exercise[]>([
+        { id: `ex-${Date.now()}`, name: '', sets: '', reps: '', weight: '' }
     ]);
+
+    const handleExerciseChange = (index: number, field: keyof Exercise, value: string) => {
+        const newExercises = [...exercises];
+        newExercises[index] = { ...newExercises[index], [field]: value };
+        setExercises(newExercises);
+    };
+
+    const addExercise = () => {
+        setExercises([...exercises, { id: `ex-${Date.now()}`, name: '', sets: '', reps: '', weight: '' }]);
+    };
+
+    const removeExercise = (index: number) => {
+        setExercises(exercises.filter((_, i) => i !== index));
+    };
+
+    const handleSave = () => {
+        if (!planName || exercises.some(ex => !ex.name)) return;
+        onSave({
+            id: `plan-${Date.now()}`,
+            name: planName,
+            exercises
+        });
+    };
+
+    return (
+        <div className="space-y-6">
+            <div className="space-y-2">
+                <Label htmlFor="plan-name">Название плана</Label>
+                <Input id="plan-name" placeholder="Например, День ног" value={planName} onChange={(e) => setPlanName(e.target.value)} />
+            </div>
+            <div className="space-y-4">
+                {exercises.map((ex, index) => (
+                    <div key={ex.id} className="grid grid-cols-12 gap-2 items-end p-2 border rounded-md">
+                        <div className="col-span-4 space-y-1">
+                            <Label className="text-xs">Упражнение</Label>
+                            <Input placeholder="Приседания" value={ex.name} onChange={(e) => handleExerciseChange(index, 'name', e.target.value)} />
+                        </div>
+                        <div className="col-span-2 space-y-1">
+                            <Label className="text-xs">Подходы</Label>
+                            <Input placeholder="3" value={ex.sets} onChange={(e) => handleExerciseChange(index, 'sets', e.target.value)} />
+                        </div>
+                        <div className="col-span-2 space-y-1">
+                            <Label className="text-xs">Повторы</Label>
+                            <Input placeholder="12" value={ex.reps} onChange={(e) => handleExerciseChange(index, 'reps', e.target.value)} />
+                        </div>
+                        <div className="col-span-3 space-y-1">
+                            <Label className="text-xs">Вес/Усилие</Label>
+                            <Input placeholder="50 кг" value={ex.weight} onChange={(e) => handleExerciseChange(index, 'weight', e.target.value)} />
+                        </div>
+                        <div className="col-span-1">
+                            <Button variant="ghost" size="icon" onClick={() => removeExercise(index)}>
+                                <Trash2 className="h-4 w-4 text-destructive" />
+                            </Button>
+                        </div>
+                    </div>
+                ))}
+            </div>
+            <Button variant="outline" onClick={addExercise} className="w-full">
+                <PlusCircle className="mr-2 h-4 w-4" /> Добавить упражнение
+            </Button>
+            <DialogFooter>
+                <Button onClick={handleSave}><Save className="mr-2 h-4 w-4" /> Сохранить шаблон</Button>
+            </DialogFooter>
+        </div>
+    );
+};
+
+export function FitnessPlanPage() {
+    const [plans, setPlans] = useState<WorkoutPlan[]>([]);
+    const { toast } = useToast();
+    const [isFormOpen, setIsFormOpen] = useState(false);
+
+    const handleSavePlan = (plan: WorkoutPlan) => {
+        setPlans([...plans, plan]);
+        setIsFormOpen(false);
+        toast({
+            title: "Шаблон сохранен!",
+            description: `Ваш новый план "${plan.name}" был успешно создан.`,
+        });
+    };
     
-    const [isScheduling, setIsScheduling] = useState(false);
-    const [activityToSchedule, setActivityToSchedule] = useState<Activity | null>(null);
-    const [targetDayId, setTargetDayId] = useState<string | null>(null);
-
-    const handleSelectActivity = (dayId: string, activity: Activity) => {
-        setActivityToSchedule(activity);
-        setTargetDayId(dayId);
-        setIsScheduling(true);
-    };
-    
-    const handleScheduleSubmit = (scheduledActivity: ScheduledActivity) => {
-        if (targetDayId) {
-             setPlanDays(prevDays =>
-                prevDays.map(day => {
-                    if (day.id === targetDayId) {
-                        return { ...day, activities: [...day.activities, scheduledActivity] };
-                    }
-                    return day;
-                })
-            );
-        }
-        closeScheduler();
-    };
-
-    const closeScheduler = () => {
-        setIsScheduling(false);
-        setActivityToSchedule(null);
-        setTargetDayId(null);
-    };
-
-    const removeActivityFromDay = (dayId: string, activityId: string) => {
-         setPlanDays(prevDays =>
-            prevDays.map(day => {
-                if (day.id === dayId) {
-                    return { ...day, activities: day.activities.filter(a => a.id !== activityId) };
-                }
-                return day;
-            })
-        );
-    };
-
-    const addDay = () => {
-        const nextDayNumber = planDays.length + 1;
-        setPlanDays(prev => [
-            ...prev,
-            { id: `day-${nextDayNumber}`, name: `День ${nextDayNumber}`, activities: [] }
-        ]);
-    };
-    
-    const removeDay = (dayId: string) => {
-        setPlanDays(prev => prev.filter(day => day.id !== dayId));
-    };
-    
-    const getScheduleText = (activity: ScheduledActivity) => {
-        const time = activity.time || 'Время не указано';
-        switch (activity.repeat) {
-            case 'daily': return `Каждый день в ${time}`;
-            case 'weekly': return `Каждую неделю в ${time}`;
-            case 'monthly': return `Каждый месяц в ${time}`;
-            case 'custom': return `Каждые ${activity.customInterval} дня в ${time}`;
-            default: return `Однократно, ${new Date(activity.startDate).toLocaleDateString()} в ${time}`;
-        }
-    };
-
+    const allGroupEvents = Object.values(scheduleData).flat();
 
     return (
         <div className="p-4 md:p-6 lg:p-8 space-y-8">
@@ -94,69 +134,96 @@ export function FitnessPlanPage() {
                         Конструктор фитнес-плана
                     </h1>
                     <p className="text-muted-foreground mt-1">
-                        Создайте свой идеальный тренировочный цикл, добавляя и настраивая активности.
+                        Создавайте личные шаблоны и добавляйте групповые занятия в свой календарь.
                     </p>
                 </div>
-                <Button size="lg">
-                    <Save className="mr-2 h-4 w-4" />
-                    Сохранить план
-                </Button>
             </div>
 
-            <Card>
-                <CardHeader>
-                    <CardTitle>Тренировочный цикл</CardTitle>
-                    <CardDescription>Составьте свой план, добавляя активности на каждый день. Вы можете добавлять столько дней, сколько нужно для вашего цикла.</CardDescription>
-                </CardHeader>
-                <CardContent>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                        {planDays.map(day => (
-                            <Card key={day.id} className="flex flex-col bg-muted/50">
-                                <CardHeader className="flex flex-row items-center justify-between">
-                                    <CardTitle className="text-lg">{day.name}</CardTitle>
-                                    {planDays.length > 1 && (
-                                         <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => removeDay(day.id)}>
-                                            <Trash2 className="h-4 w-4 text-destructive/70" />
-                                        </Button>
-                                    )}
-                                </CardHeader>
-                                <CardContent className="flex-grow space-y-2">
-                                    {day.activities.map(activity => (
-                                        <div key={activity.id} className="flex flex-col p-3 rounded-md border bg-card text-card-foreground shadow-sm">
-                                            <div className="flex items-center justify-between">
-                                                <p className="font-semibold text-sm">{activity.name}</p>
-                                                <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => removeActivityFromDay(day.id, activity.id)}>
-                                                    <Trash2 className="h-4 w-4 text-destructive/70" />
-                                                </Button>
+            <Tabs defaultValue="templates">
+                <TabsList className="grid w-full grid-cols-2">
+                    <TabsTrigger value="templates"><BookOpen className="mr-2 h-4 w-4" />Мои шаблоны тренировок</TabsTrigger>
+                    <TabsTrigger value="group"><Users className="mr-2 h-4 w-4" />Групповые занятия</TabsTrigger>
+                </TabsList>
+                
+                <TabsContent value="templates" className="mt-6">
+                    <Card>
+                        <CardHeader>
+                            <CardTitle>Шаблоны личных тренировок</CardTitle>
+                            <CardDescription>Создайте свои программы тренировок, чтобы быстро добавлять их в расписание.</CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                {plans.map(plan => (
+                                    <Card key={plan.id} className="flex flex-col">
+                                        <CardHeader>
+                                            <CardTitle>{plan.name}</CardTitle>
+                                        </CardHeader>
+                                        <CardContent className="flex-grow">
+                                            <ul className="text-sm text-muted-foreground space-y-1">
+                                                {plan.exercises.slice(0, 4).map(ex => (
+                                                    <li key={ex.id} className="truncate"> • {ex.name} ({ex.sets}x{ex.reps})</li>
+                                                ))}
+                                                {plan.exercises.length > 4 && <li>...и еще {plan.exercises.length - 4}</li>}
+                                            </ul>
+                                        </CardContent>
+                                        <CardContent>
+                                             <Button className="w-full"><Calendar className="mr-2 h-4 w-4"/>Запланировать</Button>
+                                        </CardContent>
+                                    </Card>
+                                ))}
+                                 <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
+                                    <DialogTrigger asChild>
+                                        <Card className="flex items-center justify-center min-h-[200px] border-2 border-dashed hover:border-primary transition-colors cursor-pointer">
+                                            <div className="text-center text-muted-foreground">
+                                                <PlusCircle className="mx-auto h-10 w-10 mb-2" />
+                                                <p className="font-semibold">Создать новый шаблон</p>
                                             </div>
-                                            <div className="text-xs text-muted-foreground flex items-center gap-2 mt-1">
-                                                <Calendar className="h-3 w-3" />
-                                                <span>{getScheduleText(activity)}</span>
-                                            </div>
+                                        </Card>
+                                    </DialogTrigger>
+                                    <DialogContent className="sm:max-w-3xl">
+                                        <DialogHeader>
+                                            <DialogTitle>Новый шаблон тренировки</DialogTitle>
+                                        </DialogHeader>
+                                        <NewPlanForm onSave={handleSavePlan} />
+                                    </DialogContent>
+                                </Dialog>
+                            </div>
+                        </CardContent>
+                    </Card>
+                </TabsContent>
+
+                <TabsContent value="group" className="mt-6">
+                     <Card>
+                        <CardHeader>
+                            <CardTitle>Библиотека групповых занятий</CardTitle>
+                            <CardDescription>Найдите интересные занятия и добавьте их в свой календарь.</CardDescription>
+                        </CardHeader>
+                        <CardContent className="space-y-4">
+                            {allGroupEvents.map(event => (
+                                <Card key={event.id} className="bg-muted/50">
+                                    <CardContent className="p-3 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                                        <div className="flex-1">
+                                            <Badge className={categoryColors[event.category]}>{event.category}</Badge>
+                                            <h4 className="font-semibold mt-1">{event.title}</h4>
+                                             <Link href={`/users/${event.trainer.id}`} className="flex items-center gap-2 group text-sm text-muted-foreground mt-1">
+                                                <Avatar className="h-5 w-5"><AvatarImage src={event.trainer.avatarUrl} /><AvatarFallback>{event.trainer.nickname.charAt(0)}</AvatarFallback></Avatar>
+                                                <span className="group-hover:text-primary transition-colors">{event.trainer.nickname}</span>
+                                            </Link>
                                         </div>
-                                    ))}
-                                     <ActivityLibraryDialog onSelectActivity={(activity) => handleSelectActivity(day.id, activity)} />
-                                </CardContent>
-                            </Card>
-                        ))}
-                        <div className="flex items-center justify-center min-h-[200px] border-2 border-dashed rounded-lg">
-                             <Button variant="ghost" onClick={addDay} className="flex flex-col h-auto p-4 gap-2">
-                                <PlusCircle className="h-8 w-8 text-muted-foreground"/>
-                                <span className="text-muted-foreground">Добавить день</span>
-                            </Button>
-                        </div>
-                    </div>
-                </CardContent>
-            </Card>
-            
-            {activityToSchedule && (
-                 <ScheduleActivityDialog
-                    isOpen={isScheduling}
-                    onClose={closeScheduler}
-                    activity={activityToSchedule}
-                    onSchedule={handleScheduleSubmit}
-                />
-            )}
+                                        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                                            <Clock className="h-4 w-4" />
+                                            <span>{event.startTime} - {event.endTime}</span>
+                                        </div>
+                                        <Button><Calendar className="mr-2 h-4 w-4"/>Запланировать</Button>
+                                    </CardContent>
+                                </Card>
+                            ))}
+                        </CardContent>
+                    </Card>
+                </TabsContent>
+            </Tabs>
         </div>
     );
 }
+
+    
