@@ -11,9 +11,12 @@ import { teams, initializeTeams } from './teams';
 // It's crucial to initialize in an order that respects dependencies.
 // Users are initialized first, but their social graph/sponsors depend on the full list of users.
 initializeSocialGraphAndSponsors(users, sponsors);
+
 // Teams depend on users, playgrounds, and sports. This function creates teams and links them.
+// This MUST run before assigning followers to playgrounds to ensure resident teams are known.
 initializeTeams(users, playgrounds, allSports, sponsors);
-// Playgrounds get followers assigned after users are fully initialized.
+
+// Playgrounds get followers assigned after users and teams are fully initialized.
 assignFollowersToPlaygrounds(users);
 
 
