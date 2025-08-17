@@ -3,7 +3,7 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
 import { Button } from "@/shared/ui/button";
-import { BookOpen, ShieldCheck, FileText, ArrowRight, Video, GraduationCap, Star, BarChart, Gavel } from "lucide-react";
+import { BookOpen, ShieldCheck, FileText, ArrowRight, Video, GraduationCap, Star, BarChart, Gavel, Calendar } from "lucide-react";
 import Link from "next/link";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/shared/ui/accordion";
 import { Progress } from "@/shared/ui/progress";
@@ -179,6 +179,12 @@ export function RefereeCenterPage() {
                                 <span className="text-muted-foreground">Матчей отсужено:</span>
                                 <span className="font-bold text-lg">128</span>
                             </div>
+                             <Button asChild className="w-full mt-4">
+                                <Link href="/schedule">
+                                    <Calendar className="mr-2 h-4 w-4" />
+                                    Управлять расписанием
+                                </Link>
+                            </Button>
                         </CardContent>
                     </Card>
                     <Card>
