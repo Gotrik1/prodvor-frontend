@@ -9,7 +9,21 @@ import { PlusCircle, Search, Star, MapPin } from "lucide-react";
 import Image from 'next/image';
 import Link from 'next/link';
 import { YandexMapV3 } from '@/widgets/yandex-map';
-import { playgrounds as mockPlaygrounds } from '@/mocks';
+import { playgrounds as mockPlaygrounds, allSports } from '@/mocks';
+import { Badge } from '@/shared/ui/badge';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/shared/ui/table';
+
+
+const allSportsFlat = allSports.reduce((acc, sport) => {
+    acc.push({ id: sport.id, name: sport.name });
+    if (sport.subdisciplines) {
+        sport.subdisciplines.forEach(sub => {
+            acc.push({ id: sub.id, name: sub.name });
+        });
+    }
+    return acc;
+}, [] as { id: string, name: string }[]);
+
 
 const mainFilters = ["Все", "Футбол", "Баскетбол", "Стритбол", "Воркаут", "Универсальная", "Фитнес-зал", "Бассейн", "Теннисный корт"];
 const secondaryFilters = ["Лыжная трасса", "Биатлонный комплекс", "Каток", "Сноуборд-парк", "Горнолыжный склон", "Стрельбище"];
@@ -177,6 +191,41 @@ export function PlaygroundsPage() {
                         <CardContent className="p-2">
                             <div className="relative w-full h-[600px] rounded-lg overflow-hidden">
                             <YandexMapV3 />
+                            </div>
+                        </CardContent>
+                    </Card>
+                    <Card>
+                        <CardHeader>
+                            <CardTitle>Список площадок ({mockPlaygrounds.length})</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                             <div className="border rounded-lg overflow-x-auto">
+                                <Table>
+                                    <TableHeader>
+                                        <TableRow>
+                                            <TableHead>Название</TableHead>
+                                            <TableHead>Тип</TableHead>
+                                            <TableHead>Покрытие</TableHead>
+                                            <TableHead>Виды спорта</TableHead>
+                                        </TableRow>
+                                    </TableHeader>
+                                    <TableBody>
+                                        {mockPlaygrounds.map((p) => (
+                                            <TableRow key={p.id}>
+                                                <TableCell className="font-medium">
+                                                    <Link href={`/playgrounds/${p.id}`} className="hover:text-primary transition-colors">
+                                                        {p.name}
+                                                    </Link>
+                                                </TableCell>
+                                                <TableCell><Badge variant="outline">{p.type}</Badge></TableCell>
+                                                <TableCell>{p.surface}</TableCell>
+                                                <TableCell className="text-xs">
+                                                    {p.sportIds.map((id: string) => allSportsFlat.find(s => s.id === id)?.name).filter(Boolean).join(', ')}
+                                                </TableCell>
+                                            </TableRow>
+                                        ))}
+                                    </TableBody>
+                                </Table>
                             </div>
                         </CardContent>
                     </Card>
