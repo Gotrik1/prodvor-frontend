@@ -15,6 +15,7 @@ import { useUserStore } from "@/widgets/dashboard-header/model/user-store";
 import { CreatePost } from "@/widgets/dashboard-feed/ui/create-post";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/shared/ui/chart";
 import { PolarGrid, PolarAngleAxis, Radar, RadarChart, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer } from "recharts";
+import { SocialTab } from "./player-page-social-tab";
 
 
 const defaultPlayer = users.find(u => u.role === 'Игрок')!;
@@ -266,13 +267,15 @@ export function PlayerPageTemplate({ user: profileUser }: { user?: User }) {
                 {/* Right Column for Tabs */}
                 <div className="lg:col-span-3">
                      <Tabs defaultValue="stats">
-                        <TabsList className="grid w-full grid-cols-2 md:grid-cols-4">
+                        <TabsList className="grid w-full grid-cols-2 md:grid-cols-5">
                             <TabsTrigger value="stats">Статистика</TabsTrigger>
+                            <TabsTrigger value="socials">Соц. связи</TabsTrigger>
                             <TabsTrigger value="training">Тренировки</TabsTrigger>
                             <TabsTrigger value="feed">Лента</TabsTrigger>
                             <TabsTrigger value="media">Медиа</TabsTrigger>
                         </TabsList>
                         <TabsContent value="stats" className="mt-6"><StatsTab /></TabsContent>
+                        <TabsContent value="socials" className="mt-6"><SocialTab user={player} isOwnProfile={isOwnProfile} /></TabsContent>
                         <TabsContent value="training" className="mt-6"><TrainingTab /></TabsContent>
                         <TabsContent value="feed" className="mt-6"><FeedTab player={player} isOwnProfile={isOwnProfile} /></TabsContent>
                         <TabsContent value="media" className="mt-6"><MediaTab /></TabsContent>
