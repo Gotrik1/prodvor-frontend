@@ -1,0 +1,1 @@
+export { FitnessSchedule } from './ui';

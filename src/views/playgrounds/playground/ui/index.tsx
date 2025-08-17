@@ -11,6 +11,7 @@ import Link from "next/link";
 import { Badge } from "@/shared/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
+import { FitnessSchedule } from "@/widgets/fitness-schedule";
 
 const features = [
     { id: "lighting", label: "Освещение" },
@@ -40,32 +41,24 @@ const ServiceCard = ({ service }: { service: ServiceCategory['services'][0] }) =
 };
 
 const FitnessServicesSection = ({ services }: { services: ServiceCategory[] }) => (
-    <Card className="mt-8">
-        <CardHeader>
-            <CardTitle>Услуги и программы</CardTitle>
-            <CardDescription>Ознакомьтесь с полным спектром услуг, предоставляемых в этом центре.</CardDescription>
-        </CardHeader>
-        <CardContent>
-            <Tabs defaultValue={services[0].category} className="w-full">
-                <TabsList className="grid w-full grid-cols-1 md:grid-cols-3">
-                    {services.map(category => (
-                        <TabsTrigger key={category.category} value={category.category}>
-                            {category.category}
-                        </TabsTrigger>
+     <Tabs defaultValue={services[0].category} className="w-full">
+        <TabsList className="grid w-full grid-cols-1 md:grid-cols-3">
+            {services.map(category => (
+                <TabsTrigger key={category.category} value={category.category}>
+                    {category.category}
+                </TabsTrigger>
+            ))}
+        </TabsList>
+        {services.map(category => (
+            <TabsContent key={category.category} value={category.category} className="mt-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {category.services.map(service => (
+                        <ServiceCard key={service.name} service={service} />
                     ))}
-                </TabsList>
-                {services.map(category => (
-                    <TabsContent key={category.category} value={category.category} className="mt-6">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            {category.services.map(service => (
-                                <ServiceCard key={service.name} service={service} />
-                            ))}
-                        </div>
-                    </TabsContent>
-                ))}
-            </Tabs>
-        </CardContent>
-    </Card>
+                </div>
+            </TabsContent>
+        ))}
+    </Tabs>
 );
 
 
@@ -152,7 +145,24 @@ export function PlaygroundPage({ playground }: { playground: Playground | undefi
                     </div>
                 </div>
 
-                {playground.services && <FitnessServicesSection services={playground.services} />}
+                {playground.services && (
+                    <Card className="mt-8">
+                        <CardContent className="p-6">
+                             <Tabs defaultValue="schedule" className="w-full">
+                                <TabsList className="grid w-full grid-cols-2">
+                                    <TabsTrigger value="schedule">Расписание</TabsTrigger>
+                                    <TabsTrigger value="services">Услуги</TabsTrigger>
+                                </TabsList>
+                                <TabsContent value="schedule" className="mt-6">
+                                     <FitnessSchedule />
+                                </TabsContent>
+                                 <TabsContent value="services" className="mt-6">
+                                    <FitnessServicesSection services={playground.services} />
+                                </TabsContent>
+                             </Tabs>
+                        </CardContent>
+                    </Card>
+                )}
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
                     <Card>
