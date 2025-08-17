@@ -7,7 +7,6 @@ import { sendTournamentAnnouncement, SendTournamentAnnouncementInput } from "@/s
 import { generateTournamentImage, GenerateTournamentImageInput } from "@/shared/api/generate-tournament-image";
 import { generateTournamentPromo, GenerateTournamentPromoInput } from "@/shared/api/generate-tournament-promo";
 import { analyzeMatchVideo, AnalyzeMatchVideoInput } from "@/shared/api/analyze-match-video";
-import { askRulesExpert, AskRulesExpertInput } from "@/shared/api/ask-rules-expert";
 
 
 export async function generateLogosAction(
@@ -35,8 +34,4 @@ export async function generateTournamentPromoAction(input: GenerateTournamentPro
 
 export async function analyzeMatchVideoAction(input: AnalyzeMatchVideoInput) {
     return await analyzeMatchVideo(input);
-}
-
-export async function askRulesExpertAction(input: AskRulesExpertInput) {
-    return await askRulesExpert(input);
 }
