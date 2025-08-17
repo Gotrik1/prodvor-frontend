@@ -321,7 +321,14 @@ export function AdminStatisticsPage() {
                                     <TableCell className="text-xs">{getTeamSponsors(team.sponsorIds)}</TableCell>
                                     <TableCell className="text-xs">{getTeamPlaygrounds(team.homePlaygroundIds)}</TableCell>
                                      <TableCell className="text-right align-top">
-                                        <Button asChild variant="ghost" size="sm"><Link href={`/admin/teams/${team.id}`}>Просмотр</Link></Button>
+                                        <div className="flex items-center justify-end gap-2">
+                                            <Button asChild variant="ghost" size="sm"><Link href={`/admin/teams/${team.id}`}>Просмотр</Link></Button>
+                                            <Button asChild variant="ghost" size="icon" className="h-8 w-8">
+                                                <Link href={`/teams/${team.id}`} target="_blank" rel="noopener noreferrer">
+                                                    <ExternalLink className="h-4 w-4"/>
+                                                </Link>
+                                            </Button>
+                                        </div>
                                     </TableCell>
                                 </TableRow>
                             )}
@@ -350,7 +357,14 @@ export function AdminStatisticsPage() {
                                     </TableCell>
                                     <TableCell>{sponsor.contribution}</TableCell>
                                     <TableCell className="text-right align-top">
-                                        <Button asChild variant="ghost" size="sm"><Link href={`/admin/sponsors/${sponsor.id}`}>Просмотр</Link></Button>
+                                        <div className="flex items-center justify-end gap-2">
+                                            <Button asChild variant="ghost" size="sm"><Link href={`/admin/sponsors/${sponsor.id}`}>Просмотр</Link></Button>
+                                             <Button asChild variant="ghost" size="icon" className="h-8 w-8">
+                                                <Link href={`/sponsors/${sponsor.id}`} target="_blank" rel="noopener noreferrer">
+                                                    <ExternalLink className="h-4 w-4"/>
+                                                </Link>
+                                            </Button>
+                                        </div>
                                     </TableCell>
                                 </TableRow>
                             )}
