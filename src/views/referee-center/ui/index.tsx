@@ -91,6 +91,7 @@ export function RefereeCenterPage() {
             
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
                 <div className="lg:col-span-2 space-y-8">
+                    <AiAssistant />
                     <Card>
                         <CardHeader>
                             <CardTitle className="flex items-center gap-2">
@@ -207,7 +208,6 @@ export function RefereeCenterPage() {
                 </div>
                 
                 <div className="space-y-8 lg:sticky top-24">
-                     <AiAssistant />
                      <Card>
                         <CardHeader>
                             <CardTitle className="flex items-center gap-2"><BarChart />Моя карьера</CardTitle>
