@@ -34,8 +34,8 @@ export function TrainingPage() {
                     <p className="text-muted-foreground mt-1">Планируйте свою активность и следите за командными занятиями.</p>
                 </div>
                 <div className="flex items-center gap-2">
-                    <Button size="lg" variant="outline">
-                        Мой фитнес план
+                    <Button size="lg" variant="outline" asChild>
+                        <Link href="/fitness-plan">Мой фитнес план</Link>
                     </Button>
                     <Button size="lg">
                         <PlusCircle className="mr-2 h-4 w-4" />
