@@ -39,26 +39,23 @@ function PublicPageLayout({ children }: { children: React.ReactNode }) {
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  // Define routes that should NOT have the sidebar
-  const noSidebarRoutes = ['/', '/about'];
+  // Define routes that should have the public layout (no sidebar)
+  const publicRoutes = ['/', '/about'];
+  
   // Check if the current path is an auth route
   const isAuthRoute = pathname.startsWith('/auth');
+  
   // Check if it is a public tournament page or match page
   const isPublicTournamentRoute = /^\/tournaments\/[^/]+(\/(register|match\/.+|hub))?$/.test(pathname);
-  // Check if it's a public team or user page
-  const isPublicProfileRoute = /^\/(teams|users)\/[^/]+$/.test(pathname) && !pathname.includes('/manage');
-
-
-  const showDashboardLayout = !noSidebarRoutes.includes(pathname) && !isAuthRoute && !isPublicTournamentRoute && !isPublicProfileRoute;
-  const showPublicPageLayout = isPublicProfileRoute || isPublicTournamentRoute;
-
-  if (showDashboardLayout) {
-      return <DashboardLayout>{children}</DashboardLayout>;
-  }
   
-  if (showPublicPageLayout) {
+  // Determine which layout to show.
+  // The public layout is for the homepage, about page, auth pages, and public-facing tournament pages.
+  // Everything else gets the main dashboard layout with the sidebar.
+  const showPublicLayout = publicRoutes.includes(pathname) || isAuthRoute || isPublicTournamentRoute;
+
+  if (showPublicLayout) {
       return <PublicPageLayout>{children}</PublicPageLayout>;
   }
 
-  return <>{children}</>;
+  return <DashboardLayout>{children}</DashboardLayout>;
 }
