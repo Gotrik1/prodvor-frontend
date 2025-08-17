@@ -30,7 +30,7 @@ const generatePromoFlow = ai.defineFlow(
       const prompt = `A short, epic, cinematic promotional video for a tournament called "${tournamentName}". The discipline is ${tournamentGame}. Focus on dynamic shots, intense moments, and a sense of competition.`;
       
       let { operation } = await ai.generate({
-        model: googleAI.model('veo-2.0-generate-001'),
+        model: 'googleai/veo-2.0-generate-001',
         prompt: prompt,
         config: {
           durationSeconds: 5,
@@ -68,8 +68,8 @@ const generatePromoFlow = ai.defineFlow(
         throw new Error(`Failed to download video: ${videoDownloadResponse.statusText}`);
       }
       
-      const videoBuffer = await videoDownloadResponse.buffer();
-      const videoDataUri = `data:video/mp4;base64,${videoBuffer.toString('base64')}`;
+      const videoBuffer = await videoDownloadResponse.arrayBuffer();
+      const videoDataUri = `data:video/mp4;base64,${Buffer.from(videoBuffer).toString('base64')}`;
       
       return { videoDataUri };
 

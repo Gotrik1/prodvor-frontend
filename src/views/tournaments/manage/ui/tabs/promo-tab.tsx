@@ -7,8 +7,8 @@ import { useState, useEffect } from "react";
 import { useToast } from "@/shared/hooks/use-toast";
 import { Button } from "@/shared/ui/button";
 import { Bot, Loader2, Wand2, Image as ImageIcon, CheckCircle } from "lucide-react";
-import { generateTournamentPromo } from "@/shared/api/generate-tournament-promo";
-import { generateTournamentImage } from "@/shared/api/generate-tournament-image";
+import { generateTournamentPromoAction } from "@/app/actions";
+import { generateTournamentImageAction } from "@/app/actions";
 import { Textarea } from "@/shared/ui/textarea";
 import Image from "next/image";
 
@@ -35,7 +35,7 @@ export function PromoTab({ tournament, onPromoAdd, onBannerChange }: { tournamen
         setIsVideoLoading(true);
         setGeneratedVideo(null);
 
-        const result = await generateTournamentPromo({
+        const result = await generateTournamentPromoAction({
             tournamentName: tournament.name,
             tournamentGame: tournament.game
         });
@@ -66,7 +66,7 @@ export function PromoTab({ tournament, onPromoAdd, onBannerChange }: { tournamen
         setIsImageLoading(true);
         setGeneratedImage(null);
 
-        const result = await generateTournamentImage({ prompt: imagePrompt });
+        const result = await generateTournamentImageAction({ prompt: imagePrompt });
 
         setIsImageLoading(false);
 
