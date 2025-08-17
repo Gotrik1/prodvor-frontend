@@ -3,7 +3,7 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
 import { Button } from "@/shared/ui/button";
-import { BookOpen, ShieldCheck, FileText, ArrowRight, Video, GraduationCap, Star, BarChart, Calendar, Archive } from "lucide-react";
+import { BookOpen, ShieldCheck, FileText, ArrowRight, Video, GraduationCap, Star, BarChart, Calendar, Gavel, Archive } from "lucide-react";
 import Link from "next/link";
 import { Progress } from "@/shared/ui/progress";
 import React from "react";
