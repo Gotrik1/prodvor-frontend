@@ -7,6 +7,7 @@ import { BookOpen, ShieldCheck, FileText, ArrowRight, Video, GraduationCap, Star
 import Link from "next/link";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/shared/ui/accordion";
 import { Progress } from "@/shared/ui/progress";
+import { teamSports } from "@/mocks";
 
 const mockCourses = [
     {
@@ -35,19 +36,16 @@ const mockCourses = [
     }
 ];
 
-const mockRules = {
-    'Футбол': [
-        { id: 'rules-1', title: 'Правила дворового футбола 5х5 (ProDvor)', icon: FileText },
-        { id: 'rules-2', title: 'Регламент проведения матчей плей-офф', icon: FileText },
-    ],
-    'Баскетбол': [
-        { id: 'rules-3', title: 'Официальные правила стритбола 3х3', icon: FileText },
-        { id: 'rules-4', title: 'Жесты судей в баскетболе', icon: FileText },
-    ],
-    'Хоккей': [
-        { id: 'rules-5', title: 'Правила уличного хоккея 3х3', icon: FileText },
-    ]
-};
+// Dynamically generate rules for each team sport to show scalability
+const mockRules = teamSports.reduce((acc, sport) => {
+    acc[sport.name] = [
+        { id: `rules-${sport.id}-1`, title: `Официальные правила (ProDvor)`, icon: FileText },
+        { id: `rules-${sport.id}-2`, title: 'Регламент проведения матчей', icon: FileText },
+        ...(sport.subdisciplines ? [{ id: `rules-${sport.id}-3`, title: `Особенности правил для: ${sport.subdisciplines.map(s => s.name).join(', ')}`, icon: FileText }] : [])
+    ];
+    return acc;
+}, {} as Record<string, {id: string, title: string, icon: React.ElementType}[]>);
+
 
 export function RefereeCenterPage() {
     return (
