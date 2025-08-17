@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { users, teams, sponsors, playgrounds, allSports, Team } from '@/mocks';
@@ -265,7 +266,7 @@ export function AdminStatisticsPage() {
                     </CardHeader>
                     <CardContent>
                          <DataTable 
-                            headers={['ID', 'Название', 'Адрес', 'Тип', 'Покрытие']}
+                            headers={['ID', 'Название', 'Адрес', 'Тип', 'Покрытие', 'Виды спорта']}
                             data={playgrounds}
                             renderRow={(p) => (
                                 <TableRow key={p.id}>
@@ -274,6 +275,7 @@ export function AdminStatisticsPage() {
                                     <TableCell>{p.address}</TableCell>
                                     <TableCell><Badge variant="outline">{p.type}</Badge></TableCell>
                                     <TableCell>{p.surface}</TableCell>
+                                    <TableCell className="text-xs">{p.sportIds.map((id: string) => allSports.find(s => s.id === id)?.name).filter(Boolean).join(', ')}</TableCell>
                                 </TableRow>
                             )}
                         />
