@@ -215,7 +215,7 @@ export function RefereeCenterPage() {
                                 <span className="font-bold text-lg">128</span>
                             </div>
                              <Button asChild className="w-full mt-4 !-mb-2">
-                                <Link href="/schedule">
+                                <Link href="/training-center">
                                     <Calendar className="mr-2 h-4 w-4" />
                                     Управлять расписанием
                                 </Link>
