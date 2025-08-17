@@ -5,19 +5,26 @@ import { useState } from 'react';
 import { Button } from '@/shared/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Textarea } from '@/shared/ui/textarea';
-import { Bot, Clapperboard, Film, Loader2, UploadCloud, Wand2 } from 'lucide-react';
+import { Bot, Clapperboard, Film, Loader2, UploadCloud, Wand2, Star } from 'lucide-react';
 import { analyzeMatchVideoAction } from '@/app/actions';
 import { useToast } from '@/shared/hooks/use-toast';
 import { Alert, AlertDescription, AlertTitle } from '@/shared/ui/alert';
 import { AlertTriangle } from 'lucide-react';
+import { useUserStore } from '@/widgets/dashboard-header/model/user-store';
+import Link from 'next/link';
 
 export function MatchAnalysisPage() {
     const { toast } = useToast();
+    const { user: currentUser } = useUserStore();
     const [videoFile, setVideoFile] = useState<File | null>(null);
     const [videoPreview, setVideoPreview] = useState<string | null>(null);
     const [prompt, setPrompt] = useState('Сделай краткий обзор этого матча, выдели ключевые моменты и дай тактические советы обеим командам.');
     const [analysisResult, setAnalysisResult] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
+
+    // Pro-access roles
+    const proRoles = ['Тренер', 'Менеджер', 'Администратор'];
+    const hasAccess = currentUser && proRoles.includes(currentUser.role);
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
@@ -72,6 +79,30 @@ export function MatchAnalysisPage() {
             setIsLoading(false);
         }
     };
+
+    if (!hasAccess) {
+        return (
+             <div className="p-4 md:p-6 lg:p-8 flex items-center justify-center min-h-[80vh]">
+                 <Card className="text-center max-w-lg w-full">
+                     <CardHeader>
+                         <div className="mx-auto bg-primary/10 text-primary p-4 rounded-full w-fit">
+                            <Star className="h-12 w-12" />
+                         </div>
+                         <CardTitle className="mt-4 text-2xl font-headline">PRO-функция</CardTitle>
+                         <CardDescription>AI-Аналитик матчей доступен только для PRO-пользователей.</CardDescription>
+                     </CardHeader>
+                     <CardContent>
+                         <p className="text-muted-foreground mb-6">
+                            Получите статус Тренера или Менеджера, чтобы разблокировать доступ к продвинутым инструментам аналитики и вывести свою команду на новый уровень.
+                         </p>
+                         <Button asChild>
+                             <Link href="/store">Перейти в магазин</Link>
+                         </Button>
+                     </CardContent>
+                 </Card>
+            </div>
+        )
+    }
 
     return (
         <div className="p-4 md:p-6 lg:p-8">
