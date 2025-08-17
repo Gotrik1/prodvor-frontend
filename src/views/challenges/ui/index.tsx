@@ -35,10 +35,10 @@ const ChallengeCard = ({ challenge, type }: { challenge: TeamChallenge, type: 'i
                 <div className="flex items-center gap-2">
                     {type === 'incoming' ? (
                         <>
-                            <Button size="sm" variant="secondary">
+                            <Button size="sm" variant="secondary" className="bg-green-500/10 hover:bg-green-500/20 text-green-300 border-green-500/20">
                                 <Check className="mr-2 h-4 w-4" /> Принять
                             </Button>
-                            <Button size="sm" variant="destructive">
+                            <Button size="sm" variant="destructive" className="bg-red-500/10 hover:bg-red-500/20 text-red-300 border-red-500/20">
                                 <X className="mr-2 h-4 w-4" /> Отклонить
                             </Button>
                         </>
@@ -201,28 +201,26 @@ export function ChallengesPage() {
 
             <Separator />
             
-            <div>
-                 <h2 className="text-2xl font-bold mb-4">Быстрые турниры</h2>
-                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                    <section>
-                        <div className="space-y-4">
-                            <QuickTournamentCard />
-                            <QuickTournamentCard />
-                        </div>
-                    </section>
-                     <section>
-                        <h3 className="text-xl font-semibold mb-4">Входящие вызовы ({incomingChallenges.length})</h3>
-                        <div className="space-y-4">
-                            {incomingChallenges.length > 0 ? (
-                                incomingChallenges.map(challenge => (
-                                    <ChallengeCard key={challenge.id} challenge={challenge} type="incoming" />
-                                ))
-                            ) : (
-                                <p className="text-muted-foreground">У вас нет активных вызовов.</p>
-                            )}
-                        </div>
-                    </section>
-                </div>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <section>
+                    <h3 className="text-xl font-semibold mb-4">Входящие вызовы ({incomingChallenges.length})</h3>
+                    <div className="space-y-4">
+                        {incomingChallenges.length > 0 ? (
+                            incomingChallenges.map(challenge => (
+                                <ChallengeCard key={challenge.id} challenge={challenge} type="incoming" />
+                            ))
+                        ) : (
+                            <p className="text-muted-foreground">У вас нет активных вызовов.</p>
+                        )}
+                    </div>
+                </section>
+                <section>
+                    <h3 className="text-xl font-semibold mb-4">Быстрые турниры</h3>
+                    <div className="space-y-4">
+                        <QuickTournamentCard />
+                        <QuickTournamentCard />
+                    </div>
+                </section>
             </div>
         </div>
     );
