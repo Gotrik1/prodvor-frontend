@@ -65,10 +65,10 @@ const FriendRequests = () => {
                         </div>
                     </Link>
                      <div className="flex items-center gap-2">
-                        <Button size="sm" variant="outline" className="bg-green-500/10 hover:bg-green-500/20 text-green-300 border-green-500/20" onClick={() => handleRequest(user.id)}>
+                        <Button size="icon" variant="outline" className="h-8 w-8 bg-green-500/10 hover:bg-green-500/20 text-green-300 border-green-500/20" onClick={() => handleRequest(user.id)}>
                             <Check className="h-4 w-4" />
                         </Button>
-                        <Button size="sm" variant="outline" className="bg-red-500/10 hover:bg-red-500/20 text-red-300 border-red-500/20" onClick={() => handleRequest(user.id)}>
+                        <Button size="icon" variant="outline" className="h-8 w-8 bg-red-500/10 hover:bg-red-500/20 text-red-300 border-red-500/20" onClick={() => handleRequest(user.id)}>
                             <X className="h-4 w-4" />
                         </Button>
                     </div>
@@ -122,3 +122,5 @@ export function SocialTab({ user, isOwnProfile }: { user: User, isOwnProfile: bo
         </Card>
     );
 }
+
+    
