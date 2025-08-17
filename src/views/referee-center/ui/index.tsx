@@ -3,51 +3,27 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
 import { Button } from "@/shared/ui/button";
-import { BookOpen, ShieldCheck, FileText, ArrowRight, Video, GraduationCap, Star, BarChart, Calendar, Gavel, Archive } from "lucide-react";
+import { BookOpen, ShieldCheck, FileText, ArrowRight, Video, GraduationCap, Star, BarChart, Calendar, Gavel, Archive, Search } from "lucide-react";
 import Link from "next/link";
 import { Progress } from "@/shared/ui/progress";
-import React from "react";
+import React, { useState } from "react";
 import { Badge } from "@/shared/ui/badge";
-
-const mockCourses = [
-    {
-        id: 'course-1',
-        title: 'VAR для дворового футбола: Продвинутый уровень',
-        description: 'Изучите основы работы с видеоповторами в спорных ситуациях. Курс включает симуляции и практические задания.',
-        type: 'Видеокурс',
-        discipline: 'Футбол',
-        icon: Video,
-        progress: 75,
-    },
-    {
-        id: 'course-2',
-        title: 'Психология в судействе: Управление конфликтами',
-        description: 'Научитесь управлять эмоциями игроков и разрешать конфликтные ситуации на поле.',
-        type: 'Лекция',
-        discipline: 'Общее',
-        icon: GraduationCap,
-        progress: 100,
-    },
-    {
-        id: 'course-3',
-        title: 'Правила стритбола 3х3: Разбор сложных моментов',
-        description: 'Детальный анализ правил FIBA 3x3 с примерами из реальных игр.',
-        type: 'Видеокурс',
-        discipline: 'Баскетбол',
-        icon: Video,
-        progress: 20,
-    }
-];
-
-const mockCases = [
-    { id: 'case-1', title: 'Спорный гол на последних секундах', discipline: 'Футбол', tags: ['VAR', 'Правило последнего касания'] },
-    { id: 'case-2', title: 'Определение неспортивного поведения', discipline: 'Баскетбол', tags: ['Неспортивный фол', 'Дисквалификация'] },
-    { id: 'case-3', title: 'Двойное касание в волейболе', discipline: 'Волейбол', tags: ['Техническая ошибка'] },
-];
+import { mockCourses, mockCases, knowledgeBaseData } from '../lib/mock-data';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/shared/ui/accordion";
+import { Input } from "@/shared/ui/input";
 
 
 export function RefereeCenterPage() {
     const recommendedCourse = mockCourses[0];
+    const [searchTerm, setSearchTerm] = useState('');
+
+    const filteredKnowledgeBase = knowledgeBaseData.map(sport => ({
+        ...sport,
+        documents: sport.documents.filter(doc => 
+            doc.title.toLowerCase().includes(searchTerm.toLowerCase())
+        )
+    })).filter(sport => sport.documents.length > 0);
+
 
     return (
         <div className="p-4 md:p-6 lg:p-8 space-y-8">
@@ -99,6 +75,49 @@ export function RefereeCenterPage() {
                                    </CardContent>
                                </Card>
                            ))}
+                        </CardContent>
+                    </Card>
+
+                    <Card>
+                        <CardHeader>
+                            <div className="flex items-center justify-between">
+                                <CardTitle className="flex items-center gap-2">
+                                    <Gavel className="h-6 w-6 text-primary" />
+                                    База знаний
+                                </CardTitle>
+                            </div>
+                            <CardDescription>Всегда актуальные версии правил и регламентов по ключевым видам спорта.</CardDescription>
+                             <div className="relative mt-4">
+                                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                                <Input 
+                                    placeholder="Поиск по документам..." 
+                                    className="pl-9"
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                />
+                            </div>
+                        </CardHeader>
+                        <CardContent>
+                            <Accordion type="single" collapsible className="w-full" defaultValue="football">
+                                {filteredKnowledgeBase.map(sport => (
+                                    <AccordionItem value={sport.id} key={sport.id}>
+                                        <AccordionTrigger className="text-lg font-semibold">{sport.name}</AccordionTrigger>
+                                        <AccordionContent>
+                                            <div className="space-y-2 pl-2">
+                                                {sport.documents.map(doc => (
+                                                    <Link href="#" key={doc.id} className="flex items-center gap-3 p-2 rounded-md hover:bg-muted/50 group">
+                                                        <doc.icon className="h-5 w-5 text-muted-foreground group-hover:text-primary transition-colors"/>
+                                                        <span className="font-medium group-hover:text-primary transition-colors">{doc.title}</span>
+                                                    </Link>
+                                                ))}
+                                            </div>
+                                        </AccordionContent>
+                                    </AccordionItem>
+                                ))}
+                            </Accordion>
+                            {filteredKnowledgeBase.length === 0 && (
+                                <p className="text-center text-muted-foreground py-4">По вашему запросу ничего не найдено.</p>
+                            )}
                         </CardContent>
                     </Card>
 
