@@ -1,7 +1,7 @@
 
 'use client';
 
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/shared/ui/card";
 import { Button } from '@/shared/ui/button';
 import { Gem, Palette, ShoppingCart, Sparkles, Wand2 } from "lucide-react";
 import Image from 'next/image';
