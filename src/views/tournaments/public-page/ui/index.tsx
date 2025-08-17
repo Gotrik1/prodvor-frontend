@@ -73,6 +73,8 @@ export function TournamentPublicPage({ tournament: initialTournament }: { tourna
             const savedBanner = localStorage.getItem(storageKey);
             if (savedBanner) {
                 setTournament(prev => prev ? { ...prev, bannerUrl: savedBanner } : undefined);
+            } else {
+                setTournament(initialTournament);
             }
         }
     }, [initialTournament]);
