@@ -2,7 +2,7 @@
 'use client';
 
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarProvider, SidebarInset } from "@/shared/ui/sidebar";
-import { BarChart, DollarSign, Home, Eye, Info, Shield, BookOpen } from "lucide-react";
+import { BarChart, DollarSign, Home, Eye, Info } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { DashboardHeader } from "@/widgets/dashboard-header";
@@ -63,14 +63,6 @@ export function AdminLayout({
                                 <SidebarMenuButton isActive={pathname.startsWith('/admin/roles')}>
                                     <Info />
                                     <span>Роли</span>
-                                </SidebarMenuButton>
-                            </Link>
-                        </SidebarMenuItem>
-                         <SidebarMenuItem>
-                            <Link href="/admin/docs">
-                                <SidebarMenuButton isActive={pathname.startsWith('/admin/docs')}>
-                                    <BookOpen />
-                                    <span>Документация</span>
                                 </SidebarMenuButton>
                             </Link>
                         </SidebarMenuItem>
