@@ -1,6 +1,5 @@
-import { allSports, individualSports, teamSports } from './sports';
-import { sponsors } from './personnel';
-import { teams } from './teams'; // Import teams to link disciplines
+import { allSports, individualSports, teamSports, Sport } from './sports';
+import { Sponsor } from './personnel';
 
 export type UserRole = 'Игрок' | 'Капитан' | 'Тренер' | 'Организатор' | 'Судья' | 'Менеджер' | 'Болельщик' | 'Модератор' | 'Администратор';
 export type UserGender = 'мужской' | 'женский';
@@ -50,22 +49,22 @@ const baseUsers: Omit<User, 'disciplines' | 'friends' | 'followers' | 'following
 const additionalPlayersCount = 150 - baseUsers.length;
 for (let i = 0; i < additionalPlayersCount; i++) {
   const id = 100 + i;
-  const gender: UserGender = Math.random() > 0.5 ? 'мужской' : 'женский';
+  const gender: UserGender = (id % 2 === 0) ? 'мужской' : 'женский';
   const firstNames = gender === 'мужской' ? ['Иван', 'Петр', 'Сидор', 'Алексей', 'Дмитрий'] : ['Анна', 'Мария', 'Елена', 'Ольга', 'Светлана'];
   const lastNames = ['Смирнов', 'Иванов', 'Кузнецов', 'Попов', 'Васильев'];
   const cities = ['Москва', 'Санкт-Петербург', 'Новосибирск', 'Екатеринбург', 'Казань', 'Нижний Новгород'];
   baseUsers.push({
     id: `user${id}`,
-    firstName: firstNames[Math.floor(Math.random() * firstNames.length)],
-    lastName: lastNames[Math.floor(Math.random() * lastNames.length)],
+    firstName: firstNames[id % firstNames.length],
+    lastName: lastNames[id % lastNames.length],
     nickname: `Player${id}`,
     avatarUrl: `https://i.pravatar.cc/150?u=user${id}`,
     email: `user${id}@example.com`,
     role: 'Игрок',
     gender,
-    age: Math.floor(Math.random() * 20) + 18,
-    city: cities[Math.floor(Math.random() * cities.length)],
-    phone: `+7 (999) ${Math.floor(100 + Math.random() * 900)}-${Math.floor(10 + Math.random() * 90)}-${Math.floor(10 + Math.random() * 90)}`,
+    age: 18 + (id % 20),
+    city: cities[id % cities.length],
+    phone: `+7 (999) ${100 + (id % 900)}-${10 + (id % 90)}-${10 + (id % 90)}`,
   });
 }
 
@@ -80,89 +79,62 @@ export const users: User[] = baseUsers.map(u => ({
   sponsorIds: [],
 }));
 
-// --- Helper function to populate social graph ---
-function populateSocialGraph() {
-    const userIds = users.map(u => u.id);
-
-    // Predictable random subset function
-    const getRandomSubset = (arr: string[], currentUser: string, maxSize: number, seed: string) => {
-        const otherItems = arr.filter(id => id !== currentUser);
-        // Simple predictable sort based on ID and seed
-        otherItems.sort((a, b) => (a + seed).localeCompare(b + seed));
-        return otherItems.slice(0, (currentUser.charCodeAt(2) % (maxSize + 1))); // Predictable size
-    };
-
-    users.forEach(currentUser => {
-        // Users the current user follows
-        currentUser.followingUsers = getRandomSubset(userIds, currentUser.id, 10, 'following');
-    });
-
-    // Calculate followers based on who is following whom
-    users.forEach(currentUser => {
-        users.forEach(otherUser => {
-            if (otherUser.followingUsers.includes(currentUser.id)) {
-                if (!currentUser.followers.includes(otherUser.id)) {
-                    currentUser.followers.push(otherUser.id);
-                }
-            }
-        });
-        
-        // Populate friends symmetrically and predictably
-        const potentialFriends = getRandomSubset(userIds, currentUser.id, 5, 'friends');
-        potentialFriends.forEach(friendId => {
-            const friend = users.find(u => u.id === friendId);
-            if (friend && !currentUser.friends.includes(friendId) && !friend.friends.includes(currentUser.id)) {
-                currentUser.friends.push(friendId);
-                friend.friends.push(currentUser.id);
-            }
-        });
-    });
-}
-
-
-// Helper function to assign disciplines based on roles and teams
-function assignDisciplines() {
+// This function will be called from index.ts after all base data is loaded.
+export function initializeSocialGraphAndSponsors(allUsers: User[], allSponsors: Sponsor[]) {
+    // --- Initial discipline assignment ---
     const individualSportIds = individualSports.map(s => s.id);
+    const teamSportIds = teamSports.map(s => s.id);
 
-    users.forEach(user => {
+    allUsers.forEach((user, index) => {
         const userDisciplines = new Set<string>();
-        
-        // 1. Add disciplines from the teams the user is a member of
-        const userTeams = teams.filter(t => t.members.includes(user.id));
-        userTeams.forEach(team => {
-            userDisciplines.add(team.sportId);
-        });
-
-        // 2. Add additional disciplines based on role
-        if (user.role !== 'Игрок') {
-            // For non-players, add 1-2 random disciplines (can be team or individual)
-            const seed = user.id.charCodeAt(user.id.length - 1);
-            if (allSports.length > 0) {
-                userDisciplines.add(allSports[seed % allSports.length].id);
-            }
-        } else {
-            // For players, add one random individual sport with a ~30% chance for variety
-             const seed = user.id.charCodeAt(user.id.length - 1);
-             if (seed % 3 === 0 && individualSportIds.length > 0) {
-                 userDisciplines.add(individualSportIds[seed % individualSportIds.length]);
-             }
+        // Assign 1-2 initial disciplines predictably
+        if (teamSportIds.length > 0) {
+            userDisciplines.add(teamSportIds[index % teamSportIds.length]);
         }
-        
+        if (index % 3 === 0 && individualSportIds.length > 0) { // ~33% chance for a second, individual sport
+             userDisciplines.add(individualSportIds[index % individualSportIds.length]);
+        }
         user.disciplines = Array.from(userDisciplines);
     });
-}
 
-function assignSponsors() {
-    users.forEach((user, index) => {
-        // ~20% chance to have a sponsor
-        if (index % 5 === 0 && sponsors.length > 0) {
-            user.sponsorIds = [sponsors[index % sponsors.length].id];
+    // --- Social Graph ---
+    const userIds = allUsers.map(u => u.id);
+    allUsers.forEach((currentUser, index) => {
+        // Friends (symmetric relationship)
+        const friendCount = (index % 4) + 1; // 1 to 4 friends
+        for (let i = 0; i < friendCount; i++) {
+            const friendIndex = (index * 3 + i * 7) % userIds.length;
+            const friendId = userIds[friendIndex];
+            if (friendId !== currentUser.id && !currentUser.friends.includes(friendId)) {
+                currentUser.friends.push(friendId);
+                const friend = allUsers.find(u => u.id === friendId);
+                if (friend && !friend.friends.includes(currentUser.id)) {
+                    friend.friends.push(currentUser.id);
+                }
+            }
+        }
+    });
+
+    allUsers.forEach((currentUser, index) => {
+        // Following (asymmetric relationship)
+        const followingCount = (index % 6) + 2; // 2 to 7 follows
+        for (let i = 0; i < followingCount; i++) {
+             const userToFollowIndex = (index * 5 + i * 3) % userIds.length;
+             const userToFollowId = userIds[userToFollowIndex];
+             if (userToFollowId !== currentUser.id && !currentUser.followingUsers.includes(userToFollowId)) {
+                 currentUser.followingUsers.push(userToFollowId);
+                 const followedUser = allUsers.find(u => u.id === userToFollowId);
+                 if (followedUser && !followedUser.followers.includes(currentUser.id)) {
+                     followedUser.followers.push(currentUser.id);
+                 }
+             }
+        }
+    });
+    
+    // --- Sponsors ---
+    allUsers.forEach((user, index) => {
+        if (index % 5 === 0 && allSponsors.length > 0) { // ~20% chance
+            user.sponsorIds = [allSponsors[index % allSponsors.length].id];
         }
     });
 }
-
-
-// Run the functions to populate the data in order
-assignDisciplines();
-populateSocialGraph();
-assignSponsors();
