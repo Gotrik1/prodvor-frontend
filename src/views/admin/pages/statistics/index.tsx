@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import { users, teams, sponsors, playgrounds, allSports, Team } from '@/mocks';
@@ -25,6 +24,20 @@ const statusColors: Record<string, string> = {
     'РЕГИСТРАЦИЯ': 'bg-blue-500/20 text-blue-300 border-blue-500/30',
     'ИДЕТ': 'bg-green-500/20 text-green-300 border-green-500/30',
     'ЗАВЕРШЕН': 'bg-muted text-muted-foreground border-border',
+};
+
+// Centralized function to get all disciplines for a user
+const getUserDisciplines = (user: User): string[] => {
+    const personalDisciplines = user.disciplines
+        .map(id => allSports.find(s => s.id === id)?.name)
+        .filter((name): name is string => !!name);
+    
+    const teamDisciplines = teams
+        .filter(team => team.members.includes(user.id))
+        .map(team => team.game);
+        
+    const allDisciplinesSet = new Set([...personalDisciplines, ...teamDisciplines]);
+    return Array.from(allDisciplinesSet);
 };
 
 
@@ -58,13 +71,6 @@ export function AdminStatisticsPage() {
 
     const getTeamForUser = (userId: string): Team[] => {
        return userTeamsMap.get(userId) || [];
-    };
-    
-    const getUserDisciplines = (user: User): string[] => {
-        const personalDisciplines = user.disciplines.map(id => allSports.find(s => s.id === id)?.name).filter((name): name is string => !!name);
-        const teamDisciplines = getTeamForUser(user.id).map(team => team.game);
-        const allDisciplinesSet = new Set([...personalDisciplines, ...teamDisciplines]);
-        return Array.from(allDisciplinesSet);
     };
 
     const copyToClipboard = (text: string, entity: string) => {

@@ -1,13 +1,12 @@
 
-
 'use client';
 
-import { users, teams, playgrounds, posts } from "@/mocks";
+import { users, teams, playgrounds, posts, allSports } from "@/mocks";
 import type { User } from "@/mocks/users";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { Badge } from "@/shared/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
-import { Briefcase, Dumbbell, Film, History, Mail, MapPin, MessageSquare, Phone, Rss, UserPlus, Users as UsersIcon } from "lucide-react";
+import { Briefcase, Dumbbell, Film, History, Mail, MapPin, MessageSquare, Phone, Rss, UserPlus, Users as UsersIcon, Gamepad2 } from "lucide-react";
 import Image from 'next/image';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 import { Button } from "@/shared/ui/button";
@@ -16,36 +15,6 @@ import { useUserStore } from "@/widgets/dashboard-header/model/user-store";
 import { CreatePost } from "@/widgets/dashboard-feed/ui/create-post";
 
 const defaultPlayer = users.find(u => u.role === 'Игрок')!;
-const playerTeam = teams.find(t => t.members.includes(defaultPlayer.id));
-
-// Create a diverse list of followers with different roles
-const mockFollowers = [
-    users.find(u => u.nickname === 'Valkyrie')!, // Игрок
-    users.find(u => u.nickname === 'Destroyer')!, // Игрок
-    users.find(u => u.nickname === 'Hawk')!, // Игрок
-    users.find(u => u.nickname === 'Tiger')!, // Игрок
-    users.find(u => u.role === 'Болельщик')!, // Болельщик
-    users.find(u => u.role === 'Судья')!, // Судья
-    users.find(u => u.role === 'Тренер')!, // Тренер
-    users.find(u => u.role === 'Организатор')!, // Организатор
-    users.find(u => u.role === 'Менеджер')!, // Менеджер
-    users.find(u => u.nickname === 'Bunny')!, // Игрок
-    users.find(u => u.nickname === 'Frost')!, // Игрок
-    users.find(u => u.nickname === 'Comet')!, // Игрок
-].filter(Boolean); // Filter out potential undefined values if a user isn't found
-
-const mockFollowing = {
-    users: [
-        users.find(u => u.nickname === 'Valkyrie')!,
-        users.find(u => u.role === 'Тренер')!,
-    ].filter(Boolean),
-    teams: [
-        teams.find(t => t.id === 'team2')!,
-        teams.find(t => t.id === 'team3')!,
-        teams.find(t => t.id === 'team4')!,
-    ].filter(Boolean),
-};
-
 
 const careerStats = {
     '2025': { matches: 52, wins: 38, goals: 41, assists: 15, mvp: 12 },
@@ -60,8 +29,35 @@ const StatRow = ({ label, value }: { label: string, value: string | number }) =>
     </div>
 );
 
-const OverviewTab = ({ player }: { player: User }) => (
+const getUserDisciplines = (user: User): string[] => {
+    const personalDisciplines = user.disciplines
+        .map(id => allSports.find(s => s.id === id)?.name)
+        .filter((name): name is string => !!name);
+    
+    const teamDisciplines = teams
+        .filter(team => team.members.includes(user.id))
+        .map(team => team.game);
+        
+    const allDisciplinesSet = new Set([...personalDisciplines, ...teamDisciplines]);
+    return Array.from(allDisciplinesSet);
+};
+
+const OverviewTab = ({ player, playerDisciplines }: { player: User, playerDisciplines: string[] }) => (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <Card className="lg:col-span-2">
+             <CardHeader>
+                <CardTitle className="flex items-center gap-2"><Gamepad2 />Дисциплины</CardTitle>
+            </CardHeader>
+            <CardContent>
+                <div className="flex flex-wrap gap-2">
+                    {playerDisciplines.length > 0 ? (
+                        playerDisciplines.map(d => <Badge key={d}>{d}</Badge>)
+                    ) : (
+                        <p className="text-sm text-muted-foreground">Дисциплины не указаны.</p>
+                    )}
+                </div>
+            </CardContent>
+        </Card>
         <Card className="lg:col-span-2">
             <CardHeader><CardTitle>Ключевые показатели</CardTitle></CardHeader>
             <CardContent className="grid grid-cols-2 gap-4">
@@ -80,10 +76,10 @@ const OverviewTab = ({ player }: { player: User }) => (
                 <Badge variant="destructive">Горячая голова</Badge>
             </CardContent>
         </Card>
-        <Card className="lg:col-span-4">
+        <Card className="lg:col-span-2">
             <CardHeader><CardTitle>Любимые площадки</CardTitle></CardHeader>
-            <CardContent className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                {playgrounds.slice(0, 3).map(p => (
+            <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {playgrounds.slice(0, 2).map(p => (
                     <div key={p.id} className="flex items-center gap-3 p-3 rounded-md border bg-muted/50">
                         <Dumbbell className="h-5 w-5 text-primary" />
                         <div>
@@ -158,14 +154,14 @@ const MediaTab = () => (
     </Card>
 );
 
-const FollowersCard = () => (
+const FollowersCard = ({ user }: { user: User }) => (
     <Card>
         <CardHeader>
-            <CardTitle>Подписчики ({mockFollowers.length})</CardTitle>
+            <CardTitle>Подписчики ({user.followers.length})</CardTitle>
         </CardHeader>
         <CardContent>
             <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-4 gap-3">
-                {mockFollowers.map(follower => (
+                {users.filter(u => user.followers.includes(u.id)).slice(0, 12).map(follower => (
                     <Link href={`/users/${follower.id}`} key={follower.id}>
                         <Avatar className="h-12 w-12 border-2 border-transparent hover:border-primary transition-colors">
                             <AvatarImage src={follower.avatarUrl} alt={follower.nickname} />
@@ -178,22 +174,22 @@ const FollowersCard = () => (
     </Card>
 );
 
-const FollowingCard = () => (
+const FollowingCard = ({ user }: { user: User }) => (
     <Card>
         <CardHeader>
-             <CardTitle>Подписки ({mockFollowing.users.length + mockFollowing.teams.length})</CardTitle>
+             <CardTitle>Подписки ({user.followingUsers.length + user.followingTeams.length})</CardTitle>
         </CardHeader>
          <CardContent>
             <div className="flex flex-wrap gap-3">
-                {mockFollowing.users.map(user => (
-                    <Link href={`/users/${user.id}`} key={user.id}>
+                {users.filter(u => user.followingUsers.includes(u.id)).map(followedUser => (
+                    <Link href={`/users/${followedUser.id}`} key={followedUser.id}>
                         <Avatar className="h-12 w-12 border-2 border-transparent hover:border-primary transition-colors">
-                            <AvatarImage src={user.avatarUrl} alt={user.nickname} />
-                            <AvatarFallback>{user.nickname.charAt(0)}</AvatarFallback>
+                            <AvatarImage src={followedUser.avatarUrl} alt={followedUser.nickname} />
+                            <AvatarFallback>{followedUser.nickname.charAt(0)}</AvatarFallback>
                         </Avatar>
                     </Link>
                 ))}
-                 {mockFollowing.teams.map(team => (
+                 {teams.filter(t => user.followingTeams.includes(t.id)).map(team => (
                     <Link href={`/teams/${team.id}`} key={team.id}>
                          <Avatar className="h-12 w-12 border-2 border-transparent hover:border-primary transition-colors rounded-md">
                             <AvatarImage src={team.logoUrl} alt={team.name} className="p-1" />
@@ -210,6 +206,8 @@ const FollowingCard = () => (
 export function PlayerPageTemplate({ user: profileUser }: { user?: User }) {
     const player = profileUser || defaultPlayer;
     const { user: currentUser } = useUserStore();
+    const playerDisciplines = getUserDisciplines(player);
+    const playerTeam = teams.find(t => t.members.includes(player.id));
 
     const isOwnProfile = currentUser?.id === player.id;
 
@@ -254,15 +252,15 @@ export function PlayerPageTemplate({ user: profileUser }: { user?: User }) {
                             <TabsTrigger value="feed">Лента</TabsTrigger>
                             <TabsTrigger value="media">Медиа</TabsTrigger>
                         </TabsList>
-                        <TabsContent value="overview" className="mt-6"><OverviewTab player={player} /></TabsContent>
+                        <TabsContent value="overview" className="mt-6"><OverviewTab player={player} playerDisciplines={playerDisciplines} /></TabsContent>
                         <TabsContent value="stats" className="mt-6"><StatsTab /></TabsContent>
                         <TabsContent value="feed" className="mt-6"><FeedTab player={player} isOwnProfile={isOwnProfile} /></TabsContent>
                         <TabsContent value="media" className="mt-6"><MediaTab /></TabsContent>
                     </Tabs>
                 </div>
                  <div className="lg:col-span-1 space-y-6">
-                    <FollowersCard />
-                    <FollowingCard />
+                    <FollowersCard user={player} />
+                    <FollowingCard user={player} />
                 </div>
             </div>
         </div>

@@ -1,15 +1,14 @@
 
-
 'use client';
 
-import { teams, users } from "@/mocks";
+import { teams, users, allSports } from "@/mocks";
 import type { User } from "@/mocks/users";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { Badge } from "@/shared/ui/badge";
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/shared/ui/table";
-import { Calendar, CheckCircle, Gavel, Shield, Star, XCircle } from "lucide-react";
+import { Calendar, CheckCircle, Gavel, Shield, Star, XCircle, Gamepad2 } from "lucide-react";
 
 const defaultReferee = users.find(s => s.role === 'Судья')!;
 const mockMatches = [
@@ -18,8 +17,22 @@ const mockMatches = [
     { id: 'match3', team1: teams[4], team2: teams[5], result: '-', tournament: 'Летний Кубок ProDvor', date: 'Завтра, 19:00', status: 'Предстоит' },
 ];
 
+const getUserDisciplines = (user: User): string[] => {
+    const personalDisciplines = user.disciplines
+        .map(id => allSports.find(s => s.id === id)?.name)
+        .filter((name): name is string => !!name);
+    
+    const teamDisciplines = teams
+        .filter(team => team.members.includes(user.id))
+        .map(team => team.game);
+        
+    const allDisciplinesSet = new Set([...personalDisciplines, ...teamDisciplines]);
+    return Array.from(allDisciplinesSet);
+};
+
 export function RefereePageTemplate({ user }: { user?: User }) {
     const referee = user || defaultReferee;
+    const refereeDisciplines = getUserDisciplines(referee);
     
     return (
         <div className="border rounded-lg p-4 md:p-6 space-y-6 bg-muted/20">
@@ -39,6 +52,20 @@ export function RefereePageTemplate({ user }: { user?: User }) {
             </header>
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                 <Card className="md:col-span-2 lg:col-span-4">
+                    <CardHeader>
+                        <CardTitle className="flex items-center gap-2"><Gamepad2 />Дисциплины</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <div className="flex flex-wrap gap-2">
+                           {refereeDisciplines.length > 0 ? (
+                                refereeDisciplines.map(d => <Badge key={d}>{d}</Badge>)
+                           ) : (
+                                <p className="text-sm text-muted-foreground">Дисциплины не указаны.</p>
+                           )}
+                        </div>
+                    </CardContent>
+                </Card>
                 <Card>
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                         <CardTitle className="text-sm font-medium">Матчей отсужено</CardTitle>

@@ -1,15 +1,14 @@
 
-
 'use client';
 
-import { teams, users } from "@/mocks";
+import { teams, users, allSports } from "@/mocks";
 import type { User } from "@/mocks/users";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { Badge } from "@/shared/ui/badge";
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/shared/ui/table";
-import { BarChart, Briefcase, DollarSign, ExternalLink, Trophy, Users } from "lucide-react";
+import { BarChart, Briefcase, DollarSign, ExternalLink, Trophy, Users, Gamepad2 } from "lucide-react";
 import Link from "next/link";
 import Image from 'next/image';
 
@@ -17,8 +16,22 @@ const defaultManager = users.find(u => u.role === 'Менеджер')!;
 
 const managedTeams = teams.slice(0, 3);
 
+const getUserDisciplines = (user: User): string[] => {
+    const personalDisciplines = user.disciplines
+        .map(id => allSports.find(s => s.id === id)?.name)
+        .filter((name): name is string => !!name);
+    
+    const teamDisciplines = teams
+        .filter(team => team.members.includes(user.id))
+        .map(team => team.game);
+        
+    const allDisciplinesSet = new Set([...personalDisciplines, ...teamDisciplines]);
+    return Array.from(allDisciplinesSet);
+};
+
 export function ManagerPageTemplate({ user }: { user?: User }) {
     const manager = user || defaultManager;
+    const managerDisciplines = getUserDisciplines(manager);
 
     return (
         <div className="border rounded-lg p-4 md:p-6 space-y-6 bg-muted/20">
@@ -37,6 +50,20 @@ export function ManagerPageTemplate({ user }: { user?: User }) {
             </header>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                 <Card className="md:col-span-2 lg:col-span-4">
+                    <CardHeader>
+                        <CardTitle className="flex items-center gap-2"><Gamepad2 />Дисциплины</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <div className="flex flex-wrap gap-2">
+                           {managerDisciplines.length > 0 ? (
+                                managerDisciplines.map(d => <Badge key={d}>{d}</Badge>)
+                           ) : (
+                                <p className="text-sm text-muted-foreground">Дисциплины не указаны.</p>
+                           )}
+                        </div>
+                    </CardContent>
+                </Card>
                 <Card>
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                         <CardTitle className="text-sm font-medium">Команд под управлением</CardTitle>
