@@ -17,7 +17,7 @@ const mockCourses = [
         type: 'Видеокурс',
         discipline: 'Футбол',
         icon: Video,
-        progress: 75, // Added progress
+        progress: 75,
     },
     {
         id: 'course-2',
@@ -26,6 +26,7 @@ const mockCourses = [
         type: 'Лекция',
         discipline: 'Общее',
         icon: GraduationCap,
+        progress: 100,
     },
     {
         id: 'course-3',
@@ -34,6 +35,7 @@ const mockCourses = [
         type: 'Видеокурс',
         discipline: 'Баскетбол',
         icon: Video,
+        progress: 20,
     }
 ];
 
@@ -102,7 +104,18 @@ export function RefereeCenterPage() {
                                                 </CardHeader>
                                                 <CardContent>
                                                     <p className="text-sm text-muted-foreground mb-4">{course.description}</p>
-                                                    <Button variant="secondary">Подробнее</Button>
+                                                    {course.progress !== undefined && (
+                                                         <div className="space-y-2 mb-4">
+                                                            <div className="flex justify-between items-center text-sm mb-1">
+                                                                <span className="font-medium">Прогресс:</span>
+                                                                <span className="font-bold text-primary">{course.progress}%</span>
+                                                            </div>
+                                                            <Progress value={course.progress} />
+                                                        </div>
+                                                    )}
+                                                    <Button variant="secondary">
+                                                        {course.progress === 100 ? 'Повторить' : course.progress && course.progress > 0 ? 'Продолжить' : 'Начать'}
+                                                    </Button>
                                                 </CardContent>
                                             </Card>
                                         ))}
