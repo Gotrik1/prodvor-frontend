@@ -203,7 +203,9 @@ export function PlaygroundsPage() {
                                 <Table>
                                     <TableHeader>
                                         <TableRow>
+                                            <TableHead>ID</TableHead>
                                             <TableHead>Название</TableHead>
+                                            <TableHead>Адрес</TableHead>
                                             <TableHead>Тип</TableHead>
                                             <TableHead>Покрытие</TableHead>
                                             <TableHead>Виды спорта</TableHead>
@@ -212,11 +214,13 @@ export function PlaygroundsPage() {
                                     <TableBody>
                                         {mockPlaygrounds.map((p) => (
                                             <TableRow key={p.id}>
+                                                <TableCell className="font-mono text-xs">{p.id}</TableCell>
                                                 <TableCell className="font-medium">
                                                     <Link href={`/playgrounds/${p.id}`} className="hover:text-primary transition-colors">
                                                         {p.name}
                                                     </Link>
                                                 </TableCell>
+                                                <TableCell>{p.address}</TableCell>
                                                 <TableCell><Badge variant="outline">{p.type}</Badge></TableCell>
                                                 <TableCell>{p.surface}</TableCell>
                                                 <TableCell className="text-xs">
