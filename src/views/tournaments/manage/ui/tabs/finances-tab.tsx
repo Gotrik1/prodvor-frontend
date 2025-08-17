@@ -7,7 +7,7 @@ import { Badge } from "@/shared/ui/badge";
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { Button } from "@/shared/ui/button";
-import { CheckCircle, AlertCircle, Edit, DollarSign } from "lucide-react";
+import { CheckCircle, AlertCircle, Edit } from "lucide-react";
 import React from 'react';
 import type { Team } from '@/views/tournaments/public-page/ui/mock-data';
 
@@ -16,6 +16,10 @@ const mockFinances = [
     { teamId: 'team2', fee: 2000, fine: 500, status: 'Частично' },
     { teamId: 'team3', fee: 2000, fine: 0, status: 'Не оплачено' },
     { teamId: 'team4', fee: 2000, fine: 1000, status: 'Оплачено' },
+    { teamId: 'team5', fee: 2000, fine: 0, status: 'Оплачено' },
+    { teamId: 'team6', fee: 2000, fine: 0, status: 'Не оплачено' },
+    { teamId: 'team7', fee: 2000, fine: 250, status: 'Частично' },
+    { teamId: 'team8', fee: 2000, fine: 0, status: 'Оплачено' },
 ];
 
 const getStatusVariant = (status: string): 'success' | 'secondary' | 'destructive' => {

@@ -4,7 +4,7 @@
 
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
-import { Users, Calendar, Megaphone, Settings, GanttChartIcon, Shield, Award, Film, Wand2, FileText, DollarSign, BarChartBig } from "lucide-react";
+import { Users, Calendar, Megaphone, Settings, GanttChartIcon, Shield, Award, Film, Wand2, FileText, DollarSign } from "lucide-react";
 import Link from "next/link";
 import { allTournaments, teams as allTeamsData, registeredTeams as initialRegisteredTeams } from '@/views/tournaments/public-page/ui/mock-data';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
@@ -22,7 +22,6 @@ import {
     AnnouncementsTab,
     SettingsTab,
     FinancesTab,
-    AnalyticsTab,
 } from './tabs';
 import { useProtocol } from "@/widgets/protocol-editor/lib/use-protocol";
 import { ScrollArea, ScrollBar } from "@/shared/ui/scroll-area";
@@ -33,7 +32,6 @@ const crmTabs = [
     { value: "participants", icon: Users, label: "Участники" },
     { value: "bracket", icon: GanttChartIcon, label: "Сетка и Протоколы" },
     { value: "schedule", icon: Calendar, label: "Расписание" },
-    { value: "analytics", icon: BarChartBig, label: "Аналитика" },
     { value: "media", icon: Film, label: "Медиа" },
     { value: "promo", icon: Wand2, label: "Промо" },
     { value: "staff", icon: Shield, label: "Персонал" },
@@ -186,9 +184,6 @@ export function TournamentManagementPage({ tournamentId }: { tournamentId: strin
                 </TabsContent>
                 <TabsContent value="schedule">
                     <ScheduleTab />
-                </TabsContent>
-                 <TabsContent value="analytics">
-                    <AnalyticsTab />
                 </TabsContent>
                 <TabsContent value="media">
                     <MediaTab mediaItems={mediaItems} onMediaAdd={handleAddMedia} />
