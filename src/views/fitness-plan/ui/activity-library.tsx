@@ -4,8 +4,11 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/shared/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs';
-import { Droppable, Draggable } from 'react-beautiful-dnd';
-import { Dumbbell, Users, HeartPulse, Sun } from 'lucide-react';
+import { Dumbbell, Users, HeartPulse, Sun, PlusCircle } from 'lucide-react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/shared/ui/dialog';
+import { Button } from '@/shared/ui/button';
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandList } from '@/shared/ui/command';
+
 
 export interface Activity {
     id: string;
@@ -43,86 +46,62 @@ export const mockOther: Activity[] = [
     { id: 'other-2', name: 'Специальные программы', type: 'other' },
 ];
 
-const ActivityItem = ({ activity, index }: { activity: Activity; index: number }) => (
-    <Draggable draggableId={activity.id} index={index}>
-        {(provided) => (
+const ActivityList = ({ activities, onSelect }: { activities: Activity[], onSelect: (activity: Activity) => void }) => (
+    <div className="space-y-2">
+        {activities.map(activity => (
             <div
-                ref={provided.innerRef}
-                {...provided.draggableProps}
-                {...provided.dragHandleProps}
-                className="p-3 mb-2 rounded-md border bg-card text-card-foreground shadow-sm hover:bg-accent hover:text-accent-foreground cursor-grab"
+                key={activity.id}
+                onClick={() => onSelect(activity)}
+                className="flex items-center justify-between p-2 rounded-md cursor-pointer hover:bg-muted"
             >
-                <p className="font-semibold text-sm">{activity.name}</p>
+                <p className="font-medium text-sm">{activity.name}</p>
+                 <Button variant="ghost" size="icon" className="h-7 w-7">
+                    <PlusCircle className="h-4 w-4" />
+                </Button>
             </div>
-        )}
-    </Draggable>
-);
+        ))}
+    </div>
+)
 
-export function ActivityLibrary() {
+export function ActivityLibraryDialog({ onSelectActivity }: { onSelectActivity: (activity: Activity) => void }) {
+    const [open, setOpen] = React.useState(false);
+
+    const handleSelect = (activity: Activity) => {
+        onSelectActivity(activity);
+        setOpen(false);
+    };
+
     return (
-        <Card>
-            <CardHeader>
-                <CardTitle>Библиотека активностей</CardTitle>
-                <CardDescription>Перетащите элементы в календарь.</CardDescription>
-            </CardHeader>
-            <CardContent>
-                <Tabs defaultValue="templates">
-                    <TabsList className="grid w-full grid-cols-4">
-                        <TabsTrigger value="templates"><Dumbbell className="h-4 w-4" /></TabsTrigger>
-                        <TabsTrigger value="group"><Users className="h-4 w-4" /></TabsTrigger>
-                        <TabsTrigger value="recovery"><HeartPulse className="h-4 w-4" /></TabsTrigger>
-                        <TabsTrigger value="other"><Sun className="h-4 w-4" /></TabsTrigger>
-                    </TabsList>
-                    <TabsContent value="templates" className="mt-4">
-                        <Droppable droppableId="library-templates" isDropDisabled={true} isCombineEnabled={false}>
-                            {(provided) => (
-                                <div ref={provided.innerRef} {...provided.droppableProps}>
-                                    {mockTemplates.map((item, index) => (
-                                        <ActivityItem key={item.id} activity={item} index={index} />
-                                    ))}
-                                    {provided.placeholder}
-                                </div>
-                            )}
-                        </Droppable>
-                    </TabsContent>
-                    <TabsContent value="group" className="mt-4">
-                         <Droppable droppableId="library-group" isDropDisabled={true} isCombineEnabled={false}>
-                            {(provided) => (
-                                <div ref={provided.innerRef} {...provided.droppableProps}>
-                                    {mockGroupSessions.map((item, index) => (
-                                        <ActivityItem key={item.id} activity={item} index={index} />
-                                    ))}
-                                    {provided.placeholder}
-                                </div>
-                            )}
-                        </Droppable>
-                    </TabsContent>
-                    <TabsContent value="recovery" className="mt-4">
-                         <Droppable droppableId="library-recovery" isDropDisabled={true} isCombineEnabled={false}>
-                            {(provided) => (
-                                <div ref={provided.innerRef} {...provided.droppableProps}>
-                                    {mockRecovery.map((item, index) => (
-                                        <ActivityItem key={item.id} activity={item} index={index} />
-                                    ))}
-                                    {provided.placeholder}
-                                </div>
-                            )}
-                        </Droppable>
-                    </TabsContent>
-                    <TabsContent value="other" className="mt-4">
-                         <Droppable droppableId="library-other" isDropDisabled={true} isCombineEnabled={false}>
-                            {(provided) => (
-                                <div ref={provided.innerRef} {...provided.droppableProps}>
-                                    {mockOther.map((item, index) => (
-                                        <ActivityItem key={item.id} activity={item} index={index} />
-                                    ))}
-                                    {provided.placeholder}
-                                </div>
-                            )}
-                        </Droppable>
-                    </TabsContent>
-                </Tabs>
-            </CardContent>
-        </Card>
+        <Dialog open={open} onOpenChange={setOpen}>
+            <DialogTrigger asChild>
+                <Button variant="outline" className="w-full mt-2">
+                    <PlusCircle className="mr-2 h-4 w-4" />
+                    Добавить активность
+                </Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[625px]">
+                <DialogHeader>
+                    <DialogTitle>Библиотека активностей</DialogTitle>
+                </DialogHeader>
+                <Command className="rounded-lg border shadow-md">
+                    <CommandInput placeholder="Поиск активности..." />
+                    <CommandList className="max-h-[400px]">
+                        <CommandEmpty>Ничего не найдено.</CommandEmpty>
+                        <CommandGroup heading="Мои шаблоны">
+                             <ActivityList activities={mockTemplates} onSelect={handleSelect} />
+                        </CommandGroup>
+                        <CommandGroup heading="Групповые занятия">
+                            <ActivityList activities={mockGroupSessions} onSelect={handleSelect} />
+                        </CommandGroup>
+                        <CommandGroup heading="Восстановление">
+                            <ActivityList activities={mockRecovery} onSelect={handleSelect} />
+                        </CommandGroup>
+                        <CommandGroup heading="Прочее">
+                             <ActivityList activities={mockOther} onSelect={handleSelect} />
+                        </CommandGroup>
+                    </CommandList>
+                </Command>
+            </DialogContent>
+        </Dialog>
     );
 }

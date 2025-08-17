@@ -3,128 +3,108 @@
 
 import React, { useState } from 'react';
 import { Button } from '@/shared/ui/button';
-import { Dumbbell, Save } from 'lucide-react';
-import { DragDropContext } from 'react-beautiful-dnd';
-import type { DropResult } from 'react-beautiful-dnd';
-import { FitnessPlanCalendar, Day } from './fitness-plan-calendar';
-import { ActivityLibrary, Activity, mockTemplates, mockGroupSessions, mockRecovery, mockOther } from './activity-library';
+import { Dumbbell, Save, PlusCircle, Trash2 } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/shared/ui/card';
+import { Activity, mockTemplates, mockGroupSessions, mockRecovery, mockOther } from './activity-library';
+import { ActivityLibraryDialog } from './activity-library';
 
-const allActivitiesMap = [
-    ...mockTemplates,
-    ...mockGroupSessions,
-    ...mockRecovery,
-    ...mockOther,
-].reduce((acc, activity) => {
-    acc[activity.id] = activity;
-    return acc;
-}, {} as Record<string, Activity>);
-
+export interface PlanDay {
+  id: string;
+  name: string;
+  activities: Activity[];
+}
 
 export function FitnessPlanPage() {
-    const [weekSchedule, setWeekSchedule] = useState<Day[]>([
-        { id: 'day-1', name: 'Понедельник', activities: [] },
-        { id: 'day-2', name: 'Вторник', activities: [] },
-        { id: 'day-3', name: 'Среда', activities: [] },
-        { id: 'day-4', name: 'Четверг', activities: [] },
-        { id: 'day-5', name: 'Пятница', activities: [] },
-        { id: 'day-6', name: 'Суббота', activities: [] },
-        { id: 'day-7', name: 'Воскресенье', activities: [] },
+    const [planDays, setPlanDays] = useState<PlanDay[]>([
+        { id: 'day-1', name: 'День 1', activities: [] },
+        { id: 'day-2', name: 'День 2', activities: [] },
+        { id: 'day-3', name: 'День 3', activities: [] },
+        { id: 'day-4', name: 'День 4', activities: [] },
     ]);
-    
-    const [isClient, setIsClient] = React.useState(false);
-    React.useEffect(() => {
-        setIsClient(true);
-    }, []);
 
-    const onDragEnd = (result: DropResult) => {
-        const { source, destination } = result;
-
-        if (!destination) {
-            return;
-        }
-        
-        const sourceId = source.droppableId;
-        const destId = destination.droppableId;
-
-        const newWeekSchedule = [...weekSchedule];
-        const sourceDayIndex = newWeekSchedule.findIndex(day => day.id === sourceId);
-        const destDayIndex = newWeekSchedule.findIndex(day => day.id === destId);
-
-        // --- Перетаскивание из библиотеки в календарь ---
-        if (sourceId.startsWith('library-')) {
-            const sourceActivity = allActivitiesMap[result.draggableId];
-            if (sourceActivity && destDayIndex !== -1) {
-                const destDay = newWeekSchedule[destDayIndex];
-                const newActivity = {
-                    ...sourceActivity,
-                    id: `instance-${Date.now()}-${Math.random()}`, // Create a unique ID for the new instance
-                };
-                const newActivities = Array.from(destDay.activities);
-                newActivities.splice(destination.index, 0, newActivity);
-                newWeekSchedule[destDayIndex] = { ...destDay, activities: newActivities };
-                setWeekSchedule(newWeekSchedule);
-            }
-            return;
-        }
-
-        // --- Перетаскивание внутри календаря ---
-        if (sourceDayIndex !== -1 && destDayIndex !== -1) {
-            // Reordering within the same day
-            if (sourceId === destId) {
-                const day = newWeekSchedule[sourceDayIndex];
-                const reorderedActivities = Array.from(day.activities);
-                const [removed] = reorderedActivities.splice(source.index, 1);
-                reorderedActivities.splice(destination.index, 0, removed);
-                newWeekSchedule[sourceDayIndex] = { ...day, activities: reorderedActivities };
-            } 
-            // Moving from one day to another
-            else {
-                const sourceDay = newWeekSchedule[sourceDayIndex];
-                const destDay = newWeekSchedule[destDayIndex];
-                const sourceActivities = Array.from(sourceDay.activities);
-                const destActivities = Array.from(destDay.activities);
-                const [removed] = sourceActivities.splice(source.index, 1);
-                destActivities.splice(destination.index, 0, removed);
-                newWeekSchedule[sourceDayIndex] = { ...sourceDay, activities: sourceActivities };
-                newWeekSchedule[destDayIndex] = { ...destDay, activities: destActivities };
-            }
-            setWeekSchedule(newWeekSchedule);
-        }
+    const addActivityToDay = (dayId: string, activity: Activity) => {
+        setPlanDays(prevDays =>
+            prevDays.map(day => {
+                if (day.id === dayId) {
+                    // Create a new unique ID for the activity instance in the plan
+                    const newActivityInstance = { ...activity, id: `inst-${Date.now()}`};
+                    return { ...day, activities: [...day.activities, newActivityInstance] };
+                }
+                return day;
+            })
+        );
     };
 
+    const removeActivityFromDay = (dayId: string, activityId: string) => {
+         setPlanDays(prevDays =>
+            prevDays.map(day => {
+                if (day.id === dayId) {
+                    return { ...day, activities: day.activities.filter(a => a.id !== activityId) };
+                }
+                return day;
+            })
+        );
+    };
 
-    if (!isClient) {
-        return null; // or a loading skeleton
-    }
-    
+    const addDay = () => {
+        setPlanDays(prev => [
+            ...prev,
+            { id: `day-${prev.length + 1}`, name: `День ${prev.length + 1}`, activities: [] }
+        ]);
+    };
+
     return (
-        <DragDropContext onDragEnd={onDragEnd}>
-            <div className="p-4 md:p-6 lg:p-8 space-y-8">
-                <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                    <div>
-                        <h1 className="text-3xl font-bold font-headline flex items-center gap-3">
-                            <Dumbbell className="h-8 w-8" />
-                            Конструктор фитнес-плана
-                        </h1>
-                        <p className="text-muted-foreground mt-1">
-                            Составьте свою идеальную неделю, перетаскивая активности в календарь.
-                        </p>
-                    </div>
-                    <Button size="lg">
-                        <Save className="mr-2 h-4 w-4" />
-                        Сохранить план
-                    </Button>
+        <div className="p-4 md:p-6 lg:p-8 space-y-8">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div>
+                    <h1 className="text-3xl font-bold font-headline flex items-center gap-3">
+                        <Dumbbell className="h-8 w-8" />
+                        Конструктор фитнес-плана
+                    </h1>
+                    <p className="text-muted-foreground mt-1">
+                        Создайте свой идеальный тренировочный цикл.
+                    </p>
                 </div>
-
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
-                    <div className="lg:col-span-2">
-                         <FitnessPlanCalendar weekSchedule={weekSchedule} setWeekSchedule={setWeekSchedule} />
-                    </div>
-                    <div className="lg:sticky top-24">
-                        <ActivityLibrary />
-                    </div>
-                </div>
+                <Button size="lg">
+                    <Save className="mr-2 h-4 w-4" />
+                    Сохранить план
+                </Button>
             </div>
-        </DragDropContext>
+
+            <Card>
+                <CardHeader>
+                    <CardTitle>Тренировочный цикл</CardTitle>
+                    <CardDescription>Составьте свой план, добавляя активности на каждый день.</CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                        {planDays.map(day => (
+                            <Card key={day.id} className="flex flex-col bg-muted/50">
+                                <CardHeader>
+                                    <CardTitle className="text-lg">{day.name}</CardTitle>
+                                </CardHeader>
+                                <CardContent className="flex-grow space-y-2">
+                                    {day.activities.map(activity => (
+                                        <div key={activity.id} className="flex items-center justify-between p-2 rounded-md border bg-card text-card-foreground shadow-sm">
+                                            <p className="font-semibold text-sm">{activity.name}</p>
+                                            <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => removeActivityFromDay(day.id, activity.id)}>
+                                                <Trash2 className="h-4 w-4 text-destructive/70" />
+                                            </Button>
+                                        </div>
+                                    ))}
+                                     <ActivityLibraryDialog onSelectActivity={(activity) => addActivityToDay(day.id, activity)} />
+                                </CardContent>
+                            </Card>
+                        ))}
+                        <div className="flex items-center justify-center min-h-[200px] border-2 border-dashed rounded-lg">
+                             <Button variant="ghost" onClick={addDay} className="flex flex-col h-auto p-4 gap-2">
+                                <PlusCircle className="h-8 w-8 text-muted-foreground"/>
+                                <span className="text-muted-foreground">Добавить день</span>
+                            </Button>
+                        </div>
+                    </div>
+                </CardContent>
+            </Card>
+        </div>
     );
 }
