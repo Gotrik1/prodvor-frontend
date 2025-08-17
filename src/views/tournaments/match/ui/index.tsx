@@ -2,7 +2,7 @@
 'use client';
 
 import React from 'react';
-import type { BracketMatch, Tournament } from '@/views/tournaments/public-page/ui/mock-data';
+import type { Tournament } from '@/views/tournaments/public-page/ui/mock-data';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Button } from '@/shared/ui/button';
 import Link from 'next/link';
@@ -10,19 +10,10 @@ import { ArrowLeft } from 'lucide-react';
 import { MatchProtocol } from '@/widgets/match-protocol';
 import { useProtocol } from '@/widgets/protocol-editor/lib/use-protocol';
 
-export function MatchPage({ tournament, match }: { tournament?: Tournament, match?: BracketMatch }) {
-    const { setActiveMatch, activeMatch } = useProtocol();
+export function MatchPage({ tournament }: { tournament?: Tournament }) {
+    const { activeMatch } = useProtocol();
 
-    // Set the active match in the global state when the component mounts
-    React.useEffect(() => {
-        if (match) {
-            setActiveMatch(match);
-        }
-        // Clean up on unmount
-        return () => setActiveMatch(null);
-    }, [match, setActiveMatch]);
-
-    if (!tournament || !match || !activeMatch) {
+    if (!tournament || !activeMatch) {
         return (
             <div className="flex flex-col min-h-screen items-center justify-center p-4">
                 <Card className="text-center max-w-md w-full">

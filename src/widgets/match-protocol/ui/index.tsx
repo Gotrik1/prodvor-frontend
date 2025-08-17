@@ -16,10 +16,12 @@ import { LiveTextFeed } from "./live-text-feed";
 export function MatchProtocol({ tournament, match }: { tournament: Tournament, match: BracketMatch }) {
     const { events } = useProtocol();
     
-    const { team1, team2, score1, score2 } = match;
+    const { team1, team2, id: matchId } = match;
+
+    const score1 = events.filter(e => e.type === 'goal' && e.team === 'team1').length;
+    const score2 = events.filter(e => e.type === 'goal' && e.team === 'team2').length;
 
     if (!team1 || !team2) {
-        // This case should ideally not happen if a match is active
         return <p>Команды не определены.</p>;
     }
 
@@ -28,7 +30,7 @@ export function MatchProtocol({ tournament, match }: { tournament: Tournament, m
 
 
     return (
-        <Card className="border-none shadow-none">
+        <Card>
             <CardHeader>
                 <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
                     <Link href={`/teams/${team1.id}`} className="flex items-center gap-4 group">
@@ -36,7 +38,7 @@ export function MatchProtocol({ tournament, match }: { tournament: Tournament, m
                         <h2 className="text-2xl font-bold group-hover:text-primary transition-colors">{team1.name}</h2>
                     </Link>
                     <div className="text-center">
-                        <p className="text-4xl font-black tracking-tighter">{score1 ?? 0} - {score2 ?? 0}</p>
+                        <p className="text-4xl font-black tracking-tighter">{score1} - {score2}</p>
                         <p className="text-sm text-muted-foreground">Текущий счет</p>
                     </div>
                      <Link href={`/teams/${team2.id}`} className="flex items-center gap-4 group">

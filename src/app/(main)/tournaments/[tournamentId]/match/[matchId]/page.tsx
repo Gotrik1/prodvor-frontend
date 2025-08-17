@@ -1,33 +1,36 @@
 
+'use client';
+
 import { MatchPage } from '@/views/tournaments/match';
 import { allTournaments as mockTournaments, registeredTeams } from '@/views/tournaments/public-page/ui/mock-data';
 import type { Metadata } from 'next';
+import { useProtocol } from '@/widgets/protocol-editor/lib/use-protocol';
+import { useEffect } from 'react';
 
-export async function generateMetadata({ params }: { params: { tournamentId: string, matchId: string } }): Promise<Metadata> {
-  const tournament = mockTournaments.find(t => t.id === params.tournamentId);
-  // In a real app, you would fetch match details
-  const team1 = registeredTeams[0]?.name || 'Команда 1';
-  const team2 = registeredTeams[1]?.name || 'Команда 2';
-  
-  const title = tournament ? `Матч: ${team1} vs ${team2} | ${tournament.name}` : 'Страница матча | ProDvor';
-  const description = tournament ? `Следите за ходом матча между ${team1} и ${team2} в рамках турнира ${tournament.name}.` : 'Прямая трансляция матча.';
-
-  return {
-    title,
-    description,
-  };
-}
+// This is a client component, so we can't export metadata directly.
+// We'll manage the title dynamically if needed.
 
 export default function TournamentMatchPage({ params }: { params: { tournamentId: string, matchId: string } }) {
+  const { setActiveMatch } = useProtocol();
   const tournament = mockTournaments.find(t => t.id === params.tournamentId);
+  
   // In a real app, you would fetch match details based on matchId
+  // For this mock, we'll find the match in our generated bracket if it exists
   const match = {
     id: params.matchId,
     team1: registeredTeams[0],
     team2: registeredTeams[1],
-    score1: 2,
-    score2: 1,
+    score1: null, // Let the protocol state handle the score
+    score2: null,
   };
+
+  useEffect(() => {
+    // When the component mounts, set this match as the active one in our global state.
+    // This simulates navigating to a specific match page.
+    if (match) {
+        setActiveMatch(match);
+    }
+  }, [match, setActiveMatch]);
   
-  return <MatchPage tournament={tournament} match={match} />;
+  return <MatchPage tournament={tournament} />;
 }
