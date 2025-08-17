@@ -1,5 +1,5 @@
-import { users } from './users';
-import { teams } from './teams';
+
+import type { User } from './users';
 
 export interface Playground {
     id: string;
@@ -78,25 +78,11 @@ const basePlaygrounds: Omit<Playground, 'followers' | 'residentTeamIds'>[] = [
     { id: 'p48', name: 'Автодром "Moscow Raceway"', address: 'Московская обл., Волоколамский район', type: 'Специализированный объект', surface: 'Асфальт (трек)', imageUrl: 'https://placehold.co/400x300.png', dataAiHint: 'race track', sportIds: ['sport-48'] }
 ];
 
-// --- Social Data Generation ---
-export const playgrounds: Playground[] = basePlaygrounds.map((playground, index) => {
-    // Predictable random followers for each playground
-    const followersCount = (index % 15) + 5; // 5 to 19 followers
-    const followers = [];
-    for (let i = 0; i < followersCount; i++) {
-        followers.push(users[(index + i * 3) % users.length].id);
-    }
-
-    // Resident teams are now assigned in teams.ts to avoid circular dependency.
-    // We will populate this field after teams are created.
-    const residentTeamIds: string[] = [];
-
-    return {
-        ...playground,
-        followers: Array.from(new Set(followers)), // Ensure unique
-        residentTeamIds,
-    };
-});
+export const playgrounds: Playground[] = basePlaygrounds.map((playground) => ({
+    ...playground,
+    followers: [],
+    residentTeamIds: [],
+}));
 
 // Function to link teams to playgrounds, called from teams.ts
 export function assignTeamsToPlaygrounds(teams: any[]) {
@@ -111,3 +97,20 @@ export function assignTeamsToPlaygrounds(teams: any[]) {
         }
     });
 }
+
+// Function to assign followers to playgrounds, called from users.ts after users are created
+export function assignFollowersToPlaygrounds(users: User[]) {
+    playgrounds.forEach((playground, index) => {
+        const followersCount = (index % 15) + 5; // 5 to 19 followers
+        const followers: string[] = [];
+        for (let i = 0; i < followersCount; i++) {
+            const userIndex = (index + i * 3) % users.length;
+            if (users[userIndex]) {
+                followers.push(users[userIndex].id);
+            }
+        }
+        playground.followers = Array.from(new Set(followers)); // Ensure unique
+    });
+}
+
+    

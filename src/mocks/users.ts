@@ -1,6 +1,9 @@
-
 import { allSports, individualSports, teamSports } from './sports';
 import { sponsors } from './personnel';
+
+// Note: `teams` is intentionally NOT imported here to avoid circular dependencies.
+// The relationship between users and teams will be established at a higher level,
+// for example, in the components or selectors that need this combined data.
 
 export type UserRole = 'Игрок' | 'Капитан' | 'Тренер' | 'Организатор' | 'Судья' | 'Менеджер' | 'Болельщик' | 'Модератор' | 'Администратор';
 export type UserGender = 'мужской' | 'женский';
@@ -22,11 +25,11 @@ export interface User {
   friends: string[]; // Array of user IDs
   followers: string[]; // Array of user IDs
   followingUsers: string[]; // Array of user IDs
-  followingTeams: string[]; // Array of team IDs
+  following: string[]; // Array of team IDs
   sponsorIds?: string[]; // Array of sponsor IDs
 }
 
-const baseUsers: Omit<User, 'disciplines' | 'friends' | 'followers' | 'followingUsers' | 'followingTeams' | 'sponsorIds'>[] = [
+const baseUsers: Omit<User, 'disciplines' | 'friends' | 'followers' | 'followingUsers' | 'sponsorIds' | 'following'>[] = [
   // --- Игроки (будут распределены по командам) ---
   { id: 'user1', firstName: 'Иван', lastName: 'Петров', nickname: 'Terminator', avatarUrl: 'https://i.pravatar.cc/150?u=user1', email: 'user1@example.com', role: 'Игрок', gender: 'мужской', age: 28, city: 'Москва', phone: '+7 (916) 123-45-67', bio: 'Опытный нападающий, играю в футбол с детства.' },
   { id: 'user2', firstName: 'Мария', lastName: 'Сидорова', nickname: 'Valkyrie', avatarUrl: 'https://i.pravatar.cc/150?u=user2', email: 'user2@example.com', role: 'Игрок', gender: 'женский', age: 25, city: 'Москва', phone: '+7 (916) 123-45-68', bio: 'Люблю командный дух и красивые победы. Играю в защите.' },
@@ -76,7 +79,7 @@ export const users: User[] = baseUsers.map(u => ({
   friends: [],
   followers: [],
   followingUsers: [],
-  followingTeams: [],
+  following: [],
   sponsorIds: [],
 }));
 
@@ -84,16 +87,20 @@ export const users: User[] = baseUsers.map(u => ({
 function populateSocialGraph() {
     const userIds = users.map(u => u.id);
 
-    const getRandomSubset = (arr: string[], currentUser: string, maxSize: number) => {
+    // Predictable random subset function
+    const getRandomSubset = (arr: string[], currentUser: string, maxSize: number, seed: string) => {
         const otherItems = arr.filter(id => id !== currentUser);
-        otherItems.sort(() => 0.5 - Math.random());
-        return otherItems.slice(0, Math.floor(Math.random() * (maxSize + 1)));
+        // Simple predictable sort based on ID and seed
+        otherItems.sort((a, b) => (a + seed).localeCompare(b + seed));
+        return otherItems.slice(0, (currentUser.charCodeAt(2) % (maxSize + 1))); // Predictable size
     };
 
     users.forEach(currentUser => {
-        currentUser.followingUsers = getRandomSubset(userIds, currentUser.id, 10);
+        // Users the current user follows
+        currentUser.followingUsers = getRandomSubset(userIds, currentUser.id, 10, 'following');
     });
 
+    // Calculate followers based on who is following whom
     users.forEach(currentUser => {
         users.forEach(otherUser => {
             if (otherUser.followingUsers.includes(currentUser.id)) {
@@ -103,7 +110,8 @@ function populateSocialGraph() {
             }
         });
         
-        const potentialFriends = getRandomSubset(userIds, currentUser.id, 5);
+        // Populate friends symmetrically and predictably
+        const potentialFriends = getRandomSubset(userIds, currentUser.id, 5, 'friends');
         potentialFriends.forEach(friendId => {
             const friend = users.find(u => u.id === friendId);
             if (friend && !currentUser.friends.includes(friendId) && !friend.friends.includes(currentUser.id)) {
@@ -114,29 +122,31 @@ function populateSocialGraph() {
     });
 }
 
+
 // Helper function to assign disciplines
 function assignDisciplines() {
     const teamSportIds = teamSports.map(s => s.id);
     const individualSportIds = individualSports.map(s => s.id);
 
     users.forEach(user => {
-        const numDisciplines = Math.floor(Math.random() * 2) + 1; // 1 to 2 disciplines
+        // Use a predictable seed for random choices
+        const seed = user.id.charCodeAt(user.id.length - 1);
+        const numDisciplines = (seed % 2) + 1; // 1 to 2 disciplines
         const userDisciplines = new Set<string>();
 
-        // Higher chance for players to have team sports, others to have individual
         const primaryPool = user.role === 'Игрок' ? teamSportIds : individualSportIds;
-        const secondaryPool = user.role === 'Игрок' ? individualSportIds : teamSportIds;
+        const secondaryPool = user.role === 'Игрок' ? individualSportIds : teamSports;
         
-        // Add first discipline from primary pool
+        // Add first discipline from primary pool predictably
         if (primaryPool.length > 0) {
-           userDisciplines.add(primaryPool[Math.floor(Math.random() * primaryPool.length)]);
+           userDisciplines.add(primaryPool[seed % primaryPool.length]);
         }
 
-        // Add more disciplines
+        // Add more disciplines predictably
         while(userDisciplines.size < numDisciplines) {
-            const pool = Math.random() > 0.3 ? primaryPool : secondaryPool;
+            const pool = (seed % 3) > 0 ? primaryPool : secondaryPool; // 66% chance for primary
             if (pool.length > 0) {
-               const randomSportId = pool[Math.floor(Math.random() * pool.length)];
+               const randomSportId = pool[(seed * 3) % pool.length];
                userDisciplines.add(randomSportId);
             } else {
                 break;
@@ -146,19 +156,17 @@ function assignDisciplines() {
     });
 }
 
-// This function will be called from mocks/index.ts after teams are created
-export function assignSponsorsToSoloPlayers(allUsers: User[], assignedPlayerIds: Set<string>) {
-    const soloPlayers = allUsers.filter(user => user.role === 'Игрок' && !assignedPlayerIds.has(user.id));
-    
-    // Assign one sponsor to roughly half of the solo players
-    soloPlayers.forEach((player, index) => {
-        if (index % 2 === 0 && sponsors.length > 0) {
-            player.sponsorIds = [sponsors[index % sponsors.length].id];
+function assignSponsors() {
+    users.forEach((user, index) => {
+        // ~20% chance to have a sponsor
+        if (index % 5 === 0 && sponsors.length > 0) {
+            user.sponsorIds = [sponsors[index % sponsors.length].id];
         }
     });
 }
 
-// Run the functions to populate the data
-populateSocialGraph();
+
+// Run the functions to populate the data in order
 assignDisciplines();
-// assignSponsorsToSoloPlayers is now called from index.ts to avoid circular dependency
+populateSocialGraph();
+assignSponsors();
