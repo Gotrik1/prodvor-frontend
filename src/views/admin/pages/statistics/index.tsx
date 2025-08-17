@@ -179,7 +179,7 @@ export function AdminStatisticsPage() {
                                         <div className="flex items-center gap-3 text-xs whitespace-nowrap">
                                             <div className="flex items-center gap-1" title="Друзья"><Heart className="h-3 w-3"/>{user.friends.length}</div>
                                             <div className="flex items-center gap-1" title="Подписчики"><UserPlus className="h-3 w-3"/>{user.followers.length}</div>
-                                            <div className="flex items-center gap-1" title="Подписки"><Rss className="h-3 w-3"/>{user.followingUsers.length + user.followingTeams.length}</div>
+                                            <div className="flex items-center gap-1" title="Подписки"><Rss className="h-3 w-3"/>{user.followingUsers.length + user.following.length}</div>
                                         </div>
                                     </TableCell>
                                     <TableCell className="text-xs align-top">
