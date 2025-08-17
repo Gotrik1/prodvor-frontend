@@ -11,6 +11,14 @@ export function CreateTournamentPage() {
     return (
         <div className="p-4 md:p-6 lg:p-8">
             <div className="max-w-4xl mx-auto">
+                <div className="mb-6">
+                    <Button asChild variant="outline">
+                        <Link href="/tournaments">
+                            <ArrowLeft className="mr-2 h-4 w-4" />
+                            Назад к списку турниров
+                        </Link>
+                    </Button>
+                </div>
                 <Tabs defaultValue="manual">
                     <TabsList className="grid w-full grid-cols-2">
                         <TabsTrigger value="ai">
