@@ -17,6 +17,7 @@ const mockCourses = [
         type: 'Видеокурс',
         discipline: 'Футбол',
         icon: Video,
+        progress: 75, // Added progress
     },
     {
         id: 'course-2',
@@ -70,11 +71,19 @@ export function RefereeCenterPage() {
                         <CardContent className="space-y-4">
                              <Card className="bg-muted/50">
                                 <CardHeader>
-                                    <CardTitle className="text-lg">Рекомендовано для вас</CardTitle>
+                                    <CardTitle className="text-lg flex items-center gap-2"><course.icon className="h-5 w-5"/>{mockCourses[0].title}</CardTitle>
+                                    <CardDescription>Рекомендовано для вас</CardDescription>
                                 </CardHeader>
                                 <CardContent>
                                     <p className="text-sm text-muted-foreground mb-4">{mockCourses[0].description}</p>
-                                    <Button>Начать курс <ArrowRight className="ml-2 h-4 w-4" /></Button>
+                                    <div className="space-y-2">
+                                        <div className="flex justify-between items-center text-sm mb-1">
+                                            <span className="font-medium">Прогресс:</span>
+                                            <span className="font-bold text-primary">{mockCourses[0].progress}%</span>
+                                        </div>
+                                        <Progress value={mockCourses[0].progress} />
+                                    </div>
+                                    <Button className="mt-4">Продолжить курс <ArrowRight className="ml-2 h-4 w-4" /></Button>
                                 </CardContent>
                             </Card>
                             <Accordion type="single" collapsible className="w-full">
@@ -176,7 +185,10 @@ export function RefereeCenterPage() {
                                     <span className="font-bold text-primary">80%</span>
                                 </div>
                                 <Progress value={80} />
-                                <p className="text-xs text-muted-foreground">Необходимо отсудить еще 2 матча и пройти 1 курс.</p>
+                                <ul className="text-xs text-muted-foreground list-disc pl-4 mt-2 space-y-1">
+                                    <li>Отсудить еще 2 рейтинговых матча.</li>
+                                    <li>Пройти курс "VAR для дворового футбола".</li>
+                                </ul>
                             </div>
                             <Button className="w-full mt-6" disabled>
                                 Тестирование (недоступно)
