@@ -1,9 +1,6 @@
 import { allSports, individualSports, teamSports } from './sports';
 import { sponsors } from './personnel';
-
-// Note: `teams` is intentionally NOT imported here to avoid circular dependencies.
-// The relationship between users and teams will be established at a higher level,
-// for example, in the components or selectors that need this combined data.
+import { teams } from './teams'; // Import teams to link disciplines
 
 export type UserRole = 'Игрок' | 'Капитан' | 'Тренер' | 'Организатор' | 'Судья' | 'Менеджер' | 'Болельщик' | 'Модератор' | 'Администратор';
 export type UserGender = 'мужской' | 'женский';
@@ -123,35 +120,34 @@ function populateSocialGraph() {
 }
 
 
-// Helper function to assign disciplines
+// Helper function to assign disciplines based on roles and teams
 function assignDisciplines() {
-    const teamSportIds = teamSports.map(s => s.id);
     const individualSportIds = individualSports.map(s => s.id);
 
     users.forEach(user => {
-        // Use a predictable seed for random choices
-        const seed = user.id.charCodeAt(user.id.length - 1);
-        const numDisciplines = (seed % 2) + 1; // 1 to 2 disciplines
         const userDisciplines = new Set<string>();
-
-        const primaryPool = user.role === 'Игрок' ? teamSportIds : individualSportIds;
-        const secondaryPool = user.role === 'Игрок' ? individualSportIds : teamSports;
         
-        // Add first discipline from primary pool predictably
-        if (primaryPool.length > 0) {
-           userDisciplines.add(primaryPool[seed % primaryPool.length]);
-        }
+        // 1. Add disciplines from the teams the user is a member of
+        const userTeams = teams.filter(t => t.members.includes(user.id));
+        userTeams.forEach(team => {
+            userDisciplines.add(team.sportId);
+        });
 
-        // Add more disciplines predictably
-        while(userDisciplines.size < numDisciplines) {
-            const pool = (seed % 3) > 0 ? primaryPool : secondaryPool; // 66% chance for primary
-            if (pool.length > 0) {
-               const randomSportId = pool[(seed * 3) % pool.length];
-               userDisciplines.add(randomSportId);
-            } else {
-                break;
+        // 2. Add additional disciplines based on role
+        if (user.role !== 'Игрок') {
+            // For non-players, add 1-2 random disciplines (can be team or individual)
+            const seed = user.id.charCodeAt(user.id.length - 1);
+            if (allSports.length > 0) {
+                userDisciplines.add(allSports[seed % allSports.length].id);
             }
+        } else {
+            // For players, add one random individual sport with a ~30% chance for variety
+             const seed = user.id.charCodeAt(user.id.length - 1);
+             if (seed % 3 === 0 && individualSportIds.length > 0) {
+                 userDisciplines.add(individualSportIds[seed % individualSportIds.length]);
+             }
         }
+        
         user.disciplines = Array.from(userDisciplines);
     });
 }

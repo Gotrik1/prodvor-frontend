@@ -72,8 +72,9 @@ export function initializeTeams(users: User[], allPlaygrounds: any[], allSportsL
                     }
                 }
             }
-
-            const teamName = `${sport.name} Team #${i + 1}`;
+            
+            const baseTeamNames = ['Ночные Снайперы', 'Короли Асфальта', 'Стальные Ястребы', 'Бетонные Тигры', 'Разрушители', 'Фортуна', 'Красная Фурия', 'Легион'];
+            const teamName = i === 0 ? `${sport.name} ${baseTeamNames[teamIdCounter % baseTeamNames.length]}` : `${sport.name} Team #${i + 1}`;
 
             const newTeam: Team = {
                 id: `team${teamIdCounter++}`,
@@ -105,15 +106,18 @@ export function initializeTeams(users: User[], allPlaygrounds: any[], allSportsL
     const allTeamIds = teams.map(t => t.id);
 
     teams.forEach((team, index) => {
+        // All members automatically follow their team
         team.followers = [...team.members];
         
+        // Users who are members of this team should follow it
         users.forEach(user => {
             if (team.members.includes(user.id) && !user.following.includes(team.id)) {
                 user.following.push(team.id);
             }
         });
 
-        const followingCount = (index % 3) + 1;
+        // Predictably make teams follow a few other teams
+        const followingCount = (index % 3) + 1; // 1 to 3 teams
          for (let i = 0; i < followingCount; i++) {
             const teamIndex = (index + i + 1) % allTeamIds.length;
             if (allTeamIds[teamIndex] !== team.id) {
@@ -121,10 +125,12 @@ export function initializeTeams(users: User[], allPlaygrounds: any[], allSportsL
             }
         }
 
+        // Assign sponsors to ~33% of teams predictably
         if (index % 3 === 0 && sponsors.length > 0) {
             team.sponsorIds = [sponsors[index % sponsors.length].id];
         }
     });
 
+    // Link teams to playgrounds after teams are created
     assignTeamsToPlaygrounds(teams);
 }

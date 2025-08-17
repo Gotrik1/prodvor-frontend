@@ -5,7 +5,7 @@ import { users } from './users';
 import { sponsors } from './personnel';
 import { allSports, teamSports, individualSports } from './sports';
 import { playgrounds, assignFollowersToPlaygrounds } from './playgrounds';
-import { teams as allTeams, initializeTeams } from './teams';
+import { teams, initializeTeams } from './teams';
 
 // 2. Initialize base data and establish relationships.
 // It's crucial to initialize in an order that respects dependencies.
