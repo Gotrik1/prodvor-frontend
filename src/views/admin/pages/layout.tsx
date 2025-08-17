@@ -35,7 +35,7 @@ export function AdminLayout({
                     <SidebarMenu>
                          <SidebarMenuItem>
                             <Link href="/admin">
-                                <SidebarMenuButton isActive={pathname === '/admin'}>
+                                <SidebarMenuButton isActive={pathname === '/admin' || pathname === '/admin/dashboard'}>
                                     <Home />
                                     <span>Главная</span>
                                 </SidebarMenuButton>

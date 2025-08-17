@@ -3,11 +3,6 @@
 
 import { create } from 'zustand';
 import type { User } from '@/mocks/users';
-import { users } from '@/mocks';
-
-// Default user for non-simulation mode can be an admin or a specific user.
-const DEFAULT_USER_ID = 'user1'; 
-const defaultUser = users.find(u => u.id === DEFAULT_USER_ID);
 
 interface UserState {
   user: User | null;
@@ -15,6 +10,6 @@ interface UserState {
 }
 
 export const useUserStore = create<UserState>((set) => ({
-  user: defaultUser || null,
+  user: null, // Start with no user selected
   setUser: (user) => set({ user }),
 }));

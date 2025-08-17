@@ -2,7 +2,7 @@
 'use client';
 
 import { useUserStore } from '@/widgets/dashboard-header/model/user-store';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
 import { EyeOff } from 'lucide-react';
 import Link from 'next/link';
 import { DashboardFeed } from '@/widgets/dashboard-feed';
