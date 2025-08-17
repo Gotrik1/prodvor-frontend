@@ -1,11 +1,9 @@
 
-
 'use client';
 
-import { useState } from 'react';
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
-import { PlusCircle, Search, Star, MapPin, List } from "lucide-react";
+import { PlusCircle, Star, MapPin, List } from "lucide-react";
 import Image from 'next/image';
 import Link from 'next/link';
 import { YandexMapV3 } from '@/widgets/yandex-map';
@@ -13,7 +11,6 @@ import { playgrounds as mockPlaygrounds, allSports } from '@/mocks';
 import { Badge } from '@/shared/ui/badge';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/shared/ui/table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs';
-import { Input } from '@/shared/ui/input';
 
 const allSportsFlat = allSports.reduce((acc, sport) => {
     acc.push({ id: sport.id, name: sport.name });
