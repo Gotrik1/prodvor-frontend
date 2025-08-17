@@ -23,9 +23,9 @@ async function getTournamentParticipants(tournamentId: string): Promise<{ email:
 
 const SendTournamentAnnouncementInputSchema = z.object({
   tournamentId: z.string().describe("The ID of the tournament."),
-  subject: z.string().describe('The subject of the announcement.'),
-  message: z.string().describe('The content of the announcement message or a prompt for the AI.'),
-  isAiEnhanced: z.boolean().describe("Whether to use AI to enhance the message.")
+  subject: z.string().min(5, { message: "Тема должна содержать не менее 5 символов." }).describe('The subject of the announcement.'),
+  message: z.string().min(10, { message: "Сообщение или промпт должно содержать не менее 10 символов." }).describe('The content of the announcement message or a prompt for the AI.'),
+  isAiEnhanced: z.boolean().default(false).describe("Whether to use AI to enhance the message.")
 });
 export type SendTournamentAnnouncementInput = z.infer<typeof SendTournamentAnnouncementInputSchema>;
 
