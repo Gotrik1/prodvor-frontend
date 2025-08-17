@@ -1,12 +1,6 @@
 
-import { TrainingPage } from '@/views/training';
-import type { Metadata } from 'next';
-
-export const metadata: Metadata = {
-    title: 'Мои тренировки | ProDvor',
-    description: 'Планируйте и отслеживайте свои тренировки.',
-};
+import { redirect } from 'next/navigation';
 
 export default function Training() {
-  return <TrainingPage />;
+  redirect('/training-center');
 }
