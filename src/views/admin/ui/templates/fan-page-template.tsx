@@ -1,10 +1,13 @@
-import { users, teams, tournaments } from "@/mocks";
+
+'use client';
+
+import { users, teams, tournaments, allSports } from "@/mocks";
 import type { User } from "@/mocks/users";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { Badge } from "@/shared/ui/badge";
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
-import { Bell, Calendar, Flame, Heart, Rss, Star, Ticket } from "lucide-react";
+import { Bell, Calendar, Flame, Heart, Rss, Star, Ticket, Gamepad2 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { CreatePost } from "@/widgets/dashboard-feed/ui/create-post";
@@ -16,8 +19,23 @@ const upcomingMatches = [
     { team1: teams[2], team2: teams[3], tournament: tournaments.find(t => t.id === 'mytourney1')! },
 ];
 
+const getUserDisciplines = (user: User): string[] => {
+    const personalDisciplines = user.disciplines
+        .map(id => allSports.find(s => s.id === id)?.name)
+        .filter((name): name is string => !!name);
+    
+    const teamDisciplines = teams
+        .filter(team => team.members.includes(user.id))
+        .map(team => team.game);
+        
+    const allDisciplinesSet = new Set([...personalDisciplines, ...teamDisciplines]);
+    return Array.from(allDisciplinesSet);
+};
+
+
 export function FanPageTemplate({ user }: { user?: User }) {
     const fanUser = user || defaultFan;
+    const fanDisciplines = getUserDisciplines(fanUser);
 
     return (
         <div className="border rounded-lg p-4 md:p-6 space-y-6 bg-muted/20">
@@ -95,6 +113,20 @@ export function FanPageTemplate({ user }: { user?: User }) {
                     </Card>
                 </div>
                 <div className="space-y-6">
+                    <Card>
+                        <CardHeader>
+                            <CardTitle className="flex items-center gap-2"><Gamepad2 />Интересы</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            <div className="flex flex-wrap gap-2">
+                            {fanDisciplines.length > 0 ? (
+                                    fanDisciplines.map(d => <Badge key={d}>{d}</Badge>)
+                            ) : (
+                                    <p className="text-sm text-muted-foreground">Дисциплины не указаны.</p>
+                            )}
+                            </div>
+                        </CardContent>
+                    </Card>
                     <Card>
                         <CardHeader>
                             <CardTitle className="flex items-center gap-2">

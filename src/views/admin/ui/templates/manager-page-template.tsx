@@ -8,7 +8,7 @@ import { Badge } from "@/shared/ui/badge";
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/shared/ui/table";
-import { BarChart, Briefcase, DollarSign, ExternalLink, Trophy, Users, Gamepad2, Activity } from "lucide-react";
+import { Briefcase, DollarSign, ExternalLink, Trophy, Users, Gamepad2, Activity } from "lucide-react";
 import Link from "next/link";
 import Image from 'next/image';
 

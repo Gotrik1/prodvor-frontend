@@ -58,6 +58,7 @@ export function UserPage({ userId }: { userId?: string }) {
         case 'Организатор':
             return <OrganizerPageTemplate user={user} />;
         case 'Игрок':
+        case 'Капитан':
             return <PlayerPageTemplate user={user} />;
         case 'Болельщик':
             return <FanPageTemplate user={user} />;
