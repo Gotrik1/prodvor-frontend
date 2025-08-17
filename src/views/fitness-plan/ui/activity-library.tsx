@@ -5,27 +5,42 @@ import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/shared/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs';
 import { Droppable, Draggable } from 'react-beautiful-dnd';
-import { Dumbbell, Users, Sun } from 'lucide-react';
+import { Dumbbell, Users, HeartPulse, Sun } from 'lucide-react';
 
 export interface Activity {
     id: string;
     name: string;
-    type: 'template' | 'group' | 'other';
+    type: 'template' | 'group' | 'recovery' | 'other';
 }
 
 const mockTemplates: Activity[] = [
     { id: 'template-1', name: 'День ног', type: 'template' },
-    { id: 'template-2', name: 'Тренировка груди и трицепса', type: 'template' },
+    { id: 'template-2', name: 'Грудь и трицепс', type: 'template' },
     { id: 'template-3', name: 'Кардио-интенсив', type: 'template' },
+    { id: 'template-4', name: 'Full-body тренировка', type: 'template' },
+    { id: 'template-5', name: 'Персональный тренинг', type: 'template' },
 ];
+
 const mockGroupSessions: Activity[] = [
-    { id: 'group-1', name: 'Йога', type: 'group' },
-    { id: 'group-2', name: 'Сайкл', type: 'group' },
-    { id: 'group-3', name: 'Пилатес', type: 'group' },
+    { id: 'group-1', name: 'Силовой и функциональный', type: 'group' },
+    { id: 'group-2', name: 'Водные программы', type: 'group' },
+    { id: 'group-3', name: 'Танцевальные программы', type: 'group' },
+    { id: 'group-4', name: 'Mind & Body (Йога/Пилатес)', type: 'group' },
+    { id: 'group-5', name: 'Боевые искусства', type: 'group' },
+    { id: 'group-6', name: 'Игровые программы', type: 'group' },
+    { id: 'group-7', name: 'Программы Outdoor', type: 'group' },
 ];
+
+const mockRecovery: Activity[] = [
+    { id: 'recovery-1', name: 'Отдых', type: 'recovery' },
+    { id: 'recovery-2', name: 'SPA / Баня', type: 'recovery' },
+    { id: 'recovery-3', name: 'Массаж', type: 'recovery' },
+    { id: 'recovery-4', name: 'Медицинское фитнес-тестирование', type: 'recovery' },
+];
+
 const mockOther: Activity[] = [
-    { id: 'other-1', name: 'Отдых', type: 'other' },
-    { id: 'other-2', name: 'СПА / Баня', type: 'other' },
+    { id: 'other-1', name: 'Детский фитнес', type: 'other' },
+    { id: 'other-2', name: 'Специальные программы', type: 'other' },
 ];
 
 const ActivityItem = ({ activity, index }: { activity: Activity; index: number }) => (
@@ -52,9 +67,10 @@ export function ActivityLibrary() {
             </CardHeader>
             <CardContent>
                 <Tabs defaultValue="templates">
-                    <TabsList className="grid w-full grid-cols-3">
+                    <TabsList className="grid w-full grid-cols-4">
                         <TabsTrigger value="templates"><Dumbbell className="h-4 w-4" /></TabsTrigger>
                         <TabsTrigger value="group"><Users className="h-4 w-4" /></TabsTrigger>
+                        <TabsTrigger value="recovery"><HeartPulse className="h-4 w-4" /></TabsTrigger>
                         <TabsTrigger value="other"><Sun className="h-4 w-4" /></TabsTrigger>
                     </TabsList>
                     <TabsContent value="templates" className="mt-4">
@@ -74,6 +90,18 @@ export function ActivityLibrary() {
                             {(provided) => (
                                 <div ref={provided.innerRef} {...provided.droppableProps}>
                                     {mockGroupSessions.map((item, index) => (
+                                        <ActivityItem key={item.id} activity={item} index={index} />
+                                    ))}
+                                    {provided.placeholder}
+                                </div>
+                            )}
+                        </Droppable>
+                    </TabsContent>
+                    <TabsContent value="recovery" className="mt-4">
+                         <Droppable droppableId="library-recovery" isDropDisabled={true} isCombineEnabled={false}>
+                            {(provided) => (
+                                <div ref={provided.innerRef} {...provided.droppableProps}>
+                                    {mockRecovery.map((item, index) => (
                                         <ActivityItem key={item.id} activity={item} index={index} />
                                     ))}
                                     {provided.placeholder}
