@@ -1,3 +1,4 @@
+
 import { assignTeamsToPlaygrounds, playgrounds } from "./playgrounds";
 import type { User } from "./users";
 import { users } from "./users";
@@ -11,6 +12,7 @@ export interface Team {
   captainId: string;
   members: string[]; // array of user IDs
   game: string; 
+  sportId: string; // ID of the sport
   rank: number;
   homePlaygroundIds?: string[];
   dataAiHint: string;
@@ -51,7 +53,7 @@ teamSports.forEach(sport => {
         // --- Find available captain ---
         const availableCaptains = players.filter(p => {
             const assignment = playerTeamAssignments[p.id];
-            return assignment && assignment.count < MAX_TEAMS_PER_PLAYER && !assignment.sports.has(sport.name);
+            return assignment && assignment.count < MAX_TEAMS_PER_PLAYER && !assignment.sports.has(sport.id);
         });
 
         if (availableCaptains.length === 0) break; // No more captains for this sport
@@ -60,7 +62,7 @@ teamSports.forEach(sport => {
         // --- Find available members ---
         const availableMembers = players.filter(p => {
              const assignment = playerTeamAssignments[p.id];
-             return p.id !== captain.id && assignment && assignment.count < MAX_TEAMS_PER_PLAYER && !assignment.sports.has(sport.name);
+             return p.id !== captain.id && assignment && assignment.count < MAX_TEAMS_PER_PLAYER && !assignment.sports.has(sport.id);
         });
         
         const memberCount = 4; // 4 members + 1 captain = 5 players
@@ -94,6 +96,7 @@ teamSports.forEach(sport => {
             logoUrl: `https://placehold.co/100x100.png`,
             dataAiHint: 'sports emblem',
             game: sport.name,
+            sportId: sport.id,
             captainId: captain.id,
             members: teamMembersIds,
             rank: 1200 + (teamIdCounter * 17 % 500), // Predictable rank
@@ -109,7 +112,7 @@ teamSports.forEach(sport => {
         teamMembersIds.forEach(memberId => {
             if (playerTeamAssignments[memberId]) {
                 playerTeamAssignments[memberId].count++;
-                playerTeamAssignments[memberId].sports.add(sport.name);
+                playerTeamAssignments[memberId].sports.add(sport.id);
             }
         });
     }
