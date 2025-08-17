@@ -1,37 +1,42 @@
 
 
+'use client';
+
 import { teams, users, playgrounds, challenges, posts } from "@/mocks";
 import type { User, Team } from "@/mocks";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { Badge } from "@/shared/ui/badge";
 import { Button } from "@/shared/ui/button";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
-import { Crown, Home, Swords, Trophy, UserPlus, Check, X, TrendingUp, Rss, Film, Star, Shield, History } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/shared/ui/card";
+import { Crown, Home, Swords, Trophy, UserPlus, Check, X, TrendingUp, Rss, Film, Star, Shield, History, Settings } from "lucide-react";
 import Image from 'next/image';
 import Link from 'next/link';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 import { TeamFeedTab } from "@/views/teams/team/ui/team-feed-tab";
 import { TeamMediaTab } from "@/views/teams/team/ui/team-media-tab";
+import { useUserStore } from "@/widgets/dashboard-header/model/user-store";
 
 const TeamRoster = ({ teamMembers, captainId }: { teamMembers: User[], captainId: string }) => (
     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
         {teamMembers.map(member => (
-            <div key={member.id} className="flex flex-col items-center text-center gap-2">
-                <Avatar className="h-16 w-16">
-                    <AvatarImage src={member.avatarUrl} alt={member.nickname} />
-                    <AvatarFallback>{member.firstName.charAt(0)}</AvatarFallback>
-                </Avatar>
-                <div>
-                    <p className="font-semibold">{member.nickname}</p>
-                    <p className="text-xs text-muted-foreground">{member.firstName} {member.lastName}</p>
-                    {member.id === captainId && (
-                        <Badge variant="secondary" className="mt-1">
-                            <Crown className="h-3 w-3 mr-1" />
-                            Капитан
-                        </Badge>
-                    )}
+            <Link href={`/users/${member.id}`} key={member.id} className="group">
+                <div className="flex flex-col items-center text-center gap-2 p-2 rounded-lg hover:bg-muted/50 transition-colors">
+                    <Avatar className="h-16 w-16 group-hover:scale-105 transition-transform">
+                        <AvatarImage src={member.avatarUrl} alt={member.nickname} />
+                        <AvatarFallback>{member.firstName.charAt(0)}</AvatarFallback>
+                    </Avatar>
+                    <div>
+                        <p className="font-semibold group-hover:text-primary transition-colors">{member.nickname}</p>
+                        <p className="text-xs text-muted-foreground">{member.firstName} {member.lastName}</p>
+                        {member.id === captainId && (
+                            <Badge variant="secondary" className="mt-1">
+                                <Crown className="h-3 w-3 mr-1" />
+                                Капитан
+                            </Badge>
+                        )}
+                    </div>
                 </div>
-            </div>
+            </Link>
         ))}
     </div>
 );
@@ -106,8 +111,8 @@ const TeamChallenges = ({ teamId }: { teamId: string }) => {
 
 const FormBadge = ({ result }: { result: 'W' | 'L' | 'D' }) => {
     const baseClasses = "flex items-center justify-center w-8 h-8 rounded-md font-bold";
-    if (result === 'W') return <div className={`${baseClasses} bg-success text-success-foreground border border-success/30`}>W</div>;
-    if (result === 'L') return <div className={`${baseClasses} bg-destructive text-destructive-foreground border border-destructive/30`}>L</div>;
+    if (result === 'W') return <div className={`${baseClasses} bg-success/80 text-success-foreground border border-success/30`}>W</div>;
+    if (result === 'L') return <div className={`${baseClasses} bg-destructive/80 text-destructive-foreground border border-destructive/30`}>L</div>;
     return <div className={`${baseClasses} bg-secondary text-secondary-foreground border border-secondary/30`}>D</div>;
 };
 
@@ -136,10 +141,33 @@ const StatRow = ({ label, value }: { label: string, value: string | number }) =>
 );
 
 
-export function TeamPageTemplate({ team }: { team: Team }) {
+export function TeamPageTemplate({ team }: { team?: Team }) {
+    const { user: currentUser } = useUserStore();
+    
+    if (!team) {
+       return (
+            <div className="flex flex-col min-h-[80vh] items-center justify-center p-4">
+                <Card className="text-center max-w-md w-full">
+                    <CardHeader>
+                        <CardTitle>Ошибка 404</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <p className="text-muted-foreground">
+                            Команда не найдена.
+                        </p>
+                        <Button asChild className="mt-6">
+                            <Link href="/teams">К списку команд</Link>
+                        </Button>
+                    </CardContent>
+                </Card>
+            </div>
+        )
+    }
+
     const teamMembers = users.filter(u => team.members.includes(u.id));
     const homePlaygrounds = team.homePlaygroundIds?.map(id => playgrounds.find(p => p.id === id)).filter(Boolean);
     const teamPosts = posts.filter(p => p.team?.id === team.id);
+    const isCaptain = currentUser?.id === team.captainId;
 
     // Mock statistics
     const wins = 45;
@@ -151,10 +179,10 @@ export function TeamPageTemplate({ team }: { team: Team }) {
     const topScorer = teamMembers.length > 1 ? teamMembers[1] : null;
 
     return (
-        <div className="border rounded-lg p-4 md:p-6 space-y-6 bg-card">
-            <header className="flex flex-col md:flex-row items-center gap-6">
+        <div className="p-4 md:p-6 lg:p-8 space-y-6">
+            <header className="flex flex-col md:flex-row items-center gap-6 p-4 rounded-lg bg-card border">
                 <Image src={team.logoUrl} alt={team.name} width={96} height={96} className="rounded-lg border-4 border-primary" data-ai-hint="team logo"/>
-                <div className="text-center md:text-left">
+                <div className="text-center md:text-left flex-grow">
                     <h1 className="text-3xl font-bold font-headline">{team.name}</h1>
                     <p className="text-muted-foreground text-lg">Дисциплина: {team.game}</p>
                      {homePlaygrounds && homePlaygrounds.length > 0 && (
@@ -168,11 +196,19 @@ export function TeamPageTemplate({ team }: { team: Team }) {
                         </div>
                     )}
                 </div>
-                <div className="md:ml-auto flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
-                    <Button className="w-full">
-                        <Swords className="mr-2 h-4 w-4" /> Бросить вызов
-                    </Button>
-                     <Button variant="outline" className="w-full">
+                 <div className="md:ml-auto flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
+                    {isCaptain ? (
+                        <Button asChild className="w-full">
+                            <Link href={`/teams/${team.id}/manage`}>
+                                <Settings className="mr-2 h-4 w-4" /> Управлять
+                            </Link>
+                        </Button>
+                    ) : (
+                        <Button className="w-full">
+                            <Swords className="mr-2 h-4 w-4" /> Бросить вызов
+                        </Button>
+                    )}
+                    <Button variant="outline" className="w-full">
                         <Rss className="mr-2 h-4 w-4" /> Подписаться
                     </Button>
                 </div>
@@ -280,12 +316,12 @@ export function TeamPageTemplate({ team }: { team: Team }) {
                                     <TabsTrigger value="2025">Сезон 2025</TabsTrigger>
                                     <TabsTrigger value="2024">Сезон 2024</TabsTrigger>
                                 </TabsList>
-                                <TabsContent value="2025" className="pl-4">
+                                <TabsContent value="2025" className="ml-4 pl-4 border-l">
                                     <StatRow label="Место в лиге" value={careerStats['2025'].rank} />
                                     <StatRow label="ELO на конец сезона" value={careerStats['2025'].elo} />
                                     <StatRow label="Побед / Поражений" value={`${careerStats['2025'].wins} / ${careerStats['2025'].losses}`} />
                                 </TabsContent>
-                                <TabsContent value="2024" className="pl-4">
+                                <TabsContent value="2024" className="ml-4 pl-4 border-l">
                                      <StatRow label="Место в лиге" value={careerStats['2024'].rank} />
                                     <StatRow label="ELO на конец сезона" value={careerStats['2024'].elo} />
                                     <StatRow label="Побед / Поражений" value={`${careerStats['2024'].wins} / ${careerStats['2024'].losses}`} />
