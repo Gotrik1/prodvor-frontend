@@ -6,6 +6,7 @@ import { generateNewsDigest } from "@/shared/api/generate-news-digest";
 import { sendTournamentAnnouncement, SendTournamentAnnouncementInput } from "@/shared/api/send-tournament-announcement";
 import { generateTournamentImage, GenerateTournamentImageInput } from "@/shared/api/generate-tournament-image";
 import { generateTournamentPromo, GenerateTournamentPromoInput } from "@/shared/api/generate-tournament-promo";
+import { analyzeMatchVideo, AnalyzeMatchVideoInput } from "@/shared/api/analyze-match-video";
 
 
 export async function generateLogosAction(
@@ -29,4 +30,8 @@ export async function generateTournamentImageAction(input: GenerateTournamentIma
 
 export async function generateTournamentPromoAction(input: GenerateTournamentPromoInput) {
     return await generateTournamentPromo(input);
+}
+
+export async function analyzeMatchVideoAction(input: AnalyzeMatchVideoInput) {
+    return await analyzeMatchVideo(input);
 }

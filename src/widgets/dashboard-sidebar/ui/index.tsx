@@ -24,6 +24,7 @@ import {
   Trophy,
   Users,
   Warehouse,
+  Clapperboard,
 } from "lucide-react";
 import Link from 'next/link';
 import Image from "next/image";
@@ -98,6 +99,14 @@ export function DashboardSidebar() {
                         <SidebarMenuButton>
                             <Dumbbell />
                             <span>Фитнес-план</span>
+                        </SidebarMenuButton>
+                    </Link>
+                </SidebarMenuItem>
+                 <SidebarMenuItem>
+                    <Link href="/analysis/match">
+                        <SidebarMenuButton>
+                            <Clapperboard />
+                            <span>Анализ матча</span>
                         </SidebarMenuButton>
                     </Link>
                 </SidebarMenuItem>
