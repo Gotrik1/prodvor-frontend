@@ -53,6 +53,17 @@ export function initializeTeams(
                 const assignment = playerTeamAssignments[p.id];
                 return assignment && assignment.count < MAX_TEAMS_PER_PLAYER && !assignment.sports.has(sport.id);
             });
+            
+            const memberCount = 4; // We need 4 members + 1 captain
+            const availableMembersForSport = players.filter(p => {
+                 const assignment = playerTeamAssignments[p.id];
+                 return assignment && assignment.count < MAX_TEAMS_PER_PLAYER && !assignment.sports.has(sport.id);
+            });
+            
+            // If there aren't enough players available for this sport to form a full team, skip creation.
+            if (availableMembersForSport.length < memberCount + 1) {
+                continue;
+            }
 
             if (availableCaptains.length === 0) continue; // Not enough captains for this sport
             
@@ -65,13 +76,13 @@ export function initializeTeams(
                  return p.id !== captain.id && assignment && assignment.count < MAX_TEAMS_PER_PLAYER && !assignment.sports.has(sport.id);
             });
             
-            const memberCount = 4;
             if (availableMembers.length < memberCount) continue; // Not enough members for this sport
 
             // Predictable member selection
             const newMembers: User[] = [];
+            // Shuffle available members predictably to get variety in teams
             const shuffledAvailableMembers = [...availableMembers].sort((a, b) => 
-                (a.id.charCodeAt(3) * teamIdCounter) % 13 - (b.id.charCodeAt(3) * teamIdCounter) % 13
+                (a.id.charCodeAt(3) * teamIdCounter * (i + 1)) % 13 - (b.id.charCodeAt(3) * teamIdCounter * (i + 1)) % 13
             );
 
             for (const potentialMember of shuffledAvailableMembers) {
