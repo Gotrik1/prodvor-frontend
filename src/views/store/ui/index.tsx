@@ -7,6 +7,7 @@ import { Gem, Palette, ShoppingCart, Sparkles, Wand2 } from "lucide-react";
 import Image from 'next/image';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 import { useToast } from "@/shared/hooks/use-toast";
+import Link from "next/link";
 
 const mockStoreItems = [
     {
@@ -104,40 +105,55 @@ export function StorePage() {
                     ))}
                 </TabsList>
 
-                {categories.map(cat => (
-                    <TabsContent key={cat.id} value={cat.id} className="mt-6">
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                            {mockStoreItems
-                                .filter(item => cat.id === 'all' || item.category === cat.id)
-                                .map(item => (
-                                <Card key={item.id} className="flex flex-col">
-                                    <CardHeader className="p-0">
-                                        <div className="aspect-square w-full relative">
-                                            <Image 
-                                                src={item.imageUrl} 
-                                                alt={item.name} 
-                                                fill 
-                                                className="object-cover rounded-t-lg"
-                                                data-ai-hint={item.dataAiHint}
-                                            />
+                {categories.map(cat => {
+                    const filteredItems = mockStoreItems.filter(item => cat.id === 'all' || item.category === cat.id);
+                    return (
+                        <TabsContent key={cat.id} value={cat.id} className="mt-6">
+                            {filteredItems.length > 0 ? (
+                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                                    {filteredItems.map(item => (
+                                        <Card key={item.id} className="flex flex-col">
+                                            <CardHeader className="p-0">
+                                                <div className="aspect-square w-full relative">
+                                                    <Image 
+                                                        src={item.imageUrl} 
+                                                        alt={item.name} 
+                                                        fill 
+                                                        className="object-cover rounded-t-lg"
+                                                        data-ai-hint={item.dataAiHint}
+                                                    />
+                                                </div>
+                                            </CardHeader>
+                                            <CardContent className="p-4 flex-grow">
+                                                <CardTitle className="text-lg mb-1">{item.name}</CardTitle>
+                                                <CardDescription>{item.description}</CardDescription>
+                                            </CardContent>
+                                            <CardContent className="p-4 pt-0 flex justify-between items-center">
+                                                <div className="flex items-center gap-2 text-xl font-bold text-primary">
+                                                    <Gem className="h-5 w-5"/>
+                                                    <span>{item.price}</span>
+                                                </div>
+                                                <Button onClick={() => handleBuy(item.name)}>Купить</Button>
+                                            </CardContent>
+                                        </Card>
+                                    ))}
+                                </div>
+                            ) : (
+                                <Card className="flex items-center justify-center min-h-[40vh] border-dashed">
+                                    <CardContent className="text-center p-6">
+                                         <div className="mx-auto bg-muted/50 text-muted-foreground p-4 rounded-full w-fit mb-4">
+                                            <cat.icon className="h-10 w-10" />
                                         </div>
-                                    </CardHeader>
-                                    <CardContent className="p-4 flex-grow">
-                                        <CardTitle className="text-lg mb-1">{item.name}</CardTitle>
-                                        <CardDescription>{item.description}</CardDescription>
-                                    </CardContent>
-                                    <CardContent className="p-4 pt-0 flex justify-between items-center">
-                                        <div className="flex items-center gap-2 text-xl font-bold text-primary">
-                                            <Gem className="h-5 w-5"/>
-                                            <span>{item.price}</span>
-                                        </div>
-                                        <Button onClick={() => handleBuy(item.name)}>Купить</Button>
+                                        <h3 className="text-xl font-bold font-headline">Товары не найдены</h3>
+                                        <p className="text-muted-foreground mt-2 max-w-sm">
+                                           В этой категории пока нет товаров. Загляните позже!
+                                        </p>
                                     </CardContent>
                                 </Card>
-                            ))}
-                        </div>
-                    </TabsContent>
-                ))}
+                            )}
+                        </TabsContent>
+                    )
+                })}
             </Tabs>
         </div>
     );
