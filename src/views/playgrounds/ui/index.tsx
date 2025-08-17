@@ -13,6 +13,7 @@ import { playgrounds as mockPlaygrounds, allSports } from '@/mocks';
 import { Badge } from '@/shared/ui/badge';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/shared/ui/table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs';
+import { Input } from '@/shared/ui/input';
 
 const allSportsFlat = allSports.reduce((acc, sport) => {
     acc.push({ id: sport.id, name: sport.name });
@@ -97,7 +98,6 @@ const NearbyPlaygrounds = () => {
                     ))}
                 </div>
             </CardContent>
-        </Card>
     )
 }
 
