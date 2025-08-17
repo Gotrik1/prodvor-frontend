@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { Button } from "@/shared/ui/button";
@@ -95,8 +96,8 @@ const NearbyPlaygrounds = () => {
                     ))}
                 </div>
             </CardContent>
-    )
-}
+    );
+};
 
 export function PlaygroundsPage() {
     return (

@@ -153,5 +153,5 @@ export function AddPlaygroundPage() {
                 </Card>
             </div>
         </div>
-    )
+    );
 }

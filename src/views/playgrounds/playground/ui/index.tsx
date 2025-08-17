@@ -82,7 +82,7 @@ export function PlaygroundPage({ playground }: { playground: Playground | undefi
                     </CardContent>
                 </Card>
             </div>
-        )
+        );
     }
     
     const residentTeams = teams.filter(team => playground.residentTeamIds.includes(team.id));
