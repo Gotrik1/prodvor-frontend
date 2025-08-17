@@ -18,8 +18,6 @@ const rankColors = [
     'text-amber-600'  // 3rd
 ];
 
-const allDisciplines = [...new Set(allTeams.map(team => team.game))];
-
 export function LeaguesPage() {
     const [selectedDiscipline, setSelectedDiscipline] = useState('all');
 
