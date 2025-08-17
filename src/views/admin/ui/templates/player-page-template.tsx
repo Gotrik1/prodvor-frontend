@@ -6,15 +6,37 @@ import type { User } from "@/mocks/users";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { Badge } from "@/shared/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
-import { Briefcase, Dumbbell, Film, History, Mail, MapPin, MessageSquare, Phone, Rss, UserPlus, Users as UsersIcon, Gamepad2, Heart, Activity } from "lucide-react";
+import { Briefcase, Dumbbell, Film, History, Mail, MapPin, MessageSquare, Phone, Rss, UserPlus, Users as UsersIcon, Gamepad2, Heart, Activity, TrendingUp, Shield, Star, Trophy } from "lucide-react";
 import Image from 'next/image';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 import { Button } from "@/shared/ui/button";
 import Link from "next/link";
 import { useUserStore } from "@/widgets/dashboard-header/model/user-store";
 import { CreatePost } from "@/widgets/dashboard-feed/ui/create-post";
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/shared/ui/chart";
+import { PolarGrid, PolarAngleAxis, Radar, RadarChart, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer } from "recharts";
+
 
 const defaultPlayer = users.find(u => u.role === 'Игрок')!;
+
+const skillData = [
+  { subject: 'Атака', A: 86, fullMark: 100 },
+  { subject: 'Защита', A: 75, fullMark: 100 },
+  { subject: 'Техника', A: 90, fullMark: 100 },
+  { subject: 'Скорость', A: 80, fullMark: 100 },
+  { subject: 'Пас', A: 82, fullMark: 100 },
+];
+
+const eloData = [
+  { month: 'Янв', elo: 1420 },
+  { month: 'Фев', elo: 1450 },
+  { month: 'Мар', elo: 1430 },
+  { month: 'Апр', elo: 1480 },
+  { month: 'Май', elo: 1510 },
+  { month: 'Июн', elo: 1550 },
+  { month: 'Июл', elo: 1540 },
+  { month: 'Авг', elo: 1590 },
+];
 
 const careerStats = {
     '2025': { matches: 52, wins: 38, goals: 41, assists: 15, mvp: 12 },
@@ -23,9 +45,9 @@ const careerStats = {
 };
 
 const StatRow = ({ label, value }: { label: string, value: string | number }) => (
-    <div className="flex justify-between items-center py-2 border-b border-border/50">
-        <span className="text-muted-foreground">{label}</span>
-        <span className="font-bold">{value}</span>
+    <div className="flex justify-between items-center py-2 border-b border-border/50 last:border-b-0">
+        <span className="text-sm text-muted-foreground">{label}</span>
+        <span className="font-bold text-sm">{value}</span>
     </div>
 );
 
@@ -42,56 +64,12 @@ const getUserDisciplines = (user: User): string[] => {
     return Array.from(allDisciplinesSet);
 };
 
-const OverviewTab = ({ player, playerDisciplines }: { player: User, playerDisciplines: string[] }) => (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card className="lg:col-span-2">
-             <CardHeader>
-                <CardTitle className="flex items-center gap-2"><Gamepad2 />Дисциплины</CardTitle>
-            </CardHeader>
-            <CardContent>
-                <div className="flex flex-wrap gap-2">
-                    {playerDisciplines.length > 0 ? (
-                        playerDisciplines.map(d => <Badge key={d}>{d}</Badge>)
-                    ) : (
-                        <p className="text-sm text-muted-foreground">Дисциплины не указаны.</p>
-                    )}
-                </div>
-            </CardContent>
-        </Card>
-        <Card className="lg:col-span-2">
-            <CardHeader><CardTitle>Ключевые показатели</CardTitle></CardHeader>
-            <CardContent className="grid grid-cols-2 gap-4">
-                <StatRow label="Матчей сыграно" value={152} />
-                <StatRow label="Побед" value="101 (66%)" />
-                <StatRow label="MVP" value="34 раза" />
-                <StatRow label="Надежность" value="98%" />
-            </CardContent>
-        </Card>
-        <Card className="lg:col-span-2">
-            <CardHeader><CardTitle>Достижения</CardTitle></CardHeader>
-            <CardContent className="flex flex-wrap gap-2">
-                <Badge>Ветеран</Badge>
-                <Badge>Снайпер</Badge>
-                <Badge>Мастер камбэков</Badge>
-                <Badge variant="destructive">Горячая голова</Badge>
-            </CardContent>
-        </Card>
-        <Card className="lg:col-span-2">
-            <CardHeader><CardTitle>Любимые площадки</CardTitle></CardHeader>
-            <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {playgrounds.slice(0, 2).map(p => (
-                    <div key={p.id} className="flex items-center gap-3 p-3 rounded-md border bg-muted/50">
-                        <Dumbbell className="h-5 w-5 text-primary" />
-                        <div>
-                            <p className="font-semibold">{p.name}</p>
-                            <p className="text-xs text-muted-foreground">{p.address}</p>
-                        </div>
-                    </div>
-                ))}
-            </CardContent>
-        </Card>
-    </div>
-);
+const FormBadge = ({ result }: { result: 'W' | 'L' | 'D' }) => {
+    const baseClasses = "flex items-center justify-center w-6 h-6 rounded-md font-bold text-xs";
+    if (result === 'W') return <div className={`${baseClasses} bg-success/80 text-success-foreground border border-success/30`}>W</div>;
+    if (result === 'L') return <div className={`${baseClasses} bg-destructive/80 text-destructive-foreground border border-destructive/30`}>L</div>;
+    return <div className={`${baseClasses} bg-secondary text-secondary-foreground border border-secondary/30`}>D</div>;
+};
 
 const StatsTab = () => (
     <Card>
@@ -201,62 +179,13 @@ const MediaTab = () => (
     </Card>
 );
 
-const FollowersCard = ({ user }: { user: User }) => (
-    <Card>
-        <CardHeader>
-            <CardTitle>Подписчики ({user.followers.length})</CardTitle>
-        </CardHeader>
-        <CardContent>
-            <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-4 gap-3">
-                {users.filter(u => user.followers.includes(u.id)).slice(0, 12).map(follower => (
-                    <Link href={`/users/${follower.id}`} key={follower.id}>
-                        <Avatar className="h-12 w-12 border-2 border-transparent hover:border-primary transition-colors">
-                            <AvatarImage src={follower.avatarUrl} alt={follower.nickname} />
-                            <AvatarFallback>{follower.nickname.charAt(0)}</AvatarFallback>
-                        </Avatar>
-                    </Link>
-                ))}
-            </div>
-        </CardContent>
-    </Card>
-);
-
-const FollowingCard = ({ user }: { user: User }) => (
-    <Card>
-         <CardHeader>
-             <CardTitle>Подписки ({user.followingUsers.length + user.following.length})</CardTitle>
-        </CardHeader>
-         <CardContent>
-            <div className="flex flex-wrap gap-3">
-                {users.filter(u => user.followingUsers.includes(u.id)).map(followedUser => (
-                    <Link href={`/users/${followedUser.id}`} key={followedUser.id}>
-                        <Avatar className="h-12 w-12 border-2 border-transparent hover:border-primary transition-colors">
-                            <AvatarImage src={followedUser.avatarUrl} alt={followedUser.nickname} />
-                            <AvatarFallback>{followedUser.nickname.charAt(0)}</AvatarFallback>
-                        </Avatar>
-                    </Link>
-                ))}
-                 {teams.filter(t => user.following.includes(t.id)).map(team => (
-                    <Link href={`/teams/${team.id}`} key={team.id}>
-                         <Avatar className="h-12 w-12 border-2 border-transparent hover:border-primary transition-colors rounded-md">
-                            <AvatarImage src={team.logoUrl} alt={team.name} className="p-1" />
-                            <AvatarFallback>{team.name.charAt(0)}</AvatarFallback>
-                        </Avatar>
-                    </Link>
-                ))}
-            </div>
-        </CardContent>
-    </Card>
-);
-
-
 export function PlayerPageTemplate({ user: profileUser }: { user?: User }) {
     const player = profileUser || defaultPlayer;
     const { user: currentUser } = useUserStore();
-    const playerDisciplines = getUserDisciplines(player);
     const playerTeam = teams.find(t => t.members.includes(player.id));
 
     const isOwnProfile = currentUser?.id === player.id;
+    const last5Form: ('W' | 'L' | 'D')[] = ['W', 'L', 'W', 'W', 'W'];
 
     return (
         <div className="border rounded-lg p-4 md:p-6 space-y-6 bg-muted/20">
@@ -268,7 +197,7 @@ export function PlayerPageTemplate({ user: profileUser }: { user?: User }) {
                 <div className="text-center md:text-left flex-grow">
                     <h1 className="text-3xl font-bold font-headline">{player.firstName} "{player.nickname}" {player.lastName}</h1>
                     <p className="text-muted-foreground text-lg mt-1">Роль: {player.role}</p>
-                    <div className="flex flex-wrap items-center justify-center md:justify-start gap-x-4 gap-y-1 text-muted-foreground mt-2">
+                    <div className="flex flex-wrap items-center justify-center md:justify-start gap-x-4 gap-y-1 text-muted-foreground mt-2 text-sm">
                         {playerTeam && (
                             <div className="flex items-center gap-2">
                                 <Briefcase className="h-4 w-4" />
@@ -278,8 +207,6 @@ export function PlayerPageTemplate({ user: profileUser }: { user?: User }) {
                         )}
                         {player.city && <div className="flex items-center gap-2"><MapPin className="h-4 w-4"/><span>{player.city}</span></div>}
                         {player.age && <div className="flex items-center gap-2"><span>Возраст: {player.age}</span></div>}
-                        {player.email && <div className="flex items-center gap-2"><Mail className="h-4 w-4"/><span>{player.email}</span></div>}
-                        {player.phone && <div className="flex items-center gap-2"><Phone className="h-4 w-4"/><span>{player.phone}</span></div>}
                     </div>
                 </div>
                 {!isOwnProfile && (
@@ -290,26 +217,66 @@ export function PlayerPageTemplate({ user: profileUser }: { user?: User }) {
                 )}
             </header>
             
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <div className="lg:col-span-2">
-                    <Tabs defaultValue="overview">
-                        <TabsList className="grid w-full grid-cols-2 md:grid-cols-5">
-                            <TabsTrigger value="overview">Обзор</TabsTrigger>
+            <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+                {/* Left Column for Stats and Graphs */}
+                <div className="lg:col-span-1 space-y-6">
+                    <Card>
+                        <CardHeader><CardTitle className="text-base">Форма (5 матчей)</CardTitle></CardHeader>
+                        <CardContent className="flex items-center gap-2 justify-center">
+                            {last5Form.map((result, index) => <FormBadge key={index} result={result} />)}
+                        </CardContent>
+                    </Card>
+                    <Card>
+                        <CardHeader><CardTitle className="text-base">Навыки</CardTitle></CardHeader>
+                        <CardContent>
+                            <ChartContainer config={{}} className="h-52 w-full">
+                                <RadarChart data={skillData}>
+                                    <ChartTooltipContent />
+                                    <PolarAngleAxis dataKey="subject" className="text-xs"/>
+                                    <PolarGrid />
+                                    <Radar name="Skills" dataKey="A" stroke="hsl(var(--primary))" fill="hsl(var(--primary))" fillOpacity={0.6} />
+                                </RadarChart>
+                            </ChartContainer>
+                        </CardContent>
+                    </Card>
+                    <Card>
+                        <CardHeader><CardTitle className="text-base">Прогресс ELO</CardTitle></CardHeader>
+                        <CardContent>
+                            <ChartContainer config={{elo: {label: 'ELO', color: "hsl(var(--primary))"}}} className="h-48 w-full">
+                                <LineChart data={eloData} margin={{ top: 5, right: 10, left: -20, bottom: 0 }}>
+                                    <CartesianGrid vertical={false} />
+                                    <XAxis dataKey="month" tickLine={false} axisLine={false} tickMargin={8} className="text-xs"/>
+                                    <YAxis domain={['dataMin - 50', 'dataMax + 50']} hide/>
+                                    <RechartsTooltip content={<ChartTooltipContent />}/>
+                                    <Line type="monotone" dataKey="elo" stroke="hsl(var(--primary))" strokeWidth={2} dot={false} />
+                                </LineChart>
+                            </ChartContainer>
+                        </CardContent>
+                    </Card>
+                    <Card>
+                        <CardHeader><CardTitle className="text-base">Трофеи</CardTitle></CardHeader>
+                        <CardContent className="flex justify-around items-center">
+                             <Trophy className="h-12 w-12 text-amber-400" />
+                             <Trophy className="h-10 w-10 text-slate-400" />
+                             <Trophy className="h-8 w-8 text-amber-600" />
+                        </CardContent>
+                    </Card>
+                </div>
+                
+                {/* Right Column for Tabs */}
+                <div className="lg:col-span-3">
+                     <Tabs defaultValue="stats">
+                        <TabsList className="grid w-full grid-cols-2 md:grid-cols-4">
                             <TabsTrigger value="stats">Статистика</TabsTrigger>
                             <TabsTrigger value="training">Тренировки</TabsTrigger>
                             <TabsTrigger value="feed">Лента</TabsTrigger>
                             <TabsTrigger value="media">Медиа</TabsTrigger>
                         </TabsList>
-                        <TabsContent value="overview" className="mt-6"><OverviewTab player={player} playerDisciplines={playerDisciplines} /></TabsContent>
                         <TabsContent value="stats" className="mt-6"><StatsTab /></TabsContent>
                         <TabsContent value="training" className="mt-6"><TrainingTab /></TabsContent>
                         <TabsContent value="feed" className="mt-6"><FeedTab player={player} isOwnProfile={isOwnProfile} /></TabsContent>
                         <TabsContent value="media" className="mt-6"><MediaTab /></TabsContent>
                     </Tabs>
-                </div>
-                 <div className="lg:col-span-1 space-y-6">
-                    <FollowersCard user={player} />
-                    <FollowingCard user={player} />
                 </div>
             </div>
         </div>
