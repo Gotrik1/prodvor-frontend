@@ -211,50 +211,46 @@ export function RefereeCenterPage() {
                      <Card>
                         <CardHeader>
                             <CardTitle className="flex items-center gap-2"><BarChart />Моя карьера</CardTitle>
+                             <CardDescription>Ваш текущий статус и прогресс к следующей категории.</CardDescription>
                         </CardHeader>
-                        <CardContent className="space-y-3">
-                            <div className="flex justify-between items-baseline">
+                        <CardContent className="space-y-4">
+                            <div className="flex justify-between items-baseline p-2 bg-muted/50 rounded-md">
                                 <span className="text-muted-foreground">Категория:</span>
                                 <span className="font-bold text-lg">Вторая</span>
                             </div>
-                            <div className="flex justify-between items-baseline">
+                            <div className="flex justify-between items-baseline p-2 bg-muted/50 rounded-md">
                                 <span className="text-muted-foreground">Рейтинг:</span>
                                 <div className="flex items-center gap-1 font-bold text-lg text-amber-400">
                                     <Star className="h-4 w-4 fill-amber-400"/> 4.82
                                 </div>
                             </div>
-                            <div className="flex justify-between items-baseline">
+                             <div className="flex justify-between items-baseline p-2 bg-muted/50 rounded-md">
                                 <span className="text-muted-foreground">Матчей отсужено:</span>
                                 <span className="font-bold text-lg">128</span>
                             </div>
-                             <Button asChild className="w-full mt-4 !-mb-2">
+                             <Button asChild className="w-full mt-2">
                                 <Link href="/training-center">
                                     <Calendar className="mr-2 h-4 w-4" />
                                     Управлять расписанием
                                 </Link>
                             </Button>
                         </CardContent>
-                    </Card>
-                    <Card>
-                        <CardHeader className="text-center">
-                            <div className="mx-auto bg-primary/10 text-primary p-4 rounded-full w-fit mb-4">
-                                <ShieldCheck className="h-10 w-10" />
-                            </div>
-                            <CardTitle className="text-2xl">Аттестация</CardTitle>
-                            <CardDescription>
-                                Подтвердите свою квалификацию, чтобы повысить судейскую категорию до "Первой".
+                        <CardHeader>
+                             <CardTitle className="flex items-center gap-2 text-primary pt-4 border-t"><ShieldCheck />Аттестация</CardTitle>
+                             <CardDescription>
+                                Выполните цели для повышения категории до "Первой".
                             </CardDescription>
                         </CardHeader>
-                        <CardContent>
+                         <CardContent>
                             <div className="space-y-2">
                                 <div className="flex justify-between items-center text-sm mb-1">
                                     <span className="font-medium">Прогресс до теста:</span>
                                     <span className="font-bold text-primary">80%</span>
                                 </div>
                                 <Progress value={80} />
-                                <ul className="text-xs text-muted-foreground list-disc pl-4 mt-2 space-y-1">
-                                    <li>Отсудить еще 2 рейтинговых матча.</li>
-                                    <li>Пройти курс <Link href="#" className="text-primary hover:underline">"VAR для дворового футбола"</Link>.</li>
+                                <ul className="text-xs text-muted-foreground pt-2 space-y-1.5">
+                                    <li className="flex items-center"><CheckCircle className="h-3.5 w-3.5 mr-2 text-green-500" /> Отсудить еще 2 рейтинговых матча.</li>
+                                    <li className="flex items-center"><CheckCircle className="h-3.5 w-3.5 mr-2 text-green-500" /> Пройти курс <Link href="#" className="text-primary hover:underline ml-1">"VAR для дворового футбола"</Link>.</li>
                                 </ul>
                             </div>
                             <Button className="w-full mt-6" disabled>
@@ -267,3 +263,5 @@ export function RefereeCenterPage() {
         </div>
     );
 }
+
+    
