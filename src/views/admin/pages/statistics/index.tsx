@@ -279,7 +279,14 @@ export function AdminStatisticsPage() {
                                         {getUserSponsors(user.sponsorIds)}
                                     </TableCell>
                                     <TableCell className="text-right align-top">
-                                        <Button asChild variant="ghost" size="sm"><Link href={`/admin/users/${user.id}`}><ExternalLink className="mr-2 h-4 w-4"/>Просмотр</Link></Button>
+                                        <div className="flex items-center justify-end gap-2">
+                                            <Button asChild variant="ghost" size="sm"><Link href={`/admin/users/${user.id}`}>Просмотр</Link></Button>
+                                            <Button asChild variant="ghost" size="icon" className="h-8 w-8">
+                                                <Link href={`/users/${user.id}`} target="_blank" rel="noopener noreferrer">
+                                                    <ExternalLink className="h-4 w-4"/>
+                                                </Link>
+                                            </Button>
+                                        </div>
                                     </TableCell>
                                 </TableRow>
                             )}}
@@ -314,7 +321,7 @@ export function AdminStatisticsPage() {
                                     <TableCell className="text-xs">{getTeamSponsors(team.sponsorIds)}</TableCell>
                                     <TableCell className="text-xs">{getTeamPlaygrounds(team.homePlaygroundIds)}</TableCell>
                                      <TableCell className="text-right align-top">
-                                        <Button asChild variant="ghost" size="sm"><Link href={`/admin/teams/${team.id}`}><ExternalLink className="mr-2 h-4 w-4"/>Просмотр</Link></Button>
+                                        <Button asChild variant="ghost" size="sm"><Link href={`/admin/teams/${team.id}`}>Просмотр</Link></Button>
                                     </TableCell>
                                 </TableRow>
                             )}
@@ -343,7 +350,7 @@ export function AdminStatisticsPage() {
                                     </TableCell>
                                     <TableCell>{sponsor.contribution}</TableCell>
                                     <TableCell className="text-right align-top">
-                                        <Button asChild variant="ghost" size="sm"><Link href={`/admin/sponsors/${sponsor.id}`}><ExternalLink className="mr-2 h-4 w-4"/>Просмотр</Link></Button>
+                                        <Button asChild variant="ghost" size="sm"><Link href={`/admin/sponsors/${sponsor.id}`}>Просмотр</Link></Button>
                                     </TableCell>
                                 </TableRow>
                             )}
