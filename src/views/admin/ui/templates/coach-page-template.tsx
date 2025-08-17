@@ -10,7 +10,7 @@ import { BarChart, Dumbbell, Shield, Trophy, Users, Gamepad2, Activity } from "l
 import { Button } from "@/shared/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/shared/ui/table";
 import { ChartContainer, ChartTooltip, ChartTooltipContent, ChartLegend, ChartLegendContent } from "@/shared/ui/chart";
-import { Bar, BarChart as RechartsBarChart, XAxis, YAxis, CartesianGrid } from "recharts";
+import { Bar, BarChart as RechartsBarChart, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from "recharts";
 
 const defaultCoach = users.find(u => u.role === 'Тренер')!;
 const coachTeam = teams[0];
@@ -130,14 +130,16 @@ export function CoachPageTemplate({ user }: { user?: User }) {
                     </CardHeader>
                     <CardContent>
                        <ChartContainer config={chartConfig} className="h-64 w-full">
-                            <RechartsBarChart data={chartData} accessibilityLayer>
-                                <CartesianGrid vertical={false} />
-                                <XAxis dataKey="month" tickLine={false} tickMargin={10} axisLine={false} />
-                                <YAxis />
-                                <ChartTooltip content={<ChartTooltipContent />} />
-                                <ChartLegend content={<ChartLegendContent />} />
-                                <Bar dataKey="winrate" fill="var(--color-winrate)" radius={4} />
-                            </RechartsBarChart>
+                            <ResponsiveContainer>
+                                <RechartsBarChart data={chartData} accessibilityLayer>
+                                    <CartesianGrid vertical={false} />
+                                    <XAxis dataKey="month" tickLine={false} tickMargin={10} axisLine={false} />
+                                    <YAxis />
+                                    <ChartTooltip content={<ChartTooltipContent />} />
+                                    <ChartLegend content={<ChartLegendContent />} />
+                                    <Bar dataKey="winrate" fill="var(--color-winrate)" radius={4} />
+                                </RechartsBarChart>
+                            </ResponsiveContainer>
                         </ChartContainer>
                     </CardContent>
                 </Card>
