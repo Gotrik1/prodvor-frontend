@@ -285,5 +285,3 @@ export function PlayerPageTemplate({ user: profileUser }: { user?: User }) {
         </div>
     )
 }
-
-    

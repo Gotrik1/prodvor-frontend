@@ -122,5 +122,3 @@ export function SocialTab({ user, isOwnProfile }: { user: User, isOwnProfile: bo
         </Card>
     );
 }
-
-    
