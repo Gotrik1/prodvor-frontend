@@ -14,6 +14,7 @@ import { scheduleData } from '@/widgets/fitness-schedule/lib/mock-data';
 import Link from 'next/link';
 import { Avatar, AvatarImage, AvatarFallback } from '@/shared/ui/avatar';
 import { Badge } from '@/shared/ui/badge';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shared/ui/select';
 
 interface Exercise {
   id: string;
@@ -28,6 +29,27 @@ interface WorkoutPlan {
   name: string;
   exercises: Exercise[];
 }
+
+interface GroupEvent {
+    id: string;
+    title: string;
+    category: string;
+    trainer: { id: string; avatarUrl: string; nickname: string; };
+    location?: string;
+    isCustom?: boolean;
+}
+
+const allScheduleEvents = Object.values(scheduleData).flat();
+
+const initialGroupEvents: GroupEvent[] = allScheduleEvents.map(event => ({
+    id: event.id,
+    title: event.title,
+    category: event.category,
+    trainer: event.trainer,
+    location: "Фитнес-клуб 'Pro-Forma'",
+    isCustom: false,
+}));
+
 
 const categoryColors: Record<string, string> = {
     'Силовая': 'bg-red-500/10 text-red-300 border-red-500/20',
@@ -109,21 +131,79 @@ const NewPlanForm = ({ onSave }: { onSave: (plan: WorkoutPlan) => void }) => {
     );
 };
 
+const NewGroupEventForm = ({ onSave }: { onSave: (event: GroupEvent) => void }) => {
+    const [title, setTitle] = useState('');
+    const [category, setCategory] = useState('');
+    const [trainer, setTrainer] = useState('');
+    const [location, setLocation] = useState('');
+    
+    const handleSave = () => {
+        if (!title || !category) return;
+        onSave({
+            id: `custom-${Date.now()}`,
+            title,
+            category,
+            trainer: { id: 'custom', nickname: trainer || 'Не указан', avatarUrl: '' },
+            location,
+            isCustom: true,
+        });
+    };
+
+    return (
+        <div className="space-y-4">
+            <div className="space-y-2">
+                <Label htmlFor="event-title">Название занятия</Label>
+                <Input id="event-title" value={title} onChange={e => setTitle(e.target.value)} placeholder="Например, Zumba с Анной"/>
+            </div>
+             <div className="space-y-2">
+                <Label htmlFor="event-category">Категория</Label>
+                 <Select onValueChange={setCategory}>
+                    <SelectTrigger id="event-category"><SelectValue placeholder="Выберите категорию..."/></SelectTrigger>
+                    <SelectContent>
+                        {Object.keys(categoryColors).map(cat => <SelectItem key={cat} value={cat}>{cat}</SelectItem>)}
+                    </SelectContent>
+                </Select>
+            </div>
+            <div className="space-y-2">
+                <Label htmlFor="event-trainer">Тренер (необязательно)</Label>
+                <Input id="event-trainer" value={trainer} onChange={e => setTrainer(e.target.value)} placeholder="Имя тренера"/>
+            </div>
+             <div className="space-y-2">
+                <Label htmlFor="event-location">Место (необязательно)</Label>
+                <Input id="event-location" value={location} onChange={e => setLocation(e.target.value)} placeholder="Название фитнес-клуба или адрес"/>
+            </div>
+            <DialogFooter>
+                <Button onClick={handleSave}><Save className="mr-2 h-4 w-4"/>Сохранить занятие</Button>
+            </DialogFooter>
+        </div>
+    );
+};
+
 export function FitnessPlanPage() {
     const [plans, setPlans] = useState<WorkoutPlan[]>([]);
+    const [groupEvents, setGroupEvents] = useState<GroupEvent[]>(initialGroupEvents);
     const { toast } = useToast();
-    const [isFormOpen, setIsFormOpen] = useState(false);
+    const [isPlanFormOpen, setIsPlanFormOpen] = useState(false);
+    const [isGroupFormOpen, setIsGroupFormOpen] = useState(false);
+
 
     const handleSavePlan = (plan: WorkoutPlan) => {
         setPlans([...plans, plan]);
-        setIsFormOpen(false);
+        setIsPlanFormOpen(false);
         toast({
             title: "Шаблон сохранен!",
             description: `Ваш новый план "${plan.name}" был успешно создан.`,
         });
     };
     
-    const allGroupEvents = Object.values(scheduleData).flat();
+    const handleSaveGroupEvent = (event: GroupEvent) => {
+        setGroupEvents([event, ...groupEvents]);
+        setIsGroupFormOpen(false);
+        toast({
+            title: "Занятие добавлено!",
+            description: `Активность "${event.title}" добавлена в вашу библиотеку.`,
+        });
+    };
 
     return (
         <div className="p-4 md:p-6 lg:p-8 space-y-8">
@@ -171,7 +251,7 @@ export function FitnessPlanPage() {
                                         </CardContent>
                                     </Card>
                                 ))}
-                                 <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
+                                 <Dialog open={isPlanFormOpen} onOpenChange={setIsPlanFormOpen}>
                                     <DialogTrigger asChild>
                                         <Card className="flex items-center justify-center min-h-[200px] border-2 border-dashed hover:border-primary transition-colors cursor-pointer">
                                             <div className="text-center text-muted-foreground">
@@ -195,24 +275,39 @@ export function FitnessPlanPage() {
                 <TabsContent value="group" className="mt-6">
                      <Card>
                         <CardHeader>
-                            <CardTitle>Библиотека групповых занятий</CardTitle>
-                            <CardDescription>Найдите интересные занятия и добавьте их в свой календарь.</CardDescription>
+                            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                                <div>
+                                    <CardTitle>Библиотека групповых занятий</CardTitle>
+                                    <CardDescription>Найдите интересные занятия и добавьте их в свой календарь.</CardDescription>
+                                </div>
+                                <Dialog open={isGroupFormOpen} onOpenChange={setIsGroupFormOpen}>
+                                    <DialogTrigger asChild>
+                                        <Button variant="outline"><PlusCircle className="mr-2 h-4 w-4"/>Создать свое занятие</Button>
+                                    </DialogTrigger>
+                                    <DialogContent>
+                                        <DialogHeader>
+                                            <DialogTitle>Добавить свое групповое занятие</DialogTitle>
+                                        </DialogHeader>
+                                        <NewGroupEventForm onSave={handleSaveGroupEvent} />
+                                    </DialogContent>
+                                </Dialog>
+                            </div>
                         </CardHeader>
                         <CardContent className="space-y-4">
-                            {allGroupEvents.map(event => (
+                            {groupEvents.map(event => (
                                 <Card key={event.id} className="bg-muted/50">
                                     <CardContent className="p-3 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                                         <div className="flex-1">
                                             <Badge className={categoryColors[event.category]}>{event.category}</Badge>
                                             <h4 className="font-semibold mt-1">{event.title}</h4>
-                                             <Link href={`/users/${event.trainer.id}`} className="flex items-center gap-2 group text-sm text-muted-foreground mt-1">
+                                             <div className="flex items-center gap-2 group text-sm text-muted-foreground mt-1">
                                                 <Avatar className="h-5 w-5"><AvatarImage src={event.trainer.avatarUrl} /><AvatarFallback>{event.trainer.nickname.charAt(0)}</AvatarFallback></Avatar>
-                                                <span className="group-hover:text-primary transition-colors">{event.trainer.nickname}</span>
-                                            </Link>
+                                                <span>{event.trainer.nickname}</span>
+                                            </div>
                                         </div>
                                         <div className="flex items-center gap-2 text-sm text-muted-foreground">
                                             <Clock className="h-4 w-4" />
-                                            <span>{event.startTime} - {event.endTime}</span>
+                                            <span>{event.location}</span>
                                         </div>
                                         <Button><Calendar className="mr-2 h-4 w-4"/>Запланировать</Button>
                                     </CardContent>
@@ -225,5 +320,3 @@ export function FitnessPlanPage() {
         </div>
     );
 }
-
-    
