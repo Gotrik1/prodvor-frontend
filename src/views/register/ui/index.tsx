@@ -1,4 +1,6 @@
 
+'use client';
+
 import { Button } from "@/shared/ui/button";
 import {
   Card,
@@ -16,11 +18,14 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/shared/ui/popover";
 import { CalendarIcon } from "lucide-react";
 import { Calendar } from "@/shared/ui/calendar";
 import { cn } from "@/shared/lib/utils";
+import React from 'react';
 
 
 export function RegisterPage() {
+    const [date, setDate] = React.useState<Date>();
+    
   return (
-    <div className="flex items-center justify-center min-h-screen bg-background p-4 dark">
+    <div className="flex items-center justify-center min-h-screen bg-background p-4">
       <Card className="w-full max-w-md mx-auto shadow-xl border-border/60 bg-card">
         <CardHeader className="text-center">
           <div className="flex justify-center mb-4">
@@ -64,7 +69,6 @@ export function RegisterPage() {
                             <SelectItem value="coach">Тренер</SelectItem>
                             <SelectItem value="manager">Менеджер</SelectItem>
                             <SelectItem value="organizer">Организатор</SelectItem>
-                            <SelectItem value="sponsor">Спонсор</SelectItem>
                         </SelectContent>
                     </Select>
                 </div>
@@ -76,16 +80,18 @@ export function RegisterPage() {
                             variant={"outline"}
                             className={cn(
                             "w-full justify-start text-left font-normal",
-                            !true && "text-muted-foreground"
+                            !date && "text-muted-foreground"
                             )}
                         >
                             <CalendarIcon className="mr-2 h-4 w-4" />
-                            <span>Выберите дату</span>
+                            {date ? date.toLocaleDateString() : <span>Выберите дату</span>}
                         </Button>
                         </PopoverTrigger>
                         <PopoverContent className="w-auto p-0">
                         <Calendar
                             mode="single"
+                            selected={date}
+                            onSelect={setDate}
                             initialFocus
                         />
                         </PopoverContent>

@@ -38,15 +38,7 @@ export function AdminLayout({
                             <Link href="/admin">
                                 <SidebarMenuButton isActive={pathname === '/admin' || pathname === '/admin/dashboard'}>
                                     <Home />
-                                    <span>Главная</span>
-                                </SidebarMenuButton>
-                            </Link>
-                        </SidebarMenuItem>
-                         <SidebarMenuItem>
-                            <Link href="/admin/statistics">
-                                <SidebarMenuButton isActive={pathname.startsWith('/admin/statistics')}>
-                                    <BarChart />
-                                    <span>Статистика</span>
+                                    <span>Дашборд</span>
                                 </SidebarMenuButton>
                             </Link>
                         </SidebarMenuItem>

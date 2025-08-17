@@ -2,7 +2,6 @@
 import type { Metadata } from 'next';
 import { AdminLayout } from '@/views/admin/pages/layout';
 import { AdminDashboardPage } from '@/views/admin/pages/dashboard';
-import { AdminStatisticsPage } from '@/views/admin/pages/statistics';
 import { AdvertisingPage } from '@/views/admin/advertising';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Button } from '@/shared/ui/button';
@@ -51,8 +50,6 @@ export default function AdminPage({ params }: { params: { slug: string[] } }) {
     switch (page) {
       case 'dashboard':
         return <AdminDashboardPage />;
-      case 'statistics':
-        return <AdminStatisticsPage />;
       case 'advertising':
         return <AdvertisingPage />;
       case 'simulation':
@@ -64,7 +61,7 @@ export default function AdminPage({ params }: { params: { slug: string[] } }) {
       case 'teams':
         const team = teams.find(t => t.id === subpage);
         if (!team) {
-            return <NotFoundAdminPage message={`Команда с ID "${subpage}" не найдена.`} backLink="/admin/statistics" backLinkText="Вернуться к списку" />;
+            return <NotFoundAdminPage message={`Команда с ID "${subpage}" не найдена.`} backLink="/admin" backLinkText="Вернуться в дашборд" />;
         }
         return <TeamPageTemplate team={team} />;
       case 'sponsors':
