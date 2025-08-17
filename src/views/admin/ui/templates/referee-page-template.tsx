@@ -8,7 +8,7 @@ import { Badge } from "@/shared/ui/badge";
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/shared/ui/table";
-import { Calendar, CheckCircle, Gavel, Shield, Star, XCircle, Gamepad2 } from "lucide-react";
+import { Calendar, CheckCircle, Gavel, Shield, Star, XCircle, Gamepad2, Activity } from "lucide-react";
 
 const defaultReferee = users.find(s => s.role === 'Судья')!;
 const mockMatches = [
@@ -135,23 +135,32 @@ export function RefereePageTemplate({ user }: { user?: User }) {
                         </Table>
                     </CardContent>
                 </Card>
-                <Card>
-                    <CardHeader>
-                        <CardTitle className="flex items-center gap-2"><Calendar /> Расписание</CardTitle>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                        {mockMatches.filter(m => m.status === 'Предстоит').map(match => (
-                             <div key={match.id} className="p-3 rounded-lg bg-muted/50">
-                                <p className="font-semibold">{match.team1.name} vs {match.team2.name}</p>
-                                <p className="text-xs text-muted-foreground">{match.tournament}</p>
-                                <p className="text-sm font-medium mt-1">{match.date}</p>
-                            </div>
-                        ))}
-                        <Button className="w-full mt-2">Управлять расписанием</Button>
-                    </CardContent>
-                </Card>
+                <div className="space-y-6">
+                    <Card>
+                        <CardHeader>
+                            <CardTitle className="flex items-center gap-2"><Calendar /> Расписание</CardTitle>
+                        </CardHeader>
+                        <CardContent className="space-y-4">
+                            {mockMatches.filter(m => m.status === 'Предстоит').map(match => (
+                                <div key={match.id} className="p-3 rounded-lg bg-muted/50">
+                                    <p className="font-semibold">{match.team1.name} vs {match.team2.name}</p>
+                                    <p className="text-xs text-muted-foreground">{match.tournament}</p>
+                                    <p className="text-sm font-medium mt-1">{match.date}</p>
+                                </div>
+                            ))}
+                            <Button className="w-full mt-2">Управлять расписанием</Button>
+                        </CardContent>
+                    </Card>
+                     <Card>
+                        <CardHeader>
+                            <CardTitle className="flex items-center gap-2"><Activity /> Физическая подготовка</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            <p className="text-sm text-muted-foreground">Регулярные кардио-тренировки для поддержания формы на поле.</p>
+                        </CardContent>
+                    </Card>
+                </div>
             </div>
-
         </div>
     )
 }

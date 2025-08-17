@@ -8,7 +8,7 @@ import { Badge } from "@/shared/ui/badge";
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/shared/ui/table";
-import { BarChart, Briefcase, DollarSign, ExternalLink, Trophy, Users, Gamepad2 } from "lucide-react";
+import { BarChart, Briefcase, DollarSign, ExternalLink, Trophy, Users, Gamepad2, Activity } from "lucide-react";
 import Link from "next/link";
 import Image from 'next/image';
 
@@ -101,50 +101,60 @@ export function ManagerPageTemplate({ user }: { user?: User }) {
                     </CardContent>
                 </Card>
             </div>
-
-            <Card>
-                <CardHeader>
-                    <CardTitle>Управляемые команды</CardTitle>
-                    <CardDescription>Обзор производительности команд, находящихся под вашим управлением.</CardDescription>
-                </CardHeader>
-                <CardContent>
-                    <div className="border rounded-lg">
-                        <Table>
-                            <TableHeader>
-                                <TableRow>
-                                    <TableHead>Команда</TableHead>
-                                    <TableHead>Дисциплина</TableHead>
-                                    <TableHead className="text-center">Рейтинг ELO</TableHead>
-                                    <TableHead className="text-center">Игроков</TableHead>
-                                    <TableHead className="text-right">Действия</TableHead>
-                                </TableRow>
-                            </TableHeader>
-                            <TableBody>
-                                {managedTeams.map((team) => (
-                                    <TableRow key={team.id}>
-                                        <TableCell className="font-medium">
-                                             <div className="flex items-center gap-3">
-                                                <Image src={team.logoUrl} alt={team.name} width={32} height={32} className="rounded-sm" data-ai-hint="team logo" />
-                                                <span>{team.name}</span>
-                                            </div>
-                                        </TableCell>
-                                        <TableCell>{team.game}</TableCell>
-                                        <TableCell className="text-center font-mono">{team.rank}</TableCell>
-                                        <TableCell className="text-center">{team.members.length}</TableCell>
-                                        <TableCell className="text-right">
-                                            <Button asChild variant="outline" size="sm">
-                                                <Link href={`/teams/${team.id}`}>
-                                                    Профиль <ExternalLink className="ml-2 h-3 w-3" />
-                                                </Link>
-                                            </Button>
-                                        </TableCell>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <Card className="lg:col-span-2">
+                    <CardHeader>
+                        <CardTitle>Управляемые команды</CardTitle>
+                        <CardDescription>Обзор производительности команд, находящихся под вашим управлением.</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <div className="border rounded-lg">
+                            <Table>
+                                <TableHeader>
+                                    <TableRow>
+                                        <TableHead>Команда</TableHead>
+                                        <TableHead>Дисциплина</TableHead>
+                                        <TableHead className="text-center">Рейтинг ELO</TableHead>
+                                        <TableHead className="text-center">Игроков</TableHead>
+                                        <TableHead className="text-right">Действия</TableHead>
                                     </TableRow>
-                                ))}
-                            </TableBody>
-                        </Table>
-                    </div>
-                </CardContent>
-            </Card>
+                                </TableHeader>
+                                <TableBody>
+                                    {managedTeams.map((team) => (
+                                        <TableRow key={team.id}>
+                                            <TableCell className="font-medium">
+                                                <div className="flex items-center gap-3">
+                                                    <Image src={team.logoUrl} alt={team.name} width={32} height={32} className="rounded-sm" data-ai-hint="team logo" />
+                                                    <span>{team.name}</span>
+                                                </div>
+                                            </TableCell>
+                                            <TableCell>{team.game}</TableCell>
+                                            <TableCell className="text-center font-mono">{team.rank}</TableCell>
+                                            <TableCell className="text-center">{team.members.length}</TableCell>
+                                            <TableCell className="text-right">
+                                                <Button asChild variant="outline" size="sm">
+                                                    <Link href={`/teams/${team.id}`}>
+                                                        Профиль <ExternalLink className="ml-2 h-3 w-3" />
+                                                    </Link>
+                                                </Button>
+                                            </TableCell>
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </div>
+                    </CardContent>
+                </Card>
+                <Card>
+                    <CardHeader>
+                        <CardTitle className="flex items-center gap-2"><Activity /> Тренировочный процесс</CardTitle>
+                        <CardDescription>Анализ и планирование тренировок команд.</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <p className="text-sm text-muted-foreground">Раздел в разработке. Здесь будет отображаться сводная информация о тренировках всех команд, анализ эффективности и инструменты планирования.</p>
+                    </CardContent>
+                </Card>
+            </div>
         </div>
     );
 }

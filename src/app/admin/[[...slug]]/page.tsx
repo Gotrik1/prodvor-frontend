@@ -12,6 +12,7 @@ import { TemplatePreviewPage, templateMap } from '@/views/admin/pages/templates'
 import { SimulationPage } from '@/views/admin/pages/simulation';
 import { teams } from '@/mocks';
 import { TeamPageTemplate } from '@/views/admin/ui/templates/team-page-template';
+import { RolesPage } from '@/views/admin/pages/roles';
 
 
 export const metadata: Metadata = {
@@ -55,6 +56,8 @@ export default function AdminPage({ params }: { params: { slug: string[] } }) {
         return <AdvertisingPage />;
       case 'simulation':
         return <SimulationPage />;
+      case 'roles':
+        return <RolesPage />;
       case 'users':
         return <UserPage userId={subpage} />;
       case 'teams':

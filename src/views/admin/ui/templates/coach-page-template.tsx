@@ -6,7 +6,7 @@ import type { User } from "@/mocks/users";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { Badge } from "@/shared/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
-import { BarChart, Calendar, ClipboardList, Dumbbell, Shield, Star, Swords, Trophy, Users, Whistle, Gamepad2 } from "lucide-react";
+import { BarChart, Calendar, ClipboardList, Dumbbell, Shield, Star, Swords, Trophy, Users, Whistle, Gamepad2, Activity } from "lucide-react";
 import Image from 'next/image';
 import { Button } from "@/shared/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/shared/ui/table";
@@ -142,27 +142,25 @@ export function CoachPageTemplate({ user }: { user?: User }) {
                         </ChartContainer>
                     </CardContent>
                 </Card>
-                <Card>
+                 <Card>
                     <CardHeader>
                         <CardTitle className="flex items-center gap-2">
-                            <Calendar className="h-5 w-5" />
-                            Расписание тренировок
+                            <Activity />
+                            Режим тренировок
                         </CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-3">
-                         <div className="flex items-center justify-between p-2 rounded-md bg-muted/50">
-                            <div>
-                                <p className="font-semibold">Тактическая подготовка</p>
-                                <p className="text-xs text-muted-foreground">Завтра, 18:00 - 20:00</p>
-                            </div>
-                            <Badge variant="outline">Запланировано</Badge>
+                         <div className="p-2 rounded-md bg-muted/50">
+                            <p className="font-semibold">Тактическая подготовка</p>
+                            <p className="text-xs text-muted-foreground">Пн, Чт (18:00 - 20:00)</p>
                         </div>
-                        <div className="flex items-center justify-between p-2 rounded-md bg-muted/50">
-                            <div>
-                                <p className="font-semibold">Силовая тренировка</p>
-                                <p className="text-xs text-muted-foreground">15.08.2025, 19:00 - 20:30</p>
-                            </div>
-                             <Badge variant="outline">Запланировано</Badge>
+                        <div className="p-2 rounded-md bg-muted/50">
+                            <p className="font-semibold">Силовая тренировка</p>
+                            <p className="text-xs text-muted-foreground">Вт, Пт (19:00 - 20:30)</p>
+                        </div>
+                        <div className="p-2 rounded-md bg-muted/50">
+                            <p className="font-semibold">Кардио</p>
+                            <p className="text-xs text-muted-foreground">Ср (08:00 - 09:00)</p>
                         </div>
                          <Button className="w-full mt-2">Управлять расписанием</Button>
                     </CardContent>

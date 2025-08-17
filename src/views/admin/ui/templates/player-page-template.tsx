@@ -6,7 +6,7 @@ import type { User } from "@/mocks/users";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { Badge } from "@/shared/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
-import { Briefcase, Dumbbell, Film, History, Mail, MapPin, MessageSquare, Phone, Rss, UserPlus, Users as UsersIcon, Gamepad2 } from "lucide-react";
+import { Briefcase, Dumbbell, Film, History, Mail, MapPin, MessageSquare, Phone, Rss, UserPlus, Users as UsersIcon, Gamepad2, Heart, Activity } from "lucide-react";
 import Image from 'next/image';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 import { Button } from "@/shared/ui/button";
@@ -147,6 +147,53 @@ const FeedTab = ({ player, isOwnProfile }: { player: User; isOwnProfile: boolean
     )
 };
 
+const TrainingTab = () => (
+    <Card>
+        <CardHeader>
+            <CardTitle className="flex items-center gap-2"><Activity /> Тренировочный процесс</CardTitle>
+            <CardDescription>Информация о тренировочной активности и предпочтениях игрока.</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <Card className="bg-muted/50">
+                    <CardHeader>
+                        <CardTitle className="text-lg">Специализация</CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-2">
+                        <p><span className="font-semibold">Основной фокус:</span> Выносливость и скорость</p>
+                        <p><span className="font-semibold">Дополнительно:</span> Силовые тренировки</p>
+                    </CardContent>
+                </Card>
+                <Card className="bg-muted/50">
+                    <CardHeader>
+                        <CardTitle className="text-lg">Режим</CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-2">
+                        <p><span className="font-semibold">Частота:</span> 4-5 раз в неделю</p>
+                        <p><span className="font-semibold">Любимое время:</span> Вечер</p>
+                    </CardContent>
+                </Card>
+            </div>
+             <div>
+                <h3 className="text-lg font-semibold mb-2">Предпочитаемые места</h3>
+                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {playgrounds.slice(0, 2).map(p => (
+                        <Link href={`/playgrounds/${p.id}`} key={p.id} className="block p-3 rounded-md border bg-card hover:border-primary transition-colors">
+                            <div className="flex items-center gap-3">
+                                <Dumbbell className="h-5 w-5 text-primary" />
+                                <div>
+                                    <p className="font-semibold">{p.name}</p>
+                                    <p className="text-xs text-muted-foreground">{p.address}</p>
+                                </div>
+                            </div>
+                        </Link>
+                    ))}
+                </div>
+            </div>
+        </CardContent>
+    </Card>
+);
+
 const MediaTab = () => (
     <Card>
         <CardHeader><CardTitle>Медиа</CardTitle></CardHeader>
@@ -246,14 +293,16 @@ export function PlayerPageTemplate({ user: profileUser }: { user?: User }) {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <div className="lg:col-span-2">
                     <Tabs defaultValue="overview">
-                        <TabsList className="grid w-full grid-cols-2 md:grid-cols-4">
+                        <TabsList className="grid w-full grid-cols-2 md:grid-cols-5">
                             <TabsTrigger value="overview">Обзор</TabsTrigger>
                             <TabsTrigger value="stats">Статистика</TabsTrigger>
+                            <TabsTrigger value="training">Тренировки</TabsTrigger>
                             <TabsTrigger value="feed">Лента</TabsTrigger>
                             <TabsTrigger value="media">Медиа</TabsTrigger>
                         </TabsList>
                         <TabsContent value="overview" className="mt-6"><OverviewTab player={player} playerDisciplines={playerDisciplines} /></TabsContent>
                         <TabsContent value="stats" className="mt-6"><StatsTab /></TabsContent>
+                        <TabsContent value="training" className="mt-6"><TrainingTab /></TabsContent>
                         <TabsContent value="feed" className="mt-6"><FeedTab player={player} isOwnProfile={isOwnProfile} /></TabsContent>
                         <TabsContent value="media" className="mt-6"><MediaTab /></TabsContent>
                     </Tabs>

@@ -2,7 +2,7 @@ import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
 import Link from "next/link";
 import type { LucideIcon } from "lucide-react";
-import { User, Users, ClipboardList, Gavel, Briefcase, Shield, Megaphone, Handshake, Star, PlusCircle, GanttChart, BarChart, DollarSign, Eye } from "lucide-react";
+import { User, Users, ClipboardList, Gavel, Briefcase, Shield, Megaphone, Handshake, Star, PlusCircle, GanttChart, BarChart, DollarSign, Eye, Info } from "lucide-react";
 
 const roleTemplates = [
     { name: "Игрок", slug: "player", description: "Персональная страница игрока.", icon: User },
@@ -129,6 +129,17 @@ export function AdminDashboardPage() {
                                         <div>
                                             <CardTitle className="text-base">Ad-CRM</CardTitle>
                                             <p className="text-xs text-muted-foreground">Управление рекламным инвентарем.</p>
+                                        </div>
+                                    </CardHeader>
+                                </Card>
+                            </Link>
+                            <Link href="/admin/roles">
+                                <Card className="cursor-pointer hover:border-primary transition-colors">
+                                    <CardHeader className="flex flex-row items-center gap-4">
+                                        <div className="p-3 rounded-md bg-primary/10 text-primary"><Info className="w-6 h-6" /></div>
+                                        <div>
+                                            <CardTitle className="text-base">Справка по ролям</CardTitle>
+                                            <p className="text-xs text-muted-foreground">Описание всех ролей на платформе.</p>
                                         </div>
                                     </CardHeader>
                                 </Card>
