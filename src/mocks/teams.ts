@@ -69,11 +69,12 @@ export function initializeTeams(
             if (availableMembers.length < memberCount) continue;
 
             // Predictable member selection
-            const newMembers = [];
+            const newMembers: User[] = [];
             for (let j = 0; j < memberCount; j++) {
                 const memberIndex = (teamIdCounter * 3 + j * 5 + i) % availableMembers.length;
-                 if (availableMembers[memberIndex] && !newMembers.includes(availableMembers[memberIndex])) {
-                    newMembers.push(availableMembers[memberIndex]);
+                const potentialMember = availableMembers[memberIndex];
+                 if (potentialMember && !newMembers.some(m => m.id === potentialMember.id)) {
+                    newMembers.push(potentialMember);
                 }
             }
              if (newMembers.length < memberCount) continue; // Skip if not enough unique members found
