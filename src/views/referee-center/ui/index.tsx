@@ -3,7 +3,7 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
 import { Button } from "@/shared/ui/button";
-import { BookOpen, ShieldCheck, FileText, ArrowRight, Video, GraduationCap, Star, BarChart, Calendar, Gavel, Archive, Search } from "lucide-react";
+import { BookOpen, ShieldCheck, FileText, ArrowRight, Video, GraduationCap, Star, BarChart, Calendar, Gavel, Archive, Search, Bot, Send, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { Progress } from "@/shared/ui/progress";
 import React, { useState } from "react";
@@ -11,10 +11,65 @@ import { Badge } from "@/shared/ui/badge";
 import { mockCourses, mockCases, knowledgeBaseData } from '../lib/mock-data';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/shared/ui/accordion";
 import { Input } from "@/shared/ui/input";
+import { askRulesExpertAction } from "@/app/actions";
+import { Alert, AlertDescription, AlertTitle } from "@/shared/ui/alert";
+
+
+const AiAssistant = () => {
+    const [question, setQuestion] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
+    const [result, setResult] = useState<{ answer: string; source?: string } | null>(null);
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!question.trim()) return;
+        
+        setIsLoading(true);
+        setResult(null);
+        
+        const response = await askRulesExpertAction({ question });
+        setResult(response);
+        setIsLoading(false);
+    };
+
+    return (
+        <Card>
+            <CardHeader>
+                <CardTitle className="flex items-center gap-2"><Bot />AI-Консультант</CardTitle>
+                <CardDescription>Задайте вопрос по правилам в свободной форме.</CardDescription>
+            </CardHeader>
+            <CardContent>
+                <form onSubmit={handleSubmit} className="flex gap-2 mb-4">
+                    <Input 
+                        placeholder="Напр., офсайд в мини-футболе" 
+                        value={question}
+                        onChange={(e) => setQuestion(e.target.value)}
+                        disabled={isLoading}
+                    />
+                    <Button type="submit" disabled={isLoading}>
+                        {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
+                    </Button>
+                </form>
+                {result && (
+                    <Alert>
+                        <AlertTitle>Ответ AI</AlertTitle>
+                        <AlertDescription className="space-y-2">
+                            <p>{result.answer}</p>
+                            {result.source && (
+                                <p className="text-xs text-muted-foreground border-t pt-2 mt-2">
+                                    Источник: {result.source}
+                                </p>
+                            )}
+                        </AlertDescription>
+                    </Alert>
+                )}
+            </CardContent>
+        </Card>
+    )
+};
 
 
 export function RefereeCenterPage() {
-    const recommendedCourse = mockCourses[0];
     const [searchTerm, setSearchTerm] = useState('');
 
     const filteredKnowledgeBase = knowledgeBaseData.map(sport => ({
@@ -46,7 +101,7 @@ export function RefereeCenterPage() {
                         </CardHeader>
                         <CardContent className="space-y-4">
                            {mockCourses.map(course => (
-                               <Card key={course.id} className={course.id === recommendedCourse.id ? "bg-muted/50 border-primary/50" : ""}>
+                               <Card key={course.id} className={course.id === mockCourses[0].id ? "bg-muted/50 border-primary/50" : ""}>
                                    <CardHeader>
                                        <CardTitle className="text-lg flex items-center gap-2">
                                             <course.icon className="h-5 w-5"/>
@@ -54,7 +109,7 @@ export function RefereeCenterPage() {
                                        </CardTitle>
                                        <CardDescription>
                                             {course.discipline}
-                                            {course.id === recommendedCourse.id && <Badge variant="secondary" className="ml-2">Рекомендовано</Badge>}
+                                            {course.id === mockCourses[0].id && <Badge variant="secondary" className="ml-2">Рекомендовано</Badge>}
                                         </CardDescription>
                                    </CardHeader>
                                    <CardContent>
@@ -152,6 +207,7 @@ export function RefereeCenterPage() {
                 </div>
                 
                 <div className="space-y-8 lg:sticky top-24">
+                     <AiAssistant />
                      <Card>
                         <CardHeader>
                             <CardTitle className="flex items-center gap-2"><BarChart />Моя карьера</CardTitle>
