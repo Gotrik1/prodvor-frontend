@@ -138,7 +138,7 @@ const StatRow = ({ label, value }: { label: string, value: string | number }) =>
     </div>
 );
 
-export function TeamPublicPage({ team }: { team: Team | undefined}) {
+export function TeamPublicPage({ team }: { team?: Team }) {
     const { user: currentUser } = useUserStore();
 
     if (!team) {

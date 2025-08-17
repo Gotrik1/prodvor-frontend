@@ -18,7 +18,6 @@ export async function generateMetadata({ params }: { params: { userId: string } 
 export default function UserProfilePage({ params }: { params: { userId: string } }) {
    const user = users.find(s => s.id === params.userId);
 
-  // For now, we will use the detailed PlayerPageTemplate for all user roles
-  // as it's the most comprehensive one and can be adapted.
+  // Using the unified PlayerPageTemplate for all user roles on public pages.
   return <PlayerPageTemplate user={user} />;
 }

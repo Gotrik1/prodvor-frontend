@@ -14,7 +14,7 @@ import {
   ClipboardList,
   Cog,
   Dumbbell,
-  Flame,
+  Swords,
   HelpCircle,
   Home,
   MessageSquare,
@@ -25,6 +25,10 @@ import {
   Users,
   Warehouse,
   Clapperboard,
+  BarChart,
+  Gitlab,
+  Puzzle,
+  Map,
 } from "lucide-react";
 import Link from 'next/link';
 import Image from "next/image";
@@ -73,7 +77,7 @@ export function DashboardSidebar() {
                 <SidebarMenuItem>
                     <Link href="/leagues">
                         <SidebarMenuButton>
-                            <Flame />
+                            <BarChart />
                             <span>Лиги</span>
                         </SidebarMenuButton>
                     </Link>
@@ -81,7 +85,7 @@ export function DashboardSidebar() {
                  <SidebarMenuItem>
                     <Link href="/challenges">
                         <SidebarMenuButton>
-                            <Calendar />
+                            <Swords />
                             <span>Вызовы</span>
                         </SidebarMenuButton>
                     </Link>
@@ -89,7 +93,7 @@ export function DashboardSidebar() {
                 <SidebarMenuItem>
                     <Link href="/training">
                         <SidebarMenuButton>
-                            <ClipboardList />
+                            <Calendar />
                             <span>Тренировки</span>
                         </SidebarMenuButton>
                     </Link>
@@ -129,7 +133,7 @@ export function DashboardSidebar() {
                 <SidebarMenuItem>
                     <Link href="/playgrounds">
                         <SidebarMenuButton>
-                            <Building />
+                            <Map />
                             <span>Площадки</span>
                         </SidebarMenuButton>
                     </Link>
@@ -153,7 +157,7 @@ export function DashboardSidebar() {
                 <SidebarMenuItem>
                     <Link href="/quests">
                         <SidebarMenuButton>
-                            <HelpCircle />
+                            <Puzzle />
                             <span>Квесты</span>
                         </SidebarMenuButton>
                     </Link>
