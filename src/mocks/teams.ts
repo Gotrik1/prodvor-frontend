@@ -54,7 +54,7 @@ export function initializeTeams(
                 return assignment && assignment.count < MAX_TEAMS_PER_PLAYER && !assignment.sports.has(sport.id);
             });
 
-            if (availableCaptains.length === 0) break;
+            if (availableCaptains.length === 0) continue; // Not enough captains for this sport
             
             // Predictable but more distributed captain selection
             const captainIndex = (teamIdCounter * 13 + i * 29) % availableCaptains.length;
@@ -66,13 +66,16 @@ export function initializeTeams(
             });
             
             const memberCount = 4;
-            if (availableMembers.length < memberCount) continue;
+            if (availableMembers.length < memberCount) continue; // Not enough members for this sport
 
             // Predictable member selection
             const newMembers: User[] = [];
-            for (let j = 0; j < memberCount; j++) {
-                const memberIndex = (teamIdCounter * 3 + j * 5 + i) % availableMembers.length;
-                const potentialMember = availableMembers[memberIndex];
+            const shuffledAvailableMembers = [...availableMembers].sort((a, b) => 
+                (a.id.charCodeAt(3) * teamIdCounter) % 13 - (b.id.charCodeAt(3) * teamIdCounter) % 13
+            );
+
+            for (const potentialMember of shuffledAvailableMembers) {
+                if (newMembers.length >= memberCount) break;
                  if (potentialMember && !newMembers.some(m => m.id === potentialMember.id)) {
                     newMembers.push(potentialMember);
                 }
