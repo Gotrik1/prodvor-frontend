@@ -11,20 +11,43 @@ import Link from "next/link";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/shared/ui/dropdown-menu";
 import { useUserStore } from "../model/user-store";
 import { Tooltip, TooltipProvider, TooltipContent, TooltipTrigger } from "@/shared/ui/tooltip";
+import React from "react";
+import { GlobalSearch } from "./global-search";
+
 
 export function DashboardHeader() {
   const { user } = useUserStore();
+  const [open, setOpen] = React.useState(false);
+
+  React.useEffect(() => {
+    const down = (e: KeyboardEvent) => {
+      if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
+        e.preventDefault()
+        setOpen((open) => !open)
+      }
+    }
+    document.addEventListener("keydown", down)
+    return () => document.removeEventListener("keydown", down)
+  }, [])
+
 
   return (
     <header className="flex h-16 items-center justify-between p-4 border-b bg-card">
       <div className="flex items-center gap-4">
         <SidebarTrigger className="md:hidden" />
         <div className="relative w-64 hidden md:block">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-          <Input placeholder="Поиск..." className="pl-9" />
-          <kbd className="absolute top-1/2 -translate-y-1/2 right-3 h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-100 hidden sm:flex">
-            <span className="text-xs">⌘</span>K
-          </kbd>
+            <Button
+                variant="outline"
+                className="w-full justify-start text-muted-foreground"
+                onClick={() => setOpen(true)}
+            >
+                <Search className="h-4 w-4 mr-2" />
+                <span>Поиск...</span>
+                <kbd className="pointer-events-none absolute top-1/2 -translate-y-1/2 right-3 h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-100 hidden sm:flex">
+                    <span className="text-xs">⌘</span>K
+                </kbd>
+            </Button>
+            <GlobalSearch open={open} setOpen={setOpen} />
         </div>
       </div>
       <div className="flex items-center gap-2">
