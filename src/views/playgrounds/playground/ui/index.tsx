@@ -1,14 +1,15 @@
 
 
-import { playgrounds, teams } from "@/mocks";
+import { playgrounds, teams, users } from "@/mocks";
 import type { Playground } from "@/mocks";
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
 import { YandexMapV3 } from "@/widgets/yandex-map";
-import { ArrowLeft, CheckCircle, Home, MapPin, Star, Users } from "lucide-react";
+import { ArrowLeft, CheckCircle, Home, MapPin, Star, Users, Rss } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { Badge } from "@/shared/ui/badge";
+import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 
 const features = [
     { id: "lighting", label: "Освещение" },
@@ -39,7 +40,8 @@ export function PlaygroundPage({ playground }: { playground: Playground | undefi
         )
     }
     
-    const residentTeams = teams.filter(team => team.homePlaygroundId === playground.id);
+    const residentTeams = teams.filter(team => playground.residentTeamIds.includes(team.id));
+    const followerUsers = users.filter(user => playground.followers.includes(user.id));
 
     return (
         <div className="p-4 md:p-6 lg:p-8">
@@ -110,36 +112,62 @@ export function PlaygroundPage({ playground }: { playground: Playground | undefi
                             </div>
                         </CardContent>
                     </Card>
-                    <Card>
-                        <CardHeader>
-                             <CardTitle className="flex items-center gap-2">
-                                <Users />
-                                Команды-резиденты
-                            </CardTitle>
-                             <CardDescription>Команды, которые считают это место своей домашней площадкой.</CardDescription>
-                        </CardHeader>
-                        <CardContent>
-                            {residentTeams.length > 0 ? (
-                                <ul className="space-y-3">
-                                    {residentTeams.map(team => (
-                                        <li key={team.id}>
-                                            <Link href={`/teams/${team.id}`} className="flex items-center gap-3 p-2 rounded-md hover:bg-muted/50 transition-colors group">
-                                                <Image src={team.logoUrl} alt={team.name} width={40} height={40} className="rounded-md" data-ai-hint="team logo" />
-                                                <div>
-                                                    <p className="font-semibold group-hover:text-primary">{team.name}</p>
-                                                    <p className="text-xs text-muted-foreground">{team.game}</p>
-                                                </div>
+                     <div className="space-y-8">
+                        <Card>
+                             <CardHeader>
+                                 <CardTitle className="flex items-center gap-2">
+                                    <Users />
+                                    Команды-резиденты ({residentTeams.length})
+                                </CardTitle>
+                                 <CardDescription>Команды, которые считают это место своей домашней площадкой.</CardDescription>
+                            </CardHeader>
+                            <CardContent>
+                                {residentTeams.length > 0 ? (
+                                    <ul className="space-y-3">
+                                        {residentTeams.map(team => (
+                                            <li key={team.id}>
+                                                <Link href={`/teams/${team.id}`} className="flex items-center gap-3 p-2 rounded-md hover:bg-muted/50 transition-colors group">
+                                                    <Image src={team.logoUrl} alt={team.name} width={40} height={40} className="rounded-md" data-ai-hint="team logo" />
+                                                    <div>
+                                                        <p className="font-semibold group-hover:text-primary">{team.name}</p>
+                                                        <p className="text-xs text-muted-foreground">{team.game}</p>
+                                                    </div>
+                                                </Link>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                ) : (
+                                    <p className="text-sm text-muted-foreground text-center py-10">
+                                        Пока ни одна команда не выбрала это место своим домом.
+                                    </p>
+                                )}
+                            </CardContent>
+                        </Card>
+                        <Card>
+                            <CardHeader>
+                                <CardTitle className="flex items-center gap-2">
+                                    <Rss />
+                                    Подписчики ({followerUsers.length})
+                                </CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                                {followerUsers.length > 0 ? (
+                                    <div className="flex flex-wrap gap-2">
+                                        {followerUsers.slice(0, 18).map(user => (
+                                            <Link href={`/users/${user.id}`} key={user.id}>
+                                                <Avatar className="h-10 w-10 border-2 border-transparent hover:border-primary transition-colors">
+                                                    <AvatarImage src={user.avatarUrl} alt={user.nickname} />
+                                                    <AvatarFallback>{user.nickname.charAt(0)}</AvatarFallback>
+                                                </Avatar>
                                             </Link>
-                                        </li>
-                                    ))}
-                                </ul>
-                            ) : (
-                                <p className="text-sm text-muted-foreground text-center py-10">
-                                    Пока ни одна команда не выбрала это место своим домом.
-                                </p>
-                            )}
-                        </CardContent>
-                    </Card>
+                                        ))}
+                                    </div>
+                                ) : (
+                                    <p className="text-sm text-muted-foreground">На эту площадку еще никто не подписался.</p>
+                                )}
+                            </CardContent>
+                        </Card>
+                    </div>
                 </div>
             </div>
         </div>

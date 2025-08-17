@@ -1,3 +1,6 @@
+import { users } from './users';
+import { teams } from './teams';
+
 export interface Playground {
     id: string;
     name: string;
@@ -7,9 +10,11 @@ export interface Playground {
     imageUrl: string;
     dataAiHint: string;
     sportIds: string[];
+    followers: string[]; // Array of user IDs
+    residentTeamIds: string[]; // Array of team IDs
 }
 
-export const playgrounds: Playground[] = [
+const basePlaygrounds: Omit<Playground, 'followers' | 'residentTeamIds'>[] = [
     // --- Футбол (sport-1) ---
     { id: 'p1', name: 'Стадион "Центральный"', address: 'г. Москва, ул. Ленина, 1', type: 'Стадион', surface: 'Газон', imageUrl: 'https://placehold.co/400x300.png', dataAiHint: 'stadium field', sportIds: ['sport-1'] },
     { id: 'p1-1', name: 'Зал "Мини-футбол Арена"', address: 'г. Москва, ул. Спортивная, 2', type: 'Закрытое помещение', surface: 'Паркет', imageUrl: 'https://placehold.co/400x300.png', dataAiHint: 'futsal court', sportIds: ['sport-1-1', 'sport-1-3'] },
@@ -72,3 +77,37 @@ export const playgrounds: Playground[] = [
     { id: 'p47', name: 'Гольф-клуб "Сколково"', address: 'г. Москва, Сколковское ш., 2Б', type: 'Специализированный объект', surface: 'Газон', imageUrl: 'https://placehold.co/400x300.png', dataAiHint: 'golf course', sportIds: ['sport-47'] },
     { id: 'p48', name: 'Автодром "Moscow Raceway"', address: 'Московская обл., Волоколамский район', type: 'Специализированный объект', surface: 'Асфальт (трек)', imageUrl: 'https://placehold.co/400x300.png', dataAiHint: 'race track', sportIds: ['sport-48'] }
 ];
+
+// --- Social Data Generation ---
+export const playgrounds: Playground[] = basePlaygrounds.map((playground, index) => {
+    // Predictable random followers for each playground
+    const followersCount = (index % 15) + 5; // 5 to 19 followers
+    const followers = [];
+    for (let i = 0; i < followersCount; i++) {
+        followers.push(users[(index + i * 3) % users.length].id);
+    }
+
+    // Resident teams are now assigned in teams.ts to avoid circular dependency.
+    // We will populate this field after teams are created.
+    const residentTeamIds: string[] = [];
+
+    return {
+        ...playground,
+        followers: Array.from(new Set(followers)), // Ensure unique
+        residentTeamIds,
+    };
+});
+
+// Function to link teams to playgrounds, called from teams.ts
+export function assignTeamsToPlaygrounds(teams: any[]) {
+    teams.forEach(team => {
+        if (team.homePlaygroundIds) {
+            team.homePlaygroundIds.forEach((playgroundId: string) => {
+                const playground = playgrounds.find(p => p.id === playgroundId);
+                if (playground && !playground.residentTeamIds.includes(team.id)) {
+                    playground.residentTeamIds.push(team.id);
+                }
+            });
+        }
+    });
+}

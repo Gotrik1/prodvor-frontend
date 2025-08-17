@@ -1,6 +1,4 @@
-
-
-import { playgrounds } from "./playgrounds";
+import { assignTeamsToPlaygrounds, playgrounds } from "./playgrounds";
 import type { User } from "./users";
 import { users } from "./users";
 import { teamSports } from "./sports";
@@ -23,10 +21,13 @@ export interface Team {
 
 
 // --- Player Assignment Logic ---
-const players = users.filter(u => u.role === 'Игрок');
-// Key: userId, Value: Set of sport names the player is in
-const playerAssignments: Record<string, Set<string>> = {};
-players.forEach(p => { playerAssignments[p.id] = new Set() });
+// Key: userId, Value: { count: number, sports: Set<string> }
+const playerTeamAssignments: Record<string, { count: number, sports: Set<string> }> = {};
+users.forEach(p => { 
+    if (p.role === 'Игрок') {
+        playerTeamAssignments[p.id] = { count: 0, sports: new Set() };
+    }
+});
 
 const MAX_TEAMS_PER_PLAYER = 5;
 
@@ -38,28 +39,29 @@ const stableTeamNames = [
     "Ночные Снайперы", "Короли Асфальта", "Стальные Ястребы", "Бетонные Тигры",
     "Разрушители", "Фортуна", "Красная Фурия", "Легион", "Авангард", "Гром",
     "Молния", "Вихрь", "Соколы", "Ястребы", "Тигры", "Медведи", "Звезды",
-    "Динамо", "Спартак", "Зенит", "ЦСКА", "Локомотив"
+    "Динамо", "Спартак", "Зенит", "ЦСКА", "Локомотив", "Сити", "Юнайтед"
 ];
 
+// Sort players to ensure predictable assignment order
+const players = users.filter(u => u.role === 'Игрок').sort((a, b) => a.id.localeCompare(b.id));
 
 teamSports.forEach(sport => {
-    // Create up to 4 teams per sport, depending on available players
+    // Create up to 4 teams per sport
     for (let i = 0; i < 4; i++) {
         // --- Find available captain ---
-        const availableCaptains = players.filter(p => 
-            (playerAssignments[p.id]?.size || 0) < MAX_TEAMS_PER_PLAYER && 
-            !playerAssignments[p.id]?.has(sport.name)
-        );
+        const availableCaptains = players.filter(p => {
+            const assignment = playerTeamAssignments[p.id];
+            return assignment && assignment.count < MAX_TEAMS_PER_PLAYER && !assignment.sports.has(sport.name);
+        });
 
         if (availableCaptains.length === 0) break; // No more captains for this sport
         const captain = availableCaptains[0];
 
         // --- Find available members ---
-        const availableMembers = players.filter(p => 
-            p.id !== captain.id &&
-            (playerAssignments[p.id]?.size || 0) < MAX_TEAMS_PER_PLAYER &&
-            !playerAssignments[p.id]?.has(sport.name)
-        );
+        const availableMembers = players.filter(p => {
+             const assignment = playerTeamAssignments[p.id];
+             return p.id !== captain.id && assignment && assignment.count < MAX_TEAMS_PER_PLAYER && !assignment.sports.has(sport.name);
+        });
         
         const memberCount = 4; // 4 members + 1 captain = 5 players
         if (availableMembers.length < memberCount) continue; // Not enough players for a full team
@@ -67,22 +69,24 @@ teamSports.forEach(sport => {
         const newMembers = availableMembers.slice(0, memberCount);
         const teamMembersIds = [captain.id, ...newMembers.map(m => m.id)];
         
-        // --- Assign Playgrounds ---
+        // --- Assign Playgrounds (predictable) ---
         let homePlaygroundIds: string[] | undefined = undefined;
-        // ~80% chance to have a playground
-        if (Math.random() < 0.8 && playgrounds.length > 0) {
+        // ~80% chance to have a playground, based on predictable teamId
+        if ((teamIdCounter % 5) !== 0 && playgrounds.length > 0) {
             homePlaygroundIds = [];
-            const count = Math.floor(Math.random() * 3) + 1; // 1 to 3 playgrounds
-            const shuffledPlaygrounds = [...playgrounds].sort(() => 0.5 - Math.random());
+            const count = (teamIdCounter % 3) + 1; // 1 to 3 playgrounds
             for (let j = 0; j < count; j++) {
-                if(shuffledPlaygrounds[j]) {
-                    homePlaygroundIds.push(shuffledPlaygrounds[j].id);
+                const playgroundIndex = (teamIdCounter + j) % playgrounds.length;
+                if(playgrounds[playgroundIndex]) {
+                    homePlaygroundIds.push(playgrounds[playgroundIndex].id);
                 }
             }
         }
 
-        // --- Create team ---
-        const teamName = `${stableTeamNames[teamIdCounter % stableTeamNames.length]} ${sport.name.slice(0,3)}`;
+        // --- Create team (predictable name) ---
+        const namePart1 = stableTeamNames[teamIdCounter % stableTeamNames.length];
+        const namePart2 = stableTeamNames[(teamIdCounter + 5) % stableTeamNames.length];
+        const teamName = `${namePart1} ${namePart2}`;
 
         const team: Team = {
             id: `team${teamIdCounter++}`,
@@ -103,29 +107,28 @@ teamSports.forEach(sport => {
 
         // --- Update assignments for all members ---
         teamMembersIds.forEach(memberId => {
-            if (!playerAssignments[memberId]) {
-                playerAssignments[memberId] = new Set();
+            if (playerTeamAssignments[memberId]) {
+                playerTeamAssignments[memberId].count++;
+                playerTeamAssignments[memberId].sports.add(sport.name);
             }
-            playerAssignments[memberId].add(sport.name);
         });
     }
 });
 
-
-// --- Populate Social Graph for Teams ---
+// --- Populate Social Graph for Teams (predictable) ---
 const allTeamIds = generatedTeams.map(t => t.id);
 const allUserIds = users.map(u => u.id);
 
 generatedTeams.forEach((team, index) => {
-    // Assign followers (users) - predictable
-    const followersCount = (index % 5) + 3;
+    // Assign followers (users)
+    const followersCount = (index % 5) + 3; // 3 to 7 followers
     for (let i = 0; i < followersCount; i++) {
         const userIndex = (index + i) % allUserIds.length;
         team.followers.push(allUserIds[userIndex]);
     }
 
-    // Assign following (other teams) - predictable
-    const followingCount = (index % 3) + 1;
+    // Assign following (other teams)
+    const followingCount = (index % 3) + 1; // 1 to 3 following
      for (let i = 0; i < followingCount; i++) {
         const teamIndex = (index + i + 1) % allTeamIds.length;
         if (allTeamIds[teamIndex] !== team.id) {
@@ -134,21 +137,22 @@ generatedTeams.forEach((team, index) => {
     }
 });
 
-
 // --- Assign Sponsors to Teams (predictable) ---
 generatedTeams.forEach((team, index) => {
-    if (index % 2 === 0 && sponsors.length > 0) {
+    if (index % 3 === 0 && sponsors.length > 0) { // ~33% chance to have a sponsor
         team.sponsorIds = [sponsors[index % sponsors.length].id];
     }
 });
-
 
 export const teams: Team[] = generatedTeams;
 
 // A set of all user IDs that have been assigned to at least one team.
 export const assignedPlayerIds = new Set<string>();
-Object.entries(playerAssignments).forEach(([playerId, sports]) => {
-    if (sports && sports.size > 0) {
+Object.entries(playerTeamAssignments).forEach(([playerId, assignment]) => {
+    if (assignment && assignment.count > 0) {
         assignedPlayerIds.add(playerId);
     }
 });
+
+// Finally, link the generated teams back to the playgrounds
+assignTeamsToPlaygrounds(teams);
