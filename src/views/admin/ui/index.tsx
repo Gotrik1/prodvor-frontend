@@ -1,3 +1,4 @@
+
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
 import Link from "next/link";
@@ -158,13 +159,13 @@ export function AdminPage() {
                             </CardHeader>
                             <CardContent>
                                 <div className="grid grid-cols-1 gap-6">
-                                     <Link href="/admin/statistics">
+                                     <Link href="/admin/dashboard">
                                         <Card className="cursor-pointer h-full hover:border-primary transition-colors hover:shadow-lg">
                                             <CardHeader className="flex flex-row items-center gap-4">
                                                 <div className="p-3 rounded-md bg-primary/10 text-primary">
                                                     <BarChart className="w-6 h-6" />
                                                 </div>
-                                                <CardTitle>Статистика</CardTitle>
+                                                <CardTitle>Дашборд</CardTitle>
                                             </CardHeader>
                                             <CardContent>
                                                 <p className="text-sm text-muted-foreground">Просмотр списков всех пользователей, команд и спонсоров.</p>

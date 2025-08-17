@@ -13,7 +13,7 @@ export function SponsorPage({ sponsorId }: { sponsorId?: string }) {
                 <CardHeader><CardTitle>Ошибка</CardTitle></CardHeader>
                 <CardContent>
                     <p className="text-muted-foreground">ID спонсора не указан.</p>
-                    <Button asChild className="mt-6"><Link href="/admin/statistics">Вернуться к списку</Link></Button>
+                    <Button asChild className="mt-6"><Link href="/admin/dashboard">Вернуться к списку</Link></Button>
                 </CardContent>
             </Card>
         </div>
@@ -29,7 +29,7 @@ export function SponsorPage({ sponsorId }: { sponsorId?: string }) {
                 <CardHeader><CardTitle>Ошибка 404</CardTitle></CardHeader>
                 <CardContent>
                     <p className="text-muted-foreground">Спонсор с ID "{sponsorId}" не найден.</p>
-                    <Button asChild className="mt-6"><Link href="/admin/statistics">Вернуться к списку</Link></Button>
+                    <Button asChild className="mt-6"><Link href="/admin/dashboard">Вернуться к списку</Link></Button>
                 </CardContent>
             </Card>
         </div>

@@ -20,7 +20,7 @@ export function UserPage({ userId }: { userId?: string }) {
                 <CardHeader><CardTitle>Ошибка</CardTitle></CardHeader>
                 <CardContent>
                     <p className="text-muted-foreground">ID пользователя не указан.</p>
-                    <Button asChild className="mt-6"><Link href="/admin/statistics">Вернуться к списку</Link></Button>
+                    <Button asChild className="mt-6"><Link href="/admin/dashboard">Вернуться к списку</Link></Button>
                 </CardContent>
             </Card>
         </div>
@@ -39,7 +39,7 @@ export function UserPage({ userId }: { userId?: string }) {
           <CardContent>
             <p className="text-muted-foreground">Пользователь не найден.</p>
             <Button asChild className="mt-6">
-              <Link href="/admin/statistics">Вернуться к списку</Link>
+              <Link href="/admin/dashboard">Вернуться к списку</Link>
             </Button>
           </CardContent>
         </Card>

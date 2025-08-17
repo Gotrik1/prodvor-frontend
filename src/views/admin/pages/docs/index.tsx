@@ -14,8 +14,8 @@ const markdownComponents = {
     ul: (props: any) => <ul className="list-disc list-inside mb-4 space-y-2" {...props} />,
     ol: (props: any) => <ol className="list-decimal list-inside mb-4 space-y-2" {...props} />,
     li: (props: any) => <li className="pl-2" {...props} />,
-    code: (props: any) => <code className="bg-muted text-foreground px-1 py-0.5 rounded-sm font-mono text-sm" {...props} />,
-    pre: (props: any) => <pre className="bg-muted p-4 rounded-md overflow-x-auto" {...props} />,
+    code: ({ ...props }) => <code className="bg-muted text-foreground px-1 py-0.5 rounded-sm font-mono text-sm" {...props} />,
+    pre: ({ ...props }) => <pre className="bg-muted p-4 rounded-md overflow-x-auto" {...props} />,
     a: (props: any) => <a className="text-primary hover:underline" {...props} />,
     strong: (props: any) => <strong className="font-bold" {...props} />,
 };

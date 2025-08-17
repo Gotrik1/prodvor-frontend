@@ -83,7 +83,12 @@ export default function AdminPage({ params }: { params: { slug: string[] } }) {
              return <TemplatePreviewPage title={`Шаблон: Игрок`}><templateMap.player user={playerUser} /></TemplatePreviewPage>;
         }
 
-        return TemplateComponent ? <TemplatePreviewPage title={`Шаблон: ${title}`}><TemplateComponent /></TemplatePreviewPage> : <NotFoundAdminPage message="Страница администрирования не найдена." backLink="/admin" backLinkText="Вернуться в админ-панель" />;
+        if (TemplateComponent) {
+            // @ts-ignore
+            return <TemplatePreviewPage title={`Шаблон: ${title}`}><TemplateComponent user={playerUser} /></TemplatePreviewPage>;
+        }
+        
+        return <NotFoundAdminPage message="Страница администрирования не найдена." backLink="/admin" backLinkText="Вернуться в админ-панель" />;
       default:
         return <NotFoundAdminPage message="Страница администрирования не найдена." backLink="/admin" backLinkText="Вернуться в админ-панель" />;
     }
