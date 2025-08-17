@@ -27,6 +27,17 @@ const statusColors: Record<string, string> = {
     'ЗАВЕРШЕН': 'bg-muted text-muted-foreground border-border',
 };
 
+// Create a flat list of all sports including subdisciplines for easy lookup
+const allSportsFlat = allSports.reduce((acc, sport) => {
+    acc.push({ id: sport.id, name: sport.name });
+    if (sport.subdisciplines) {
+        sport.subdisciplines.forEach(sub => {
+            acc.push({ id: sub.id, name: sub.name });
+        });
+    }
+    return acc;
+}, [] as { id: string, name: string }[]);
+
 // Centralized function to get all disciplines for a user
 const getUserDisciplines = (user: User): string[] => {
     const personalDisciplines = user.disciplines
@@ -275,7 +286,7 @@ export function AdminStatisticsPage() {
                                     <TableCell>{p.address}</TableCell>
                                     <TableCell><Badge variant="outline">{p.type}</Badge></TableCell>
                                     <TableCell>{p.surface}</TableCell>
-                                    <TableCell className="text-xs">{p.sportIds.map((id: string) => allSports.find(s => s.id === id)?.name).filter(Boolean).join(', ')}</TableCell>
+                                    <TableCell className="text-xs">{p.sportIds.map((id: string) => allSportsFlat.find(s => s.id === id)?.name).filter(Boolean).join(', ')}</TableCell>
                                 </TableRow>
                             )}
                         />
@@ -353,3 +364,5 @@ export function AdminStatisticsPage() {
         </Tabs>
     );
 }
+
+    
