@@ -73,15 +73,7 @@ const userRegistrationData = [
   { month: "Июн", registrations: 250 },
 ];
 
-const userRolesData = [
-  { role: "Игрок", count: users.filter(u => u.role === 'Игрок').length },
-  { role: "Судья", count: users.filter(u => u.role === 'Судья').length },
-  { role: "Тренер", count: users.filter(u => u.role === 'Тренер').length },
-  { role: "Болельщик", count: users.filter(u => u.role === 'Болельщик').length },
-  { role: "Организатор", count: users.filter(u => u.role === 'Организатор').length },
-];
-
-const topSportsData = allSports.slice(0, 5).map(s => ({
+const topSportsData = allSports.filter(s => s.isTeamSport).slice(0, 5).map(s => ({
     sport: s.name,
     teams: teams.filter(t => t.game === s.name).length
 }));
@@ -458,3 +450,5 @@ export function AdminStatisticsPage() {
         </Tabs>
     );
 }
+
+    
