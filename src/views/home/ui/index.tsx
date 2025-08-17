@@ -54,7 +54,7 @@ export function HomePage() {
                 ProDvor — это социальная платформа, объединяющая дворовый спорт и любительский киберспорт. Создавай команду, находи соперников, участвуй в турнирах и строй свою спортивную карьеру.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button asChild size="lg" className="font-bold">
+                <Button asChild size="lg" className="font-bold shine-button bg-accent hover:bg-accent/90 text-accent-foreground">
                   <Link href="/auth/register">Начать побеждать</Link>
                 </Button>
                 <Button asChild size="lg" variant="outline" className="font-bold">
@@ -141,29 +141,31 @@ export function HomePage() {
               </p>
             </div>
             <div className="relative max-w-5xl mx-auto">
-              <div className="absolute top-8 left-0 w-full h-0.5 bg-border -translate-y-1/2 hidden md:block" aria-hidden="true"></div>
-              <div className="relative grid grid-cols-1 md:grid-cols-3 gap-8">
-                  <Card className="text-center bg-card border-border/60 p-6">
-                      <div className="mx-auto w-16 h-16 rounded-full border-2 border-primary bg-background flex items-center justify-center font-bold text-2xl mb-4 text-primary">1</div>
-                      <CardTitle className="font-headline text-xl mb-2">Регистрация</CardTitle>
+              {/* Desktop connector line */}
+              <div className="absolute top-8 left-1/2 w-2/3 h-0.5 bg-border -translate-x-1/2 hidden md:block" aria-hidden="true"></div>
+              
+              <div className="relative grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-16">
+                  <div className="flex flex-col items-center text-center">
+                      <div className="mx-auto w-16 h-16 rounded-full border-2 border-accent bg-background flex items-center justify-center font-bold text-2xl mb-4 text-accent z-10">1</div>
+                      <h3 className="font-headline text-xl mb-2 font-bold">Регистрация</h3>
                       <p className="text-muted-foreground">
                         Создайте свой аккаунт и получите доступ ко всем возможностям платформы.
                       </p>
-                  </Card>
-                  <Card className="text-center bg-card border-border/60 p-6">
-                      <div className="mx-auto w-16 h-16 rounded-full border-2 border-primary bg-background flex items-center justify-center font-bold text-2xl mb-4 text-primary">2</div>
-                      <CardTitle className="font-headline text-xl mb-2">Создание команды</CardTitle>
+                  </div>
+                   <div className="flex flex-col items-center text-center">
+                      <div className="mx-auto w-16 h-16 rounded-full border-2 border-accent bg-background flex items-center justify-center font-bold text-2xl mb-4 text-accent z-10">2</div>
+                      <h3 className="font-headline text-xl mb-2 font-bold">Создание команды</h3>
                       <p className="text-muted-foreground">
                         Соберите свой состав или присоединитесь к существующей команде.
                       </p>
-                  </Card>
-                  <Card className="text-center bg-card border-border/60 p-6">
-                      <div className="mx-auto w-16 h-16 rounded-full border-2 border-primary bg-background flex items-center justify-center font-bold text-2xl mb-4 text-primary">3</div>
-                      <CardTitle className="font-headline text-xl mb-2">Участие в турнирах</CardTitle>
+                  </div>
+                   <div className="flex flex-col items-center text-center">
+                      <div className="mx-auto w-16 h-16 rounded-full border-2 border-accent bg-background flex items-center justify-center font-bold text-2xl mb-4 text-accent z-10">3</div>
+                      <h3 className="font-headline text-xl mb-2 font-bold">Участие в турнирах</h3>
                       <p className="text-muted-foreground">
                         Сражайтесь за славу и призы в регулярных турнирах и лигах.
                       </p>
-                  </Card>
+                  </div>
               </div>
             </div>
           </div>
@@ -176,7 +178,7 @@ export function HomePage() {
             <p className="text-lg text-muted-foreground mt-4 max-w-2xl mx-auto">
               Присоединяйтесь к тысячам игроков, которые уже соревнуются и побеждают на ProDvor.
             </p>
-            <Button asChild size="lg" className="mt-8 bg-accent hover:bg-accent/90 text-accent-foreground font-bold">
+            <Button asChild size="lg" className="mt-8 bg-accent hover:bg-accent/90 text-accent-foreground font-bold shine-button">
               <Link href="/auth/register">Создать аккаунт</Link>
             </Button>
           </div>
