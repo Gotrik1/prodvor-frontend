@@ -1,4 +1,5 @@
 
+
 import { users } from '@/mocks';
 import { PlayerPageTemplate } from '@/views/admin/ui/templates/player-page-template';
 import type { Metadata } from 'next';

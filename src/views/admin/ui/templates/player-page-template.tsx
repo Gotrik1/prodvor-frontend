@@ -189,8 +189,8 @@ export function PlayerPageTemplate({ user: profileUser }: { user?: User }) {
     const last5Form: ('W' | 'L' | 'D')[] = ['W', 'L', 'W', 'W', 'W'];
 
     return (
-        <div className="border rounded-lg p-4 md:p-6 space-y-6 bg-muted/20">
-            <header className="flex flex-col md:flex-row items-center gap-6">
+        <div className="p-4 md:p-6 lg:p-8 space-y-6">
+            <header className="flex flex-col md:flex-row items-center gap-6 p-4 rounded-lg bg-card border">
                 <Avatar className="h-24 w-24 border-4 border-primary">
                     <AvatarImage src={player.avatarUrl} alt={player.nickname} />
                     <AvatarFallback>{player.firstName.charAt(0)}{player.lastName.charAt(0)}</AvatarFallback>

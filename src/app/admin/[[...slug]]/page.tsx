@@ -10,7 +10,7 @@ import { UserPage } from '@/views/admin/pages/users';
 import { SponsorPage } from '@/views/admin/pages/sponsors';
 import { TemplatePreviewPage, templateMap } from '@/views/admin/pages/templates';
 import { SimulationPage } from '@/views/admin/pages/simulation';
-import { teams } from '@/mocks';
+import { teams, users } from '@/mocks';
 import { TeamPageTemplate } from '@/views/admin/ui/templates/team-page-template';
 import { RolesPage } from '@/views/admin/pages/roles';
 
@@ -72,9 +72,14 @@ export default function AdminPage({ params }: { params: { slug: string[] } }) {
         if (!subpage) return <NotFoundAdminPage message="Страница администрирования не найдена." backLink="/admin" backLinkText="Вернуться в админ-панель" />;
         const TemplateComponent = templateMap[subpage as keyof typeof templateMap];
         const title = subpage.charAt(0).toUpperCase() + subpage.slice(1);
+        const playerUser = users.find(u => u.role === 'Игрок');
 
         if (subpage === 'team') {
              return <TemplatePreviewPage title={`Шаблон: Команда`}><TeamPageTemplate team={teams[0]} /></TemplatePreviewPage>;
+        }
+        
+        if (subpage === 'player' && playerUser) {
+             return <TemplatePreviewPage title={`Шаблон: Игрок`}><templateMap.player user={playerUser} /></TemplatePreviewPage>;
         }
 
         return TemplateComponent ? <TemplatePreviewPage title={`Шаблон: ${title}`}><TemplateComponent /></TemplatePreviewPage> : <NotFoundAdminPage message="Страница администрирования не найдена." backLink="/admin" backLinkText="Вернуться в админ-панель" />;
