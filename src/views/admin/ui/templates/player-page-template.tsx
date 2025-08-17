@@ -176,8 +176,8 @@ const FollowersCard = ({ user }: { user: User }) => (
 
 const FollowingCard = ({ user }: { user: User }) => (
     <Card>
-        <CardHeader>
-             <CardTitle>Подписки ({user.followingUsers.length + user.followingTeams.length})</CardTitle>
+         <CardHeader>
+             <CardTitle>Подписки ({user.followingUsers.length + user.following.length})</CardTitle>
         </CardHeader>
          <CardContent>
             <div className="flex flex-wrap gap-3">
@@ -189,7 +189,7 @@ const FollowingCard = ({ user }: { user: User }) => (
                         </Avatar>
                     </Link>
                 ))}
-                 {teams.filter(t => user.followingTeams.includes(t.id)).map(team => (
+                 {teams.filter(t => user.following.includes(t.id)).map(team => (
                     <Link href={`/teams/${team.id}`} key={team.id}>
                          <Avatar className="h-12 w-12 border-2 border-transparent hover:border-primary transition-colors rounded-md">
                             <AvatarImage src={team.logoUrl} alt={team.name} className="p-1" />
