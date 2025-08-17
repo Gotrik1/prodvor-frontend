@@ -2,8 +2,8 @@ export interface Playground {
     id: string;
     name: string;
     address: string;
-    type: 'Открытая площадка' | 'Закрытое помещение' | 'Стадион';
-    surface: 'Асфальт' | 'Резиновое' | 'Газон' | 'Песок' | 'Паркет';
+    type: 'Открытая площадка' | 'Закрытое помещение' | 'Стадион' | 'Спортивный центр';
+    surface: 'Асфальт' | 'Резиновое' | 'Газон' | 'Песок' | 'Паркет' | 'Вода' | 'Татами' | 'Грунт';
     imageUrl: string;
     dataAiHint: string;
 }
@@ -44,5 +44,50 @@ export const playgrounds: Playground[] = [
         surface: 'Резиновое',
         imageUrl: 'https://placehold.co/400x300.png',
         dataAiHint: 'park playground'
+    },
+    {
+        id: 'p5',
+        name: 'Теннисный корт "Чемпион"',
+        address: 'г. Москва, ул. Спортивная, 10',
+        type: 'Открытая площадка',
+        surface: 'Грунт',
+        imageUrl: 'https://placehold.co/400x300.png',
+        dataAiHint: 'tennis court'
+    },
+    {
+        id: 'p6',
+        name: 'Бассейн "Нептун"',
+        address: 'г. Екатеринбург, ул. Водная, 1',
+        type: 'Закрытое помещение',
+        surface: 'Вода',
+        imageUrl: 'https://placehold.co/400x300.png',
+        dataAiHint: 'swimming pool'
+    },
+    {
+        id: 'p7',
+        name: 'Воркаут-площадка в парке Горького',
+        address: 'г. Москва, Парк Горького',
+        type: 'Открытая площадка',
+        surface: 'Резиновое',
+        imageUrl: 'https://placehold.co/400x300.png',
+        dataAiHint: 'workout area'
+    },
+    {
+        id: 'p8',
+        name: 'Зал единоборств "Будокан"',
+        address: 'г. Новосибирск, ул. Самураев, 5',
+        type: 'Закрытое помещение',
+        surface: 'Татами',
+        imageUrl: 'https://placehold.co/400x300.png',
+        dataAiHint: 'dojo interior'
+    },
+    {
+        id: 'p9',
+        name: 'Компьютерный клуб "Winstrike"',
+        address: 'г. Москва, ул. Киберспортивная, 1',
+        type: 'Закрытое помещение',
+        surface: 'Паркет',
+        imageUrl: 'https://placehold.co/400x300.png',
+        dataAiHint: 'gaming club'
     }
 ];
