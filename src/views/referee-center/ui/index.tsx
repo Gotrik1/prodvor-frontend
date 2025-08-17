@@ -134,6 +134,34 @@ export function RefereeCenterPage() {
                         </CardContent>
                     </Card>
 
+                     <Card>
+                        <CardHeader>
+                            <div className="flex items-center justify-between">
+                                <CardTitle className="flex items-center gap-2">
+                                    <Archive className="h-6 w-6 text-primary" />
+                                    Разбор кейсов
+                                </CardTitle>
+                                <Button variant="ghost" size="sm">Смотреть все</Button>
+                            </div>
+                            <CardDescription>Анализ сложных и спорных игровых ситуаций от экспертов ProDvor.</CardDescription>
+                        </CardHeader>
+                        <CardContent className="space-y-3">
+                            {mockCases.map(caseItem => (
+                                <Link href="#" key={caseItem.id} className="block group">
+                                    <div className="p-4 rounded-lg border bg-background hover:border-primary/50 transition-colors">
+                                        <h4 className="font-semibold group-hover:text-primary">{caseItem.title}</h4>
+                                        <div className="flex items-center gap-2 mt-2">
+                                            <Badge variant="secondary">{caseItem.discipline}</Badge>
+                                            {caseItem.tags.map(tag => (
+                                                <Badge key={tag} variant="outline">{tag}</Badge>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </Link>
+                            ))}
+                        </CardContent>
+                    </Card>
+
                     <Card>
                         <CardHeader>
                             <div className="flex items-center justify-between">
@@ -176,35 +204,6 @@ export function RefereeCenterPage() {
                             )}
                         </CardContent>
                     </Card>
-
-                    <Card>
-                        <CardHeader>
-                            <div className="flex items-center justify-between">
-                                <CardTitle className="flex items-center gap-2">
-                                    <Archive className="h-6 w-6 text-primary" />
-                                    Разбор кейсов
-                                </CardTitle>
-                                <Button variant="ghost" size="sm">Смотреть все</Button>
-                            </div>
-                            <CardDescription>Анализ сложных и спорных игровых ситуаций от экспертов ProDvor.</CardDescription>
-                        </CardHeader>
-                        <CardContent className="space-y-3">
-                            {mockCases.map(caseItem => (
-                                <Link href="#" key={caseItem.id} className="block group">
-                                    <div className="p-4 rounded-lg border bg-background hover:border-primary/50 transition-colors">
-                                        <h4 className="font-semibold group-hover:text-primary">{caseItem.title}</h4>
-                                        <div className="flex items-center gap-2 mt-2">
-                                            <Badge variant="secondary">{caseItem.discipline}</Badge>
-                                            {caseItem.tags.map(tag => (
-                                                <Badge key={tag} variant="outline">{tag}</Badge>
-                                            ))}
-                                        </div>
-                                    </div>
-                                </Link>
-                            ))}
-                        </CardContent>
-                    </Card>
-
                 </div>
                 
                 <div className="space-y-8 lg:sticky top-24">
