@@ -9,7 +9,7 @@ import { Badge } from '@/shared/ui/badge';
 import { Button } from '@/shared/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/shared/ui/table';
-import { Copy, ExternalLink, Heart, UserPlus, Rss, BarChart3, Users2, MapPin, User as UserIcon, Phone, Mail, Trophy, Home } from 'lucide-react';
+import { Copy, ExternalLink, Heart, UserPlus, Rss, BarChart3, Users2, MapPin, User as UserIcon, Phone, Mail, Trophy, Home, BarChart, TrendingUp, Users as UsersIconComponent } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Progress } from '@/shared/ui/progress';
@@ -18,6 +18,8 @@ import { useToast } from '@/shared/hooks/use-toast';
 import { useEffect, useState, useMemo } from 'react';
 import { Tooltip, TooltipProvider, TooltipContent, TooltipTrigger } from '@/shared/ui/tooltip';
 import type { User } from '@/mocks/users';
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/shared/ui/chart";
+import { Bar as RechartsBar, BarChart as RechartsBarChart, XAxis, YAxis, ResponsiveContainer } from "recharts";
 
 const statusColors: Record<string, string> = {
     'АНОНС': 'bg-purple-500/20 text-purple-300 border-purple-500/30',
@@ -62,6 +64,33 @@ const DataTable = ({ headers, data, renderRow }: { headers: string[], data: any[
     </div>
 );
 
+const userRegistrationData = [
+  { month: "Янв", registrations: 186 },
+  { month: "Фев", registrations: 305 },
+  { month: "Мар", registrations: 237 },
+  { month: "Апр", registrations: 173 },
+  { month: "Май", registrations: 209 },
+  { month: "Июн", registrations: 250 },
+];
+
+const userRolesData = [
+  { role: "Игрок", count: users.filter(u => u.role === 'Игрок').length },
+  { role: "Судья", count: users.filter(u => u.role === 'Судья').length },
+  { role: "Тренер", count: users.filter(u => u.role === 'Тренер').length },
+  { role: "Болельщик", count: users.filter(u => u.role === 'Болельщик').length },
+  { role: "Организатор", count: users.filter(u => u.role === 'Организатор').length },
+];
+
+const topSportsData = allSports.slice(0, 5).map(s => ({
+    sport: s.name,
+    teams: teams.filter(t => t.game === s.name).length
+}));
+
+const chartConfig = {
+    registrations: { label: "Регистрации", color: "hsl(var(--primary))" },
+    count: { label: "Кол-во", color: "hsl(var(--primary))" },
+    teams: { label: "Команды", color: "hsl(var(--primary))" },
+}
 
 export function AdminStatisticsPage() {
     const { toast } = useToast();
@@ -110,9 +139,10 @@ export function AdminStatisticsPage() {
     }
     
     return (
-        <Tabs defaultValue="users">
+        <Tabs defaultValue="overview">
             <div className="flex items-center justify-between mb-6">
                  <TabsList>
+                    <TabsTrigger value="overview"><BarChart className="mr-2 h-4 w-4" />Обзор</TabsTrigger>
                     <TabsTrigger value="users"><UserIcon className="mr-2 h-4 w-4" />Пользователи</TabsTrigger>
                     <TabsTrigger value="teams"><Users2 className="mr-2 h-4 w-4" />Команды</TabsTrigger>
                     <TabsTrigger value="sponsors"><Heart className="mr-2 h-4 w-4" />Спонсоры</TabsTrigger>
@@ -121,7 +151,67 @@ export function AdminStatisticsPage() {
                     <TabsTrigger value="sports"><BarChart3 className="mr-2 h-4 w-4" />Виды спорта</TabsTrigger>
                 </TabsList>
             </div>
-            
+             <TabsContent value="overview">
+                <div className="space-y-6">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <Card>
+                            <CardHeader><CardTitle className="flex items-center gap-2"><UsersIconComponent className="h-5 w-5"/>Всего пользователей</CardTitle></CardHeader>
+                            <CardContent>
+                                <p className="text-4xl font-bold">{users.length}</p>
+                                <p className="text-sm text-muted-foreground">+20.1% с прошлого месяца</p>
+                            </CardContent>
+                        </Card>
+                        <Card>
+                            <CardHeader><CardTitle className="flex items-center gap-2"><TrendingUp className="h-5 w-5"/>Активных команд</CardTitle></CardHeader>
+                            <CardContent>
+                                <p className="text-4xl font-bold">{teams.length}</p>
+                                <p className="text-sm text-muted-foreground">+18.3% с прошлого месяца</p>
+                            </CardContent>
+                        </Card>
+                         <Card>
+                            <CardHeader><CardTitle className="flex items-center gap-2"><Trophy className="h-5 w-5"/>Текущие турниры</CardTitle></CardHeader>
+                            <CardContent>
+                                <p className="text-4xl font-bold">{tournaments.filter(t => t.status === 'ИДЕТ').length}</p>
+                                <p className="text-sm text-muted-foreground">+2 новых на этой неделе</p>
+                            </CardContent>
+                        </Card>
+                    </div>
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <Card className="lg:col-span-2">
+                             <CardHeader>
+                                <CardTitle>Динамика регистраций</CardTitle>
+                                <CardDescription>Новые пользователи за последние 6 месяцев.</CardDescription>
+                            </CardHeader>
+                            <CardContent>
+                               <ChartContainer config={chartConfig} className="h-64 w-full">
+                                    <RechartsBarChart data={userRegistrationData} accessibilityLayer>
+                                        <XAxis dataKey="month" tickLine={false} axisLine={false} />
+                                        <YAxis tickLine={false} axisLine={false} />
+                                        <ChartTooltip content={<ChartTooltipContent />} />
+                                        <RechartsBar dataKey="registrations" fill="var(--color-registrations)" radius={4} />
+                                    </RechartsBarChart>
+                                </ChartContainer>
+                            </CardContent>
+                        </Card>
+                        <Card>
+                            <CardHeader>
+                                <CardTitle>Топ-5 дисциплин</CardTitle>
+                                <CardDescription>По количеству созданных команд.</CardDescription>
+                            </CardHeader>
+                            <CardContent>
+                               <ChartContainer config={chartConfig} className="h-64 w-full">
+                                    <RechartsBarChart data={topSportsData} layout="vertical" accessibilityLayer>
+                                        <XAxis type="number" hide />
+                                        <YAxis dataKey="sport" type="category" tickLine={false} axisLine={false} width={80} />
+                                        <ChartTooltip content={<ChartTooltipContent />} />
+                                        <RechartsBar dataKey="teams" fill="var(--color-teams)" radius={4} />
+                                    </RechartsBarChart>
+                                </ChartContainer>
+                            </CardContent>
+                        </Card>
+                    </div>
+                </div>
+            </TabsContent>
             <TabsContent value="users">
                 <Card>
                     <CardHeader>
