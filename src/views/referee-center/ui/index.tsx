@@ -3,13 +3,11 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
 import { Button } from "@/shared/ui/button";
-import { BookOpen, ShieldCheck, FileText, ArrowRight, Video, GraduationCap, Star, BarChart, Calendar, Archive, Search } from "lucide-react";
+import { BookOpen, ShieldCheck, FileText, ArrowRight, Video, GraduationCap, Star, BarChart, Calendar, Archive } from "lucide-react";
 import Link from "next/link";
 import { Progress } from "@/shared/ui/progress";
-import { teamSports } from "@/mocks";
-import { Badge } from "@/shared/ui/badge";
-import { Input } from "@/shared/ui/input";
 import React from "react";
+import { Badge } from "@/shared/ui/badge";
 
 const mockCourses = [
     {
@@ -41,15 +39,6 @@ const mockCourses = [
     }
 ];
 
-const mockRules = teamSports.reduce((acc, sport) => {
-    acc[sport.name] = [
-        { id: `rules-${sport.id}-1`, title: `Официальные правила (ProDvor)`, icon: FileText },
-        { id: `rules-${sport.id}-2`, title: 'Регламент проведения матчей', icon: FileText },
-        ...(sport.subdisciplines ? [{ id: `rules-${sport.id}-3`, title: `Особенности правил для: ${sport.subdisciplines.map(s => s.name).join(', ')}`, icon: FileText }] : [])
-    ];
-    return acc;
-}, {} as Record<string, {id: string, title: string, icon: React.ElementType}[]>);
-
 const mockCases = [
     { id: 'case-1', title: 'Спорный гол на последних секундах', discipline: 'Футбол', tags: ['VAR', 'Правило последнего касания'] },
     { id: 'case-2', title: 'Определение неспортивного поведения', discipline: 'Баскетбол', tags: ['Неспортивный фол', 'Дисквалификация'] },
@@ -59,21 +48,6 @@ const mockCases = [
 
 export function RefereeCenterPage() {
     const recommendedCourse = mockCourses[0];
-    const [searchTerm, setSearchTerm] = React.useState('');
-
-    const filteredRules = React.useMemo(() => {
-        if (!searchTerm) return mockRules;
-        const lowercasedFilter = searchTerm.toLowerCase();
-        
-        return Object.entries(mockRules).reduce((acc, [discipline, rules]) => {
-            const filtered = rules.filter(rule => rule.title.toLowerCase().includes(lowercasedFilter));
-            if (filtered.length > 0) {
-                acc[discipline] = filtered;
-            }
-            return acc;
-        }, {} as typeof mockRules);
-
-    }, [searchTerm]);
 
     return (
         <div className="p-4 md:p-6 lg:p-8 space-y-8">
@@ -95,57 +69,42 @@ export function RefereeCenterPage() {
                             <CardDescription>Проходите курсы, чтобы повысить свою категорию и получать назначения на более важные матчи.</CardDescription>
                         </CardHeader>
                         <CardContent className="space-y-4">
-                            <Card className="bg-muted/50 border-primary/50">
-                                <CardHeader>
-                                    <CardTitle className="text-lg flex items-center gap-2"><recommendedCourse.icon className="h-5 w-5"/>{recommendedCourse.title}</CardTitle>
-                                    <CardDescription>Рекомендовано для вас</CardDescription>
-                                </CardHeader>
-                                <CardContent>
-                                    <p className="text-sm text-muted-foreground mb-4">{recommendedCourse.description}</p>
-                                    <div className="space-y-2">
-                                        <div className="flex justify-between items-center text-sm mb-1">
-                                            <span className="font-medium">Прогресс:</span>
-                                            <span className="font-bold text-primary">{recommendedCourse.progress}%</span>
-                                        </div>
-                                        <Progress value={recommendedCourse.progress} />
-                                    </div>
-                                    <Button className="mt-4">Продолжить курс <ArrowRight className="ml-2 h-4 w-4" /></Button>
-                                </CardContent>
-                            </Card>
-                            <div className="space-y-4 pt-4">
-                                {mockCourses.map(course => (
-                                    <Card key={course.id}>
-                                        <CardHeader>
-                                            <CardTitle className="text-lg flex items-center gap-2">
-                                                <course.icon className="h-5 w-5" />
-                                                {course.title}
-                                            </CardTitle>
-                                             <CardDescription>{course.discipline}</CardDescription>
-                                        </CardHeader>
-                                        <CardContent>
-                                            <p className="text-sm text-muted-foreground mb-4">{course.description}</p>
-                                            {course.progress !== undefined && (
-                                                 <div className="space-y-2 mb-4">
-                                                    <div className="flex justify-between items-center text-sm mb-1">
-                                                        <span className="font-medium">Прогресс:</span>
-                                                        <span className="font-bold text-primary">{course.progress}%</span>
-                                                    </div>
-                                                    <Progress value={course.progress} />
-                                                </div>
-                                            )}
-                                            <Button variant="secondary">
-                                                {course.progress === 100 ? 'Повторить' : course.progress && course.progress > 0 ? 'Продолжить' : 'Начать'}
-                                            </Button>
-                                        </CardContent>
-                                    </Card>
-                                ))}
-                            </div>
+                           {mockCourses.map(course => (
+                               <Card key={course.id} className={course.id === recommendedCourse.id ? "bg-muted/50 border-primary/50" : ""}>
+                                   <CardHeader>
+                                       <CardTitle className="text-lg flex items-center gap-2">
+                                            <course.icon className="h-5 w-5"/>
+                                            {course.title}
+                                       </CardTitle>
+                                       <CardDescription>
+                                            {course.discipline}
+                                            {course.id === recommendedCourse.id && <Badge variant="secondary" className="ml-2">Рекомендовано</Badge>}
+                                        </CardDescription>
+                                   </CardHeader>
+                                   <CardContent>
+                                       <p className="text-sm text-muted-foreground mb-4">{course.description}</p>
+                                       {course.progress !== undefined && (
+                                            <div className="space-y-2 mb-4">
+                                               <div className="flex justify-between items-center text-sm mb-1">
+                                                   <span className="font-medium">Прогресс:</span>
+                                                   <span className="font-bold text-primary">{course.progress}%</span>
+                                               </div>
+                                               <Progress value={course.progress} />
+                                           </div>
+                                       )}
+                                       <Button>
+                                           {course.progress === 100 ? 'Повторить' : course.progress && course.progress > 0 ? 'Продолжить' : 'Начать'}
+                                           <ArrowRight className="ml-2 h-4 w-4" />
+                                       </Button>
+                                   </CardContent>
+                               </Card>
+                           ))}
                         </CardContent>
                     </Card>
 
                     <Card>
                         <CardHeader>
-                             <div className="flex items-center justify-between">
+                            <div className="flex items-center justify-between">
                                 <CardTitle className="flex items-center gap-2">
                                     <Archive className="h-6 w-6 text-primary" />
                                     Разбор кейсов
@@ -171,48 +130,6 @@ export function RefereeCenterPage() {
                         </CardContent>
                     </Card>
 
-                    <Card>
-                        <CardHeader>
-                            <CardTitle className="flex items-center gap-2">
-                                <FileText className="h-6 w-6 text-primary" />
-                                База знаний
-                            </CardTitle>
-                             <CardDescription>Актуальные регламенты и правила по всем дисциплинам ProDvor.</CardDescription>
-                        </CardHeader>
-                        <CardContent>
-                            <div className="relative mb-4">
-                                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                                <Input 
-                                    placeholder="Поиск по правилам..." 
-                                    className="pl-9"
-                                    value={searchTerm}
-                                    onChange={(e) => setSearchTerm(e.target.value)}
-                                />
-                            </div>
-                            <div className="space-y-4">
-                                {Object.keys(filteredRules).length > 0 ? (
-                                    Object.entries(filteredRules).map(([discipline, rules]) => (
-                                        <div key={discipline}>
-                                            <h4 className="font-semibold mb-2">{discipline}</h4>
-                                            <div className="space-y-2">
-                                                {rules.map(rule => (
-                                                    <Link href="#" key={rule.id} className="flex items-center justify-between p-3 rounded-md border bg-background hover:border-primary/50 transition-colors group">
-                                                        <div className="flex items-center gap-3">
-                                                            <rule.icon className="h-5 w-5 text-muted-foreground" />
-                                                            <span className="font-medium group-hover:text-primary">{rule.title}</span>
-                                                        </div>
-                                                        <ArrowRight className="h-4 w-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
-                                                    </Link>
-                                                ))}
-                                            </div>
-                                        </div>
-                                    ))
-                                ) : (
-                                    <p className="text-sm text-muted-foreground text-center py-4">По вашему запросу ничего не найдено.</p>
-                                )}
-                            </div>
-                        </CardContent>
-                    </Card>
                 </div>
                 
                 <div className="space-y-8 lg:sticky top-24">
@@ -275,5 +192,3 @@ export function RefereeCenterPage() {
         </div>
     );
 }
-
-    
