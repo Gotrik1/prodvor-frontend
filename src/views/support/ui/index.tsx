@@ -1,5 +1,6 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
-import { Construction } from "lucide-react";
+
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
+import { LifeBuoy } from "lucide-react";
 
 export function SupportPage() {
     return (
@@ -7,13 +8,14 @@ export function SupportPage() {
             <Card className="text-center max-w-md w-full">
                 <CardHeader>
                     <div className="mx-auto bg-primary/10 text-primary p-4 rounded-full w-fit">
-                      <Construction className="h-12 w-12" />
+                      <LifeBuoy className="h-12 w-12" />
                     </div>
                     <CardTitle className="mt-4 text-2xl font-headline">Раздел "Поддержка"</CardTitle>
+                    <CardDescription>В разработке</CardDescription>
                 </CardHeader>
                 <CardContent>
                     <p className="text-muted-foreground">
-                        Этот раздел находится в разработке. Скоро здесь появится центр помощи.
+                        Этот раздел находится в разработке. Скоро здесь появится центр помощи с базой знаний и возможностью связаться с нашей командой.
                     </p>
                 </CardContent>
             </Card>
