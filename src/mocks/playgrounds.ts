@@ -1,6 +1,17 @@
 
 import type { User } from './users';
 
+export interface FitnessService {
+    name: string;
+    description: string;
+    icon?: string; // e.g., lucide-react icon name
+}
+
+export interface ServiceCategory {
+    category: string;
+    services: FitnessService[];
+}
+
 export interface Playground {
     id: string;
     name: string;
@@ -12,6 +23,7 @@ export interface Playground {
     sportIds: string[];
     followers: string[]; // Array of user IDs
     residentTeamIds: string[]; // Array of team IDs
+    services?: ServiceCategory[];
 }
 
 const basePlaygrounds: Omit<Playground, 'followers' | 'residentTeamIds'>[] = [
@@ -21,6 +33,45 @@ const basePlaygrounds: Omit<Playground, 'followers' | 'residentTeamIds'>[] = [
     { id: 'p1-2', name: 'Пляжный стадион "Золотые пески"', address: 'г. Сочи, Адлер', type: 'Открытая площадка', surface: 'Песок', imageUrl: 'https://placehold.co/400x300.png', dataAiHint: 'beach soccer', sportIds: ['sport-1-2'] },
     { id: 'p1-3', name: 'Футзал-центр "Паркет"', address: 'г. Екатеринбург, ул. Игровая, 5', type: 'Закрытое помещение', surface: 'Паркет', imageUrl: 'https://placehold.co/400x300.png', dataAiHint: 'indoor soccer', sportIds: ['sport-1-3'] },
     { id: 'p1-4', name: 'Коробка у школы №15', address: 'г. Москва, ул. Школьная, 15', type: 'Открытая площадка', surface: 'Асфальт', imageUrl: 'https://placehold.co/400x300.png', dataAiHint: 'street court', sportIds: ['sport-1-4', 'sport-21-2'] },
+    // --- Фитнес-центр с услугами ---
+    { 
+        id: 'fc1', 
+        name: 'Фитнес-клуб "Pro-Forma"', 
+        address: 'г. Москва, ул. Профсоюзная, 25', 
+        type: 'Спортивный центр', 
+        surface: 'Синтетика', 
+        imageUrl: 'https://placehold.co/400x300.png', 
+        dataAiHint: 'modern gym', 
+        sportIds: ['sport-33', 'sport-34', 'sport-35', 'sport-26', 'sport-37'],
+        services: [
+            {
+                category: "Основные услуги",
+                services: [
+                    { name: "Тренажерный зал", description: "Современный зал с оборудованием от ведущих мировых брендов для силовых и кардио-тренировок.", icon: "Dumbbell" },
+                    { name: "Бассейн", description: "25-метровый бассейн на 4 дорожки для свободного плавания и аквааэробики.", icon: "Waves" },
+                    { name: "Персональный тренинг", description: "Индивидуальные программы, разработанные нашими сертифицированными тренерами для достижения ваших целей.", icon: "UserCheck" },
+                    { name: "Медицинское фитнес-тестирование", description: "Анализ функциональных показателей организма для составления эффективной и безопасной программы занятий.", icon: "HeartPulse" },
+                ]
+            },
+            {
+                category: "Групповые программы",
+                services: [
+                    { name: "Силовой и функциональный тренинг", description: "Программы для тренировки всех групп мышц, повышения силы и выносливости.", icon: "Flame" },
+                    { name: "Кардиотренинг", description: "Высокоинтенсивные тренировки для укрепления сердечно-сосудистой системы и сжигания калорий.", icon: "Zap" },
+                    { name: "Mind & Body", description: "Уникальные программы, такие как йога и пилатес, для улучшения физического состояния и обретения душевного равновесия.", icon: "BrainCircuit" },
+                    { name: "Танцевальные программы", description: "Зажигательные танцевальные классы для всех уровней подготовки.", icon: "Music" },
+                ]
+            },
+            {
+                category: "Дополнительно",
+                services: [
+                     { name: "Боевые искусства", description: "Секции по боксу и MMA для развития силы, реакции и уверенности в себе.", icon: "Swords" },
+                     { name: "Детский фитнес", description: "Программы для детей от 3 до 16 лет, включая спортивные секции и развивающие занятия.", icon: "Baby" },
+                     { name: "SPA-зона", description: "Сауна, хаммам и массажный кабинет для восстановления после тренировок.", icon: "Sparkles" },
+                ]
+            }
+        ]
+    },
     // --- Баскетбол (sport-2) ---
     { id: 'p2', name: 'Баскетбольный центр "Триумф"', address: 'г. Москва, пр. Мира, 5', type: 'Закрытое помещение', surface: 'Паркет', imageUrl: 'https://placehold.co/400x300.png', dataAiHint: 'basketball court', sportIds: ['sport-2', 'sport-2-3'] },
     { id: 'p2-1', name: 'Площадка "Стритбол 3х3"', address: 'г. Москва, Парк Горького', type: 'Открытая площадка', surface: 'Резиновое', imageUrl: 'https://placehold.co/400x300.png', dataAiHint: 'streetball court', sportIds: ['sport-2-1', 'sport-2-2'] },
@@ -114,5 +165,3 @@ export function assignFollowersToPlaygrounds(users: User[]) {
         playground.followers = Array.from(new Set(followers)); // Ensure unique
     });
 }
-
-    

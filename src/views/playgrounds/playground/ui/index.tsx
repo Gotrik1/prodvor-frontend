@@ -1,15 +1,16 @@
 
-
 import { playgrounds, teams, users } from "@/mocks";
-import type { Playground } from "@/mocks";
+import type { Playground, ServiceCategory } from "@/mocks";
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
 import { YandexMapV3 } from "@/widgets/yandex-map";
 import { ArrowLeft, CheckCircle, Home, MapPin, Star, Users, Rss } from "lucide-react";
+import * as LucideIcons from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { Badge } from "@/shared/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 
 const features = [
     { id: "lighting", label: "Освещение" },
@@ -17,6 +18,56 @@ const features = [
     { id: "fence", label: "Ограждение" },
     { id: "water_source", label: "Источник воды" },
 ];
+
+const ServiceCard = ({ service }: { service: ServiceCategory['services'][0] }) => {
+    // @ts-ignore
+    const Icon = service.icon ? LucideIcons[service.icon] as React.ElementType : Home;
+    return (
+        <Card className="bg-background/50 h-full">
+            <CardHeader className="flex flex-row items-center gap-4">
+                <div className="p-3 rounded-md bg-primary/10 text-primary">
+                    <Icon className="w-6 h-6" />
+                </div>
+                <div>
+                    <CardTitle>{service.name}</CardTitle>
+                </div>
+            </CardHeader>
+            <CardContent>
+                <p className="text-sm text-muted-foreground">{service.description}</p>
+            </CardContent>
+        </Card>
+    );
+};
+
+const FitnessServicesSection = ({ services }: { services: ServiceCategory[] }) => (
+    <Card className="mt-8">
+        <CardHeader>
+            <CardTitle>Услуги и программы</CardTitle>
+            <CardDescription>Ознакомьтесь с полным спектром услуг, предоставляемых в этом центре.</CardDescription>
+        </CardHeader>
+        <CardContent>
+            <Tabs defaultValue={services[0].category} className="w-full">
+                <TabsList className="grid w-full grid-cols-1 md:grid-cols-3">
+                    {services.map(category => (
+                        <TabsTrigger key={category.category} value={category.category}>
+                            {category.category}
+                        </TabsTrigger>
+                    ))}
+                </TabsList>
+                {services.map(category => (
+                    <TabsContent key={category.category} value={category.category} className="mt-6">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            {category.services.map(service => (
+                                <ServiceCard key={service.name} service={service} />
+                            ))}
+                        </div>
+                    </TabsContent>
+                ))}
+            </Tabs>
+        </CardContent>
+    </Card>
+);
+
 
 export function PlaygroundPage({ playground }: { playground: Playground | undefined }) {
 
@@ -45,7 +96,7 @@ export function PlaygroundPage({ playground }: { playground: Playground | undefi
 
     return (
         <div className="p-4 md:p-6 lg:p-8">
-            <div className="max-w-5xl mx-auto">
+            <div className="max-w-6xl mx-auto">
                 <div className="mb-6 flex justify-between items-center">
                     <Button asChild variant="outline">
                         <Link href="/playgrounds">
@@ -100,6 +151,8 @@ export function PlaygroundPage({ playground }: { playground: Playground | undefi
                         </Card>
                     </div>
                 </div>
+
+                {playground.services && <FitnessServicesSection services={playground.services} />}
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
                     <Card>
