@@ -21,19 +21,18 @@ import {
     SponsorsTab,
     AnnouncementsTab,
     SettingsTab,
-    ProtocolTab,
     FinancesTab,
     AnalyticsTab,
 } from './tabs';
 import { useProtocol } from "@/widgets/protocol-editor/lib/use-protocol";
 import { ScrollArea, ScrollBar } from "@/shared/ui/scroll-area";
+import { ProtocolEditor } from "@/widgets/protocol-editor";
 
 const crmTabs = [
     { value: "overview", icon: GanttChartIcon, label: "Обзор" },
     { value: "participants", icon: Users, label: "Участники" },
-    { value: "bracket", icon: GanttChartIcon, label: "Сетка" },
+    { value: "bracket", icon: GanttChartIcon, label: "Сетка и Протоколы" },
     { value: "schedule", icon: Calendar, label: "Расписание" },
-    { value: "protocol", icon: FileText, label: "Протоколы" },
     { value: "analytics", icon: BarChartBig, label: "Аналитика" },
     { value: "media", icon: Film, label: "Медиа" },
     { value: "promo", icon: Wand2, label: "Промо" },
@@ -168,13 +167,25 @@ export function TournamentManagementPage({ tournamentId }: { tournamentId: strin
                     <ParticipantsTab teams={teams} setTeams={setTeams} />
                 </TabsContent>
                 <TabsContent value="bracket">
-                    <BracketTab confirmedTeams={confirmedTeams} generatedBracket={generatedBracket} />
+                   <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+                        <BracketTab confirmedTeams={confirmedTeams} generatedBracket={generatedBracket} />
+                        <div>
+                             {activeMatch ? (
+                                <ProtocolEditor match={activeMatch} />
+                            ) : (
+                                <Card className="sticky top-24">
+                                     <CardContent className="min-h-[50vh] flex items-center justify-center">
+                                        <div className="text-center text-muted-foreground">
+                                            <p>Выберите матч в сетке для редактирования протокола.</p>
+                                        </div>
+                                    </CardContent>
+                                </Card>
+                            )}
+                        </div>
+                    </div>
                 </TabsContent>
                 <TabsContent value="schedule">
                     <ScheduleTab />
-                </TabsContent>
-                <TabsContent value="protocol">
-                    <ProtocolTab tournament={tournament} />
                 </TabsContent>
                  <TabsContent value="analytics">
                     <AnalyticsTab />
