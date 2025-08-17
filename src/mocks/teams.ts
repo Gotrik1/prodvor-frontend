@@ -56,8 +56,8 @@ export function initializeTeams(
 
             if (availableCaptains.length === 0) break;
             
-            // Predictable captain selection
-            const captainIndex = (teamIdCounter + i) % availableCaptains.length;
+            // Predictable but more distributed captain selection
+            const captainIndex = (teamIdCounter * 13 + i * 29) % availableCaptains.length;
             const captain = availableCaptains[captainIndex];
 
             const availableMembers = players.filter(p => {
@@ -88,7 +88,7 @@ export function initializeTeams(
                 homePlaygroundIds = [sportPlaygrounds[teamIdCounter % sportPlaygrounds.length].id];
             }
             
-            const baseTeamNames = ['Ночные Снайперы', 'Короли Асфальта', 'Стальные Ястребы', 'Бетонные Тигры', 'Разрушители', 'Фортуна', 'Красная Фурия', 'Легион'];
+            const baseTeamNames = ['Ночные Снайперы', 'Короли Асфальта', 'Стальные Ястребы', 'Бетонные Тигры', 'Разрушители', 'Фортуна', 'Красная Фурия', 'Легион', 'Авангард', 'Молот', 'Звезда', 'Циклон'];
             const teamName = `${baseTeamNames[teamIdCounter % baseTeamNames.length]} (${sport.name})`;
             
             // Assign sponsors to ~33% of teams predictably

@@ -1,3 +1,4 @@
+
 import { allSports, individualSports, teamSports, Sport } from './sports';
 import { Sponsor } from './personnel';
 
@@ -82,17 +83,16 @@ export const users: User[] = baseUsers.map(u => ({
 // This function will be called from index.ts after all base data is loaded.
 export function initializeSocialGraphAndSponsors(allUsers: User[], allSponsors: Sponsor[]) {
     // --- Initial discipline assignment ---
-    const individualSportIds = individualSports.map(s => s.id);
-    const teamSportIds = teamSports.map(s => s.id);
+    const allSportIds = allSports.map(s => s.id);
 
     allUsers.forEach((user, index) => {
         const userDisciplines = new Set<string>();
-        // Assign 1-2 initial disciplines predictably
-        if (teamSportIds.length > 0) {
-            userDisciplines.add(teamSportIds[index % teamSportIds.length]);
+        // Assign 1-2 initial disciplines predictably to all users
+        if (allSportIds.length > 0) {
+            userDisciplines.add(allSportIds[index % allSportIds.length]);
         }
-        if (index % 3 === 0 && individualSportIds.length > 0) { // ~33% chance for a second, individual sport
-             userDisciplines.add(individualSportIds[index % individualSportIds.length]);
+        if (index % 3 === 0 && allSportIds.length > 0) { // ~33% chance for a second sport
+             userDisciplines.add(allSportIds[(index * 7) % allSportIds.length]);
         }
         user.disciplines = Array.from(userDisciplines);
     });
