@@ -8,7 +8,8 @@ import { Badge } from "@/shared/ui/badge";
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/shared/ui/table";
-import { Calendar, CheckCircle, Gavel, Shield, Star, XCircle, Gamepad2, Activity } from "lucide-react";
+import { Calendar, CheckCircle, Gavel, Shield, Star, XCircle, Gamepad2, Activity, ArrowRight } from "lucide-react";
+import Link from "next/link";
 
 const defaultReferee = users.find(s => s.role === 'Судья')!;
 const mockMatches = [
@@ -153,10 +154,16 @@ export function RefereePageTemplate({ user }: { user?: User }) {
                     </Card>
                      <Card>
                         <CardHeader>
-                            <CardTitle className="flex items-center gap-2"><Activity /> Физическая подготовка</CardTitle>
+                            <CardTitle className="flex items-center gap-2"><Gavel /> Центр судей</CardTitle>
                         </CardHeader>
                         <CardContent>
-                            <p className="text-sm text-muted-foreground">Регулярные кардио-тренировки для поддержания формы на поле.</p>
+                           <p className="text-sm text-muted-foreground mb-4">Получайте назначения на матчи и управляйте своей карьерой.</p>
+                           <Button asChild className="w-full">
+                                <Link href="/referee-center">
+                                    Перейти в центр
+                                    <ArrowRight className="ml-2 h-4 w-4" />
+                                </Link>
+                           </Button>
                         </CardContent>
                     </Card>
                 </div>
