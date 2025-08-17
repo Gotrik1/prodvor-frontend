@@ -58,7 +58,7 @@ export function ActivityLibrary() {
                         <TabsTrigger value="other"><Sun className="h-4 w-4" /></TabsTrigger>
                     </TabsList>
                     <TabsContent value="templates" className="mt-4">
-                        <Droppable droppableId="library-templates" isDropDisabled={true}>
+                        <Droppable droppableId="library-templates" isDropDisabled={true} isCombineEnabled={false}>
                             {(provided) => (
                                 <div ref={provided.innerRef} {...provided.droppableProps}>
                                     {mockTemplates.map((item, index) => (
@@ -70,7 +70,7 @@ export function ActivityLibrary() {
                         </Droppable>
                     </TabsContent>
                     <TabsContent value="group" className="mt-4">
-                         <Droppable droppableId="library-group" isDropDisabled={true}>
+                         <Droppable droppableId="library-group" isDropDisabled={true} isCombineEnabled={false}>
                             {(provided) => (
                                 <div ref={provided.innerRef} {...provided.droppableProps}>
                                     {mockGroupSessions.map((item, index) => (
@@ -82,7 +82,7 @@ export function ActivityLibrary() {
                         </Droppable>
                     </TabsContent>
                     <TabsContent value="other" className="mt-4">
-                         <Droppable droppableId="library-other" isDropDisabled={true}>
+                         <Droppable droppableId="library-other" isDropDisabled={true} isCombineEnabled={false}>
                             {(provided) => (
                                 <div ref={provided.innerRef} {...provided.droppableProps}>
                                     {mockOther.map((item, index) => (
