@@ -4,7 +4,7 @@
 
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
-import { Users, Calendar, Megaphone, Settings, GanttChartIcon, Shield, Award, Film, Wand2, FileText, DollarSign } from "lucide-react";
+import { Users, Calendar, Megaphone, Settings, GanttChartIcon, Shield, Award, Film, Wand2, FileText, DollarSign, BarChart } from "lucide-react";
 import Link from "next/link";
 import { allTournaments, teams as allTeamsData, registeredTeams as initialRegisteredTeams } from '@/views/tournaments/public-page/ui/mock-data';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
@@ -22,6 +22,7 @@ import {
     AnnouncementsTab,
     SettingsTab,
     FinancesTab,
+    AnalyticsTab,
 } from './tabs';
 import { useProtocol } from "@/widgets/protocol-editor/lib/use-protocol";
 import { ScrollArea, ScrollBar } from "@/shared/ui/scroll-area";
@@ -29,6 +30,7 @@ import { ProtocolEditor } from "@/widgets/protocol-editor";
 
 const crmTabs = [
     { value: "overview", icon: GanttChartIcon, label: "Обзор" },
+    { value: "analytics", icon: BarChart, label: "Аналитика" },
     { value: "participants", icon: Users, label: "Участники" },
     { value: "bracket", icon: GanttChartIcon, label: "Сетка и Протоколы" },
     { value: "schedule", icon: Calendar, label: "Расписание" },
@@ -160,6 +162,9 @@ export function TournamentManagementPage({ tournamentId }: { tournamentId: strin
                 </ScrollArea>
                 <TabsContent value="overview">
                     <OverviewTab tournament={tournament} onStatusChange={(status) => handleTournamentChange({ status })} confirmedCount={confirmedTeams.length} />
+                </TabsContent>
+                <TabsContent value="analytics">
+                    <AnalyticsTab />
                 </TabsContent>
                 <TabsContent value="participants">
                     <ParticipantsTab teams={teams} setTeams={setTeams} />
