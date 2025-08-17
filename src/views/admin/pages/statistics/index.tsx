@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { users, teams, sponsors, playgrounds, allSports, Team } from '@/mocks';
@@ -16,6 +17,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs';
 import { useToast } from '@/shared/hooks/use-toast';
 import { useEffect, useState, useMemo } from 'react';
 import { Tooltip, TooltipProvider, TooltipContent, TooltipTrigger } from '@/shared/ui/tooltip';
+import type { User } from '@/mocks/users';
 
 const statusColors: Record<string, string> = {
     'АНОНС': 'bg-purple-500/20 text-purple-300 border-purple-500/30',
@@ -56,6 +58,13 @@ export function AdminStatisticsPage() {
 
     const getTeamForUser = (userId: string): Team[] => {
        return userTeamsMap.get(userId) || [];
+    };
+    
+    const getUserDisciplines = (user: User): string[] => {
+        const personalDisciplines = user.disciplines.map(id => allSports.find(s => s.id === id)?.name).filter((name): name is string => !!name);
+        const teamDisciplines = getTeamForUser(user.id).map(team => team.game);
+        const allDisciplinesSet = new Set([...personalDisciplines, ...teamDisciplines]);
+        return Array.from(allDisciplinesSet);
     };
 
     const copyToClipboard = (text: string, entity: string) => {
@@ -105,7 +114,9 @@ export function AdminStatisticsPage() {
                         <DataTable 
                             headers={['ID', 'Пользователь', 'Роль', 'Дисциплины', 'Контакты', 'Команды', 'Соц. связи', 'Спонсоры', '']}
                             data={users}
-                            renderRow={(user) => (
+                            renderRow={(user: User) => {
+                                const userDisciplines = getUserDisciplines(user);
+                                return (
                                 <TableRow key={user.id}>
                                     <TableCell className="font-mono text-xs whitespace-nowrap align-top">
                                         <div className="flex items-center gap-2">
@@ -131,12 +142,12 @@ export function AdminStatisticsPage() {
                                             <Tooltip>
                                                 <TooltipTrigger asChild>
                                                     <p className="text-xs break-words line-clamp-3">
-                                                        {user.disciplines.map(id => allSports.find(s => s.id === id)?.name).join(', ')}
+                                                        {userDisciplines.join(', ')}
                                                     </p>
                                                 </TooltipTrigger>
                                                 <TooltipContent>
                                                     <p className="max-w-xs break-words">
-                                                         {user.disciplines.map(id => allSports.find(s => s.id === id)?.name).join(', ')}
+                                                         {userDisciplines.join(', ')}
                                                     </p>
                                                 </TooltipContent>
                                             </Tooltip>
@@ -171,7 +182,7 @@ export function AdminStatisticsPage() {
                                         <Button asChild variant="ghost" size="sm"><Link href={`/admin/users/${user.id}`}><ExternalLink className="mr-2 h-4 w-4"/>Просмотр</Link></Button>
                                     </TableCell>
                                 </TableRow>
-                            )}
+                            )}}
                         />
                     </CardContent>
                 </Card>
