@@ -2,7 +2,7 @@
 'use client';
 
 import { SidebarTrigger } from "@/shared/ui/sidebar";
-import { Search, ShoppingCart, Bell, User, Settings, LifeBuoy, Share2, LogOut } from "lucide-react";
+import { Search, ShoppingCart, Bell, User, Settings, LifeBuoy, Share2, LogOut, Gem } from "lucide-react";
 import { Input } from "@/shared/ui/input";
 import { Button } from "@/shared/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
@@ -10,6 +10,7 @@ import { ThemeToggle } from "@/shared/ui/theme-toggle";
 import Link from "next/link";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/shared/ui/dropdown-menu";
 import { useUserStore } from "../model/user-store";
+import { Tooltip, TooltipProvider, TooltipContent, TooltipTrigger } from "@/shared/ui/tooltip";
 
 export function DashboardHeader() {
   const { user } = useUserStore();
@@ -27,6 +28,20 @@ export function DashboardHeader() {
         </div>
       </div>
       <div className="flex items-center gap-2">
+        <TooltipProvider>
+            <Tooltip>
+                <TooltipTrigger asChild>
+                    <Button variant="outline" className="hidden sm:flex items-center gap-2">
+                        <Gem className="h-4 w-4 text-primary" />
+                        <span className="font-bold">1,250</span>
+                    </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                    <p>Ваш баланс PD Coins</p>
+                </TooltipContent>
+            </Tooltip>
+        </TooltipProvider>
+
         <Button variant="ghost" size="icon" asChild>
           <Link href="/store"><ShoppingCart /></Link>
         </Button>

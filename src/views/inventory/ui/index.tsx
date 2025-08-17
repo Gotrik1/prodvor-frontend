@@ -1,22 +1,140 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
-import { Construction } from "lucide-react";
+
+'use client';
+
+import { useState } from 'react';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
+import { Button } from '@/shared/ui/button';
+import { CheckCircle, Gem, Package, Palette, Sparkles, Wand2 } from "lucide-react";
+import Image from 'next/image';
+import { Badge } from '@/shared/ui/badge';
+import { cn } from '@/shared/lib/utils';
+import { useToast } from '@/shared/hooks/use-toast';
+
+const mockInventoryItems = [
+    {
+      id: 'item-1',
+      name: 'Золотая рамка "Чемпион"',
+      description: 'Покажите всем, кто здесь победитель. Сверкающая рамка для вашего аватара.',
+      category: 'Рамки для аватара',
+      imageUrl: 'https://placehold.co/150x150.png',
+      dataAiHint: 'gold frame',
+      type: 'cosmetic',
+    },
+    {
+      id: 'item-2',
+      name: 'Эффект "Горящий мяч"',
+      description: 'Добавляет анимированный эффект горящего мяча на страницу вашей команды.',
+      category: 'Эффекты для профиля',
+      imageUrl: 'https://placehold.co/150x150.png',
+      dataAiHint: 'fireball',
+      type: 'effect',
+    },
+    {
+      id: 'item-5',
+      name: 'Пак из 5 генераций лого',
+      description: 'Дополнительные 5 попыток для создания идеального логотипа с помощью AI.',
+      category: 'Бустеры',
+      imageUrl: 'https://placehold.co/150x150.png',
+      dataAiHint: 'logo pack',
+      type: 'consumable',
+      quantity: 5,
+    },
+];
+
+const categoryIcons: Record<string, React.ElementType> = {
+    'Рамки для аватара': Palette,
+    'Эффекты для профиля': Sparkles,
+    'Бустеры': Wand2,
+};
+
 
 export function InventoryPage() {
+    const [inventory, setInventory] = useState(mockInventoryItems);
+    const [activeItemId, setActiveItemId] = useState('item-1');
+    const { toast } = useToast();
+    
+    const handleActivate = (itemId: string, itemName: string) => {
+        setActiveItemId(itemId);
+        toast({
+            title: "Предмет активирован!",
+            description: `Вы успешно применили "${itemName}".`,
+        })
+    };
+    
     return (
-        <div className="p-4 md:p-6 space-y-6 flex items-center justify-center min-h-[80vh]">
-            <Card className="text-center max-w-md w-full">
-                <CardHeader>
-                    <div className="mx-auto bg-primary/10 text-primary p-4 rounded-full w-fit">
-                      <Construction className="h-12 w-12" />
-                    </div>
-                    <CardTitle className="mt-4 text-2xl font-headline">Раздел "Инвентарь"</CardTitle>
-                </CardHeader>
-                <CardContent>
-                    <p className="text-muted-foreground">
-                        Этот раздел находится в разработке. Скоро здесь появятся ваши предметы.
-                    </p>
-                </CardContent>
-            </Card>
+        <div className="p-4 md:p-6 lg:p-8 space-y-8">
+            <div>
+                <h1 className="text-3xl font-bold font-headline flex items-center gap-3">
+                    <Package className="h-8 w-8" />
+                    Мой инвентарь
+                </h1>
+                <p className="text-muted-foreground mt-1">
+                    Здесь хранятся все ваши купленные предметы, награды и бустеры.
+                </p>
+            </div>
+            
+            {inventory.length > 0 ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                    {inventory.map(item => {
+                        const Icon = categoryIcons[item.category] || Gem;
+                        const isActive = activeItemId === item.id && item.type !== 'consumable';
+                        return (
+                            <Card key={item.id} className={cn("flex flex-col", isActive && "border-primary")}>
+                                <CardHeader className="relative p-0">
+                                    <div className="aspect-video w-full relative">
+                                        <Image 
+                                            src={item.imageUrl} 
+                                            alt={item.name} 
+                                            fill 
+                                            className="object-cover rounded-t-lg"
+                                            data-ai-hint={item.dataAiHint}
+                                        />
+                                    </div>
+                                    <Badge variant="secondary" className="absolute top-2 left-2 flex items-center gap-1">
+                                        <Icon className="h-3 w-3" />
+                                        {item.category}
+                                    </Badge>
+                                </CardHeader>
+                                <CardContent className="p-4 flex-grow">
+                                    <CardTitle className="text-lg mb-2">{item.name}</CardTitle>
+                                    <CardDescription>{item.description}</CardDescription>
+                                </CardContent>
+                                <CardContent className="p-4 pt-0">
+                                    {item.type === 'consumable' ? (
+                                        <div className="text-sm text-muted-foreground">Осталось: <span className="font-bold text-foreground">{item.quantity} шт.</span></div>
+                                    ) : (
+                                        <Button 
+                                            className="w-full" 
+                                            onClick={() => handleActivate(item.id, item.name)} 
+                                            disabled={isActive}
+                                        >
+                                            {isActive && <CheckCircle className="mr-2 h-4 w-4" />}
+                                            {isActive ? 'Активировано' : 'Активировать'}
+                                        </Button>
+                                    )}
+                                </CardContent>
+                            </Card>
+                        )
+                    })}
+                </div>
+            ) : (
+                 <Card className="flex items-center justify-center min-h-[50vh] border-dashed">
+                    <CardContent className="text-center p-6">
+                        <div className="mx-auto bg-muted/50 text-muted-foreground p-4 rounded-full w-fit mb-4">
+                            <Package className="h-12 w-12" />
+                        </div>
+                        <h3 className="text-2xl font-bold font-headline">Ваш инвентарь пуст</h3>
+                        <p className="text-muted-foreground mt-2 mb-6 max-w-sm">
+                           Посетите магазин, чтобы приобрести уникальные предметы, или выигрывайте их в турнирах.
+                        </p>
+                        <Button asChild>
+                            <Link href="/store">
+                                В магазин
+                            </Link>
+                        </Button>
+                    </CardContent>
+                </Card>
+            )}
         </div>
     );
 }
