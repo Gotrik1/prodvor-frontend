@@ -3,7 +3,7 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
 import { Button } from "@/shared/ui/button";
-import { BookOpen, ShieldCheck, FileText, ArrowRight, Video, GraduationCap, Star, BarChart, Gavel, Calendar, Archive } from "lucide-react";
+import { BookOpen, ShieldCheck, FileText, ArrowRight, Video, GraduationCap, Star, BarChart, Calendar, Archive } from "lucide-react";
 import Link from "next/link";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/shared/ui/accordion";
 import { Progress } from "@/shared/ui/progress";
@@ -131,7 +131,7 @@ export function RefereeCenterPage() {
                         </CardContent>
                     </Card>
 
-                     <Card>
+                    <Card>
                         <CardHeader>
                              <div className="flex items-center justify-between">
                                 <CardTitle className="flex items-center gap-2">
