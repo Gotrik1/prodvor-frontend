@@ -217,7 +217,11 @@ export function FitnessPlanPage() {
 
     return (
         <div className="space-y-8">
-            <Tabs defaultValue="templates">
+            <Tabs defaultValue="templates" className="w-full">
+                <TabsList className="grid w-full grid-cols-2">
+                    <TabsTrigger value="templates"><Dumbbell className="mr-2 h-4 w-4"/>Личные шаблоны</TabsTrigger>
+                    <TabsTrigger value="group"><Users className="mr-2 h-4 w-4"/>Групповые занятия</TabsTrigger>
+                </TabsList>
                 <TabsContent value="templates" className="mt-6">
                     <Card>
                         <CardHeader>
