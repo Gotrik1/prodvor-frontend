@@ -11,49 +11,32 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/popover';
 import { Calendar } from '@/shared/ui/calendar';
 import { CalendarIcon } from 'lucide-react';
 import { cn } from '@/shared/lib/utils';
-import { Activity } from './activity-library';
-
-export interface ScheduledActivity extends Activity {
-    startDate: string;
-    time: string;
-    repeat: 'none' | 'daily' | 'weekly' | 'monthly' | 'custom';
-    customInterval: number;
-}
+import type { WorkoutPlan } from './types';
 
 interface ScheduleActivityDialogProps {
     isOpen: boolean;
     onClose: () => void;
-    activity: Activity;
-    onSchedule: (scheduledActivity: ScheduledActivity) => void;
+    plan: WorkoutPlan;
+    onSchedule: (plan: WorkoutPlan, startDate: Date, time: string, restDays: number) => void;
 }
 
-export function ScheduleActivityDialog({ isOpen, onClose, activity, onSchedule }: ScheduleActivityDialogProps) {
+export function ScheduleActivityDialog({ isOpen, onClose, plan, onSchedule }: ScheduleActivityDialogProps) {
     const [startDate, setStartDate] = useState<Date | undefined>(new Date());
     const [time, setTime] = useState('12:00');
-    const [repeat, setRepeat] = useState<'none' | 'daily' | 'weekly' | 'monthly' | 'custom'>('weekly');
-    const [customInterval, setCustomInterval] = useState(2);
+    const [restDays, setRestDays] = useState(1);
 
     const handleSubmit = () => {
-        if (!startDate) return;
-
-        const newScheduledActivity: ScheduledActivity = {
-            ...activity,
-            id: `scheduled-${Date.now()}`,
-            startDate: startDate.toISOString(),
-            time,
-            repeat,
-            customInterval,
-        };
-        onSchedule(newScheduledActivity);
+        if (!startDate || !plan) return;
+        onSchedule(plan, startDate, time, restDays);
     };
 
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>
             <DialogContent>
                 <DialogHeader>
-                    <DialogTitle>Настроить активность: {activity.name}</DialogTitle>
+                    <DialogTitle>Запланировать: {plan.name}</DialogTitle>
                     <DialogDescription>
-                        Укажите дату, время и правила повторения для этой активности в вашем плане.
+                        Выберите дату начала и интервал отдыха. План будет автоматически распределен по календарю.
                     </DialogDescription>
                 </DialogHeader>
                 <div className="grid gap-6 py-4">
@@ -84,31 +67,23 @@ export function ScheduleActivityDialog({ isOpen, onClose, activity, onSchedule }
                             </Popover>
                         </div>
                         <div className="space-y-2">
-                             <Label htmlFor="time">Время</Label>
+                             <Label htmlFor="time">Время тренировок</Label>
                              <Input id="time" type="time" value={time} onChange={(e) => setTime(e.target.value)} />
                         </div>
                     </div>
-                    <div className="space-y-2">
-                        <Label htmlFor="repeat">Повторение</Label>
-                        <Select value={repeat} onValueChange={(value) => setRepeat(value as any)}>
-                            <SelectTrigger id="repeat">
+                     <div className="space-y-2">
+                        <Label htmlFor="rest-days">Дней отдыха между тренировками</Label>
+                         <Select value={String(restDays)} onValueChange={(value) => setRestDays(Number(value))}>
+                            <SelectTrigger id="rest-days">
                                 <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
-                                <SelectItem value="none">Не повторять</SelectItem>
-                                <SelectItem value="daily">Каждый день</SelectItem>
-                                <SelectItem value="weekly">Каждую неделю</SelectItem>
-                                <SelectItem value="monthly">Каждый месяц</SelectItem>
-                                <SelectItem value="custom">Каждые N дней</SelectItem>
+                                <SelectItem value="0">Без отдыха</SelectItem>
+                                <SelectItem value="1">1 день</SelectItem>
+                                <SelectItem value="2">2 дня</SelectItem>
                             </SelectContent>
                         </Select>
                     </div>
-                    {repeat === 'custom' && (
-                        <div className="space-y-2">
-                             <Label htmlFor="interval">Интервал (дни)</Label>
-                             <Input id="interval" type="number" value={customInterval} onChange={(e) => setCustomInterval(Number(e.target.value))} min="2" />
-                        </div>
-                    )}
                 </div>
                 <DialogFooter>
                     <Button variant="outline" onClick={onClose}>Отмена</Button>

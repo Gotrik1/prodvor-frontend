@@ -8,10 +8,10 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import { Button } from '@/shared/ui/button';
 import { Clock, User, Users } from 'lucide-react';
 import Link from 'next/link';
-import { Activity, ActivityLibraryDialog } from '@/views/fitness-plan/ui/activity-library';
+import { ActivityLibraryDialog } from '@/views/fitness-plan/ui/activity-library';
 import { ScheduleActivityDialog } from '@/views/fitness-plan/ui/schedule-activity-dialog';
 import { useWorkoutStore } from '@/views/training-center/session/lib/workout-store';
-import type { ScheduledActivity } from '@/views/fitness-plan/ui/types';
+import type { ScheduledActivity, Activity } from '@/views/fitness-plan/ui/types';
 
 
 const categoryColors: Record<ScheduleEvent['category'], string> = {
@@ -78,31 +78,20 @@ const PersonalEventCard = ({ event }: { event: ScheduledActivity }) => (
 
 export function FitnessSchedule({ personalOnly = false }: { personalOnly?: boolean }) {
     const days = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота', 'Воскресенье'];
-    const [isScheduling, setIsScheduling] = useState(false);
-    const [selectedActivity, setSelectedActivity] = useState<Activity | null>(null);
     const { personalSchedule, addScheduledActivity } = useWorkoutStore();
 
-    const handleSelectActivity = (activity: Activity) => {
-        setSelectedActivity(activity);
-        setIsScheduling(true);
-    };
-    
-    const handleCloseScheduler = () => {
-        setIsScheduling(false);
-        setSelectedActivity(null);
-    };
+    const handleBookGroupSession = (event: ScheduleEvent, day: string) => {
+        const date = new Date();
+        const currentDay = date.getDay(); // Sunday - 0, Monday - 1, etc.
+        const targetDay = days.indexOf(day) + 1; // Our array: Mon - 0
+        const dayDiff = (targetDay - (currentDay === 0 ? 7 : currentDay) + 7) % 7;
+        date.setDate(date.getDate() + dayDiff);
 
-    const handleSchedule = (scheduledActivity: ScheduledActivity) => {
-        addScheduledActivity(scheduledActivity);
-        handleCloseScheduler();
-    };
-    
-    const handleBookGroupSession = (event: ScheduleEvent) => {
         const newScheduledActivity: ScheduledActivity = {
             id: `scheduled-${event.id}-${Date.now()}`,
             name: event.title,
             type: 'group',
-            startDate: new Date().toISOString(), // This should be calculated based on 'day'
+            startDate: date.toISOString(),
             time: event.startTime,
             repeat: 'none',
             customInterval: 0,
@@ -118,25 +107,16 @@ export function FitnessSchedule({ personalOnly = false }: { personalOnly?: boole
                         <h3 className="font-semibold text-center p-2 border-b border-border bg-muted/50">{day}</h3>
                         <div className="p-2 space-y-2">
                             {personalSchedule[day]?.map(event => <PersonalEventCard key={event.id} event={event} />)}
-                            {!personalOnly && scheduleData[day].map(event => <EventCard key={event.id} event={event} onBook={() => handleBookGroupSession(event)} />)}
+                            {!personalOnly && scheduleData[day].map(event => <EventCard key={event.id} event={event} onBook={() => handleBookGroupSession(event, day)} />)}
                             {(!personalSchedule[day] || personalSchedule[day].length === 0) && personalOnly && (
                                 <div className="text-center text-muted-foreground pt-10">
                                     <p className="text-xs">Нет активностей</p>
                                 </div>
                             )}
-                             <ActivityLibraryDialog onSelectActivity={handleSelectActivity} />
                         </div>
                     </div>
                 ))}
             </div>
-             {selectedActivity && (
-                <ScheduleActivityDialog
-                    isOpen={isScheduling}
-                    onClose={handleCloseScheduler}
-                    activity={selectedActivity}
-                    onSchedule={handleSchedule}
-                />
-            )}
         </div>
     );
 }

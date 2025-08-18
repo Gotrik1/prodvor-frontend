@@ -69,6 +69,8 @@ interface WorkoutState {
   // Schedule State
   personalSchedule: Record<string, ScheduledActivity[]>;
   addScheduledActivity: (activity: ScheduledActivity) => void;
+  addScheduledPlan: (plan: WorkoutPlan, startDate: Date, time: string, restDays: number) => void;
+
 
   // Session State
   activeSession: WorkoutSession | null;
@@ -77,6 +79,12 @@ interface WorkoutState {
   toggleSetComplete: (dayKey: string, exerciseId: string, setIndex: number) => void;
   endSession: () => WorkoutSession | null;
 }
+
+const getDayOfWeek = (date: Date): string => {
+    const dayOfWeek = date.toLocaleDateString('ru-RU', { weekday: 'long' });
+    return dayOfWeek.charAt(0).toUpperCase() + dayOfWeek.slice(1);
+};
+
 
 export const useWorkoutStore = create<WorkoutState>()(
   persist(
@@ -91,14 +99,35 @@ export const useWorkoutStore = create<WorkoutState>()(
       // Schedule State
       personalSchedule: initialPersonalSchedule,
       addScheduledActivity: (activity) => set(produce((draft: WorkoutState) => {
-        const dayOfWeek = new Date(activity.startDate).toLocaleDateString('ru-RU', { weekday: 'long' });
-        const capitalizedDay = dayOfWeek.charAt(0).toUpperCase() + dayOfWeek.slice(1);
+        const dayOfWeek = getDayOfWeek(new Date(activity.startDate));
         
-        if (draft.personalSchedule[capitalizedDay]) {
-            draft.personalSchedule[capitalizedDay].push(activity);
-            draft.personalSchedule[capitalizedDay].sort((a, b) => a.time.localeCompare(b.time));
+        if (draft.personalSchedule[dayOfWeek]) {
+            draft.personalSchedule[dayOfWeek].push(activity);
+            draft.personalSchedule[dayOfWeek].sort((a, b) => a.time.localeCompare(b.time));
         }
       })),
+      addScheduledPlan: (plan, startDate, time, restDays) => {
+          let currentDate = new Date(startDate);
+          const planDays = Object.values(plan.days);
+          
+          planDays.forEach((planDay, index) => {
+              if (index > 0) {
+                  // Add rest days + 1 day for the next training
+                  currentDate.setDate(currentDate.getDate() + restDays + 1);
+              }
+              const activity: ScheduledActivity = {
+                  id: `scheduled-${plan.id}-${planDay.name}-${Date.now()}`,
+                  name: `${plan.name}: ${planDay.name}`,
+                  type: 'template',
+                  startDate: currentDate.toISOString(),
+                  time,
+                  repeat: 'none',
+                  customInterval: 0
+              };
+              get().addScheduledActivity(activity);
+          });
+      },
+
 
       // Session State Logic
       activeSession: null,

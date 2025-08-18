@@ -27,9 +27,9 @@ interface SplitTemplate {
 export function FitnessPlanPage() {
     const { toast } = useToast();
     const router = useRouter();
-    const { plans, addPlan, isPlanFormOpen, setIsPlanFormOpen, selectedPlanType, setSelectedPlanType, addScheduledActivity } = useWorkoutStore();
+    const { plans, addPlan, isPlanFormOpen, setIsPlanFormOpen, selectedPlanType, setSelectedPlanType, addScheduledPlan } = useWorkoutStore();
     const [selectedSplitTemplate, setSelectedSplitTemplate] = useState<SplitTemplate | null>(null);
-    const [activityToSchedule, setActivityToSchedule] = useState<Activity | null>(null);
+    const [planToSchedule, setPlanToSchedule] = useState<WorkoutPlan | null>(null);
 
     const handleSavePlan = (plan: WorkoutPlan) => {
         addPlan(plan);
@@ -95,28 +95,14 @@ export function FitnessPlanPage() {
         }
         return 'Шаг 1: Создание нового плана';
     }
-
-    const handleScheduleClick = (plan: WorkoutPlan) => {
-        // For simplicity, let's schedule the first day of the plan.
-        // A more complex implementation could let the user choose which day.
-        const firstDayKey = Object.keys(plan.days)[0];
-        if (firstDayKey) {
-            const activity: Activity = {
-                id: plan.id,
-                name: `${plan.name}: ${plan.days[firstDayKey].name}`,
-                type: 'template',
-            };
-            setActivityToSchedule(activity);
-        }
-    };
     
-     const handleConfirmSchedule = (scheduledActivity: ScheduledActivity) => {
-        addScheduledActivity(scheduledActivity);
+     const handleConfirmSchedule = (plan: WorkoutPlan, startDate: Date, time: string, restDays: number) => {
+        addScheduledPlan(plan, startDate, time, restDays);
         toast({
-            title: "Тренировка запланирована!",
-            description: `"${scheduledActivity.name}" добавлена в ваше расписание.`,
+            title: "План добавлен в расписание!",
+            description: `Все тренировки из плана "${plan.name}" были запланированы.`,
         });
-        setActivityToSchedule(null);
+        setPlanToSchedule(null);
     };
 
 
@@ -143,7 +129,7 @@ export function FitnessPlanPage() {
                                     </ul>
                                 </CardContent>
                                 <CardFooter className="gap-2">
-                                     <Button variant="secondary" className="w-full" onClick={() => handleScheduleClick(plan)}><CalendarIcon className="mr-2 h-4 w-4"/>В расписание</Button>
+                                     <Button variant="secondary" className="w-full" onClick={() => setPlanToSchedule(plan)}><CalendarIcon className="mr-2 h-4 w-4"/>В расписание</Button>
                                      <Button className="w-full" onClick={() => handleStartWorkout(plan)}>
                                         <PlayCircle className="mr-2 h-4 w-4"/>Запустить
                                      </Button>
@@ -177,11 +163,11 @@ export function FitnessPlanPage() {
                     </div>
                 </CardContent>
             </Card>
-            {activityToSchedule && (
+            {planToSchedule && (
                  <ScheduleActivityDialog
-                    isOpen={!!activityToSchedule}
-                    onClose={() => setActivityToSchedule(null)}
-                    activity={activityToSchedule}
+                    isOpen={!!planToSchedule}
+                    onClose={() => setPlanToSchedule(null)}
+                    plan={planToSchedule}
                     onSchedule={handleConfirmSchedule}
                 />
             )}
