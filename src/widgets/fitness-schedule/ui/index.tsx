@@ -9,7 +9,10 @@ import { Button } from '@/shared/ui/button';
 import { Clock, User, Users } from 'lucide-react';
 import Link from 'next/link';
 import { Activity, ActivityLibraryDialog } from '@/views/fitness-plan/ui/activity-library';
-import { ScheduleActivityDialog, ScheduledActivity } from '@/views/fitness-plan/ui/schedule-activity-dialog';
+import { ScheduleActivityDialog } from '@/views/fitness-plan/ui/schedule-activity-dialog';
+import { useWorkoutStore } from '@/views/training-center/session/lib/workout-store';
+import type { ScheduledActivity } from '@/views/fitness-plan/ui/types';
+
 
 const categoryColors: Record<ScheduleEvent['category'], string> = {
     'Силовая': 'bg-red-500/10 text-red-300 border-red-500/20',
@@ -77,9 +80,7 @@ export function FitnessSchedule({ personalOnly = false }: { personalOnly?: boole
     const days = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота', 'Воскресенье'];
     const [isScheduling, setIsScheduling] = useState(false);
     const [selectedActivity, setSelectedActivity] = useState<Activity | null>(null);
-    const [personalSchedule, setPersonalSchedule] = useState<Record<string, ScheduledActivity[]>>({
-        'Понедельник': [], 'Вторник': [], 'Среда': [], 'Четверг': [], 'Пятница': [], 'Суббота': [], 'Воскресенье': []
-    });
+    const { personalSchedule, addScheduledActivity } = useWorkoutStore();
 
     const handleSelectActivity = (activity: Activity) => {
         setSelectedActivity(activity);
@@ -92,18 +93,11 @@ export function FitnessSchedule({ personalOnly = false }: { personalOnly?: boole
     };
 
     const handleSchedule = (scheduledActivity: ScheduledActivity) => {
-        const dayOfWeek = new Date(scheduledActivity.startDate).toLocaleDateString('ru-RU', { weekday: 'long' });
-        const capitalizedDay = dayOfWeek.charAt(0).toUpperCase() + dayOfWeek.slice(1);
-        
-        setPersonalSchedule(prev => ({
-            ...prev,
-            [capitalizedDay]: [...prev[capitalizedDay], scheduledActivity].sort((a,b) => a.time.localeCompare(b.time)),
-        }));
-
+        addScheduledActivity(scheduledActivity);
         handleCloseScheduler();
     };
     
-    const handleBookGroupSession = (event: ScheduleEvent, day: string) => {
+    const handleBookGroupSession = (event: ScheduleEvent) => {
         const newScheduledActivity: ScheduledActivity = {
             id: `scheduled-${event.id}-${Date.now()}`,
             name: event.title,
@@ -113,10 +107,7 @@ export function FitnessSchedule({ personalOnly = false }: { personalOnly?: boole
             repeat: 'none',
             customInterval: 0,
         };
-        setPersonalSchedule(prev => ({
-            ...prev,
-            [day]: [...prev[day], newScheduledActivity].sort((a,b) => a.time.localeCompare(b.time)),
-        }));
+        addScheduledActivity(newScheduledActivity);
     };
 
     return (
@@ -126,9 +117,9 @@ export function FitnessSchedule({ personalOnly = false }: { personalOnly?: boole
                     <div key={day} className="border-b border-r border-border min-h-[60vh]">
                         <h3 className="font-semibold text-center p-2 border-b border-border bg-muted/50">{day}</h3>
                         <div className="p-2 space-y-2">
-                            {personalSchedule[day].map(event => <PersonalEventCard key={event.id} event={event} />)}
-                            {!personalOnly && scheduleData[day].map(event => <EventCard key={event.id} event={event} onBook={() => handleBookGroupSession(event, day)} />)}
-                            {personalSchedule[day].length === 0 && personalOnly && (
+                            {personalSchedule[day]?.map(event => <PersonalEventCard key={event.id} event={event} />)}
+                            {!personalOnly && scheduleData[day].map(event => <EventCard key={event.id} event={event} onBook={() => handleBookGroupSession(event)} />)}
+                            {(!personalSchedule[day] || personalSchedule[day].length === 0) && personalOnly && (
                                 <div className="text-center text-muted-foreground pt-10">
                                     <p className="text-xs">Нет активностей</p>
                                 </div>

@@ -3,7 +3,7 @@
 
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
-import type { WorkoutPlan, PlanType, WorkoutSession } from '@/views/fitness-plan/ui/types';
+import type { WorkoutPlan, PlanType, WorkoutSession, ScheduledActivity } from '@/views/fitness-plan/ui/types';
 import { produce } from 'immer';
 
 const mockPlan: WorkoutPlan = {
@@ -54,6 +54,10 @@ const mockPlan: WorkoutPlan = {
     },
 };
 
+const initialPersonalSchedule = {
+    'Понедельник': [], 'Вторник': [], 'Среда': [], 'Четверг': [], 'Пятница': [], 'Суббота': [], 'Воскресенье': []
+};
+
 interface WorkoutState {
   plans: WorkoutPlan[];
   addPlan: (plan: WorkoutPlan) => void;
@@ -62,6 +66,10 @@ interface WorkoutState {
   selectedPlanType: PlanType | null;
   setSelectedPlanType: (type: PlanType | null) => void;
   
+  // Schedule State
+  personalSchedule: Record<string, ScheduledActivity[]>;
+  addScheduledActivity: (activity: ScheduledActivity) => void;
+
   // Session State
   activeSession: WorkoutSession | null;
   startSession: (plan: WorkoutPlan) => void;
@@ -79,6 +87,18 @@ export const useWorkoutStore = create<WorkoutState>()(
       setIsPlanFormOpen: (isOpen) => set({ isPlanFormOpen: isOpen }),
       selectedPlanType: null,
       setSelectedPlanType: (type) => set({ selectedPlanType: type }),
+
+      // Schedule State
+      personalSchedule: initialPersonalSchedule,
+      addScheduledActivity: (activity) => set(produce((draft: WorkoutState) => {
+        const dayOfWeek = new Date(activity.startDate).toLocaleDateString('ru-RU', { weekday: 'long' });
+        const capitalizedDay = dayOfWeek.charAt(0).toUpperCase() + dayOfWeek.slice(1);
+        
+        if (draft.personalSchedule[capitalizedDay]) {
+            draft.personalSchedule[capitalizedDay].push(activity);
+            draft.personalSchedule[capitalizedDay].sort((a, b) => a.time.localeCompare(b.time));
+        }
+      })),
 
       // Session State Logic
       activeSession: null,

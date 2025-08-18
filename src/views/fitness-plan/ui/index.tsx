@@ -10,7 +10,7 @@ import { useToast } from '@/shared/hooks/use-toast';
 import { FitnessSchedule } from '@/widgets/fitness-schedule';
 import { PlanTypeSelector } from './plan-type-selector';
 import { NewPlanForm } from './new-plan-form';
-import type { WorkoutPlan, PlanType, Exercise } from './types';
+import type { WorkoutPlan, PlanType, Exercise, ScheduledActivity } from './types';
 import { useWorkoutStore } from '@/views/training-center/session/lib/workout-store';
 import { useRouter } from 'next/navigation';
 import { SplitTemplateSelector, splitTemplates } from './split-template-selector';
@@ -27,7 +27,7 @@ interface SplitTemplate {
 export function FitnessPlanPage() {
     const { toast } = useToast();
     const router = useRouter();
-    const { plans, addPlan, isPlanFormOpen, setIsPlanFormOpen, selectedPlanType, setSelectedPlanType } = useWorkoutStore();
+    const { plans, addPlan, isPlanFormOpen, setIsPlanFormOpen, selectedPlanType, setSelectedPlanType, addScheduledActivity } = useWorkoutStore();
     const [selectedSplitTemplate, setSelectedSplitTemplate] = useState<SplitTemplate | null>(null);
     const [activityToSchedule, setActivityToSchedule] = useState<Activity | null>(null);
 
@@ -110,9 +110,8 @@ export function FitnessPlanPage() {
         }
     };
     
-     const handleConfirmSchedule = (scheduledActivity: any) => {
-        // Here you would typically update a global schedule state.
-        // For now, we'll just show a toast.
+     const handleConfirmSchedule = (scheduledActivity: ScheduledActivity) => {
+        addScheduledActivity(scheduledActivity);
         toast({
             title: "Тренировка запланирована!",
             description: `"${scheduledActivity.name}" добавлена в ваше расписание.`,

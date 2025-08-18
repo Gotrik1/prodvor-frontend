@@ -28,6 +28,21 @@ export interface WorkoutPlan {
   days: Record<string, PlanDay>;
 }
 
+// ---- Schedule Types ----
+export interface Activity {
+    id: string;
+    name: string;
+    type: 'template' | 'group' | 'recovery' | 'other';
+}
+
+export interface ScheduledActivity extends Activity {
+    startDate: string;
+    time: string;
+    repeat: 'none' | 'daily' | 'weekly' | 'monthly' | 'custom';
+    customInterval: number;
+}
+
+
 // ---- Workout Session Types ----
 export interface SetResult {
   completed: boolean;
