@@ -3,10 +3,69 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
 import { ArrowLeft, ArrowRight, Edit } from 'lucide-react';
-import type { PlanType } from './types';
+import type { PlanType, Exercise } from './types';
 import { Button } from '@/shared/ui/button';
 
-export const splitTemplates: Record<PlanType['value'], { name: string; days: string[] }[]> = {
+export const splitDayTemplates: Record<string, {label: string, value: string}[]> = {
+    '2-day-split': [
+        { label: 'Тренировка верха', value: 'upper' },
+        { label: 'Тренировка низа', value: 'lower' },
+        { label: 'Тянущие мышцы', value: 'pull' },
+        { label: 'Толкающие мышцы', value: 'push' },
+    ],
+    '3-day-split': [
+        { label: 'Грудь и Трицепс', value: 'chest-tri' },
+        { label: 'Спина и Бицепс', value: 'back-bi' },
+        { label: 'Ноги и Плечи', value: 'legs-shoulders' },
+    ],
+    '4-day-split': [
+        { label: 'Грудь', value: 'chest' },
+        { label: 'Спина', value: 'back' },
+        { label: 'Ноги', value: 'legs' },
+        { label: 'Руки и Плечи', value: 'arms-shoulders' },
+    ],
+}
+
+interface SplitTemplate {
+    name: string;
+    days: string[];
+    prefilled?: boolean;
+    exercises?: Record<string, Omit<Exercise, 'id'>[]>;
+}
+
+const sportWikiVariant1: Record<string, Omit<Exercise, 'id'>[]> = {
+    'Спина, трицепс': [
+        { name: 'Тяга штанги к поясу в наклоне', sets: '4', reps: '8-10', weight: '', restBetweenSets: '60', restAfterExercise: '120' },
+        { name: 'Подтягивания к груди', sets: '4', reps: '8-10', weight: '', restBetweenSets: '60', restAfterExercise: '120' },
+        { name: 'Тяга верхнего блока прямыми руками', sets: '4', reps: '8-10', weight: '', restBetweenSets: '60', restAfterExercise: '120' },
+        { name: 'Жим лежа узким хватом', sets: '3', reps: '8-10', weight: '', restBetweenSets: '60', restAfterExercise: '120' },
+        { name: 'Разгибания рук на верхнем блоке', sets: '3', reps: '10-12', weight: '', restBetweenSets: '60', restAfterExercise: '120' },
+    ],
+    'Ноги': [
+        { name: 'Приседания со штангой', sets: '3', reps: '8-10', weight: '', restBetweenSets: '60', restAfterExercise: '120' },
+        { name: 'Жим платформы ногами', sets: '3', reps: '8-10', weight: '', restBetweenSets: '60', restAfterExercise: '120' },
+        { name: 'Разгибания ног в станке', sets: '3', reps: '10-12', weight: '', restBetweenSets: '60', restAfterExercise: '120' },
+        { name: 'Сгибания ног в станке', sets: '3', reps: '10-12', weight: '', restBetweenSets: '60', restAfterExercise: '120' },
+        { name: 'Подъем на носки', sets: '3', reps: '10-12', weight: '', restBetweenSets: '60', restAfterExercise: '120' },
+    ],
+    'Грудь, бицепс': [
+        { name: 'Жим штанги на наклонной скамье', sets: '4', reps: '8-10', weight: '', restBetweenSets: '60', restAfterExercise: '120' },
+        { name: 'Разведения с гантелями', sets: '4', reps: '8-10', weight: '', restBetweenSets: '60', restAfterExercise: '120' },
+        { name: 'Отжимания на брусьях', sets: '4', reps: '8-10', weight: '', restBetweenSets: '60', restAfterExercise: '120' },
+        { name: 'Сгибания рук с гантелями (супинация)', sets: '3', reps: '8-10', weight: '', restBetweenSets: '60', restAfterExercise: '120' },
+        { name: 'Подъем штанги на бицепс (Скамья Скотта)', sets: '3', reps: '8-10', weight: '', restBetweenSets: '60', restAfterExercise: '120' },
+    ],
+    'Дельты': [
+        { name: 'Жимы штанги вверх сидя', sets: '3', reps: '8-10', weight: '', restBetweenSets: '60', restAfterExercise: '120' },
+        { name: 'Протяжка штанги вдоль туловища', sets: '3', reps: '8-10', weight: '', restBetweenSets: '60', restAfterExercise: '120' },
+        { name: 'Махи гантелями через стороны', sets: '3', reps: '10-12', weight: '', restBetweenSets: '60', restAfterExercise: '120' },
+        { name: 'Тяга нижнего блока к груди сидя', sets: '3', reps: '8-10', weight: '', restBetweenSets: '60', restAfterExercise: '120' },
+        { name: 'Махи гантелями в наклоне', sets: '3', reps: '10-12', weight: '', restBetweenSets: '60', restAfterExercise: '120' },
+    ],
+};
+
+
+export const splitTemplates: Record<PlanType['value'], SplitTemplate[]> = {
     'full-body': [],
     '2-day-split': [
         { name: 'Верх / Низ', days: ['Тренировка верха', 'Тренировка низа'] },
@@ -17,14 +76,19 @@ export const splitTemplates: Record<PlanType['value'], { name: string; days: str
         { name: 'Классический сплит', days: ['Грудь и Трицепс', 'Спина и Бицепс', 'Ноги и Плечи'] },
     ],
     '4-day-split': [
-        { name: 'Толкай / Тяни / Ноги / Плечи', days: ['Толкающие (Грудь, Трицепс)', 'Тянущие (Спина, Бицепс)', 'Ноги', 'Плечи и Руки'] },
-        { name: 'Продвинутый сплит', days: ['Грудь', 'Спина', 'Ноги', 'Руки и Плечи'] },
+        {
+            name: 'Программа от SportWiki',
+            days: ['Спина, трицепс', 'Ноги', 'Грудь, бицепс', 'Дельты'],
+            prefilled: true,
+            exercises: sportWikiVariant1
+        },
+        { name: 'Классический бодибилдинг', days: ['Грудь', 'Спина', 'Ноги', 'Руки и Плечи'] },
     ],
 };
 
 interface SplitTemplateSelectorProps {
     planType: PlanType;
-    onSelect: (dayNames: string[]) => void;
+    onSelect: (template: SplitTemplate) => void;
     onBack: () => void;
 }
 
@@ -43,7 +107,7 @@ export function SplitTemplateSelector({ planType, onSelect, onBack }: SplitTempl
                     <Card 
                         key={template.name}
                         className="cursor-pointer hover:border-primary transition-colors group flex flex-col"
-                        onClick={() => onSelect(template.days)}
+                        onClick={() => onSelect(template)}
                     >
                         <CardHeader>
                             <CardTitle className="flex justify-between items-center">
@@ -60,7 +124,7 @@ export function SplitTemplateSelector({ planType, onSelect, onBack }: SplitTempl
                 ))}
                 <Card 
                     className="cursor-pointer hover:border-primary transition-colors group flex flex-col"
-                    onClick={() => onSelect(customTemplateDays)}
+                    onClick={() => onSelect({ name: 'Свой шаблон', days: customTemplateDays })}
                 >
                     <CardHeader>
                         <CardTitle className="flex justify-between items-center">

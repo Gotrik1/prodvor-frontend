@@ -1,36 +1,46 @@
 
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/shared/ui/button';
 import { Input } from '@/shared/ui/input';
 import { Label } from '@/shared/ui/label';
 import { PlusCircle, Trash2, Save, ArrowLeft } from 'lucide-react';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/shared/ui/accordion';
 import type { WorkoutPlan, PlanType, Exercise, PlanDay } from './types';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shared/ui/select';
+import { splitDayTemplates } from './split-template-selector';
 
 interface NewPlanFormProps {
     planType: PlanType;
     dayNames: string[];
+    prefilledExercises?: Record<string, Omit<Exercise, 'id'>[]>;
     onSave: (plan: WorkoutPlan) => void;
     onBack: () => void;
 }
 
-const createInitialDays = (dayNames: string[]): Record<string, PlanDay> => {
+const createInitialDays = (dayNames: string[], prefilledExercises?: Record<string, Omit<Exercise, 'id'>[]>): Record<string, PlanDay> => {
     const days: Record<string, PlanDay> = {};
     dayNames.forEach((name, index) => {
         const dayKey = `day${index + 1}`;
+        const exercisesForDay = prefilledExercises?.[name] || [{ name: '', sets: '', reps: '', weight: '', restBetweenSets: '60', restAfterExercise: '120' }];
+        
         days[dayKey] = {
             name: name || `День ${index + 1}`,
-            exercises: [{ id: `ex-${Date.now()}`, name: '', sets: '', reps: '', weight: '', restBetweenSets: '60', restAfterExercise: '120' }],
+            exercises: exercisesForDay.map(ex => ({ ...ex, id: `ex-${Date.now()}-${Math.random()}` })),
         };
     });
     return days;
 };
 
-export const NewPlanForm = ({ planType, dayNames, onSave, onBack }: NewPlanFormProps) => {
+export const NewPlanForm = ({ planType, dayNames, prefilledExercises, onSave, onBack }: NewPlanFormProps) => {
     const [planName, setPlanName] = useState('');
-    const [days, setDays] = useState<Record<string, PlanDay>>(createInitialDays(dayNames));
+    const [days, setDays] = useState<Record<string, PlanDay>>({});
+    
+    useEffect(() => {
+        setDays(createInitialDays(dayNames, prefilledExercises));
+    }, [dayNames, prefilledExercises]);
+
 
     const handleExerciseChange = (dayKey: string, exIndex: number, field: keyof Exercise, value: string) => {
         const newDays = { ...days };
@@ -65,6 +75,8 @@ export const NewPlanForm = ({ planType, dayNames, onSave, onBack }: NewPlanFormP
             days,
         });
     };
+    
+    const dayNameTemplates = splitDayTemplates[planType.value] || [];
 
     return (
         <div className="space-y-6 max-h-[70vh] overflow-y-auto pr-4">
@@ -77,13 +89,26 @@ export const NewPlanForm = ({ planType, dayNames, onSave, onBack }: NewPlanFormP
                 {Object.entries(days).map(([dayKey, dayData]) => (
                     <AccordionItem value={dayKey} key={dayKey}>
                         <AccordionTrigger>
-                            <div className="flex items-center gap-2 w-full pr-2">
+                           <div className="flex items-center gap-2 w-full pr-2">
                                 <Input 
                                     value={dayData.name} 
                                     onChange={(e) => handleDayNameChange(dayKey, e.target.value)}
                                     onClick={(e) => e.stopPropagation()}
-                                    className="w-full md:w-1/2 border-none shadow-none focus-visible:ring-1 h-8 font-semibold text-base"
+                                    className="w-full md:w-auto border-none shadow-none focus-visible:ring-1 h-8 font-semibold text-base"
+                                    list={`day-name-options-${dayKey}`}
                                 />
+                                {dayNameTemplates.length > 0 && (
+                                     <Select onValueChange={(value) => handleDayNameChange(dayKey, value)}>
+                                        <SelectTrigger onClick={(e) => e.stopPropagation()} className="w-auto h-8 text-xs">
+                                            <SelectValue placeholder="Шаблон..." />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            {dayNameTemplates.map(template => (
+                                                <SelectItem key={template.value} value={template.label}>{template.label}</SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
+                                )}
                             </div>
                         </AccordionTrigger>
                         <AccordionContent>

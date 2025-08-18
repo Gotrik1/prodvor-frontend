@@ -10,16 +10,23 @@ import { useToast } from '@/shared/hooks/use-toast';
 import { FitnessSchedule } from '@/widgets/fitness-schedule';
 import { PlanTypeSelector } from './plan-type-selector';
 import { NewPlanForm } from './new-plan-form';
-import type { WorkoutPlan, PlanType } from './types';
+import type { WorkoutPlan, PlanType, Exercise } from './types';
 import { useWorkoutStore } from '@/views/training-center/session/lib/workout-store';
 import { useRouter } from 'next/navigation';
 import { SplitTemplateSelector, splitTemplates } from './split-template-selector';
+
+interface SplitTemplate {
+    name: string;
+    days: string[];
+    prefilled?: boolean;
+    exercises?: Record<string, Omit<Exercise, 'id'>[]>;
+}
 
 export function FitnessPlanPage() {
     const { toast } = useToast();
     const router = useRouter();
     const { plans, addPlan, isPlanFormOpen, setIsPlanFormOpen, selectedPlanType, setSelectedPlanType } = useWorkoutStore();
-    const [selectedSplitTemplate, setSelectedSplitTemplate] = useState<string[] | null>(null);
+    const [selectedSplitTemplate, setSelectedSplitTemplate] = useState<SplitTemplate | null>(null);
 
     const handleSavePlan = (plan: WorkoutPlan) => {
         addPlan(plan);
@@ -34,8 +41,8 @@ export function FitnessPlanPage() {
         setSelectedPlanType(type);
     };
 
-    const handleSelectSplitTemplate = (dayNames: string[]) => {
-        setSelectedSplitTemplate(dayNames);
+    const handleSelectSplitTemplate = (template: SplitTemplate) => {
+        setSelectedSplitTemplate(template);
     }
     
     const handleCloseDialog = () => {
@@ -61,7 +68,13 @@ export function FitnessPlanPage() {
 
     const renderDialogContent = () => {
         if (selectedPlanType && selectedSplitTemplate) {
-            return <NewPlanForm planType={selectedPlanType} dayNames={selectedSplitTemplate} onSave={handleSavePlan} onBack={handleBack} />
+            return <NewPlanForm 
+                        planType={selectedPlanType} 
+                        dayNames={selectedSplitTemplate.days} 
+                        prefilledExercises={selectedSplitTemplate.exercises}
+                        onSave={handleSavePlan} 
+                        onBack={handleBack} 
+                    />
         }
         if (selectedPlanType) {
             return <SplitTemplateSelector planType={selectedPlanType} onSelect={handleSelectSplitTemplate} onBack={handleBack} />
