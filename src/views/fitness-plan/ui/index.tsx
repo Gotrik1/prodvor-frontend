@@ -3,7 +3,7 @@
 
 import React, { useState } from 'react';
 import { Button } from '@/shared/ui/button';
-import { Dumbbell, Save, PlusCircle, Trash2, Calendar as CalendarIcon, BookOpen, Users, Star, Building, Search } from 'lucide-react';
+import { Dumbbell, Save, PlusCircle, Trash2, Calendar as CalendarIcon, BookOpen, Users, Star, Building, Search, PlayCircle } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/shared/ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/shared/ui/dialog';
 import { Input } from '@/shared/ui/input';
@@ -64,8 +64,9 @@ export function FitnessPlanPage() {
                                         ))}
                                     </ul>
                                 </CardContent>
-                                <CardFooter>
-                                     <Button className="w-full"><CalendarIcon className="mr-2 h-4 w-4"/>Запланировать</Button>
+                                <CardFooter className="gap-2">
+                                     <Button variant="secondary" className="w-full"><CalendarIcon className="mr-2 h-4 w-4"/>В расписание</Button>
+                                     <Button className="w-full"><PlayCircle className="mr-2 h-4 w-4"/>Запустить</Button>
                                 </CardFooter>
                             </Card>
                         ))}

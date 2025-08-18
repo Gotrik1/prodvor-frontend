@@ -5,6 +5,8 @@ export interface Exercise {
   sets: string;
   reps: string;
   weight: string;
+  restBetweenSets: string;
+  restAfterExercise: string;
 }
 
 export interface PlanDay {

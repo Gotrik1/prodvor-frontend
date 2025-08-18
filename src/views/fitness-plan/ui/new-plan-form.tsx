@@ -21,7 +21,7 @@ const createInitialDays = (type: PlanType): Record<string, PlanDay> => {
         const dayKey = `day${i}`;
         days[dayKey] = {
             name: `День ${i}`,
-            exercises: [{ id: `ex-${Date.now()}`, name: '', sets: '', reps: '', weight: '' }],
+            exercises: [{ id: `ex-${Date.now()}`, name: '', sets: '', reps: '', weight: '', restBetweenSets: '60', restAfterExercise: '120' }],
         };
     }
     return days;
@@ -45,7 +45,7 @@ export const NewPlanForm = ({ planType, onSave, onBack }: NewPlanFormProps) => {
 
     const addExercise = (dayKey: string) => {
         const newDays = { ...days };
-        newDays[dayKey].exercises.push({ id: `ex-${Date.now()}`, name: '', sets: '', reps: '', weight: '' });
+        newDays[dayKey].exercises.push({ id: `ex-${Date.now()}`, name: '', sets: '', reps: '', weight: '', restBetweenSets: '60', restAfterExercise: '120' });
         setDays(newDays);
     };
 
@@ -87,7 +87,7 @@ export const NewPlanForm = ({ planType, onSave, onBack }: NewPlanFormProps) => {
                             <div className="space-y-4 pl-2">
                                 {dayData.exercises.map((ex, index) => (
                                     <div key={ex.id} className="grid grid-cols-12 gap-2 items-end p-2 border rounded-md">
-                                        <div className="col-span-12 md:col-span-4 space-y-1">
+                                        <div className="col-span-12 md:col-span-6 space-y-1">
                                             <Label className="text-xs">Упражнение</Label>
                                             <Input placeholder="Приседания со штангой" value={ex.name} onChange={(e) => handleExerciseChange(dayKey, index, 'name', e.target.value)} />
                                         </div>
@@ -99,11 +99,19 @@ export const NewPlanForm = ({ planType, onSave, onBack }: NewPlanFormProps) => {
                                             <Label className="text-xs">Повторы</Label>
                                             <Input placeholder="12" value={ex.reps} onChange={(e) => handleExerciseChange(dayKey, index, 'reps', e.target.value)} />
                                         </div>
-                                        <div className="col-span-4 md:col-span-3 space-y-1">
-                                            <Label className="text-xs">Вес/Усилие</Label>
+                                        <div className="col-span-4 md:col-span-2 space-y-1">
+                                            <Label className="text-xs">Вес</Label>
                                             <Input placeholder="50 кг" value={ex.weight} onChange={(e) => handleExerciseChange(dayKey, index, 'weight', e.target.value)} />
                                         </div>
-                                        <div className="col-span-12 md:col-span-1 flex justify-end">
+                                        <div className="col-span-6 md:col-span-5 space-y-1">
+                                            <Label className="text-xs">Отдых между подходами (сек)</Label>
+                                            <Input placeholder="60" value={ex.restBetweenSets} onChange={(e) => handleExerciseChange(dayKey, index, 'restBetweenSets', e.target.value)} />
+                                        </div>
+                                         <div className="col-span-6 md:col-span-5 space-y-1">
+                                            <Label className="text-xs">Отдых после упражнения (сек)</Label>
+                                            <Input placeholder="120" value={ex.restAfterExercise} onChange={(e) => handleExerciseChange(dayKey, index, 'restAfterExercise', e.target.value)} />
+                                        </div>
+                                        <div className="col-span-12 md:col-span-2 flex justify-end">
                                             <Button variant="ghost" size="icon" onClick={() => removeExercise(dayKey, index)}>
                                                 <Trash2 className="h-4 w-4 text-destructive" />
                                             </Button>
