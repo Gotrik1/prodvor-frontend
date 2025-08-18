@@ -3,32 +3,27 @@
 
 import React, { useState } from 'react';
 import { Button } from '@/shared/ui/button';
-import { Dumbbell, Save, PlusCircle, Trash2, Calendar as CalendarIcon, BookOpen, Users, Star, Building, Search, PlayCircle } from 'lucide-react';
+import { Save, PlusCircle, Trash2, Calendar as CalendarIcon, PlayCircle } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/shared/ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/shared/ui/dialog';
-import { Input } from '@/shared/ui/input';
-import { Label } from '@/shared/ui/label';
 import { useToast } from '@/shared/hooks/use-toast';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs';
 import { FitnessSchedule } from '@/widgets/fitness-schedule';
 import { PlanTypeSelector } from './plan-type-selector';
 import { NewPlanForm } from './new-plan-form';
 import type { WorkoutPlan, PlanType } from './types';
 import { useWorkoutStore } from '@/views/training-center/session/lib/workout-store';
 import { useRouter } from 'next/navigation';
-import Link from 'next/link';
-
+import { SplitTemplateSelector, splitTemplates } from './split-template-selector';
 
 export function FitnessPlanPage() {
     const { toast } = useToast();
     const router = useRouter();
     const { plans, addPlan, isPlanFormOpen, setIsPlanFormOpen, selectedPlanType, setSelectedPlanType } = useWorkoutStore();
-
+    const [selectedSplitTemplate, setSelectedSplitTemplate] = useState<string[] | null>(null);
 
     const handleSavePlan = (plan: WorkoutPlan) => {
         addPlan(plan);
-        setIsPlanFormOpen(false);
-        setSelectedPlanType(null); // Reset after saving
+        handleCloseDialog(); // Close and reset everything
         toast({
             title: "План сохранен!",
             description: `Ваш новый план "${plan.name}" был успешно создан.`,
@@ -38,16 +33,52 @@ export function FitnessPlanPage() {
     const handleSelectPlanType = (type: PlanType) => {
         setSelectedPlanType(type);
     };
+
+    const handleSelectSplitTemplate = (dayNames: string[]) => {
+        setSelectedSplitTemplate(dayNames);
+    }
     
     const handleCloseDialog = () => {
         setIsPlanFormOpen(false);
-        // Delay resetting the plan type to avoid flash of content
-        setTimeout(() => setSelectedPlanType(null), 300);
+        // Delay resetting to avoid content flash
+        setTimeout(() => {
+            setSelectedPlanType(null);
+            setSelectedSplitTemplate(null);
+        }, 300);
     }
     
     const handleStartWorkout = (plan: WorkoutPlan) => {
         router.push(`/training-center/session/${plan.id}`);
     };
+
+    const handleBack = () => {
+        if (selectedSplitTemplate) {
+            setSelectedSplitTemplate(null);
+        } else if (selectedPlanType) {
+            setSelectedPlanType(null);
+        }
+    }
+
+    const renderDialogContent = () => {
+        if (selectedPlanType && selectedSplitTemplate) {
+            return <NewPlanForm planType={selectedPlanType} dayNames={selectedSplitTemplate} onSave={handleSavePlan} onBack={handleBack} />
+        }
+        if (selectedPlanType) {
+            return <SplitTemplateSelector planType={selectedPlanType} onSelect={handleSelectSplitTemplate} onBack={handleBack} />
+        }
+        return <PlanTypeSelector onSelect={handleSelectPlanType} />
+    }
+    
+    const getDialogTitle = () => {
+        if (selectedPlanType && selectedSplitTemplate) {
+            return 'Шаг 3: Наполните план';
+        }
+        if (selectedPlanType) {
+            return 'Шаг 2: Выберите шаблон разбивки';
+        }
+        return 'Шаг 1: Создание нового плана';
+    }
+
 
     return (
         <div className="space-y-8">
@@ -90,19 +121,9 @@ export function FitnessPlanPage() {
                             </DialogTrigger>
                             <DialogContent className="sm:max-w-4xl" onInteractOutside={handleCloseDialog}>
                                 <DialogHeader>
-                                    <DialogTitle>
-                                        {selectedPlanType ? `Новый план: ${selectedPlanType.label}` : 'Создание нового плана'}
-                                    </DialogTitle>
+                                    <DialogTitle>{getDialogTitle()}</DialogTitle>
                                 </DialogHeader>
-                                {selectedPlanType ? (
-                                    <NewPlanForm 
-                                        planType={selectedPlanType} 
-                                        onSave={handleSavePlan} 
-                                        onBack={() => setSelectedPlanType(null)}
-                                    />
-                                ) : (
-                                    <PlanTypeSelector onSelect={handleSelectPlanType} />
-                                )}
+                                {renderDialogContent()}
                             </DialogContent>
                         </Dialog>
                     </div>
