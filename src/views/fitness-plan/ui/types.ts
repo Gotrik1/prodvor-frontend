@@ -27,3 +27,26 @@ export interface WorkoutPlan {
   type: PlanType;
   days: Record<string, PlanDay>;
 }
+
+// ---- Workout Session Types ----
+export interface SetResult {
+  completed: boolean;
+  actualReps: string;
+  actualWeight: string;
+}
+
+export interface ExerciseResult {
+  exerciseId: string;
+  sets: SetResult[];
+}
+
+export interface DayResult {
+  exercises: ExerciseResult[];
+}
+
+export interface WorkoutSession {
+  plan: WorkoutPlan;
+  startTime: string;
+  endTime: string | null;
+  dayResults: Record<string, DayResult>;
+}

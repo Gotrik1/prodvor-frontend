@@ -14,16 +14,19 @@ import { FitnessSchedule } from '@/widgets/fitness-schedule';
 import { PlanTypeSelector } from './plan-type-selector';
 import { NewPlanForm } from './new-plan-form';
 import type { WorkoutPlan, PlanType } from './types';
+import { useWorkoutStore } from '@/views/training-center/session/lib/workout-store';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 
 export function FitnessPlanPage() {
-    const [plans, setPlans] = useState<WorkoutPlan[]>([]);
     const { toast } = useToast();
-    const [isPlanFormOpen, setIsPlanFormOpen] = useState(false);
-    const [selectedPlanType, setSelectedPlanType] = useState<PlanType | null>(null);
+    const router = useRouter();
+    const { plans, addPlan, isPlanFormOpen, setIsPlanFormOpen, selectedPlanType, setSelectedPlanType } = useWorkoutStore();
+
 
     const handleSavePlan = (plan: WorkoutPlan) => {
-        setPlans([...plans, plan]);
+        addPlan(plan);
         setIsPlanFormOpen(false);
         setSelectedPlanType(null); // Reset after saving
         toast({
@@ -41,6 +44,10 @@ export function FitnessPlanPage() {
         // Delay resetting the plan type to avoid flash of content
         setTimeout(() => setSelectedPlanType(null), 300);
     }
+    
+    const handleStartWorkout = (plan: WorkoutPlan) => {
+        router.push(`/training-center/session/${plan.id}`);
+    };
 
     return (
         <div className="space-y-8">
@@ -66,13 +73,15 @@ export function FitnessPlanPage() {
                                 </CardContent>
                                 <CardFooter className="gap-2">
                                      <Button variant="secondary" className="w-full"><CalendarIcon className="mr-2 h-4 w-4"/>В расписание</Button>
-                                     <Button className="w-full"><PlayCircle className="mr-2 h-4 w-4"/>Запустить</Button>
+                                     <Button className="w-full" onClick={() => handleStartWorkout(plan)}>
+                                        <PlayCircle className="mr-2 h-4 w-4"/>Запустить
+                                     </Button>
                                 </CardFooter>
                             </Card>
                         ))}
                          <Dialog open={isPlanFormOpen} onOpenChange={setIsPlanFormOpen}>
                             <DialogTrigger asChild>
-                                <Card className="flex items-center justify-center min-h-[200px] border-2 border-dashed hover:border-primary transition-colors cursor-pointer">
+                                <Card className="flex items-center justify-center min-h-[200px] border-2 border-dashed hover:border-primary transition-colors cursor-pointer" onClick={() => setIsPlanFormOpen(true)}>
                                     <div className="text-center text-muted-foreground">
                                         <PlusCircle className="mx-auto h-10 w-10 mb-2" />
                                         <p className="font-semibold">Создать новый план</p>
