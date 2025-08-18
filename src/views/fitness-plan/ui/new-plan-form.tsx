@@ -8,6 +8,7 @@ import { Label } from '@/shared/ui/label';
 import { PlusCircle, Trash2, Save, ArrowLeft } from 'lucide-react';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/shared/ui/accordion';
 import type { WorkoutPlan, PlanType, Exercise, PlanDay } from './types';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shared/ui/select';
 
 interface NewPlanFormProps {
     planType: PlanType;
@@ -26,6 +27,16 @@ const createInitialDays = (type: PlanType): Record<string, PlanDay> => {
     }
     return days;
 };
+
+const dayNameTemplates = [
+    'Ноги',
+    'Грудь и трицепс',
+    'Спина и бицепс',
+    'Плечи',
+    'Руки (Бицепс/Трицепс)',
+    'Full Body',
+    'Кардио',
+];
 
 export const NewPlanForm = ({ planType, onSave, onBack }: NewPlanFormProps) => {
     const [planName, setPlanName] = useState('');
@@ -76,12 +87,24 @@ export const NewPlanForm = ({ planType, onSave, onBack }: NewPlanFormProps) => {
                 {Object.entries(days).map(([dayKey, dayData]) => (
                     <AccordionItem value={dayKey} key={dayKey}>
                         <AccordionTrigger>
-                            <Input 
-                                value={dayData.name} 
-                                onChange={(e) => handleDayNameChange(dayKey, e.target.value)}
-                                onClick={(e) => e.stopPropagation()}
-                                className="w-1/3 border-none shadow-none focus-visible:ring-1"
-                            />
+                            <div className="flex items-center gap-2 w-full pr-2">
+                                <Input 
+                                    value={dayData.name} 
+                                    onChange={(e) => handleDayNameChange(dayKey, e.target.value)}
+                                    onClick={(e) => e.stopPropagation()}
+                                    className="w-1/2 md:w-1/3 border-none shadow-none focus-visible:ring-1 h-8"
+                                />
+                                <Select onValueChange={(value) => handleDayNameChange(dayKey, value)} onClick={(e) => e.stopPropagation()}>
+                                    <SelectTrigger className="w-auto h-8 border-dashed focus:ring-0 text-muted-foreground">
+                                        <SelectValue placeholder="Шаблон..." />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {dayNameTemplates.map(template => (
+                                            <SelectItem key={template} value={template}>{template}</SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                            </div>
                         </AccordionTrigger>
                         <AccordionContent>
                             <div className="space-y-4 pl-2">
