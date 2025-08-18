@@ -89,9 +89,9 @@ export const NewPlanForm = ({ planType, dayNames, prefilledExercises, onSave, on
                 {Object.entries(days).map(([dayKey, dayData]) => (
                     <AccordionItem value={dayKey} key={dayKey}>
                         <div className="flex items-center w-full hover:bg-muted/50 rounded-t-md">
-                             <AccordionTrigger>
+                            <AccordionTrigger className="flex-grow">
                                 <span className="font-semibold text-base">{dayData.name}</span>
-                             </AccordionTrigger>
+                            </AccordionTrigger>
                             <div className="flex items-center gap-2 pr-4" onClick={(e) => e.stopPropagation()}>
                                 <Input
                                     value={dayData.name}
