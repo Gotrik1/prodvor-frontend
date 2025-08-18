@@ -88,31 +88,30 @@ export const NewPlanForm = ({ planType, dayNames, prefilledExercises, onSave, on
             <Accordion type="multiple" defaultValue={['day1']} className="w-full">
                 {Object.entries(days).map(([dayKey, dayData]) => (
                     <AccordionItem value={dayKey} key={dayKey}>
-                        <AccordionTrigger>
-                           <div className="flex items-center gap-2 w-full pr-2">
+                        <div className="flex items-center w-full pr-4 py-2 hover:bg-muted/50 rounded-t-md">
+                            <AccordionTrigger className="flex-grow">
                                 <Input 
                                     value={dayData.name} 
                                     onChange={(e) => handleDayNameChange(dayKey, e.target.value)}
                                     onClick={(e) => e.stopPropagation()}
-                                    className="w-full md:w-auto border-none shadow-none focus-visible:ring-1 h-8 font-semibold text-base"
-                                    list={`day-name-options-${dayKey}`}
+                                    className="w-full md:w-auto border-none shadow-none focus-visible:ring-1 h-8 font-semibold text-base bg-transparent"
                                 />
-                                {dayNameTemplates.length > 0 && (
-                                     <Select onValueChange={(value) => handleDayNameChange(dayKey, value)}>
-                                        <SelectTrigger onClick={(e) => e.stopPropagation()} className="w-auto h-8 text-xs">
-                                            <SelectValue placeholder="Шаблон..." />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            {dayNameTemplates.map(template => (
-                                                <SelectItem key={template.value} value={template.label}>{template.label}</SelectItem>
-                                            ))}
-                                        </SelectContent>
-                                    </Select>
-                                )}
-                            </div>
-                        </AccordionTrigger>
+                            </AccordionTrigger>
+                            {dayNameTemplates.length > 0 && (
+                                <Select onValueChange={(value) => handleDayNameChange(dayKey, value)}>
+                                    <SelectTrigger onClick={(e) => e.stopPropagation()} className="w-auto h-8 text-xs ml-2">
+                                        <SelectValue placeholder="Шаблон..." />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {dayNameTemplates.map(template => (
+                                            <SelectItem key={template.value} value={template.label}>{template.label}</SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                            )}
+                        </div>
                         <AccordionContent>
-                            <div className="space-y-4 pl-2">
+                            <div className="space-y-4 pl-2 pt-2">
                                 {dayData.exercises.map((ex, index) => (
                                     <div key={ex.id} className="grid grid-cols-12 gap-2 items-end p-2 border rounded-md">
                                         <div className="col-span-12 md:col-span-6 space-y-1">
