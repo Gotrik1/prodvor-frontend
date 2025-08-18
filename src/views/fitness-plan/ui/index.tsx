@@ -69,16 +69,16 @@ export function FitnessPlanPage() {
                                 </CardFooter>
                             </Card>
                         ))}
-                         <Dialog open={isPlanFormOpen} onOpenChange={handleCloseDialog}>
+                         <Dialog open={isPlanFormOpen} onOpenChange={setIsPlanFormOpen}>
                             <DialogTrigger asChild>
-                                <Card onClick={() => setIsPlanFormOpen(true)} className="flex items-center justify-center min-h-[200px] border-2 border-dashed hover:border-primary transition-colors cursor-pointer">
+                                <Card className="flex items-center justify-center min-h-[200px] border-2 border-dashed hover:border-primary transition-colors cursor-pointer">
                                     <div className="text-center text-muted-foreground">
                                         <PlusCircle className="mx-auto h-10 w-10 mb-2" />
                                         <p className="font-semibold">Создать новый план</p>
                                     </div>
                                 </Card>
                             </DialogTrigger>
-                            <DialogContent className="sm:max-w-4xl">
+                            <DialogContent className="sm:max-w-4xl" onInteractOutside={handleCloseDialog}>
                                 <DialogHeader>
                                     <DialogTitle>
                                         {selectedPlanType ? `Новый план: ${selectedPlanType.label}` : 'Создание нового плана'}
