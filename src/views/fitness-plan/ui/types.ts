@@ -15,7 +15,7 @@ export interface PlanDay {
 }
 
 export interface PlanType {
-    value: 'full-body' | '2-day-split' | '3-day-split' | '4-day-split' | '2-through-2';
+    value: 'full-body' | '2-day-split' | '3-day-split' | '4-day-split' | '5-day-split' | '2-through-2';
     label: string;
     days: number;
     description: string;
