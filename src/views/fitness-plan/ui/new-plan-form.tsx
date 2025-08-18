@@ -14,6 +14,7 @@ import { splitDayTemplates } from './split-template-selector';
 interface NewPlanFormProps {
     planType: PlanType;
     dayNames: string[];
+    templateName?: string;
     prefilledExercises?: Record<string, Omit<Exercise, 'id'>[]>;
     onSave: (plan: WorkoutPlan) => void;
     onBack: () => void;
@@ -33,8 +34,8 @@ const createInitialDays = (dayNames: string[], prefilledExercises?: Record<strin
     return days;
 };
 
-export const NewPlanForm = ({ planType, dayNames, prefilledExercises, onSave, onBack }: NewPlanFormProps) => {
-    const [planName, setPlanName] = useState('');
+export const NewPlanForm = ({ planType, dayNames, templateName, prefilledExercises, onSave, onBack }: NewPlanFormProps) => {
+    const [planName, setPlanName] = useState(templateName || '');
     const [days, setDays] = useState<Record<string, PlanDay>>({});
     
     useEffect(() => {
@@ -88,11 +89,11 @@ export const NewPlanForm = ({ planType, dayNames, prefilledExercises, onSave, on
             <Accordion type="multiple" defaultValue={Object.keys(createInitialDays(dayNames, prefilledExercises))} className="w-full">
                 {Object.entries(days).map(([dayKey, dayData]) => (
                     <AccordionItem value={dayKey} key={dayKey}>
-                        <div className="flex items-center w-full hover:bg-muted/50 rounded-t-md">
+                        <div className="flex items-center w-full hover:bg-muted/50 rounded-t-md pr-4">
                             <AccordionTrigger className="flex-grow">
                                 <span className="font-semibold text-base">{dayData.name}</span>
                             </AccordionTrigger>
-                            <div className="flex items-center gap-2 pr-4" onClick={(e) => e.stopPropagation()}>
+                            <div className="flex items-center gap-2 pl-2" onClick={(e) => e.stopPropagation()}>
                                 <Input
                                     value={dayData.name}
                                     onChange={(e) => handleDayNameChange(dayKey, e.target.value)}

@@ -74,6 +74,7 @@ export function FitnessPlanPage() {
             return <NewPlanForm 
                         planType={selectedPlanType} 
                         dayNames={selectedSplitTemplate.days} 
+                        templateName={selectedSplitTemplate.prefilled ? selectedSplitTemplate.name : ''}
                         prefilledExercises={selectedSplitTemplate.exercises}
                         onSave={handleSavePlan} 
                         onBack={handleBack} 
@@ -150,7 +151,7 @@ export function FitnessPlanPage() {
                                 </CardFooter>
                             </Card>
                         ))}
-                         <Dialog open={isPlanFormOpen} onOpenChange={setIsPlanFormOpen}>
+                         <Dialog open={isPlanFormOpen} onOpenChange={handleCloseDialog}>
                             <DialogTrigger asChild>
                                 <Card className="flex items-center justify-center min-h-[200px] border-2 border-dashed hover:border-primary transition-colors cursor-pointer" onClick={() => setIsPlanFormOpen(true)}>
                                     <div className="text-center text-muted-foreground">
