@@ -159,7 +159,15 @@ export function FitnessPlanPage() {
                                     </div>
                                 </Card>
                             </DialogTrigger>
-                            <DialogContent className="sm:max-w-4xl" onInteractOutside={handleCloseDialog}>
+                            <DialogContent className="sm:max-w-4xl" onInteractOutside={(e) => {
+                                // Prevent closing when clicking on select/popover triggers
+                                const target = e.target as HTMLElement;
+                                if(target.closest('[role="combobox"]') || target.closest('[aria-haspopup="dialog"]')) {
+                                    e.preventDefault();
+                                } else {
+                                    handleCloseDialog();
+                                }
+                            }}>
                                 <DialogHeader>
                                     <DialogTitle>{getDialogTitle()}</DialogTitle>
                                 </DialogHeader>
