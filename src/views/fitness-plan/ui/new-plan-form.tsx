@@ -23,7 +23,7 @@ const createInitialDays = (dayNames: string[], prefilledExercises?: Record<strin
     const days: Record<string, PlanDay> = {};
     dayNames.forEach((name, index) => {
         const dayKey = `day${index + 1}`;
-        const exercisesForDay = prefilledExercises?.[name] || [{ name: '', sets: '', reps: '', weight: '', restBetweenSets: '60', restAfterExercise: '120' }];
+        const exercisesForDay = prefilledExercises?.[name] || [{ name: '', sets: '3', reps: '10', weight: '', restBetweenSets: '60', restAfterExercise: '120' }];
         
         days[dayKey] = {
             name: name || `День ${index + 1}`,
@@ -85,30 +85,33 @@ export const NewPlanForm = ({ planType, dayNames, prefilledExercises, onSave, on
                 <Input id="plan-name" placeholder="Например, Моя программа на массу" value={planName} onChange={(e) => setPlanName(e.target.value)} />
             </div>
             
-            <Accordion type="multiple" defaultValue={['day1']} className="w-full">
+            <Accordion type="multiple" defaultValue={Object.keys(createInitialDays(dayNames, prefilledExercises))} className="w-full">
                 {Object.entries(days).map(([dayKey, dayData]) => (
                     <AccordionItem value={dayKey} key={dayKey}>
-                        <div className="flex items-center w-full pr-4 py-2 hover:bg-muted/50 rounded-t-md">
-                            <AccordionTrigger className="flex-grow">
-                                <Input 
-                                    value={dayData.name} 
+                        <div className="flex items-center w-full hover:bg-muted/50 rounded-t-md">
+                             <AccordionTrigger>
+                                <span className="font-semibold text-base">{dayData.name}</span>
+                             </AccordionTrigger>
+                            <div className="flex items-center gap-2 pr-4" onClick={(e) => e.stopPropagation()}>
+                                <Input
+                                    value={dayData.name}
                                     onChange={(e) => handleDayNameChange(dayKey, e.target.value)}
-                                    onClick={(e) => e.stopPropagation()}
-                                    className="w-full md:w-auto border-none shadow-none focus-visible:ring-1 h-8 font-semibold text-base bg-transparent"
+                                    className="w-48 h-8 text-sm"
+                                    placeholder="Название дня"
                                 />
-                            </AccordionTrigger>
-                            {dayNameTemplates.length > 0 && (
-                                <Select onValueChange={(value) => handleDayNameChange(dayKey, value)}>
-                                    <SelectTrigger onClick={(e) => e.stopPropagation()} className="w-auto h-8 text-xs ml-2">
-                                        <SelectValue placeholder="Шаблон..." />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        {dayNameTemplates.map(template => (
-                                            <SelectItem key={template.value} value={template.label}>{template.label}</SelectItem>
-                                        ))}
-                                    </SelectContent>
-                                </Select>
-                            )}
+                                {dayNameTemplates.length > 0 && (
+                                    <Select onValueChange={(value) => handleDayNameChange(dayKey, value)}>
+                                        <SelectTrigger className="w-auto h-8 text-xs">
+                                            <SelectValue placeholder="Шаблон..." />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            {dayNameTemplates.map(template => (
+                                                <SelectItem key={template.value} value={template.label}>{template.label}</SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
+                                )}
+                            </div>
                         </div>
                         <AccordionContent>
                             <div className="space-y-4 pl-2 pt-2">
