@@ -14,6 +14,8 @@ import type { WorkoutPlan, PlanType, Exercise } from './types';
 import { useWorkoutStore } from '@/views/training-center/session/lib/workout-store';
 import { useRouter } from 'next/navigation';
 import { SplitTemplateSelector, splitTemplates } from './split-template-selector';
+import { ScheduleActivityDialog } from './schedule-activity-dialog';
+import { Activity } from './activity-library';
 
 interface SplitTemplate {
     name: string;
@@ -27,6 +29,7 @@ export function FitnessPlanPage() {
     const router = useRouter();
     const { plans, addPlan, isPlanFormOpen, setIsPlanFormOpen, selectedPlanType, setSelectedPlanType } = useWorkoutStore();
     const [selectedSplitTemplate, setSelectedSplitTemplate] = useState<SplitTemplate | null>(null);
+    const [activityToSchedule, setActivityToSchedule] = useState<Activity | null>(null);
 
     const handleSavePlan = (plan: WorkoutPlan) => {
         addPlan(plan);
@@ -92,6 +95,30 @@ export function FitnessPlanPage() {
         return 'Шаг 1: Создание нового плана';
     }
 
+    const handleScheduleClick = (plan: WorkoutPlan) => {
+        // For simplicity, let's schedule the first day of the plan.
+        // A more complex implementation could let the user choose which day.
+        const firstDayKey = Object.keys(plan.days)[0];
+        if (firstDayKey) {
+            const activity: Activity = {
+                id: plan.id,
+                name: `${plan.name}: ${plan.days[firstDayKey].name}`,
+                type: 'template',
+            };
+            setActivityToSchedule(activity);
+        }
+    };
+    
+     const handleConfirmSchedule = (scheduledActivity: any) => {
+        // Here you would typically update a global schedule state.
+        // For now, we'll just show a toast.
+        toast({
+            title: "Тренировка запланирована!",
+            description: `"${scheduledActivity.name}" добавлена в ваше расписание.`,
+        });
+        setActivityToSchedule(null);
+    };
+
 
     return (
         <div className="space-y-8">
@@ -116,7 +143,7 @@ export function FitnessPlanPage() {
                                     </ul>
                                 </CardContent>
                                 <CardFooter className="gap-2">
-                                     <Button variant="secondary" className="w-full"><CalendarIcon className="mr-2 h-4 w-4"/>В расписание</Button>
+                                     <Button variant="secondary" className="w-full" onClick={() => handleScheduleClick(plan)}><CalendarIcon className="mr-2 h-4 w-4"/>В расписание</Button>
                                      <Button className="w-full" onClick={() => handleStartWorkout(plan)}>
                                         <PlayCircle className="mr-2 h-4 w-4"/>Запустить
                                      </Button>
@@ -142,6 +169,14 @@ export function FitnessPlanPage() {
                     </div>
                 </CardContent>
             </Card>
+            {activityToSchedule && (
+                 <ScheduleActivityDialog
+                    isOpen={!!activityToSchedule}
+                    onClose={() => setActivityToSchedule(null)}
+                    activity={activityToSchedule}
+                    onSchedule={handleConfirmSchedule}
+                />
+            )}
         </div>
     );
 }
