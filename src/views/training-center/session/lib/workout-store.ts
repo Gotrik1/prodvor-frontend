@@ -70,6 +70,7 @@ interface WorkoutState {
   personalSchedule: Record<string, ScheduledActivity[]>;
   addScheduledActivity: (activity: ScheduledActivity) => void;
   addScheduledPlan: (plan: WorkoutPlan, startDate: Date, time: string, restDays: number) => void;
+  removeScheduledActivity: (activityId: string) => void;
 
 
   // Session State
@@ -116,7 +117,7 @@ export const useWorkoutStore = create<WorkoutState>()(
                   currentDate.setDate(currentDate.getDate() + restDays + 1);
               }
               const activity: ScheduledActivity = {
-                  id: `scheduled-${plan.id}-${planDay.name}-${Date.now()}`,
+                  id: `scheduled-${plan.id}-${planDay.name}-${Date.now()}-${Math.random()}`,
                   name: `${plan.name}: ${planDay.name}`,
                   type: 'template',
                   startDate: currentDate.toISOString(),
@@ -127,6 +128,11 @@ export const useWorkoutStore = create<WorkoutState>()(
               get().addScheduledActivity(activity);
           });
       },
+      removeScheduledActivity: (activityId) => set(produce((draft: WorkoutState) => {
+        for (const day in draft.personalSchedule) {
+            draft.personalSchedule[day] = draft.personalSchedule[day].filter(activity => activity.id !== activityId);
+        }
+      })),
 
 
       // Session State Logic

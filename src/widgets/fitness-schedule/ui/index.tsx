@@ -6,7 +6,7 @@ import { scheduleData, ScheduleEvent } from '../lib/mock-data';
 import { Badge } from '@/shared/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import { Button } from '@/shared/ui/button';
-import { Clock, User, Users } from 'lucide-react';
+import { Clock, User, Users, Trash2 } from 'lucide-react';
 import Link from 'next/link';
 import { ActivityLibraryDialog } from '@/views/fitness-plan/ui/activity-library';
 import { ScheduleActivityDialog } from '@/views/fitness-plan/ui/schedule-activity-dialog';
@@ -61,8 +61,16 @@ const EventCard = ({ event, onBook }: { event: ScheduleEvent, onBook: (event: Sc
     )
 };
 
-const PersonalEventCard = ({ event }: { event: ScheduledActivity }) => (
-    <div className="p-3 rounded-lg bg-card border flex flex-col gap-3">
+const PersonalEventCard = ({ event, onRemove }: { event: ScheduledActivity, onRemove: (id: string) => void }) => (
+    <div className="p-3 rounded-lg bg-card border flex flex-col gap-3 group relative">
+        <Button 
+            variant="ghost" 
+            size="icon" 
+            className="absolute top-1 right-1 h-6 w-6 text-muted-foreground hover:bg-destructive/10 hover:text-destructive opacity-0 group-hover:opacity-100 transition-opacity"
+            onClick={() => onRemove(event.id)}
+        >
+            <Trash2 className="h-4 w-4" />
+        </Button>
          <div>
             <Badge className={`${personalActivityColors[event.type]}`}>{event.type === 'group' ? 'Групповое' : event.type === 'recovery' ? 'Восстановление' : 'Тренировка'}</Badge>
             <h4 className="font-semibold mt-2">{event.name}</h4>
@@ -78,7 +86,7 @@ const PersonalEventCard = ({ event }: { event: ScheduledActivity }) => (
 
 export function FitnessSchedule({ personalOnly = false }: { personalOnly?: boolean }) {
     const days = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота', 'Воскресенье'];
-    const { personalSchedule, addScheduledActivity } = useWorkoutStore();
+    const { personalSchedule, addScheduledActivity, removeScheduledActivity } = useWorkoutStore();
 
     const handleBookGroupSession = (event: ScheduleEvent, day: string) => {
         const date = new Date();
@@ -106,7 +114,7 @@ export function FitnessSchedule({ personalOnly = false }: { personalOnly?: boole
                     <div key={day} className="border-b border-r border-border min-h-[60vh]">
                         <h3 className="font-semibold text-center p-2 border-b border-border bg-muted/50">{day}</h3>
                         <div className="p-2 space-y-2">
-                            {personalSchedule[day]?.map(event => <PersonalEventCard key={event.id} event={event} />)}
+                            {personalSchedule[day]?.map(event => <PersonalEventCard key={event.id} event={event} onRemove={removeScheduledActivity} />)}
                             {!personalOnly && scheduleData[day].map(event => <EventCard key={event.id} event={event} onBook={() => handleBookGroupSession(event, day)} />)}
                             {(!personalSchedule[day] || personalSchedule[day].length === 0) && personalOnly && (
                                 <div className="text-center text-muted-foreground pt-10">
