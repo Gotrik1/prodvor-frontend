@@ -10,6 +10,7 @@ const planTypes: PlanType[] = [
     { value: '2-day-split', label: 'Сплит на 2 дня', days: 2, description: 'Разделение на верх и низ тела или тянущие/толкающие.' },
     { value: '3-day-split', label: 'Сплит на 3 дня', days: 3, description: 'Классический сплит для проработки каждой группы мышц раз в неделю.' },
     { value: '4-day-split', label: 'Сплит на 4 дня', days: 4, description: 'Для более продвинутых атлетов с фокусом на отдельные группы мышц.' },
+    { value: '2-through-2', label: 'Сплит 2 через 2', days: 4, description: 'Интенсивная схема: 2 дня тренировок, 2 дня отдыха.' },
 ];
 
 export function PlanTypeSelector({ onSelect }: { onSelect: (type: PlanType) => void }) {

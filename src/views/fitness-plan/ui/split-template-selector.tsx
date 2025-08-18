@@ -86,6 +86,10 @@ export const splitTemplates: Record<PlanType['value'], SplitTemplate[]> = {
         },
         { name: 'Классический бодибилдинг', days: ['Грудь', 'Спина', 'Ноги', 'Руки и Плечи'] },
     ],
+    '2-through-2': [
+        { name: 'Верх / Низ (x2)', days: ['Верх тела 1', 'Низ тела 1', 'Верх тела 2', 'Низ тела 2'] },
+        { name: 'Продвинутый', days: ['Грудь, передняя и средняя дельта', 'Спина и задняя дельта', 'Ноги', 'Руки'] },
+    ]
 };
 
 interface SplitTemplateSelectorProps {
