@@ -57,7 +57,7 @@ export function ActivityLibraryDialog({ onSelectActivity }: { onSelectActivity: 
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-                <Button variant="outline" className="w-full mt-2">
+                <Button variant="outline" className="w-full mt-2 h-12 border-dashed">
                     <PlusCircle className="mr-2 h-4 w-4" />
                     Добавить активность
                 </Button>

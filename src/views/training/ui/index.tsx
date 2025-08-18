@@ -16,11 +16,11 @@ export function TrainingPage() {
         <div className="space-y-8">
             <Card>
                 <CardHeader>
-                     <CardTitle className="flex items-center gap-2"><CalendarIcon /> Календарь активности</CardTitle>
-                     <CardDescription>Расписание ваших личных и групповых тренировок.</CardDescription>
+                     <CardTitle className="flex items-center gap-2"><CalendarIcon /> Мое расписание</CardTitle>
+                     <CardDescription>Календарь ваших личных и групповых тренировок, на которые вы записались.</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <FitnessSchedule />
+                    <FitnessSchedule personalOnly={true} />
                 </CardContent>
             </Card>
 

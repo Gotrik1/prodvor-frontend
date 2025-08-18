@@ -17,6 +17,7 @@ import { Badge } from '@/shared/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shared/ui/select';
 import { cn } from '@/shared/lib/utils';
 import { useUserStore } from '@/widgets/dashboard-header/model/user-store';
+import { FitnessSchedule } from '@/widgets/fitness-schedule';
 
 interface Exercise {
   id: string;
@@ -274,102 +275,33 @@ export function FitnessPlanPage() {
                 <TabsContent value="group" className="mt-6">
                      <Card>
                         <CardHeader>
-                            <CardTitle>Библиотека групповых занятий</CardTitle>
-                            <CardDescription>Сохраняйте избранные занятия из фитнес-центров или создавайте свои для удобного планирования.</CardDescription>
+                            <CardTitle>Расписание групповых занятий</CardTitle>
+                            <CardDescription>Просматривайте и записывайтесь на занятия в вашем фитнес-центре.</CardDescription>
                         </CardHeader>
                         <CardContent>
-                            <Tabs defaultValue="favorites">
-                                <TabsList className="grid w-full grid-cols-2">
-                                    <TabsTrigger value="favorites"><Star className="mr-2 h-4 w-4"/>Избранное</TabsTrigger>
-                                    <TabsTrigger value="centers"><Building className="mr-2 h-4 w-4"/>Фитнес-центры</TabsTrigger>
-                                </TabsList>
-                                <TabsContent value="favorites" className="mt-6">
-                                     <div className="flex justify-between items-center mb-4">
-                                        <div className="relative w-full max-w-sm">
-                                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                                            <Input placeholder="Поиск в избранном..." className="pl-9" />
-                                        </div>
-                                         <Dialog open={isGroupFormOpen} onOpenChange={setIsGroupFormOpen}>
-                                            <DialogTrigger asChild>
-                                                <Button variant="outline"><PlusCircle className="mr-2 h-4 w-4"/>Создать свое занятие</Button>
-                                            </DialogTrigger>
-                                            <DialogContent>
-                                                <DialogHeader>
-                                                    <DialogTitle>Добавить свое групповое занятие</DialogTitle>
-                                                </DialogHeader>
-                                                <NewGroupEventForm onSave={handleSaveGroupEvent} />
-                                            </DialogContent>
-                                        </Dialog>
-                                     </div>
-                                     <div className="space-y-4">
-                                        {favoriteEvents.map(event => (
-                                             <Card key={event.id} className="bg-muted/50">
-                                                <CardContent className="p-3 flex items-center justify-between gap-4">
-                                                     <div className="flex-1">
-                                                        <Badge className={cn(categoryColors[event.category], "mb-1")}>{event.category}</Badge>
-                                                        <h4 className="font-semibold">{event.title}</h4>
-                                                         <div className="flex items-center gap-2 group text-sm text-muted-foreground mt-1">
-                                                            <Avatar className="h-5 w-5"><AvatarImage src={event.trainer.avatarUrl} /><AvatarFallback>{event.trainer.nickname.charAt(0)}</AvatarFallback></Avatar>
-                                                            <span>{event.trainer.nickname}</span>
-                                                        </div>
-                                                    </div>
-                                                    <Button><Calendar className="mr-2 h-4 w-4"/>Запланировать</Button>
-                                                </CardContent>
-                                            </Card>
-                                        ))}
-                                     </div>
-                                </TabsContent>
-                                <TabsContent value="centers" className="mt-6">
-                                    {!selectedFitnessCenter ? (
-                                        <div className="text-center py-10 px-4 border-2 border-dashed rounded-lg">
-                                            <Building className="mx-auto h-12 w-12 text-muted-foreground" />
-                                            <h3 className="mt-4 text-lg font-semibold">Фитнес-центр не выбран</h3>
-                                            <p className="mt-1 text-sm text-muted-foreground">Добавьте свой фитнес-центр для синхронизации расписания.</p>
-                                            <Button asChild className="mt-4">
-                                                <Link href="/playgrounds/add">
-                                                    <PlusCircle className="mr-2 h-4 w-4"/> Добавить фитнес-центр
-                                                </Link>
-                                            </Button>
-                                        </div>
-                                    ) : (
+                           
+                            {!selectedFitnessCenter ? (
+                                <div className="text-center py-10 px-4 border-2 border-dashed rounded-lg">
+                                    <Building className="mx-auto h-12 w-12 text-muted-foreground" />
+                                    <h3 className="mt-4 text-lg font-semibold">Фитнес-центр не выбран</h3>
+                                    <p className="mt-1 text-sm text-muted-foreground">Добавьте свой фитнес-центр для синхронизации расписания.</p>
+                                    <Button asChild className="mt-4">
+                                        <Link href="/playgrounds/add">
+                                            <PlusCircle className="mr-2 h-4 w-4"/> Добавить фитнес-центр
+                                        </Link>
+                                    </Button>
+                                </div>
+                            ) : (
+                                <div>
+                                    <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4 mb-4">
                                         <div>
-                                            <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4 mb-4">
-                                                <div>
-                                                    <h3 className="text-lg font-semibold">Расписание: Фитнес-клуб "Pro-Forma"</h3>
-                                                    <p className="text-sm text-muted-foreground">Последнее обновление: сегодня</p>
-                                                </div>
-                                                 <Dialog open={isGroupFormOpen} onOpenChange={setIsGroupFormOpen}>
-                                                    <DialogTrigger asChild>
-                                                        <Button variant="outline"><PlusCircle className="mr-2 h-4 w-4"/>Создать свое</Button>
-                                                    </DialogTrigger>
-                                                    <DialogContent>
-                                                        <DialogHeader>
-                                                            <DialogTitle>Добавить свое групповое занятие</DialogTitle>
-                                                        </DialogHeader>
-                                                        <NewGroupEventForm onSave={handleSaveGroupEvent} />
-                                                    </DialogContent>
-                                                </Dialog>
-                                            </div>
-                                            <div className="space-y-4">
-                                                 {initialGroupEvents.map(event => (
-                                                    <Card key={event.id} className="bg-muted/50">
-                                                        <CardContent className="p-3 flex items-center justify-between gap-4">
-                                                            <div className="flex-1">
-                                                                <Badge className={cn(categoryColors[event.category], "mb-1")}>{event.category}</Badge>
-                                                                <h4 className="font-semibold">{event.title}</h4>
-                                                            </div>
-                                                            <Button variant="ghost" onClick={() => toggleFavorite(event)}>
-                                                                <Star className={cn("mr-2 h-4 w-4", favoriteEvents.some(fav => fav.id === event.id) ? "text-amber-400 fill-amber-400" : "text-muted-foreground")} />
-                                                                {favoriteEvents.some(fav => fav.id === event.id) ? "В избранном" : "В избранное"}
-                                                            </Button>
-                                                        </CardContent>
-                                                    </Card>
-                                                 ))}
-                                            </div>
+                                            <h3 className="text-lg font-semibold">Расписание: Фитнес-клуб "Pro-Forma"</h3>
+                                            <p className="text-sm text-muted-foreground">Последнее обновление: сегодня</p>
                                         </div>
-                                    )}
-                                </TabsContent>
-                            </Tabs>
+                                    </div>
+                                    <FitnessSchedule />
+                                </div>
+                            )}
                         </CardContent>
                     </Card>
                 </TabsContent>
