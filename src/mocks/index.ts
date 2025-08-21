@@ -10,6 +10,7 @@ import { posts } from './posts';
 import { challenges } from './challenges';
 import { tournaments } from './tournaments';
 import { requirements } from './requirements';
+import { ranks } from './ranks';
 
 // 2. Import and run the central initializer.
 // This function will mutate the imported arrays to establish relationships.
@@ -34,3 +35,4 @@ export * from './requirements';
 export * from './challenges';
 export * from './playgrounds';
 export * from './tournaments';
+export * from './ranks';
