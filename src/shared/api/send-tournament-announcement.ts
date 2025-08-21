@@ -96,9 +96,10 @@ const announcementFlow = ai.defineFlow(
 
       return { success: true };
 
-    } catch (e: any) {
+    } catch (e: unknown) {
       console.error('Flow Error:', e);
-      return { success: false, error: e.message || 'An unknown error occurred.' };
+      const errorMessage = e instanceof Error ? e.message : 'An unknown error occurred.';
+      return { success: false, error: errorMessage };
     }
   }
 );

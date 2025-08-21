@@ -70,9 +70,10 @@ const newsDigestFlow = ai.defineFlow(
       
       return { digest: output, success: true };
 
-    } catch (e: any) {
+    } catch (e: unknown) {
       console.error("News Digest Flow Error:", e);
-      return { digest: null, success: false, error: e.message || "An unknown error occurred." };
+      const errorMessage = e instanceof Error ? e.message : 'An unknown error occurred.';
+      return { digest: null, success: false, error: errorMessage };
     }
   }
 );
@@ -81,5 +82,3 @@ const newsDigestFlow = ai.defineFlow(
 export async function generateNewsDigest(): Promise<NewsDigestOutput> {
   return await newsDigestFlow();
 }
-
-

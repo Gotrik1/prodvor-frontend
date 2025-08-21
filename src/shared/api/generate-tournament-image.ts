@@ -40,9 +40,10 @@ const generateImageFlow = ai.defineFlow(
       }
 
       return { imageDataUri: media.url };
-    } catch (e: any) {
+    } catch (e: unknown) {
       console.error('Flow Error:', e);
-      return { error: e.message || 'An unknown error occurred during image generation.' };
+      const errorMessage = e instanceof Error ? e.message : 'An unknown error occurred during image generation.';
+      return { error: errorMessage };
     }
   }
 );

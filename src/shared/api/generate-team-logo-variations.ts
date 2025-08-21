@@ -46,9 +46,10 @@ const logoGenerationFlow = ai.defineFlow(
       });
       
       return { logoDataUris };
-    } catch (e: any) {
+    } catch (e: unknown) {
       console.error("Logo Generation Flow Error:", e);
-      return { logoDataUris: [], error: e.message || "An unknown error occurred during logo generation." };
+      const errorMessage = e instanceof Error ? e.message : 'An unknown error occurred during logo generation.';
+      return { logoDataUris: [], error: errorMessage };
     }
   }
 );

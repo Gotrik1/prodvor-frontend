@@ -73,9 +73,10 @@ const generatePromoFlow = ai.defineFlow(
       
       return { videoDataUri };
 
-    } catch (e: any) {
+    } catch (e: unknown) {
       console.error('Flow Error:', e);
-      return { error: e.message || 'An unknown error occurred during video generation.' };
+      const errorMessage = e instanceof Error ? e.message : 'An unknown error occurred during video generation.';
+      return { error: errorMessage };
     }
   }
 );

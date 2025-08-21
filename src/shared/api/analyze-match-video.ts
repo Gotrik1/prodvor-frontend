@@ -54,9 +54,10 @@ const analyzeVideoFlow = ai.defineFlow(
       });
 
       return { analysis: text };
-    } catch (e: any) {
+    } catch (e: unknown) {
       console.error('Flow Error:', e);
-      return { error: e.message || 'An unknown error occurred during video analysis.' };
+      const errorMessage = e instanceof Error ? e.message : 'An unknown error occurred during video analysis.';
+      return { error: errorMessage };
     }
   }
 );
