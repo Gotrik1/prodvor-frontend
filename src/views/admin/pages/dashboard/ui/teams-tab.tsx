@@ -1,0 +1,64 @@
+
+'use client';
+
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
+import { teams, users, sponsors, playgrounds } from '@/mocks';
+import { Badge } from '@/shared/ui/badge';
+import Image from 'next/image';
+import Link from 'next/link';
+import { Button } from '@/shared/ui/button';
+import { ExternalLink } from 'lucide-react';
+import { DataTable } from './data-table';
+
+export function TeamsTab() {
+    const getTeamSponsors = (sponsorIds?: string[]) => {
+        if (!sponsorIds || sponsorIds.length === 0) return 'Нет';
+        return sponsorIds.map(id => sponsors.find(s => s.id === id)?.name).filter(Boolean).join(', ');
+    }
+
+    const getTeamPlaygrounds = (playgroundIds?: string[]) => {
+        if (!playgroundIds || playgroundIds.length === 0) return 'Нет';
+        return playgroundIds.map(id => playgrounds.find(p => p.id === id)?.name).filter(Boolean).join(', ');
+    }
+  return (
+    <Card>
+        <CardHeader>
+            <CardTitle>Список команд ({teams.length})</CardTitle>
+            <CardDescription>Все команды, зарегистрированные на платформе.</CardDescription>
+        </CardHeader>
+        <CardContent>
+            <DataTable 
+                headers={['ID', 'Команда', 'Дисциплина', 'Капитан', 'Игроков', 'Рейтинг', 'Спонсоры', 'Домашние площадки', '']}
+                data={teams}
+                renderRow={(team) => (
+                    <tr key={team.id}>
+                        <td className="p-4 align-middle font-mono text-xs">{team.id}</td>
+                        <td className="p-4 align-middle">
+                            <Link href={`/admin/teams/${team.id}`} className="flex items-center gap-3 group">
+                                <Image src={team.logoUrl} alt={team.name} width={32} height={32} className="rounded-md" data-ai-hint={team.dataAiHint}/>
+                                <span className="font-medium group-hover:text-primary transition-colors">{team.name}</span>
+                            </Link>
+                        </td>
+                        <td className="p-4 align-middle"><Badge variant="secondary">{team.game}</Badge></td>
+                        <td className="p-4 align-middle text-xs">{users.find(u => u.id === team.captainId)?.nickname || 'N/A'}</td>
+                        <td className="p-4 align-middle">{team.members.length}</td>
+                        <td className="p-4 align-middle font-mono">{team.rank}</td>
+                        <td className="p-4 align-middle text-xs">{getTeamSponsors(team.sponsorIds)}</td>
+                        <td className="p-4 align-middle text-xs">{getTeamPlaygrounds(team.homePlaygroundIds)}</td>
+                         <td className="p-4 align-middle text-right">
+                            <div className="flex items-center justify-end gap-2">
+                                <Button asChild variant="ghost" size="sm"><Link href={`/admin/teams/${team.id}`}>Просмотр</Link></Button>
+                                <Button asChild variant="ghost" size="icon" className="h-8 w-8">
+                                    <Link href={`/teams/${team.id}`} target="_blank" rel="noopener noreferrer">
+                                        <ExternalLink className="h-4 w-4"/>
+                                    </Link>
+                                </Button>
+                            </div>
+                        </td>
+                    </tr>
+                )}
+            />
+        </CardContent>
+    </Card>
+  );
+}
