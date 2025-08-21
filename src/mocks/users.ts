@@ -1,6 +1,6 @@
 
-import { allSports, individualSports, teamSports, Sport } from './sports';
-import { Sponsor } from './personnel';
+import type { Sport } from './sports';
+import type { Sponsor } from './personnel';
 
 export type UserRole = 'Игрок' | 'Капитан' | 'Тренер' | 'Организатор' | 'Судья' | 'Менеджер' | 'Болельщик' | 'Модератор' | 'Администратор';
 export type UserGender = 'мужской' | 'женский';
@@ -81,62 +81,3 @@ export const users: User[] = baseUsers.map(u => ({
   following: [],
   sponsorIds: [],
 }));
-
-// This function will be called from index.ts after all base data is loaded.
-export function initializeSocialGraphAndSponsors(allUsers: User[], allSponsors: Sponsor[]) {
-    // --- Initial discipline assignment ---
-    const allSportIds = allSports.map(s => s.id);
-
-    allUsers.forEach((user, index) => {
-        const userDisciplines = new Set<string>();
-        // Assign 1-2 initial disciplines predictably to all users
-        if (allSportIds.length > 0) {
-            userDisciplines.add(allSportIds[index % allSportIds.length]);
-        }
-        if (index % 3 === 0 && allSportIds.length > 0) { // ~33% chance for a second sport
-             userDisciplines.add(allSportIds[(index * 7) % allSportIds.length]);
-        }
-        user.disciplines = Array.from(userDisciplines);
-    });
-
-    // --- Social Graph ---
-    const userIds = allUsers.map(u => u.id);
-    allUsers.forEach((currentUser, index) => {
-        // Friends (symmetric relationship)
-        const friendCount = (index % 4) + 1; // 1 to 4 friends
-        for (let i = 0; i < friendCount; i++) {
-            const friendIndex = (index * 3 + i * 7) % userIds.length;
-            const friendId = userIds[friendIndex];
-            if (friendId !== currentUser.id && !currentUser.friends.includes(friendId)) {
-                currentUser.friends.push(friendId);
-                const friend = allUsers.find(u => u.id === friendId);
-                if (friend && !friend.friends.includes(currentUser.id)) {
-                    friend.friends.push(currentUser.id);
-                }
-            }
-        }
-    });
-
-    allUsers.forEach((currentUser, index) => {
-        // Following (asymmetric relationship)
-        const followingCount = (index % 6) + 2; // 2 to 7 follows
-        for (let i = 0; i < followingCount; i++) {
-             const userToFollowIndex = (index * 5 + i * 3) % userIds.length;
-             const userToFollowId = userIds[userToFollowIndex];
-             if (userToFollowId !== currentUser.id && !currentUser.followingUsers.includes(userToFollowId)) {
-                 currentUser.followingUsers.push(userToFollowId);
-                 const followedUser = allUsers.find(u => u.id === userToFollowId);
-                 if (followedUser && !followedUser.followers.includes(currentUser.id)) {
-                     followedUser.followers.push(currentUser.id);
-                 }
-             }
-        }
-    });
-    
-    // --- Sponsors ---
-    allUsers.forEach((user, index) => {
-        if (index % 5 === 0 && allSponsors.length > 0) { // ~20% chance
-            user.sponsorIds = [allSponsors[index % allSponsors.length].id];
-        }
-    });
-}

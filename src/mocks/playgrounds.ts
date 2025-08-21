@@ -136,32 +136,3 @@ export const playgrounds: Playground[] = basePlaygrounds.map((playground) => ({
     followers: [],
     residentTeamIds: [],
 }));
-
-// Function to link teams to playgrounds, called from teams.ts
-export function assignTeamsToPlaygrounds(teams: any[]) {
-    teams.forEach(team => {
-        if (team.homePlaygroundIds) {
-            team.homePlaygroundIds.forEach((playgroundId: string) => {
-                const playground = playgrounds.find(p => p.id === playgroundId);
-                if (playground && !playground.residentTeamIds.includes(team.id)) {
-                    playground.residentTeamIds.push(team.id);
-                }
-            });
-        }
-    });
-}
-
-// Function to assign followers to playgrounds, called from users.ts after users are created
-export function assignFollowersToPlaygrounds(users: User[]) {
-    playgrounds.forEach((playground, index) => {
-        const followersCount = (index % 15) + 5; // 5 to 19 followers
-        const followers: string[] = [];
-        for (let i = 0; i < followersCount; i++) {
-            const userIndex = (index + i * 3) % users.length;
-            if (users[userIndex]) {
-                followers.push(users[userIndex].id);
-            }
-        }
-        playground.followers = Array.from(new Set(followers)); // Ensure unique
-    });
-}

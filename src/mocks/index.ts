@@ -1,30 +1,28 @@
 // IMPORTANT: Order of imports and exports matters to avoid circular dependencies.
 
-// 1. Import foundational data that doesn't depend on other mocks.
-import { users, initializeSocialGraphAndSponsors } from './users';
+// 1. Import all base data definitions and raw data.
+import { users } from './users';
+import { teams } from './teams';
+import { playgrounds } from './playgrounds';
 import { sponsors } from './personnel';
 import { allSports } from './sports';
-import { playgrounds, assignFollowersToPlaygrounds } from './playgrounds';
-import { teams, initializeTeams } from './teams';
-
-// 2. Initialize base data and establish relationships.
-// It's crucial to initialize in an order that respects dependencies.
-// Users are initialized first, but their social graph/sponsors depend on the full list of users.
-initializeSocialGraphAndSponsors(users, sponsors);
-
-// Teams depend on users, playgrounds, and sports. This function creates teams and links them.
-// This MUST run before assigning followers to playgrounds to ensure resident teams are known.
-initializeTeams(users, playgrounds, allSports, sponsors);
-
-// Playgrounds get followers assigned after users and teams are fully initialized.
-assignFollowersToPlaygrounds(users);
-
-
-// 3. Import data that depends on the initialized data above.
 import { posts } from './posts';
 import { challenges } from './challenges';
 import { tournaments } from './tournaments';
 import { requirements } from './requirements';
+
+// 2. Import and run the central initializer.
+// This function will mutate the imported arrays to establish relationships.
+import { initializeMockData } from './initialize';
+
+initializeMockData({
+    users,
+    teams,
+    playgrounds,
+    sponsors,
+    allSports
+});
+
 
 // 4. Export everything for use in the application.
 export * from './users';
