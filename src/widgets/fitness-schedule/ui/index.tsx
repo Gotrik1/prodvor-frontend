@@ -10,7 +10,7 @@ import { Clock, User, Users, Trash2 } from 'lucide-react';
 import Link from 'next/link';
 import { ActivityLibraryDialog } from '@/views/fitness-plan/ui/activity-library';
 import { ScheduleActivityDialog } from '@/views/fitness-plan/ui/schedule-activity-dialog';
-import { useWorkoutStore } from '@/views/training-center/session/lib/workout-store';
+import { useScheduleStore } from '@/entities/training/model/use-schedule-store';
 import type { ScheduledActivity, Activity } from '@/views/fitness-plan/ui/types';
 
 
@@ -86,7 +86,7 @@ const PersonalEventCard = ({ event, onRemove }: { event: ScheduledActivity, onRe
 
 export function FitnessSchedule({ personalOnly = false }: { personalOnly?: boolean }) {
     const days = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота', 'Воскресенье'];
-    const { personalSchedule, addScheduledActivity, removeScheduledActivity } = useWorkoutStore();
+    const { personalSchedule, addScheduledActivity, removeScheduledActivity } = useScheduleStore();
 
     const handleBookGroupSession = (event: ScheduleEvent, day: string) => {
         const date = new Date();

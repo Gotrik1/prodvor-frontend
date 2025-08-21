@@ -3,7 +3,8 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useWorkoutStore } from './lib/workout-store';
+import { useSessionStore } from '@/entities/training/model/use-session-store';
+import { usePlanStore } from '@/entities/training/model/use-plan-store';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/shared/ui/card';
 import { Button } from '@/shared/ui/button';
 import Link from 'next/link';
@@ -52,7 +53,8 @@ const useTimer = (initialSeconds = 60, onEnd: () => void) => {
 
 export function WorkoutSessionPage({ planId }: { planId: string }) {
     const router = useRouter();
-    const { plans, activeSession, startSession, updateSet, toggleSetComplete, endSession } = useWorkoutStore();
+    const { plans } = usePlanStore();
+    const { activeSession, startSession, updateSet, toggleSetComplete, endSession } = useSessionStore();
     const [currentDayIndex, setCurrentDayIndex] = useState(0);
     const [currentExerciseIndex, setCurrentExerciseIndex] = useState(0);
     const [isResting, setIsResting] = useState(false);
@@ -177,7 +179,7 @@ export function WorkoutSessionPage({ planId }: { planId: string }) {
                 </CardHeader>
                 <CardContent className="space-y-4">
                     {sessionExerciseResult.sets.map((set, index) => (
-                        <div key={index} className="grid grid-cols-12 gap-2 items-center p-2 rounded-md bg-muted/50">
+                        <div key={index} className="grid grid-cols-12 gap-2 items-end p-2 rounded-md bg-muted/50">
                             <div className="col-span-1 font-bold text-lg">{index + 1}</div>
                             <div className="col-span-4 space-y-1">
                                 <Label htmlFor={`reps-${index}`} className="text-xs">Факт. повт.</Label>

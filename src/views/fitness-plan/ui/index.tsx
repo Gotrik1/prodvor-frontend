@@ -11,7 +11,8 @@ import { FitnessSchedule } from '@/widgets/fitness-schedule';
 import { PlanTypeSelector } from './plan-type-selector';
 import { NewPlanForm } from './new-plan-form';
 import type { WorkoutPlan, PlanType, Exercise, ScheduledActivity } from './types';
-import { useWorkoutStore } from '@/views/training-center/session/lib/workout-store';
+import { usePlanStore } from '@/entities/training/model/use-plan-store';
+import { useScheduleStore } from '@/entities/training/model/use-schedule-store';
 import { useRouter } from 'next/navigation';
 import { SplitTemplateSelector, splitTemplates } from './split-template-selector';
 import { ScheduleActivityDialog } from './schedule-activity-dialog';
@@ -27,7 +28,8 @@ interface SplitTemplate {
 export function FitnessPlanPage() {
     const { toast } = useToast();
     const router = useRouter();
-    const { plans, addPlan, isPlanFormOpen, setIsPlanFormOpen, selectedPlanType, setSelectedPlanType, addScheduledPlan } = useWorkoutStore();
+    const { plans, addPlan, isPlanFormOpen, setIsPlanFormOpen, selectedPlanType, setSelectedPlanType } = usePlanStore();
+    const { addScheduledPlan } = useScheduleStore();
     const [selectedSplitTemplate, setSelectedSplitTemplate] = useState<SplitTemplate | null>(null);
     const [planToSchedule, setPlanToSchedule] = useState<WorkoutPlan | null>(null);
 
