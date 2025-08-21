@@ -52,16 +52,22 @@ export function WorkoutResultsPage({ planId }: { planId: string }) {
     
     const totalVolume = Object.values(dayResults)
       .flatMap(d => d.exercises)
-      .flatMap((e, exIndex) => 
-          e.sets.map((s, setIndex) => {
+      .flatMap((e, exIndex) => {
+          const planDayKey = Object.keys(plan.days).find(key => plan.days[key].exercises.some(ex => ex.id === e.exerciseId));
+          if (!planDayKey) return [];
+          const planEx = plan.days[planDayKey].exercises.find(ex => ex.id === e.exerciseId);
+          if (!planEx) return [];
+          
+          return e.sets.map((s) => {
               if (!s.completed) return 0;
-              const planEx = Object.values(plan.days).flatMap(day => day.exercises)[exIndex];
               const reps = Number(s.actualReps || planEx.reps);
-              const weight = Number(s.actualWeight || planEx.weight.replace(/[^0-9.]/g, ''));
+              const weightString = s.actualWeight || planEx.weight;
+              const weight = parseFloat(weightString.replace(/[^0-9.,]/g, '').replace(',', '.'));
+
               return isNaN(reps) || isNaN(weight) ? 0 : reps * weight;
           })
-      )
-      .reduce((sum, vol) => sum + vol, 0);
+      })
+      .reduce((sum, vol) => sum + (vol || 0), 0);
 
     return (
         <div className="max-w-4xl mx-auto p-4 md:p-6 lg:p-8">
@@ -113,8 +119,9 @@ export function WorkoutResultsPage({ planId }: { planId: string }) {
                                         </TableRow>
                                     </TableHeader>
                                     <TableBody>
-                                        {dayData.exercises.map((exResult, exIndex) => {
-                                            const planEx = plan.days[dayKey].exercises[exIndex];
+                                        {dayData.exercises.map((exResult) => {
+                                            const planEx = plan.days[dayKey].exercises.find(e => e.id === exResult.exerciseId);
+                                            if (!planEx) return null;
                                             return exResult.sets.map((setResult, setIndex) => (
                                                 <TableRow key={`${exResult.exerciseId}-${setIndex}`} className={!setResult.completed ? 'bg-destructive/10' : ''}>
                                                     {setIndex === 0 && (
