@@ -111,7 +111,7 @@ function generateTeams(
                 sportId: sport.id,
                 captainId: captain.id,
                 members: teamMembersIds,
-                rank: 1200 + (teamIdCounter * 17 % 500),
+                rank: 1200, // Standard starting ELO rank
                 homePlaygroundIds,
                 followers: [],
                 following: [],
