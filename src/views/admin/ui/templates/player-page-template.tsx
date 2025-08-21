@@ -1,12 +1,12 @@
 
 'use client';
 
-import { users, teams, playgrounds, posts, allSports } from "@/mocks";
+import { users, teams, playgrounds, posts, allSports, ranks } from "@/mocks";
 import type { User } from "@/mocks/users";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { Badge } from "@/shared/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
-import { Briefcase, Dumbbell, Film, History, Mail, MapPin, MessageSquare, Phone, Rss, UserPlus, Users as UsersIcon, Gamepad2, Heart, Activity, TrendingUp, Shield, Star, Trophy } from "lucide-react";
+import { Briefcase, Dumbbell, Film, History, Mail, MapPin, MessageSquare, Phone, Rss, UserPlus, Users as UsersIcon, Gamepad2, Heart, Activity, TrendingUp, Shield, Star, Trophy, Gem } from "lucide-react";
 import Image from 'next/image';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 import { Button } from "@/shared/ui/button";
@@ -63,6 +63,10 @@ const getUserDisciplines = (user: User): string[] => {
         
     const allDisciplinesSet = new Set([...personalDisciplines, ...teamDisciplines]);
     return Array.from(allDisciplinesSet);
+};
+
+const getRankForElo = (elo: number) => {
+    return ranks.find(rank => elo >= rank.eloMin && elo <= rank.eloMax);
 };
 
 const FormBadge = ({ result }: { result: 'W' | 'L' | 'D' }) => {
@@ -184,6 +188,8 @@ export function PlayerPageTemplate({ user: profileUser }: { user?: User }) {
     const player = profileUser || defaultPlayer;
     const { user: currentUser } = useUserStore();
     const playerTeam = teams.find(t => t.members.includes(player.id));
+    const playerRank = player.elo ? getRankForElo(player.elo) : null;
+
 
     const isOwnProfile = currentUser?.id === player.id;
     const last5Form: ('W' | 'L' | 'D')[] = ['W', 'L', 'W', 'W', 'W'];
@@ -197,7 +203,15 @@ export function PlayerPageTemplate({ user: profileUser }: { user?: User }) {
                 </Avatar>
                 <div className="text-center md:text-left flex-grow">
                     <h1 className="text-3xl font-bold font-headline">{player.firstName} "{player.nickname}" {player.lastName}</h1>
-                    <p className="text-muted-foreground text-lg mt-1">Роль: {player.role}</p>
+                    <div className="flex items-center justify-center md:justify-start gap-4 mt-1">
+                        <p className="text-muted-foreground text-lg">Роль: {player.role}</p>
+                        {playerRank && (
+                            <div className="flex items-center gap-2 text-lg text-primary font-semibold">
+                                <playerRank.icon className="h-5 w-5" />
+                                <span>{playerRank.name} ({player.elo} ELO)</span>
+                            </div>
+                        )}
+                    </div>
                     <div className="flex flex-wrap items-center justify-center md:justify-start gap-x-4 gap-y-1 text-muted-foreground mt-2 text-sm">
                         {playerTeam && (
                             <div className="flex items-center gap-2">
@@ -285,5 +299,3 @@ export function PlayerPageTemplate({ user: profileUser }: { user?: User }) {
         </div>
     )
 }
-
-    
