@@ -1,6 +1,9 @@
+
 import { ranks } from '@/mocks/ranks';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Badge } from '@/shared/ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs';
+import { Construction, User, Gavel, Megaphone, ClipboardList } from 'lucide-react';
 
 const rankColors = [
     'border-destructive/50', // Annihilator
@@ -16,33 +19,63 @@ const rankColors = [
     'border-gray-400/50', // Take Me
 ];
 
+const Placeholder = ({ roleName }: { roleName: string }) => (
+    <div className="flex flex-col items-center justify-center min-h-[40vh] text-center p-4">
+        <div className="mx-auto bg-primary/10 text-primary p-4 rounded-full w-fit mb-4">
+            <Construction className="h-10 w-10" />
+        </div>
+        <h3 className="text-xl font-bold font-headline">Ранги для роли "{roleName}"</h3>
+        <p className="text-muted-foreground mt-2 max-w-sm">
+            Система прогрессии для этой роли находится в разработке.
+        </p>
+    </div>
+);
 
 export function RanksPage() {
     return (
-        <div className="space-y-4">
-            {ranks.map((rank, index) => (
-                <Card key={rank.name} className={`bg-card/50 ${rankColors[index] || 'border-border'}`}>
-                    <CardHeader>
-                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-                            <div className="flex items-center gap-3">
-                                <div className="p-2 rounded-md bg-muted">
-                                    <rank.icon className="w-6 h-6 text-primary" />
+        <Tabs defaultValue="player">
+            <TabsList className="grid w-full grid-cols-2 md:grid-cols-4">
+                <TabsTrigger value="player"><User className="mr-2 h-4 w-4" />Игрок</TabsTrigger>
+                <TabsTrigger value="referee" disabled><Gavel className="mr-2 h-4 w-4" />Судья</TabsTrigger>
+                <TabsTrigger value="organizer" disabled><Megaphone className="mr-2 h-4 w-4" />Организатор</TabsTrigger>
+                <TabsTrigger value="coach" disabled><ClipboardList className="mr-2 h-4 w-4" />Тренер</TabsTrigger>
+            </TabsList>
+            <TabsContent value="player" className="mt-6">
+                <div className="space-y-4">
+                    {ranks.map((rank, index) => (
+                        <Card key={rank.name} className={`bg-card/50 ${rankColors[index] || 'border-border'}`}>
+                            <CardHeader>
+                                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                                    <div className="flex items-center gap-3">
+                                        <div className="p-2 rounded-md bg-muted">
+                                            <rank.icon className="w-6 h-6 text-primary" />
+                                        </div>
+                                        <div>
+                                            <CardTitle className="text-xl">{rank.name}</CardTitle>
+                                            <CardDescription className="italic">"{rank.title}"</CardDescription>
+                                        </div>
+                                    </div>
+                                    <Badge variant="outline" className="font-mono text-base w-fit">
+                                        {rank.eloMin}{rank.eloMax > rank.eloMin ? ` - ${rank.eloMax}` : '+'} ELO
+                                    </Badge>
                                 </div>
-                                <div>
-                                    <CardTitle className="text-xl">{rank.name}</CardTitle>
-                                    <CardDescription className="italic">"{rank.title}"</CardDescription>
-                                </div>
-                            </div>
-                            <Badge variant="outline" className="font-mono text-base w-fit">
-                                {rank.eloMin}{rank.eloMax > rank.eloMin ? ` - ${rank.eloMax}` : '+'} ELO
-                            </Badge>
-                        </div>
-                    </CardHeader>
-                    <CardContent>
-                        <p className="text-muted-foreground">{rank.description}</p>
-                    </CardContent>
-                </Card>
-            ))}
-        </div>
+                            </CardHeader>
+                            <CardContent>
+                                <p className="text-muted-foreground">{rank.description}</p>
+                            </CardContent>
+                        </Card>
+                    ))}
+                </div>
+            </TabsContent>
+            <TabsContent value="referee" className="mt-6">
+                <Placeholder roleName="Судья" />
+            </TabsContent>
+            <TabsContent value="organizer" className="mt-6">
+                 <Placeholder roleName="Организатор" />
+            </TabsContent>
+            <TabsContent value="coach" className="mt-6">
+                 <Placeholder roleName="Тренер" />
+            </TabsContent>
+        </Tabs>
     );
 }
