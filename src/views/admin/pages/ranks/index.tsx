@@ -1,7 +1,6 @@
 import { ranks } from '@/mocks/ranks';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Badge } from '@/shared/ui/badge';
-import { Progress } from '@/shared/ui/progress';
 
 const rankColors = [
     'border-destructive/50', // Annihilator
