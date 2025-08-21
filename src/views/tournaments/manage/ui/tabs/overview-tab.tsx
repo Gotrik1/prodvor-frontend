@@ -7,8 +7,9 @@ import { Bot, PlayCircle, StopCircle, Ban, RefreshCw, ExternalLink } from "lucid
 import Image from "next/image";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/select";
 import React from "react";
-import { Tournament } from '@/views/tournaments/public-page/ui/mock-data';
+import type { Tournament } from '@/views/tournaments/public-page/ui/mock-data';
 import Link from "next/link";
+import { useTournamentCrmContext } from "../../lib/TournamentCrmContext";
 
 const statusColors: Record<string, string> = {
     'АНОНС': 'bg-purple-500/20 text-purple-300 border-purple-500/30',
@@ -29,7 +30,14 @@ const StatCard = ({ title, value }: { title: string, value: string | React.React
     </div>
 );
 
-export function OverviewTab({ tournament, onStatusChange, confirmedCount }: { tournament: Tournament, onStatusChange: (status: Tournament['status']) => void, confirmedCount: number }) {
+export function OverviewTab() {
+    const { tournament, handleTournamentChange, confirmedTeams } = useTournamentCrmContext();
+
+    if (!tournament) return null;
+
+    const onStatusChange = (status: Tournament['status']) => {
+        handleTournamentChange({ status });
+    };
     
     const getAiAdvice = () => {
         return `AI-Советник временно недоступен.`;
@@ -61,7 +69,7 @@ export function OverviewTab({ tournament, onStatusChange, confirmedCount }: { to
                                     </SelectContent>
                                 </Select>
                             </div>
-                            <StatCard title="Участники" value={`${confirmedCount}/${tournament.maxParticipants}`} />
+                            <StatCard title="Участники" value={`${confirmedTeams.length}/${tournament.maxParticipants}`} />
                             <StatCard title="Призовой фонд" value={<span className="text-primary">{tournament.prizePool}</span>} />
                             <StatCard title="Дата начала" value={new Date(tournament.startDate).toLocaleDateString('ru-RU')} />
                         </div>

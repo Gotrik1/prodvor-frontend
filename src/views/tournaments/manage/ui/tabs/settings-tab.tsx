@@ -17,6 +17,7 @@ import { Calendar as CalendarComponent } from "@/shared/ui/calendar";
 import { Tournament, requirements as initialRequirements } from '@/views/tournaments/public-page/ui/mock-data';
 import { useToast } from "@/shared/hooks/use-toast";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/select";
+import { useTournamentCrmContext } from "../../lib/TournamentCrmContext";
 
 // Mock data for playgrounds
 const mockPlaygrounds = [
@@ -26,12 +27,15 @@ const mockPlaygrounds = [
 ];
 
 
-export function SettingsTab({ tournament, onTournamentChange }: { tournament: Tournament, onTournamentChange: (data: Partial<Tournament>) => void }) {
+export function SettingsTab() {
+    const { tournament, handleTournamentChange } = useTournamentCrmContext();
     const { toast } = useToast();
     const [selectedRequirements, setSelectedRequirements] = useState<string[]>(['req1', 'req2', 'req3', 'req4', 'req5']);
     const [isSaving, setIsSaving] = useState(false);
     const [tournamentPlaygrounds, setTournamentPlaygrounds] = useState([mockPlaygrounds[0]]);
     
+    if (!tournament) return null;
+
     const handleRequirementChange = (reqId: string, checked: boolean) => {
         setSelectedRequirements(prev =>
             checked ? [...prev, reqId] : prev.filter(id => id !== reqId)
@@ -39,11 +43,11 @@ export function SettingsTab({ tournament, onTournamentChange }: { tournament: To
     };
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        onTournamentChange({ [e.target.id]: e.target.value });
+        handleTournamentChange({ [e.target.id]: e.target.value });
     };
     
     const handleSelectChange = (id: 'level', value: Tournament['level']) => {
-        onTournamentChange({ [id]: value });
+        handleTournamentChange({ [id]: value });
     };
 
     const handleSave = () => {
@@ -190,7 +194,7 @@ export function SettingsTab({ tournament, onTournamentChange }: { tournament: To
                                     <span>Начало турнира</span>
                                 </Button>
                                 </PopoverTrigger>
-                                <PopoverContent className="w-auto p-0"><CalendarComponent mode="single" selected={new Date(tournament.startDate)} onSelect={(date) => onTournamentChange({ startDate: date?.toISOString() || '' })} initialFocus /></PopoverContent>
+                                <PopoverContent className="w-auto p-0"><CalendarComponent mode="single" selected={new Date(tournament.startDate)} onSelect={(date) => handleTournamentChange({ startDate: date?.toISOString() || '' })} initialFocus /></PopoverContent>
                             </Popover>
                         </div>
                     </div>

@@ -8,8 +8,10 @@ import Image from "next/image";
 import { Input } from "@/shared/ui/input";
 import { Label } from "@/shared/ui/label";
 import React from "react";
+import { useTournamentCrmContext } from "../../lib/TournamentCrmContext";
 
-export function MediaTab({ mediaItems, onMediaAdd }: { mediaItems: any[], onMediaAdd: (item: any) => void }) {
+export function MediaTab() {
+    const { mediaItems, handleAddMedia } = useTournamentCrmContext();
 
     return (
         <Card>

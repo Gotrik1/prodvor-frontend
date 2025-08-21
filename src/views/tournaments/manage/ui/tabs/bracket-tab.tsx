@@ -9,8 +9,10 @@ import { Input } from "@/shared/ui/input";
 import React, { useState, useEffect } from "react";
 import type { Team, BracketMatch } from '@/views/tournaments/public-page/ui/mock-data';
 import { useProtocol } from "@/widgets/protocol-editor/lib/use-protocol";
+import { useTournamentCrmContext } from "../../lib/TournamentCrmContext";
 
-export function BracketTab({ confirmedTeams, generatedBracket }: { confirmedTeams: Team[], generatedBracket: BracketMatch[][] }) {
+export function BracketTab() {
+    const { confirmedTeams, generatedBracket } = useTournamentCrmContext();
     const { setActiveMatch, activeMatch } = useProtocol();
     const [rounds, setRounds] = useState<BracketMatch[][]>(generatedBracket);
     const [scores, setScores] = useState<Record<string, { score1: string, score2: string }>>({});

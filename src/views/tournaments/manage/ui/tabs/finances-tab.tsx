@@ -10,6 +10,7 @@ import { Button } from "@/shared/ui/button";
 import { CheckCircle, AlertCircle, Edit } from "lucide-react";
 import React from 'react';
 import type { Team } from '@/views/tournaments/public-page/ui/mock-data';
+import { useTournamentCrmContext } from "../../lib/TournamentCrmContext";
 
 const mockFinances = [
     { teamId: 'team1', fee: 2000, fine: 0, status: 'Оплачено' },
@@ -35,8 +36,10 @@ const getStatusVariant = (status: string): 'success' | 'secondary' | 'destructiv
     }
 };
 
-export function FinancesTab({ teams }: { teams: Team[] }) {
-    const teamsWithFinance = teams.map(team => {
+export function FinancesTab() {
+    const { confirmedTeams } = useTournamentCrmContext();
+
+    const teamsWithFinance = confirmedTeams.map(team => {
         const finance = mockFinances.find(f => f.teamId === team.id) || { fee: 2000, fine: 0, status: 'Не оплачено' };
         return { ...team, ...finance };
     });

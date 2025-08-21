@@ -2,7 +2,7 @@
 'use client';
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
-import { Tournament } from '@/views/tournaments/public-page/ui/mock-data';
+import type { Tournament } from '@/views/tournaments/public-page/ui/mock-data';
 import { useState, useEffect } from "react";
 import { useToast } from "@/shared/hooks/use-toast";
 import { Button } from "@/shared/ui/button";
@@ -11,27 +11,32 @@ import { generateTournamentPromoAction } from "@/app/actions";
 import { generateTournamentImageAction } from "@/app/actions";
 import { Textarea } from "@/shared/ui/textarea";
 import Image from "next/image";
+import { useTournamentCrmContext } from "../../lib/TournamentCrmContext";
 
 const LOCAL_STORAGE_IMAGE_KEY_PREFIX = 'promo-image-';
 
-export function PromoTab({ tournament, onPromoAdd, onBannerChange }: { tournament: Tournament, onPromoAdd: (item: any) => void, onBannerChange: (url: string) => void }) {
+export function PromoTab() {
+    const { tournament, handleAddMedia, handleBannerChange } = useTournamentCrmContext();
     const { toast } = useToast();
     const [isVideoLoading, setIsVideoLoading] = useState(false);
     const [isImageLoading, setIsImageLoading] = useState(false);
-    const [imagePrompt, setImagePrompt] = useState(`Логотип турнира "${tournament.name}" на эпическом фоне, связанном с дисциплиной ${tournament.game}.`);
+    const [imagePrompt, setImagePrompt] = useState(tournament ? `Логотип турнира "${tournament.name}" на эпическом фоне, связанном с дисциплиной ${tournament.game}.` : '');
     const [generatedVideo, setGeneratedVideo] = useState<string | null>(null);
     const [generatedImage, setGeneratedImage] = useState<string | null>(null);
     
-    const storageKey = `${LOCAL_STORAGE_IMAGE_KEY_PREFIX}${tournament.id}`;
+    const storageKey = tournament ? `${LOCAL_STORAGE_IMAGE_KEY_PREFIX}${tournament.id}` : '';
 
     useEffect(() => {
-        const savedImage = localStorage.getItem(storageKey);
-        if (savedImage) {
-            setGeneratedImage(savedImage);
+        if (storageKey) {
+            const savedImage = localStorage.getItem(storageKey);
+            if (savedImage) {
+                setGeneratedImage(savedImage);
+            }
         }
     }, [storageKey]);
 
     const handleGeneratePromo = async () => {
+        if (!tournament) return;
         setIsVideoLoading(true);
         setGeneratedVideo(null);
 
@@ -48,7 +53,7 @@ export function PromoTab({ tournament, onPromoAdd, onBannerChange }: { tournamen
                 description: "Ролик был успешно сгенерирован и добавлен в медиа-центр.",
             });
             setGeneratedVideo(result.videoDataUri);
-            onPromoAdd({
+            handleAddMedia({
                 type: 'promo-video',
                 src: result.videoDataUri,
                 title: `${tournament.name} - Промо-ролик`
@@ -77,10 +82,10 @@ export function PromoTab({ tournament, onPromoAdd, onBannerChange }: { tournamen
             });
             setGeneratedImage(result.imageDataUri);
             localStorage.setItem(storageKey, result.imageDataUri);
-            onPromoAdd({
+            handleAddMedia({
                 type: 'image',
                 src: result.imageDataUri,
-                title: `${tournament.name} - Промо-арт`,
+                title: `${tournament?.name} - Промо-арт`,
                 dataAiHint: 'promo art'
             });
         } else {
@@ -94,13 +99,15 @@ export function PromoTab({ tournament, onPromoAdd, onBannerChange }: { tournamen
 
     const handleSetAsBanner = () => {
         if (generatedImage) {
-            onBannerChange(generatedImage);
+            handleBannerChange(generatedImage);
             toast({
                 title: "Баннер обновлен!",
                 description: "Новое изображение установлено как основной баннер турнира.",
             });
         }
     }
+
+    if (!tournament) return null;
 
     return (
         <Card>

@@ -10,8 +10,11 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { Input } from "@/shared/ui/input";
 import React from "react";
+import { useTournamentCrmContext } from "../../lib/TournamentCrmContext";
 
-export function ParticipantsTab({teams, setTeams}: {teams: any[], setTeams: React.Dispatch<React.SetStateAction<any[]>>}) {
+export function ParticipantsTab() {
+    const { teams, setTeams } = useTournamentCrmContext();
+
     const handleStatusChange = (teamId: string, newStatus: 'Подтверждена' | 'Отклонена') => {
         setTeams(currentTeams => currentTeams.map(team =>
             team.id === teamId ? { ...team, status: newStatus } : team
@@ -51,7 +54,7 @@ export function ParticipantsTab({teams, setTeams}: {teams: any[], setTeams: Reac
                                             <span className="group-hover:text-primary transition-colors">{team.name}</span>
                                         </Link>
                                     </TableCell>
-                                    <TableCell>{team.date}</TableCell>
+                                    <TableCell>{(team as any).date || new Date().toLocaleDateString()}</TableCell>
                                     <TableCell>
                                         <Badge variant={
                                             team.status === 'Подтверждена' ? "secondary" : 
