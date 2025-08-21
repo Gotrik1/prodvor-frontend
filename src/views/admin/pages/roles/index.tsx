@@ -18,38 +18,28 @@ const roles: { name: string; description: string; icon: LucideIcon }[] = [
 
 export function RolesPage() {
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Справка по ролям пользователей</CardTitle>
-        <CardDescription>
-          Описание всех доступных ролей на платформе ProDvor и их основные функции.
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <div className="border rounded-lg">
-            <Table>
-                <TableHeader>
-                    <TableRow>
-                        <TableHead>Роль</TableHead>
-                        <TableHead>Описание</TableHead>
+    <div className="border rounded-lg">
+        <Table>
+            <TableHeader>
+                <TableRow>
+                    <TableHead>Роль</TableHead>
+                    <TableHead>Описание</TableHead>
+                </TableRow>
+            </TableHeader>
+            <TableBody>
+                {roles.map(role => (
+                    <TableRow key={role.name}>
+                        <TableCell className="font-medium whitespace-nowrap">
+                            <div className="flex items-center gap-2">
+                                <role.icon className="h-5 w-5 text-primary" />
+                                {role.name}
+                            </div>
+                        </TableCell>
+                        <TableCell className="text-muted-foreground">{role.description}</TableCell>
                     </TableRow>
-                </TableHeader>
-                <TableBody>
-                    {roles.map(role => (
-                        <TableRow key={role.name}>
-                            <TableCell className="font-medium whitespace-nowrap">
-                                <div className="flex items-center gap-2">
-                                    <role.icon className="h-5 w-5 text-primary" />
-                                    {role.name}
-                                </div>
-                            </TableCell>
-                            <TableCell className="text-muted-foreground">{role.description}</TableCell>
-                        </TableRow>
-                    ))}
-                </TableBody>
-            </Table>
-        </div>
-      </CardContent>
-    </Card>
+                ))}
+            </TableBody>
+        </Table>
+    </div>
   );
 }

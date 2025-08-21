@@ -1,10 +1,11 @@
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
-import { FileText, DraftingCompass } from "lucide-react";
+import { FileText, DraftingCompass, Info } from "lucide-react";
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { CONCEPT, README } from './docs-content';
+import { RolesPage } from "../roles";
 
 const markdownComponents = {
     h1: (props: any) => <h1 className="text-3xl font-bold mt-6 mb-4 font-headline" {...props} />,
@@ -24,16 +25,17 @@ export function DocsPage() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Документация проекта</CardTitle>
+        <CardTitle>Справочный центр</CardTitle>
         <CardDescription>
-          Здесь собрана вся ключевая информация о концепции и технической реализации платформы ProDvor.
+          Здесь собрана вся ключевая информация о концепции, технической реализации и ролях на платформе ProDvor.
         </CardDescription>
       </CardHeader>
       <CardContent>
          <Tabs defaultValue="concept">
-            <TabsList className="grid w-full grid-cols-2">
+            <TabsList className="grid w-full grid-cols-3">
                 <TabsTrigger value="concept"><DraftingCompass className="mr-2 h-4 w-4" />Концепция</TabsTrigger>
-                <TabsTrigger value="readme"><FileText className="mr-2 h-4 w-4" />Техническая документация</TabsTrigger>
+                <TabsTrigger value="readme"><FileText className="mr-2 h-4 w-4" />Тех. документация</TabsTrigger>
+                <TabsTrigger value="roles"><Info className="mr-2 h-4 w-4" />Роли</TabsTrigger>
             </TabsList>
             <TabsContent value="concept" className="mt-6 prose prose-sm dark:prose-invert max-w-none">
                  <ReactMarkdown components={markdownComponents} remarkPlugins={[remarkGfm]}>
@@ -44,6 +46,9 @@ export function DocsPage() {
                 <ReactMarkdown components={markdownComponents} remarkPlugins={[remarkGfm]}>
                     {README}
                 </ReactMarkdown>
+            </TabsContent>
+            <TabsContent value="roles" className="mt-6">
+                <RolesPage />
             </TabsContent>
          </Tabs>
       </CardContent>
