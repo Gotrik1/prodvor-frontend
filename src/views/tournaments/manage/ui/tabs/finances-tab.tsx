@@ -9,7 +9,6 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { Button } from "@/shared/ui/button";
 import { CheckCircle, AlertCircle, Edit } from "lucide-react";
 import React from 'react';
-import type { Team } from '@/views/tournaments/public-page/ui/mock-data';
 import { useTournamentCrmContext } from "../../lib/TournamentCrmContext";
 
 const mockFinances = [
