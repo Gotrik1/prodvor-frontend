@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import React, { useState } from 'react';
@@ -109,7 +110,7 @@ export function FitnessSchedule({ personalOnly = false }: { personalOnly?: boole
 
     return (
         <div className="w-full">
-            <div className="grid grid-cols-7 border-t border-l border-border">
+            <div className="grid grid-cols-1 md:grid-cols-7 border-t border-l border-border">
                 {days.map(day => (
                     <div key={day} className="border-b border-r border-border min-h-[60vh]">
                         <h3 className="font-semibold text-center p-2 border-b border-border bg-muted/50">{day}</h3>
