@@ -8,6 +8,7 @@
  * - AnalyzeMatchVideoOutput - The return type for the function.
  */
 import { z } from 'zod';
+import { ai } from '@/ai/genkit';
 
 const AnalyzeMatchVideoInputSchema = z.object({
   videoDataUri: z
@@ -25,14 +26,36 @@ const AnalyzeMatchVideoOutputSchema = z.object({
 });
 export type AnalyzeMatchVideoOutput = z.infer<typeof AnalyzeMatchVideoOutputSchema>;
 
+const analysisPrompt = ai.definePrompt({
+    name: 'videoAnalysisPrompt',
+    input: { schema: AnalyzeMatchVideoInputSchema },
+    output: { schema: z.string() },
+    prompt: `
+        Analyze the provided sports match video and address the user's prompt.
+        
+        User's prompt: {{{prompt}}}
+        
+        Video for analysis:
+        {{media url=videoDataUri}}
+        
+        Provide a concise analysis based on the user's query, highlighting key tactical moments, player performance, or any other relevant aspects.
+        Format your response in Markdown.
+    `,
+});
 
-export async function analyzeMatchVideo(input: AnalyzeMatchVideoInput): Promise<AnalyzeMatchVideoOutput> {
-  console.log("Mocking video analysis for prompt:", input.prompt);
-
-  // Simulate a delay
-  await new Promise(resolve => setTimeout(resolve, 2000));
-
-  const mockAnalysis = `
+export const analyzeMatchVideoFlow = ai.defineFlow(
+  {
+    name: 'analyzeMatchVideoFlow',
+    inputSchema: AnalyzeMatchVideoInputSchema,
+    outputSchema: AnalyzeMatchVideoOutputSchema,
+  },
+  async (input) => {
+    // In a real implementation, you would use a model that supports video analysis.
+    // For this prototype, we will return a detailed mock analysis.
+    console.log("Mocking Genkit video analysis for prompt:", input.prompt);
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    
+    const mockAnalysis = `
 ## Краткий обзор матча
 
 Матч прошел в напряженной борьбе с обилием острых моментов. **Красные Ястребы** продемонстрировали отличную командную игру и прессинг, в то время как **Синие Тигры** полагались на индивидуальное мастерство и быстрые контратаки.
@@ -51,7 +74,13 @@ export async function analyzeMatchVideo(input: AnalyzeMatchVideoInput): Promise<
 **Для Синих Тигров:**
 - Улучшите реализацию моментов. У вас было несколько отличных шансов.
 - Попробуйте использовать больше фланговых атак, центр обороны соперника очень плотный.
-  `;
+    `;
+    
+    return { analysis: mockAnalysis };
+  }
+);
 
-  return { analysis: mockAnalysis };
+
+export async function analyzeMatchVideo(input: AnalyzeMatchVideoInput): Promise<AnalyzeMatchVideoOutput> {
+  return await analyzeMatchVideoFlow(input);
 }

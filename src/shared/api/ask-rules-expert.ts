@@ -8,6 +8,8 @@
  * - AskRulesExpertOutput - The return type for the function.
  */
 import { z } from 'zod';
+import { ai } from '@/ai/genkit';
+
 
 const AskRulesExpertInputSchema = z.object({
   question: z.string().describe("The user's question about sports rules."),
@@ -20,22 +22,45 @@ const AskRulesExpertOutputSchema = z.object({
 });
 export type AskRulesExpertOutput = z.infer<typeof AskRulesExpertOutputSchema>;
 
+const rulesExpertPrompt = ai.definePrompt({
+    name: 'rulesExpertPrompt',
+    input: { schema: AskRulesExpertInputSchema },
+    output: { schema: AskRulesExpertOutputSchema },
+    prompt: `
+        You are an expert on sports rules. Answer the user's question clearly and concisely.
+        If possible, cite the source of the rule.
+
+        Question: {{{question}}}
+    `,
+});
+
+export const askRulesExpertFlow = ai.defineFlow(
+    {
+        name: 'askRulesExpertFlow',
+        inputSchema: AskRulesExpertInputSchema,
+        outputSchema: AskRulesExpertOutputSchema,
+    },
+    async (input) => {
+        console.log("Mocking Genkit rules expert for question:", input.question);
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        
+        // This is a mock implementation that simulates a call to an LLM
+        // and provides a canned response for a specific question.
+        if (input.question.toLowerCase().includes('офсайд')) {
+            return {
+                answer: "В мини-футболе (футзале) положение 'вне игры' (офсайд) отсутствует. Игрок может находиться в любой точке площадки в любой момент времени.",
+                source: "Правила мини-футбола (Футзала)"
+            };
+        }
+
+        return { 
+            answer: "Я — моковая версия AI-Консультанта, использующая Genkit. В реальной версии я бы дал точный ответ на ваш вопрос. Сейчас я могу ответить только на вопрос про офсайд в мини-футболе.",
+            source: "N/A"
+        };
+    }
+);
+
 
 export async function askRulesExpert(input: AskRulesExpertInput): Promise<AskRulesExpertOutput> {
-  console.log("Mocking rules expert for question:", input.question);
-
-  // Simulate a delay
-  await new Promise(resolve => setTimeout(resolve, 1000));
-  
-  if (input.question.toLowerCase().includes('офсайд')) {
-      return {
-          answer: "В мини-футболе (футзале) положение 'вне игры' (офсайд) отсутствует. Игрок может находиться в любой точке площадки в любой момент времени.",
-          source: "Правила мини-футбола (Футзала)"
-      };
-  }
-
-  return { 
-    answer: "Я — моковая версия AI-Консультанта. В реальной версии я бы дал точный ответ на ваш вопрос, основываясь на базе знаний. Сейчас я могу ответить только на вопрос про офсайд в мини-футболе.",
-    source: "N/A"
-  };
+  return await askRulesExpertFlow(input);
 }
