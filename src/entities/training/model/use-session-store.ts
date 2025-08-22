@@ -70,7 +70,7 @@ export const useSessionStore = create<SessionState>()(
     }),
     {
       name: 'prodvor-session-storage',
-      storage: createJSONStorage(() => localStorage),
+      storage: createJSONStorage(() => sessionStorage),
     }
   )
 );
