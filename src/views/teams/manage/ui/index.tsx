@@ -17,6 +17,8 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { useState, useMemo } from "react";
 import { useToast } from "@/shared/hooks/use-toast";
 import { Label } from "@/shared/ui/label";
+import { TacticalBoard } from "./tactical-board";
+import { RosterManagement } from "./roster-management";
 
 const mockApplications = users.slice(2, 4).map(u => ({ ...u, status: 'pending' }));
 
@@ -97,51 +99,9 @@ export function TeamManagementPage({ team }: { team: Team | undefined }) {
             </div>
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
                 <div className="lg:col-span-2 space-y-8">
+                    <TacticalBoard teamMembers={teamMembers} />
+                    <RosterManagement allTeamMembers={teamMembers} />
                     <LogoGeneratorWidget />
-                    <Card>
-                        <CardHeader>
-                            <CardTitle className="flex items-center gap-2"><Users />Состав команды ({teamMembers.length})</CardTitle>
-                            <CardDescription>Управление текущими участниками вашей команды.</CardDescription>
-                        </CardHeader>
-                        <CardContent>
-                            <ul className="space-y-3">
-                                {teamMembers.map(member => (
-                                    <li key={member.id} className="flex items-center justify-between p-2 rounded-md bg-muted/30 hover:bg-muted/60 transition-colors">
-                                        <div className="flex items-center gap-3">
-                                            <Avatar>
-                                                <AvatarImage src={member.avatarUrl} />
-                                                <AvatarFallback>{member.firstName.charAt(0)}</AvatarFallback>
-                                            </Avatar>
-                                            <div>
-                                                <p className="font-semibold">{member.nickname}</p>
-                                                <p className="text-xs text-muted-foreground">{member.firstName} {member.lastName}</p>
-                                            </div>
-                                        </div>
-                                        <div className="flex items-center gap-3">
-                                            {member.id === captain?.id ? (
-                                                <Badge variant="default"><Crown className="mr-1 h-3 w-3" />Капитан</Badge>
-                                            ) : (
-                                                <DropdownMenu>
-                                                    <DropdownMenuTrigger asChild>
-                                                        <Button variant="ghost" size="icon" className="h-8 w-8">
-                                                            <MoreHorizontal className="h-4 w-4" />
-                                                        </Button>
-                                                    </DropdownMenuTrigger>
-                                                    <DropdownMenuContent align="end">
-                                                        <DropdownMenuItem><ArrowRightLeft className="mr-2 h-4 w-4" />Выставить на трансфер</DropdownMenuItem>
-                                                        <DropdownMenuItem><Handshake className="mr-2 h-4 w-4" />Отдать в аренду</DropdownMenuItem>
-                                                        <DropdownMenuItem className="text-destructive focus:bg-destructive/10 focus:text-destructive">
-                                                            <LogOut className="mr-2 h-4 w-4" />Исключить из команды
-                                                        </DropdownMenuItem>
-                                                    </DropdownMenuContent>
-                                                </DropdownMenu>
-                                            )}
-                                        </div>
-                                    </li>
-                                ))}
-                            </ul>
-                        </CardContent>
-                    </Card>
                     <Card>
                         <CardHeader>
                             <CardTitle className="flex items-center gap-2"><Mail />Заявки на вступление ({applications.length})</CardTitle>
