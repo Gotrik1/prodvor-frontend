@@ -36,9 +36,9 @@ export function RanksPage() {
         <Tabs defaultValue="player">
             <TabsList className="grid w-full grid-cols-2 md:grid-cols-4">
                 <TabsTrigger value="player"><User className="mr-2 h-4 w-4" />Игрок</TabsTrigger>
-                <TabsTrigger value="referee" disabled><Gavel className="mr-2 h-4 w-4" />Судья</TabsTrigger>
-                <TabsTrigger value="organizer" disabled><Megaphone className="mr-2 h-4 w-4" />Организатор</TabsTrigger>
-                <TabsTrigger value="coach" disabled><ClipboardList className="mr-2 h-4 w-4" />Тренер</TabsTrigger>
+                <TabsTrigger value="referee"><Gavel className="mr-2 h-4 w-4" />Судья</TabsTrigger>
+                <TabsTrigger value="organizer"><Megaphone className="mr-2 h-4 w-4" />Организатор</TabsTrigger>
+                <TabsTrigger value="coach"><ClipboardList className="mr-2 h-4 w-4" />Тренер</TabsTrigger>
             </TabsList>
             <TabsContent value="player" className="mt-6">
                 <div className="space-y-4">
