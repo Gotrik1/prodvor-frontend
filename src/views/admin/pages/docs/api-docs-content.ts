@@ -384,4 +384,15 @@ export const API_DOCS = `
 - **POST \`/store/buy/:itemId\`**: Покупка товара.
 - **GET \`/inventory\`**: Получение инвентаря текущего пользователя.
 - **POST \`/inventory/activate/:itemId\`**: Активация косметического предмета.
+
+### 4.11. Admin & Dashboard Endpoints
+
+- **GET \`/admin/stats\`**: Получение агрегированной статистики для главной страницы админ-панели.
+  - Response: \`{ totalUsers, activeTeams, activeTournaments, userRegistrationData: [...] }\`
+- **GET \`/admin/users\`**: Получение полного списка пользователей с пагинацией и фильтрами.
+  - Query params: \`?page=1&limit=20&search=...&role=...\`
+- **GET \`/admin/teams\`**: Получение полного списка команд.
+- **GET \`/admin/sponsors\`**: Получение полного списка спонсоров.
+- **GET \`/admin/playgrounds\`**: Получение полного списка площадок.
+- **GET \`/admin/tournaments\`**: Получение полного списка турниров.
 `
