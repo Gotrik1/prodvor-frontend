@@ -141,7 +141,7 @@ export function FitnessPlanPage() {
                                 </CardFooter>
                             </Card>
                         ))}
-                         <Dialog open={isPlanFormOpen} onOpenChange={handleCloseDialog}>
+                         <Dialog open={isPlanFormOpen} onOpenChange={(isOpen) => !isOpen && handleCloseDialog()}>
                             <DialogTrigger asChild>
                                 <Card className="flex items-center justify-center min-h-[200px] border-2 border-dashed hover:border-primary transition-colors cursor-pointer" onClick={() => setIsPlanFormOpen(true)}>
                                     <div className="text-center text-muted-foreground">
@@ -155,8 +155,6 @@ export function FitnessPlanPage() {
                                 const target = e.target as HTMLElement;
                                 if(target.closest('[role="combobox"]') || target.closest('[aria-haspopup="dialog"]')) {
                                     e.preventDefault();
-                                } else {
-                                    handleCloseDialog();
                                 }
                             }}>
                                 <DialogHeader>
