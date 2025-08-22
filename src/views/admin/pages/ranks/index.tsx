@@ -1,11 +1,12 @@
 
 'use client';
 
-import { ranks } from '@/mocks/ranks';
+import { ranks, allSports } from '@/mocks';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Badge } from '@/shared/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs';
 import { Construction, User, Gavel, Megaphone, ClipboardList, Briefcase, Handshake, Star, Shield, Award } from 'lucide-react';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/shared/ui/accordion';
 
 const rankColors = [
     'border-destructive/50', // Annihilator
@@ -87,14 +88,21 @@ export function RanksPage() {
                                     <Award className="h-5 w-5"/>
                                     <CardTitle>Достижения игрока</CardTitle>
                                 </div>
+                                <CardDescription>Достижения группируются по видам спорта.</CardDescription>
                             </CardHeader>
-                            <CardContent className="flex flex-col items-center justify-center min-h-[40vh] text-center p-4">
-                                <div className="mx-auto bg-primary/10 text-primary p-4 rounded-full w-fit mb-4">
-                                    <Construction className="h-10 w-10" />
-                                </div>
-                                <p className="text-muted-foreground mt-2 max-w-sm">
-                                    Раздел с уникальными достижениями для игроков находится в разработке.
-                                </p>
+                            <CardContent>
+                                <Accordion type="single" collapsible className="w-full">
+                                    {allSports.map(sport => (
+                                        <AccordionItem value={sport.id} key={sport.id}>
+                                            <AccordionTrigger>{sport.name}</AccordionTrigger>
+                                            <AccordionContent>
+                                                <div className="text-center text-muted-foreground p-4">
+                                                    <p>Достижения для этого вида спорта скоро появятся.</p>
+                                                </div>
+                                            </AccordionContent>
+                                        </AccordionItem>
+                                    ))}
+                                </Accordion>
                             </CardContent>
                         </Card>
                     </div>
