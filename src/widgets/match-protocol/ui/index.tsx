@@ -7,11 +7,12 @@ import { users } from '@/mocks';
 import Image from "next/image";
 import { MatchTimeline } from "./match-timeline";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
-import { Crown } from "lucide-react";
+import { Crown, Bot } from "lucide-react";
 import Link from "next/link";
 import { useProtocol } from "@/widgets/protocol-editor/lib/use-protocol";
 import type { BracketMatch, Tournament } from "@/views/tournaments/public-page/ui/mock-data";
 import { LiveTextFeed } from "./live-text-feed";
+import { AiAnalysisTool } from "@/views/analysis/match/ui";
 
 export function MatchProtocol({ tournament, match }: { tournament: Tournament, match: BracketMatch }) {
     const { events } = useProtocol();
@@ -27,6 +28,8 @@ export function MatchProtocol({ tournament, match }: { tournament: Tournament, m
 
     const team1Members = users.filter(u => team1.members.includes(u.id));
     const team2Members = users.filter(u => team2.members.includes(u.id));
+
+    const isMatchFinished = match.score1 !== null && match.score2 !== null;
 
 
     return (
@@ -52,9 +55,10 @@ export function MatchProtocol({ tournament, match }: { tournament: Tournament, m
             </CardHeader>
             <CardContent>
                 <Tabs defaultValue="protocol">
-                    <TabsList className="grid w-full grid-cols-2">
+                    <TabsList className="grid w-full grid-cols-2 md:grid-cols-3">
                         <TabsTrigger value="protocol">Протокол и Live</TabsTrigger>
                         <TabsTrigger value="lineups">Составы</TabsTrigger>
+                        {isMatchFinished && <TabsTrigger value="analysis" className="text-primary"><Bot className="mr-2 h-4 w-4"/>AI-Аналитика</TabsTrigger>}
                     </TabsList>
                     <TabsContent value="protocol" className="mt-6 space-y-8">
                         <MatchTimeline events={events} />
@@ -91,6 +95,11 @@ export function MatchProtocol({ tournament, match }: { tournament: Tournament, m
                             </div>
                         </div>
                     </TabsContent>
+                    {isMatchFinished && (
+                        <TabsContent value="analysis" className="mt-6">
+                            <AiAnalysisTool embedded={true} />
+                        </TabsContent>
+                    )}
                 </Tabs>
             </CardContent>
         </Card>
