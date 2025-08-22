@@ -15,6 +15,7 @@ import Link from 'next/link';
 import { Button } from '@/shared/ui/button';
 import { ExternalLink } from 'lucide-react';
 import { DataTable } from './data-table';
+import { TableRow, TableCell } from '@/shared/ui/table';
 
 export function TeamsTab() {
   const getTeamSponsors = (sponsorIds?: string[]) => {
@@ -55,9 +56,9 @@ export function TeamsTab() {
           ]}
           data={teams}
           renderRow={(team) => (
-            <tr key={team.id}>
-              <td className="p-4 align-middle font-mono text-xs">{team.id}</td>
-              <td className="p-4 align-middle">
+            <TableRow key={team.id}>
+              <TableCell className="font-mono text-xs">{team.id}</TableCell>
+              <TableCell>
                 <Link
                   href={`/admin/teams/${team.id}`}
                   className="flex items-center gap-3 group"
@@ -74,22 +75,22 @@ export function TeamsTab() {
                     {team.name}
                   </span>
                 </Link>
-              </td>
-              <td className="p-4 align-middle">
+              </TableCell>
+              <TableCell>
                 <Badge variant="secondary">{team.game}</Badge>
-              </td>
-              <td className="p-4 align-middle text-xs">
+              </TableCell>
+              <TableCell className="text-xs">
                 {users.find((u) => u.id === team.captainId)?.nickname || 'N/A'}
-              </td>
-              <td className="p-4 align-middle">{team.members.length}</td>
-              <td className="p-4 align-middle font-mono">{team.rank}</td>
-              <td className="p-4 align-middle text-xs">
+              </TableCell>
+              <TableCell>{team.members.length}</TableCell>
+              <TableCell className="font-mono">{team.rank}</TableCell>
+              <TableCell className="text-xs">
                 {getTeamSponsors(team.sponsorIds)}
-              </td>
-              <td className="p-4 align-middle text-xs">
+              </TableCell>
+              <TableCell className="text-xs">
                 {getTeamPlaygrounds(team.homePlaygroundIds)}
-              </td>
-              <td className="p-4 align-middle text-right">
+              </TableCell>
+              <TableCell className="text-right">
                 <div className="flex items-center justify-end gap-2">
                   <Button asChild variant="ghost" size="sm">
                     <Link href={`/admin/teams/${team.id}`}>Просмотр</Link>
@@ -104,8 +105,8 @@ export function TeamsTab() {
                     </Link>
                   </Button>
                 </div>
-              </td>
-            </tr>
+              </TableCell>
+            </TableRow>
           )}
         />
       </CardContent>

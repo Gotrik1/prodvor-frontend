@@ -1,1 +1,1 @@
-export { AdminDashboardPage } from './index';
+export { AdminDashboardPage } from './ui';

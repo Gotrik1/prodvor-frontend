@@ -6,6 +6,7 @@ import { allTournaments as tournaments } from '@/views/tournaments/public-page/u
 import { Badge } from '@/shared/ui/badge';
 import { Progress } from '@/shared/ui/progress';
 import { DataTable } from './data-table';
+import { TableCell, TableRow } from '@/shared/ui/table';
 
 const statusColors: Record<string, string> = {
     'АНОНС': 'bg-purple-500/20 text-purple-300 border-purple-500/30',
@@ -26,20 +27,20 @@ export function TournamentsTab() {
                 headers={['ID', 'Название', 'Дисциплина', 'Участники', 'Статус']}
                 data={tournaments}
                 renderRow={(t) => (
-                    <tr key={t.id}>
-                        <td className="p-4 align-middle font-mono text-xs">{t.id}</td>
-                        <td className="p-4 align-middle font-medium">{t.name}</td>
-                        <td className="p-4 align-middle">{t.game}</td>
-                        <td className="p-4 align-middle">
+                    <TableRow key={t.id}>
+                        <TableCell className="font-mono text-xs">{t.id}</TableCell>
+                        <TableCell className="font-medium">{t.name}</TableCell>
+                        <TableCell>{t.game}</TableCell>
+                        <TableCell>
                             <div className="flex items-center gap-2">
                                 <Progress value={(t.participants / t.maxParticipants) * 100} className="w-20" />
                                 <span>{t.participants}/{t.maxParticipants}</span>
                             </div>
-                        </td>
-                        <td className="p-4 align-middle">
+                        </TableCell>
+                        <TableCell>
                             <Badge className={statusColors[t.status]}>{t.status}</Badge>
-                        </td>
-                    </tr>
+                        </TableCell>
+                    </TableRow>
                 )}
             />
         </CardContent>

@@ -13,6 +13,7 @@ import { useMemo } from 'react';
 import Link from 'next/link';
 import { getUserDisciplines } from '../lib';
 import { DataTable } from './data-table';
+import { TableCell, TableRow } from '@/shared/ui/table';
 
 export function UsersTab() {
     const { toast } = useToast();
@@ -53,14 +54,14 @@ export function UsersTab() {
                     renderRow={(user: User) => {
                         const userDisciplines = getUserDisciplines(user);
                         return (
-                        <tr key={user.id}>
-                            <td className="p-4 align-top font-mono text-xs whitespace-nowrap">
+                        <TableRow key={user.id}>
+                            <TableCell className="align-top font-mono text-xs whitespace-nowrap">
                                 <div className="flex items-center gap-2">
                                     <span>{user.id}</span>
                                     <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => copyToClipboard(user.id, 'User')}><Copy className="h-3 w-3"/></Button>
                                 </div>
-                            </td>
-                            <td className="p-4 align-top">
+                            </TableCell>
+                            <TableCell className="align-top">
                                 <div className="flex items-center gap-3">
                                     <Avatar className="h-9 w-9">
                                         <AvatarImage src={user.avatarUrl} />
@@ -71,9 +72,9 @@ export function UsersTab() {
                                         <p className="text-xs text-muted-foreground">@{user.nickname}</p>
                                     </div>
                                 </div>
-                            </td>
-                            <td className="p-4 align-top"><Badge variant="outline">{user.role}</Badge></td>
-                            <td className="p-4 align-top min-w-[150px] max-w-[200px]">
+                            </TableCell>
+                            <TableCell className="align-top"><Badge variant="outline">{user.role}</Badge></TableCell>
+                            <TableCell className="align-top min-w-[150px] max-w-[200px]">
                                  <TooltipProvider>
                                     <Tooltip>
                                         <TooltipTrigger asChild>
@@ -88,14 +89,14 @@ export function UsersTab() {
                                         </TooltipContent>
                                     </Tooltip>
                                 </TooltipProvider>
-                            </td>
-                            <td className="p-4 align-top text-xs whitespace-nowrap">
+                            </TableCell>
+                            <TableCell className="align-top text-xs whitespace-nowrap">
                                 <div className="flex flex-col gap-1">
                                     <div className="flex items-center gap-1"><Mail className="h-3 w-3"/>{user.email}</div>
                                     <div className="flex items-center gap-1"><Phone className="h-3 w-3"/>{user.phone}</div>
                                 </div>
-                            </td>
-                             <td className="p-4 align-top">
+                            </TableCell>
+                             <TableCell className="align-top">
                                 <div className="flex flex-col gap-1 text-xs">
                                    {getTeamForUser(user.id).map(team => (
                                         <Link key={team.id} href={`/admin/teams/${team.id}`} className="text-blue-400 hover:underline whitespace-nowrap">
@@ -103,18 +104,18 @@ export function UsersTab() {
                                         </Link>
                                    ))}
                                 </div>
-                            </td>
-                            <td className="p-4 align-top">
+                            </TableCell>
+                            <TableCell className="align-top">
                                 <div className="flex items-center gap-3 text-xs whitespace-nowrap">
                                     <div className="flex items-center gap-1" title="Друзья"><Heart className="h-3 w-3"/>{user.friends.length}</div>
                                     <div className="flex items-center gap-1" title="Подписчики"><UserPlus className="h-3 w-3"/>{user.followers.length}</div>
                                     <div className="flex items-center gap-1" title="Подписки"><Rss className="h-3 w-3"/>{user.followingUsers.length + user.following.length}</div>
                                 </div>
-                            </td>
-                            <td className="p-4 align-top text-xs">
+                            </TableCell>
+                            <TableCell className="align-top text-xs">
                                 {getUserSponsors(user.sponsorIds)}
-                            </td>
-                            <td className="p-4 align-top text-right">
+                            </TableCell>
+                            <TableCell className="align-top text-right">
                                 <div className="flex items-center justify-end gap-2">
                                     <Button asChild variant="ghost" size="sm"><Link href={`/admin/users/${user.id}`}>Просмотр</Link></Button>
                                     <Button asChild variant="ghost" size="icon" className="h-8 w-8">
@@ -123,8 +124,8 @@ export function UsersTab() {
                                         </Link>
                                     </Button>
                                 </div>
-                            </td>
-                        </tr>
+                            </TableCell>
+                        </TableRow>
                     )}}
                 />
             </CardContent>

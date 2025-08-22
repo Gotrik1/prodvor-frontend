@@ -4,6 +4,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
 import { allSports } from '@/mocks';
 import { DataTable } from './data-table';
+import { TableCell, TableRow } from '@/shared/ui/table';
 
 export function SportsTab() {
   return (
@@ -17,15 +18,15 @@ export function SportsTab() {
             headers={['ID', 'Название', 'Поддисциплины']}
             data={allSports.filter((s) => s.isTeamSport)}
             renderRow={(sport) => (
-              <tr key={sport.id}>
-                <td className="p-4 align-middle font-mono text-xs">
+              <TableRow key={sport.id}>
+                <TableCell className="font-mono text-xs">
                   {sport.id}
-                </td>
-                <td className="p-4 align-middle font-medium">{sport.name}</td>
-                <td className="p-4 align-middle text-xs">
+                </TableCell>
+                <TableCell className="font-medium">{sport.name}</TableCell>
+                <TableCell className="text-xs">
                   {sport.subdisciplines?.map((s) => s.name).join(', ')}
-                </td>
-              </tr>
+                </TableCell>
+              </TableRow>
             )}
           />
         </CardContent>
@@ -39,15 +40,15 @@ export function SportsTab() {
             headers={['ID', 'Название', 'Поддисциплины']}
             data={allSports.filter((s) => !s.isTeamSport)}
             renderRow={(sport) => (
-              <tr key={sport.id}>
-                <td className="p-4 align-middle font-mono text-xs">
+              <TableRow key={sport.id}>
+                <TableCell className="font-mono text-xs">
                   {sport.id}
-                </td>
-                <td className="p-4 align-middle font-medium">{sport.name}</td>
-                <td className="p-4 align-middle text-xs">
+                </TableCell>
+                <TableCell className="font-medium">{sport.name}</TableCell>
+                <TableCell className="text-xs">
                   {sport.subdisciplines?.map((s) => s.name).join(', ')}
-                </td>
-              </tr>
+                </TableCell>
+              </TableRow>
             )}
           />
         </CardContent>
