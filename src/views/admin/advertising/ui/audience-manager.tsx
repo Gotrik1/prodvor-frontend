@@ -10,7 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { users, teams, allSports } from '@/mocks';
 import { BarChart, Filter, Users, DollarSign, Save } from 'lucide-react';
 import { Slider } from '@/shared/ui/slider';
-import { Badge } from '@/shared/ui/badge';
+import { Badge } from "@/shared/ui/badge";
 import type { User } from '@/mocks';
 
 const allDisciplines = allSports.map(s => s.name);

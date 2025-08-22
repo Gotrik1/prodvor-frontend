@@ -152,5 +152,5 @@ export function CampaignManager() {
                 </div>
             </CardContent>
         </Card>
-    )
+    );
 }
