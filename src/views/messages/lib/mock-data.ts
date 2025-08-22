@@ -69,4 +69,3 @@ export const mockMessages: Record<string, Message[]> = {
 Object.keys(mockMessages).forEach(key => {
     if (!mockMessages[key]) mockMessages[key] = [];
 })
-
