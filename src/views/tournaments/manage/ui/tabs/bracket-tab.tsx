@@ -10,6 +10,8 @@ import React, { useState, useEffect } from "react";
 import type { Team, BracketMatch } from '@/views/tournaments/public-page/ui/mock-data';
 import { useProtocol } from "@/widgets/protocol-editor/lib/use-protocol";
 import { useTournamentCrmContext } from "../../lib/TournamentCrmContext";
+import { updateRatings } from "@/shared/lib/rating";
+import { useToast } from "@/shared/hooks/use-toast";
 
 export function BracketTab() {
     const { confirmedTeams, generatedBracket } = useTournamentCrmContext();
@@ -17,6 +19,7 @@ export function BracketTab() {
     const [rounds, setRounds] = useState<BracketMatch[][]>(generatedBracket);
     const [scores, setScores] = useState<Record<string, { score1: string, score2: string }>>({});
     const [error, setError] = useState<string | null>(null);
+    const { toast } = useToast();
 
     useEffect(() => {
         setRounds(generatedBracket);
@@ -61,13 +64,30 @@ export function BracketTab() {
     };
 
     const handleSaveResult = (roundIndex: number, matchIndex: number) => {
-        const matchId = rounds[roundIndex][matchIndex].id;
-        const matchScores = scores[matchId] || { score1: '0', score2: '0' };
+        const match = rounds[roundIndex][matchIndex];
+        const matchScores = scores[match.id] || { score1: '0', score2: '0' };
         
         const score1 = parseInt(matchScores.score1, 10);
         const score2 = parseInt(matchScores.score2, 10);
         
         if (isNaN(score1) || isNaN(score2)) return;
+
+        // --- ELO Calculation Step ---
+        if (match.team1 && match.team2) {
+            const scoreA: 1 | 0.5 | 0 = score1 > score2 ? 1 : score1 < score2 ? 0 : 0.5;
+            const { newRatingA, newRatingB } = updateRatings(match.team1.rank, match.team2.rank, scoreA);
+            
+            console.log(`[ELO Update] Match: ${match.team1.name} vs ${match.team2.name}`);
+            console.log(`[ELO Update] ${match.team1.name}: ${match.team1.rank} -> ${newRatingA}`);
+            console.log(`[ELO Update] ${match.team2.name}: ${match.team2.rank} -> ${newRatingB}`);
+            
+            toast({
+                title: "Рейтинг обновлен (симуляция)",
+                description: `${match.team1.name}: ${newRatingA}, ${match.team2.name}: ${newRatingB}`
+            });
+            // In a real app, you would now update the state or database with these new ratings.
+        }
+        // --- End ELO Calculation Step ---
 
         const newRounds = JSON.parse(JSON.stringify(rounds)); // Deep copy
         newRounds[roundIndex][matchIndex] = {
