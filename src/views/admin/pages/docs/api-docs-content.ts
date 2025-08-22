@@ -13,9 +13,20 @@ export const API_DOCS = `
 
 ---
 
-## 2. Сущности
+## 2. Архитектура данных: Роли и Профили
 
-### 2.1. User (Пользователь)
+Ключевой аспект архитектуры — разделение **базовой аутентификации** от **ролевых данных**.
+
+- **User (Пользователь):** Центральная сущность, отвечающая за вход, основные данные (имя, аватар) и социальные связи. У одного пользователя может быть несколько ролей.
+- **Профили (\`PlayerProfile\`, \`RefereeProfile\` и т.д.):** Отдельные сущности, связанные с \`User\` через \`userId\`. Они хранят уникальные данные, специфичные для каждой роли.
+
+---
+
+## 3. Сущности
+
+### 3.1. User (Пользователь) - Базовая сущность
+
+Содержит общую информацию для всех ролей.
 
 \`\`\`json
 {
@@ -25,14 +36,12 @@ export const API_DOCS = `
   "nickname": "string (unique)",
   "avatarUrl": "string (URL)",
   "email": "string (email, unique)",
-  "role": "string (Enum: 'Игрок', 'Тренер', 'Судья', 'Менеджер', 'Организатор', 'Болельщик', ...)",
+  "roles": ["string (Enum: 'Игрок', 'Тренер', ...)", "..."],
   "gender": "string (Enum: 'мужской', 'женский')",
-  "elo": "number",
   "age": "number",
   "city": "string",
   "phone": "string",
   "bio": "string (optional)",
-  "disciplines": ["string (sportId)", "..."],
   "friends": ["string (userId)", "..."],
   "followers": ["string (userId)", "..."],
   "followingUsers": ["string (userId)", "..."],
@@ -41,7 +50,52 @@ export const API_DOCS = `
 }
 \`\`\`
 
-### 2.2. Team (Команда)
+### 3.2. PlayerProfile (Профиль Игрока)
+
+Связан с User. Хранит игровую статистику.
+
+\`\`\`json
+{
+  "id": "string (UUID)",
+  "userId": "string (foreign key to User)",
+  "elo": "number",
+  "mainDiscipline": "string (sportId)",
+  "stats": {
+    "totalMatches": "number",
+    "wins": "number",
+    "goals": "number",
+    "assists": "number",
+    "mvpAwards": "number"
+  }
+}
+\`\`\`
+
+### 3.3. RefereeProfile (Профиль Судьи)
+
+\`\`\`json
+{
+  "id": "string (UUID)",
+  "userId": "string (foreign key to User)",
+  "category": "string (e.g., 'Первая', 'Вторая')",
+  "certificationId": "string",
+  "matchesJudged": "number",
+  "rating": "number (1-5)"
+}
+\`\`\`
+
+### 3.4. CoachProfile (Профиль Тренера)
+
+\`\`\`json
+{
+  "id": "string (UUID)",
+  "userId": "string (foreign key to User)",
+  "specialization": "string (e.g., 'Тактика', 'Физ. подготовка')",
+  "experienceYears": "number",
+  "licenseId": "string"
+}
+\`\`\`
+
+### 3.5. Team (Команда)
 
 \`\`\`json
 {
@@ -59,7 +113,7 @@ export const API_DOCS = `
 }
 \`\`\`
 
-### 2.3. Tournament (Турнир)
+### 3.6. Tournament (Турнир)
 
 \`\`\`json
 {
@@ -80,7 +134,7 @@ export const API_DOCS = `
 }
 \`\`\`
 
-### 2.4. Playground (Площадка)
+### 3.7. Playground (Площадка)
 
 \`\`\`json
 {
@@ -96,7 +150,7 @@ export const API_DOCS = `
 }
 \`\`\`
 
-### 2.5. Post (Пост)
+### 3.8. Post (Пост)
 
 \`\`\`json
 {
@@ -117,7 +171,7 @@ export const API_DOCS = `
 }
 \`\`\`
 
-### 2.6. Challenge (Вызов)
+### 3.9. Challenge (Вызов)
 
 \`\`\`json
 {
@@ -130,7 +184,7 @@ export const API_DOCS = `
 }
 \`\`\`
 
-### 2.7. TrainingPlan (План тренировок)
+### 3.10. TrainingPlan (План тренировок)
 
 \`\`\`json
 {
@@ -151,23 +205,25 @@ export const API_DOCS = `
 
 ---
 
-## 3. Эндпоинты
+## 4. Эндпоинты
 
-### 3.1. Auth & Users (\`/auth\`, \`/users\`)
+### 4.1. Auth & Users (\`/auth\`, \`/users\`)
 
 - **POST \`/auth/register\`**: Регистрация нового пользователя.
-  - Body: \`{ firstName, lastName, nickname, email, password, role, ... }\`
+  - Body: \`{ firstName, lastName, nickname, email, password, roles, ... }\`
 - **POST \`/auth/login\`**: Аутентификация пользователя.
   - Body: \`{ email, password }\`
   - Response: \`{ accessToken, user }\`
 - **GET \`/users/me\`**: Получение профиля текущего пользователя (требует авторизации).
+  - Response: Возвращает объект \`User\` и массив связанных профилей (\`PlayerProfile\`, \`RefereeProfile\` и т.д.).
 - **GET \`/users/:id\`**: Получение публичного профиля пользователя.
-- **PUT \`/users/me\`**: Обновление профиля текущего пользователя.
+  - Response: Возвращает объект \`User\` и связанные профили.
+- **PUT \`/users/me\`**: Обновление профиля текущего пользователя (включая связанные профили).
 - **POST \`/users/:id/follow\`**: Подписаться/отписаться на пользователя.
 - **POST \`/users/friend-request\`**: Отправить/принять/отклонить запрос в друзья.
   - Body: \`{ targetUserId: "string", action: "send" | "accept" | "decline" }\`
 
-### 3.2. Teams (\`/teams\`)
+### 4.2. Teams (\`/teams\`)
 
 - **POST \`/teams\`**: Создание новой команды.
   - Body: \`{ name, sportId, memberIds, logoUrl }\`
@@ -183,7 +239,7 @@ export const API_DOCS = `
   - Body: \`{ userId }\`
 - **DELETE \`/teams/:id/members/:userId\`**: Удаление игрока из команды.
 
-### 3.3. Tournaments (\`/tournaments\`)
+### 4.3. Tournaments (\`/tournaments\`)
 
 - **POST \`/tournaments\`**: Создание нового турнира (только для организатора).
 - **GET \`/tournaments\`**: Получение списка всех турниров.
@@ -200,7 +256,7 @@ export const API_DOCS = `
 - **POST \`/tournaments/:id/matches/:matchId/events\`**: Добавление события в протокол матча.
   - Body: \`{ type, minute, playerId, ... }\`
 
-### 3.4. Playgrounds (\`/playgrounds\`)
+### 4.4. Playgrounds (\`/playgrounds\`)
 
 - **POST \`/playgrounds\`**: Добавление новой площадки (с премодерацией).
 - **GET \`/playgrounds\`**: Получение списка всех площадок с фильтрацией (\`?city=...\`, \`?sportId=...\`).
@@ -208,7 +264,7 @@ export const API_DOCS = `
 - **POST \`/playgrounds/:id/follow\`**: Подписаться/отписаться от площадки.
 - **GET \`/playgrounds/:id/followers\`**: Получить список подписчиков площадки.
 
-### 3.5. Social & Feed (\`/feed\`, \`/posts\`, \`/challenges\`)
+### 4.5. Social & Feed (\`/feed\`, \`/posts\`, \`/challenges\`)
 
 - **GET \`/feed\`**: Получение персонализированной ленты новостей для текущего пользователя.
 - **POST \`/posts\`**: Создание нового поста.
@@ -220,7 +276,7 @@ export const API_DOCS = `
 - **POST \`/challenges/:id/accept\`**: Принять вызов.
 - **POST \`/challenges/:id/decline\`**: Отклонить вызов.
 
-### 3.6. AI Services (\`/ai\`)
+### 4.6. AI Services (\`/ai\`)
 
 - **POST \`/ai/generate-logo\`**: Генерация логотипа.
   - Body: \`{ prompt: "string" }\`
@@ -232,7 +288,7 @@ export const API_DOCS = `
   - Body: \`{ question: "string" }\`
 - **POST \`/ai/tournament-promo\`**: Генерация промо-материалов для турнира.
 
-### 3.7. Training Center (\`/training\`)
+### 4.7. Training Center (\`/training\`)
 
 - **GET \`/training/plans\`**: Получение списка планов тренировок пользователя.
 - **POST \`/training/plans\`**: Создание нового плана.
@@ -244,20 +300,20 @@ export const API_DOCS = `
   - Body: \`{ activityType, activityId, date, time, repeat? }\`
 - **DELETE \`/training/schedule/:activityId\`**: Удаление активности из расписания.
 
-### 3.8. Referee Center (\`/referee-center\`)
+### 4.8. Referee Center (\`/referee-center\`)
 
 - **GET \`/referee-center/courses\`**: Получение списка курсов для судей.
 - **GET \`/referee-center/knowledge-base\`**: Получение базы знаний (правил).
 - **GET \`/referee-center/cases\`**: Получение разборов спорных кейсов.
 - **POST \`/referee-center/attestation\`**: Запрос на прохождение аттестации.
 
-### 3.9. Gamification (\`/gamification\`)
+### 4.9. Gamification (\`/gamification\`)
 
 - **GET \`/quests\`**: Получение списка доступных квестов (daily, weekly, event).
 - **POST \`/quests/:id/claim\`**: Получение награды за выполненный квест.
 - **GET \`/users/:id/achievements\`**: Получение списка достижений пользователя.
 
-### 3.10. Store & Inventory (\`/store\`, \`/inventory\`)
+### 4.10. Store & Inventory (\`/store\`, \`/inventory\`)
 
 - **GET \`/store/items\`**: Получение списка товаров в магазине.
 - **POST \`/store/buy/:itemId\`**: Покупка товара.
