@@ -7,9 +7,7 @@
  * - AnalyzeMatchVideoInput - The input type for the function.
  * - AnalyzeMatchVideoOutput - The return type for the function.
  */
-import { ai } from '@/shared/lib/genkit';
 import { z } from 'zod';
-import { googleAI } from '@genkit-ai/googleai';
 
 const AnalyzeMatchVideoInputSchema = z.object({
   videoDataUri: z
@@ -28,40 +26,32 @@ const AnalyzeMatchVideoOutputSchema = z.object({
 export type AnalyzeMatchVideoOutput = z.infer<typeof AnalyzeMatchVideoOutputSchema>;
 
 
-const analyzeVideoFlow = ai.defineFlow(
-  {
-    name: 'analyzeVideoFlow',
-    inputSchema: AnalyzeMatchVideoInputSchema,
-    outputSchema: AnalyzeMatchVideoOutputSchema,
-  },
-  async ({ videoDataUri, prompt }) => {
-    try {
-      const { text } = await ai.generate({
-        model: googleAI.model('gemini-1.5-flash'),
-        prompt: [
-          {
-            text: `You are an expert sports analyst. Your task is to analyze the provided sports match video and answer the user's query.
-            Provide a detailed, structured analysis. Use markdown for formatting (e.g., ## Заголовок, **жирный текст**). Be insightful and offer tactical advice where appropriate.
-            The language of the response must be Russian.
-            
-            User's query: "${prompt}"`,
-          },
-          { media: { url: videoDataUri } },
-        ],
-        config: {
-            temperature: 0.5,
-        }
-      });
-
-      return { analysis: text };
-    } catch (e: unknown) {
-      console.error('Flow Error:', e);
-      const errorMessage = e instanceof Error ? e.message : 'An unknown error occurred during video analysis.';
-      return { error: errorMessage };
-    }
-  }
-);
-
 export async function analyzeMatchVideo(input: AnalyzeMatchVideoInput): Promise<AnalyzeMatchVideoOutput> {
-  return await analyzeVideoFlow(input);
+  console.log("Mocking video analysis for prompt:", input.prompt);
+
+  // Simulate a delay
+  await new Promise(resolve => setTimeout(resolve, 2000));
+
+  const mockAnalysis = `
+## Краткий обзор матча
+
+Матч прошел в напряженной борьбе с обилием острых моментов. **Красные Ястребы** продемонстрировали отличную командную игру и прессинг, в то время как **Синие Тигры** полагались на индивидуальное мастерство и быстрые контратаки.
+
+### Ключевые моменты
+- **15'** - Опасный штрафной в исполнении Синих Тигров, вратарь на высоте.
+- **32'** - Красные Ястребы открывают счет после затяжной атаки.
+- **58'** - Синие Тигры сравнивают счет благодаря быстрой контратаке.
+- **75'** - Спорный момент в штрафной Красных Ястребов, судья не назначил пенальти.
+
+### Тактические советы
+**Для Красных Ястребов:**
+- Продолжайте использовать высокий прессинг, это приносит плоды.
+- Обратите внимание на оборону при контратаках соперника, оставляете слишком много свободных зон.
+
+**Для Синих Тигров:**
+- Улучшите реализацию моментов. У вас было несколько отличных шансов.
+- Попробуйте использовать больше фланговых атак, центр обороны соперника очень плотный.
+  `;
+
+  return { analysis: mockAnalysis };
 }

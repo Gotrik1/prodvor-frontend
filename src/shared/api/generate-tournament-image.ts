@@ -3,9 +3,7 @@
 /**
  * @fileOverview Generates a promotional image for a tournament.
  */
-import { ai } from '@/shared/lib/genkit';
 import { z } from 'zod';
-import { googleAI } from '@genkit-ai/googleai';
 
 const GenerateTournamentImageInputSchema = z.object({
   prompt: z.string().describe("A detailed text description for the tournament promotional image."),
@@ -18,36 +16,12 @@ const GenerateTournamentImageOutputSchema = z.object({
 });
 export type GenerateTournamentImageOutput = z.infer<typeof GenerateTournamentImageOutputSchema>;
 
-const generateImageFlow = ai.defineFlow(
-  {
-    name: 'generateImageFlow',
-    inputSchema: GenerateTournamentImageInputSchema,
-    outputSchema: GenerateTournamentImageOutputSchema,
-  },
-  async ({ prompt }) => {
-    try {
-      const { media } = await ai.generate({
-        model: 'googleai/gemini-2.0-flash-preview-image-generation',
-        prompt: `Epic, 4k, cinematic, ultra-high resolution promotional background image for a sports tournament banner. Style: photorealistic, dramatic lighting. The image should be a visually stunning background for a wide aspect ratio banner. Description: "${prompt}"`,
-        config: {
-          responseModalities: ['IMAGE', 'TEXT'],
-          negativePrompt: "text, words, letters, characters, fonts, typography",
-        },
-      });
-
-      if (!media?.url) {
-        throw new Error('Image generation failed to return a media URL.');
-      }
-
-      return { imageDataUri: media.url };
-    } catch (e: unknown) {
-      console.error('Flow Error:', e);
-      const errorMessage = e instanceof Error ? e.message : 'An unknown error occurred during image generation.';
-      return { error: errorMessage };
-    }
-  }
-);
-
 export async function generateTournamentImage(input: GenerateTournamentImageInput): Promise<GenerateTournamentImageOutput> {
-  return await generateImageFlow(input);
+  console.log("Mocking tournament image generation for prompt:", input.prompt);
+  await new Promise(resolve => setTimeout(resolve, 2000));
+  
+  // Return a placeholder image URL, which the component can handle.
+  const placeholderUrl = 'https://placehold.co/1200x400.png';
+  
+  return { imageDataUri: placeholderUrl };
 }

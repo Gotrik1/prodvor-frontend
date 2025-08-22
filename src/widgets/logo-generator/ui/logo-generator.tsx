@@ -73,10 +73,10 @@ export function LogoGenerator() {
              <Skeleton className="w-full h-full rounded-lg" />
           </div>
         ))}
-        {logos.map((logoDataUri, index) => (
+        {logos.map((logoUri, index) => (
           <div key={index} className="group relative aspect-square w-full overflow-hidden rounded-lg border">
             <Image
-              src={logoDataUri}
+              src={logoUri}
               alt={`Generated logo ${index + 1}`}
               fill
               className="object-cover"
