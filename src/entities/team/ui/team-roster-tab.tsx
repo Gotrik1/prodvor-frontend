@@ -1,12 +1,13 @@
 'use client';
 
-import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/shared/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
 import { UserPlus, Crown } from "lucide-react";
 import type { User } from "@/mocks";
 import Link from 'next/link';
 import { Avatar, AvatarImage, AvatarFallback } from "@/shared/ui/avatar";
 import { Badge } from "@/shared/ui/badge";
 import { Button } from "@/shared/ui/button";
+import { useToast } from "@/shared/hooks/use-toast";
 
 const TeamRoster = ({ teamMembers, captainId }: { teamMembers: User[], captainId: string }) => (
     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
@@ -34,17 +35,30 @@ const TeamRoster = ({ teamMembers, captainId }: { teamMembers: User[], captainId
 );
 
 
-export const TeamRosterTab = ({ teamMembers, captainId }: { teamMembers: User[], captainId: string }) => (
-    <Card>
-        <CardHeader>
-            <CardTitle>Состав команды ({teamMembers.length})</CardTitle>
-            <CardDescription>
-                Игроки, представляющие команду в текущем сезоне.
-                <Button variant="outline" size="sm" className="ml-4"><UserPlus className="mr-2 h-4 w-4" /> Подать заявку</Button>
-            </CardDescription>
-        </CardHeader>
-        <CardContent>
-            <TeamRoster teamMembers={teamMembers} captainId={captainId} />
-        </CardContent>
-    </Card>
-);
+export const TeamRosterTab = ({ teamMembers, captainId }: { teamMembers: User[], captainId: string }) => {
+    const { toast } = useToast();
+
+    const handleApply = () => {
+        toast({
+            title: "Заявка отправлена!",
+            description: "Капитан команды рассмотрит вашу заявку в ближайшее время.",
+        });
+    };
+
+    return (
+        <Card>
+            <CardHeader>
+                <CardTitle>Состав команды ({teamMembers.length})</CardTitle>
+                <CardDescription>
+                    Игроки, представляющие команду в текущем сезоне.
+                    <Button variant="outline" size="sm" className="ml-4" onClick={handleApply}>
+                        <UserPlus className="mr-2 h-4 w-4" /> Подать заявку
+                    </Button>
+                </CardDescription>
+            </CardHeader>
+            <CardContent>
+                <TeamRoster teamMembers={teamMembers} captainId={captainId} />
+            </CardContent>
+        </Card>
+    );
+}
