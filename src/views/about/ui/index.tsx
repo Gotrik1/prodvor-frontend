@@ -1,33 +1,13 @@
+
 import { Button } from "@/shared/ui/button";
 import Image from "next/image";
 import Link from "next/link";
-
-const Logo = () => (
-    <Image 
-      src="https://placehold.co/64x64.png"
-      alt="ProDvor Logo" 
-      width={40} 
-      height={40} 
-      className="object-contain"
-      data-ai-hint="logo"
-    />
-);
+import { HomeHeader } from "@/widgets/home-header";
+import { HomeFooter } from "@/widgets/home-footer";
 
 export function AboutPage() {
     return (
         <div className="flex flex-col min-h-screen bg-background text-foreground">
-            <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-                <div className="container mx-auto flex h-16 items-center justify-between px-4 md:px-6">
-                    <Link href="/" className="flex items-center gap-2 font-bold text-xl">
-                        <Logo />
-                        <span className="font-headline">ProDvor</span>
-                    </Link>
-                    <Button asChild>
-                        <Link href="/auth">Войти</Link>
-                    </Button>
-                </div>
-            </header>
-
             <main className="flex-1">
                 <section className="py-16 md:py-24">
                     <div className="container mx-auto px-4 md:px-6">
@@ -61,12 +41,6 @@ export function AboutPage() {
                     </div>
                 </section>
             </main>
-
-            <footer className="border-t border-border/40">
-                <div className="container mx-auto px-4 md:px-6 py-6 text-center text-muted-foreground">
-                    <p>© 2025 ProDvor. Все права защищены.</p>
-                </div>
-            </footer>
         </div>
     );
 }

@@ -12,19 +12,9 @@ import { Separator } from "@/shared/ui/separator";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { useState, useEffect } from 'react';
 import type { Tournament } from './mock-data';
+import { DashboardHeader } from "@/widgets/dashboard-header";
 
 const LOCAL_STORAGE_BANNER_KEY_PREFIX = 'promo-banner-';
-
-const Logo = () => (
-    <Image 
-      src="https://placehold.co/64x64.png"
-      alt="ProDvor Logo" 
-      width={40} 
-      height={40} 
-      className="object-contain"
-      data-ai-hint="logo"
-    />
-);
 
 const StatCard = ({ title, value, icon: Icon }: { title: string, value: string | React.ReactNode, icon: React.ElementType }) => (
     <Card className="text-center bg-card/50 backdrop-blur-sm">
@@ -101,18 +91,6 @@ export function TournamentPublicPage({ tournament: initialTournament }: { tourna
 
     return (
         <div className="flex flex-col min-h-screen bg-background text-foreground">
-            <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-                <div className="container mx-auto flex h-16 items-center justify-between px-4 md:px-6">
-                <Link href="/" className="flex items-center gap-2 font-bold text-xl">
-                    <Logo />
-                    <span className="font-headline">ProDvor</span>
-                </Link>
-                <Button asChild>
-                    <Link href="/auth">Войти</Link>
-                </Button>
-                </div>
-            </header>
-
             <main className="flex-1">
                 {/* Hero section with banner */}
                 <section className="relative w-full h-[60vh] md:h-[70vh] flex items-center justify-center text-center">
@@ -155,11 +133,20 @@ export function TournamentPublicPage({ tournament: initialTournament }: { tourna
                         <h2 className="text-3xl font-bold font-headline mb-8">Спонсоры турнира</h2>
                         <div className="flex justify-center items-center flex-wrap gap-8">
                             {sponsors.map(sponsor => (
-                                 <Link href={`/sponsors/${sponsor.id}`} key={sponsor.id} className="block group">
-                                    <Avatar className="h-24 w-24 transition-transform group-hover:scale-110 border-4 border-transparent group-hover:border-primary">
-                                        <AvatarImage src={sponsor.logoUrl} alt={sponsor.name}/>
-                                        <AvatarFallback>{sponsor.name.charAt(0)}</AvatarFallback>
-                                    </Avatar>
+                                 <Link href={`/admin/sponsors/${sponsor.id}`} key={sponsor.id} className="block group">
+                                    <TooltipProvider>
+                                        <Tooltip>
+                                            <TooltipTrigger asChild>
+                                                <Avatar className="h-24 w-24 transition-transform group-hover:scale-110 border-4 border-transparent group-hover:border-primary">
+                                                    <AvatarImage src={sponsor.logoUrl} alt={sponsor.name}/>
+                                                    <AvatarFallback>{sponsor.name.charAt(0)}</AvatarFallback>
+                                                </Avatar>
+                                            </TooltipTrigger>
+                                            <TooltipContent>
+                                                <p>{sponsor.name}</p>
+                                            </TooltipContent>
+                                        </Tooltip>
+                                    </TooltipProvider>
                                  </Link>
                             ))}
                         </div>
@@ -181,12 +168,6 @@ export function TournamentPublicPage({ tournament: initialTournament }: { tourna
                     </div>
                 </section>
             </main>
-
-            <footer className="border-t border-border/40">
-                <div className="container mx-auto px-4 md:px-6 py-6 text-center text-muted-foreground">
-                <p>© 2025 ProDvor. Все права защищены.</p>
-                </div>
-            </footer>
         </div>
     );
 }

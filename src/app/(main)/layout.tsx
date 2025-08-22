@@ -6,6 +6,7 @@ import { DashboardHeader } from "@/widgets/dashboard-header";
 import { DashboardSidebar } from "@/widgets/dashboard-sidebar";
 import { DashboardFooter } from "@/widgets/dashboard-footer";
 import { usePathname } from 'next/navigation';
+import { HomeHeader } from "@/widgets/home-header";
 
 function DashboardLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -25,6 +26,7 @@ function DashboardLayout({ children }: { children: React.ReactNode }) {
 function PublicPageLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex flex-col min-h-screen bg-background text-foreground">
+        <HomeHeader />
         <main className="flex-1">
             {children}
         </main>
@@ -38,9 +40,12 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   
   const isAuthRoute = pathname.startsWith('/auth');
   
-  const isPublicTournamentRoute = /^\/tournaments\/[^/]+(\/(register|match\/.+|hub))?$/.test(pathname);
+  // This regex now correctly treats the tournament hub as a public-facing but distinct section,
+  // not requiring the dashboard sidebar.
+  const isPublicTournamentRoute = /^\/tournaments\/[^/]+(\/(register|hub))?$/.test(pathname);
+  const isMatchRoute = /^\/tournaments\/[^/]+\/match\/[^/]+$/.test(pathname);
   
-  const showPublicLayout = publicRoutes.includes(pathname) || isAuthRoute || isPublicTournamentRoute;
+  const showPublicLayout = publicRoutes.includes(pathname) || isAuthRoute || isPublicTournamentRoute || isMatchRoute;
 
   if (showPublicLayout) {
       return <PublicPageLayout>{children}</PublicPageLayout>;
