@@ -1,16 +1,16 @@
 
 'use client';
 
-import { users, teams, playgrounds, allSports, ranks } from "@/mocks";
+import { users, teams, ranks } from "@/mocks";
 import type { User } from "@/mocks/users";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
-import { Briefcase, Dumbbell, Film, History, Mail, MapPin, MessageSquare, Phone, Rss, UserPlus, Users as UsersIcon, Gamepad2, Heart, Activity, TrendingUp, Shield, Star, Trophy, Gem, Award } from "lucide-react";
+import { Briefcase, Dumbbell, Film, History, MapPin, MessageSquare, Rss, UserPlus } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 import { Button } from "@/shared/ui/button";
 import Link from "next/link";
 import { useUserStore } from "@/widgets/dashboard-header/model/user-store";
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/shared/ui/chart";
+import { ChartContainer, ChartTooltipContent } from "@/shared/ui/chart";
 import { PolarGrid, PolarAngleAxis, Radar, RadarChart, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip } from "recharts";
 import { SocialTab } from "./player-page-social-tab";
 import { StatsTab } from "./player-page-stats-tab";
@@ -47,8 +47,8 @@ const getRankForElo = (elo: number) => {
 
 const FormBadge = ({ result }: { result: 'W' | 'L' | 'D' }) => {
     const baseClasses = "flex items-center justify-center w-6 h-6 rounded-md font-bold text-xs";
-    if (result === 'W') return <div className={`${baseClasses} bg-success/80 text-success-foreground border border-success/30`}>W</div>;
-    if (result === 'L') return <div className={`${baseClasses} bg-destructive/80 text-destructive-foreground border border-destructive/30`}>L</div>;
+    if (result === 'W') return <div className={`${baseClasses} bg-green-500/20 text-green-300 border border-green-500/30`}>W</div>;
+    if (result === 'L') return <div className={`${baseClasses} bg-red-500/20 text-red-300 border border-red-500/30`}>L</div>;
     return <div className={`${baseClasses} bg-secondary text-secondary-foreground border border-secondary/30`}>D</div>;
 };
 
@@ -132,14 +132,6 @@ export function PlayerPageTemplate({ user: profileUser }: { user?: User }) {
                                     <Line type="monotone" dataKey="elo" stroke="hsl(var(--primary))" strokeWidth={2} dot={false} />
                                 </LineChart>
                             </ChartContainer>
-                        </CardContent>
-                    </Card>
-                    <Card>
-                        <CardHeader><CardTitle className="text-base">Трофеи</CardTitle></CardHeader>
-                        <CardContent className="flex justify-around items-center">
-                             <Trophy className="h-12 w-12 text-amber-400" />
-                             <Trophy className="h-10 w-10 text-slate-400" />
-                             <Trophy className="h-8 w-8 text-amber-600" />
                         </CardContent>
                     </Card>
                 </div>

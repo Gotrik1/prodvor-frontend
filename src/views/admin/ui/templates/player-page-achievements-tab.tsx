@@ -4,7 +4,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/shared/ui/accordion";
 import { allSports, achievementsBySport, type User } from "@/mocks";
-import { Award, BarChart4, Gem } from "lucide-react";
+import { Award, Gem } from "lucide-react";
 import { Progress } from "@/shared/ui/progress";
 
 const StatCard = ({ title, value, icon: Icon }: { title: string, value: string | number, icon: React.ElementType }) => (
