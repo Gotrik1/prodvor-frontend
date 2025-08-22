@@ -80,7 +80,9 @@ export function PromoTab() {
                 description: "Картинка была успешно сгенерирована и добавлена в медиа-центр.",
             });
             setGeneratedImage(result.imageDataUri);
-            localStorage.setItem(storageKey, result.imageDataUri);
+            if (storageKey) {
+                localStorage.setItem(storageKey, result.imageDataUri);
+            }
             handleAddMedia({
                 type: 'image',
                 src: result.imageDataUri,

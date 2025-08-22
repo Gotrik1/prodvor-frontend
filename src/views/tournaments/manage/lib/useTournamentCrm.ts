@@ -59,7 +59,7 @@ export function useTournamentCrm(tournamentId: string) {
     useEffect(() => {
         const savedBanner = localStorage.getItem(storageKey);
         if (savedBanner && tournament && tournament.bannerUrl !== savedBanner) {
-            setTournament(prev => ({...prev!, bannerUrl: savedBanner}));
+            setTournament(prev => prev ? ({...prev!, bannerUrl: savedBanner}) : undefined);
         }
     }, [storageKey, tournament]);
 
@@ -76,12 +76,12 @@ export function useTournamentCrm(tournamentId: string) {
 
     const handleTournamentChange = (data: Partial<Tournament>) => {
         if (tournament) {
-            setTournament(prev => ({ ...prev!, ...data }));
+            setTournament(prev => prev ? ({ ...prev!, ...data }) : undefined);
         }
     };
      const handleBannerChange = (url: string) => {
         if (tournament) {
-            setTournament(prev => ({ ...prev!, bannerUrl: url }));
+            setTournament(prev => prev ? ({ ...prev!, bannerUrl: url }) : undefined);
             localStorage.setItem(storageKey, url);
         }
     };
