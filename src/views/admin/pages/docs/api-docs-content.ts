@@ -95,7 +95,71 @@ export const API_DOCS = `
 }
 \`\`\`
 
-### 3.5. Team (Команда)
+### 3.5. OrganizerProfile (Профиль Организатора)
+
+\`\`\`json
+{
+  "id": "string (UUID)",
+  "userId": "string (foreign key to User)",
+  "tournamentsOrganized": ["string (tournamentId)", "..."],
+  "organizationName": "string (optional)",
+  "rating": "number (1-5)"
+}
+\`\`\`
+
+### 3.6. ManagerProfile (Профиль Менеджера)
+
+\`\`\`json
+{
+  "id": "string (UUID)",
+  "userId": "string (foreign key to User)",
+  "agency": "string (optional)",
+  "managedTeams": ["string (teamId)", "..."],
+  "managedPlayers": ["string (userId)", "..."]
+}
+\`\`\`
+
+### 3.7. SponsorProfile (Профиль Спонсора)
+
+\`\`\`json
+{
+  "id": "string (UUID)",
+  "userId": "string (foreign key to User)",
+  "companyName": "string (optional)",
+  "sponsoredTournaments": ["string (tournamentId)", "..."],
+  "sponsoredTeams": ["string (teamId)", "..."],
+  "contactInfo": {
+    "person": "string",
+    "email": "string",
+    "phone": "string"
+  }
+}
+\`\`\`
+
+### 3.8. FanProfile (Профиль Болельщика)
+
+\`\`\`json
+{
+  "id": "string (UUID)",
+  "userId": "string (foreign key to User)",
+  "favoriteTeams": ["string (teamId)", "..."],
+  "supportLevel": "string (e.g., 'Новичок', 'Легенда')",
+  "matchesWatched": "number"
+}
+\`\`\`
+
+### 3.9. ModeratorProfile (Профиль Модератора)
+
+\`\`\`json
+{
+  "id": "string (UUID)",
+  "userId": "string (foreign key to User)",
+  "permissions": ["string (e.g., 'manage_users', 'delete_posts')"],
+  "moderationZone": "string (e.g., 'all', 'tournaments')"
+}
+\`\`\`
+
+### 3.10. Team (Команда)
 
 \`\`\`json
 {
@@ -113,7 +177,7 @@ export const API_DOCS = `
 }
 \`\`\`
 
-### 3.6. Tournament (Турнир)
+### 3.11. Tournament (Турнир)
 
 \`\`\`json
 {
@@ -134,7 +198,7 @@ export const API_DOCS = `
 }
 \`\`\`
 
-### 3.7. Playground (Площадка)
+### 3.12. Playground (Площадка)
 
 \`\`\`json
 {
@@ -150,7 +214,7 @@ export const API_DOCS = `
 }
 \`\`\`
 
-### 3.8. Post (Пост)
+### 3.13. Post (Пост)
 
 \`\`\`json
 {
@@ -171,7 +235,7 @@ export const API_DOCS = `
 }
 \`\`\`
 
-### 3.9. Challenge (Вызов)
+### 3.14. Challenge (Вызов)
 
 \`\`\`json
 {
@@ -184,7 +248,7 @@ export const API_DOCS = `
 }
 \`\`\`
 
-### 3.10. TrainingPlan (План тренировок)
+### 3.15. TrainingPlan (План тренировок)
 
 \`\`\`json
 {
@@ -215,7 +279,7 @@ export const API_DOCS = `
   - Body: \`{ email, password }\`
   - Response: \`{ accessToken, user }\`
 - **GET \`/users/me\`**: Получение профиля текущего пользователя (требует авторизации).
-  - Response: Возвращает объект \`User\` и массив связанных профилей (\`PlayerProfile\`, \`RefereeProfile\` и т.д.).
+  - Response: Возвращает объект \`User\` и массив связанных профилей (\`PlayerProfile\`, \`RefereeProfile\`, \`FanProfile\` и т.д.).
 - **GET \`/users/:id\`**: Получение публичного профиля пользователя.
   - Response: Возвращает объект \`User\` и связанные профили.
 - **PUT \`/users/me\`**: Обновление профиля текущего пользователя (включая связанные профили).
