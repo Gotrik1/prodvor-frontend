@@ -253,6 +253,7 @@ export const API_DOCS = `
 - **GET \`/tournaments/:id/bracket\`**: Получение турнирной сетки.
 - **POST \`/tournaments/:id/matches/:matchId/score\`**: Обновление счета матча (только для судьи/организатора).
   - Body: \`{ score1, score2 }\`
+  - **Примечание:** Этот эндпоинт должен триггерить на бэкенде пересчет ELO-рейтинга для команд.
 - **POST \`/tournaments/:id/matches/:matchId/events\`**: Добавление события в протокол матча.
   - Body: \`{ type, minute, playerId, ... }\`
 
