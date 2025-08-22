@@ -26,8 +26,8 @@ export function PaybackChartCard() {
                         <ComposedChart data={quarterlyForecast}>
                             <CartesianGrid vertical={false} />
                             <XAxis dataKey="quarter" />
-                            <YAxis yAxisId="left" stroke="hsl(var(--primary))" unit=" M" />
-                            <YAxis yAxisId="right" orientation="right" stroke="hsl(var(--accent))" unit=" M" />
+                            <YAxis yAxisId="left" stroke="hsl(var(--primary))" unit="M" />
+                            <YAxis yAxisId="right" orientation="right" stroke="hsl(var(--accent))" unit="M" />
                             <Tooltip formatter={(value: number) => value.toFixed(1)} content={<ChartTooltipContent />} />
                             <Legend />
                             <Bar yAxisId="left" dataKey="revenue" fill="hsl(var(--primary))" name="Доход, млн ₽" radius={[4, 4, 0, 0]} />

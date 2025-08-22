@@ -87,7 +87,7 @@ export function useAdSettings() {
     
      const quarterlyForecast = useMemo(() => {
         const baseTotalRevenue = initialQuarterlyForecast.reduce((sum, q) => sum + q.revenue, 0);
-        const newTotalRevenue = annualRevenue * (baseTotalRevenue / 22.2); // Adjust based on initial base
+        const newTotalRevenue = annualRevenue;
         
         return initialQuarterlyForecast.map(q => {
             const ratio = q.revenue / baseTotalRevenue;

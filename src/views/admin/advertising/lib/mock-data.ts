@@ -43,10 +43,10 @@ export const sensitivityAnalysis = [
 ];
 
 export const initialQuarterlyForecast = [
-    { quarter: "2025-Q1", mau: 320, impressions: 36.9, ecpm: 105, fill: 60, revenue: 9.3, ebitda: -2.7 },
-    { quarter: "2025-Q2", mau: 380, impressions: 43.8, ecpm: 110, fill: 65, revenue: 12.4, ebitda: 1.7 },
-    { quarter: "2025-Q3", mau: 440, impressions: 50.6, ecpm: 112, fill: 72, revenue: 15.7, ebitda: 7.4 },
-    { quarter: "2025-Q4", mau: 500, impressions: 57.6, ecpm: 115, fill: 78, revenue: 19.4, ebitda: 13.1 },
+    { quarter: "2025-Q1", mau: 320, impressions: 36.9, ecpm: 105, fill: 60, revenue: 2.3, ebitda: -2.7 },
+    { quarter: "2025-Q2", mau: 380, impressions: 43.8, ecpm: 110, fill: 65, revenue: 3.1, ebitda: 1.7 },
+    { quarter: "2025-Q3", mau: 440, impressions: 50.6, ecpm: 112, fill: 72, revenue: 4.1, ebitda: 7.4 },
+    { quarter: "2025-Q4", mau: 500, impressions: 57.6, ecpm: 115, fill: 78, revenue: 5.1, ebitda: 13.1 },
 ];
 
 export const growthLevers = [

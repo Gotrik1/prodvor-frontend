@@ -22,7 +22,7 @@ export function SensitivityAnalysisCard() {
                     <RechartsBarChart data={sensitivityAnalysis} accessibilityLayer>
                         <CartesianGrid vertical={false} />
                         <XAxis dataKey="scenario" tickLine={false} tickMargin={10} axisLine={false} />
-                        <YAxis unit=" M" />
+                        <YAxis unit="M" />
                         <Tooltip content={<ChartTooltipContent />} />
                         <Bar dataKey="revenue" fill="var(--color-revenue)" radius={4} name="Выручка, млн ₽" />
                     </RechartsBarChart>
