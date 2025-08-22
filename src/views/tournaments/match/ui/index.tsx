@@ -6,9 +6,11 @@ import type { Tournament } from '@/views/tournaments/public-page/ui/mock-data';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Button } from '@/shared/ui/button';
 import Link from 'next/link';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Bot } from 'lucide-react';
 import { MatchProtocol } from '@/widgets/match-protocol';
 import { useProtocol } from '@/widgets/protocol-editor/lib/use-protocol';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs';
+import { AiAnalysisTool } from '@/views/analysis/match/ui';
 
 export function MatchPage({ tournament }: { tournament?: Tournament }) {
     const { activeMatch } = useProtocol();
@@ -32,6 +34,8 @@ export function MatchPage({ tournament }: { tournament?: Tournament }) {
             </div>
         );
     }
+    
+    const isMatchFinished = activeMatch.score1 !== null && activeMatch.score2 !== null;
 
     return (
         <div className="container mx-auto p-4 md:p-6 lg:p-8">
@@ -43,7 +47,23 @@ export function MatchPage({ tournament }: { tournament?: Tournament }) {
                     </Link>
                 </Button>
             </div>
-            <MatchProtocol tournament={tournament} match={activeMatch} />
+            <Tabs defaultValue="protocol">
+                 <TabsList className="grid w-full grid-cols-2">
+                    <TabsTrigger value="protocol">Протокол матча</TabsTrigger>
+                    {isMatchFinished ? (
+                         <TabsTrigger value="analysis"><Bot className="mr-2 h-4 w-4"/>AI-Аналитика</TabsTrigger>
+                    ) : (
+                         <TabsTrigger value="analysis" disabled><Bot className="mr-2 h-4 w-4"/>AI-Аналитика</TabsTrigger>
+                    )}
+                </TabsList>
+                <TabsContent value="protocol" className="mt-6">
+                     <MatchProtocol tournament={tournament} match={activeMatch} />
+                </TabsContent>
+                 <TabsContent value="analysis" className="mt-6">
+                    <AiAnalysisTool embedded={true} />
+                </TabsContent>
+            </Tabs>
+           
         </div>
     );
 }

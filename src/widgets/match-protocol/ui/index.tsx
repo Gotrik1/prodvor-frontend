@@ -12,7 +12,6 @@ import Link from "next/link";
 import { useProtocol } from "@/widgets/protocol-editor/lib/use-protocol";
 import type { BracketMatch, Tournament } from "@/views/tournaments/public-page/ui/mock-data";
 import { LiveTextFeed } from "./live-text-feed";
-import { AiAnalysisTool } from "@/views/analysis/match/ui";
 
 export function MatchProtocol({ tournament, match }: { tournament: Tournament, match: BracketMatch }) {
     const { events } = useProtocol();
@@ -55,10 +54,9 @@ export function MatchProtocol({ tournament, match }: { tournament: Tournament, m
             </CardHeader>
             <CardContent>
                 <Tabs defaultValue="protocol">
-                    <TabsList className="grid w-full grid-cols-2 md:grid-cols-3">
+                    <TabsList className="grid w-full grid-cols-2">
                         <TabsTrigger value="protocol">Протокол и Live</TabsTrigger>
                         <TabsTrigger value="lineups">Составы</TabsTrigger>
-                        {isMatchFinished && <TabsTrigger value="analysis" className="text-primary"><Bot className="mr-2 h-4 w-4"/>AI-Аналитика</TabsTrigger>}
                     </TabsList>
                     <TabsContent value="protocol" className="mt-6 space-y-8">
                         <MatchTimeline events={events} />
@@ -95,11 +93,6 @@ export function MatchProtocol({ tournament, match }: { tournament: Tournament, m
                             </div>
                         </div>
                     </TabsContent>
-                    {isMatchFinished && (
-                        <TabsContent value="analysis" className="mt-6">
-                            <AiAnalysisTool embedded={true} />
-                        </TabsContent>
-                    )}
                 </Tabs>
             </CardContent>
         </Card>

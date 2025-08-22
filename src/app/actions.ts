@@ -6,7 +6,7 @@ import { generateNewsDigest } from "@/shared/api/generate-news-digest";
 import { sendTournamentAnnouncement, type SendTournamentAnnouncementInput } from "@/shared/api/send-tournament-announcement";
 import { generateTournamentImage, type GenerateTournamentImageInput } from "@/shared/api/generate-tournament-image";
 import { generateTournamentPromo, type GenerateTournamentPromoInput } from "@/shared/api/generate-tournament-promo";
-import { analyzeMatchVideo, type AnalyzeMatchVideoInput } from "@/shared/api/analyze-match-video";
+import { analyzeMatchVideo, type AnalyzeMatchVideoInput, type AnalyzeMatchVideoOutput } from "@/shared/api/analyze-match-video";
 import { askRulesExpert, type AskRulesExpertInput } from "@/shared/api/ask-rules-expert";
 
 
@@ -33,10 +33,11 @@ export async function generateTournamentPromoAction(input: GenerateTournamentPro
     return await generateTournamentPromo(input);
 }
 
-export async function analyzeMatchVideoAction(input: AnalyzeMatchVideoInput) {
+export async function analyzeMatchVideoAction(input: AnalyzeMatchVideoInput): Promise<AnalyzeMatchVideoOutput> {
     return await analyzeMatchVideo(input);
 }
 
 export async function askRulesExpertAction(input: AskRulesExpertInput) {
     return await askRulesExpert(input);
 }
+

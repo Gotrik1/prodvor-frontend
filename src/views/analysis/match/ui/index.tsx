@@ -7,6 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/sha
 import { Textarea } from '@/shared/ui/textarea';
 import { Bot, Clapperboard, Film, Loader2, UploadCloud, Wand2, Star } from 'lucide-react';
 import { analyzeMatchVideoAction } from '@/app/actions';
+import type { AnalyzeMatchVideoInput } from '@/shared/api/analyze-match-video';
 import { useToast } from '@/shared/hooks/use-toast';
 import { Alert, AlertDescription, AlertTitle } from '@/shared/ui/alert';
 import { AlertTriangle } from 'lucide-react';
