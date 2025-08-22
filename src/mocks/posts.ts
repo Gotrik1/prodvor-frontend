@@ -15,7 +15,7 @@ export const posts: Post[] = [
   {
     id: 'post1',
     author: users.find(u => u.nickname === 'Terminator')!,
-    team: teams.find(t => t.name === 'Ночные Снайперы'),
+    team: teams.find(t => t.name.startsWith('Ночные Снайперы')),
     content: 'Отличная игра сегодня! Всех с победой над "Стальными Ястребами"! Готовимся к следующему вызову.',
     timestamp: '2025-08-15T10:00:00.000Z',
     likes: 25,
@@ -40,7 +40,7 @@ export const posts: Post[] = [
   {
     id: 'post4',
     author: users.find(u => u.nickname === 'Terminator')!,
-    team: teams.find(t => t.name === 'Ночные Снайперы'),
+    team: teams.find(t => t.name.startsWith('Ночные Снайперы')),
     content: 'Тренировка завтра в 19:00 на нашей домашней площадке. Не опаздывать!',
     timestamp: '2025-08-13T09:00:00.000Z',
     likes: 18,
@@ -49,7 +49,7 @@ export const posts: Post[] = [
   {
     id: 'post5',
     author: users.find(u => u.nickname === 'Wolf')!,
-    team: teams.find(t => t.name === 'Стальные Ястребы'),
+    team: teams.find(t => t.name.startsWith('Стальные Ястребы')),
     content: 'Провели отличную тренировку по тактике. "Ночные Снайперы", ждите нас!',
     timestamp: '2025-08-12T18:45:00.000Z',
     likes: 31,
