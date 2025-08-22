@@ -17,6 +17,7 @@ import { useRouter } from 'next/navigation';
 import { SplitTemplateSelector, splitTemplates } from './split-template-selector';
 import { ScheduleActivityDialog } from './schedule-activity-dialog';
 import { Activity } from './activity-library';
+import { useSessionStore } from '@/entities/training/model/use-session-store';
 
 interface SplitTemplate {
     name: string;
@@ -30,6 +31,7 @@ export function FitnessPlanPage() {
     const router = useRouter();
     const { plans, addPlan, isPlanFormOpen, setIsPlanFormOpen, selectedPlanType, setSelectedPlanType } = usePlanStore();
     const { addScheduledPlan } = useScheduleStore();
+    const { startSession } = useSessionStore();
     const [selectedSplitTemplate, setSelectedSplitTemplate] = useState<SplitTemplate | null>(null);
     const [planToSchedule, setPlanToSchedule] = useState<WorkoutPlan | null>(null);
 
@@ -60,6 +62,7 @@ export function FitnessPlanPage() {
     }
     
     const handleStartWorkout = (plan: WorkoutPlan) => {
+        startSession(plan);
         router.push(`/training-center/session/${plan.id}`);
     };
 

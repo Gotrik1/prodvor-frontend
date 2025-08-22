@@ -12,6 +12,8 @@ import { ArrowLeft, Check, Timer, X, SkipForward, Flag, Info } from 'lucide-reac
 import { Progress } from '@/shared/ui/progress';
 import { Alert, AlertDescription, AlertTitle } from '@/shared/ui/alert';
 import type { WorkoutPlan, Exercise, PlanDay } from '@/views/fitness-plan/ui/types';
+import { Label } from '@/shared/ui/label';
+import { Input } from '@/shared/ui/input';
 
 const useTimer = (initialSeconds = 60, onEnd: () => void) => {
     const [seconds, setSeconds] = useState(initialSeconds);
@@ -135,6 +137,23 @@ export function WorkoutSessionPage({ planId }: { planId: string }) {
     const handleSkipRest = () => {
         stopTimer();
         setIsResting(false);
+    }
+
+    if (!currentDay || !currentExercise || !sessionExerciseResult) {
+        return (
+            <div className="flex items-center justify-center min-h-[80vh] p-4">
+                <Card className="text-center">
+                    <CardHeader>
+                        <CardTitle>Ошибка загрузки тренировки</CardTitle>
+                        <CardContent>
+                             <Button asChild className="mt-4">
+                                <Link href="/training-center">Вернуться</Link>
+                            </Button>
+                        </CardContent>
+                    </CardHeader>
+                </Card>
+            </div>
+        );
     }
 
     if (isResting) {
