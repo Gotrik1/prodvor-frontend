@@ -8,63 +8,8 @@ import Image from 'next/image';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 import { useToast } from "@/shared/hooks/use-toast";
 import Link from "next/link";
+import { mockStoreItems } from '../lib/mock-data';
 
-const mockStoreItems = [
-    {
-      id: 'item-1',
-      name: 'Золотая рамка "Чемпион"',
-      description: 'Покажите всем, кто здесь победитель.',
-      category: 'Рамки для аватара',
-      price: 500,
-      imageUrl: 'https://placehold.co/150x150.png',
-      dataAiHint: 'gold frame',
-    },
-    {
-      id: 'item-2',
-      name: 'Эффект "Горящий мяч"',
-      description: 'Анимированный эффект для страницы команды.',
-      category: 'Эффекты для профиля',
-      price: 1200,
-      imageUrl: 'https://placehold.co/150x150.png',
-      dataAiHint: 'fireball',
-    },
-    {
-      id: 'item-3',
-      name: 'Рамка "Неоновый киберпанк"',
-      description: 'Стильная анимированная рамка для аватара.',
-      category: 'Рамки для аватара',
-      price: 750,
-      imageUrl: 'https://placehold.co/150x150.png',
-      dataAiHint: 'neon frame',
-    },
-    {
-      id: 'item-4',
-      name: 'Эффект "Легендарное сияние"',
-      description: 'Золотое свечение вокруг вашего профиля.',
-      category: 'Эффекты для профиля',
-      price: 1500,
-      imageUrl: 'https://placehold.co/150x150.png',
-      dataAiHint: 'gold aura',
-    },
-    {
-      id: 'item-5',
-      name: 'Пак из 5 генераций лого',
-      description: '+5 попыток для AI-генератора логотипов.',
-      category: 'Бустеры',
-      price: 300,
-      imageUrl: 'https://placehold.co/150x150.png',
-      dataAiHint: 'logo pack',
-    },
-     {
-      id: 'item-6',
-      name: 'Бустер опыта x2 (3 дня)',
-      description: 'Удваивает получаемый опыт на 72 часа.',
-      category: 'Бустеры',
-      price: 400,
-      imageUrl: 'https://placehold.co/150x150.png',
-      dataAiHint: 'xp boost',
-    },
-];
 
 const categories = [
     { id: 'all', name: 'Все товары', icon: Gem },
@@ -128,13 +73,13 @@ export function StorePage() {
                                                 <CardTitle className="text-lg mb-1">{item.name}</CardTitle>
                                                 <CardDescription>{item.description}</CardDescription>
                                             </CardContent>
-                                            <CardContent className="p-4 pt-0 flex justify-between items-center">
+                                            <CardFooter className="p-4 pt-0 flex justify-between items-center">
                                                 <div className="flex items-center gap-2 text-xl font-bold text-primary">
                                                     <Gem className="h-5 w-5"/>
                                                     <span>{item.price}</span>
                                                 </div>
                                                 <Button onClick={() => handleBuy(item.name)}>Купить</Button>
-                                            </CardContent>
+                                            </CardFooter>
                                         </Card>
                                     ))}
                                 </div>

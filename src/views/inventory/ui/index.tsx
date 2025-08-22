@@ -17,40 +17,8 @@ import { Badge } from '@/shared/ui/badge';
 import { cn } from '@/shared/lib/utils';
 import { useToast } from '@/shared/hooks/use-toast';
 import Link from 'next/link';
+import { mockStoreItems } from '@/views/store/lib/mock-data';
 
-const mockInventoryItems = [
-  {
-    id: 'item-1',
-    name: 'Золотая рамка "Чемпион"',
-    description:
-      'Покажите всем, кто здесь победитель. Сверкающая рамка для вашего аватара.',
-    category: 'Рамки для аватара',
-    imageUrl: 'https://placehold.co/150x150.png',
-    dataAiHint: 'gold frame',
-    type: 'cosmetic',
-  },
-  {
-    id: 'item-2',
-    name: 'Эффект "Горящий мяч"',
-    description:
-      'Добавляет анимированный эффект горящего мяча на страницу вашей команды.',
-    category: 'Эффекты для профиля',
-    imageUrl: 'https://placehold.co/150x150.png',
-    dataAiHint: 'fireball',
-    type: 'effect',
-  },
-  {
-    id: 'item-5',
-    name: 'Пак из 5 генераций лого',
-    description:
-      'Дополнительные 5 попыток для создания идеального логотипа с помощью AI.',
-    category: 'Бустеры',
-    imageUrl: 'https://placehold.co/150x150.png',
-    dataAiHint: 'logo pack',
-    type: 'consumable',
-    quantity: 5,
-  },
-];
 
 const categoryIcons: Record<string, React.ElementType> = {
   'Рамки для аватара': Palette,
@@ -59,7 +27,7 @@ const categoryIcons: Record<string, React.ElementType> = {
 };
 
 export function InventoryPage() {
-  const [inventory, setInventory] = useState(mockInventoryItems);
+  const [inventory, setInventory] = useState(mockStoreItems);
   const [activeItemId, setActiveItemId] = useState('item-1');
   const { toast } = useToast();
 
