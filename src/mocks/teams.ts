@@ -15,7 +15,7 @@ export interface Team {
   rank: number;
   homePlaygroundIds?: string[];
   dataAiHint: string;
-  followers: string[]; // Array of user IDs
+  followers: string[]; // Array of user IDs or team IDs
   following: string[]; // Array of team IDs
   sponsorIds?: string[]; // Array of sponsor IDs
 }
