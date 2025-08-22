@@ -105,7 +105,7 @@ export function DashboardSidebar() {
                     <Link href="/lfg">
                         <SidebarMenuButton>
                             <Search />
-                            <span>Поиск игры</span>
+                            <span>Хаб сообщества</span>
                         </SidebarMenuButton>
                     </Link>
                 </SidebarMenuItem>
