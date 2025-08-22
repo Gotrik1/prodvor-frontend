@@ -1,4 +1,3 @@
-
 export const mockStoreItems = [
   {
     id: 'pro-coach',
