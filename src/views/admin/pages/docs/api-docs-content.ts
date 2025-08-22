@@ -241,6 +241,67 @@ export const API_DOCS = `
 }
 \`\`\`
 
+### 3.16. TrainingPlan (План тренировок)
+\`\`\`json
+{
+  "id": "string (UUID)",
+  "userId": "string (userId)",
+  "name": "string",
+  "type": "string (e.g., '4-day-split')",
+  "days": [
+    {
+      "dayName": "string (e.g., 'Спина, трицепс')",
+      "exercises": [
+        {
+          "name": "string (e.g., 'Тяга штанги')",
+          "sets": "number",
+          "reps": "string (e.g., '8-10')",
+          "weight": "string (e.g., '60 кг')",
+          "restBetweenSets": "number (sec)",
+          "restAfterExercise": "number (sec)"
+        }
+      ]
+    }
+  ]
+}
+\`\`\`
+
+### 3.17. ScheduledActivity (Запланированная активность)
+\`\`\`json
+{
+  "id": "string (UUID)",
+  "userId": "string (userId)",
+  "name": "string",
+  "type": "string (e.g., 'template', 'match', 'recovery')",
+  "startDate": "string (ISO 8601)",
+  "time": "string (HH:MM)"
+}
+\`\`\`
+
+### 3.18. WorkoutSessionResult (Результат тренировки)
+\`\`\`json
+{
+  "id": "string (UUID)",
+  "userId": "string (userId)",
+  "planId": "string (trainingPlanId)",
+  "startTime": "string (ISO 8601)",
+  "endTime": "string (ISO 8601)",
+  "dayResults": [
+      {
+          "dayName": "string",
+          "exercises": [
+              {
+                  "exerciseName": "string",
+                  "sets": [
+                      { "completed": true, "actualReps": 10, "actualWeight": 60 }
+                  ]
+              }
+          ]
+      }
+  ]
+}
+\`\`\`
+
 ---
 
 ## 4. Эндпоинты
@@ -359,6 +420,46 @@ export const API_DOCS = `
 - **POST \`/lfg\`**: Разместить объявление о поиске.
   - **Auth:** Требуется.
   - **Body:** \`{ "type": "player_lfg" | "team_lfg", "teamId": "string (optional)", "requiredRole": "string", "message": "string" }\`.
+
+### 4.6. Training Center (Тренировочный центр)
+
+- **GET \`/training/plans\`**: Получить список всех планов тренировок текущего пользователя.
+  - **Auth:** Требуется.
+  - **Response:** \`[TrainingPlan]\`.
+
+- **POST \`/training/plans\`**: Создать новый план тренировок.
+  - **Auth:** Требуется.
+  - **Body:** \`TrainingPlan\` object (без \`id\` и \`userId\`).
+  - **Response:** \`TrainingPlan\` object (с присвоенным \`id\`).
+
+- **PUT \`/training/plans/:id\`**: Обновить существующий план.
+  - **Auth:** Требуется.
+
+- **DELETE \`/training/plans/:id\`**: Удалить план.
+  - **Auth:** Требуется.
+
+- **GET \`/training/schedule\`**: Получить расписание активностей пользователя.
+  - **Auth:** Требуется.
+  - **Query Params:** \`?startDate=YYYY-MM-DD\`, \`?endDate=YYYY-MM-DD\`.
+  - **Response:** \`[ScheduledActivity]\`.
+
+- **POST \`/training/schedule\`**: Добавить новую активность в расписание.
+  - **Auth:** Требуется.
+  - **Body:** \`ScheduledActivity\` object (без \`id\` и \`userId\`).
+  - **Response:** \`ScheduledActivity\` object.
+
+- **DELETE \`/training/schedule/:id\`**: Удалить активность из расписания.
+  - **Auth:** Требуется.
+
+- **POST \`/training/sessions/start\`**: Начать новую тренировочную сессию.
+  - **Auth:** Требуется.
+  - **Body:** \`{ "planId": "string" }\`.
+  - **Response:** \`{ "sessionId": "string", "startTime": "ISO 8601" }\`.
+
+- **POST \`/training/sessions/:id/finish\`**: Завершить тренировку и сохранить результаты.
+  - **Auth:** Требуется.
+  - **Body:** \`WorkoutSessionResult\` object (без \`id\`, \`userId\`).
+  - **Response:** \`{ "success": true }\`.
 
 ---
 
