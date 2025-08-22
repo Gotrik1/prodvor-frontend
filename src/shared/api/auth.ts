@@ -1,9 +1,9 @@
+
 import { users } from '@/mocks';
 import type { User } from '@/mocks';
 
 /**
  * Mock function to simulate user login.
- * In the future, this will be replaced with Firebase Authentication.
  * @param email - The user's email.
  * @param password - The user's password.
  * @returns The user object if login is successful, otherwise null.
@@ -23,7 +23,6 @@ export async function signIn(email: string, password?: string): Promise<User | n
 
 /**
  * Mock function to simulate user registration.
- * In the future, this will be replaced with Firebase Authentication.
  * @param userData - The new user's data.
  * @returns The created user object.
  */
@@ -44,6 +43,5 @@ export async function signUp(userData: Omit<User, 'id'>): Promise<User> {
  */
 export async function signOut(): Promise<void> {
     console.log('User signed out.');
-    // In a real app, this would call Firebase's signOut method.
     return Promise.resolve();
 }
