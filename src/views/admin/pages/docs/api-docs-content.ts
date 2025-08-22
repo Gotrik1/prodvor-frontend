@@ -1,3 +1,4 @@
+
 export const API_DOCS = `
 # ProDvor - Документация по API (v1)
 
@@ -170,6 +171,20 @@ export const API_DOCS = `
 }
 \`\`\`
 
+### 3.11. Post (Пост/Новость)
+
+\`\`\`json
+{
+  "id": "string (UUID)",
+  "author": "User (object, вложенный)",
+  "team": "Team (object, вложенный, optional)",
+  "content": "string",
+  "timestamp": "string (ISO 8601)",
+  "likes": "number",
+  "comments": "number"
+}
+\`\`\`
+
 ---
 
 ## 4. Эндпоинты
@@ -194,4 +209,36 @@ export const API_DOCS = `
 - **GET \`/teams\`**: Получение списка команд с фильтрацией (\`?sportId=...\`, \`?search=...\`).
 - **GET \`/teams/:id\`**: Получение детальной информации о команде.
 - **PUT \`/teams/:id\`**: Обновление информации о команде (только для капитана/админа).
+
+### 4.3. Social & Feed (\`/feed\`, \`/posts\`)
+
+- **POST \`/posts\`**: Создание нового поста.
+  - **Auth:** Требуется.
+  - **Body:** \`{ "content": "string", "teamId": "string (optional)" }\`
+  - **Response:** \`Post\` object.
+
+- **GET \`/feed\`**: Получение персонализированной ленты новостей.
+  - **Auth:** Требуется.
+  - **Логика:** Бэкенд должен получить \`userId\` текущего пользователя из JWT-токена. Затем агрегировать посты, где:
+    1.  \`authorId\` находится в списке друзей пользователя (\`friends\`).
+    2.  \`authorId\` находится в списке пользователей, на которых подписан текущий юзер (\`followingUsers\`).
+    3.  \`teamId\` находится в списке команд, на которые подписан текущий юзер (\`followingTeams\`).
+  - **Response:** \`[Post]\` (массив постов, отсортированный по дате).
+
+- **POST \`/users/:id/follow\`**: Подписаться/отписаться от пользователя.
+  - **Auth:** Требуется.
+  - **Response:** \`{ "success": true }\`.
+
+- **POST \`/teams/:id/follow\`**: Подписаться/отписаться от команды.
+  - **Auth:** Требуется.
+  - **Response:** \`{ "success": true }\`.
+
+- **GET \`/users/me/friend-requests\`**: Получение списка заявок в друзья.
+  - **Auth:** Требуется.
+  - **Response:** \`[User]\` (массив пользователей, отправивших заявку).
+
+- **POST \`/users/friend-request\`**: Отправка/обработка заявки в друзья.
+  - **Auth:** Требуется.
+  - **Body:** \`{ "targetUserId": "string", "action": "send" | "accept" | "decline" }\`
+  - **Response:** \`{ "success": true }\`.
 `;
