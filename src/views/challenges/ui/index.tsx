@@ -1,10 +1,10 @@
 
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
 import { Button } from "@/shared/ui/button";
-import { Check, X, Send, Users, Trophy } from "lucide-react";
+import { Check, X, Send, Users, Trophy, Swords, Sparkles } from "lucide-react";
 import Image from "next/image";
 import { challenges, TeamChallenge } from '@/mocks/challenges';
 import { teams, users, teamSports } from '@/mocks';
@@ -14,6 +14,8 @@ import { Label } from "@/shared/ui/label";
 import { Separator } from "@/shared/ui/separator";
 import { Checkbox } from "@/shared/ui/checkbox";
 import { Slider } from '@/shared/ui/slider';
+import { Badge } from '@/shared/ui/badge';
+import Link from 'next/link';
 
 const ChallengeCard = ({ challenge, type }: { challenge: TeamChallenge, type: 'incoming' | 'outgoing' }) => {
     const opponent = type === 'incoming' ? challenge.challenger : challenge.challenged;
@@ -50,46 +52,46 @@ const ChallengeCard = ({ challenge, type }: { challenge: TeamChallenge, type: 'i
     )
 }
 
-const QuickTournamentCard = () => (
-    <Card>
-        <CardHeader>
-            <div className="flex justify-between items-start">
-                <div>
-                    <CardTitle>Районная лига</CardTitle>
-                    <CardDescription>Дворовый футбол</CardDescription>
-                </div>
-                 <Button variant="outline" size="sm">Присоединиться</Button>
+const RecommendedOpponentCard = ({ team }: { team: typeof teams[0] }) => (
+    <Card className="bg-background/50">
+        <CardContent className="p-3 flex items-center justify-between">
+            <div className="flex items-center gap-3">
+                 <Image src={team.logoUrl} alt={team.name} width={40} height={40} className="rounded-md" data-ai-hint={team.dataAiHint} />
+                 <div>
+                    <Link href={`/teams/${team.id}`} className="font-semibold hover:text-primary transition-colors">{team.name}</Link>
+                    <p className="text-xs text-muted-foreground">ELO: {team.rank}</p>
+                 </div>
             </div>
-        </CardHeader>
-        <CardContent>
-            <div className="flex items-center justify-between text-sm">
-                <div className="flex items-center gap-2 text-muted-foreground">
-                    <Users className="h-4 w-4" />
-                    <span>3 / 8 команд</span>
-                </div>
-                <div className="flex items-center gap-2 text-muted-foreground">
-                    <Trophy className="h-4 w-4" />
-                    <span>Приз: Уважение</span>
-                </div>
-            </div>
+            <Button size="sm" variant="outline"><Swords className="mr-2 h-4 w-4" />Вызвать</Button>
         </CardContent>
     </Card>
 )
 
-
 export function ChallengesPage() {
-    const incomingChallenges = challenges.filter(c => c.status === 'pending');
-    const outgoingChallenges = challenges.filter(c => c.status === 'pending'); // Using same for demo
-    const referees = users.filter(u => u.role === 'Судья');
-    const [ageRange, setAgeRange] = useState([16, 99]);
-    const [eloRange, setEloRange] = useState([800, 2500]);
+    // Mock current team for demonstration
+    const myTeam = teams[0];
+    const incomingChallenges = challenges.filter(c => c.challenged.id === myTeam.id && c.status === 'pending');
+    
+    // --- Matchmaking Logic ---
+    const [eloRange, setEloRange] = useState([-250, 250]);
+    const [disciplineFilter, setDisciplineFilter] = useState(myTeam.game);
+
+    const recommendedOpponents = useMemo(() => {
+        return teams.filter(team => {
+            if (team.id === myTeam.id) return false; // Exclude self
+            if (team.game !== disciplineFilter) return false; // Match discipline
+            const eloDiff = team.rank - myTeam.rank;
+            return eloDiff >= eloRange[0] && eloDiff <= eloRange[1];
+        }).slice(0, 5); // Limit to 5 recommendations
+    }, [myTeam, eloRange, disciplineFilter]);
+
 
     return (
         <div className="space-y-8">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <Card>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+                 <Card>
                     <CardHeader>
-                        <CardTitle>Вызов 1 на 1</CardTitle>
+                        <CardTitle>Быстрый вызов</CardTitle>
                         <CardDescription>Бросьте вызов конкретной команде на один матч.</CardDescription>
                     </CardHeader>
                     <CardContent>
@@ -122,105 +124,52 @@ export function ChallengesPage() {
                         </form>
                     </CardContent>
                 </Card>
-                 <Card>
+                <Card>
                     <CardHeader>
-                        <CardTitle>Быстрый турнир</CardTitle>
-                        <CardDescription>Создайте мини-турнир для нескольких команд.</CardDescription>
+                        <CardTitle className="flex items-center gap-2"><Sparkles className="text-primary"/>Рекомендуемые соперники</CardTitle>
+                        <CardDescription>Подбор команд с близким вам рейтингом.</CardDescription>
                     </CardHeader>
-                    <CardContent>
-                        <form className="space-y-4">
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div className="space-y-2">
-                                    <Label htmlFor="quick-tourney-name">Название</Label>
-                                    <Input id="quick-tourney-name" placeholder="Напр., Кубок нашего двора" />
-                                </div>
-                                <div className="space-y-2">
-                                    <Label htmlFor="quick-tourney-teams">Команды</Label>
-                                    <Select>
-                                        <SelectTrigger id="quick-tourney-teams"><SelectValue placeholder="Кол-во" /></SelectTrigger>
-                                        <SelectContent>
-                                            <SelectItem value="4">4 команды</SelectItem>
-                                            <SelectItem value="8">8 команд</SelectItem>
-                                            <SelectItem value="16">16 команд</SelectItem>
-                                        </SelectContent>
-                                    </Select>
-                                </div>
-                            </div>
-                            <div className="space-y-2">
-                                <Label htmlFor="discipline">Дисциплина</Label>
-                                <Select>
-                                    <SelectTrigger id="discipline"><SelectValue placeholder="Выберите дисциплину" /></SelectTrigger>
+                    <CardContent className="space-y-4">
+                        <div className="grid grid-cols-2 gap-4">
+                             <div className="space-y-2">
+                                <Label>Дисциплина</Label>
+                                <Select value={disciplineFilter} onValueChange={setDisciplineFilter}>
+                                    <SelectTrigger><SelectValue /></SelectTrigger>
                                     <SelectContent>
-                                        <SelectGroup>
-                                            <SelectLabel>Командные виды спорта</SelectLabel>
-                                            {teamSports.map((sport) => (
-                                                <SelectItem key={sport.id} value={sport.id}>
-                                                    {sport.name}
-                                                </SelectItem>
-                                            ))}
-                                        </SelectGroup>
+                                        {teamSports.map(sport => <SelectItem key={sport.id} value={sport.name}>{sport.name}</SelectItem>)}
                                     </SelectContent>
                                 </Select>
                             </div>
-                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                 <div className="space-y-2">
-                                    <Label>Возраст: от {ageRange[0]} до {ageRange[1]}</Label>
-                                    <Slider value={ageRange} onValueChange={setAgeRange} min={12} max={99} step={1} />
-                                </div>
-                                <div className="space-y-2">
-                                    <Label>Рейтинг ELO: от {eloRange[0]} до {eloRange[1]}</Label>
-                                    <Slider value={eloRange} onValueChange={setEloRange} min={500} max={3000} step={50} />
-                                </div>
-                            </div>
                             <div className="space-y-2">
-                                <Label htmlFor="quick-tourney-referee">Судья (необязательно)</Label>
-                                <Select>
-                                    <SelectTrigger id="quick-tourney-referee"><SelectValue placeholder="Не назначен" /></SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem value="none">Не назначен</SelectItem>
-                                        {referees.map(ref => (
-                                            <SelectItem key={ref.id} value={ref.id}>{ref.firstName} {ref.lastName}</SelectItem>
-                                        ))}
-                                    </SelectContent>
-                                </Select>
+                                <Label>Разница ELO: {eloRange[0]} / +{eloRange[1]}</Label>
+                                <Slider value={eloRange} onValueChange={setEloRange} min={-500} max={500} step={50} />
                             </div>
-                             <div className="flex items-center space-x-2 pt-2">
-                                <Checkbox id="publish-feed" />
-                                <Label htmlFor="publish-feed" className="text-sm font-normal">
-                                    Опубликовать в ленте города
-                                </Label>
-                            </div>
-                            <Button className="w-full !mt-6">
-                                <Trophy className="mr-2 h-4 w-4" /> Создать
-                            </Button>
-                        </form>
+                        </div>
+                        <div className="space-y-2">
+                             {recommendedOpponents.length > 0 ? (
+                                recommendedOpponents.map(team => <RecommendedOpponentCard key={team.id} team={team} />)
+                            ) : (
+                                <p className="text-sm text-muted-foreground text-center pt-4">Подходящих соперников не найдено. Попробуйте расширить фильтры.</p>
+                            )}
+                        </div>
                     </CardContent>
                 </Card>
             </div>
 
             <Separator />
             
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <section>
-                    <h3 className="text-xl font-semibold mb-4">Входящие вызовы ({incomingChallenges.length})</h3>
-                    <div className="space-y-4">
-                        {incomingChallenges.length > 0 ? (
-                            incomingChallenges.map(challenge => (
-                                <ChallengeCard key={challenge.id} challenge={challenge} type="incoming" />
-                            ))
-                        ) : (
-                            <p className="text-muted-foreground">У вас нет активных вызовов.</p>
-                        )}
-                    </div>
-                </section>
-                <section>
-                    <h3 className="text-xl font-semibold mb-4">Быстрые турниры</h3>
-                    <div className="space-y-4">
-                        <QuickTournamentCard />
-                        <QuickTournamentCard />
-                    </div>
-                </section>
-            </div>
+            <section>
+                <h3 className="text-xl font-semibold mb-4">Входящие вызовы ({incomingChallenges.length})</h3>
+                <div className="space-y-4">
+                    {incomingChallenges.length > 0 ? (
+                        incomingChallenges.map(challenge => (
+                            <ChallengeCard key={challenge.id} challenge={challenge} type="incoming" />
+                        ))
+                    ) : (
+                        <p className="text-muted-foreground">У вас нет активных вызовов.</p>
+                    )}
+                </div>
+            </section>
         </div>
     );
 }
