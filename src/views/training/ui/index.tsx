@@ -17,10 +17,10 @@ export function TrainingPage() {
             <Card>
                 <CardHeader>
                      <CardTitle className="flex items-center gap-2"><CalendarIcon /> Мое расписание</CardTitle>
-                     <CardDescription>Календарь ваших личных и групповых тренировок, на которые вы записались.</CardDescription>
+                     <CardDescription>Календарь ваших личных и групповых тренировок, а также предстоящих матчей.</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <FitnessSchedule personalOnly={true} />
+                    <FitnessSchedule />
                 </CardContent>
             </Card>
 

@@ -11,6 +11,7 @@ import { Badge } from "@/shared/ui/badge";
 import Image from "next/image";
 import { useUserStore } from "@/widgets/dashboard-header/model/user-store";
 import { teams } from "@/mocks";
+import { FitnessSchedule } from "@/widgets/fitness-schedule";
 
 type TournamentStatus = 'АНОНС' | 'ПРЕДРЕГИСТРАЦИЯ' | 'РЕГИСТРАЦИЯ' | 'ИДЕТ' | 'ЗАВЕРШЕН';
 
@@ -45,6 +46,8 @@ export function DashboardAside() {
 
   return (
     <>
+      <FitnessSchedule showHeader={true} />
+
       <Card className="bg-card">
         <CardHeader>
           <CardTitle className="flex items-center gap-2"><Users /> Мои команды</CardTitle>
