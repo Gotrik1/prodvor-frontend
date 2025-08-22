@@ -81,11 +81,17 @@ export function TeamManagementPage({ team }: { team: Team | undefined }) {
 
     return (
         <div className="p-4 md:p-6 lg:p-8">
-            <div className="mb-6">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
+                 <div>
+                    <h1 className="text-3xl font-bold font-headline">Управление командой</h1>
+                    <p className="text-muted-foreground mt-1">
+                        CRM-панель капитана команды <span className="font-semibold text-primary">{team.name}</span>.
+                    </p>
+                </div>
                 <Button asChild variant="outline">
                     <Link href={`/teams/${team.id}`}>
                         <ArrowLeft className="mr-2 h-4 w-4" />
-                        Назад к профилю команды
+                        К профилю команды
                     </Link>
                 </Button>
             </div>
