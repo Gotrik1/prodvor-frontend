@@ -6,12 +6,12 @@
  */
 import { z } from 'zod';
 import { ai } from '@/ai/genkit';
+import type { LogoGenerationInput } from '@/widgets/logo-generator/ui/logo-generator';
 
 
 const LogoGenerationInputSchema = z.object({
   logoDescription: z.string().describe("A detailed text description for a team logo."),
 });
-export type LogoGenerationInput = z.infer<typeof LogoGenerationInputSchema>;
 
 const LogoGenerationOutputSchema = z.object({
   logoDataUris: z.array(z.string()).describe("An array of 4 generated logo images as Base64 data URIs."),

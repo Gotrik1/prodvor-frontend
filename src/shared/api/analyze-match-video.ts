@@ -9,6 +9,7 @@
  */
 import { z } from 'zod';
 import { ai } from '@/ai/genkit';
+import type { AnalyzeMatchVideoInput, AnalyzeMatchVideoOutput } from '@/views/analysis/match/ui/index';
 
 const AnalyzeMatchVideoInputSchema = z.object({
   videoDataUri: z
@@ -18,13 +19,11 @@ const AnalyzeMatchVideoInputSchema = z.object({
     ),
   prompt: z.string().describe('A specific question or prompt for the AI to focus on during analysis.'),
 });
-export type AnalyzeMatchVideoInput = z.infer<typeof AnalyzeMatchVideoInputSchema>;
 
 const AnalyzeMatchVideoOutputSchema = z.object({
   analysis: z.string().optional(),
   error: z.string().optional(),
 });
-export type AnalyzeMatchVideoOutput = z.infer<typeof AnalyzeMatchVideoOutputSchema>;
 
 const analysisPrompt = ai.definePrompt({
     name: 'videoAnalysisPrompt',

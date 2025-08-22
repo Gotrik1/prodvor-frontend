@@ -9,18 +9,17 @@
  */
 import { z } from 'zod';
 import { ai } from '@/ai/genkit';
+import type { AskRulesExpertInput, AskRulesExpertOutput } from '@/views/referee-center/ui/index';
 
 
 const AskRulesExpertInputSchema = z.object({
   question: z.string().describe("The user's question about sports rules."),
 });
-export type AskRulesExpertInput = z.infer<typeof AskRulesExpertInputSchema>;
 
 const AskRulesExpertOutputSchema = z.object({
   answer: z.string().describe("A clear and concise answer to the user's question."),
   source: z.string().optional().describe("The specific rule or document the answer is based on."),
 });
-export type AskRulesExpertOutput = z.infer<typeof AskRulesExpertOutputSchema>;
 
 const rulesExpertPrompt = ai.definePrompt({
     name: 'rulesExpertPrompt',

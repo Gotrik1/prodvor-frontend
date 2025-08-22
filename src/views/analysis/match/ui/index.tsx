@@ -118,10 +118,6 @@ export function AiAnalysisTool({ embedded = false }: { embedded?: boolean }) {
         }
     };
 
-    if (!hasAccess && embedded) {
-        return <ProAccessCard />;
-    }
-    
     if (!hasAccess && !embedded) {
         return (
             <div className="p-4 md:p-6 lg:p-8 flex items-center justify-center min-h-[80vh]">
@@ -132,7 +128,14 @@ export function AiAnalysisTool({ embedded = false }: { embedded?: boolean }) {
     
     // Simplified version for embedded post-match analysis
     if (embedded) {
-        return (
+        if (!hasAccess) {
+             return (
+                 <div className="p-4 md:p-6 lg:p-8 flex items-center justify-center min-h-[40vh]">
+                    <ProAccessCard />
+                </div>
+            )
+        }
+         return (
              <div className="space-y-6">
                 <Card>
                     <CardHeader>
