@@ -97,12 +97,17 @@ export function BracketTab() {
         // --- End ELO & Gamification ---
 
         const newRounds = JSON.parse(JSON.stringify(rounds)); // Deep copy
-        newRounds[roundIndex][matchIndex] = {
+        const updatedMatch = {
             ...newRounds[roundIndex][matchIndex],
             score1: score1,
             score2: score2,
         };
+        newRounds[roundIndex][matchIndex] = updatedMatch;
         
+        if (activeMatch?.id === updatedMatch.id) {
+            setActiveMatch(updatedMatch);
+        }
+
         const currentRoundFinished = newRounds[roundIndex].every((m: BracketMatch) => m.score1 !== null && m.score2 !== null);
         
         if (currentRoundFinished) {

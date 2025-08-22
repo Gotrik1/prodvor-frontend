@@ -25,6 +25,7 @@ export const useProtocol = create<ProtocolState>((set) => ({
     })),
     setActiveMatch: (match) => set((state) => {
         if (state.activeMatch?.id === match?.id) {
+            // If the same match is selected again, but maybe with updated scores, just update it
             return { activeMatch: match };
         }
         // For demonstration, load mock events for the first match, otherwise start fresh
