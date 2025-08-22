@@ -96,7 +96,7 @@ const NearbyPlaygrounds = () => {
                     ))}
                 </div>
             </CardContent>
-    );
+    </Card>);
 };
 
 export function PlaygroundsPage() {
