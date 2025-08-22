@@ -3,7 +3,7 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs';
-import { BarChart, Heart, User as UserIcon, Users2, MapPin, Trophy, BarChart3, Eye } from 'lucide-react';
+import { BarChart, Heart, User as UserIcon, Users2, MapPin, Trophy, BarChart3, Eye, Gem } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/shared/ui/button';
 import { OverviewTab } from './ui/overview-tab';
@@ -13,6 +13,7 @@ import { SponsorsTab } from './ui/sponsors-tab';
 import { PlaygroundsTab } from './ui/playgrounds-tab';
 import { TournamentsTab } from './ui/tournaments-tab';
 import { SportsTab } from './ui/sports-tab';
+import { RanksPage } from '../ranks';
 
 export function AdminDashboardPage() {
     return (
@@ -26,6 +27,7 @@ export function AdminDashboardPage() {
                     <TabsTrigger value="playgrounds"><MapPin className="mr-2 h-4 w-4" />Площадки</TabsTrigger>
                     <TabsTrigger value="tournaments"><Trophy className="mr-2 h-4 w-4" />Турниры</TabsTrigger>
                     <TabsTrigger value="sports"><BarChart3 className="mr-2 h-4 w-4" />Виды спорта</TabsTrigger>
+                    <TabsTrigger value="ranks"><Gem className="mr-2 h-4 w-4" />Ранги</TabsTrigger>
                 </TabsList>
             </div>
              <TabsContent value="overview">
@@ -48,6 +50,9 @@ export function AdminDashboardPage() {
             </TabsContent>
             <TabsContent value="sports">
                 <SportsTab />
+            </TabsContent>
+            <TabsContent value="ranks">
+                <RanksPage />
             </TabsContent>
         </Tabs>
     );
