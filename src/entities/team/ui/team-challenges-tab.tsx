@@ -30,8 +30,8 @@ export const TeamChallengesTab = ({ teamId }: { teamId: string }) => {
                     <CardDescription>Управляйте вызовами или бросайте их другим командам.</CardDescription>
                 </div>
                 <Button asChild className="mt-4 md:mt-0">
-                    <Link href="/competitions?tab=challenges">
-                        <Swords className="mr-2 h-4 w-4" /> Перейти в хаб вызовов
+                    <Link href="/competitions">
+                        <Swords className="mr-2 h-4 w-4" /> Перейти в хаб соревнований
                     </Link>
                 </Button>
             </CardHeader>
