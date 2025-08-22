@@ -1,3 +1,4 @@
+
 'use client';
 
 import { Button } from '@/shared/ui/button';
@@ -6,6 +7,7 @@ import {
   CardContent,
   CardHeader,
   CardTitle,
+  CardDescription
 } from '@/shared/ui/card';
 import { PlusCircle, Send, Edit } from 'lucide-react';
 import Link from 'next/link';
@@ -65,7 +67,10 @@ export function StaffTab() {
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">
-          <CardTitle>Персонал турнира</CardTitle>
+            <div>
+                <CardTitle>Персонал турнира</CardTitle>
+                <CardDescription>Судьи, организаторы и другие роли.</CardDescription>
+            </div>
           <Dialog>
             <DialogTrigger asChild>
               <Button variant="outline" size="sm">
@@ -137,7 +142,10 @@ export function StaffTab() {
       </Card>
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">
-          <CardTitle>Дисциплинарные санкции</CardTitle>
+            <div>
+                <CardTitle>Дисциплинарные санкции</CardTitle>
+                <CardDescription>Дисквалификации и другие ограничения.</CardDescription>
+            </div>
         </CardHeader>
         <CardContent>
           <div className="border rounded-lg">
@@ -203,9 +211,6 @@ export function StaffTab() {
                                   </SelectItem>
                                   <SelectItem value="Отменена">
                                     Отменена
-                                  </SelectItem>
-                                  <SelectItem value="Пожизненная">
-                                    Пожизненная
                                   </SelectItem>
                                 </SelectContent>
                               </Select>

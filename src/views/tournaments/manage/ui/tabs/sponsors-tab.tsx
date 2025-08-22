@@ -1,3 +1,4 @@
+
 'use client';
 
 import { Button } from '@/shared/ui/button';
@@ -84,10 +85,10 @@ export function SponsorsTab() {
                 <TableRow key={sponsor.id}>
                   <TableCell className="font-medium">
                     <Link
-                      href={`/sponsors/${sponsor.id}`}
+                      href={`/admin/sponsors/${sponsor.id}`}
                       className="flex items-center gap-3 group"
                     >
-                      <Avatar>
+                      <Avatar className="h-9 w-9">
                         <AvatarImage src={sponsor.logoUrl} />
                         <AvatarFallback>{sponsor.name.charAt(0)}</AvatarFallback>
                       </Avatar>

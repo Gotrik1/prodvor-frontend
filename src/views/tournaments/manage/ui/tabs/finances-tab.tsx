@@ -78,7 +78,11 @@ export function FinancesTab() {
                                     <TableCell className="text-center font-mono">{team.fine} ₽</TableCell>
                                     <TableCell className="text-center font-mono font-bold">{team.fee + team.fine} ₽</TableCell>
                                     <TableCell className="text-center">
-                                        <Badge variant={getStatusVariant(team.status)}>
+                                        <Badge className={
+                                            team.status === 'Оплачено' ? "bg-green-500/20 text-green-300 border-green-500/30" : 
+                                            team.status === 'Частично' ? "bg-amber-500/20 text-amber-300 border-amber-500/30" :
+                                            "bg-red-500/20 text-red-300 border-red-500/30"
+                                        }>
                                             {team.status === 'Оплачено' && <CheckCircle className="mr-1 h-3 w-3" />}
                                             {team.status !== 'Оплачено' && <AlertCircle className="mr-1 h-3 w-3" />}
                                             {team.status}

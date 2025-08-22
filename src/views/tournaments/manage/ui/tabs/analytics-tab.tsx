@@ -6,6 +6,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { users } from "@/mocks";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { ArrowDown, ArrowUp } from "lucide-react";
+import { useTournamentCrmContext } from "../../lib/TournamentCrmContext";
+import { teams } from "@/mocks";
 
 // Mock data for analytics
 const topScorers = [
@@ -24,13 +26,6 @@ const topAssists = [
     { ...users[9], assists: 7 },
 ];
 
-const teamStats = [
-    { teamId: 'team1', goalsFor: 28, goalsAgainst: 12, diff: 16 },
-    { teamId: 'team2', goalsFor: 25, goalsAgainst: 15, diff: 10 },
-    { teamId: 'team3', goalsFor: 22, goalsAgainst: 18, diff: 4 },
-    { teamId: 'team4', goalsFor: 20, goalsAgainst: 20, diff: 0 },
-    { teamId: 'team5', goalsFor: 18, goalsAgainst: 25, diff: -7 },
-];
 
 const StatCard = ({ title, value }: { title: string, value: string | number }) => (
     <Card>
@@ -44,6 +39,21 @@ const StatCard = ({ title, value }: { title: string, value: string | number }) =
 );
 
 export function AnalyticsTab() {
+    const { confirmedTeams } = useTournamentCrmContext();
+    
+    const teamStats = confirmedTeams.map(team => {
+        const seed = team.id.charCodeAt(team.id.length - 1);
+        const goalsFor = 20 + (seed % 15);
+        const goalsAgainst = 15 + (seed % 10);
+        return {
+            team,
+            goalsFor,
+            goalsAgainst,
+            diff: goalsFor - goalsAgainst
+        }
+    }).sort((a,b) => b.diff - a.diff);
+
+
     return (
         <div className="space-y-6">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -116,8 +126,13 @@ export function AnalyticsTab() {
                         </TableHeader>
                         <TableBody>
                            {teamStats.map(stat => (
-                                <TableRow key={stat.teamId}>
-                                    <TableCell>{stat.teamId}</TableCell>
+                                <TableRow key={stat.team.id}>
+                                     <TableCell>
+                                        <div className="flex items-center gap-3">
+                                            <Avatar className="h-8 w-8"><AvatarImage src={stat.team.logoUrl} /><AvatarFallback>{stat.team.name.charAt(0)}</AvatarFallback></Avatar>
+                                            <span>{stat.team.name}</span>
+                                        </div>
+                                    </TableCell>
                                     <TableCell className="text-center font-medium text-green-400">{stat.goalsFor}</TableCell>
                                     <TableCell className="text-center font-medium text-red-400">{stat.goalsAgainst}</TableCell>
                                     <TableCell className={`text-center font-bold ${stat.diff > 0 ? 'text-green-400' : stat.diff < 0 ? 'text-red-400' : ''}`}>
