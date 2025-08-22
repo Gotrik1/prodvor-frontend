@@ -126,6 +126,14 @@ export function DashboardSidebar() {
                     </Link>
                 </SidebarMenuItem>
                 <SidebarMenuItem>
+                    <Link href="/quests">
+                        <SidebarMenuButton>
+                            <Puzzle />
+                            <span>Квесты</span>
+                        </SidebarMenuButton>
+                    </Link>
+                </SidebarMenuItem>
+                <SidebarMenuItem>
                     <Link href="/inventory">
                         <SidebarMenuButton>
                             <Warehouse />
@@ -138,14 +146,6 @@ export function DashboardSidebar() {
                         <SidebarMenuButton>
                             <ShoppingCart />
                             <span>Магазин</span>
-                        </SidebarMenuButton>
-                    </Link>
-                </SidebarMenuItem>
-                <SidebarMenuItem>
-                    <Link href="/quests">
-                        <SidebarMenuButton>
-                            <Puzzle />
-                            <span>Квесты</span>
                         </SidebarMenuButton>
                     </Link>
                 </SidebarMenuItem>
