@@ -129,6 +129,12 @@ export function DashboardHeader() {
                 <span>Профиль</span>
               </Link>
             </DropdownMenuItem>
+             <DropdownMenuItem asChild>
+              <Link href="/inventory">
+                <User className="mr-2 h-4 w-4" />
+                <span>Инвентарь</span>
+              </Link>
+            </DropdownMenuItem>
             <DropdownMenuItem asChild>
               <Link href="/settings">
                 <Settings className="mr-2 h-4 w-4" />
