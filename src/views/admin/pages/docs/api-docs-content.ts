@@ -333,6 +333,71 @@ export const API_DOCS = `
 }
 \`\`\`
 
+### 3.21. Playground (Площадка)
+\`\`\`json
+{
+  "id": "string",
+  "name": "string",
+  "address": "string",
+  "type": "string (e.g., 'Открытая площадка')",
+  "surface": "string (e.g., 'Асфальт')",
+  "imageUrl": "string",
+  "sportIds": ["string (sportId)", "..."],
+  "followers": ["string (userId)", "..."],
+  "residentTeamIds": ["string (teamId)", "..."],
+  "services": [
+      {
+          "category": "string",
+          "services": [
+              { "name": "string", "description": "string" }
+          ]
+      }
+  ]
+}
+\`\`\`
+
+### 3.22. Sponsor (Спонсор)
+\`\`\`json
+{
+  "id": "string",
+  "name": "string",
+  "logoUrl": "string",
+  "contribution": "string"
+}
+\`\`\`
+
+### 3.23. Sport (Вид спорта)
+\`\`\`json
+{
+  "id": "string",
+  "name": "string",
+  "isTeamSport": "boolean",
+  "subdisciplines": [
+    { "id": "string", "name": "string" }
+  ]
+}
+\`\`\`
+
+### 3.24. Achievement (Достижение)
+\`\`\`json
+{
+  "id": "string",
+  "name": "string",
+  "description": "string",
+  "icon": "string (e.g., 'Medal', 'Star')"
+}
+\`\`\`
+
+### 3.25. Requirement (Требование к турниру)
+\`\`\`json
+{
+  "id": "string",
+  "name": "string",
+  "description": "string",
+  "category": "string (e.g., 'Состав', 'Рейтинг')"
+}
+\`\`\`
+
 ---
 
 ## 4. Эндпоинты
