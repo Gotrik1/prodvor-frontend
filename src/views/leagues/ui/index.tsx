@@ -8,7 +8,7 @@ import { Crown, Trophy } from "lucide-react";
 import Image from 'next/image';
 import { Badge } from '@/shared/ui/badge';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem, SelectGroup, SelectLabel } from '@/shared/ui/select';
 
 const rankColors = [
@@ -20,9 +20,12 @@ const rankColors = [
 export function LeaguesPage() {
     const [selectedDiscipline, setSelectedDiscipline] = useState('all');
 
-    const filteredAndSortedTeams = allTeams
-        .filter(team => selectedDiscipline === 'all' || team.game === selectedDiscipline)
-        .sort((a, b) => b.rank - a.rank);
+    const filteredAndSortedTeams = useMemo(() => {
+        return allTeams
+            .filter(team => selectedDiscipline === 'all' || team.game === selectedDiscipline)
+            .sort((a, b) => b.rank - a.rank);
+    }, [selectedDiscipline]);
+
 
     return (
         <div className="space-y-8">
