@@ -21,7 +21,7 @@ const SendTournamentAnnouncementOutputSchema = z.object({
   success: z.boolean(),
   error: z.string().optional(),
 });
-export type SendTournamentAnnouncementOutput = z.infer<typeof SendTournamentAnnouncementOutputSchema>;
+type SendTournamentAnnouncementOutput = z.infer<typeof SendTournamentAnnouncementOutputSchema>;
 
 
 export async function sendTournamentAnnouncement(input: SendTournamentAnnouncementInput): Promise<SendTournamentAnnouncementOutput> {

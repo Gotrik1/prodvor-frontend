@@ -34,7 +34,7 @@ const rulesExpertPrompt = ai.definePrompt({
     `,
 });
 
-export const askRulesExpertFlow = ai.defineFlow(
+const askRulesExpertFlow = ai.defineFlow(
     {
         name: 'askRulesExpertFlow',
         inputSchema: AskRulesExpertInputSchema,

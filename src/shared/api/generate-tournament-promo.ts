@@ -15,7 +15,7 @@ const GenerateTournamentPromoOutputSchema = z.object({
   videoDataUri: z.string().optional(),
   error: z.string().optional(),
 });
-export type GenerateTournamentPromoOutput = z.infer<typeof GenerateTournamentPromoOutputSchema>;
+type GenerateTournamentPromoOutput = z.infer<typeof GenerateTournamentPromoOutputSchema>;
 
 export async function generateTournamentPromo(input: GenerateTournamentPromoInput): Promise<GenerateTournamentPromoOutput> {
   console.log("Mocking tournament promo generation for:", input.tournamentName);

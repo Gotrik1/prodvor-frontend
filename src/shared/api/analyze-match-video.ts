@@ -43,7 +43,7 @@ const analysisPrompt = ai.definePrompt({
     `,
 });
 
-export const analyzeMatchVideoFlow = ai.defineFlow(
+const analyzeMatchVideoFlow = ai.defineFlow(
   {
     name: 'analyzeMatchVideoFlow',
     inputSchema: AnalyzeMatchVideoInputSchema,

@@ -1,17 +1,17 @@
 
 "use server";
 
-import { generateTeamLogoVariations } from "@/shared/api/generate-team-logo-variations";
+import { generateTeamLogoVariations, type LogoGenerationInput } from "@/shared/api/generate-team-logo-variations";
 import { generateNewsDigest } from "@/shared/api/generate-news-digest";
-import { sendTournamentAnnouncement, SendTournamentAnnouncementInput } from "@/shared/api/send-tournament-announcement";
-import { generateTournamentImage, GenerateTournamentImageInput } from "@/shared/api/generate-tournament-image";
-import { generateTournamentPromo, GenerateTournamentPromoInput } from "@/shared/api/generate-tournament-promo";
-import { analyzeMatchVideo, AnalyzeMatchVideoInput } from "@/shared/api/analyze-match-video";
-import { askRulesExpert, AskRulesExpertInput } from "@/shared/api/ask-rules-expert";
+import { sendTournamentAnnouncement, type SendTournamentAnnouncementInput } from "@/shared/api/send-tournament-announcement";
+import { generateTournamentImage, type GenerateTournamentImageInput } from "@/shared/api/generate-tournament-image";
+import { generateTournamentPromo, type GenerateTournamentPromoInput } from "@/shared/api/generate-tournament-promo";
+import { analyzeMatchVideo, type AnalyzeMatchVideoInput } from "@/shared/api/analyze-match-video";
+import { askRulesExpert, type AskRulesExpertInput } from "@/shared/api/ask-rules-expert";
 
 
 export async function generateLogosAction(
-  input: any
+  input: LogoGenerationInput
 ) {
     return await generateTeamLogoVariations(input);
 }

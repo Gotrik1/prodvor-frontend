@@ -17,9 +17,9 @@ const LogoGenerationOutputSchema = z.object({
   logoDataUris: z.array(z.string()).describe("An array of 4 generated logo images as Base64 data URIs."),
   error: z.string().optional(),
 });
-export type LogoGenerationOutput = z.infer<typeof LogoGenerationOutputSchema>;
+type LogoGenerationOutput = z.infer<typeof LogoGenerationOutputSchema>;
 
-export const generateTeamLogoVariationsFlow = ai.defineFlow(
+const generateTeamLogoVariationsFlow = ai.defineFlow(
     {
         name: 'generateTeamLogoVariationsFlow',
         inputSchema: LogoGenerationInputSchema,

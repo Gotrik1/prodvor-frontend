@@ -14,7 +14,7 @@ const GenerateTournamentImageOutputSchema = z.object({
   imageDataUri: z.string().optional(),
   error: z.string().optional(),
 });
-export type GenerateTournamentImageOutput = z.infer<typeof GenerateTournamentImageOutputSchema>;
+type GenerateTournamentImageOutput = z.infer<typeof GenerateTournamentImageOutputSchema>;
 
 export async function generateTournamentImage(input: GenerateTournamentImageInput): Promise<GenerateTournamentImageOutput> {
   console.log("Mocking tournament image generation for prompt:", input.prompt);
