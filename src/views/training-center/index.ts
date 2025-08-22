@@ -1,2 +1,1 @@
-
 export { TrainingCenterPage } from './ui';
