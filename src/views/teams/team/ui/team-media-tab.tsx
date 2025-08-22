@@ -1,3 +1,4 @@
+
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
 import { Film, UploadCloud } from "lucide-react";
 import Image from "next/image";
