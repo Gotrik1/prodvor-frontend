@@ -176,12 +176,68 @@ export const API_DOCS = `
 \`\`\`json
 {
   "id": "string (UUID)",
-  "author": "User (object, вложенный)",
-  "team": "Team (object, вложенный, optional)",
+  "authorId": "string (userId)",
+  "teamId": "string (teamId, optional)",
   "content": "string",
   "timestamp": "string (ISO 8601)",
   "likes": "number",
   "comments": "number"
+}
+\`\`\`
+
+### 3.12. Tournament (Турнир)
+\`\`\`json
+{
+  "id": "string (UUID)",
+  "name": "string",
+  "description": "string",
+  "game": "string (название дисциплины)",
+  "sportId": "string",
+  "status": "string (Enum: 'АНОНС', 'РЕГИСТРАЦИЯ', 'ИДЕТ', 'ЗАВЕРШЕН')",
+  "prizePool": "string",
+  "maxParticipants": "number",
+  "startDate": "string (ISO 8601)",
+  "bannerUrl": "string (URL)",
+  "playgrounds": ["Playground (object)", "..."],
+  "sponsors": ["Sponsor (object)", "..."],
+  "registeredTeams": ["Team (object)", "..."],
+  "bracket": [ 
+    { "round": 1, "matches": ["BracketMatch (object)", "..."] },
+    { "round": 2, "matches": ["BracketMatch (object)", "..."] }
+  ]
+}
+\`\`\`
+
+### 3.13. BracketMatch (Матч в сетке)
+\`\`\`json
+{
+  "id": "string (UUID)",
+  "team1": "Team (object, может быть null)",
+  "team2": "Team (object, может быть null)",
+  "score1": "number (может быть null)",
+  "score2": "number (может быть null)",
+  "winnerTeamId": "string (teamId, может быть null)"
+}
+\`\`\`
+
+### 3.14. Challenge (Вызов)
+\`\`\`json
+{
+  "id": "string (UUID)",
+  "challengerTeamId": "string (teamId)",
+  "challengedTeamId": "string (teamId)",
+  "date": "string (ISO 8601)",
+  "discipline": "string",
+  "status": "string (Enum: 'pending', 'accepted', 'declined', 'completed')"
+}
+\`\`\`
+
+### 3.15. LeagueRanking (Рейтинг в лиге)
+\`\`\`json
+{
+  "rank": "number",
+  "team": "Team (object)",
+  "elo": "number"
 }
 \`\`\`
 
@@ -192,23 +248,17 @@ export const API_DOCS = `
 ### 4.1. Auth & Users (\`/auth\`, \`/users\`)
 
 - **POST \`/auth/register\`**: Регистрация нового пользователя.
-  - Body: \`{ firstName, lastName, nickname, email, password, roles, ... }\`
 - **POST \`/auth/login\`**: Аутентификация пользователя.
-  - Body: \`{ email, password }\`
-  - Response: \`{ accessToken, user }\`
 - **GET \`/users/me\`**: Получение профиля текущего пользователя (требует авторизации).
-  - Response: Возвращает объект \`User\` и массив связанных профилей (\`PlayerProfile\`, \`RefereeProfile\`, \`FanProfile\` и т.д.).
+  - Response: Возвращает объект \`User\` и массив связанных профилей (\`PlayerProfile\`, \`RefereeProfile\` и т.д.).
 - **GET \`/users/:id\`**: Получение публичного профиля пользователя.
   - Response: Возвращает объект \`User\` и связанные профили.
-- **PUT \`/users/me\`**: Обновление профиля текущего пользователя (включая связанные профили).
+- **PUT \`/users/me\`**: Обновление профиля текущего пользователя.
 
 ### 4.2. Teams (\`/teams\`)
 
-- **POST \`/teams\`**: Создание новой команды.
-  - Body: \`{ name, sportId, memberIds, logoUrl }\`
 - **GET \`/teams\`**: Получение списка команд с фильтрацией (\`?sportId=...\`, \`?search=...\`).
 - **GET \`/teams/:id\`**: Получение детальной информации о команде.
-- **PUT \`/teams/:id\`**: Обновление информации о команде (только для капитана/админа).
 
 ### 4.3. Social & Feed (\`/feed\`, \`/posts\`)
 
@@ -241,4 +291,37 @@ export const API_DOCS = `
   - **Auth:** Требуется.
   - **Body:** \`{ "targetUserId": "string", "action": "send" | "accept" | "decline" }\`
   - **Response:** \`{ "success": true }\`.
+
+### 4.4. Competitions (Соревнования)
+
+- **GET \`/tournaments\`**: Получение списка всех турниров.
+  - **Query Params:** \`?status=ИДЕТ\`, \`?level=Городской\`, \`?game=Футбол\`
+  - **Response:** \`[Tournament]\` (краткая информация).
+
+- **GET \`/tournaments/:id\`**: Получение детальной информации о турнире.
+  - **Response:** \`Tournament\` object (полная информация, включая сетку, участников и т.д.).
+
+- **POST \`/tournaments/:id/register\`**: Регистрация команды на турнир.
+  - **Auth:** Требуется (пользователь должен быть капитаном).
+  - **Body:** \`{ "teamId": "string", "roster": ["userId", "..."] }\`
+  - **Response:** \`{ "success": true, "message": "Заявка отправлена на рассмотрение" }\`.
+
+- **GET \`/leagues\`**: Получение рейтинговых таблиц.
+  - **Query Params:** \`?discipline=Футбол\` (фильтрация по дисциплине).
+  - **Response:** \`[LeagueRanking]\` (отсортированный массив).
+
+- **GET \`/challenges\`**: Получение списка вызовов для текущей команды пользователя.
+  - **Auth:** Требуется.
+  - **Query Params:** \`?type=incoming | outgoing\`
+  - **Response:** \`[Challenge]\`.
+
+- **POST \`/challenges\`**: Бросить вызов другой команде.
+  - **Auth:** Требуется.
+  - **Body:** \`{ "myTeamId": "string", "opponentTeamId": "string", "dateTime": "ISO 8601" }\`
+  - **Response:** \`Challenge\` object.
+
+- **POST \`/challenges/:id/respond\`**: Ответить на вызов.
+  - **Auth:** Требуется.
+  - **Body:** \`{ "response": "accept" | "decline" }\`
+  - **Response:** \`Challenge\` object.
 `;
