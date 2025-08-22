@@ -1,6 +1,6 @@
 
 export const API_DOCS = `
-# ProDvor - Документация по API
+# ProDvor - Документация по API (v1)
 
 Этот документ описывает RESTful API, необходимое для поддержки функционала платформы ProDvor. Он предназначен для бэкенд-разработчиков и описывает сущности, эндпоинты, методы и структуры данных.
 
@@ -25,7 +25,7 @@ export const API_DOCS = `
   "nickname": "string (unique)",
   "avatarUrl": "string (URL)",
   "email": "string (email, unique)",
-  "role": "string (Enum: 'Игрок', 'Тренер', 'Судья', ...)",
+  "role": "string (Enum: 'Игрок', 'Тренер', 'Судья', 'Менеджер', 'Организатор', 'Болельщик', ...)",
   "gender": "string (Enum: 'мужской', 'женский')",
   "elo": "number",
   "age": "number",
@@ -68,7 +68,7 @@ export const API_DOCS = `
   "description": "string",
   "game": "string",
   "sportId": "string",
-  "status": "string (Enum: 'РЕГИСТРАЦИЯ', 'ИДЕТ', ...)",
+  "status": "string (Enum: 'РЕГИСТРАЦИЯ', 'ИДЕТ', 'ЗАВЕРШЕН', ...)",
   "prizePool": "string",
   "maxParticipants": "number",
   "startDate": "string (ISO 8601)",
@@ -187,6 +187,4 @@ export const API_DOCS = `
   - Body: \`{ name, type, days: { ... } }\`
 - **GET \`/training/schedule\`**: Получение расписания пользователя на неделю.
 - **POST \`/training/schedule\`**: Добавление активности в расписание.
-
----
 `;
