@@ -27,15 +27,7 @@ const markdownComponents = {
 
 export function DocsPage() {
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Справочный центр</CardTitle>
-        <CardDescription>
-          Здесь собрана вся ключевая информация о концепции, технической реализации и ролях на платформе ProDvor.
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-         <Tabs defaultValue="concept">
+        <Tabs defaultValue="concept" className="w-full">
             <TabsList className="grid w-full grid-cols-5">
                 <TabsTrigger value="concept"><DraftingCompass className="mr-2 h-4 w-4" />Концепция</TabsTrigger>
                 <TabsTrigger value="readme"><FileText className="mr-2 h-4 w-4" />Тех. документация</TabsTrigger>
@@ -65,7 +57,5 @@ export function DocsPage() {
                 <RanksPage />
             </TabsContent>
          </Tabs>
-      </CardContent>
-    </Card>
   );
 }
