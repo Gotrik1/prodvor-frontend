@@ -65,7 +65,7 @@ export function AiAnalysisTool({ embedded = false }: { embedded?: boolean }) {
     };
 
     const handleAnalyze = async () => {
-        if (!videoFile) {
+        if (!videoFile && !embedded) {
             toast({
                 variant: 'destructive',
                 title: 'Ошибка',
@@ -78,16 +78,12 @@ export function AiAnalysisTool({ embedded = false }: { embedded?: boolean }) {
         setAnalysisResult(null);
 
         try {
-            const reader = new FileReader();
-            reader.readAsDataURL(videoFile);
-            reader.onloadend = async () => {
-                const base64data = reader.result as string;
-                
-                const result = await analyzeMatchVideoAction({
-                    videoDataUri: base64data,
-                    prompt,
+            const getAnalysis = async (videoDataUri?: string) => {
+                 const result = await analyzeMatchVideoAction({
+                    videoDataUri: videoDataUri || '', // Pass empty string if no video, rely on prompt
+                    prompt: embedded ? `Проанализируй события матча и дай тактические советы. ${prompt}` : prompt,
                 });
-
+                
                 if (result.analysis) {
                     setAnalysisResult(result.analysis);
                 } else {
@@ -99,6 +95,18 @@ export function AiAnalysisTool({ embedded = false }: { embedded?: boolean }) {
                 }
                 setIsLoading(false);
             };
+
+            if(videoFile) {
+                const reader = new FileReader();
+                reader.readAsDataURL(videoFile);
+                reader.onloadend = async () => {
+                    const base64data = reader.result as string;
+                    await getAnalysis(base64data);
+                };
+            } else if (embedded) {
+                await getAnalysis();
+            }
+
         } catch (error: any) {
              toast({
                 variant: 'destructive',
@@ -109,10 +117,61 @@ export function AiAnalysisTool({ embedded = false }: { embedded?: boolean }) {
         }
     };
 
-    if (!hasAccess) {
-        return embedded ? <ProAccessCard /> : (
+    if (!hasAccess && embedded) {
+        return <ProAccessCard />;
+    }
+    
+    if (!hasAccess && !embedded) {
+        return (
             <div className="p-4 md:p-6 lg:p-8 flex items-center justify-center min-h-[80vh]">
                 <ProAccessCard />
+            </div>
+        )
+    }
+    
+    // Simplified version for embedded post-match analysis
+    if (embedded) {
+        return (
+             <div className="space-y-6">
+                <Card>
+                    <CardHeader>
+                        <CardTitle>AI-Аналитика матча</CardTitle>
+                        <CardDescription>Получите разбор ключевых моментов и тактические рекомендации от нашего AI-ассистента.</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                         <Textarea
+                            value={prompt}
+                            onChange={(e) => setPrompt(e.target.value)}
+                            rows={3}
+                            placeholder="Например: Проанализируй нашу игру в защите. На что обратить внимание?"
+                        />
+                    </CardContent>
+                </Card>
+                <div className="text-center">
+                    <Button size="lg" onClick={handleAnalyze} disabled={isLoading}>
+                        {isLoading ? (
+                            <>
+                                <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                                Анализирую...
+                            </>
+                        ) : (
+                            <>
+                                <Wand2 className="mr-2 h-5 w-5" />
+                                Получить разбор
+                            </>
+                        )}
+                    </Button>
+                </div>
+                 {analysisResult && (
+                    <Card className="border-primary">
+                        <CardHeader>
+                            <CardTitle className="flex items-center gap-3"><Bot className="h-6 w-6 text-primary"/>Результаты анализа</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            <MarkdownRenderer content={analysisResult} />
+                        </CardContent>
+                    </Card>
+                )}
             </div>
         )
     }
