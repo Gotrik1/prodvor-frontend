@@ -250,9 +250,9 @@ export const API_DOCS = `
 - **POST \`/auth/register\`**: Регистрация нового пользователя.
 - **POST \`/auth/login\`**: Аутентификация пользователя.
 - **GET \`/users/me\`**: Получение профиля текущего пользователя (требует авторизации).
-  - Response: Возвращает объект \`User\` и массив связанных профилей (\`PlayerProfile\`, \`RefereeProfile\` и т.д.).
+  - **Response:** Возвращает объект \`User\` и массив связанных профилей (\`PlayerProfile\`, \`RefereeProfile\` и т.д.).
 - **GET \`/users/:id\`**: Получение публичного профиля пользователя.
-  - Response: Возвращает объект \`User\` и связанные профили.
+  - **Response:** Возвращает объект \`User\` и связанные профили.
 - **PUT \`/users/me\`**: Обновление профиля текущего пользователя.
 
 ### 4.2. Teams (\`/teams\`)
@@ -324,4 +324,57 @@ export const API_DOCS = `
   - **Auth:** Требуется.
   - **Body:** \`{ "response": "accept" | "decline" }\`
   - **Response:** \`Challenge\` object.
+
+### 4.5. Team & Player Management (CRM)
+
+- **POST \`/teams\`**: Создание новой команды.
+  - **Auth:** Требуется.
+  - **Body:** \`{ "name": "string", "sportId": "string", "logoUrl": "string (optional)", "membersToInvite": ["userId", "..."] }\`. Текущий пользователь автоматически становится капитаном.
+  - **Response:** \`Team\` object.
+
+- **PUT \`/teams/:id\`**: Обновление данных команды (название, логотип, статус набора).
+  - **Auth:** Требуется (только для капитана).
+
+- **GET \`/teams/:id/applications\`**: Получение списка заявок на вступление в команду.
+  - **Auth:** Требуется (только для капитана).
+  - **Response:** \`[User]\`.
+
+- **POST \`/teams/:id/applications/:userId/respond\`**: Принять или отклонить заявку игрока.
+  - **Auth:** Требуется (только для капитана).
+  - **Body:** \`{ "action": "accept" | "decline" }\`.
+
+- **POST \`/teams/:id/invites\`**: Пригласить игрока в команду.
+  - **Auth:** Требуется (только для капитана).
+  - **Body:** \`{ "userId": "string" }\`.
+
+- **DELETE \`/teams/:id/members/:userId\`**: Исключить игрока из команды.
+  - **Auth:** Требуется (только для капитана).
+
+- **GET \`/lfg/players\`**: Получить список игроков, ищущих команду.
+  - **Query Params:** \`?sportId=...\`, \`?role=...\`.
+
+- **GET \`/lfg/teams\`**: Получить список команд, ищущих игроков.
+  - **Query Params:** \`?sportId=...\`, \`?role=...\`.
+
+- **POST \`/lfg\`**: Разместить объявление о поиске.
+  - **Auth:** Требуется.
+  - **Body:** \`{ "type": "player_lfg" | "team_lfg", "teamId": "string (optional)", "requiredRole": "string", "message": "string" }\`.
+
+---
+
+## 5. Gamification (Геймификация)
+
+- **GET \`/quests\`**: Получение списка доступных квестов (ежедневные, еженедельные, событийные).
+  - **Auth:** Требуется.
+  - **Response:** \`{ "daily": [Quest], "weekly": [Quest], "event": [Quest] }\`.
+
+- **POST \`/quests/:id/claim\`**: Получение награды за выполненный квест.
+  - **Auth:** Требуется.
+  - **Response:** \`{ "success": true, "rewards": { "xp": "number", "pd_coins": "number" } }\`.
+
+- **GET \`/users/:id/achievements\`**: Получение списка достижений пользователя.
+  - **Response:** \`[Achievement]\`.
+
+**Примечание по ELO:**
+- Пересчет ELO-рейтинга должен происходить на бэкенде после того, как судья или организатор вносит результат матча через эндпоинт, связанный с управлением турниром (например, \`POST /tournaments/:id/matches/:matchId/score\`).
 `;
