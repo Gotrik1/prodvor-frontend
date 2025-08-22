@@ -1,3 +1,4 @@
+
 import type { Metadata } from 'next';
 import { AdminLayout } from '@/views/admin/pages/layout';
 import { AdminDashboardPage } from '@/views/admin/pages/dashboard';
