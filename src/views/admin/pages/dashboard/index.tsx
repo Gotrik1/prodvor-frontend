@@ -3,7 +3,7 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs';
-import { BarChart, Heart, User as UserIcon, Users2, MapPin, Trophy, BarChart3, Eye, Gem, Info } from 'lucide-react';
+import { BarChart, Heart, User as UserIcon, Users2, MapPin, Trophy, BarChart3 } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/shared/ui/button';
 import { OverviewTab } from './ui/overview-tab';
@@ -13,8 +13,6 @@ import { SponsorsTab } from './ui/sponsors-tab';
 import { PlaygroundsTab } from './ui/playgrounds-tab';
 import { TournamentsTab } from './ui/tournaments-tab';
 import { SportsTab } from './ui/sports-tab';
-import { RanksPage } from '../ranks';
-import { RolesPage } from '../roles';
 
 export function AdminDashboardPage() {
     return (
