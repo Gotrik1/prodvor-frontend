@@ -117,6 +117,38 @@ export const API_DOCS = `
 }
 \`\`\`
 
+### 2.6. Challenge (Вызов)
+
+\`\`\`json
+{
+  "id": "string (UUID)",
+  "challengerTeamId": "string (teamId)",
+  "challengedTeamId": "string (teamId)",
+  "date": "string (ISO 8601)",
+  "discipline": "string",
+  "status": "string (Enum: 'pending', 'accepted', 'declined', 'completed')"
+}
+\`\`\`
+
+### 2.7. TrainingPlan (План тренировок)
+
+\`\`\`json
+{
+  "id": "string (UUID)",
+  "userId": "string (userId)",
+  "name": "string",
+  "type": "string",
+  "days": {
+    "day1": {
+      "name": "string",
+      "exercises": [
+        { "id": "string", "name": "string", "sets": "string", "reps": "string", "weight": "string", ... }
+      ]
+    }
+  }
+}
+\`\`\`
+
 ---
 
 ## 3. Эндпоинты
@@ -135,7 +167,7 @@ export const API_DOCS = `
 ### 3.2. Teams (\`/teams\`)
 
 - **POST \`/teams\`**: Создание новой команды.
-  - Body: \`{ name, sportId, ... }\`
+  - Body: \`{ name, sportId, memberIds, logoUrl }\`
 - **GET \`/teams\`**: Получение списка команд с фильтрацией (\`?sportId=...\`, \`?search=...\`).
 - **GET \`/teams/:id\`**: Получение детальной информации о команде.
 - **PUT \`/teams/:id\`**: Обновление информации о команде (только для капитана/админа).
@@ -143,31 +175,42 @@ export const API_DOCS = `
   - Body: \`{ userId }\`
 - **DELETE \`/teams/:id/members/:userId\`**: Удаление игрока из команды.
 - **POST \`/teams/:id/join\`**: Подача заявки на вступление в команду.
+- **POST \`/teams/:id/applications/:applicationId/accept\`**: Принять заявку на вступление.
+- **POST \`/teams/:id/applications/:applicationId/decline\`**: Отклонить заявку.
 
 ### 3.3. Tournaments (\`/tournaments\`)
 
 - **POST \`/tournaments\`**: Создание нового турнира (только для организатора).
 - **GET \`/tournaments\`**: Получение списка всех турниров.
 - **GET \`/tournaments/:id\`**: Получение детальной информации о турнире.
+- **PUT \`/tournaments/:id\`**: Обновление настроек турнира.
 - **POST \`/tournaments/:id/register\`**: Регистрация команды на турнир.
   - Body: \`{ teamId, roster: [userId, ...] }\`
 - **GET \`/tournaments/:id/bracket\`**: Получение турнирной сетки.
 - **POST \`/tournaments/:id/matches/:matchId/score\`**: Обновление счета матча (только для судьи/организатора).
   - Body: \`{ score1, score2 }\`
+- **POST \`/tournaments/:id/matches/:matchId/events\`**: Добавление события в протокол матча.
+  - Body: \`{ type, minute, playerId, ... }\`
+- **GET \`/tournaments/:id/participants\`**: Получение списка команд-участников.
+- **PUT \`/tournaments/:id/participants/:teamId/status\`**: Изменение статуса заявки (принять/отклонить).
 
 ### 3.4. Playgrounds (\`/playgrounds\`)
 
 - **POST \`/playgrounds\`**: Добавление новой площадки (с премодерацией).
-- **GET \`/playgrounds\`**: Получение списка всех площадок.
+- **GET \`/playgrounds\`**: Получение списка всех площадок с фильтрацией (\`?city=...\`, \`?sportId=...\`).
 - **GET \`/playgrounds/:id\`**: Получение информации о площадке.
 
-### 3.5. Social Feed (\`/feed\`, \`/posts\`)
+### 3.5. Social & Feed (\`/feed\`, \`/posts\`, \`/challenges\`)
 
 - **GET \`/feed\`**: Получение персонализированной ленты новостей для текущего пользователя.
 - **POST \`/posts\`**: Создание нового поста.
   - Body: \`{ content, teamId? }\`
 - **POST \`/posts/:id/like\`**: Лайк поста.
 - **POST \`/posts/:id/comments\`**: Добавление комментария.
+- **POST \`/challenges\`**: Создание нового вызова.
+  - Body: \`{ challengedTeamId, date, ... }\`
+- **POST \`/challenges/:id/accept\`**: Принять вызов.
+- **POST \`/challenges/:id/decline\`**: Отклонить вызов.
 
 ### 3.6. AI Services (\`/ai\`)
 
@@ -179,6 +222,7 @@ export const API_DOCS = `
 - **POST \`/ai/news-digest\`**: Генерация новостного дайджеста.
 - **POST \`/ai/rules-expert\`**: Запрос к AI-консультанту по правилам.
   - Body: \`{ question: "string" }\`
+- **POST \`/ai/tournament-promo\`**: Генерация промо-материалов для турнира.
 
 ### 3.7. Training Center (\`/training\`)
 
@@ -187,4 +231,25 @@ export const API_DOCS = `
   - Body: \`{ name, type, days: { ... } }\`
 - **GET \`/training/schedule\`**: Получение расписания пользователя на неделю.
 - **POST \`/training/schedule\`**: Добавление активности в расписание.
-`;
+  - Body: \`{ activityType, activityId, date, time }\`
+- **DELETE \`/training/schedule/:activityId\`**: Удаление активности из расписания.
+
+### 3.8. Referee Center (\`/referee-center\`)
+
+- **GET \`/referee-center/courses\`**: Получение списка курсов для судей.
+- **GET \`/referee-center/knowledge-base\`**: Получение базы знаний (правил).
+- **POST \`/referee-center/attestation\`**: Запрос на прохождение аттестации.
+
+### 3.9. Gamification (\`/gamification\`)
+
+- **GET \`/quests\`**: Получение списка доступных квестов (daily, weekly, event).
+- **POST \`/quests/:id/claim\`**: Получение награды за выполненный квест.
+- **GET \`/users/:id/achievements\`**: Получение списка достижений пользователя.
+
+### 3.10. Store & Inventory (\`/store\`, \`/inventory\`)
+
+- **GET \`/store/items\`**: Получение списка товаров в магазине.
+- **POST \`/store/buy/:itemId\`**: Покупка товара.
+- **GET \`/inventory\`**: Получение инвентаря текущего пользователя.
+- **POST \`/inventory/activate/:itemId\`**: Активация косметического предмета.
+`
