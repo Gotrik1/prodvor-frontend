@@ -16,6 +16,7 @@ import { Checkbox } from "@/shared/ui/checkbox";
 import { Slider } from '@/shared/ui/slider';
 import { Badge } from '@/shared/ui/badge';
 import Link from 'next/link';
+import { useUserStore } from '@/widgets/dashboard-header/model/user-store';
 
 const ChallengeCard = ({ challenge, type }: { challenge: TeamChallenge, type: 'incoming' | 'outgoing' }) => {
     const opponent = type === 'incoming' ? challenge.challenger : challenge.challenged;
@@ -68,22 +69,44 @@ const RecommendedOpponentCard = ({ team }: { team: typeof teams[0] }) => (
 )
 
 export function ChallengesPage() {
-    // Mock current team for demonstration
-    const myTeam = teams[0];
-    const incomingChallenges = challenges.filter(c => c.challenged.id === myTeam.id && c.status === 'pending');
+    const { user: currentUser } = useUserStore();
+    // Find the first team the user is a captain of
+    const myTeam = useMemo(() => teams.find(t => t.captainId === currentUser?.id), [currentUser]);
+
+    const incomingChallenges = myTeam ? challenges.filter(c => c.challenged.id === myTeam.id && c.status === 'pending') : [];
     
     // --- Matchmaking Logic ---
     const [eloRange, setEloRange] = useState([-250, 250]);
-    const [disciplineFilter, setDisciplineFilter] = useState(myTeam.game);
+    const [disciplineFilter, setDisciplineFilter] = useState(myTeam?.game || teamSports[0].name);
 
     const recommendedOpponents = useMemo(() => {
+        if (!myTeam) return [];
         return teams.filter(team => {
             if (team.id === myTeam.id) return false; // Exclude self
             if (team.game !== disciplineFilter) return false; // Match discipline
             const eloDiff = team.rank - myTeam.rank;
             return eloDiff >= eloRange[0] && eloDiff <= eloRange[1];
-        }).slice(0, 5); // Limit to 5 recommendations
+        }).sort((a,b) => Math.abs(a.rank - myTeam.rank) - Math.abs(b.rank - myTeam.rank)) // Sort by closest ELO
+        .slice(0, 5); // Limit to 5 recommendations
     }, [myTeam, eloRange, disciplineFilter]);
+
+    if (!myTeam) {
+        return (
+            <Card className="text-center">
+                <CardHeader>
+                    <CardTitle>Функция для капитанов</CardTitle>
+                    <CardDescription>
+                        Для управления вызовами вы должны быть капитаном команды.
+                    </CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <Button asChild>
+                        <Link href="/teams/create">Создать команду</Link>
+                    </Button>
+                </CardContent>
+            </Card>
+        );
+    }
 
 
     return (
@@ -103,7 +126,7 @@ export function ChallengesPage() {
                                         <SelectValue placeholder="Выберите команду..." />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        {teams.map(team => (
+                                        {teams.filter(t => t.id !== myTeam.id && t.game === myTeam.game).map(team => (
                                             <SelectItem key={team.id} value={team.id}>
                                                 <div className="flex items-center gap-2">
                                                     <Image src={team.logoUrl} alt={team.name} width={20} height={20} className="rounded-sm" data-ai-hint={team.dataAiHint}/>
@@ -127,7 +150,7 @@ export function ChallengesPage() {
                 <Card>
                     <CardHeader>
                         <CardTitle className="flex items-center gap-2"><Sparkles className="text-primary"/>Рекомендуемые соперники</CardTitle>
-                        <CardDescription>Подбор команд с близким вам рейтингом.</CardDescription>
+                        <CardDescription>Подбор команд с близким вам рейтингом ({myTeam.rank} ELO).</CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-4">
                         <div className="grid grid-cols-2 gap-4">
