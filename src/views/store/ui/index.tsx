@@ -3,7 +3,7 @@
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/shared/ui/card";
 import { Button } from '@/shared/ui/button';
-import { Gem, Palette, ShoppingCart, Sparkles, Wand2 } from "lucide-react";
+import { Gem, Palette, ShoppingCart, Sparkles, Wand2, Award } from "lucide-react";
 import Image from 'next/image';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 import { useToast } from "@/shared/hooks/use-toast";
@@ -13,6 +13,7 @@ import { mockStoreItems } from '../lib/mock-data';
 
 const categories = [
     { id: 'all', name: 'Все товары', icon: Gem },
+    { id: 'PRO-статусы', name: 'PRO-статусы', icon: Award },
     { id: 'Рамки для аватара', name: 'Рамки', icon: Palette },
     { id: 'Эффекты для профиля', name: 'Эффекты', icon: Sparkles },
     { id: 'Бустеры', name: 'Бустеры', icon: Wand2 },
@@ -21,7 +22,12 @@ const categories = [
 export function StorePage() {
     const { toast } = useToast();
 
-    const handleBuy = (itemName: string) => {
+    const handleBuy = (itemName: string, itemType: string) => {
+        if (itemType === 'pro_status') {
+            // This is handled by the Link, but we can still show a toast if needed
+            // or perform other actions.
+            return;
+        }
         toast({
             title: "Покупка совершена!",
             description: `Предмет "${itemName}" добавлен в ваш инвентарь.`,
@@ -78,7 +84,13 @@ export function StorePage() {
                                                     <Gem className="h-5 w-5"/>
                                                     <span>{item.price}</span>
                                                 </div>
-                                                <Button onClick={() => handleBuy(item.name)}>Купить</Button>
+                                                {item.type === 'pro_status' ? (
+                                                    <Button asChild onClick={() => handleBuy(item.name, item.type)}>
+                                                        <Link href={`/store/pro`}>Подробнее</Link>
+                                                    </Button>
+                                                ) : (
+                                                    <Button onClick={() => handleBuy(item.name, item.type)}>Купить</Button>
+                                                )}
                                             </CardFooter>
                                         </Card>
                                     ))}

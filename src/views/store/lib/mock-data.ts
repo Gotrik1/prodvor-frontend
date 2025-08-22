@@ -1,6 +1,26 @@
 
 export const mockStoreItems = [
   {
+    id: 'pro-coach',
+    name: 'Статус "Тренер"',
+    description: 'Разблокируйте доступ к AI-аналитике матчей и расширенному управлению командой.',
+    category: 'PRO-статусы',
+    price: 15000,
+    imageUrl: 'https://placehold.co/400x400.png',
+    dataAiHint: 'coach clipboard strategy',
+    type: 'pro_status',
+  },
+  {
+    id: 'pro-manager',
+    name: 'Статус "Менеджер"',
+    description: 'Получите инструменты для управления несколькими командами и игроками, а также доступ к трансферному рынку.',
+    category: 'PRO-статусы',
+    price: 25000,
+    imageUrl: 'https://placehold.co/400x400.png',
+    dataAiHint: 'business handshake deal',
+    type: 'pro_status',
+  },
+  {
     id: 'item-1',
     name: 'Золотая рамка "Чемпион"',
     description: 'Покажите всем, кто здесь победитель.',
