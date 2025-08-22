@@ -14,7 +14,8 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/shared/ui/popover";
 import { cn } from "@/shared/lib/utils";
 import { Calendar as CalendarIcon } from 'lucide-react';
 import { Calendar as CalendarComponent } from "@/shared/ui/calendar";
-import { Tournament, requirements as initialRequirements } from '@/views/tournaments/public-page/ui/mock-data';
+import { requirements as initialRequirements } from '@/views/tournaments/public-page/ui/mock-data';
+import type { Tournament } from '@/views/tournaments/public-page/ui/mock-data';
 import { useToast } from "@/shared/hooks/use-toast";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/select";
 import { useTournamentCrmContext } from "../../lib/TournamentCrmContext";
@@ -32,7 +33,7 @@ export function SettingsTab() {
     const { toast } = useToast();
     const [selectedRequirements, setSelectedRequirements] = useState<string[]>(['req1', 'req2', 'req3', 'req4', 'req5']);
     const [isSaving, setIsSaving] = useState(false);
-    const [tournamentPlaygrounds, setTournamentPlaygrounds] = useState([mockPlaygrounds[0]]);
+    const [tournamentPlaygrounds, setTournamentPlaygrounds] = useState(tournament?.playgrounds || [mockPlaygrounds[0]]);
     
     if (!tournament) return null;
 
