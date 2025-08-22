@@ -5,7 +5,7 @@ import { users, teams, playgrounds, allSports, ranks } from "@/mocks";
 import type { User } from "@/mocks/users";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
-import { Briefcase, Dumbbell, Film, History, Mail, MapPin, MessageSquare, Phone, Rss, UserPlus, Users as UsersIcon, Gamepad2, Heart, Activity, TrendingUp, Shield, Star, Trophy, Gem } from "lucide-react";
+import { Briefcase, Dumbbell, Film, History, Mail, MapPin, MessageSquare, Phone, Rss, UserPlus, Users as UsersIcon, Gamepad2, Heart, Activity, TrendingUp, Shield, Star, Trophy, Gem, Award } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 import { Button } from "@/shared/ui/button";
 import Link from "next/link";
@@ -17,6 +17,7 @@ import { StatsTab } from "./player-page-stats-tab";
 import { FeedTab } from "./player-page-feed-tab";
 import { TrainingTab } from "./player-page-training-tab";
 import { MediaTab } from "./player-page-media-tab";
+import { AchievementsTab } from "./player-page-achievements-tab";
 import Image from "next/image";
 
 const defaultPlayer = users.find(u => u.role === 'Игрок')!;
@@ -144,14 +145,16 @@ export function PlayerPageTemplate({ user: profileUser }: { user?: User }) {
                 </div>
                 
                 <div className="lg:col-span-3">
-                     <Tabs defaultValue="stats">
-                        <TabsList className="grid w-full grid-cols-2 md:grid-cols-5">
+                     <Tabs defaultValue="achievements">
+                        <TabsList className="grid w-full grid-cols-3 md:grid-cols-6">
+                            <TabsTrigger value="achievements">Достижения</TabsTrigger>
                             <TabsTrigger value="stats">Статистика</TabsTrigger>
                             <TabsTrigger value="socials">Соц. связи</TabsTrigger>
                             <TabsTrigger value="training">Тренировки</TabsTrigger>
                             <TabsTrigger value="feed">Лента</TabsTrigger>
                             <TabsTrigger value="media">Медиа</TabsTrigger>
                         </TabsList>
+                        <TabsContent value="achievements" className="mt-6"><AchievementsTab player={player} /></TabsContent>
                         <TabsContent value="stats" className="mt-6"><StatsTab /></TabsContent>
                         <TabsContent value="socials" className="mt-6"><SocialTab user={player} isOwnProfile={isOwnProfile} /></TabsContent>
                         <TabsContent value="training" className="mt-6"><TrainingTab /></TabsContent>
