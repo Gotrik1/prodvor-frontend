@@ -13,9 +13,11 @@ import { useTournamentCrmContext } from "../../lib/TournamentCrmContext";
 import { updateRatings } from "@/shared/lib/rating";
 import { useToast } from "@/shared/hooks/use-toast";
 import { GameplayEvent, awardProgressPoints } from "@/shared/lib/gamification";
+import { useUserStore } from "@/widgets/dashboard-header/model/user-store";
 
 export function BracketTab() {
     const { confirmedTeams, generatedBracket } = useTournamentCrmContext();
+    const { user: currentUser } = useUserStore();
     const { setActiveMatch, activeMatch } = useProtocol();
     const [rounds, setRounds] = useState<BracketMatch[][]>(generatedBracket);
     const [scores, setScores] = useState<Record<string, { score1: string, score2: string }>>({});
@@ -86,7 +88,14 @@ export function BracketTab() {
                 title: "Рейтинг обновлен (симуляция)",
                 description: `${match.team1.name}: ${newRatingA}, ${match.team2.name}: ${newRatingB}`
             });
-            // Award points
+            
+            // Award points for participation
+            const allParticipants = [...match.team1.members, ...match.team2.members];
+            allParticipants.forEach(memberId => {
+                 awardProgressPoints(GameplayEvent.MATCH_PARTICIPATION, { userId: memberId, teamId: match.team1?.members.includes(memberId) ? match.team1.id : match.team2?.id, entityId: match.id });
+            });
+            
+            // Award points for winning
             const winner = score1 > score2 ? match.team1 : (score2 > score1 ? match.team2 : null);
             if (winner) {
                 winner.members.forEach(memberId => {
