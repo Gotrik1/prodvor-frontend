@@ -137,7 +137,7 @@ export function CoachPageTemplate({ user }: { user?: User }) {
                                     <YAxis />
                                     <ChartTooltip content={<ChartTooltipContent />} />
                                     <ChartLegend content={<ChartLegendContent />} />
-                                    <Bar dataKey="winrate" fill="var(--color-winrate)" radius={4} />
+                                    <Bar dataKey="winrate" fill="var(--color-winrate)" radius={[4, 4, 0, 0]} />
                                 </RechartsBarChart>
                             </ResponsiveContainer>
                         </ChartContainer>
