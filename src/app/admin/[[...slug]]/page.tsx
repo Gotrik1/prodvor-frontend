@@ -66,7 +66,7 @@ export default function AdminPage({ params }: { params: { slug: string[] } }) {
         return <UserPage userId={subpage} />;
       case 'teams':
         const team = teams.find((t) => t.id === subpage);
-        if (!team) {
+        if (subpage && !team) {
           return (
             <NotFoundAdminPage
               message={`Команда с ID "${subpage}" не найдена.`}

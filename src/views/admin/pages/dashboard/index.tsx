@@ -23,13 +23,11 @@ export function AdminDashboardPage() {
                  <TabsList>
                     <TabsTrigger value="overview"><BarChart className="mr-2 h-4 w-4" />Обзор</TabsTrigger>
                     <TabsTrigger value="users"><UserIcon className="mr-2 h-4 w-4" />Пользователи</TabsTrigger>
-                    <TabsTrigger value="roles"><Info className="mr-2 h-4 w-4" />Роли</TabsTrigger>
                     <TabsTrigger value="teams"><Users2 className="mr-2 h-4 w-4" />Команды</TabsTrigger>
                     <TabsTrigger value="sponsors"><Heart className="mr-2 h-4 w-4" />Спонсоры</TabsTrigger>
                     <TabsTrigger value="playgrounds"><MapPin className="mr-2 h-4 w-4" />Площадки</TabsTrigger>
                     <TabsTrigger value="tournaments"><Trophy className="mr-2 h-4 w-4" />Турниры</TabsTrigger>
                     <TabsTrigger value="sports"><BarChart3 className="mr-2 h-4 w-4" />Виды спорта</TabsTrigger>
-                    <TabsTrigger value="ranks"><Gem className="mr-2 h-4 w-4" />Ранги</TabsTrigger>
                 </TabsList>
             </div>
              <TabsContent value="overview">
@@ -37,9 +35,6 @@ export function AdminDashboardPage() {
             </TabsContent>
             <TabsContent value="users">
                 <UsersTab />
-            </TabsContent>
-            <TabsContent value="roles">
-                <RolesPage />
             </TabsContent>
              <TabsContent value="teams">
                 <TeamsTab />
@@ -55,9 +50,6 @@ export function AdminDashboardPage() {
             </TabsContent>
             <TabsContent value="sports">
                 <SportsTab />
-            </TabsContent>
-            <TabsContent value="ranks">
-                <RanksPage />
             </TabsContent>
         </Tabs>
     );
