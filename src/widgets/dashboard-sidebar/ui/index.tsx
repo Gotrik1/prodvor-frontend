@@ -28,6 +28,7 @@ import {
   Gitlab,
   Puzzle,
   Map,
+  Gavel,
 } from "lucide-react";
 import Link from 'next/link';
 import Image from "next/image";
@@ -86,6 +87,14 @@ export function DashboardSidebar() {
                         <SidebarMenuButton>
                             <Clapperboard />
                             <span>Анализ матча</span>
+                        </SidebarMenuButton>
+                    </Link>
+                </SidebarMenuItem>
+                 <SidebarMenuItem>
+                    <Link href="/referee-center">
+                        <SidebarMenuButton>
+                            <Gavel />
+                            <span>Центр судей</span>
                         </SidebarMenuButton>
                     </Link>
                 </SidebarMenuItem>
