@@ -53,7 +53,7 @@ export function RanksPage() {
             <TabsContent value="player" className="mt-6">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                     <div>
-                        <h3 className="text-xl font-bold mb-4">Ранги</h3>
+                        <h3 className="text-xl font-bold mb-4">Ранги (ELO)</h3>
                         <div className="space-y-4">
                             {ranks.map((rank, index) => (
                                 <Card key={rank.name} className={`bg-card/50 ${rankColors[index] || 'border-border'}`}>
