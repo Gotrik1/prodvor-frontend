@@ -163,6 +163,9 @@ export const API_DOCS = `
 - **GET \`/users/me\`**: Получение профиля текущего пользователя (требует авторизации).
 - **GET \`/users/:id\`**: Получение публичного профиля пользователя.
 - **PUT \`/users/me\`**: Обновление профиля текущего пользователя.
+- **POST \`/users/:id/follow\`**: Подписаться/отписаться на пользователя.
+- **POST \`/users/friend-request\`**: Отправить/принять/отклонить запрос в друзья.
+  - Body: \`{ targetUserId: "string", action: "send" | "accept" | "decline" }\`
 
 ### 3.2. Teams (\`/teams\`)
 
@@ -171,12 +174,14 @@ export const API_DOCS = `
 - **GET \`/teams\`**: Получение списка команд с фильтрацией (\`?sportId=...\`, \`?search=...\`).
 - **GET \`/teams/:id\`**: Получение детальной информации о команде.
 - **PUT \`/teams/:id\`**: Обновление информации о команде (только для капитана/админа).
+- **POST \`/teams/:id/follow\`**: Подписаться/отписаться на команду.
+- **POST \`/teams/:id/join\`**: Подача заявки на вступление в команду.
+- **GET \`/teams/:id/applications\`**: Получение списка заявок на вступление (для капитана).
+- **POST \`/teams/:id/applications/:applicationId/accept\`**: Принять заявку на вступление.
+- **POST \`/teams/:id/applications/:applicationId/decline\`**: Отклонить заявку.
 - **POST \`/teams/:id/members\`**: Отправка приглашения игроку.
   - Body: \`{ userId }\`
 - **DELETE \`/teams/:id/members/:userId\`**: Удаление игрока из команды.
-- **POST \`/teams/:id/join\`**: Подача заявки на вступление в команду.
-- **POST \`/teams/:id/applications/:applicationId/accept\`**: Принять заявку на вступление.
-- **POST \`/teams/:id/applications/:applicationId/decline\`**: Отклонить заявку.
 
 ### 3.3. Tournaments (\`/tournaments\`)
 
@@ -186,19 +191,22 @@ export const API_DOCS = `
 - **PUT \`/tournaments/:id\`**: Обновление настроек турнира.
 - **POST \`/tournaments/:id/register\`**: Регистрация команды на турнир.
   - Body: \`{ teamId, roster: [userId, ...] }\`
+- **GET \`/tournaments/:id/participants\`**: Получение списка команд-участников.
+- **PUT \`/tournaments/:id/participants/:teamId/status\`**: Изменение статуса заявки (принять/отклонить).
+  - Body: \`{ status: "accepted" | "declined" }\`
 - **GET \`/tournaments/:id/bracket\`**: Получение турнирной сетки.
 - **POST \`/tournaments/:id/matches/:matchId/score\`**: Обновление счета матча (только для судьи/организатора).
   - Body: \`{ score1, score2 }\`
 - **POST \`/tournaments/:id/matches/:matchId/events\`**: Добавление события в протокол матча.
   - Body: \`{ type, minute, playerId, ... }\`
-- **GET \`/tournaments/:id/participants\`**: Получение списка команд-участников.
-- **PUT \`/tournaments/:id/participants/:teamId/status\`**: Изменение статуса заявки (принять/отклонить).
 
 ### 3.4. Playgrounds (\`/playgrounds\`)
 
 - **POST \`/playgrounds\`**: Добавление новой площадки (с премодерацией).
 - **GET \`/playgrounds\`**: Получение списка всех площадок с фильтрацией (\`?city=...\`, \`?sportId=...\`).
 - **GET \`/playgrounds/:id\`**: Получение информации о площадке.
+- **POST \`/playgrounds/:id/follow\`**: Подписаться/отписаться от площадки.
+- **GET \`/playgrounds/:id/followers\`**: Получить список подписчиков площадки.
 
 ### 3.5. Social & Feed (\`/feed\`, \`/posts\`, \`/challenges\`)
 
@@ -229,15 +237,18 @@ export const API_DOCS = `
 - **GET \`/training/plans\`**: Получение списка планов тренировок пользователя.
 - **POST \`/training/plans\`**: Создание нового плана.
   - Body: \`{ name, type, days: { ... } }\`
+- **PUT \`/training/plans/:id\`**: Обновление существующего плана.
+- **DELETE \`/training/plans/:id\`**: Удаление плана.
 - **GET \`/training/schedule\`**: Получение расписания пользователя на неделю.
 - **POST \`/training/schedule\`**: Добавление активности в расписание.
-  - Body: \`{ activityType, activityId, date, time }\`
+  - Body: \`{ activityType, activityId, date, time, repeat? }\`
 - **DELETE \`/training/schedule/:activityId\`**: Удаление активности из расписания.
 
 ### 3.8. Referee Center (\`/referee-center\`)
 
 - **GET \`/referee-center/courses\`**: Получение списка курсов для судей.
 - **GET \`/referee-center/knowledge-base\`**: Получение базы знаний (правил).
+- **GET \`/referee-center/cases\`**: Получение разборов спорных кейсов.
 - **POST \`/referee-center/attestation\`**: Запрос на прохождение аттестации.
 
 ### 3.9. Gamification (\`/gamification\`)
