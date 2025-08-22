@@ -206,4 +206,4 @@ export const README = `
 - \`npm run build\` — сборка продакшн-версии приложения.
 - \`npm run start\` — запуск продакшн-сервера.
 - \`npm run lint\` — проверка кода с помощью ESLint.
-`;
+`
