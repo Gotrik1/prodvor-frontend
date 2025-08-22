@@ -12,6 +12,7 @@ import { useProtocol } from "@/widgets/protocol-editor/lib/use-protocol";
 import { useTournamentCrmContext } from "../../lib/TournamentCrmContext";
 import { updateRatings } from "@/shared/lib/rating";
 import { useToast } from "@/shared/hooks/use-toast";
+import { GameplayEvent, awardProgressPoints } from "@/shared/lib/gamification";
 
 export function BracketTab() {
     const { confirmedTeams, generatedBracket } = useTournamentCrmContext();
@@ -72,7 +73,7 @@ export function BracketTab() {
         
         if (isNaN(score1) || isNaN(score2)) return;
 
-        // --- ELO Calculation Step ---
+        // --- ELO Calculation Step & Gamification---
         if (match.team1 && match.team2) {
             const scoreA: 1 | 0.5 | 0 = score1 > score2 ? 1 : score1 < score2 ? 0 : 0.5;
             const { newRatingA, newRatingB } = updateRatings(match.team1.rank, match.team2.rank, scoreA);
@@ -85,9 +86,15 @@ export function BracketTab() {
                 title: "Рейтинг обновлен (симуляция)",
                 description: `${match.team1.name}: ${newRatingA}, ${match.team2.name}: ${newRatingB}`
             });
-            // In a real app, you would now update the state or database with these new ratings.
+            // Award points
+            const winner = score1 > score2 ? match.team1 : (score2 > score1 ? match.team2 : null);
+            if (winner) {
+                winner.members.forEach(memberId => {
+                    awardProgressPoints(GameplayEvent.MATCH_WIN, { userId: memberId, teamId: winner.id, entityId: match.id });
+                });
+            }
         }
-        // --- End ELO Calculation Step ---
+        // --- End ELO & Gamification ---
 
         const newRounds = JSON.parse(JSON.stringify(rounds)); // Deep copy
         newRounds[roundIndex][matchIndex] = {

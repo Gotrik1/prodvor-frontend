@@ -18,6 +18,9 @@ import { SplitTemplateSelector, splitTemplates } from './split-template-selector
 import { ScheduleActivityDialog } from './schedule-activity-dialog';
 import { Activity } from './activity-library';
 import { useSessionStore } from '@/entities/training/model/use-session-store';
+import { useUserStore } from '@/widgets/dashboard-header/model/user-store';
+import { GameplayEvent, awardProgressPoints } from '@/shared/lib/gamification';
+
 
 interface SplitTemplate {
     name: string;
@@ -29,6 +32,7 @@ interface SplitTemplate {
 export function FitnessPlanPage() {
     const { toast } = useToast();
     const router = useRouter();
+    const { user: currentUser } = useUserStore();
     const { plans, addPlan, isPlanFormOpen, setIsPlanFormOpen, selectedPlanType, setSelectedPlanType } = usePlanStore();
     const { addScheduledPlan } = useScheduleStore();
     const { startSession } = useSessionStore();
@@ -37,6 +41,11 @@ export function FitnessPlanPage() {
 
     const handleSavePlan = (plan: WorkoutPlan) => {
         addPlan(plan);
+
+        if (currentUser) {
+            awardProgressPoints(GameplayEvent.FITNESS_PLAN_CREATED, { userId: currentUser.id, entityId: plan.id });
+        }
+        
         handleCloseDialog(); // Close and reset everything
         toast({
             title: "План сохранен!",

@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState } from 'react';
@@ -11,10 +12,13 @@ import { Bot, PlusCircle, Trash2, UploadCloud, Users, Wand2 } from 'lucide-react
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import { useToast } from '@/shared/hooks/use-toast';
 import { useRouter } from 'next/navigation';
+import { useUserStore } from '@/widgets/dashboard-header/model/user-store';
+import { GameplayEvent, awardProgressPoints } from '@/shared/lib/gamification';
 
 export function CreateTeamPage() {
     const { toast } = useToast();
     const router = useRouter();
+    const { user: currentUser } = useUserStore();
     const [teamName, setTeamName] = useState('');
     const [discipline, setDiscipline] = useState('');
     const [invitedMembers, setInvitedMembers] = useState<string[]>([]);
@@ -39,6 +43,11 @@ export function CreateTeamPage() {
             });
             return;
         }
+
+        if (currentUser) {
+            awardProgressPoints(GameplayEvent.TEAM_CREATED, { userId: currentUser.id });
+        }
+        
         toast({
             title: 'Команда создана!',
             description: `Команда "${teamName}" успешно зарегистрирована.`,

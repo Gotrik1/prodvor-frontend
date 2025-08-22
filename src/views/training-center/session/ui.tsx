@@ -14,6 +14,8 @@ import { Alert, AlertDescription, AlertTitle } from '@/shared/ui/alert';
 import type { WorkoutPlan, Exercise, PlanDay } from '@/views/fitness-plan/ui/types';
 import { Label } from '@/shared/ui/label';
 import { Input } from '@/shared/ui/input';
+import { useUserStore } from '@/widgets/dashboard-header/model/user-store';
+import { GameplayEvent, awardProgressPoints } from '@/shared/lib/gamification';
 
 const useTimer = (initialSeconds = 60, onEnd: () => void) => {
     const [seconds, setSeconds] = useState(initialSeconds);
@@ -55,6 +57,7 @@ const useTimer = (initialSeconds = 60, onEnd: () => void) => {
 
 export function WorkoutSessionPage({ planId }: { planId: string }) {
     const router = useRouter();
+    const { user: currentUser } = useUserStore();
     const { plans } = usePlanStore();
     const { activeSession, startSession, updateSet, toggleSetComplete, endSession } = useSessionStore();
     const [currentDayIndex, setCurrentDayIndex] = useState(0);
@@ -119,6 +122,11 @@ export function WorkoutSessionPage({ planId }: { planId: string }) {
              // To pass complex state to the results page after redirect
             localStorage.setItem('last-workout-result', JSON.stringify(finalSession));
         }
+
+        if (currentUser) {
+            awardProgressPoints(GameplayEvent.TRAINING_COMPLETED, { userId: currentUser.id, entityId: planId });
+        }
+        
         router.push(`/training-center/session/${planId}/results`);
     };
 
