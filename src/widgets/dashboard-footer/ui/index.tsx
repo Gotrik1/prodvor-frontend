@@ -1,3 +1,4 @@
+
 import Link from "next/link";
 import Image from "next/image";
 
@@ -27,17 +28,17 @@ export function DashboardFooter() {
             <h4 className="font-bold mb-2 text-foreground">Навигация</h4>
             <ul className="space-y-1">
               <li>
-                <Link href="#" className="hover:text-primary">
+                <Link href="/teams" className="hover:text-primary">
                   Команды
                 </Link>
               </li>
               <li>
-                <Link href="#" className="hover:text-primary">
+                <Link href="/competitions" className="hover:text-primary">
                   Соревнования
                 </Link>
               </li>
               <li>
-                <Link href="#" className="hover:text-primary">
+                <Link href="/support" className="hover:text-primary">
                   Поддержка
                 </Link>
               </li>
@@ -47,7 +48,7 @@ export function DashboardFooter() {
             <h4 className="font-bold mb-2 text-foreground">Информация</h4>
             <ul className="space-y-1">
               <li>
-                <Link href="#" className="hover:text-primary">
+                <Link href="/about" className="hover:text-primary">
                   О проекте
                 </Link>
               </li>
