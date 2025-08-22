@@ -302,6 +302,37 @@ export const API_DOCS = `
 }
 \`\`\`
 
+### 3.19. Quest (Квест)
+\`\`\`json
+{
+  "id": "string",
+  "name": "string",
+  "description": "string",
+  "type": "string (daily, weekly, event)",
+  "progress": "number",
+  "target": "number",
+  "claimed": "boolean",
+  "rewards": {
+    "xp": "number",
+    "pd_coins": "number"
+  }
+}
+\`\`\`
+
+### 3.20. StoreItem (Товар в магазине)
+\`\`\`json
+{
+  "id": "string",
+  "name": "string",
+  "description": "string",
+  "category": "string",
+  "price": "number",
+  "imageUrl": "string",
+  "type": "string (cosmetic, effect, consumable)",
+  "quantity": "number (for consumables)"
+}
+\`\`\`
+
 ---
 
 ## 4. Эндпоинты
@@ -331,9 +362,9 @@ export const API_DOCS = `
 - **GET \`/feed\`**: Получение персонализированной ленты новостей.
   - **Auth:** Требуется.
   - **Логика:** Бэкенд должен получить \`userId\` текущего пользователя из JWT-токена. Затем агрегировать посты, где:
-    1.  \`authorId\` находится в списке друзей пользователя (\`friends\`).
-    2.  \`authorId\` находится в списке пользователей, на которых подписан текущий юзер (\`followingUsers\`).
-    3.  \`teamId\` находится в списке команд, на которые подписан текущий юзер (\`followingTeams\`).
+    1. \`authorId\` находится в списке друзей пользователя (\`friends\`).
+    2. \`authorId\` находится в списке пользователей, на которых подписан текущий юзер (\`followingUsers\`).
+    3. \`teamId\` находится в списке команд, на которые подписан текущий юзер (\`followingTeams\`).
   - **Response:** \`[Post]\` (массив постов, отсортированный по дате).
 
 - **POST \`/users/:id/follow\`**: Подписаться/отписаться от пользователя.
@@ -461,9 +492,14 @@ export const API_DOCS = `
   - **Body:** \`WorkoutSessionResult\` object (без \`id\`, \`userId\`).
   - **Response:** \`{ "success": true }\`.
 
----
+### 4.7. Playgrounds (Площадки)
 
-## 5. Gamification (Геймификация)
+- **GET \`/playgrounds\`**: Получение списка всех площадок с фильтрацией.
+- **POST \`/playgrounds\`**: Добавление новой площадки (требует модерации).
+  - **Auth:** Требуется.
+- **GET \`/playgrounds/:id\`**: Получение детальной информации о площадке.
+
+### 4.8. Gamification (Геймификация)
 
 - **GET \`/quests\`**: Получение списка доступных квестов (ежедневные, еженедельные, событийные).
   - **Auth:** Требуется.
@@ -478,4 +514,20 @@ export const API_DOCS = `
 
 **Примечание по ELO:**
 - Пересчет ELO-рейтинга должен происходить на бэкенде после того, как судья или организатор вносит результат матча через эндпоинт, связанный с управлением турниром (например, \`POST /tournaments/:id/matches/:matchId/score\`).
+
+### 4.9. Store & Inventory (Магазин и Инвентарь)
+
+- **GET \`/store/items\`**: Получение списка всех товаров в магазине.
+  - **Query Params:** \`?category=...\`
+  - **Response:** \`[StoreItem]\`.
+
+- **POST \`/store/buy/:itemId\`**: Покупка предмета.
+  - **Auth:** Требуется.
+  - **Response:** \`{ "success": true }\`.
+
+- **GET \`/users/me/inventory\`**: Получение инвентаря текущего пользователя.
+  - **Auth:** Требуется.
+  - **Response:** \`[StoreItem]\`.
+
+---
 `;
