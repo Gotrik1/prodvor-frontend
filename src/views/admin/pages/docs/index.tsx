@@ -3,10 +3,11 @@
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
-import { FileText, DraftingCompass, Info, Gem } from "lucide-react";
+import { FileText, DraftingCompass, Info, Gem, Server } from "lucide-react";
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { CONCEPT, README } from './docs-content';
+import { API_DOCS } from './api-docs-content';
 import { RolesPage } from "../roles";
 import { RanksPage } from "../ranks";
 
@@ -35,9 +36,10 @@ export function DocsPage() {
       </CardHeader>
       <CardContent>
          <Tabs defaultValue="concept">
-            <TabsList className="grid w-full grid-cols-4">
+            <TabsList className="grid w-full grid-cols-5">
                 <TabsTrigger value="concept"><DraftingCompass className="mr-2 h-4 w-4" />Концепция</TabsTrigger>
                 <TabsTrigger value="readme"><FileText className="mr-2 h-4 w-4" />Тех. документация</TabsTrigger>
+                <TabsTrigger value="api"><Server className="mr-2 h-4 w-4" />API</TabsTrigger>
                 <TabsTrigger value="roles"><Info className="mr-2 h-4 w-4" />Роли</TabsTrigger>
                 <TabsTrigger value="ranks"><Gem className="mr-2 h-4 w-4" />Ранги</TabsTrigger>
             </TabsList>
@@ -49,6 +51,11 @@ export function DocsPage() {
             <TabsContent value="readme" className="mt-6 prose prose-sm dark:prose-invert max-w-none">
                 <ReactMarkdown components={markdownComponents} remarkPlugins={[remarkGfm]}>
                     {README}
+                </ReactMarkdown>
+            </TabsContent>
+             <TabsContent value="api" className="mt-6 prose prose-sm dark:prose-invert max-w-none">
+                <ReactMarkdown components={markdownComponents} remarkPlugins={[remarkGfm]}>
+                    {API_DOCS}
                 </ReactMarkdown>
             </TabsContent>
             <TabsContent value="roles" className="mt-6">
