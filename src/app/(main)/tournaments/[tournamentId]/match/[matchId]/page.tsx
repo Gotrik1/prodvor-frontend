@@ -3,7 +3,6 @@
 
 import { MatchPage } from '@/views/tournaments/match';
 import { allTournaments as mockTournaments, registeredTeams } from '@/views/tournaments/public-page/ui/mock-data';
-import type { Metadata } from 'next';
 import { useProtocol } from '@/widgets/protocol-editor/lib/use-protocol';
 import { useEffect } from 'react';
 
