@@ -12,6 +12,7 @@ import { useScheduleStore } from '@/entities/training/model/use-schedule-store';
 import type { ScheduledActivity, Activity } from '@/views/fitness-plan/ui/types';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
 import { allTournaments, registeredTeams } from '@/views/tournaments/public-page/ui/mock-data';
+import { ActivityLibraryDialog } from '@/views/fitness-plan/ui/activity-library';
 
 const categoryColors: Record<ScheduleEvent['category'], string> = {
     'Силовая': 'bg-red-500/10 text-red-300 border-red-500/20',
@@ -29,11 +30,22 @@ const personalActivityColors: Record<Activity['type'] | 'match', string> = {
     'match': 'bg-primary/10 text-primary border-primary/20',
 };
 
-const EventCard = ({ event }: { event: ScheduledActivity }) => (
+const EventCard = ({ event, onRemove }: { event: ScheduledActivity; onRemove: (id: string) => void }) => (
     <div className="p-3 rounded-lg bg-card border flex flex-col gap-3 group relative">
-        <Badge className={`${personalActivityColors[event.type === 'template' ? 'template' : 'match']}`}>
-            {event.type === 'template' ? 'Тренировка' : 'Матч'}
-        </Badge>
+        <div className="flex justify-between items-start">
+            <Badge className={`${personalActivityColors[event.type === 'template' ? 'template' : 'match']}`}>
+                {event.type === 'template' ? <Dumbbell className="h-3 w-3 mr-1.5" /> : <Trophy className="h-3 w-3 mr-1.5" />}
+                {event.type === 'template' ? 'Тренировка' : 'Матч'}
+            </Badge>
+            <Button
+                variant="ghost"
+                size="icon"
+                className="h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity absolute top-2 right-2"
+                onClick={() => onRemove(event.id)}
+            >
+                <Trash2 className="h-4 w-4 text-destructive" />
+            </Button>
+        </div>
         <h4 className="font-semibold mt-1">{event.name}</h4>
         <div className="text-sm text-muted-foreground space-y-2">
             <div className="flex items-center gap-2">
@@ -45,9 +57,13 @@ const EventCard = ({ event }: { event: ScheduledActivity }) => (
 );
 
 export function FitnessSchedule({ showHeader = false }: { showHeader?: boolean }) {
-    const days = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
-    const [selectedDay, setSelectedDay] = useState(days[new Date().getDay() - 1] || days[0]);
-    const { personalSchedule } = useScheduleStore();
+    const daysOfWeek = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота', 'Воскресенье'];
+    const shortDays = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
+    
+    const todayIndex = (new Date().getDay() + 6) % 7; // Monday is 0
+    const [selectedDay, setSelectedDay] = useState(daysOfWeek[todayIndex]);
+    
+    const { personalSchedule, removeScheduledActivity, addScheduledActivity } = useScheduleStore();
 
     // Mock upcoming match for demonstration
     const upcomingMatch = {
@@ -58,11 +74,29 @@ export function FitnessSchedule({ showHeader = false }: { showHeader?: boolean }
         time: '19:00',
         repeat: 'none',
         customInterval: 0,
-    }
+    };
 
-    const todaySchedule = personalSchedule[Object.keys(personalSchedule)[new Date().getDay() - 1]] || [];
+    const eventsForSelectedDay = personalSchedule[selectedDay] || [];
     // Add the mock match to today's schedule for demonstration
-    const eventsForToday = [...todaySchedule, upcomingMatch].sort((a,b) => a.time.localeCompare(b.time));
+    if (selectedDay === daysOfWeek[todayIndex]) {
+        if (!eventsForSelectedDay.find(e => e.id === 'match-upcoming-1')) {
+            eventsForSelectedDay.push(upcomingMatch);
+        }
+    }
+    eventsForSelectedDay.sort((a,b) => a.time.localeCompare(b.time));
+
+    const handleSelectActivity = (activity: Activity) => {
+        // For demonstration, we'll add it with a default time
+        const newActivity: ScheduledActivity = {
+            ...activity,
+            id: `scheduled-${activity.id}-${Date.now()}`,
+            startDate: new Date().toISOString(), // This should be tied to the selected day
+            time: "12:00",
+            repeat: 'none',
+            customInterval: 0,
+        };
+        addScheduledActivity(newActivity);
+    };
 
     return (
         <Card>
@@ -74,26 +108,27 @@ export function FitnessSchedule({ showHeader = false }: { showHeader?: boolean }
             )}
             <CardContent className={showHeader ? "" : "pt-6"}>
                 <div className="flex justify-between items-center mb-4">
-                    {days.map(day => (
+                    {shortDays.map((day, index) => (
                         <Button
                             key={day}
-                            variant={selectedDay === day ? 'default' : 'ghost'}
+                            variant={selectedDay === daysOfWeek[index] ? 'default' : 'ghost'}
                             size="sm"
                             className="w-full"
-                            onClick={() => setSelectedDay(day)}
+                            onClick={() => setSelectedDay(daysOfWeek[index])}
                         >
                             {day}
                         </Button>
                     ))}
                 </div>
                 <div className="space-y-3 min-h-[150px]">
-                    {selectedDay === (days[new Date().getDay() - 1] || days[0]) && eventsForToday.length > 0 ? (
-                        eventsForToday.map(event => <EventCard key={event.id} event={event} />)
+                    {eventsForSelectedDay.length > 0 ? (
+                        eventsForSelectedDay.map(event => <EventCard key={event.id} event={event} onRemove={removeScheduledActivity} />)
                     ) : (
                          <div className="text-center text-muted-foreground pt-10">
                             <p className="text-sm">На этот день активностей нет.</p>
                         </div>
                     )}
+                    {!showHeader && <ActivityLibraryDialog onSelectActivity={handleSelectActivity}/>}
                 </div>
             </CardContent>
         </Card>
