@@ -5,7 +5,7 @@ import { users, teams, ranks } from "@/mocks";
 import type { User } from "@/mocks/users";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
-import { Briefcase, Dumbbell, Film, History, MapPin, MessageSquare, Rss, UserPlus } from "lucide-react";
+import { Briefcase, Dumbbell, Film, History, MapPin, MessageSquare, Rss, UserPlus, Users2 } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 import { Button } from "@/shared/ui/button";
 import Link from "next/link";
@@ -141,7 +141,7 @@ export function PlayerPageTemplate({ user: profileUser }: { user?: User }) {
                         <TabsList className="grid w-full grid-cols-3 md:grid-cols-6">
                             <TabsTrigger value="achievements">Достижения</TabsTrigger>
                             <TabsTrigger value="stats">Статистика</TabsTrigger>
-                            <TabsTrigger value="socials">Соц. связи</TabsTrigger>
+                            <TabsTrigger value="socials"><Users2 className="md:mr-2 h-4 w-4"/><span className="hidden md:inline">Соц. связи</span></TabsTrigger>
                             <TabsTrigger value="training">Тренировки</TabsTrigger>
                             <TabsTrigger value="feed">Лента</TabsTrigger>
                             <TabsTrigger value="media">Медиа</TabsTrigger>
