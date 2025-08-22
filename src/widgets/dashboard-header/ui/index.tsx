@@ -1,3 +1,4 @@
+
 'use client';
 
 import { SidebarTrigger } from '@/shared/ui/sidebar';
@@ -75,9 +76,12 @@ export function DashboardHeader() {
               <Button
                 variant="outline"
                 className="hidden sm:flex items-center gap-2"
+                asChild
               >
-                <Gem className="h-4 w-4 text-primary" />
-                <span className="font-bold">1,250</span>
+                <Link href="/store">
+                  <Gem className="h-4 w-4 text-primary" />
+                  <span className="font-bold">1,250</span>
+                </Link>
               </Button>
             </TooltipTrigger>
             <TooltipContent>

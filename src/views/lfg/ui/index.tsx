@@ -45,7 +45,7 @@ const PlayerCard = ({ player }: { player: typeof playersLookingForTeam[0] }) => 
 const TeamCard = ({ team }: { team: typeof teamsLookingForPlayers[0] }) => (
      <Card>
         <CardHeader className="flex-row items-center gap-4">
-            <Avatar className="h-12 w-12">
+            <Avatar className="h-12 w-12 rounded-md">
                 <AvatarImage src={team.logoUrl} />
                 <AvatarFallback>{team.name.charAt(0)}</AvatarFallback>
             </Avatar>
