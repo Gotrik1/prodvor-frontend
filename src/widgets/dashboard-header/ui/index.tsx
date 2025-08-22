@@ -12,6 +12,7 @@ import {
   Share2,
   LogOut,
   Gem,
+  Warehouse,
 } from 'lucide-react';
 import { Button } from '@/shared/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
@@ -131,7 +132,7 @@ export function DashboardHeader() {
             </DropdownMenuItem>
              <DropdownMenuItem asChild>
               <Link href="/inventory">
-                <User className="mr-2 h-4 w-4" />
+                <Warehouse className="mr-2 h-4 w-4" />
                 <span>Инвентарь</span>
               </Link>
             </DropdownMenuItem>

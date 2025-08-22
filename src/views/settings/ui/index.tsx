@@ -24,7 +24,7 @@ import {
   FormMessage,
 } from '@/shared/ui/form';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs';
-import { Bell, Brush, Lock, User as UserIcon, Save, Shield } from 'lucide-react';
+import { Bell, Brush, Lock, User as UserIcon, Save, Shield, Warehouse } from 'lucide-react';
 import { useUserStore } from '@/widgets/dashboard-header/model/user-store';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import { Textarea } from '@/shared/ui/textarea';
@@ -32,6 +32,7 @@ import { Switch } from '@/shared/ui/switch';
 import { ThemeToggle } from '@/shared/ui/theme-toggle';
 import { useToast } from '@/shared/hooks/use-toast';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shared/ui/select';
+import Link from 'next/link';
 
 const profileFormSchema = z.object({
   firstName: z.string().min(2, 'Имя должно содержать не менее 2 символов.'),
@@ -117,7 +118,12 @@ export function SettingsPage() {
                                     <AvatarImage src={currentUser?.avatarUrl} />
                                     <AvatarFallback>{currentUser?.nickname?.charAt(0)}</AvatarFallback>
                                 </Avatar>
-                                <Button type="button" variant="outline">Загрузить новый аватар</Button>
+                                <div className="flex flex-col gap-2">
+                                    <Button type="button" variant="outline">Загрузить новый аватар</Button>
+                                    <Button asChild type="button" variant="secondary">
+                                        <Link href="/inventory"><Warehouse className="mr-2 h-4 w-4"/>Настроить рамку</Link>
+                                    </Button>
+                                </div>
                             </div>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <FormField control={profileForm.control} name="firstName" render={({ field }) => (
