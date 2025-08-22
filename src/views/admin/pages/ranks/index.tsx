@@ -1,9 +1,11 @@
 
+'use client';
+
 import { ranks } from '@/mocks/ranks';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Badge } from '@/shared/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs';
-import { Construction, User, Gavel, Megaphone, ClipboardList, Briefcase, Handshake, Star, Shield } from 'lucide-react';
+import { Construction, User, Gavel, Megaphone, ClipboardList, Briefcase, Handshake, Star, Shield, Award } from 'lucide-react';
 
 const rankColors = [
     'border-destructive/50', // Annihilator
@@ -19,17 +21,20 @@ const rankColors = [
     'border-gray-400/50', // Take Me
 ];
 
-const Placeholder = ({ roleName }: { roleName: string }) => (
-    <div className="flex flex-col items-center justify-center min-h-[40vh] text-center p-4">
-        <div className="mx-auto bg-primary/10 text-primary p-4 rounded-full w-fit mb-4">
-            <Construction className="h-10 w-10" />
-        </div>
-        <h3 className="text-xl font-bold font-headline">Ранги для роли "{roleName}"</h3>
-        <p className="text-muted-foreground mt-2 max-w-sm">
-            Система прогрессии для этой роли находится в разработке.
-        </p>
+const PlaceholderColumn = ({ title, description }: { title: string, description: string }) => (
+    <div>
+        <h3 className="text-xl font-bold mb-4">{title}</h3>
+        <Card className="flex flex-col items-center justify-center min-h-[40vh] text-center p-4">
+             <div className="mx-auto bg-primary/10 text-primary p-4 rounded-full w-fit mb-4">
+                <Construction className="h-10 w-10" />
+            </div>
+            <p className="text-muted-foreground mt-2 max-w-sm">
+                {description}
+            </p>
+        </Card>
     </div>
 );
+
 
 export function RanksPage() {
     return (
@@ -45,53 +50,73 @@ export function RanksPage() {
                 <TabsTrigger value="moderator"><Shield className="mr-2 h-4 w-4" />Модератор</TabsTrigger>
             </TabsList>
             <TabsContent value="player" className="mt-6">
-                <div className="space-y-4">
-                    {ranks.map((rank, index) => (
-                        <Card key={rank.name} className={`bg-card/50 ${rankColors[index] || 'border-border'}`}>
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div>
+                        <h3 className="text-xl font-bold mb-4">Ранги</h3>
+                        <div className="space-y-4">
+                            {ranks.map((rank, index) => (
+                                <Card key={rank.name} className={`bg-card/50 ${rankColors[index] || 'border-border'}`}>
+                                    <CardHeader>
+                                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                                            <div className="flex items-center gap-3">
+                                                <div className="p-2 rounded-md bg-muted">
+                                                    <rank.icon className="w-6 h-6 text-primary" />
+                                                </div>
+                                                <div>
+                                                    <CardTitle className="text-xl">{rank.name}</CardTitle>
+                                                    <CardDescription className="italic">"{rank.title}"</CardDescription>
+                                                </div>
+                                            </div>
+                                            <Badge variant="outline" className="font-mono text-base w-fit">
+                                                {rank.eloMin}{rank.eloMax > rank.eloMin ? ` - ${rank.eloMax}` : '+'} ELO
+                                            </Badge>
+                                        </div>
+                                    </CardHeader>
+                                    <CardContent>
+                                        <p className="text-muted-foreground">{rank.description}</p>
+                                    </CardContent>
+                                </Card>
+                            ))}
+                        </div>
+                    </div>
+                     <div>
+                        <h3 className="text-xl font-bold mb-4">Ачивки</h3>
+                        <Card>
                             <CardHeader>
-                                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-                                    <div className="flex items-center gap-3">
-                                        <div className="p-2 rounded-md bg-muted">
-                                            <rank.icon className="w-6 h-6 text-primary" />
-                                        </div>
-                                        <div>
-                                            <CardTitle className="text-xl">{rank.name}</CardTitle>
-                                            <CardDescription className="italic">"{rank.title}"</CardDescription>
-                                        </div>
-                                    </div>
-                                    <Badge variant="outline" className="font-mono text-base w-fit">
-                                        {rank.eloMin}{rank.eloMax > rank.eloMin ? ` - ${rank.eloMax}` : '+'} ELO
-                                    </Badge>
+                                <div className="flex items-center gap-2">
+                                    <Award className="h-5 w-5"/>
+                                    <CardTitle>Достижения игрока</CardTitle>
                                 </div>
                             </CardHeader>
-                            <CardContent>
-                                <p className="text-muted-foreground">{rank.description}</p>
+                            <CardContent className="flex flex-col items-center justify-center min-h-[40vh] text-center p-4">
+                                <div className="mx-auto bg-primary/10 text-primary p-4 rounded-full w-fit mb-4">
+                                    <Construction className="h-10 w-10" />
+                                </div>
+                                <p className="text-muted-foreground mt-2 max-w-sm">
+                                    Раздел с уникальными достижениями для игроков находится в разработке.
+                                </p>
                             </CardContent>
                         </Card>
-                    ))}
+                    </div>
                 </div>
             </TabsContent>
-             <TabsContent value="coach" className="mt-6">
-                 <Placeholder roleName="Тренер" />
-            </TabsContent>
-            <TabsContent value="referee" className="mt-6">
-                <Placeholder roleName="Судья" />
-            </TabsContent>
-             <TabsContent value="manager" className="mt-6">
-                 <Placeholder roleName="Менеджер" />
-            </TabsContent>
-            <TabsContent value="organizer" className="mt-6">
-                 <Placeholder roleName="Организатор" />
-            </TabsContent>
-             <TabsContent value="sponsor" className="mt-6">
-                 <Placeholder roleName="Спонсор" />
-            </TabsContent>
-             <TabsContent value="fan" className="mt-6">
-                 <Placeholder roleName="Болельщик" />
-            </TabsContent>
-             <TabsContent value="moderator" className="mt-6">
-                 <Placeholder roleName="Модератор" />
-            </TabsContent>
+            
+            {[
+                { value: 'coach', name: 'Тренер' },
+                { value: 'referee', name: 'Судья' },
+                { value: 'manager', name: 'Менеджер' },
+                { value: 'organizer', name: 'Организатор' },
+                { value: 'sponsor', name: 'Спонсор' },
+                { value: 'fan', name: 'Болельщик' },
+                { value: 'moderator', name: 'Модератор' },
+            ].map(role => (
+                 <TabsContent key={role.value} value={role.value} className="mt-6">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        <PlaceholderColumn title="Ранги" description={`Система прогрессии для роли "${role.name}" находится в разработке.`} />
+                        <PlaceholderColumn title="Ачивки" description={`Система достижений для роли "${role.name}" находится в разработке.`} />
+                    </div>
+                </TabsContent>
+            ))}
         </Tabs>
     );
 }
