@@ -24,7 +24,7 @@ export function TournamentRegisterPage({ tournament }: { tournament: (typeof all
     const { user: currentUser } = useUserStore();
     const { toast } = useToast();
     const router = useRouter();
-    const [selectedTeamId, setSelectedTeamId] = useState<string | null>(null);
+    const [selectedTeamId, setSelectedTeamId] = useState<string | undefined>(undefined);
 
     if (!tournament) {
         return (
@@ -46,8 +46,12 @@ export function TournamentRegisterPage({ tournament }: { tournament: (typeof all
         );
     }
 
-    const userTeams = teams.filter(team => team.captainId === currentUser?.id && team.game === tournament.game);
-    const selectedTeam = userTeams.find(team => team.id === selectedTeamId);
+    const userTeams = useMemo(() => {
+        if (!currentUser) return [];
+        return teams.filter(team => team.captainId === currentUser.id && team.game === tournament.game);
+    }, [currentUser, tournament.game]);
+
+    const selectedTeam = useMemo(() => userTeams.find(team => team.id === selectedTeamId), [userTeams, selectedTeamId]);
     
     // Automatically select the first team if it's the only one
     useState(() => {
@@ -117,7 +121,7 @@ export function TournamentRegisterPage({ tournament }: { tournament: (typeof all
                         <CardContent className="space-y-8">
                                 <div className="space-y-2">
                                 <Label htmlFor="team-select">Ваша команда</Label>
-                                <Select onValueChange={setSelectedTeamId} defaultValue={selectedTeamId || undefined}>
+                                <Select onValueChange={setSelectedTeamId} defaultValue={selectedTeamId}>
                                     <SelectTrigger id="team-select">
                                         <SelectValue placeholder="Выберите команду для регистрации" />
                                     </SelectTrigger>
@@ -170,5 +174,3 @@ export function TournamentRegisterPage({ tournament }: { tournament: (typeof all
         </div>
     );
 }
-
-    

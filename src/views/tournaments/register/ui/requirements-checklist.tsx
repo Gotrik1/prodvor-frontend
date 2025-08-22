@@ -9,7 +9,7 @@ import type { Team, User } from '@/mocks';
 import { users } from '@/mocks';
 
 // Mock values for demonstration
-const mockRequirementValues = {
+const mockRequirementValues: Record<string, number> = {
     req1: 5, // min players
     req2: 7, // max players
     req3: 16, // min age
@@ -104,5 +104,3 @@ export function RequirementsChecklist({ team }: { team: Team | undefined }) {
         </Card>
     );
 }
-
-    
