@@ -36,7 +36,7 @@ export const API_DOCS = `
   "nickname": "string (unique)",
   "avatarUrl": "string (URL)",
   "email": "string (email, unique)",
-  "roles": ["string (Enum: 'Игрок', 'Тренер', ...)", "..."],
+  "roles": ["string (Enum: 'Игрок', 'Капитан', 'Тренер', 'Организатор', 'Судья', 'Менеджер', 'Болельщик', 'Модератор', 'Администратор')", "..."],
   "gender": "string (Enum: 'мужской', 'женский')",
   "age": "number",
   "city": "string",
@@ -325,7 +325,7 @@ export const API_DOCS = `
   "id": "string",
   "name": "string",
   "description": "string",
-  "category": "string",
+  "category": "string (e.g., 'Рамки для аватара', 'Эффекты для профиля')",
   "price": "number",
   "imageUrl": "string",
   "type": "string (cosmetic, effect, consumable)",
@@ -339,8 +339,8 @@ export const API_DOCS = `
   "id": "string",
   "name": "string",
   "address": "string",
-  "type": "string (e.g., 'Открытая площадка')",
-  "surface": "string (e.g., 'Асфальт')",
+  "type": "string (Enum: 'Открытая площадка', 'Закрытое помещение', 'Стадион', ...)",
+  "surface": "string (Enum: 'Асфальт', 'Резиновое', 'Газон', ...)",
   "imageUrl": "string",
   "sportIds": ["string (sportId)", "..."],
   "followers": ["string (userId)", "..."],
@@ -394,7 +394,7 @@ export const API_DOCS = `
   "id": "string",
   "name": "string",
   "description": "string",
-  "category": "string (e.g., 'Состав', 'Рейтинг')"
+  "category": "string (Enum: 'Состав', 'Рейтинг', 'Возраст', 'Прочее')"
 }
 \`\`\`
 
