@@ -39,8 +39,8 @@ export function FinancesTab() {
     const { confirmedTeams } = useTournamentCrmContext();
 
     const teamsWithFinance = confirmedTeams.map(team => {
-        const finance = mockFinances.find(f => f.teamId === team.id) || { fee: 2000, fine: 0, status: 'Не оплачено' };
-        return { ...team, ...finance };
+        const financeInfo = mockFinances.find(f => f.teamId === team.id) || { fee: 2000, fine: 0, status: 'Не оплачено' };
+        return { ...team, ...financeInfo };
     });
 
     return (
