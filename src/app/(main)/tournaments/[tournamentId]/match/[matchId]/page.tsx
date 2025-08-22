@@ -5,6 +5,7 @@ import { MatchPage } from '@/views/tournaments/match';
 import { allTournaments as mockTournaments, registeredTeams } from '@/views/tournaments/public-page/ui/mock-data';
 import { useProtocol } from '@/widgets/protocol-editor/lib/use-protocol';
 import { useEffect } from 'react';
+import type { BracketMatch } from '@/views/tournaments/public-page/ui/mock-data';
 
 // This is a client component, so we can't export metadata directly.
 // We'll manage the title dynamically if needed.
@@ -15,7 +16,7 @@ export default function TournamentMatchPage({ params }: { params: { tournamentId
   
   // In a real app, you would fetch match details based on matchId
   // For this mock, we'll find the match in our generated bracket if it exists
-  const match = {
+  const match: BracketMatch = {
     id: params.matchId,
     team1: registeredTeams[0],
     team2: registeredTeams[1],
