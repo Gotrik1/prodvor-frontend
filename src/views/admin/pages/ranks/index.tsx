@@ -1,7 +1,7 @@
 
 'use client';
 
-import { ranks, allSports } from '@/mocks';
+import { ranks, allSports, achievementsBySport } from '@/mocks';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Badge } from '@/shared/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs';
@@ -92,16 +92,28 @@ export function RanksPage() {
                             </CardHeader>
                             <CardContent>
                                 <Accordion type="single" collapsible className="w-full">
-                                    {allSports.map(sport => (
+                                    {allSports.map(sport => {
+                                        const sportAchievements = achievementsBySport[sport.id] || achievementsBySport['default'];
+                                        return (
                                         <AccordionItem value={sport.id} key={sport.id}>
                                             <AccordionTrigger>{sport.name}</AccordionTrigger>
                                             <AccordionContent>
-                                                <div className="text-center text-muted-foreground p-4">
-                                                    <p>Достижения для этого вида спорта скоро появятся.</p>
+                                                <div className="space-y-3">
+                                                    {sportAchievements.map(ach => (
+                                                        <div key={ach.id} className="flex items-start gap-3 p-2 rounded-md hover:bg-muted/50">
+                                                            <div className="p-2 rounded-md bg-muted text-primary">
+                                                                <ach.icon className="h-5 w-5"/>
+                                                            </div>
+                                                            <div>
+                                                                <p className="font-semibold">{ach.name}</p>
+                                                                <p className="text-xs text-muted-foreground">{ach.description}</p>
+                                                            </div>
+                                                        </div>
+                                                    ))}
                                                 </div>
                                             </AccordionContent>
                                         </AccordionItem>
-                                    ))}
+                                    )})}
                                 </Accordion>
                             </CardContent>
                         </Card>
