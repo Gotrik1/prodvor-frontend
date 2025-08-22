@@ -3,7 +3,7 @@ import { ranks } from '@/mocks/ranks';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Badge } from '@/shared/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs';
-import { Construction, User, Gavel, Megaphone, ClipboardList } from 'lucide-react';
+import { Construction, User, Gavel, Megaphone, ClipboardList, Briefcase, Handshake, Star, Shield } from 'lucide-react';
 
 const rankColors = [
     'border-destructive/50', // Annihilator
@@ -34,11 +34,15 @@ const Placeholder = ({ roleName }: { roleName: string }) => (
 export function RanksPage() {
     return (
         <Tabs defaultValue="player">
-            <TabsList className="grid w-full grid-cols-2 md:grid-cols-4">
+            <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 lg:grid-cols-8">
                 <TabsTrigger value="player"><User className="mr-2 h-4 w-4" />Игрок</TabsTrigger>
-                <TabsTrigger value="referee"><Gavel className="mr-2 h-4 w-4" />Судья</TabsTrigger>
-                <TabsTrigger value="organizer"><Megaphone className="mr-2 h-4 w-4" />Организатор</TabsTrigger>
                 <TabsTrigger value="coach"><ClipboardList className="mr-2 h-4 w-4" />Тренер</TabsTrigger>
+                <TabsTrigger value="referee"><Gavel className="mr-2 h-4 w-4" />Судья</TabsTrigger>
+                <TabsTrigger value="manager"><Briefcase className="mr-2 h-4 w-4" />Менеджер</TabsTrigger>
+                <TabsTrigger value="organizer"><Megaphone className="mr-2 h-4 w-4" />Организатор</TabsTrigger>
+                <TabsTrigger value="sponsor"><Handshake className="mr-2 h-4 w-4" />Спонсор</TabsTrigger>
+                <TabsTrigger value="fan"><Star className="mr-2 h-4 w-4" />Болельщик</TabsTrigger>
+                <TabsTrigger value="moderator"><Shield className="mr-2 h-4 w-4" />Модератор</TabsTrigger>
             </TabsList>
             <TabsContent value="player" className="mt-6">
                 <div className="space-y-4">
@@ -67,14 +71,26 @@ export function RanksPage() {
                     ))}
                 </div>
             </TabsContent>
+             <TabsContent value="coach" className="mt-6">
+                 <Placeholder roleName="Тренер" />
+            </TabsContent>
             <TabsContent value="referee" className="mt-6">
                 <Placeholder roleName="Судья" />
+            </TabsContent>
+             <TabsContent value="manager" className="mt-6">
+                 <Placeholder roleName="Менеджер" />
             </TabsContent>
             <TabsContent value="organizer" className="mt-6">
                  <Placeholder roleName="Организатор" />
             </TabsContent>
-            <TabsContent value="coach" className="mt-6">
-                 <Placeholder roleName="Тренер" />
+             <TabsContent value="sponsor" className="mt-6">
+                 <Placeholder roleName="Спонсор" />
+            </TabsContent>
+             <TabsContent value="fan" className="mt-6">
+                 <Placeholder roleName="Болельщик" />
+            </TabsContent>
+             <TabsContent value="moderator" className="mt-6">
+                 <Placeholder roleName="Модератор" />
             </TabsContent>
         </Tabs>
     );
