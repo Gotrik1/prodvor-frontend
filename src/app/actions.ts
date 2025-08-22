@@ -1,13 +1,19 @@
 
 "use server";
 
-import { generateTeamLogoVariations, type LogoGenerationInput } from "@/shared/api/generate-team-logo-variations";
+import { generateTeamLogoVariations } from "@/shared/api/generate-team-logo-variations";
+import type { LogoGenerationInput } from "@/shared/api/generate-team-logo-variations";
 import { generateNewsDigest } from "@/shared/api/generate-news-digest";
-import { sendTournamentAnnouncement, type SendTournamentAnnouncementInput } from "@/shared/api/send-tournament-announcement";
-import { generateTournamentImage, type GenerateTournamentImageInput } from "@/shared/api/generate-tournament-image";
-import { generateTournamentPromo, type GenerateTournamentPromoInput } from "@/shared/api/generate-tournament-promo";
-import { analyzeMatchVideo, type AnalyzeMatchVideoInput, type AnalyzeMatchVideoOutput } from "@/shared/api/analyze-match-video";
-import { askRulesExpert, type AskRulesExpertInput } from "@/shared/api/ask-rules-expert";
+import { sendTournamentAnnouncement } from "@/shared/api/send-tournament-announcement";
+import type { SendTournamentAnnouncementInput } from "@/shared/api/send-tournament-announcement";
+import { generateTournamentImage } from "@/shared/api/generate-tournament-image";
+import type { GenerateTournamentImageInput } from "@/shared/api/generate-tournament-image";
+import { generateTournamentPromo } from "@/shared/api/generate-tournament-promo";
+import type { GenerateTournamentPromoInput } from "@/shared/api/generate-tournament-promo";
+import { analyzeMatchVideo } from "@/shared/api/analyze-match-video";
+import type { AnalyzeMatchVideoInput, AnalyzeMatchVideoOutput } from "@/shared/api/analyze-match-video";
+import { askRulesExpert } from "@/shared/api/ask-rules-expert";
+import type { AskRulesExpertInput } from "@/shared/api/ask-rules-expert";
 
 
 export async function generateLogosAction(
@@ -40,4 +46,3 @@ export async function analyzeMatchVideoAction(input: AnalyzeMatchVideoInput): Pr
 export async function askRulesExpertAction(input: AskRulesExpertInput) {
     return await askRulesExpert(input);
 }
-
