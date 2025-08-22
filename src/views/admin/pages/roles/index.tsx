@@ -22,6 +22,7 @@ export function RolesPage() {
         <Table>
             <TableHeader>
                 <TableRow>
+                    <TableHead className="w-[150px]">ID</TableHead>
                     <TableHead>Роль</TableHead>
                     <TableHead>Описание</TableHead>
                 </TableRow>
@@ -29,6 +30,7 @@ export function RolesPage() {
             <TableBody>
                 {roles.map(role => (
                     <TableRow key={role.id}>
+                        <TableCell className="font-mono text-xs">{role.id}</TableCell>
                         <TableCell className="font-medium whitespace-nowrap">
                             <div className="flex items-center gap-2">
                                 <role.icon className="h-5 w-5 text-primary" />
