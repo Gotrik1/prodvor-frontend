@@ -70,7 +70,7 @@ export function LfgPage() {
     return (
         <div className="p-4 md:p-6 lg:p-8 space-y-8">
              <div>
-                <h1 className="text-3xl font-bold font-headline">Поиск игры</h1>
+                <h1 className="text-3xl font-bold font-headline">Хаб сообщества</h1>
                 <p className="text-muted-foreground mt-1">
                     Находите игроков для своей команды или команду для себя.
                 </p>
@@ -115,38 +115,6 @@ export function LfgPage() {
                 <TabsContent value="find-player" className="mt-6">
                     <Card>
                         <CardHeader>
-                            <CardTitle>Команды в поиске игроков</CardTitle>
-                            <CardDescription>Эти команды ищут усиление состава. Может, это вы?</CardDescription>
-                        </CardHeader>
-                        <CardContent>
-                             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                                <Input placeholder="Поиск по названию команды..." />
-                                <Select>
-                                    <SelectTrigger><SelectValue placeholder="Дисциплина" /></SelectTrigger>
-                                    <SelectContent>
-                                        {allSports.map(s => <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>)}
-                                    </SelectContent>
-                                </Select>
-                                <Select>
-                                    <SelectTrigger><SelectValue placeholder="Требуемая роль" /></SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem value="any">Любая</SelectItem>
-                                        <SelectItem value="goalkeeper">Вратарь</SelectItem>
-                                        <SelectItem value="defender">Защитник</SelectItem>
-                                        <SelectItem value="midfielder">Полузащитник</SelectItem>
-                                        <SelectItem value="forward">Нападающий</SelectItem>
-                                    </SelectContent>
-                                </Select>
-                            </div>
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                                {teamsLookingForPlayers.map(team => <TeamCard key={team.id} team={team} />)}
-                            </div>
-                        </CardContent>
-                    </Card>
-                </TabsContent>
-                <TabsContent value="find-team" className="mt-6">
-                    <Card>
-                        <CardHeader>
                             <CardTitle>Игроки в поиске команды</CardTitle>
                             <CardDescription>Эти игроки готовы присоединиться к команде и покорять вершины.</CardDescription>
                         </CardHeader>
@@ -172,6 +140,38 @@ export function LfgPage() {
                             </div>
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                                 {playersLookingForTeam.map(player => <PlayerCard key={player.id} player={player} />)}
+                            </div>
+                        </CardContent>
+                    </Card>
+                </TabsContent>
+                <TabsContent value="find-team" className="mt-6">
+                    <Card>
+                        <CardHeader>
+                            <CardTitle>Команды в поиске игроков</CardTitle>
+                            <CardDescription>Эти команды ищут усиление состава. Может, это вы?</CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                                <Input placeholder="Поиск по названию команды..." />
+                                <Select>
+                                    <SelectTrigger><SelectValue placeholder="Дисциплина" /></SelectTrigger>
+                                    <SelectContent>
+                                        {allSports.map(s => <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>)}
+                                    </SelectContent>
+                                </Select>
+                                <Select>
+                                    <SelectTrigger><SelectValue placeholder="Требуемая роль" /></SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="any">Любая</SelectItem>
+                                        <SelectItem value="goalkeeper">Вратарь</SelectItem>
+                                        <SelectItem value="defender">Защитник</SelectItem>
+                                        <SelectItem value="midfielder">Полузащитник</SelectItem>
+                                        <SelectItem value="forward">Нападающий</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            </div>
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                {teamsLookingForPlayers.map(team => <TeamCard key={team.id} team={team} />)}
                             </div>
                         </CardContent>
                     </Card>
