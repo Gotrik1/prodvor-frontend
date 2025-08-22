@@ -1,4 +1,3 @@
-// This is a new file.
 'use client';
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
