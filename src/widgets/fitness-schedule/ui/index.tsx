@@ -6,7 +6,7 @@ import { scheduleData, ScheduleEvent } from '../lib/mock-data';
 import { Badge } from '@/shared/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import { Button } from '@/shared/ui/button';
-import { Clock, User, Users, Trash2, Calendar, Trophy } from 'lucide-react';
+import { Clock, User, Users, Trash2, Calendar, Trophy, Dumbbell } from 'lucide-react';
 import Link from 'next/link';
 import { useScheduleStore } from '@/entities/training/model/use-schedule-store';
 import type { ScheduledActivity, Activity } from '@/views/fitness-plan/ui/types';
