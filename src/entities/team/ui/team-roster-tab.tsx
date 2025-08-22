@@ -1,3 +1,4 @@
+
 'use client';
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
@@ -22,7 +23,7 @@ const TeamRoster = ({ teamMembers, captainId }: { teamMembers: User[], captainId
                         <p className="font-semibold group-hover:text-primary transition-colors">{member.nickname}</p>
                         <p className="text-xs text-muted-foreground">{member.firstName} {member.lastName}</p>
                         {member.id === captainId && (
-                            <Badge variant="secondary" className="mt-1">
+                            <Badge variant="default" className="mt-1">
                                 <Crown className="h-3 w-3 mr-1" />
                                 Капитан
                             </Badge>
@@ -47,14 +48,16 @@ export const TeamRosterTab = ({ teamMembers, captainId }: { teamMembers: User[],
 
     return (
         <Card>
-            <CardHeader>
-                <CardTitle>Состав команды ({teamMembers.length})</CardTitle>
-                <CardDescription>
-                    Игроки, представляющие команду в текущем сезоне.
-                    <Button variant="outline" size="sm" className="ml-4" onClick={handleApply}>
-                        <UserPlus className="mr-2 h-4 w-4" /> Подать заявку
-                    </Button>
-                </CardDescription>
+            <CardHeader className="flex flex-col md:flex-row md:items-center md:justify-between">
+                <div>
+                    <CardTitle>Состав команды ({teamMembers.length})</CardTitle>
+                    <CardDescription>
+                        Игроки, представляющие команду в текущем сезоне.
+                    </CardDescription>
+                </div>
+                <Button variant="outline" size="sm" className="mt-4 md:mt-0" onClick={handleApply}>
+                    <UserPlus className="mr-2 h-4 w-4" /> Подать заявку
+                </Button>
             </CardHeader>
             <CardContent>
                 <TeamRoster teamMembers={teamMembers} captainId={captainId} />
