@@ -9,6 +9,7 @@ import { DashboardHeader } from "@/widgets/dashboard-header";
 import { DashboardFooter } from "@/widgets/dashboard-footer";
 import { usePathname } from "next/navigation";
 import { Button } from "@/shared/ui/button";
+import { Construction } from 'lucide-react';
 
 const Logo = () => (
     <div className="flex items-center gap-2 font-bold text-xl">
@@ -65,6 +66,12 @@ export function AdminLayout({
                                     <span>Справка</span>
                                 </SidebarMenuButton>
                             </Link>
+                        </SidebarMenuItem>
+                         <SidebarMenuItem>
+                            <SidebarMenuButton disabled>
+                                <Construction />
+                                <span>В разработке</span>
+                            </SidebarMenuButton>
                         </SidebarMenuItem>
                     </SidebarMenu>
                 </SidebarContent>
