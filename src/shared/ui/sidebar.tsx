@@ -536,7 +536,7 @@ const sidebarMenuButtonVariants = cva(
 
 const SidebarMenuButton = React.forwardRef<
   HTMLButtonElement | HTMLAnchorElement,
-  React.ComponentProps<"button"> & {
+  (React.ComponentProps<"button"> | React.ComponentProps<"a">) & {
     as?: 'button' | 'a'
     isActive?: boolean
     tooltip?: string | React.ComponentProps<typeof TooltipContent>
@@ -564,7 +564,7 @@ const SidebarMenuButton = React.forwardRef<
         data-size={size}
         data-active={isActive}
         className={cn(sidebarMenuButtonVariants({ variant, size }), className)}
-        {...props}
+        {...props as any}
       />
     )
 
