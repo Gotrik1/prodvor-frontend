@@ -14,7 +14,7 @@ import * as LucideIcons from "lucide-react";
 
 const QuestCard = ({ quest: initialQuest, onClaim }: { quest: Quest; onClaim: (questId: string) => void; }) => {
     const isCompleted = initialQuest.progress >= initialQuest.target;
-    const Icon = (LucideIcons as Record<string, React.ElementType>)[initialQuest.icon] || Puzzle;
+    const Icon = LucideIcons[initialQuest.icon as keyof typeof LucideIcons] || Puzzle;
 
     return (
         <Card className={cn("flex flex-col transition-all", isCompleted && !initialQuest.claimed && "border-primary shadow-primary/20", initialQuest.claimed && "opacity-60 bg-muted/50")}>
