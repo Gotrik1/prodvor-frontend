@@ -6,11 +6,13 @@ import { useState, useEffect } from "react";
 import { useToast } from "@/shared/hooks/use-toast";
 import { Button } from "@/shared/ui/button";
 import { Bot, Loader2, Wand2, Image as ImageIcon, CheckCircle } from "lucide-react";
-import { generateTournamentPromoAction, GenerateTournamentPromoInput } from "@/app/actions";
-import { generateTournamentImageAction, GenerateTournamentImageInput } from "@/app/actions";
+import { generateTournamentPromoAction } from "@/app/actions";
+import { generateTournamentImageAction } from "@/app/actions";
 import { Textarea } from "@/shared/ui/textarea";
 import Image from "next/image";
 import { useTournamentCrmContext } from "../../lib/TournamentCrmContext";
+import type { GenerateTournamentPromoInput } from "@/shared/api/generate-tournament-promo";
+import type { GenerateTournamentImageInput } from "@/shared/api/generate-tournament-image";
 
 const LOCAL_STORAGE_IMAGE_KEY_PREFIX = 'promo-image-';
 

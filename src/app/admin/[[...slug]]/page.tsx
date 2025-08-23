@@ -105,7 +105,6 @@ export default function AdminPage({ params }: { params: { slug: string[] } }) {
         const TemplateComponent = templateMap[subpage as keyof typeof templateMap];
         const userForTemplate = users.find(u => u.role === 'Игрок') || users[0];
 
-        // @ts-expect-error This is a generic template renderer; we assume the component accepts a user or is a placeholder.
         return <TemplatePreviewPage title={`Шаблон: ${subpage}`}><TemplateComponent user={userForTemplate} /></TemplatePreviewPage>;
       }
       default:
