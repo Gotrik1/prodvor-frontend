@@ -5,7 +5,6 @@ import { Button } from '@/shared/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Cpu, Users, Trophy } from 'lucide-react';
 import { LogoGeneratorWidget } from '@/widgets/logo-generator';
-import { HomeHeader } from '@/widgets/home-header';
 
 export function HomePage() {
   return (

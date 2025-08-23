@@ -2,8 +2,6 @@
 import { Button } from "@/shared/ui/button";
 import Image from "next/image";
 import Link from "next/link";
-import { HomeHeader } from "@/widgets/home-header";
-import { HomeFooter } from "@/widgets/home-footer";
 
 export function AboutPage() {
     return (

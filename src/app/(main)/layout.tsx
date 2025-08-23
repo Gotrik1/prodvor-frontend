@@ -7,6 +7,7 @@ import { DashboardSidebar } from "@/widgets/dashboard-sidebar";
 import { DashboardFooter } from "@/widgets/dashboard-footer";
 import { usePathname } from 'next/navigation';
 import { HomeHeader } from "@/widgets/home-header";
+import { HomeFooter } from "@/widgets/home-footer";
 
 function DashboardLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -30,6 +31,7 @@ function PublicPageLayout({ children }: { children: React.ReactNode }) {
         <main className="flex-1">
             {children}
         </main>
+        <HomeFooter />
     </div>
   )
 }
