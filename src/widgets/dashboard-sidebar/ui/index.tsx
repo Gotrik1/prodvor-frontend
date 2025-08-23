@@ -89,7 +89,7 @@ export function DashboardSidebar() {
                     <Link href="/analysis/match">
                         <SidebarMenuButton>
                             <Clapperboard />
-                            <span>Анализ матча</span>
+                            <span>AI-Аналитик</span>
                         </SidebarMenuButton>
                     </Link>
                 </SidebarMenuItem>

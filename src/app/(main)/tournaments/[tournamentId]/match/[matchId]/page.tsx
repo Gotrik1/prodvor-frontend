@@ -17,13 +17,21 @@ export default function TournamentMatchPage({ params }: { params: { tournamentId
   
   // In a real app, you would fetch match details based on matchId
   // For this mock, we'll find the match in our generated bracket if it exists
-  const match: BracketMatch = {
-    id: params.matchId,
-    team1: registeredTeams[0],
-    team2: registeredTeams[1],
-    score1: null, // Let the protocol state handle the score
-    score2: null,
-  };
+  const match: BracketMatch | undefined = tournament?.id === 'mytourney1'
+    ? {
+        id: params.matchId,
+        team1: registeredTeams[0],
+        team2: registeredTeams[1],
+        score1: 5,
+        score2: 3,
+      }
+    : {
+        id: params.matchId,
+        team1: registeredTeams[0],
+        team2: registeredTeams[1],
+        score1: null, // Let the protocol state handle the score
+        score2: null,
+      };
 
   useEffect(() => {
     // When the component mounts, set this match as the active one in our global state.

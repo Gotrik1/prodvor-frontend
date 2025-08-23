@@ -6,15 +6,13 @@ import { generateNewsDigest } from "@/shared/api/generate-news-digest";
 import { sendTournamentAnnouncement } from "@/shared/api/send-tournament-announcement";
 import { generateTournamentImage } from "@/shared/api/generate-tournament-image";
 import { generateTournamentPromo } from "@/shared/api/generate-tournament-promo";
-import { analyzeMatchVideo } from "@/shared/api/analyze-match-video";
-import { askRulesExpert } from "@/shared/api/ask-rules-expert";
+import { analyzeMatchVideo, AnalyzeMatchVideoInput, AnalyzeMatchVideoOutput } from "@/shared/api/analyze-match-video";
+import { askRulesExpert, AskRulesExpertInput, AskRulesExpertOutput } from "@/shared/api/ask-rules-expert";
 
 import type { LogoGenerationInput } from "@/widgets/logo-generator/ui/logo-generator";
 import type { SendTournamentAnnouncementInput } from "@/views/tournaments/manage/ui/tabs/announcements-tab";
 import type { GenerateTournamentImageInput } from "@/views/tournaments/manage/ui/tabs/promo-tab";
 import type { GenerateTournamentPromoInput } from "@/views/tournaments/manage/ui/tabs/promo-tab";
-import type { AnalyzeMatchVideoInput, AnalyzeMatchVideoOutput } from "@/shared/api/analyze-match-video";
-import type { AskRulesExpertInput, AskRulesExpertOutput } from "@/shared/api/ask-rules-expert";
 
 
 export async function generateLogosAction(
