@@ -19,6 +19,9 @@ const nextConfig = {
         }
     ],
   },
+  env: {
+    NEXT_PUBLIC_YANDEX_API_KEY: process.env.YANDEX_API_KEY,
+  }
 };
 
 export default nextConfig;

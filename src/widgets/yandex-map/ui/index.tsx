@@ -23,7 +23,8 @@ declare global {
   }
 }
 
-const YANDEX_API_KEY = "f9e81512-e208-40f8-bea8-a091bd41ed72";
+const YANDEX_API_KEY = process.env.NEXT_PUBLIC_YANDEX_API_KEY || "f9e81512-e208-40f8-bea8-a091bd41ed72";
+
 
 export function YandexMapV3() {
   const mapRef = useRef<HTMLDivElement>(null);
