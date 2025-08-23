@@ -33,6 +33,8 @@ export function SettingsTab() {
     const [selectedRequirements, setSelectedRequirements] = useState<string[]>(['req1', 'req2', 'req3', 'req4', 'req5']);
     const [isSaving, setIsSaving] = useState(false);
     const [tournamentPlaygrounds, setTournamentPlaygrounds] = useState(tournament?.playgrounds || [mockPlaygrounds[0]]);
+    const [regStartDate, setRegStartDate] = useState<Date | undefined>();
+    const [regEndDate, setRegEndDate] = useState<Date | undefined>();
     
     if (!tournament) return null;
 
@@ -171,27 +173,27 @@ export function SettingsTab() {
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-2">
                             <Popover>
                                 <PopoverTrigger asChild>
-                                <Button variant={"outline"} className={cn("w-full justify-start text-left font-normal", !true && "text-muted-foreground")}>
-                                    <CalendarIcon className="mr-2 h-4 w-4" /> {/* TODO: Implement date selection and display */}
-                                    <span>Начало регистрации</span>
+                                <Button variant={"outline"} className={cn("w-full justify-start text-left font-normal", !regStartDate && "text-muted-foreground")}>
+                                    <CalendarIcon className="mr-2 h-4 w-4" />
+                                    {regStartDate ? regStartDate.toLocaleDateString() : <span>Начало регистрации</span>}
                                 </Button>
                                 </PopoverTrigger>
-                                <PopoverContent className="w-auto p-0"><CalendarComponent mode="single" initialFocus /></PopoverContent>
+                                <PopoverContent className="w-auto p-0"><CalendarComponent mode="single" selected={regStartDate} onSelect={setRegStartDate} initialFocus /></PopoverContent>
                             </Popover>
                             <Popover>
-                                 <PopoverTrigger asChild>
-                                <Button variant={"outline"} className={cn("w-full justify-start text-left font-normal", !true && "text-muted-foreground")}>
-                                    <CalendarIcon className="mr-2 h-4 w-4" /> {/* TODO: Implement date selection and display */}
-                                    <span>Конец регистрации</span>
+                                <PopoverTrigger asChild>
+                                <Button variant={"outline"} className={cn("w-full justify-start text-left font-normal", !regEndDate && "text-muted-foreground")}>
+                                    <CalendarIcon className="mr-2 h-4 w-4" />
+                                    {regEndDate ? regEndDate.toLocaleDateString() : <span>Конец регистрации</span>}
                                 </Button>
                                 </PopoverTrigger>
-                                <PopoverContent className="w-auto p-0"><CalendarComponent mode="single" initialFocus /></PopoverContent>
+                                <PopoverContent className="w-auto p-0"><CalendarComponent mode="single" selected={regEndDate} onSelect={setRegEndDate} initialFocus /></PopoverContent>
                             </Popover>
                              <Popover>
                                 <PopoverTrigger asChild>
-                                <Button variant={"outline"} className={cn("w-full justify-start text-left font-normal", !true && "text-muted-foreground")}>
+                                <Button variant={"outline"} className={cn("w-full justify-start text-left font-normal", !tournament.startDate && "text-muted-foreground")}>
                                     <CalendarIcon className="mr-2 h-4 w-4" /> 
-                                    <span>Начало турнира</span> 
+                                    {tournament.startDate ? new Date(tournament.startDate).toLocaleDateString() : <span>Начало турнира</span>}
                                 </Button>
                                 </PopoverTrigger>
                                 <PopoverContent className="w-auto p-0"><CalendarComponent mode="single" selected={new Date(tournament.startDate)} onSelect={(date) => handleTournamentChange({ startDate: date?.toISOString() || '' })} initialFocus /></PopoverContent>
