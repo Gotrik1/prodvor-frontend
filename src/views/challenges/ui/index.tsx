@@ -149,7 +149,7 @@ export function ChallengesPage() {
                 </Card>
                 <Card>
                     <CardHeader>
-                        <CardTitle className="flex items-center gap-2"><Sparkles className="text-primary"/>Рекомендуемые соперники</CardTitle>
+                        <CardTitle className="flex items-center gap-2"><Sparkles className="text-primary"/>AI-Матчмейкинг</CardTitle>
                         <CardDescription>Подбор команд с близким вам рейтингом ({myTeam.rank} ELO).</CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-4">
