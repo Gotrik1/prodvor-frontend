@@ -9,20 +9,7 @@ import { CONCEPT, README } from './docs-content';
 import { API_DOCS } from './api-docs-content';
 import { RolesPage } from "../roles";
 import { RanksPage } from "../ranks";
-
-const markdownComponents = {
-    h1: (props: React.HTMLAttributes<HTMLHeadingElement>) => <h1 className="text-3xl font-bold mt-6 mb-4 font-headline" {...props} />,
-    h2: (props: React.HTMLAttributes<HTMLHeadingElement>) => <h2 className="text-2xl font-bold mt-6 mb-3 font-headline border-b pb-2" {...props} />,
-    h3: (props: React.HTMLAttributes<HTMLHeadingElement>) => <h3 className="text-xl font-semibold mt-4 mb-2 font-headline" {...props} />,
-    p: (props: React.HTMLAttributes<HTMLParagraphElement>) => <p className="leading-relaxed mb-4" {...props} />,
-    ul: (props: React.HTMLAttributes<HTMLUListElement>) => <ul className="list-disc list-inside mb-4 space-y-2" {...props} />,
-    ol: (props: React.HTMLAttributes<HTMLOListElement>) => <ol className="list-decimal list-inside mb-4 space-y-2" {...props} />,
-    li: (props: React.LiHTMLAttributes<HTMLLIElement>) => <li className="pl-2" {...props} />,
-    code: (props: React.HTMLAttributes<HTMLElement>) => <code className="bg-muted text-foreground px-1 py-0.5 rounded-sm font-mono text-sm" {...props} />,
-    pre: (props: React.HTMLAttributes<HTMLPreElement>) => <pre className="bg-muted p-4 rounded-md overflow-x-auto" {...props} />,
-    a: (props: React.AnchorHTMLAttributes<HTMLAnchorElement>) => <a className="text-primary hover:underline" {...props} />,
-    strong: (props: React.HTMLAttributes<HTMLElement>) => <strong className="font-bold" {...props} />,
-};
+import { markdownComponents } from '@/app/(main)/analysis/match/ui/markdown-styles';
 
 export function DocsPage() {
   return (
