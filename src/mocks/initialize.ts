@@ -13,6 +13,8 @@ interface MockData {
     allSports: Sport[];
 }
 
+let isInitialized = false;
+
 /**
  * Centralized initializer for all mock data.
  * This function takes raw data arrays and establishes relationships between them.
@@ -20,6 +22,10 @@ interface MockData {
  * @param data - An object containing all the raw data arrays.
  */
 export function initializeMockData(data: MockData) {
+    if (isInitialized) {
+        return;
+    }
+
     const { users, teams, playgrounds, sponsors, allSports } = data;
 
     // --- 1. Generate Teams ---
@@ -45,6 +51,8 @@ export function initializeMockData(data: MockData) {
 
     // --- 8. Link teams to playgrounds after teams are created ---
     assignTeamsToPlaygrounds(teams, playgrounds);
+
+    isInitialized = true;
 }
 
 
