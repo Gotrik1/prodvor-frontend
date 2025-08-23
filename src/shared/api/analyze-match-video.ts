@@ -1,5 +1,4 @@
 
-'use server';
 /**
  * @fileOverview Analyzes a match video using a multimodal AI model.
  *

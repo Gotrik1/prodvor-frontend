@@ -1,5 +1,4 @@
 
-'use server';
 /**
  * @fileOverview Generates logo variations for a team based on a description.
  * - generateTeamLogoVariations - A function that handles the logo generation.

@@ -1,5 +1,4 @@
 
-'use server';
 /**
  * @fileOverview Generates a news digest based on recent platform activity.
  *

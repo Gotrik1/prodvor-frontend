@@ -1,5 +1,4 @@
 
-'use server';
 /**
  * @fileOverview Generates a promotional image for a tournament.
  */

@@ -1,5 +1,4 @@
 
-'use server';
 /**
  * @fileOverview Sends a tournament announcement to all registered participants.
  *
