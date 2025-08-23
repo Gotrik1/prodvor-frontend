@@ -39,13 +39,15 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   const publicRoutes = ['/', '/about'];
   
   const isAuthRoute = pathname.startsWith('/auth');
+  const isPublicUserRoute = /^\/users\/[^/]+$/.test(pathname);
+  const isPublicTeamRoute = /^\/teams\/[^/]+$/.test(pathname) && !pathname.endsWith('/manage');
   
   // This regex now correctly treats the tournament hub as a public-facing but distinct section,
   // not requiring the dashboard sidebar.
   const isPublicTournamentRoute = /^\/tournaments\/[^/]+(\/(register|hub))?$/.test(pathname);
   const isMatchRoute = /^\/tournaments\/[^/]+\/match\/[^/]+$/.test(pathname);
   
-  const showPublicLayout = publicRoutes.includes(pathname) || isAuthRoute || isPublicTournamentRoute || isMatchRoute;
+  const showPublicLayout = publicRoutes.includes(pathname) || isAuthRoute || isPublicTournamentRoute || isMatchRoute || isPublicUserRoute || isPublicTeamRoute;
 
   if (showPublicLayout) {
       return <PublicPageLayout>{children}</PublicPageLayout>;

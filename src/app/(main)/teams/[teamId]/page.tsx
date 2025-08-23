@@ -1,6 +1,6 @@
 
 
-import { TeamPageTemplate } from '@/views/admin/ui/templates/team-page-template';
+import { TeamPublicPage } from '@/views/teams/team';
 import { teams as mockTeams } from '@/mocks';
 import type { Metadata } from 'next';
 
@@ -19,9 +19,8 @@ export default function TeamPage({ params }: { params: { teamId: string } }) {
   const team = mockTeams.find(t => t.id === params.teamId);
   
   if (!team) {
-    // Optionally return a not-found component or handle it within the template
-    return <TeamPageTemplate team={undefined} />;
+    return <TeamPublicPage team={undefined} />;
   }
   
-  return <TeamPageTemplate team={team} />;
+  return <TeamPublicPage team={team} />;
 }
