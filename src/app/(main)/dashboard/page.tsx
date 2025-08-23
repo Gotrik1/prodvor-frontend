@@ -7,6 +7,10 @@ import { EyeOff } from 'lucide-react';
 import Link from 'next/link';
 import { DashboardFeed } from '@/widgets/dashboard-feed';
 import { DashboardAside } from '@/widgets/dashboard-aside';
+import { PlayerStatsWidget } from '@/widgets/dashboard-widgets/ui/player-stats-widget';
+import { MyTeamWidget } from '@/widgets/dashboard-widgets/ui/my-team-widget';
+import { ActiveQuestsWidget } from '@/widgets/dashboard-widgets/ui/active-quests-widget';
+import { UpcomingEventsWidget } from '@/widgets/dashboard-widgets/ui/upcoming-events-widget';
 
 export default function Dashboard() {
   const { user: currentUser } = useUserStore();
@@ -33,10 +37,16 @@ export default function Dashboard() {
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 p-4 md:p-6 lg:p-8 items-start">
-        <div className="lg:col-span-3 space-y-6">
+        <aside className="hidden lg:block lg:col-span-1 space-y-6 lg:sticky top-24">
+            <PlayerStatsWidget user={currentUser} />
+            <MyTeamWidget user={currentUser} />
+            <ActiveQuestsWidget />
+        </aside>
+        <div className="lg:col-span-2 space-y-6">
             <DashboardFeed />
         </div>
         <aside className="lg:col-span-1 space-y-6 lg:sticky top-24">
+            <UpcomingEventsWidget />
             <DashboardAside />
         </aside>
     </div>

@@ -11,7 +11,6 @@ import { Badge } from "@/shared/ui/badge";
 import Image from "next/image";
 import { useUserStore } from "@/widgets/dashboard-header/model/user-store";
 import { teams } from "@/mocks";
-import { FitnessSchedule } from "@/widgets/fitness-schedule";
 
 type TournamentStatus = 'АНОНС' | 'ПРЕДРЕГИСТРАЦИЯ' | 'РЕГИСТРАЦИЯ' | 'ИДЕТ' | 'ЗАВЕРШЕН';
 
@@ -42,41 +41,8 @@ export function DashboardAside() {
       return false;
   });
   
-  const myTeams = user ? teams.filter(team => team.members.includes(user.id)) : [];
-
   return (
     <>
-      <FitnessSchedule showHeader={true} />
-
-      <Card className="bg-card">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2"><Users /> Мои команды</CardTitle>
-          <CardDescription>Быстрый доступ к вашим командам.</CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-            {myTeams.length > 0 ? (
-                myTeams.map(team => (
-                    <Link href={`/teams/${team.id}`} key={team.id} className="block group p-2 rounded-lg hover:bg-muted/50 transition-colors">
-                        <div className="flex items-center gap-3">
-                            <Image src={team.logoUrl} alt={team.name} width={40} height={40} className="rounded-md object-cover" data-ai-hint={team.dataAiHint} />
-                            <div>
-                                <p className="font-semibold leading-tight group-hover:text-primary">{team.name}</p>
-                                <p className="text-xs text-muted-foreground">{team.game}</p>
-                            </div>
-                        </div>
-                    </Link>
-                ))
-            ) : (
-                <div className="text-center py-4">
-                    <p className="text-sm text-muted-foreground mb-3">Вы еще не состоите в команде.</p>
-                    <Button asChild variant="secondary" size="sm">
-                        <Link href="/teams">Найти или создать команду</Link>
-                    </Button>
-                </div>
-            )}
-        </CardContent>
-      </Card>
-
       <Card className="bg-card">
         <CardHeader>
           <CardTitle className="flex items-center gap-2"><Trophy /> Активные турниры</CardTitle>
