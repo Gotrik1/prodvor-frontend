@@ -9,7 +9,7 @@ import { Input } from '@/shared/ui/input';
 import { Label } from '@/shared/ui/label';
 import { Trash2, PlusCircle } from 'lucide-react';
 import { useProtocol } from '../lib/use-protocol';
-import { EventType, eventTypes } from '@/widgets/match-protocol/ui/match-timeline';
+import { EventType, eventTypes, MatchEvent } from '@/widgets/match-protocol/ui/match-timeline';
 import { users } from '@/mocks';
 import type { BracketMatch } from '@/views/tournaments/public-page/ui/mock-data';
 
@@ -40,7 +40,7 @@ export function ProtocolEditor({ match }: { match: BracketMatch }) {
         const p1 = allPlayersInMatch.find(p => p.id === player1);
         if (!p1) return;
 
-        const newEvent: Omit<any, 'id'> = {
+        const newEvent: Omit<MatchEvent, 'id'> = {
             minute: parseInt(minute, 10),
             type: eventType,
             team: team1Members.some(m => m.id === p1.id) ? 'team1' : 'team2',

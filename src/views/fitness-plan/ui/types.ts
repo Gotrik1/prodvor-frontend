@@ -32,7 +32,7 @@ export interface WorkoutPlan {
 export interface Activity {
     id: string;
     name: string;
-    type: 'template' | 'group' | 'recovery' | 'other';
+    type: 'template' | 'group' | 'recovery' | 'other' | 'match';
 }
 
 export interface ScheduledActivity extends Activity {

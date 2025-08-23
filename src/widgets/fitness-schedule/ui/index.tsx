@@ -56,9 +56,9 @@ export function FitnessSchedule({ showHeader = false }: { showHeader?: boolean }
 
     // Mock upcoming match for demonstration
     const upcomingMatch: ScheduledActivity = {
- id: 'match-upcoming-1',
+        id: 'match-upcoming-1',
         name: `${registeredTeams[0].name} vs ${registeredTeams[1].name}`,
-        type: 'match' as any,
+        type: 'match',
         startDate: new Date().toISOString(),
         time: '19:00',
         repeat: 'none',
