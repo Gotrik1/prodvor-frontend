@@ -5,7 +5,7 @@ import { users, teams, ranks } from "@/mocks";
 import type { User } from "@/mocks/users";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
-import { Briefcase, Dumbbell, Film, History, MapPin, MessageSquare, Rss, UserPlus, Users2 } from "lucide-react";
+import { Briefcase, Dumbbell, Film, History, MapPin, MessageSquare, Rss, UserPlus, Users2, BarChart3, Award } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 import { Button } from "@/shared/ui/button";
 import Link from "next/link";
@@ -52,6 +52,52 @@ const FormBadge = ({ result }: { result: 'W' | 'L' | 'D' }) => {
     return <div className={`${baseClasses} bg-secondary text-secondary-foreground border border-secondary/30`}>D</div>;
 };
 
+const PlayerOverviewTab = ({ player }: { player: User }) => {
+    const last5Form: ('W' | 'L' | 'D')[] = ['W', 'L', 'W', 'W', 'W'];
+    return (
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+            <div className="lg:col-span-1 space-y-6">
+                <Card>
+                    <CardHeader><CardTitle className="text-base">Форма (5 матчей)</CardTitle></CardHeader>
+                    <CardContent className="flex items-center gap-2 justify-center">
+                        {last5Form.map((result, index) => <FormBadge key={index} result={result} />)}
+                    </CardContent>
+                </Card>
+                <Card>
+                    <CardHeader><CardTitle className="text-base">Навыки</CardTitle></CardHeader>
+                    <CardContent>
+                        <ChartContainer config={{}} className="h-52 w-full">
+                            <RadarChart data={skillData}>
+                                <ChartTooltipContent />
+                                <PolarAngleAxis dataKey="subject" className="text-xs"/>
+                                <PolarGrid />
+                                <Radar name="Skills" dataKey="A" stroke="hsl(var(--primary))" fill="hsl(var(--primary))" fillOpacity={0.6} />
+                            </RadarChart>
+                        </ChartContainer>
+                    </CardContent>
+                </Card>
+                <Card>
+                    <CardHeader><CardTitle className="text-base">Прогресс ELO</CardTitle></CardHeader>
+                    <CardContent>
+                        <ChartContainer config={{elo: {label: 'ELO', color: "hsl(var(--primary))"}}} className="h-48 w-full">
+                            <LineChart data={eloData} margin={{ top: 5, right: 10, left: -20, bottom: 0 }}>
+                                <CartesianGrid vertical={false} />
+                                <XAxis dataKey="month" tickLine={false} axisLine={false} tickMargin={8} className="text-xs"/>
+                                <YAxis domain={['dataMin - 50', 'dataMax + 50']} hide/>
+                                <RechartsTooltip content={<ChartTooltipContent />}/>
+                                <Line type="monotone" dataKey="elo" stroke="hsl(var(--primary))" strokeWidth={2} dot={false} />
+                            </LineChart>
+                        </ChartContainer>
+                    </CardContent>
+                </Card>
+            </div>
+            <div className="lg:col-span-3">
+                 <StatsTab />
+            </div>
+        </div>
+    )
+}
+
 export function PlayerPageTemplate({ user: profileUser }: { user?: User }) {
     const player = profileUser || defaultPlayer;
     const { user: currentUser } = useUserStore();
@@ -59,7 +105,6 @@ export function PlayerPageTemplate({ user: profileUser }: { user?: User }) {
     const playerRank = player.elo ? getRankForElo(player.elo) : null;
 
     const isOwnProfile = currentUser?.id === player.id;
-    const last5Form: ('W' | 'L' | 'D')[] = ['W', 'L', 'W', 'W', 'W'];
 
     return (
         <div className="p-4 md:p-6 lg:p-8 space-y-6">
@@ -99,62 +144,42 @@ export function PlayerPageTemplate({ user: profileUser }: { user?: User }) {
                 )}
             </header>
             
-            <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-                <div className="lg:col-span-1 space-y-6">
-                    <Card>
-                        <CardHeader><CardTitle className="text-base">Форма (5 матчей)</CardTitle></CardHeader>
-                        <CardContent className="flex items-center gap-2 justify-center">
-                            {last5Form.map((result, index) => <FormBadge key={index} result={result} />)}
-                        </CardContent>
-                    </Card>
-                    <Card>
-                        <CardHeader><CardTitle className="text-base">Навыки</CardTitle></CardHeader>
-                        <CardContent>
-                            <ChartContainer config={{}} className="h-52 w-full">
-                                <RadarChart data={skillData}>
-                                    <ChartTooltipContent />
-                                    <PolarAngleAxis dataKey="subject" className="text-xs"/>
-                                    <PolarGrid />
-                                    <Radar name="Skills" dataKey="A" stroke="hsl(var(--primary))" fill="hsl(var(--primary))" fillOpacity={0.6} />
-                                </RadarChart>
-                            </ChartContainer>
-                        </CardContent>
-                    </Card>
-                    <Card>
-                        <CardHeader><CardTitle className="text-base">Прогресс ELO</CardTitle></CardHeader>
-                        <CardContent>
-                            <ChartContainer config={{elo: {label: 'ELO', color: "hsl(var(--primary))"}}} className="h-48 w-full">
-                                <LineChart data={eloData} margin={{ top: 5, right: 10, left: -20, bottom: 0 }}>
-                                    <CartesianGrid vertical={false} />
-                                    <XAxis dataKey="month" tickLine={false} axisLine={false} tickMargin={8} className="text-xs"/>
-                                    <YAxis domain={['dataMin - 50', 'dataMax + 50']} hide/>
-                                    <RechartsTooltip content={<ChartTooltipContent />}/>
-                                    <Line type="monotone" dataKey="elo" stroke="hsl(var(--primary))" strokeWidth={2} dot={false} />
-                                </LineChart>
-                            </ChartContainer>
-                        </CardContent>
-                    </Card>
-                </div>
-                
-                <div className="lg:col-span-3">
-                     <Tabs defaultValue="achievements">
-                        <TabsList className="grid w-full grid-cols-3 md:grid-cols-6">
-                            <TabsTrigger value="achievements">Достижения</TabsTrigger>
-                            <TabsTrigger value="stats">Статистика</TabsTrigger>
-                            <TabsTrigger value="socials"><Users2 className="md:mr-2 h-4 w-4"/><span className="hidden md:inline">Соц. связи</span></TabsTrigger>
-                            <TabsTrigger value="training">Тренировки</TabsTrigger>
-                            <TabsTrigger value="feed">Лента</TabsTrigger>
-                            <TabsTrigger value="media">Медиа</TabsTrigger>
-                        </TabsList>
-                        <TabsContent value="achievements" className="mt-6"><AchievementsTab player={player} /></TabsContent>
-                        <TabsContent value="stats" className="mt-6"><StatsTab /></TabsContent>
-                        <TabsContent value="socials" className="mt-6"><SocialTab user={player} isOwnProfile={isOwnProfile} /></TabsContent>
-                        <TabsContent value="training" className="mt-6"><TrainingTab /></TabsContent>
-                        <TabsContent value="feed" className="mt-6"><FeedTab player={player} isOwnProfile={isOwnProfile} /></TabsContent>
-                        <TabsContent value="media" className="mt-6"><MediaTab /></TabsContent>
-                    </Tabs>
-                </div>
-            </div>
+             <Tabs defaultValue="overview">
+                <TabsList className="grid w-full grid-cols-3 md:grid-cols-7">
+                    <TabsTrigger value="overview">Обзор</TabsTrigger>
+                    <TabsTrigger value="achievements">
+                        <Award className="md:mr-2 h-4 w-4" />
+                        <span className="hidden md:inline">Достижения</span>
+                    </TabsTrigger>
+                    <TabsTrigger value="stats">
+                        <BarChart3 className="md:mr-2 h-4 w-4" />
+                        <span className="hidden md:inline">Статистика</span>
+                    </TabsTrigger>
+                    <TabsTrigger value="socials">
+                        <Users2 className="md:mr-2 h-4 w-4"/>
+                        <span className="hidden md:inline">Соц. связи</span>
+                    </TabsTrigger>
+                    <TabsTrigger value="training">
+                        <Dumbbell className="md:mr-2 h-4 w-4"/>
+                        <span className="hidden md:inline">Тренировки</span>
+                    </TabsTrigger>
+                    <TabsTrigger value="feed">
+                        <Rss className="md:mr-2 h-4 w-4" />
+                        <span className="hidden md:inline">Лента</span>
+                    </TabsTrigger>
+                    <TabsTrigger value="media">
+                        <Film className="md:mr-2 h-4 w-4" />
+                        <span className="hidden md:inline">Медиа</span>
+                    </TabsTrigger>
+                </TabsList>
+                <TabsContent value="overview" className="mt-6"><PlayerOverviewTab player={player} /></TabsContent>
+                <TabsContent value="achievements" className="mt-6"><AchievementsTab player={player} /></TabsContent>
+                <TabsContent value="stats" className="mt-6"><StatsTab /></TabsContent>
+                <TabsContent value="socials" className="mt-6"><SocialTab user={player} isOwnProfile={isOwnProfile} /></TabsContent>
+                <TabsContent value="training" className="mt-6"><TrainingTab /></TabsContent>
+                <TabsContent value="feed" className="mt-6"><FeedTab player={player} isOwnProfile={isOwnProfile} /></TabsContent>
+                <TabsContent value="media" className="mt-6"><MediaTab /></TabsContent>
+            </Tabs>
         </div>
     )
 }
