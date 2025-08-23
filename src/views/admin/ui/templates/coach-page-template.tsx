@@ -205,7 +205,7 @@ export function CoachPageTemplate({ user }: { user?: User }) {
                                     </TableCell>
                                     <TableCell className="text-center">58</TableCell>
                                     <TableCell className="text-center">
-                                         <Badge variant="success">Отличная</Badge>
+                                         <Badge variant="success" className="bg-green-500/20 text-green-300 border-green-500/30">Отличная</Badge>
                                     </TableCell>
                                 </TableRow>
                             ))}
