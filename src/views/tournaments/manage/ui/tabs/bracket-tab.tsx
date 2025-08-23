@@ -12,7 +12,6 @@ import { useProtocol } from "@/widgets/protocol-editor/lib/use-protocol";
 import { useTournamentCrmContext } from "../../lib/TournamentCrmContext";
 import { updateRatings } from "@/shared/lib/rating";
 import { GameplayEvent, awardProgressPoints } from "@/shared/lib/gamification";
-import { useUserStore } from "@/widgets/dashboard-header/model/user-store";
 
 export function BracketTab() {
     const { confirmedTeams, generatedBracket } = useTournamentCrmContext();
