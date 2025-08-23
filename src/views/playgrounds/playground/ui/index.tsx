@@ -1,5 +1,4 @@
 
-
 import type { Playground, ServiceCategory } from "@/mocks";
 import { teams, users } from "@/mocks";
 import { Button } from "@/shared/ui/button";
@@ -22,8 +21,10 @@ const features = [
 ];
 
 const ServiceCard = ({ service }: { service: ServiceCategory['services'][0] }) => {
-    // @ts-ignore
-    const Icon = service.icon ? LucideIcons[service.icon] as React.ElementType : Home; // @ts-expect-error: Icon name from mock might not exist in LucideIcons
+    const Icon = service.icon && (service.icon in LucideIcons) 
+        // @ts-expect-error Icon name from mock might not exist in LucideIcons, we handle this.
+        ? LucideIcons[service.icon] as React.ElementType 
+        : Home;
     return (
         <Card className="bg-background/50 h-full">
             <CardHeader className="flex flex-row items-center gap-4">

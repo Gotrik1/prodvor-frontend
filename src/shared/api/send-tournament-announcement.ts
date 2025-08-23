@@ -6,7 +6,6 @@
  * - SendTournamentAnnouncementInput - The input type for the function.
  * - SendTournamentAnnouncementOutput - The return type for the function.
  */
-import { z } from 'zod';
 import type { SendTournamentAnnouncementInput, SendTournamentAnnouncementOutput } from '@/views/tournaments/manage/ui/tabs/announcements-tab';
 
 export async function sendTournamentAnnouncement(input: SendTournamentAnnouncementInput): Promise<SendTournamentAnnouncementOutput> {

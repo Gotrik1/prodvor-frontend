@@ -5,13 +5,12 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/sha
 import { Button } from "@/shared/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/shared/ui/table";
 import { Badge } from "@/shared/ui/badge";
-import { MoreHorizontal, PlusCircle, Megaphone, Send, UploadCloud } from "lucide-react";
+import { MoreHorizontal, PlusCircle, Megaphone, UploadCloud } from "lucide-react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/shared/ui/dropdown-menu";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/shared/ui/dialog";
 import { Input } from "@/shared/ui/input";
 import { Label } from "@/shared/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/select";
-import { Textarea } from "@/shared/ui/textarea";
 
 const mockCampaigns = [
     { id: 'camp1', name: 'Летний Кубок - Регистрация', status: 'Активна', segment: 'Игроки в футбол (Москва)', impressions: '1.2M', clicks: '2,450', ctr: '0.20%' },

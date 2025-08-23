@@ -3,9 +3,23 @@
 
 import React, { useEffect, useRef } from "react";
 
+type YandexMap = {
+    destroy: () => void;
+    addChild: (child: unknown) => void;
+};
+
+type YandexMapModule = {
+    YMap: new (element: HTMLElement, options: object, layers: unknown[]) => YandexMap;
+    YMapDefaultSchemeLayer: new (options: object) => unknown;
+    YMapDefaultFeaturesLayer: new (options: object) => unknown;
+    YMapListener: new (options: object) => unknown;
+    ready: Promise<void>;
+    import: (moduleName: string) => Promise<{ YMapDefaultMarker: new (options: object) => unknown }>;
+};
+
 declare global {
   interface Window {
-    ymaps3: unknown;
+    ymaps3?: YandexMapModule;
   }
 }
 
@@ -13,26 +27,25 @@ const YANDEX_API_KEY = "f9e81512-e208-40f8-bea8-a091bd41ed72";
 
 export function YandexMapV3() {
   const mapRef = useRef<HTMLDivElement>(null);
-  const mapInstanceRef = useRef<unknown>(null); // To hold the map instance
+  const mapInstanceRef = useRef<YandexMap | null>(null); // To hold the map instance
 
   useEffect(() => {
     let script: HTMLScriptElement | null = null;
-    let mapInstance: any = null;
+    let mapInstance: YandexMap | null = null;
 
     async function initMap() {
-      if (!mapRef.current) return;
+      if (!mapRef.current || !window.ymaps3) return;
 
- await window.ymaps3.ready;
+      await window.ymaps3.ready;
       const { 
         YMap, 
         YMapDefaultSchemeLayer, 
         YMapDefaultFeaturesLayer
-      } = window.ymaps3 as unknown; // Cast to unknown here for access to properties
+      } = window.ymaps3;
       
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const { YMapDefaultMarker } = await (window.ymaps3 as any).import('@yandex/ymaps3-markers@0.0.1'); // This import requires a specific type that is not readily available
+      const { YMapDefaultMarker } = await window.ymaps3.import('@yandex/ymaps3-markers@0.0.1');
  
-      // Destroy the old map instance if it exist s
+      // Destroy the old map instance if it exists
       if (mapInstanceRef.current) {
         mapInstanceRef.current.destroy();
         mapInstanceRef.current = null;
@@ -53,14 +66,14 @@ export function YandexMapV3() {
         ]
       );
  
-      const { YMapListener } = window.ymaps3 as unknown; // Cast to unknown for access
+      const { YMapListener } = window.ymaps3;
       
       mapInstanceRef.current = mapInstance;
 
       // Add a marker on map click
       const mapListener = new YMapListener({
         layer: 'any',
-        onClick: (e) => {
+        onClick: (e: { coordinates: [number, number] }) => {
           // Create a new marker with the click coordinates
           const marker = new YMapDefaultMarker({
             coordinates: e.coordinates,
@@ -68,7 +81,7 @@ export function YandexMapV3() {
             subtitle: 'Уточните адрес',
             color: '#FF0000'
           });
-          mapInstance.addChild(marker);
+          mapInstance?.addChild(marker);
         }
       });
       mapInstance.addChild(mapListener);

@@ -14,6 +14,7 @@ export const metadata: Metadata = {
 const inter = Inter({
   subsets: ['latin', 'cyrillic'],
   variable: '--font-inter',
+  display: 'swap',
 });
 
 export default function RootLayout({
@@ -24,12 +25,7 @@ export default function RootLayout({
   
   return (
     <html lang="ru" className={`${inter.variable}`} suppressHydrationWarning>
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet" />
-        {/* Custom font - acknowledging the Next.js warning */}
-      </head>
+      <head />
       <body className="font-body antialiased">
         <ThemeProvider
             attribute="class"
