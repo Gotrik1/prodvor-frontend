@@ -1,8 +1,7 @@
 
 'use client';
 
-import { users, playgrounds, posts } from "@/mocks";
-import type { Team } from "@/mocks";
+import { users, playgrounds, posts, Team } from "@/mocks";
 import { Button } from "@/shared/ui/button";
 import { Card, CardHeader, CardContent, CardTitle } from "@/shared/ui/card";
 import { Rss, Film, History } from "lucide-react";
