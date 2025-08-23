@@ -50,3 +50,5 @@ export const TrainingTab = () => (
         </CardContent>
     </Card>
 );
+
+    

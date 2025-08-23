@@ -68,8 +68,10 @@ export function UserPage({ userId }: { userId?: string }) {
   }
 
   return (
-    <div>
+    <div className="bg-card p-4 rounded-lg">
         {renderTemplate()}
     </div>
   );
 }
+
+    

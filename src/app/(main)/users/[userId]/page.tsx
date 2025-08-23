@@ -64,3 +64,5 @@ export default function UserProfilePage({ params }: { params: { userId: string }
         return <PlaceholderTemplate roleName={user.role} />;
   }
 }
+
+    

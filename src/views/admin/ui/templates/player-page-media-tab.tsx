@@ -7,3 +7,5 @@ export const MediaTab = () => (
         <CardContent><p className="text-muted-foreground">Раздел с медиа в разработке.</p></CardContent>
     </Card>
 );
+
+    

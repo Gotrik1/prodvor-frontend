@@ -107,7 +107,7 @@ export function PlayerPageTemplate({ user: profileUser }: { user?: User }) {
     const isOwnProfile = currentUser?.id === player.id;
 
     return (
-        <div className="p-4 md:p-6 lg:p-8 space-y-6">
+        <div className="space-y-6">
             <header className="flex flex-col md:flex-row items-center gap-6 p-4 rounded-lg bg-card border">
                 <Avatar className="h-24 w-24 border-4 border-primary">
                     <AvatarImage src={player.avatarUrl} alt={player.nickname} />
@@ -183,3 +183,5 @@ export function PlayerPageTemplate({ user: profileUser }: { user?: User }) {
         </div>
     )
 }
+
+    

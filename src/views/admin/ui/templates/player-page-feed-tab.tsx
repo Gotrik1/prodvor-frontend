@@ -20,3 +20,5 @@ export function FeedTab({ player, isOwnProfile }: { player: User; isOwnProfile: 
         </div>
     )
 };
+
+    
