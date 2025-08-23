@@ -16,6 +16,7 @@ import { FeedTab } from "./player-page-feed-tab";
 import { TrainingTab } from "./player-page-training-tab";
 import { MediaTab } from "./player-page-media-tab";
 import { AchievementsTab } from "./player-page-achievements-tab";
+import { SocialTab } from "./player-page-social-tab";
 import Image from "next/image";
 
 const defaultPlayer = users.find(u => u.role === 'Игрок')!;
@@ -50,7 +51,7 @@ const FormBadge = ({ result }: { result: 'W' | 'L' | 'D' }) => {
     return <div className={`${baseClasses} bg-secondary text-secondary-foreground border border-secondary/30`}>D</div>;
 };
 
-const PlayerOverviewTab = () => {
+const PlayerOverviewTab = ({ player }: { player: User }) => {
     const last5Form: ('W' | 'L' | 'D')[] = ['W', 'L', 'W', 'W', 'W'];
     return (
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
@@ -99,7 +100,7 @@ const PlayerOverviewTab = () => {
 export function PlayerPageTemplate({ user: profileUser }: { user?: User }) {
     const player = profileUser || defaultPlayer;
     const { user: currentUser } = useUserStore();
-    const playerTeam = teams.find(t => t.memberIds.includes(player.id));
+    const playerTeam = teams.find(t => t.members.includes(player.id));
     const playerRank = player.elo ? getRankForElo(player.elo) : null;
 
     const isOwnProfile = currentUser?.id === player.id;
@@ -171,7 +172,7 @@ export function PlayerPageTemplate({ user: profileUser }: { user?: User }) {
                     </TabsTrigger>
                 </TabsList>
                 <TabsContent value="overview" className="mt-6"><PlayerOverviewTab player={player} /></TabsContent>
-                <TabsContent value="achievements" className="mt-6"><AchievementsTab player={player} /></TabsContent>
+                <TabsContent value="achievements" className="mt-6"><AchievementsTab /></TabsContent>
                 <TabsContent value="stats" className="mt-6"><StatsTab /></TabsContent>
                 <TabsContent value="socials" className="mt-6"><SocialTab user={player} isOwnProfile={isOwnProfile} /></TabsContent>
                 <TabsContent value="training" className="mt-6"><TrainingTab /></TabsContent>
@@ -181,5 +182,3 @@ export function PlayerPageTemplate({ user: profileUser }: { user?: User }) {
         </div>
     )
 }
-
-    
