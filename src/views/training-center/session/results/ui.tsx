@@ -51,8 +51,8 @@ export function WorkoutResultsPage({ planId }: { planId: string }) {
     const totalSetsCompleted = Object.values(dayResults).flatMap(d => d.exercises).flatMap(e => e.sets).filter(s => s.completed).length;
     
     const totalVolume = Object.values(dayResults)
-      .flatMap(d => d.exercises)
-      .flatMap((e, exIndex) => {
+      .flatMap((d) => d.exercises)
+      .flatMap((e) => {
           const planDayKey = Object.keys(plan.days).find(key => plan.days[key].exercises.some(ex => ex.id === e.exerciseId));
           if (!planDayKey) return [];
           const planEx = plan.days[planDayKey].exercises.find(ex => ex.id === e.exerciseId);
