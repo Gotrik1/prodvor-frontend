@@ -12,6 +12,9 @@ import { Label } from '@/shared/ui/label';
 import { Input } from '@/shared/ui/input';
 import { useUserStore } from '@/widgets/dashboard-header/model/user-store';
 import { GameplayEvent, awardProgressPoints } from '@/shared/lib/gamification';
+import { Progress } from '@/shared/ui/progress';
+import { Timer, Flag, SkipForward, Check, Info } from 'lucide-react';
+import { Alert, AlertDescription, AlertTitle } from '@/shared/ui/alert';
 
 const useTimer = (initialSeconds = 60, onEnd: () => void) => {
     const [seconds, setSeconds] = useState(initialSeconds);
@@ -73,7 +76,7 @@ export function WorkoutSessionPage({ planId }: { planId: string }) {
         setIsResting(false);
     };
     
-    const { start: startTimer, stop: stopTimer, isActive: isTimerActive, time: timerDisplay } = useTimer(60, onTimerEnd); // eslint-disable-line @typescript-eslint/no-unused-vars
+    const { start: startTimer, stop: stopTimer, time: timerDisplay } = useTimer(60, onTimerEnd);
 
     if (!activeSession) {
         // This can happen if the user refreshes the page and zustand hasn't rehydrated yet

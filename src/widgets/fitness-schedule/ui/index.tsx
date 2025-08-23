@@ -8,6 +8,8 @@ import { Clock, Trash2, Calendar, Trophy, Dumbbell } from 'lucide-react';
 import { useScheduleStore } from '@/entities/training/model/use-schedule-store';
 import type { ScheduledActivity, Activity } from '@/views/fitness-plan/ui/types';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
+import { ActivityLibraryDialog } from '@/views/fitness-plan/ui/activity-library';
+import { registeredTeams } from '@/views/tournaments/public-page/ui/mock-data';
 
 const personalActivityColors: Record<Activity['type'] | 'match', string> = {
     'template': 'bg-amber-500/10 text-amber-300 border-amber-500/20',
@@ -53,10 +55,10 @@ export function FitnessSchedule({ showHeader = false }: { showHeader?: boolean }
     const { personalSchedule, removeScheduledActivity, addScheduledActivity } = useScheduleStore();
 
     // Mock upcoming match for demonstration
-    const upcomingMatch = {
+    const upcomingMatch: ScheduledActivity = {
  id: 'match-upcoming-1',
         name: `${registeredTeams[0].name} vs ${registeredTeams[1].name}`,
-        type: 'match' as const,
+        type: 'match' as any,
         startDate: new Date().toISOString(),
         time: '19:00',
         repeat: 'none',

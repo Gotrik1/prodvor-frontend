@@ -13,8 +13,8 @@ import { MarkdownRenderer } from './markdown-renderer';
 import { analyzeMatchVideoAction } from '@/app/actions';
 
 const ProAccessCard = () => (
- <Card className="text-center max-w-lg w-full mt-6 border-primary/50">
- <CardHeader>
+    <Card className="text-center max-w-lg w-full mt-6 border-primary/50">
+        <CardHeader>
             <div className="mx-auto bg-primary/10 text-primary p-4 rounded-full w-fit">
                <Star className="h-12 w-12" />
             </div>
@@ -84,7 +84,7 @@ export function AiAnalysisTool({ embedded = false }: { embedded?: boolean }) {
                 
                 if (result.analysis) {
                     setAnalysisResult(result.analysis);
-                } else {
+                } else if (result.error) {
                     toast({
                         variant: 'destructive',
                         title: 'Ошибка анализа',
@@ -106,12 +106,12 @@ export function AiAnalysisTool({ embedded = false }: { embedded?: boolean }) {
             }
 
         } catch (error: unknown) {
- toast({ // TODO: Replace `unknown` with a more specific error type if possible.
+            toast({
                 variant: 'destructive',
                 title: 'Ошибка',
-                description: error.message || 'Произошла непредвиденная ошибка.',
+                description: error instanceof Error ? error.message : 'Произошла непредвиденная ошибка.',
             });
-            setIsLoading(false);
+            setIsLoading(false); // Ensure loading state is turned off
         }
     };
 

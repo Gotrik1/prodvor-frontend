@@ -2,6 +2,7 @@
 'use client';
 
 import type { Team, User } from "@/mocks";
+import { users } from "@/mocks";
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
 import Link from "next/link";
@@ -15,6 +16,7 @@ import { useToast } from "@/shared/hooks/use-toast";
 import { TacticalBoard } from "./tactical-board";
 import { RosterManagement } from "./roster-management";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
+import { Label } from "@/shared/ui/label";
 
 const mockApplications = users.slice(2, 4).map(u => ({ ...u, status: 'pending' }));
 

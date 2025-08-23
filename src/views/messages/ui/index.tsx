@@ -11,6 +11,7 @@ import { cn } from "@/shared/lib/utils";
 import { mockChats, mockMessages, Chat } from '../lib/mock-data';
 import Link from 'next/link';
 import { useUserStore } from '@/widgets/dashboard-header/model/user-store';
+import type { User } from '@/mocks';
 
 const ChatListItem = ({ chat, isActive, onSelect }: { chat: Chat, isActive: boolean, onSelect: (chatId: string) => void }) => (
     <div
@@ -34,7 +35,7 @@ const ChatListItem = ({ chat, isActive, onSelect }: { chat: Chat, isActive: bool
     </div>
 );
 
-const ChatWindow = ({ chat, messages, currentUser }: { chat: Chat | null, messages: (typeof mockMessages)[string], currentUser: unknown }) => {
+const ChatWindow = ({ chat, messages, currentUser }: { chat: Chat | null, messages: (typeof mockMessages)[string], currentUser: User }) => {
     const [newMessage, setNewMessage] = useState('');
 
     const handleSendMessage = (e: React.FormEvent) => {

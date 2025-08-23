@@ -9,6 +9,8 @@ import { ArrowLeft, Clock, Dumbbell, Flame, CheckCircle, Repeat } from 'lucide-r
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/shared/ui/table';
 import { formatDistanceStrict } from 'date-fns';
 import { ru } from 'date-fns/locale';
+import type { WorkoutSession } from '@/views/fitness-plan/ui/types';
+
 export function WorkoutResultsPage({ planId }: { planId: string }) {
     const [sessionResult, setSessionResult] = useState<WorkoutSession | null>(null);
 
