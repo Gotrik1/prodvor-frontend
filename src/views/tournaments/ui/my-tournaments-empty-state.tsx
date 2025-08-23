@@ -1,3 +1,4 @@
+
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent } from "@/shared/ui/card";
 import { PlusCircle, Trophy } from "lucide-react";
