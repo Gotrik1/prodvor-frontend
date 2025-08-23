@@ -9,12 +9,12 @@ import { Input } from "@/shared/ui/input";
 import { Label } from "@/shared/ui/label";
 import React from "react";
 import { useTournamentCrmContext } from "../../lib/TournamentCrmContext";
-import type { MediaItem } from "@/mocks";
 
 export function MediaTab() {
-    const { mediaItems, handleAddMedia } = useTournamentCrmContext();
+    const { mediaItems } = useTournamentCrmContext();
 
     return (
+
         <Card>
             <CardHeader>
                 <CardTitle>Медиа-центр</CardTitle>
