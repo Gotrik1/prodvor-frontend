@@ -535,7 +535,7 @@ const sidebarMenuButtonVariants = cva(
 )
 
 const SidebarMenuButton = React.forwardRef<
-  HTMLButtonElement,
+  HTMLButtonElement | HTMLAnchorElement,
   React.ComponentProps<"button"> & {
     as?: 'button' | 'a'
     isActive?: boolean
