@@ -13,6 +13,7 @@ import { ChartContainer, ChartTooltip, ChartTooltipContent, ChartLegend, ChartLe
 import { Bar, BarChart as RechartsBarChart, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from "recharts";
 import React, { useMemo } from "react";
 import { getUserDisciplines } from "@/entities/user/lib";
+import { StatCard } from "@/entities/team/ui/stat-card";
 
 const defaultCoach = users.find(u => u.role === 'Тренер');
 const coachTeam = teams[0];
@@ -87,42 +88,10 @@ export function CoachPageTemplate({ user }: { user?: User }) {
                         </div>
                     </CardContent>
                 </Card>
-                <Card>
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium">Команд в управлении</CardTitle>
-                        <Users className="h-4 w-4 text-muted-foreground" />
-                    </CardHeader>
-                    <CardContent>
-                        <div className="text-2xl font-bold">1</div>
-                    </CardContent>
-                </Card>
-                <Card>
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium">Процент побед (сезон)</CardTitle>
-                        <Trophy className="h-4 w-4 text-muted-foreground" />
-                    </CardHeader>
-                    <CardContent>
-                        <div className="text-2xl font-bold text-green-400">78%</div>
-                    </CardContent>
-                </Card>
-                <Card>
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium">Ближайшая тренировка</CardTitle>
-                        <Dumbbell className="h-4 w-4 text-muted-foreground" />
-                    </CardHeader>
-                    <CardContent>
-                        <div className="text-2xl font-bold">Завтра, 18:00</div>
-                    </CardContent>
-                </Card>
-                <Card>
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium">Лицензия</CardTitle>
-                        <Shield className="h-4 w-4 text-muted-foreground" />
-                    </CardHeader>
-                    <CardContent>
-                        <div className="text-2xl font-bold">PRO-1583</div>
-                    </CardContent>
-                </Card>
+                <StatCard title="Команд в управлении" value="1" icon={Users} />
+                <StatCard title="Процент побед (сезон)" value={<span className="text-green-400">78%</span>} icon={Trophy} />
+                <StatCard title="Ближайшая тренировка" value="Завтра, 18:00" icon={Dumbbell} />
+                <StatCard title="Лицензия" value="PRO-1583" icon={Shield} />
             </div>
             
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

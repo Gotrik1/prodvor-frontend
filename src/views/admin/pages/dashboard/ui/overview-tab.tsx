@@ -9,6 +9,7 @@ import { Bar as RechartsBar, BarChart as RechartsBarChart, XAxis, YAxis } from "
 import { users, teams, allSports } from '@/mocks';
 import { allTournaments as tournaments } from '@/views/tournaments/public-page/ui/mock-data';
 import Link from 'next/link';
+import { TeamStatCard } from '@/entities/team/ui/stat-card';
 
 
 const userRegistrationData = [
@@ -34,27 +35,21 @@ export function OverviewTab() {
   return (
     <div className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <Card>
-                <CardHeader><CardTitle className="flex items-center gap-2"><UsersIconComponent className="h-5 w-5"/>Всего пользователей</CardTitle></CardHeader>
-                <CardContent>
-                    <p className="text-4xl font-bold">{users.length}</p>
-                    <p className="text-sm text-muted-foreground">+20.1% с прошлого месяца</p>
-                </CardContent>
-            </Card>
-            <Card>
-                <CardHeader><CardTitle className="flex items-center gap-2"><TrendingUp className="h-5 w-5"/>Активных команд</CardTitle></CardHeader>
-                <CardContent>
-                    <p className="text-4xl font-bold">{teams.length}</p>
-                    <p className="text-sm text-muted-foreground">+18.3% с прошлого месяца</p>
-                </CardContent>
-            </Card>
-            <Card>
-                <CardHeader><CardTitle className="flex items-center gap-2"><Trophy className="h-5 w-5"/>Текущие турниры</CardTitle></CardHeader>
-                <CardContent>
-                    <p className="text-4xl font-bold">{tournaments.filter(t => t.status === 'ИДЕТ').length}</p>
-                    <p className="text-sm text-muted-foreground">+2 новых на этой неделе</p>
-                </CardContent>
-            </Card>
+            <TeamStatCard 
+                title="Всего пользователей" 
+                value={users.length.toString()} 
+                description="+20.1% с прошлого месяца" 
+            />
+            <TeamStatCard 
+                title="Активных команд" 
+                value={teams.length.toString()}
+                description="+18.3% с прошлого месяца"
+            />
+             <TeamStatCard 
+                title="Текущие турниры" 
+                value={tournaments.filter(t => t.status === 'ИДЕТ').length.toString()}
+                description="+2 новых на этой неделе"
+            />
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <Card className="lg:col-span-2">
