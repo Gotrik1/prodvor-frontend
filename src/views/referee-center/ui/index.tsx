@@ -13,7 +13,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Input } from "@/shared/ui/input";
 import { askRulesExpertAction } from "@/app/actions";
 import { Alert, AlertDescription, AlertTitle } from "@/shared/ui/alert";
-import type { AskRulesExpertOutput } from "@/shared/api/ask-rules-expert";
+import type { AskRulesExpertOutput } from "@/shared/lib/schemas";
 
 
 const AiAssistant = () => {

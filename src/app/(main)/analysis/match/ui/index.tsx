@@ -133,9 +133,8 @@ export function AiAnalysisTool({ embedded = false }: { embedded?: boolean }) {
         setAnalysisResult(null);
 
         try {
-            const videoDataUri = file ? await filePreview : undefined;
             const result = await analyzeMatchVideoAction({
-                videoDataUri,
+                videoDataUri: filePreview, // filePreview is already a data URI string from the hook
                 prompt: embedded ? `Проанализируй события матча и дай тактические советы. ${prompt}` : prompt,
             });
             

@@ -1,32 +1,13 @@
 
+'use server';
 /**
  * @fileOverview Analyzes a match video using a multimodal AI model.
  *
  * - analyzeMatchVideo - A function that handles the video analysis.
- * - AnalyzeMatchVideoInput - The input type for the function.
- * - AnalyzeMatchVideoOutput - The return type for the function.
  */
-import { z } from 'zod';
 import { ai } from '@/ai/genkit';
+import { AnalyzeMatchVideoInputSchema, AnalyzeMatchVideoOutputSchema, type AnalyzeMatchVideoInput, type AnalyzeMatchVideoOutput } from '@/shared/lib/schemas';
 
-export const AnalyzeMatchVideoInputSchema = z.object({
-  videoDataUri: z
-    .string()
-    .describe(
-      "A video of a sports match, as a data URI that must include a MIME type and use Base64 encoding. Expected format: 'data:<mimetype>;base64,<encoded_data>'."
-    )
-    .optional(), // Make optional to support embedded analysis without video
-  prompt: z.string().describe('A specific question or prompt for the AI to focus on during analysis.'),
-});
-
-export type AnalyzeMatchVideoInput = z.infer<typeof AnalyzeMatchVideoInputSchema>;
-
-const AnalyzeMatchVideoOutputSchema = z.object({
-  analysis: z.string().optional(),
-  error: z.string().optional(),
-});
-
-export type AnalyzeMatchVideoOutput = z.infer<typeof AnalyzeMatchVideoOutputSchema>;
 
 const analyzeMatchVideoFlow = ai.defineFlow(
   {

@@ -1,26 +1,12 @@
 
+'use server';
 /**
  * @fileOverview An AI agent that answers questions about sports rules.
  *
  * - askRulesExpert - A function that handles the question-answering process.
- * - AskRulesExpertInput - The input type for the function.
- * - AskRulesExpertOutput - The return type for the function.
  */
-import { z } from 'zod';
 import { ai } from '@/ai/genkit';
-
-export const AskRulesExpertInputSchema = z.object({
-  question: z.string().describe("The user's question about sports rules."),
-});
-export type AskRulesExpertInput = z.infer<typeof AskRulesExpertInputSchema>;
-
-
-const AskRulesExpertOutputSchema = z.object({
-  answer: z.string().describe("A clear and concise answer to the user's question."),
-  source: z.string().optional().describe("The specific rule or document the answer is based on."),
-  error: z.string().optional(),
-});
-export type AskRulesExpertOutput = z.infer<typeof AskRulesExpertOutputSchema>;
+import { AskRulesExpertInputSchema, AskRulesExpertOutputSchema, type AskRulesExpertInput, type AskRulesExpertOutput } from '@/shared/lib/schemas';
 
 
 const rulesExpertPrompt = ai.definePrompt({

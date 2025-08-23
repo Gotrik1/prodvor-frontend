@@ -6,9 +6,11 @@ import { generateNewsDigest } from "@/shared/api/generate-news-digest";
 import { sendTournamentAnnouncement } from "@/shared/api/send-tournament-announcement";
 import { generateTournamentImage, type GenerateTournamentImageInput } from "@/shared/api/generate-tournament-image";
 import { generateTournamentPromo, type GenerateTournamentPromoInput } from "@/shared/api/generate-tournament-promo";
-import { analyzeMatchVideo, AnalyzeMatchVideoInputSchema, AnalyzeMatchVideoOutput } from "@/shared/api/analyze-match-video";
-import { askRulesExpert, AskRulesExpertInputSchema, AskRulesExpertOutput } from "@/shared/api/ask-rules-expert";
+import { analyzeMatchVideo } from "@/shared/api/analyze-match-video";
+import { askRulesExpert } from "@/shared/api/ask-rules-expert";
 import { users } from "@/mocks"; // Mock user data for access control
+import { AnalyzeMatchVideoInputSchema, type AnalyzeMatchVideoOutput, AskRulesExpertInputSchema, type AskRulesExpertOutput } from "@/shared/lib/schemas";
+
 
 import type { LogoGenerationInput } from "@/widgets/logo-generator/ui/logo-generator";
 import type { SendTournamentAnnouncementInput } from "@/views/tournaments/manage/ui/tabs/announcements-tab";
@@ -44,7 +46,8 @@ export async function analyzeMatchVideoAction(input: unknown): Promise<AnalyzeMa
     }
     const validatedInput = validation.data;
 
-    const currentUser = users.find(u => u.role === 'Тренер');
+    // This is a mock for the currently logged-in user. In a real app, you'd get this from the session.
+    const currentUser = users.find(u => u.role === 'Тренер'); // Simulating a PRO user
     const proRoles = ['Тренер', 'Менеджер', 'Администратор'];
     
     if (!currentUser || !proRoles.includes(currentUser.role)) {
@@ -61,4 +64,3 @@ export async function askRulesExpertAction(input: unknown): Promise<AskRulesExpe
     }
     return await askRulesExpert(validation.data);
 }
-
