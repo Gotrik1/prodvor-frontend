@@ -1,5 +1,4 @@
 
-
 import { TeamPublicPage } from '@/views/teams/team';
 import { teams as mockTeams } from '@/mocks';
 import type { Metadata } from 'next';

@@ -1,3 +1,4 @@
+
 import { TournamentHubPage } from '@/views/tournaments/hub';
 import { allTournaments as mockTournaments } from '@/views/tournaments/public-page/ui/mock-data';
 import type { Metadata } from 'next';
