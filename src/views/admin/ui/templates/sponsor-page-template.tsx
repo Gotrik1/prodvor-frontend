@@ -14,27 +14,35 @@ import Link from "next/link";
 
 const defaultSponsor = sponsors[0];
 
+// This part can be a Server Component if it only displays data.
+// For the template preview, we'll keep it as a client component for simplicity,
+// but in a real app, this could be optimized.
+function SponsorNotFound() {
+    return (
+        <div className="flex flex-col min-h-[80vh] items-center justify-center">
+            <Card className="text-center max-w-md w-full">
+                <CardHeader>
+                    <CardTitle>Ошибка 404</CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <p className="text-muted-foreground">
+                        Спонсор не найден.
+                    </p>
+                    <Button asChild className="mt-6">
+                        <Link href="/dashboard">Вернуться на платформу</Link>
+                    </Button>
+                </CardContent>
+            </Card>
+        </div>
+    );
+}
+
+
 export function SponsorPageTemplate({ sponsor: sponsorProp }: { sponsor?: Sponsor }) {
     const sponsor = sponsorProp || defaultSponsor;
 
     if (!sponsor) {
-        return (
-             <div className="flex flex-col min-h-[80vh] items-center justify-center">
-                <Card className="text-center max-w-md w-full">
-                    <CardHeader>
-                        <CardTitle>Ошибка 404</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        <p className="text-muted-foreground">
-                            Спонсор не найден.
-                        </p>
-                        <Button asChild className="mt-6">
-                            <Link href="/dashboard">Вернуться на платформу</Link>
-                        </Button>
-                    </CardContent>
-                </Card>
-            </div>
-        )
+        return <SponsorNotFound />;
     }
 
 

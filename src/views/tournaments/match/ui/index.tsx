@@ -12,27 +12,31 @@ import { useProtocol } from '@/widgets/protocol-editor/lib/use-protocol';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs';
 import { AiAnalysisTool } from '@/views/analysis/match/ui';
 
+function MatchNotFound() {
+    return (
+        <div className="flex flex-col min-h-screen items-center justify-center p-4">
+            <Card className="text-center max-w-md w-full">
+                <CardHeader>
+                    <CardTitle>Ошибка 404</CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <p className="text-muted-foreground">
+                        Матч или турнир не найден.
+                    </p>
+                    <Button asChild className="mt-6">
+                        <Link href="/tournaments">К списку турниров</Link>
+                    </Button>
+                </CardContent>
+            </Card>
+        </div>
+    );
+}
+
 export function MatchPage({ tournament }: { tournament?: Tournament }) {
     const { activeMatch } = useProtocol();
 
     if (!tournament || !activeMatch) {
-        return (
-            <div className="flex flex-col min-h-screen items-center justify-center p-4">
-                <Card className="text-center max-w-md w-full">
-                    <CardHeader>
-                        <CardTitle>Ошибка 404</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        <p className="text-muted-foreground">
-                            Матч или турнир не найден.
-                        </p>
-                        <Button asChild className="mt-6">
-                            <Link href="/tournaments">К списку турниров</Link>
-                        </Button>
-                    </CardContent>
-                </Card>
-            </div>
-        );
+        return <MatchNotFound />;
     }
     
     const isMatchFinished = activeMatch.score1 !== null && activeMatch.score2 !== null;

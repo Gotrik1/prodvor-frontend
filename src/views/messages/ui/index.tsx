@@ -35,15 +35,73 @@ const ChatListItem = ({ chat, isActive, onSelect }: { chat: Chat, isActive: bool
     </div>
 );
 
-const ChatWindow = ({ chat, messages, currentUser }: { chat: Chat | null, messages: (typeof mockMessages)[string], currentUser: User }) => {
+const ChatWindowHeader = ({ chat }: { chat: Chat }) => (
+    <header className="flex items-center gap-4 p-4 border-b">
+        <Avatar className="h-10 w-10">
+            <AvatarImage src={chat.avatarUrl} />
+            <AvatarFallback>{chat.name.charAt(0)}</AvatarFallback>
+        </Avatar>
+        <h3 className="font-semibold text-lg">{chat.name}</h3>
+        <div className="ml-auto flex items-center gap-2">
+            <Button variant="ghost" size="icon"><Phone /></Button>
+            <Button variant="ghost" size="icon"><Video /></Button>
+        </div>
+    </header>
+);
+
+const ChatMessage = ({ msg, isOwnMessage }: { msg: (typeof mockMessages)[string][0], isOwnMessage: boolean }) => (
+    <div className={cn("flex items-end gap-2", isOwnMessage ? "justify-end" : "justify-start")}>
+        {!isOwnMessage && (
+             <Avatar className="h-8 w-8">
+                <AvatarImage src={msg.sender.avatarUrl} />
+                <AvatarFallback>{msg.sender.nickname.charAt(0)}</AvatarFallback>
+            </Avatar>
+        )}
+        <div className={cn(
+            "max-w-xs md:max-w-md p-3 rounded-lg",
+            isOwnMessage ? "bg-primary text-primary-foreground" : "bg-muted"
+        )}>
+            <p className="text-sm">{msg.text}</p>
+        </div>
+         {isOwnMessage && (
+             <Avatar className="h-8 w-8">
+                <AvatarImage src={msg.sender.avatarUrl} />
+                <AvatarFallback>{msg.sender.nickname.charAt(0)}</AvatarFallback>
+            </Avatar>
+        )}
+    </div>
+);
+
+const ChatInput = ({ onSendMessage }: { onSendMessage: (text: string) => void }) => {
     const [newMessage, setNewMessage] = useState('');
 
-    const handleSendMessage = (e: React.FormEvent) => {
+    const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         if (!newMessage.trim()) return;
-        // In a real app, this would send the message to a backend
-        console.log(`Sending message to ${chat?.id}: ${newMessage}`);
+        onSendMessage(newMessage);
         setNewMessage('');
+    };
+
+    return (
+        <footer className="p-4 border-t">
+            <form className="flex items-center gap-2" onSubmit={handleSubmit}>
+                <Input 
+                    placeholder="Напишите сообщение..." 
+                    className="flex-grow"
+                    value={newMessage}
+                    onChange={(e) => setNewMessage(e.target.value)}
+                />
+                <Button type="submit" size="icon"><Send /></Button>
+            </form>
+        </footer>
+    );
+}
+
+const ChatWindow = ({ chat, messages, currentUser }: { chat: Chat | null, messages: (typeof mockMessages)[string], currentUser: User }) => {
+    
+    const handleSendMessage = (text: string) => {
+        // In a real app, this would send the message to a backend
+        console.log(`Sending message to ${chat?.id}: ${text}`);
     };
 
     if (!chat) {
@@ -58,52 +116,13 @@ const ChatWindow = ({ chat, messages, currentUser }: { chat: Chat | null, messag
     
     return (
         <div className="flex flex-col h-full bg-card rounded-lg border">
-            <header className="flex items-center gap-4 p-4 border-b">
-                 <Avatar className="h-10 w-10">
-                    <AvatarImage src={chat.avatarUrl} />
-                    <AvatarFallback>{chat.name.charAt(0)}</AvatarFallback>
-                </Avatar>
-                <h3 className="font-semibold text-lg">{chat.name}</h3>
-                <div className="ml-auto flex items-center gap-2">
-                    <Button variant="ghost" size="icon"><Phone /></Button>
-                    <Button variant="ghost" size="icon"><Video /></Button>
-                </div>
-            </header>
+            <ChatWindowHeader chat={chat} />
             <div className="flex-grow p-4 space-y-4 overflow-y-auto">
                 {messages.map(msg => (
-                    <div key={msg.id} className={cn("flex items-end gap-2", msg.sender.id === currentUser.id ? "justify-end" : "justify-start")}>
-                        {msg.sender.id !== currentUser.id && (
-                             <Avatar className="h-8 w-8">
-                                <AvatarImage src={msg.sender.avatarUrl} />
-                                <AvatarFallback>{msg.sender.nickname.charAt(0)}</AvatarFallback>
-                            </Avatar>
-                        )}
-                        <div className={cn(
-                            "max-w-xs md:max-w-md p-3 rounded-lg",
-                            msg.sender.id === currentUser.id ? "bg-primary text-primary-foreground" : "bg-muted"
-                        )}>
-                            <p className="text-sm">{msg.text}</p>
-                        </div>
-                         {msg.sender.id === currentUser.id && (
-                             <Avatar className="h-8 w-8">
-                                <AvatarImage src={msg.sender.avatarUrl} />
-                                <AvatarFallback>{msg.sender.nickname.charAt(0)}</AvatarFallback>
-                            </Avatar>
-                        )}
-                    </div>
+                    <ChatMessage key={msg.id} msg={msg} isOwnMessage={msg.sender.id === currentUser.id} />
                 ))}
             </div>
-            <footer className="p-4 border-t">
-                <form className="flex items-center gap-2" onSubmit={handleSendMessage}>
-                    <Input 
-                        placeholder="Напишите сообщение..." 
-                        className="flex-grow"
-                        value={newMessage}
-                        onChange={(e) => setNewMessage(e.target.value)}
-                    />
-                    <Button type="submit" size="icon"><Send /></Button>
-                </form>
-            </footer>
+            <ChatInput onSendMessage={handleSendMessage} />
         </div>
     )
 }
