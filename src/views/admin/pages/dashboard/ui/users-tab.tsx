@@ -53,6 +53,7 @@ export function UsersTab() {
                     data={users}
                     renderRow={(user: User) => {
                         const userDisciplines = getUserDisciplines(user);
+                        const userTeams = getTeamForUser(user.id);
                         return (
                         <TableRow key={user.id}>
                             <TableCell className="align-top font-mono text-xs whitespace-nowrap">
@@ -98,7 +99,7 @@ export function UsersTab() {
                             </TableCell>
                              <TableCell className="align-top">
                                 <div className="flex flex-col gap-1 text-xs">
-                                   {getTeamForUser(user.id).map(team => (
+                                   {userTeams.map(team => (
                                         <Link key={team.id} href={`/admin/teams/${team.id}`} className="text-blue-400 hover:underline whitespace-nowrap">
                                             {team.name} ({team.game})
                                         </Link>

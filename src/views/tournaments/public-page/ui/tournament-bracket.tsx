@@ -5,8 +5,9 @@ import { registeredTeams } from './mock-data';
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { Trophy } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
+import { Skeleton } from '@/shared/ui/skeleton';
 
 interface Match {
     id: string;
@@ -16,42 +17,42 @@ interface Match {
     score2: number;
 }
 
-export function TournamentBracket({ tournamentId }: { tournamentId: string }) {
-    const [matches, setMatches] = useState<Match[]>([]);
+const generateInitialMatches = (): Match[] => {
+    // This logic now runs only once on component initialization
+    // Simple pseudo-random generator to ensure same results on client renders
+    const createSeededRandom = (seed: number) => () => {
+        let t = seed += 0x6D2B79F5;
+        t = Math.imul(t ^ t >>> 15, t | 1);
+        t ^= t + Math.imul(t ^ t >>> 7, t | 61);
+        return ((t ^ t >>> 14) >>> 0) / 4294967296;
+    };
 
-    useEffect(() => {
-        // This logic runs on the client to avoid hydration mismatch
-        // Simple pseudo-random generator to ensure same results on client renders
-        const createSeededRandom = (seed: number) => () => {
-          let t = seed += 0x6D2B79F5;
-          t = Math.imul(t ^ t >>> 15, t | 1);
-          t ^= t + Math.imul(t ^ t >>> 7, t | 61);
-          return ((t ^ t >>> 14) >>> 0) / 4294967296;
-        };
-
-        const generatedMatches: Match[] = [];
-        const teamsCopy = [...registeredTeams].sort(() => 0.5 - Math.random()); // Shuffle teams
-
-        for (let i = 0; i < teamsCopy.length; i += 2) {
-            if (teamsCopy[i + 1]) {
-                const seededRandom = createSeededRandom(i); // Use loop index as seed
-                const match: Match = {
-                    id: `rd1-match${i / 2}`,
-                    team1: teamsCopy[i],
-                    team2: teamsCopy[i + 1],
-                    score1: Math.floor(seededRandom() * 5),
-                    score2: Math.floor(seededRandom() * 5)
-                };
-                // Ensure scores are not equal to have a clear winner
-                if (match.score1 === match.score2) {
-                    match.score2 = (match.score2 + 1) % 5;
-                }
-                generatedMatches.push(match);
-            }
-        }
-        setMatches(generatedMatches);
-    }, []);
+    const generatedMatches: Match[] = [];
+    // Ensure the shuffle is consistent across renders by not using Math.random() directly
+    const teamsCopy = [...registeredTeams].sort((a, b) => a.id.localeCompare(b.id)); 
     
+    for (let i = 0; i < teamsCopy.length; i += 2) {
+        if (teamsCopy[i + 1]) {
+            const seededRandom = createSeededRandom(i);
+            const match: Match = {
+                id: `rd1-match${i / 2}`,
+                team1: teamsCopy[i],
+                team2: teamsCopy[i + 1],
+                score1: Math.floor(seededRandom() * 5),
+                score2: Math.floor(seededRandom() * 5)
+            };
+            if (match.score1 === match.score2) {
+                match.score2 = (match.score2 + 1) % 5;
+            }
+            generatedMatches.push(match);
+        }
+    }
+    return generatedMatches;
+};
+
+export function TournamentBracket({ tournamentId }: { tournamentId: string }) {
+    const [matches] = useState(generateInitialMatches);
+
     if (matches.length === 0) {
         return (
              <Card>
@@ -60,7 +61,9 @@ export function TournamentBracket({ tournamentId }: { tournamentId: string }) {
                 </CardHeader>
                 <CardContent className="space-y-6">
                     <div className="text-center p-8 text-muted-foreground">
-                        Генерация сетки...
+                        <Skeleton className="h-10 w-full" />
+                        <Skeleton className="h-10 w-full mt-4" />
+                        <Skeleton className="h-10 w-full mt-4" />
                     </div>
                 </CardContent>
             </Card>
