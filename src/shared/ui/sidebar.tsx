@@ -1,3 +1,4 @@
+
 "use client"
 
 import * as React from "react"
@@ -558,7 +559,7 @@ const SidebarMenuButton = React.forwardRef<
 
     const button = (
       <Comp
-        ref={ref}
+        ref={ref as any}
         data-sidebar="menu-button"
         data-size={size}
         data-active={isActive}

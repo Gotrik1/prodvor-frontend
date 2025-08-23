@@ -1,6 +1,7 @@
 
-import { users, teams, tournaments, posts } from '@/mocks';
+import { users, teams, posts } from '@/mocks';
 import type { User, Team } from '@/mocks';
+import { allTournaments as tournaments } from '@/views/tournaments/public-page/ui/mock-data';
 import type { Tournament } from '@/views/tournaments/public-page/ui/mock-data';
 
 /**
