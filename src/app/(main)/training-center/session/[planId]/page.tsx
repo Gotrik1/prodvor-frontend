@@ -1,3 +1,4 @@
+
 import { WorkoutSessionPage } from '@/views/training-center/session';
 import type { Metadata } from 'next';
 
