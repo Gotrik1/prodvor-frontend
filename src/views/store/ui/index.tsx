@@ -85,7 +85,7 @@ export function StorePage() {
                                                     <span>{item.price}</span>
                                                 </div>
                                                 {item.type === 'pro_status' ? (
-                                                    <Button asChild onClick={() => handleBuy(item.name, item.type)}>
+                                                    <Button asChild>
                                                         <Link href={`/store/pro`}>Подробнее</Link>
                                                     </Button>
                                                 ) : (
