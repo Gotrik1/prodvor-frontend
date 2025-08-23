@@ -5,6 +5,8 @@ import { create } from 'zustand';
 import { matchEvents as initialMatchEvents, MatchEvent } from '@/widgets/match-protocol/ui/match-timeline';
 import type { BracketMatch } from '@/views/tournaments/public-page/ui/mock-data';
 
+const DEMO_MATCH_ID = 'rd1-match0';
+
 interface ProtocolState {
     events: MatchEvent[];
     activeMatch: BracketMatch | null;
@@ -29,7 +31,7 @@ export const useProtocol = create<ProtocolState>((set) => ({
             return { activeMatch: match };
         }
         // For demonstration, load mock events for the first match, otherwise start fresh
-        const events = match?.id === 'rd1-match0' ? initialMatchEvents.sort((a, b) => a.minute - b.minute) : [];
+        const events = match?.id === DEMO_MATCH_ID ? initialMatchEvents.sort((a, b) => a.minute - b.minute) : [];
         return { activeMatch: match, events };
     }),
     resetEvents: () => set({ events: [] }),
