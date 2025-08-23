@@ -4,32 +4,40 @@
 import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
-import { CheckCircle, Gem, Puzzle } from "lucide-react";
+import { CheckCircle, Gem, Puzzle, Swords, MessageSquare, Dumbbell, Repeat, Trophy, Users, CalendarCheck, MapPin } from "lucide-react";
 import { mockDailyQuests, mockWeeklyQuests, mockEventQuests, Quest } from '../lib/mock-data';
 import { Progress } from '@/shared/ui/progress';
 import { Button } from '@/shared/ui/button';
 import { useToast } from '@/shared/hooks/use-toast';
 import { cn } from '@/shared/lib/utils';
-import * as LucideIcons from "lucide-react";
 import type { LucideProps } from 'lucide-react';
 import React from 'react';
+
+const iconMap: Record<string, React.FC<LucideProps>> = {
+  Swords,
+  MessageSquare,
+  Dumbbell,
+  Repeat,
+  Trophy,
+  Users,
+  CalendarCheck,
+  MapPin,
+  Puzzle,
+};
+
+const QuestIcon = ({ name, ...props }: { name: string } & LucideProps) => {
+  const Icon = iconMap[name] || Puzzle;
+  return <Icon {...props} />;
+};
 
 const QuestCard = ({ quest: initialQuest, onClaim }: { quest: Quest; onClaim: (questId: string) => void; }) => {
     const isCompleted = initialQuest.progress >= initialQuest.target;
     
-    let Icon: React.ElementType = Puzzle;
-    const PotentialIcon = LucideIcons[initialQuest.icon as keyof typeof LucideIcons];
-
-    // Check if the imported value is a valid React component (forwardRef components have a displayName)
-    if (PotentialIcon && typeof PotentialIcon === 'object' && 'displayName' in PotentialIcon) {
-        Icon = PotentialIcon as React.ElementType<LucideProps>;
-    }
-
     return (
         <Card className={cn("flex flex-col transition-all", isCompleted && !initialQuest.claimed && "border-primary shadow-primary/20", initialQuest.claimed && "opacity-60 bg-muted/50")}>
             <CardHeader className="flex-row items-start gap-4 space-y-0">
                 <div className="p-3 rounded-lg bg-muted text-primary">
-                    <Icon className="h-6 w-6" />
+                    <QuestIcon name={initialQuest.icon} className="h-6 w-6" />
                 </div>
                 <div>
                     <CardTitle>{initialQuest.name}</CardTitle>
