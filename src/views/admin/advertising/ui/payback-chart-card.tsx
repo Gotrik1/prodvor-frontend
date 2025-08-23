@@ -3,7 +3,7 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/shared/ui/chart";
-import { Bar, ComposedChart, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Line } from "recharts";
+import { Bar, ComposedChart, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Line, ReferenceLine } from "recharts";
 import { useAdSettingsContext } from './index';
 
 const chartConfig = {
@@ -30,6 +30,7 @@ export function PaybackChartCard() {
                             <YAxis yAxisId="right" orientation="right" stroke="hsl(var(--accent))" unit="M" />
                             <Tooltip formatter={(value: number) => value.toFixed(1)} content={<ChartTooltipContent />} />
                             <Legend />
+                             <ReferenceLine yAxisId="right" y={0} stroke="hsl(var(--foreground))" strokeDasharray="3 3" />
                             <Bar yAxisId="left" dataKey="revenue" fill="hsl(var(--primary))" name="Доход, млн ₽" radius={[4, 4, 0, 0]} />
                             <Line yAxisId="right" type="monotone" dataKey="ebitda" stroke="hsl(var(--accent))" strokeWidth={2} name="Cum EBITDA, млн ₽" />
                         </ComposedChart>

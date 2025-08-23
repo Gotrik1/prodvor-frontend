@@ -20,14 +20,14 @@ const mockCampaigns = [
     { id: 'camp4', name: 'Весенний сезон - Анонс', status: 'Завершена', segment: 'Все пользователи', impressions: '10.2M', clicks: '15,300', ctr: '0.15%' },
 ];
 
-const getStatusVariant = (status: string): 'success' | 'secondary' | 'default' => {
+const getStatusVariant = (status: string) => {
     switch (status) {
         case 'Активна':
-            return 'success';
+            return 'bg-green-500/20 text-green-300 border-green-500/30';
         case 'На паузе':
-            return 'secondary';
+            return 'bg-amber-500/20 text-amber-300 border-amber-500/30';
         default:
-            return 'default';
+            return 'bg-muted text-muted-foreground border-border';
     }
 };
 
@@ -123,7 +123,7 @@ export function CampaignManager() {
                                 <TableRow key={campaign.id}>
                                     <TableCell className="font-medium">{campaign.name}</TableCell>
                                     <TableCell>
-                                        <Badge variant={getStatusVariant(campaign.status)}>{campaign.status}</Badge>
+                                        <Badge className={getStatusVariant(campaign.status)}>{campaign.status}</Badge>
                                     </TableCell>
                                     <TableCell>{campaign.segment}</TableCell>
                                     <TableCell className="text-right font-mono">{campaign.impressions}</TableCell>

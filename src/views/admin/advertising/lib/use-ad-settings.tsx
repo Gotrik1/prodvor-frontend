@@ -89,6 +89,8 @@ export function useAdSettings() {
         const baseTotalRevenue = initialQuarterlyForecast.reduce((sum, q) => sum + q.revenue, 0);
         const newTotalRevenue = annualRevenue;
         
+        if (baseTotalRevenue === 0) return initialQuarterlyForecast; // Avoid division by zero
+
         return initialQuarterlyForecast.map(q => {
             const ratio = q.revenue / baseTotalRevenue;
             const newRevenue = newTotalRevenue * ratio;
