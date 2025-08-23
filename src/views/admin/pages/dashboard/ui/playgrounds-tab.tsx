@@ -7,6 +7,7 @@ import { Badge } from '@/shared/ui/badge';
 import Link from 'next/link';
 import { DataTable } from './data-table';
 import { allSportsFlat } from '../lib';
+import { TableRow, TableCell } from '@/shared/ui/table';
 
 export function PlaygroundsTab() {
   return (
