@@ -15,7 +15,6 @@ import Image from 'next/image';
 import { useUserStore } from '@/widgets/dashboard-header/model/user-store';
 import { useToast } from '@/shared/hooks/use-toast';
 import { useRouter } from 'next/navigation';
-import { Alert, AlertDescription, AlertTitle } from '@/shared/ui/alert';
 import { AlertTriangle } from 'lucide-react';
 import React, { useState, useMemo } from 'react';
 import { RequirementsChecklist } from './requirements-checklist';

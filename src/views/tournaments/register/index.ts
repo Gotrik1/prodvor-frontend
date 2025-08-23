@@ -1,1 +1,3 @@
+
 export { TournamentRegisterPage } from './ui';
+
