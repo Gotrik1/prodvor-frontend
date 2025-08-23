@@ -3,6 +3,7 @@
 
 import React from 'react';
 import {
+  Command,
   CommandDialog,
   CommandEmpty,
   CommandGroup,
