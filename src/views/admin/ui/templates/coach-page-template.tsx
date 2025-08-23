@@ -11,10 +11,11 @@ import { Button } from "@/shared/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/shared/ui/table";
 import { ChartContainer, ChartTooltip, ChartTooltipContent, ChartLegend, ChartLegendContent } from "@/shared/ui/chart";
 import { Bar, BarChart as RechartsBarChart, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from "recharts";
+import React, { useMemo } from "react";
 
-const defaultCoach = users.find(u => u.role === 'Тренер')!;
+const defaultCoach = users.find(u => u.role === 'Тренер');
 const coachTeam = teams[0];
-const teamMembers = users.filter(u => coachTeam.members.includes(u.id));
+const teamMembers = coachTeam ? users.filter(u => coachTeam.members.includes(u.id)) : [];
 
 const chartData = [
   { month: "Январь", winrate: 65 },
@@ -47,7 +48,24 @@ const getUserDisciplines = (user: User): string[] => {
 
 export function CoachPageTemplate({ user }: { user?: User }) {
     const coach = user || defaultCoach;
-    const coachDisciplines = getUserDisciplines(coach);
+
+    const coachDisciplines = useMemo(() => {
+        if (!coach) return [];
+        return getUserDisciplines(coach);
+    }, [coach]);
+    
+    if (!coach || !coachTeam) {
+         return (
+            <div className="flex items-center justify-center min-h-[60vh]">
+                <Card className="text-center">
+                    <CardHeader>
+                        <CardTitle>Ошибка</CardTitle>
+                        <CardDescription>Не удалось загрузить данные тренера.</CardDescription>
+                    </CardHeader>
+                </Card>
+            </div>
+        );
+    }
     
     return (
         <div className="border rounded-lg p-4 md:p-6 space-y-6 bg-muted/20">

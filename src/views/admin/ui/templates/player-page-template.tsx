@@ -18,6 +18,7 @@ import { MediaTab } from "./player-page-media-tab";
 import { AchievementsTab } from "./player-page-achievements-tab";
 import { SocialTab } from "./player-page-social-tab";
 import Image from "next/image";
+import React from "react";
 
 const defaultPlayer = users.find(u => u.role === 'Игрок')!;
 

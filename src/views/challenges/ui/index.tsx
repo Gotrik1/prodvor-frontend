@@ -71,7 +71,10 @@ export function ChallengesPage() {
     // Find the first team the user is a captain of
     const myTeam = useMemo(() => teams.find(t => t.captainId === currentUser?.id), [currentUser]);
 
-    const incomingChallenges = myTeam ? challenges.filter(c => c.challenged.id === myTeam.id && c.status === 'pending') : [];
+    const incomingChallenges = useMemo(() => {
+        if (!myTeam) return [];
+        return challenges.filter(c => c.challenged.id === myTeam.id && c.status === 'pending');
+    }, [myTeam]);
     
     // --- Matchmaking Logic ---
     const [eloRange, setEloRange] = useState([-250, 250]);

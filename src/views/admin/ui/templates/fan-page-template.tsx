@@ -11,8 +11,9 @@ import { Bell, Calendar, Flame, Heart, Rss, Star, Ticket, Gamepad2 } from "lucid
 import Image from "next/image";
 import Link from "next/link";
 import { CreatePost } from "@/widgets/dashboard-feed/ui/create-post";
+import React, { useMemo } from "react";
 
-const defaultFan: User = users.find(u => u.role === 'Болельщик') || users[3];
+const defaultFan: User | undefined = users.find(u => u.role === 'Болельщик');
 const favoriteTeams = teams.slice(0, 4);
 const upcomingMatches = [
     { team1: teams[0], team2: teams[1], tournament: tournaments.find(t => t.id === 'mytourney1')! },
@@ -35,7 +36,24 @@ const getUserDisciplines = (user: User): string[] => {
 
 export function FanPageTemplate({ user }: { user?: User }) {
     const fanUser = user || defaultFan;
-    const fanDisciplines = getUserDisciplines(fanUser);
+    
+    const fanDisciplines = useMemo(() => {
+        if (!fanUser) return [];
+        return getUserDisciplines(fanUser);
+    }, [fanUser]);
+
+    if (!fanUser) {
+        return (
+            <div className="flex items-center justify-center min-h-[60vh]">
+                <Card className="text-center">
+                    <CardHeader>
+                        <CardTitle>Ошибка</CardTitle>
+                        <CardDescription>Не удалось загрузить данные болельщика.</CardDescription>
+                    </CardHeader>
+                </Card>
+            </div>
+        );
+    }
 
     return (
         <div className="border rounded-lg p-4 md:p-6 space-y-6 bg-muted/20">

@@ -9,6 +9,7 @@ import { Progress } from "@/shared/ui/progress";
 import { Badge } from "@/shared/ui/badge";
 import Image from "next/image";
 import { useUserStore } from "@/widgets/dashboard-header/model/user-store";
+import React, { useMemo } from "react";
 
 type TournamentStatus = 'АНОНС' | 'ПРЕДРЕГИСТРАЦИЯ' | 'РЕГИСТРАЦИЯ' | 'ИДЕТ' | 'ЗАВЕРШЕН';
 
@@ -24,7 +25,8 @@ const statusColors: Record<TournamentStatus, string> = {
 export function DashboardAside() {
   const { user } = useUserStore();
 
-  const activeTournaments = allTournaments.filter(t => {
+  const activeTournaments = useMemo(() => {
+    return allTournaments.filter(t => {
       const isActiveStatus = t.status === 'ИДЕТ' || t.status === 'РЕГИСТРАЦИЯ';
       if (!isActiveStatus) return false;
 
@@ -37,7 +39,8 @@ export function DashboardAside() {
       }
 
       return false;
-  });
+    });
+  }, [user]);
   
   return (
     <>
