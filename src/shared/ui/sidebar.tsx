@@ -559,12 +559,12 @@ const SidebarMenuButton = React.forwardRef<
 
     const button = (
       <Comp
-        ref={ref as any}
+        ref={ref as React.ForwardedRef<HTMLButtonElement & HTMLAnchorElement>}
         data-sidebar="menu-button"
         data-size={size}
         data-active={isActive}
         className={cn(sidebarMenuButtonVariants({ variant, size }), className)}
-        {...props as any}
+        {...(props as React.HTMLAttributes<HTMLButtonElement | HTMLAnchorElement>)}
       />
     )
 

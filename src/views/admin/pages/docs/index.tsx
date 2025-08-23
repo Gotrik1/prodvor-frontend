@@ -10,18 +10,18 @@ import { API_DOCS } from './api-docs-content';
 import { RolesPage } from "../roles";
 import { RanksPage } from "../ranks";
 
-const markdownComponents = {
-    h1: (props: any) => <h1 className="text-3xl font-bold mt-6 mb-4 font-headline" {...props} />,
-    h2: (props: any) => <h2 className="text-2xl font-bold mt-6 mb-3 font-headline border-b pb-2" {...props} />,
-    h3: (props: any) => <h3 className="text-xl font-semibold mt-4 mb-2 font-headline" {...props} />,
-    p: (props: any) => <p className="leading-relaxed mb-4" {...props} />,
-    ul: (props: any) => <ul className="list-disc list-inside mb-4 space-y-2" {...props} />,
-    ol: (props: any) => <ol className="list-decimal list-inside mb-4 space-y-2" {...props} />,
-    li: (props: any) => <li className="pl-2" {...props} />,
-    code: ({ ...props }: any) => <code className="bg-muted text-foreground px-1 py-0.5 rounded-sm font-mono text-sm" {...props} />,
-    pre: ({ ...props }: any) => <pre className="bg-muted p-4 rounded-md overflow-x-auto" {...props} />,
-    a: (props: any) => <a className="text-primary hover:underline" {...props} />,
-    strong: (props: any) => <strong className="font-bold" {...props} />,
+const markdownComponents: { [key: string]: React.ElementType } = {
+    h1: (props: React.ComponentProps<'h1'>) => <h1 className="text-3xl font-bold mt-6 mb-4 font-headline" {...props} />,
+    h2: (props: React.ComponentProps<'h2'>) => <h2 className="text-2xl font-bold mt-6 mb-3 font-headline border-b pb-2" {...props} />,
+    h3: (props: React.ComponentProps<'h3'>) => <h3 className="text-xl font-semibold mt-4 mb-2 font-headline" {...props} />,
+    p: (props: React.ComponentProps<'p'>) => <p className="leading-relaxed mb-4" {...props} />,
+    ul: (props: React.ComponentProps<'ul'>) => <ul className="list-disc list-inside mb-4 space-y-2" {...props} />,
+    ol: (props: React.ComponentProps<'ol'>) => <ol className="list-decimal list-inside mb-4 space-y-2" {...props} />,
+    li: (props: React.ComponentProps<'li'>) => <li className="pl-2" {...props} />,
+    code: (props: React.ComponentProps<'code'>) => <code className="bg-muted text-foreground px-1 py-0.5 rounded-sm font-mono text-sm" {...props} />,
+    pre: (props: React.ComponentProps<'pre'>) => <pre className="bg-muted p-4 rounded-md overflow-x-auto" {...props} />,
+    a: (props: React.ComponentProps<'a'>) => <a className="text-primary hover:underline" {...props} />,
+    strong: (props: React.ComponentProps<'strong'>) => <strong className="font-bold" {...props} />,
 };
 
 export function DocsPage() {

@@ -51,7 +51,7 @@ const FormBadge = ({ result }: { result: 'W' | 'L' | 'D' }) => {
     return <div className={`${baseClasses} bg-secondary text-secondary-foreground border border-secondary/30`}>D</div>;
 };
 
-const PlayerOverviewTab = ({ player }: { player: User }) => {
+const PlayerOverviewTab = () => {
     const last5Form: ('W' | 'L' | 'D')[] = ['W', 'L', 'W', 'W', 'W'];
     return (
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
@@ -171,7 +171,7 @@ export function PlayerPageTemplate({ user: profileUser }: { user?: User }) {
                         <span className="hidden md:inline">Медиа</span>
                     </TabsTrigger>
                 </TabsList>
-                <TabsContent value="overview" className="mt-6"><PlayerOverviewTab player={player} /></TabsContent>
+                <TabsContent value="overview" className="mt-6"><PlayerOverviewTab /></TabsContent>
                 <TabsContent value="achievements" className="mt-6"><AchievementsTab /></TabsContent>
                 <TabsContent value="stats" className="mt-6"><StatsTab /></TabsContent>
                 <TabsContent value="socials" className="mt-6"><SocialTab user={player} isOwnProfile={isOwnProfile} /></TabsContent>
