@@ -7,8 +7,12 @@ import { Input } from "@/shared/ui/input";
 import { Alert, AlertDescription, AlertTitle } from "@/shared/ui/alert";
 import { Wand2, Loader2, AlertTriangle, Download } from "lucide-react";
 import Image from 'next/image';
-import { generateTeamLogoVariations } from "@/shared/api/generate-team-logo-variations";
+import { generateLogosAction } from "@/app/actions";
 import { Skeleton } from "@/shared/ui/skeleton";
+
+export type LogoGenerationInput = {
+    logoDescription: string;
+};
 
 export function LogoGenerator() {
   const [description, setDescription] = useState("");
@@ -25,7 +29,7 @@ export function LogoGenerator() {
     setError(null);
     setLogos([]);
 
-    const result = await generateTeamLogoVariations({ logoDescription: description });
+    const result = await generateLogosAction({ logoDescription: description });
 
     if (result.error || result.logoDataUris.length === 0) {
       setError(result.error || "Не удалось сгенерировать логотипы. Попробуйте другой запрос.");

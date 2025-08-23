@@ -19,6 +19,7 @@ import { useToast } from "@/shared/hooks/use-toast";
 import { Label } from "@/shared/ui/label";
 import { TacticalBoard } from "./tactical-board";
 import { RosterManagement } from "./roster-management";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 
 const mockApplications = users.slice(2, 4).map(u => ({ ...u, status: 'pending' }));
 
@@ -97,119 +98,107 @@ export function TeamManagementPage({ team }: { team: Team | undefined }) {
                     </Link>
                 </Button>
             </div>
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
-                <div className="lg:col-span-2 space-y-8">
-                    <TacticalBoard teamMembers={teamMembers} />
+            <Tabs defaultValue="roster" className="w-full">
+                <TabsList className="grid w-full grid-cols-3">
+                    <TabsTrigger value="roster">Состав и Тактика</TabsTrigger>
+                    <TabsTrigger value="branding">Брендинг</TabsTrigger>
+                    <TabsTrigger value="transfers">Трансферы</TabsTrigger>
+                </TabsList>
+                <TabsContent value="roster" className="mt-6 space-y-8">
                     <RosterManagement allTeamMembers={teamMembers} />
+                    <TacticalBoard teamMembers={teamMembers} />
+                </TabsContent>
+                <TabsContent value="branding" className="mt-6">
                     <LogoGeneratorWidget />
-                    <Card>
-                        <CardHeader>
-                            <CardTitle className="flex items-center gap-2"><Mail />Заявки на вступление ({applications.length})</CardTitle>
-                            <CardDescription>Рассмотрите заявки от игроков, желающих присоединиться к вашей команде.</CardDescription>
-                        </CardHeader>
-                        <CardContent>
-                            {applications.length > 0 ? (
-                                <ul className="space-y-3">
-                                    {applications.map(applicant => (
-                                        <li key={applicant.id} className="flex items-center justify-between p-2 rounded-md bg-muted/30">
-                                            <div className="flex items-center gap-3">
-                                                <Avatar>
-                                                    <AvatarImage src={applicant.avatarUrl} />
-                                                    <AvatarFallback>{applicant.firstName.charAt(0)}</AvatarFallback>
-                                                </Avatar>
-                                                    <div>
-                                                    <p className="font-semibold">{applicant.nickname}</p>
-                                                    <p className="text-xs text-muted-foreground">Рейтинг: {applicant.elo} ELO</p>
-                                                </div>
-                                            </div>
-                                            <div className="flex items-center gap-2">
-                                                <Button variant="outline" size="icon" className="h-8 w-8 bg-green-500/10 border-green-500/20 text-green-300 hover:bg-green-500/20 hover:text-green-200" onClick={() => handleApplication(applicant.id, true)}>
-                                                    <CheckCircle className="h-4 w-4" />
-                                                </Button>
-                                                <Button variant="outline" size="icon" className="h-8 w-8 bg-red-500/10 border-red-500/20 text-red-300 hover:bg-red-500/20 hover:text-red-200" onClick={() => handleApplication(applicant.id, false)}>
-                                                    <XCircle className="h-4 w-4" />
-                                                </Button>
-                                            </div>
-                                        </li>
-                                    ))}
-                                </ul>
-                            ) : (
-                                <p className="text-sm text-muted-foreground text-center py-4">Новых заявок нет.</p>
-                            )}
-                        </CardContent>
-                    </Card>
-                </div>
-                <div className="space-y-8 lg:sticky top-24">
+                </TabsContent>
+                <TabsContent value="transfers" className="mt-6">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                         <Card>
-                        <CardHeader>
-                            <CardTitle className="flex items-center gap-2"><Shield />Статус команды</CardTitle>
-                        </CardHeader>
-                        <CardContent className="space-y-4">
-                            <Image src={team.logoUrl} alt={team.name} width={256} height={256} className="w-24 h-24 rounded-lg mx-auto border" data-ai-hint="team logo" />
-                                <div className="text-center">
-                                <p className="text-lg font-bold">{team.name}</p>
-                                <p className="text-sm text-muted-foreground">{team.game}</p>
-                            </div>
-                            <Separator />
-                            <div className="flex justify-between text-sm">
-                                <span className="text-muted-foreground">Рейтинг:</span>
-                                <span className="font-bold">{team.rank} ELO</span>
-                            </div>
-                            <div className="flex justify-between text-sm">
-                                <span className="text-muted-foreground">Статус набора:</span>
-                                <Badge variant="secondary">Открыт</Badge>
-                            </div>
-                        </CardContent>
-                    </Card>
-                    <Card>
-                        <CardHeader>
-                            <CardTitle className="flex items-center gap-2"><ArrowRightLeft />Трансферы и аренда</CardTitle>
-                             <CardDescription>Поиск и приглашение новых игроков в команду.</CardDescription>
-                        </CardHeader>
-                        <CardContent>
-                            <div className="space-y-4">
-                                <div className="space-y-2">
-                                    <Label htmlFor="nickname-invite">Никнейм игрока</Label>
-                                    <div className="flex gap-2">
-                                        <Input 
-                                            id="nickname-invite" 
-                                            placeholder="Player123" 
-                                            value={searchQuery}
-                                            onChange={(e) => setSearchQuery(e.target.value)}
-                                            onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-                                        />
-                                        <Button variant="secondary" onClick={handleSearch}><Search className="h-4 w-4"/></Button>
-                                    </div>
-                                </div>
-                                <Separator />
-                                <div className="space-y-2">
-                                    {searchResults.length > 0 ? (
-                                        searchResults.map(player => (
-                                            <div key={player.id} className="flex items-center justify-between p-2 rounded-md bg-muted/50">
-                                                <div className="flex items-center gap-2">
-                                                    <Avatar className="h-8 w-8">
-                                                        <AvatarImage src={player.avatarUrl} />
-                                                        <AvatarFallback>{player.nickname.charAt(0)}</AvatarFallback>
+                            <CardHeader>
+                                <CardTitle className="flex items-center gap-2"><Mail />Заявки на вступление ({applications.length})</CardTitle>
+                                <CardDescription>Рассмотрите заявки от игроков, желающих присоединиться к вашей команде.</CardDescription>
+                            </CardHeader>
+                            <CardContent>
+                                {applications.length > 0 ? (
+                                    <ul className="space-y-3">
+                                        {applications.map(applicant => (
+                                            <li key={applicant.id} className="flex items-center justify-between p-2 rounded-md bg-muted/30">
+                                                <div className="flex items-center gap-3">
+                                                    <Avatar>
+                                                        <AvatarImage src={applicant.avatarUrl} />
+                                                        <AvatarFallback>{applicant.firstName.charAt(0)}</AvatarFallback>
                                                     </Avatar>
-                                                    <div>
-                                                        <p className="text-sm font-semibold">{player.nickname}</p>
-                                                        <p className="text-xs text-muted-foreground">ELO: {player.elo}</p>
+                                                        <div>
+                                                        <p className="font-semibold">{applicant.nickname}</p>
+                                                        <p className="text-xs text-muted-foreground">Рейтинг: {applicant.elo} ELO</p>
                                                     </div>
                                                 </div>
-                                                <Button size="sm" variant="outline" onClick={() => handleInvite(player)}>
-                                                    <UserPlus className="mr-2 h-4 w-4"/> Пригласить
-                                                </Button>
-                                            </div>
-                                        ))
-                                    ) : (
-                                        <p className="text-xs text-center text-muted-foreground pt-2">Результаты поиска появятся здесь.</p>
-                                    )}
+                                                <div className="flex items-center gap-2">
+                                                    <Button variant="outline" size="icon" className="h-8 w-8 bg-green-500/10 border-green-500/20 text-green-300 hover:bg-green-500/20 hover:text-green-200" onClick={() => handleApplication(applicant.id, true)}>
+                                                        <CheckCircle className="h-4 w-4" />
+                                                    </Button>
+                                                    <Button variant="outline" size="icon" className="h-8 w-8 bg-red-500/10 border-red-500/20 text-red-300 hover:bg-red-500/20 hover:text-red-200" onClick={() => handleApplication(applicant.id, false)}>
+                                                        <XCircle className="h-4 w-4" />
+                                                    </Button>
+                                                </div>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                ) : (
+                                    <p className="text-sm text-muted-foreground text-center py-4">Новых заявок нет.</p>
+                                )}
+                            </CardContent>
+                        </Card>
+                        <Card>
+                            <CardHeader>
+                                <CardTitle className="flex items-center gap-2"><ArrowRightLeft />Поиск игроков</CardTitle>
+                                <CardDescription>Пригласите новых игроков в свою команду.</CardDescription>
+                            </CardHeader>
+                            <CardContent>
+                                <div className="space-y-4">
+                                    <div className="space-y-2">
+                                        <Label htmlFor="nickname-invite">Никнейм игрока</Label>
+                                        <div className="flex gap-2">
+                                            <Input 
+                                                id="nickname-invite" 
+                                                placeholder="Player123" 
+                                                value={searchQuery}
+                                                onChange={(e) => setSearchQuery(e.target.value)}
+                                                onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+                                            />
+                                            <Button variant="secondary" onClick={handleSearch}><Search className="h-4 w-4"/></Button>
+                                        </div>
+                                    </div>
+                                    <Separator />
+                                    <div className="space-y-2">
+                                        {searchResults.length > 0 ? (
+                                            searchResults.map(player => (
+                                                <div key={player.id} className="flex items-center justify-between p-2 rounded-md bg-muted/50">
+                                                    <div className="flex items-center gap-2">
+                                                        <Avatar className="h-8 w-8">
+                                                            <AvatarImage src={player.avatarUrl} />
+                                                            <AvatarFallback>{player.nickname.charAt(0)}</AvatarFallback>
+                                                        </Avatar>
+                                                        <div>
+                                                            <p className="text-sm font-semibold">{player.nickname}</p>
+                                                            <p className="text-xs text-muted-foreground">ELO: {player.elo}</p>
+                                                        </div>
+                                                    </div>
+                                                    <Button size="sm" variant="outline" onClick={() => handleInvite(player)}>
+                                                        <UserPlus className="mr-2 h-4 w-4"/> Пригласить
+                                                    </Button>
+                                                </div>
+                                            ))
+                                        ) : (
+                                            <p className="text-xs text-center text-muted-foreground pt-2">Результаты поиска появятся здесь.</p>
+                                        )}
+                                    </div>
                                 </div>
-                            </div>
-                        </CardContent>
-                    </Card>
-                </div>
-            </div>
+                            </CardContent>
+                        </Card>
+                    </div>
+                </TabsContent>
+            </Tabs>
         </div>
     );
 }

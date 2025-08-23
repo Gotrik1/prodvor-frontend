@@ -14,6 +14,7 @@ import { useToast } from '@/shared/hooks/use-toast';
 import { useRouter } from 'next/navigation';
 import { useUserStore } from '@/widgets/dashboard-header/model/user-store';
 import { GameplayEvent, awardProgressPoints } from '@/shared/lib/gamification';
+import { LogoGeneratorWidget } from '@/widgets/logo-generator';
 
 export function CreateTeamPage() {
     const { toast } = useToast();
@@ -116,15 +117,7 @@ export function CreateTeamPage() {
                         </div>
 
                         {showLogoGenerator && (
-                            <Card className="bg-muted/50">
-                                <CardHeader>
-                                    <CardTitle className="flex items-center gap-2"><Wand2 />AI-генератор</CardTitle>
-                                    <CardDescription>Опишите логотип, и AI создаст его для вас.</CardDescription>
-                                </CardHeader>
-                                <CardContent>
-                                    <p className="text-center p-8">Компонент AI-генератора будет здесь.</p>
-                                </CardContent>
-                            </Card>
+                           <LogoGeneratorWidget />
                         )}
                     </CardContent>
                 </Card>

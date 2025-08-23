@@ -1,7 +1,7 @@
 
 "use server";
 
-import { generateTeamLogoVariations } from "@/shared/api/generate-team-logo-variations";
+import { generateTeamLogoVariations } from "@/widgets/logo-generator/ui/logo-generator";
 import { generateNewsDigest } from "@/shared/api/generate-news-digest";
 import { sendTournamentAnnouncement } from "@/shared/api/send-tournament-announcement";
 import { generateTournamentImage } from "@/shared/api/generate-tournament-image";
