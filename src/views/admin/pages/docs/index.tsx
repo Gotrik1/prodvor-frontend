@@ -1,7 +1,7 @@
 
 'use client';
 
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardBody } from "@/shared/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 import { FileText, DraftingCompass, Info, Gem, Server } from "lucide-react";
 import ReactMarkdown from 'react-markdown';
@@ -10,7 +10,6 @@ import { CONCEPT, README } from './docs-content';
 import { API_DOCS } from './api-docs-content';
 import { RolesPage } from "../roles";
 import { RanksPage } from "../ranks";
-import { CardBody } from 'recharts/types/component/Card';
 
 const markdownComponents = {
     h1: (props: any) => <h1 className="text-3xl font-bold mt-6 mb-4 font-headline" {...props} />,
