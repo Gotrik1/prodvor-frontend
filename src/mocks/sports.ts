@@ -1,3 +1,4 @@
+
 export interface Subdiscipline {
   id: string;
   name: string;
@@ -11,7 +12,7 @@ export interface Sport {
   subdisciplines?: Subdiscipline[];
 }
 
-const sportsData: Omit<Sport, 'subdisciplines'> & { subdisciplines?: string[] }[] = [
+const sportsData: (Omit<Sport, 'subdisciplines'> & { subdisciplines?: string[] })[] = [
   // Командные виды спорта
   { id: 'sport-1', name: 'Футбол', isTeamSport: true, subdisciplines: ['мини-футбол', 'пляжный футбол', 'футзал', 'уличный футбол'] },
   { id: 'sport-2', name: 'Баскетбол', isTeamSport: true, subdisciplines: ['3х3', 'стритбол', 'классический'] },
