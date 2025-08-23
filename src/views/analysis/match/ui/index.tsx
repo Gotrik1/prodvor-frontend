@@ -7,13 +7,13 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/sha
 import { Textarea } from '@/shared/ui/textarea';
 import { Bot, Clapperboard, Film, Loader2, UploadCloud, Wand2, Star } from 'lucide-react';
 import { analyzeMatchVideoAction } from '@/app/actions';
-import type { AnalyzeMatchVideoInput } from '@/shared/api/analyze-match-video';
 import { useToast } from '@/shared/hooks/use-toast';
 import { Alert, AlertDescription, AlertTitle } from '@/shared/ui/alert';
 import { AlertTriangle } from 'lucide-react';
 import { useUserStore } from '@/widgets/dashboard-header/model/user-store';
 import Link from 'next/link';
 import { MarkdownRenderer } from './markdown-renderer';
+import type { AnalyzeMatchVideoInput } from '@/shared/api/analyze-match-video';
 
 const ProAccessCard = () => (
     <Card className="text-center max-w-lg w-full mt-6 border-primary/50">
@@ -81,7 +81,7 @@ export function AiAnalysisTool({ embedded = false }: { embedded?: boolean }) {
         try {
             const getAnalysis = async (videoDataUri?: string) => {
                  const result = await analyzeMatchVideoAction({
-                    videoDataUri: videoDataUri || '', // Pass empty string if no video, rely on prompt
+                    videoDataUri: videoDataUri,
                     prompt: embedded ? `Проанализируй события матча и дай тактические советы. ${prompt}` : prompt,
                 });
                 
