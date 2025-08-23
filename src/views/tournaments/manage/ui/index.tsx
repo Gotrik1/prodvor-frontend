@@ -91,7 +91,7 @@ function TournamentCrmContent() {
   }
 
   return (
-    <Tabs defaultValue="overview" className="w-full">
+    <Tabs defaultValue="bracket" className="w-full">
       <ScrollArea className="w-full whitespace-nowrap">
         <TabsList className="h-auto mb-4">
           {crmTabs.map((tab) => (
