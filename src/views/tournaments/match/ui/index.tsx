@@ -50,11 +50,7 @@ export function MatchPage({ tournament }: { tournament?: Tournament }) {
             <Tabs defaultValue="protocol">
                  <TabsList className="grid w-full grid-cols-2">
                     <TabsTrigger value="protocol">Протокол матча</TabsTrigger>
-                    {isMatchFinished ? (
-                         <TabsTrigger value="analysis"><Bot className="mr-2 h-4 w-4"/>AI-Аналитика</TabsTrigger>
-                    ) : (
-                         <TabsTrigger value="analysis" disabled><Bot className="mr-2 h-4 w-4"/>AI-Аналитика</TabsTrigger>
-                    )}
+                    <TabsTrigger value="analysis" disabled={!isMatchFinished}><Bot className="mr-2 h-4 w-4"/>AI-Аналитика</TabsTrigger>
                 </TabsList>
                 <TabsContent value="protocol" className="mt-6">
                      <MatchProtocol tournament={tournament} match={activeMatch} />

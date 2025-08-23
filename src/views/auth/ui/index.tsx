@@ -1,4 +1,3 @@
-import type { SVGProps } from 'react';
 import { Button } from "@/shared/ui/button";
 import {
   Card,
@@ -11,15 +10,13 @@ import { Checkbox } from "@/shared/ui/checkbox";
 import { Input } from "@/shared/ui/input";
 import { Label } from "@/shared/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
-import { HelpCircle } from "lucide-react";
 import Image from 'next/image';
-import type { ComponentProps } from "react";
 import { cn } from '@/shared/lib/utils';
 import Link from 'next/link';
 
 // ------------------ Логотип ------------------
 export function Logo(
-  props: Omit<ComponentProps<typeof Image>, "src" | "alt" | "width" | "height">
+  props: Omit<React.ComponentProps<typeof Image>, "src" | "alt" | "width" | "height">
 ) {
   return (
     <Image
@@ -35,7 +32,7 @@ export function Logo(
 }
 
 // ------------------ Yandex ------------------
-export function YandexIcon(props: SVGProps<SVGSVGElement>) {
+export function YandexIcon(props: React.SVGProps<SVGSVGElement>) {
     return (
         <svg
             viewBox="0 0 24 24"
@@ -53,7 +50,7 @@ export function YandexIcon(props: SVGProps<SVGSVGElement>) {
 }
 
 // ------------------ VK ------------------
-export function VkIcon(props: SVGProps<SVGSVGElement>) {
+export function VkIcon(props: React.SVGProps<SVGSVGElement>) {
     return (
         <svg
             viewBox="0 0 100 100"
@@ -71,7 +68,7 @@ export function VkIcon(props: SVGProps<SVGSVGElement>) {
 }
 
 // ------------------ Telegram ------------------
-export function TelegramIcon(props: SVGProps<SVGSVGElement>) {
+export function TelegramIcon(props: React.SVGProps<SVGSVGElement>) {
     return (
         <svg
             viewBox="0 0 240 240"
@@ -95,7 +92,7 @@ export function TelegramIcon(props: SVGProps<SVGSVGElement>) {
 }
 
 // ------------------ Госуслуги ------------------
-export function GosuslugiIcon(props: SVGProps<SVGSVGElement>) {
+export function GosuslugiIcon(props: React.SVGProps<SVGSVGElement>) {
     return (
         <svg
             viewBox="0 0 220 35"
@@ -163,10 +160,9 @@ export function AuthPage() {
                                 <Checkbox id="remember" />
                                 <Label htmlFor="remember" className="text-sm font-normal text-muted-foreground">Сохранить вход</Label>
                             </div>
-                            <a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                                <HelpCircle className="inline h-4 w-4 mr-1" />
+                            <Link href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">
                                 Забыли пароль?
-                            </a>
+                            </Link>
                         </div>
                         <Button asChild type="submit" className="w-full">
                            <Link href="/dashboard">Продолжить</Link>
