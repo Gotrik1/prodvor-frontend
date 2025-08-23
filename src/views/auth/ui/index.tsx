@@ -13,6 +13,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 import Image from 'next/image';
 import { cn } from '@/shared/lib/utils';
 import Link from 'next/link';
+import { i18n } from '@/shared/lib/i18n';
 
 // ------------------ Логотип ------------------
 export function Logo(
@@ -123,49 +124,49 @@ export function AuthPage() {
             <div className="flex justify-center mb-4">
                 <Logo />
             </div>
-            <CardTitle className="text-2xl font-bold">Вход в ProDvor ID</CardTitle>
+            <CardTitle className="text-2xl font-bold">{i18n.auth.title}</CardTitle>
             <CardDescription>
-                Войдите в свой аккаунт, чтобы продолжить.
+                {i18n.auth.description}
             </CardDescription>
         </CardHeader>
         <CardContent>
             <Tabs defaultValue="email">
                 <TabsList className="grid w-full grid-cols-2">
-                    <TabsTrigger value="phone">Телефон</TabsTrigger>
-                    <TabsTrigger value="email">Почта</TabsTrigger>
+                    <TabsTrigger value="phone">{i18n.auth.phoneTab}</TabsTrigger>
+                    <TabsTrigger value="email">{i18n.auth.emailTab}</TabsTrigger>
                 </TabsList>
                 <TabsContent value="phone" className="pt-4">
                      <div className="space-y-4">
                         <div className="space-y-2">
-                            <Label htmlFor="phone">Телефон</Label>
+                            <Label htmlFor="phone">{i18n.auth.phoneLabel}</Label>
                             <Input id="phone" type="tel" placeholder="+7 (___) ___-__-__" required />
                         </div>
                         <Button asChild type="submit" className="w-full">
-                            <Link href="/dashboard">Продолжить</Link>
+                            <Link href="/dashboard">{i18n.auth.continue}</Link>
                         </Button>
                     </div>
                 </TabsContent>
                 <TabsContent value="email" className="pt-4">
                     <div className="space-y-4">
                         <div className="space-y-2">
-                            <Label htmlFor="email">Email</Label>
+                            <Label htmlFor="email">{i18n.auth.emailLabel}</Label>
                             <Input id="email" type="email" placeholder="admin@example.com" required />
                         </div>
                         <div className="space-y-2">
-                            <Label htmlFor="password">Пароль</Label>
+                            <Label htmlFor="password">{i18n.auth.passwordLabel}</Label>
                             <Input id="password" type="password" required />
                         </div>
                         <div className="flex items-center justify-between">
                             <div className="flex items-center space-x-2">
                                 <Checkbox id="remember" />
-                                <Label htmlFor="remember" className="text-sm font-normal text-muted-foreground">Сохранить вход</Label>
+                                <Label htmlFor="remember" className="text-sm font-normal text-muted-foreground">{i18n.auth.rememberMe}</Label>
                             </div>
                             <Link href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                                Забыли пароль?
+                                {i18n.auth.forgotPassword}
                             </Link>
                         </div>
                         <Button asChild type="submit" className="w-full">
-                           <Link href="/dashboard">Продолжить</Link>
+                           <Link href="/dashboard">{i18n.auth.continue}</Link>
                         </Button>
                     </div>
                 </TabsContent>
@@ -177,7 +178,7 @@ export function AuthPage() {
                         <span className="w-full border-t" />
                     </div>
                     <div className="relative flex justify-center text-xs uppercase">
-                        <span className="bg-card px-2 text-muted-foreground">Или войдите с помощью</span>
+                        <span className="bg-card px-2 text-muted-foreground">{i18n.auth.socialsDivider}</span>
                     </div>
                 </div>
                 
@@ -201,16 +202,16 @@ export function AuthPage() {
                         <span className="w-full border-t" />
                     </div>
                     <div className="relative flex justify-center text-xs uppercase">
-                        <span className="bg-card px-2 text-muted-foreground">Нет аккаунта?</span>
+                        <span className="bg-card px-2 text-muted-foreground">{i18n.auth.noAccountDivider}</span>
                     </div>
                 </div>
 
                 <Button variant="secondary" className="w-full" asChild>
-                  <Link href="/auth/register">Зарегистрироваться</Link>
+                  <Link href="/auth/register">{i18n.auth.register}</Link>
                 </Button>
 
                 <Button variant="outline" className="w-full" asChild>
-                  <Link href="/">Вернуться на главную</Link>
+                  <Link href="/">{i18n.auth.backToHome}</Link>
                 </Button>
             </div>
         </CardContent>

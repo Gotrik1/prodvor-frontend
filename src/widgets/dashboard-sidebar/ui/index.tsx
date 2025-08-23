@@ -29,12 +29,13 @@ import {
 } from "lucide-react";
 import Link from 'next/link';
 import Image from "next/image";
+import { i18n } from "@/shared/lib/i18n";
 
 const Logo = () => (
     <div className="flex items-center gap-2 font-bold text-xl">
         <Link href="/" className="flex items-center gap-2">
             <Image src="https://placehold.co/64x64.png" alt="ProDvor Logo" width={40} height={40} className="object-contain" data-ai-hint="logo" style={{ width: 'auto', height: 'auto' }} />
-            <span className="font-headline text-sidebar-foreground">ProDvor</span>
+            <span className="font-headline text-sidebar-foreground">{i18n.common.appName}</span>
         </Link>
     </div>
 );
@@ -51,7 +52,7 @@ export function DashboardSidebar() {
                     <Link href="/dashboard">
                         <SidebarMenuButton>
                             <Home />
-                            <span>Лента</span>
+                            <span>{i18n.sidebar.feed}</span>
                         </SidebarMenuButton>
                     </Link>
                 </SidebarMenuItem>
@@ -59,7 +60,7 @@ export function DashboardSidebar() {
                     <Link href="/teams">
                         <SidebarMenuButton>
                             <Users />
-                            <span>Команды</span>
+                            <span>{i18n.sidebar.teams}</span>
                         </SidebarMenuButton>
                     </Link>
                 </SidebarMenuItem>
@@ -67,7 +68,7 @@ export function DashboardSidebar() {
                     <Link href="/competitions">
                         <SidebarMenuButton>
                             <Trophy />
-                            <span>Соревнования</span>
+                            <span>{i18n.sidebar.competitions}</span>
                         </SidebarMenuButton>
                     </Link>
                 </SidebarMenuItem>
@@ -75,7 +76,7 @@ export function DashboardSidebar() {
                     <Link href="/training-center">
                         <SidebarMenuButton>
                             <Dumbbell />
-                            <span>Тренировки</span>
+                            <span>{i18n.sidebar.training}</span>
                         </SidebarMenuButton>
                     </Link>
                 </SidebarMenuItem>
@@ -83,7 +84,7 @@ export function DashboardSidebar() {
                     <Link href="/analysis/match">
                         <SidebarMenuButton>
                             <Clapperboard />
-                            <span>AI-Аналитик</span>
+                            <span>{i18n.sidebar.aiAnalyst}</span>
                         </SidebarMenuButton>
                     </Link>
                 </SidebarMenuItem>
@@ -91,7 +92,7 @@ export function DashboardSidebar() {
                     <Link href="/referee-center">
                         <SidebarMenuButton>
                             <Gavel />
-                            <span>Центр судей</span>
+                            <span>{i18n.sidebar.refereeCenter}</span>
                         </SidebarMenuButton>
                     </Link>
                 </SidebarMenuItem>
@@ -99,7 +100,7 @@ export function DashboardSidebar() {
                     <Link href="/lfg">
                         <SidebarMenuButton>
                             <Search />
-                            <span>Хаб сообщества</span>
+                            <span>{i18n.sidebar.communityHub}</span>
                         </SidebarMenuButton>
                     </Link>
                 </SidebarMenuItem>
@@ -107,7 +108,7 @@ export function DashboardSidebar() {
                     <Link href="/playgrounds">
                         <SidebarMenuButton>
                             <Map />
-                            <span>Площадки</span>
+                            <span>{i18n.sidebar.playgrounds}</span>
                         </SidebarMenuButton>
                     </Link>
                 </SidebarMenuItem>
@@ -115,7 +116,7 @@ export function DashboardSidebar() {
                     <Link href="/quests">
                         <SidebarMenuButton>
                             <Puzzle />
-                            <span>Квесты</span>
+                            <span>{i18n.sidebar.quests}</span>
                         </SidebarMenuButton>
                     </Link>
                 </SidebarMenuItem>
@@ -123,7 +124,7 @@ export function DashboardSidebar() {
                     <Link href="/inventory">
                         <SidebarMenuButton>
                             <Warehouse />
-                            <span>Инвентарь</span>
+                            <span>{i18n.sidebar.inventory}</span>
                         </SidebarMenuButton>
                     </Link>
                 </SidebarMenuItem>
@@ -131,7 +132,7 @@ export function DashboardSidebar() {
                     <Link href="/store">
                         <SidebarMenuButton>
                             <ShoppingCart />
-                            <span>Магазин</span>
+                            <span>{i18n.sidebar.store}</span>
                         </SidebarMenuButton>
                     </Link>
                 </SidebarMenuItem>
@@ -144,7 +145,7 @@ export function DashboardSidebar() {
                         <Link href="/support">
                             <SidebarMenuButton>
                                 <HelpCircle />
-                                <span>Поддержка</span>
+                                <span>{i18n.sidebar.support}</span>
                             </SidebarMenuButton>
                         </Link>
                     </SidebarMenuItem>
@@ -152,7 +153,7 @@ export function DashboardSidebar() {
                         <Link href="/settings">
                             <SidebarMenuButton>
                                 <Cog />
-                                <span>Настройки</span>
+                                <span>{i18n.sidebar.settings}</span>
                             </SidebarMenuButton>
                         </Link>
                     </SidebarMenuItem>
@@ -160,7 +161,7 @@ export function DashboardSidebar() {
                         <Link href="/admin">
                             <SidebarMenuButton>
                                 <Shield />
-                                <span>Админ-панель</span>
+                                <span>{i18n.sidebar.adminPanel}</span>
                             </SidebarMenuButton>
                         </Link>
                     </SidebarMenuItem>
