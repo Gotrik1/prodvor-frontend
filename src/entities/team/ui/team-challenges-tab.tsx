@@ -11,10 +11,10 @@ import Link from "next/link";
 
 
 const statusMap = {
-    pending: { text: "Ожидание", variant: "secondary" as const },
-    accepted: { text: "Принят", variant: "default" as const },
-    declined: { text: "Отклонен", variant: "destructive" as const },
-    completed: { text: "Завершен", variant: "outline" as const },
+    pending: { text: "Ожидание", variant: "secondary" as const, className: "bg-amber-500/20 text-amber-300 border-amber-500/30" },
+    accepted: { text: "Принят", variant: "default" as const, className: "bg-green-500/20 text-green-300 border-green-500/30" },
+    declined: { text: "Отклонен", variant: "destructive" as const, className: "bg-red-500/20 text-red-300 border-red-500/30" },
+    completed: { text: "Завершен", variant: "outline" as const, className: "bg-muted text-muted-foreground border-border" },
 }
 
 
@@ -53,7 +53,7 @@ export const TeamChallengesTab = ({ teamId }: { teamId: string }) => {
                                                 <Button size="icon" variant="outline" className="h-8 w-8 bg-red-500/10 text-red-300 border-red-500/20 hover:bg-red-500/20"><X className="h-4 w-4" /></Button>
                                             </div>
                                         ) : (
-                                            <Badge variant={statusMap[challenge.status].variant}>{statusMap[challenge.status].text}</Badge>
+                                            <Badge className={statusMap[challenge.status].className}>{statusMap[challenge.status].text}</Badge>
                                         )}
                                     </CardContent>
                                 </Card>
@@ -71,7 +71,7 @@ export const TeamChallengesTab = ({ teamId }: { teamId: string }) => {
                                             <Image src={challenge.challenged.logoUrl} alt={challenge.challenged.name} width={32} height={32} className="rounded-md" data-ai-hint="team logo" />
                                             <span className="font-medium">{challenge.challenged.name}</span>
                                         </div>
-                                        <Badge variant={statusMap[challenge.status].variant}>{statusMap[challenge.status].text}</Badge>
+                                        <Badge className={statusMap[challenge.status].className}>{statusMap[challenge.status].text}</Badge>
                                     </CardContent>
                                 </Card>
                             ))}
