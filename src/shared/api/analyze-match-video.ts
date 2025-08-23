@@ -9,7 +9,7 @@
 import { z } from 'zod';
 import { ai } from '@/ai/genkit';
 
-const AnalyzeMatchVideoInputSchema = z.object({
+export const AnalyzeMatchVideoInputSchema = z.object({
   videoDataUri: z
     .string()
     .describe(

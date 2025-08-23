@@ -3,14 +3,15 @@
 
 import { useState } from 'react';
 import { Button } from '@/shared/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card'; // Assuming Card components are used
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Textarea } from '@/shared/ui/textarea';
 import { Bot, Clapperboard, Loader2, UploadCloud, Wand2, Star } from 'lucide-react';
-import { analyzeMatchVideoAction } from '@/app/actions';
 import { useToast } from '@/shared/hooks/use-toast';
 import { useUserStore } from '@/widgets/dashboard-header/model/user-store';
 import Link from 'next/link';
 import { MarkdownRenderer } from './markdown-renderer';
+import { analyzeMatchVideoAction } from '@/app/actions';
+
 const ProAccessCard = () => (
     <Card className="text-center max-w-lg w-full mt-6 border-primary/50">
         <CardHeader>
@@ -67,6 +68,16 @@ export function AiAnalysisTool({ embedded = false }: { embedded?: boolean }) {
                 variant: 'destructive',
                 title: 'Ошибка',
                 description: 'Пожалуйста, сначала загрузите видеофайл.',
+            });
+            return;
+        }
+
+        // Client-side check for immediate feedback (UX improvement)
+        if (!hasAccess) {
+             toast({
+                variant: 'destructive',
+                title: 'Доступ запрещен',
+                description: 'Эта функция доступна только для PRO-пользователей.',
             });
             return;
         }
