@@ -1,15 +1,16 @@
 
+
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/shared/ui/card'; // Assuming CardDescription is used in the original file, keeping it for now
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/shared/ui/card';
 import { Button } from '@/shared/ui/button';
 import Link from 'next/link';
-import { ArrowLeft, Clock, Dumbbell, Flame, CheckCircle, Repeat } from 'lucide-react'; // Assuming CheckCircle and Repeat are used, keeping them
+import { ArrowLeft, Clock, Dumbbell, Flame, CheckCircle, Repeat } from 'lucide-react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/shared/ui/table';
 import { formatDistanceStrict } from 'date-fns';
 import { ru } from 'date-fns/locale';
-import type { WorkoutSession } from '@/views/fitness-plan/ui/types';
+import type { WorkoutSession, DayResult, ExerciseResult } from '@/views/fitness-plan/ui/types';
 
 export function WorkoutResultsPage({ planId }: { planId: string }) {
     const [sessionResult, setSessionResult] = useState<WorkoutSession | null>(null);
@@ -46,11 +47,11 @@ export function WorkoutResultsPage({ planId }: { planId: string }) {
 
     const totalDuration = endTime ? formatDistanceStrict(new Date(startTime), new Date(endTime), { locale: ru }) : 'N/A';
     
-    const totalSetsCompleted = Object.values(dayResults).flatMap(d => d.exercises).flatMap(e => e.sets).filter(s => s.completed).length;
+    const totalSetsCompleted = Object.values(dayResults).flatMap((d: DayResult) => d.exercises).flatMap((e: ExerciseResult) => e.sets).filter(s => s.completed).length;
     
     const totalVolume = Object.values(dayResults)
-      .flatMap((d) => d.exercises)
-      .flatMap((e) => {
+      .flatMap((d: DayResult) => d.exercises)
+      .flatMap((e: ExerciseResult) => {
           const planDayKey = Object.keys(plan.days).find(key => plan.days[key].exercises.some(ex => ex.id === e.exerciseId));
           if (!planDayKey) return [];
           const planEx = plan.days[planDayKey].exercises.find(ex => ex.id === e.exerciseId);
@@ -117,7 +118,7 @@ export function WorkoutResultsPage({ planId }: { planId: string }) {
                                         </TableRow>
                                     </TableHeader>
                                     <TableBody>
-                                        {dayData.exercises.map((exResult) => {
+                                        {dayData.exercises.map((exResult: ExerciseResult) => {
                                             const planEx = plan.days[dayKey].exercises.find(e => e.id === exResult.exerciseId);
                                             if (!planEx) return null;
                                             return exResult.sets.map((setResult, setIndex) => (
