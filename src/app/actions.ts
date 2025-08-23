@@ -13,8 +13,8 @@ import type { LogoGenerationInput } from "@/widgets/logo-generator/ui/logo-gener
 import type { SendTournamentAnnouncementInput } from "@/views/tournaments/manage/ui/tabs/announcements-tab";
 import type { GenerateTournamentImageInput } from "@/views/tournaments/manage/ui/tabs/promo-tab";
 import type { GenerateTournamentPromoInput } from "@/views/tournaments/manage/ui/tabs/promo-tab";
-import type { AnalyzeMatchVideoInput, AnalyzeMatchVideoOutput } from "@/views/analysis/match/ui/index";
-import type { AskRulesExpertInput } from "@/views/referee-center/ui/index";
+import type { AnalyzeMatchVideoInput, AnalyzeMatchVideoOutput } from "@/shared/api/analyze-match-video";
+import type { AskRulesExpertInput, AskRulesExpertOutput } from "@/shared/api/ask-rules-expert";
 
 
 export async function generateLogosAction(
@@ -44,6 +44,6 @@ export async function analyzeMatchVideoAction(input: AnalyzeMatchVideoInput): Pr
     return await analyzeMatchVideo(input);
 }
 
-export async function askRulesExpertAction(input: AskRulesExpertInput) {
+export async function askRulesExpertAction(input: AskRulesExpertInput): Promise<AskRulesExpertOutput> {
     return await askRulesExpert(input);
 }

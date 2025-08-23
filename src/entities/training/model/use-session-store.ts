@@ -70,7 +70,7 @@ export const useSessionStore = create<SessionState>()(
     }),
     {
       name: 'prodvor-session-storage',
-      storage: createJSONStorage(() => sessionStorage),
+      storage: sessionStorage, // Use sessionStorage for active session
     }
   )
 );

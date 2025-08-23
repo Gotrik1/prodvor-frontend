@@ -44,7 +44,6 @@ export function SimulationPage() {
     }
 
     return (
-        <div className="space-y-8">
             <Card>
                 <CardHeader>
                     <CardTitle>Режим симуляции</CardTitle>
@@ -91,6 +90,5 @@ export function SimulationPage() {
                     )}
                 </CardContent>
             </Card>
-        </div>
     );
 }

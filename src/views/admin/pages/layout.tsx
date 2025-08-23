@@ -2,7 +2,7 @@
 'use client';
 
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarProvider, SidebarInset } from "@/shared/ui/sidebar";
-import { DollarSign, Home, Eye, Info, BookOpen, Gem, Users } from "lucide-react";
+import { DollarSign, Home, Eye, Info, BookOpen } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { DashboardHeader } from "@/widgets/dashboard-header";

@@ -9,33 +9,41 @@
  */
 import { z } from 'zod';
 import { ai } from '@/ai/genkit';
-import type { AnalyzeMatchVideoInput, AnalyzeMatchVideoOutput } from '@/views/analysis/match/ui/index';
 
 const AnalyzeMatchVideoInputSchema = z.object({
   videoDataUri: z
     .string()
     .describe(
       "A video of a sports match, as a data URI that must include a MIME type and use Base64 encoding. Expected format: 'data:<mimetype>;base64,<encoded_data>'."
-    ),
+    )
+    .optional(), // Make optional to support embedded analysis without video
   prompt: z.string().describe('A specific question or prompt for the AI to focus on during analysis.'),
 });
+
+export type AnalyzeMatchVideoInput = z.infer<typeof AnalyzeMatchVideoInputSchema>;
 
 const AnalyzeMatchVideoOutputSchema = z.object({
   analysis: z.string().optional(),
   error: z.string().optional(),
 });
 
+export type AnalyzeMatchVideoOutput = z.infer<typeof AnalyzeMatchVideoOutputSchema>;
+
+
 const analysisPrompt = ai.definePrompt({
     name: 'videoAnalysisPrompt',
     input: { schema: AnalyzeMatchVideoInputSchema },
     output: { schema: z.string() },
     prompt: `
-        Analyze the provided sports match video and address the user's prompt.
+        Analyze the provided sports match video (if available) and address the user's prompt.
+        If no video is provided, analyze the tactical situation based on the prompt alone.
         
         User's prompt: {{{prompt}}}
         
+        {{#if videoDataUri}}
         Video for analysis:
         {{media url=videoDataUri}}
+        {{/if}}
         
         Provide a concise analysis based on the user's query, highlighting key tactical moments, player performance, or any other relevant aspects.
         Format your response in Markdown.

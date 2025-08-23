@@ -13,12 +13,13 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Input } from "@/shared/ui/input";
 import { askRulesExpertAction } from "@/app/actions";
 import { Alert, AlertDescription, AlertTitle } from "@/shared/ui/alert";
+import type { AskRulesExpertOutput } from "@/shared/api/ask-rules-expert";
 
 
 const AiAssistant = () => {
     const [question, setQuestion] = useState('');
     const [isLoading, setIsLoading] = useState(false);
-    const [result, setResult] = useState<{ answer: string; source?: string } | null>(null);
+    const [result, setResult] = useState<AskRulesExpertOutput | null>(null);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
