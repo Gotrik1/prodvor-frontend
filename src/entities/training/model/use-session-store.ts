@@ -1,7 +1,7 @@
 
 'use client';
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { persist, createJSONStorage } from 'zustand/middleware';
 import type { WorkoutPlan, WorkoutSession } from '@/views/fitness-plan/ui/types';
 import { produce } from 'immer';
 
@@ -69,7 +69,7 @@ export const useSessionStore = create<SessionState>()(
     }),
     {
       name: 'prodvor-session-storage',
-      storage: sessionStorage, // Use sessionStorage for active session
+      storage: createJSONStorage(() => sessionStorage), // Use sessionStorage for active session
     }
   )
 );

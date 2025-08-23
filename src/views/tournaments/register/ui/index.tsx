@@ -1,8 +1,8 @@
 
 'use client';
 
-import { allTournaments, teams } from '@/views/tournaments/public-page/ui/mock-data';
-import { users } from '@/mocks';
+import { allTournaments } from '@/views/tournaments/public-page/ui/mock-data';
+import { users, teams } from '@/mocks';
 import Link from 'next/link';
 import { Button } from '@/shared/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
@@ -16,7 +16,7 @@ import { useUserStore } from '@/widgets/dashboard-header/model/user-store';
 import { useToast } from '@/shared/hooks/use-toast';
 import { useRouter } from 'next/navigation';
 import { AlertTriangle } from 'lucide-react';
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { RequirementsChecklist } from './requirements-checklist';
 
 export function TournamentRegisterPage({ tournament }: { tournament: (typeof allTournaments)[0] | undefined }) {
@@ -52,12 +52,11 @@ export function TournamentRegisterPage({ tournament }: { tournament: (typeof all
 
     const selectedTeam = useMemo(() => userTeams.find(team => team.id === selectedTeamId), [userTeams, selectedTeamId]);
     
-    // Automatically select the first team if it's the only one
-    useState(() => {
+    useEffect(() => {
         if (userTeams.length === 1) {
             setSelectedTeamId(userTeams[0].id);
         }
-    });
+    }, [userTeams]);
 
     if (!currentUser || userTeams.length === 0) {
         return (

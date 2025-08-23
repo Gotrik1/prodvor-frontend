@@ -45,6 +45,9 @@ export function ProtocolEditor({ match }: { match: BracketMatch }) {
             type: eventType,
             team: team1Members.some(m => m.id === p1.id) ? 'team1' : 'team2',
             player: p1.nickname,
+            assist: undefined,
+            playerIn: undefined,
+            playerOut: undefined,
         };
 
         if (eventType === eventTypes.GOAL && player2) {

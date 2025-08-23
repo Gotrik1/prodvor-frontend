@@ -1,1 +1,1 @@
-export { SimulationPage } from './index.tsx';
+export { SimulationPage } from './ui';
