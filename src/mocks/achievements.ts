@@ -1,4 +1,4 @@
-import { Medal, Star, Shield, Dribbble, Target, TrendingUp, Zap, Wind, Crown, Sun, Dumbbell, Flame, Trophy, Repeat, GaugeCircle, Sigma, Clock, Moon, Users, TrendingDown, Clock4 } from 'lucide-react';
+import { Medal, Star, Shield, Dribbble, Target, TrendingUp, Zap, Wind, Crown, Sun, Dumbbell, Flame, Trophy, Repeat, GaugeCircle, Sigma, Moon, Users, TrendingDown, Clock4 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 
 export interface Achievement {

@@ -2,15 +2,13 @@
 'use client';
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
-import { Button } from "@/shared/ui/button";
-import { Trophy, Users } from "lucide-react";
+import { Trophy } from "lucide-react";
 import { allTournaments } from "@/views/tournaments/public-page/ui/mock-data";
 import Link from "next/link";
 import { Progress } from "@/shared/ui/progress";
 import { Badge } from "@/shared/ui/badge";
 import Image from "next/image";
 import { useUserStore } from "@/widgets/dashboard-header/model/user-store";
-import { teams } from "@/mocks";
 
 type TournamentStatus = 'АНОНС' | 'ПРЕДРЕГИСТРАЦИЯ' | 'РЕГИСТРАЦИЯ' | 'ИДЕТ' | 'ЗАВЕРШЕН';
 

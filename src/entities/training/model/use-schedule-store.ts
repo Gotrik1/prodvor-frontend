@@ -35,18 +35,19 @@ export const useScheduleStore = create<ScheduleState>()(
         }
       })),
       addScheduledPlan: (plan, startDate, time, restDays) => {
-          let currentDate = new Date(startDate);
+          const firstActivityDate = new Date(startDate);
           const planDays = Object.values(plan.days);
           
           planDays.forEach((planDay, index) => {
+              const activityDate = new Date(firstActivityDate);
               if (index > 0) {
-                  currentDate.setDate(currentDate.getDate() + restDays + 1);
+ activityDate.setDate(activityDate.getDate() + index * (restDays + 1));
               }
               const activity: ScheduledActivity = {
                   id: `scheduled-${plan.id}-${planDay.name}-${Date.now()}-${Math.random()}`,
                   name: `${plan.name}: ${planDay.name}`,
                   type: 'template',
-                  startDate: currentDate.toISOString(),
+                  startDate: firstActivityDate.toISOString(),
                   time,
                   repeat: 'none',
                   customInterval: 0

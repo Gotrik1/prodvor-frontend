@@ -1,8 +1,7 @@
 
 'use client';
-
 import { create } from 'zustand';
-import { persist, createJSONStorage } from 'zustand/middleware';
+import { persist } from 'zustand/middleware';
 import type { WorkoutPlan, WorkoutSession } from '@/views/fitness-plan/ui/types';
 import { produce } from 'immer';
 

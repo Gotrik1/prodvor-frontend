@@ -1,5 +1,4 @@
 
-import type { User } from './users';
 
 export interface FitnessService {
     name: string;

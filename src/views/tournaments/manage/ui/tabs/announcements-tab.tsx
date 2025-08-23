@@ -22,6 +22,13 @@ const SendTournamentAnnouncementInputSchema = z.object({
   isAiEnhanced: z.boolean().default(false).describe("Whether to use AI to enhance the message.")
 });
 
+export type SendTournamentAnnouncementInput = z.infer<typeof SendTournamentAnnouncementInputSchema>;
+
+export type SendTournamentAnnouncementOutput = {
+    success: boolean;
+    error?: string;
+};
+
 export function AnnouncementsTab() {
   const { tournament } = useTournamentCrmContext();
   const { toast } = useToast();

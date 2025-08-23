@@ -1,6 +1,4 @@
 
-import Link from "next/link";
-
 export function HomeFooter() {
     return (
         <footer className="border-t border-border/40">

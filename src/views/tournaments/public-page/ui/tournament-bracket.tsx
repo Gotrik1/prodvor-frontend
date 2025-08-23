@@ -7,7 +7,6 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { Trophy } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { Button } from '@/shared/ui/button';
 
 interface Match {
     id: string;

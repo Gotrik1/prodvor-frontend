@@ -3,7 +3,7 @@
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/shared/ui/card";
 import { Search, PlusCircle, UserPlus, UserCheck } from "lucide-react";
-import { Button } from "@/shared/ui/button";
+import { Button } from '@/shared/ui/button';import { Input } from "@/shared/ui/input";
 import { Input } from "@/shared/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/select";
 import { allSports, users, teams } from "@/mocks";

@@ -13,7 +13,7 @@ import {
 } from '@/shared/ui/command';
 import { users, teams } from '@/mocks';
 import { useRouter } from 'next/navigation';
-import { User, Users, Cog, Trophy, Dumbbell } from 'lucide-react';
+import { Cog, Trophy, Dumbbell } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import Image from 'next/image';
 

@@ -83,10 +83,10 @@ export function SettingsPage() {
         }
     });
 
-    function onProfileSubmit(values: z.infer<typeof profileFormSchema>) {
+    function onProfileSubmit(_values: z.infer<typeof profileFormSchema>) {
         toast({ title: "Профиль обновлен", description: "Ваши данные успешно сохранены." });
     }
-     function onAccountSubmit(values: z.infer<typeof accountFormSchema>) {
+     function onAccountSubmit(_values: z.infer<typeof accountFormSchema>) {
         toast({ title: "Настройки аккаунта обновлены", description: "Ваши данные успешно сохранены." });
     }
 

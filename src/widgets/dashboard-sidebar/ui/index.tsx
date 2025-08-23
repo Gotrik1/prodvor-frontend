@@ -12,14 +12,10 @@ import {
   SidebarGroup,
 } from "@/shared/ui/sidebar";
 import {
-  Calendar,
-  ClipboardList,
   Cog,
   Dumbbell,
-  Swords,
   HelpCircle,
   Home,
-  MessageSquare,
   Search,
   Shield,
   ShoppingCart,
@@ -27,12 +23,9 @@ import {
   Users,
   Warehouse,
   Clapperboard,
-  BarChart,
-  Gitlab,
   Puzzle,
   Map,
   Gavel,
-  DollarSign,
 } from "lucide-react";
 import Link from 'next/link';
 import Image from "next/image";
@@ -107,14 +100,6 @@ export function DashboardSidebar() {
                         <SidebarMenuButton>
                             <Search />
                             <span>Хаб сообщества</span>
-                        </SidebarMenuButton>
-                    </Link>
-                </SidebarMenuItem>
-                 <SidebarMenuItem>
-                    <Link href="/messages">
-                        <SidebarMenuButton>
-                            <MessageSquare />
-                            <span>Сообщения</span>
                         </SidebarMenuButton>
                     </Link>
                 </SidebarMenuItem>

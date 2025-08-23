@@ -11,18 +11,15 @@ import type { Team, BracketMatch } from '@/views/tournaments/public-page/ui/mock
 import { useProtocol } from "@/widgets/protocol-editor/lib/use-protocol";
 import { useTournamentCrmContext } from "../../lib/TournamentCrmContext";
 import { updateRatings } from "@/shared/lib/rating";
-import { useToast } from "@/shared/hooks/use-toast";
 import { GameplayEvent, awardProgressPoints } from "@/shared/lib/gamification";
 import { useUserStore } from "@/widgets/dashboard-header/model/user-store";
 
 export function BracketTab() {
     const { confirmedTeams, generatedBracket } = useTournamentCrmContext();
-    const { user: currentUser } = useUserStore();
     const { setActiveMatch, activeMatch } = useProtocol();
     const [rounds, setRounds] = useState<BracketMatch[][]>(generatedBracket);
     const [scores, setScores] = useState<Record<string, { score1: string, score2: string }>>({});
     const [error, setError] = useState<string | null>(null);
-    const { toast } = useToast();
 
     useEffect(() => {
         setRounds(generatedBracket);
@@ -83,11 +80,6 @@ export function BracketTab() {
             console.log(`[ELO Update] Match: ${match.team1.name} vs ${match.team2.name}`);
             console.log(`[ELO Update] ${match.team1.name}: ${match.team1.rank} -> ${newRatingA}`);
             console.log(`[ELO Update] ${match.team2.name}: ${match.team2.rank} -> ${newRatingB}`);
-            
-            toast({
-                title: "Рейтинг обновлен (симуляция)",
-                description: `${match.team1.name}: ${newRatingA}, ${match.team2.name}: ${newRatingB}`
-            });
             
             // Award points for participation
             const allParticipants = [...match.team1.members, ...match.team2.members];

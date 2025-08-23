@@ -3,16 +3,7 @@
 
 import React, { createContext, useContext } from 'react';
 import { useAdSettings } from '../lib/use-ad-settings';
-import { AssumptionsCard } from './assumptions-card';
-import { AudienceManager } from './audience-manager';
-import { CampaignManager } from './campaign-manager';
-import { GrowthLeversCard } from './growth-levers-card';
-import { PaybackChartCard } from './payback-chart-card';
-import { RevenueForecastCard } from './revenue-forecast-card';
-import { SensitivityAnalysisCard } from './sensitivity-analysis-card';
-import { InventoryMap } from './inventory-map';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
-import { Construction } from 'lucide-react';
 
 // Create a context and a hook to use it
 type AdSettingsContextType = ReturnType<typeof useAdSettings>;
@@ -47,7 +38,7 @@ export function AdvertisingPage() {
                  <Card className="text-center">
                     <CardHeader>
                         <div className="mx-auto bg-primary/10 text-primary p-4 rounded-full w-fit">
-                        <Construction className="h-12 w-12" />
+ {/* <Construction className="h-12 w-12" /> Temporarily removed as the section is under development */}
                         </div>
                         <CardTitle className="mt-4 text-2xl font-headline">Раздел в разработке</CardTitle>
                     </CardHeader>

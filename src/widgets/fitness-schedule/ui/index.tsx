@@ -2,25 +2,12 @@
 'use client';
 
 import React, { useState } from 'react';
-import { scheduleData, ScheduleEvent } from '../lib/mock-data';
 import { Badge } from '@/shared/ui/badge';
-import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import { Button } from '@/shared/ui/button';
-import { Clock, User, Users, Trash2, Calendar, Trophy, Dumbbell } from 'lucide-react';
-import Link from 'next/link';
+import { Clock, Trash2, Calendar, Trophy, Dumbbell } from 'lucide-react';
 import { useScheduleStore } from '@/entities/training/model/use-schedule-store';
 import type { ScheduledActivity, Activity } from '@/views/fitness-plan/ui/types';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
-import { allTournaments, registeredTeams } from '@/views/tournaments/public-page/ui/mock-data';
-import { ActivityLibraryDialog } from '@/views/fitness-plan/ui/activity-library';
-
-const categoryColors: Record<ScheduleEvent['category'], string> = {
-    'Силовая': 'bg-red-500/10 text-red-300 border-red-500/20',
-    'Кардио': 'bg-blue-500/10 text-blue-300 border-blue-500/20',
-    'Mind & Body': 'bg-green-500/10 text-green-300 border-green-500/20',
-    'Танцы': 'bg-purple-500/10 text-purple-300 border-purple-500/20',
-    'Вода': 'bg-cyan-500/10 text-cyan-300 border-cyan-500/20',
-};
 
 const personalActivityColors: Record<Activity['type'] | 'match', string> = {
     'template': 'bg-amber-500/10 text-amber-300 border-amber-500/20',
@@ -67,7 +54,7 @@ export function FitnessSchedule({ showHeader = false }: { showHeader?: boolean }
 
     // Mock upcoming match for demonstration
     const upcomingMatch = {
-        id: 'match-upcoming-1',
+ id: 'match-upcoming-1',
         name: `${registeredTeams[0].name} vs ${registeredTeams[1].name}`,
         type: 'match' as const,
         startDate: new Date().toISOString(),

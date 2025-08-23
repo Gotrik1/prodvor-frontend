@@ -5,14 +5,12 @@ import { users, teams, ranks } from "@/mocks";
 import type { User } from "@/mocks/users";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
-import { Briefcase, Dumbbell, Film, History, MapPin, MessageSquare, Rss, UserPlus, Users2, BarChart3, Award } from "lucide-react";
+import { Briefcase, Dumbbell, Film, MapPin, MessageSquare, Rss, UserPlus, Users2, BarChart3, Award } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 import { Button } from "@/shared/ui/button";
-import Link from "next/link";
 import { useUserStore } from "@/widgets/dashboard-header/model/user-store";
 import { ChartContainer, ChartTooltipContent } from "@/shared/ui/chart";
 import { PolarGrid, PolarAngleAxis, Radar, RadarChart, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip } from "recharts";
-import { SocialTab } from "./player-page-social-tab";
 import { StatsTab } from "./player-page-stats-tab";
 import { FeedTab } from "./player-page-feed-tab";
 import { TrainingTab } from "./player-page-training-tab";
@@ -52,7 +50,7 @@ const FormBadge = ({ result }: { result: 'W' | 'L' | 'D' }) => {
     return <div className={`${baseClasses} bg-secondary text-secondary-foreground border border-secondary/30`}>D</div>;
 };
 
-const PlayerOverviewTab = ({ player }: { player: User }) => {
+const PlayerOverviewTab = () => {
     const last5Form: ('W' | 'L' | 'D')[] = ['W', 'L', 'W', 'W', 'W'];
     return (
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
@@ -101,7 +99,7 @@ const PlayerOverviewTab = ({ player }: { player: User }) => {
 export function PlayerPageTemplate({ user: profileUser }: { user?: User }) {
     const player = profileUser || defaultPlayer;
     const { user: currentUser } = useUserStore();
-    const playerTeam = teams.find(t => t.members.includes(player.id));
+    const playerTeam = teams.find(t => t.memberIds.includes(player.id));
     const playerRank = player.elo ? getRankForElo(player.elo) : null;
 
     const isOwnProfile = currentUser?.id === player.id;

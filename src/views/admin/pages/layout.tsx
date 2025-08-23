@@ -2,7 +2,7 @@
 'use client';
 
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarProvider, SidebarInset } from "@/shared/ui/sidebar";
-import { DollarSign, Home, Eye, Info, BookOpen } from "lucide-react";
+import { DollarSign, Home, Eye, BookOpen } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { DashboardHeader } from "@/widgets/dashboard-header";
@@ -27,7 +27,7 @@ export function AdminLayout({
 }) {
     const pathname = usePathname();
 
-    return (
+ return (
         <SidebarProvider>
             <Sidebar>
                  <SidebarHeader>

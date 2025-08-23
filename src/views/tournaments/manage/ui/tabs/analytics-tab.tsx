@@ -1,13 +1,11 @@
 
 'use client';
 
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/shared/ui/table";
 import { users } from "@/mocks";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
-import { ArrowDown, ArrowUp } from "lucide-react";
-import { useTournamentCrmContext } from "../../lib/TournamentCrmContext";
-import { teams } from "@/mocks";
+import { useTournamentCrmContext } from "../../lib/TournamentCrmContext";;
 
 // Mock data for analytics
 const topScorers = [

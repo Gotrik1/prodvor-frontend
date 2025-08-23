@@ -3,7 +3,7 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
 import { Button } from "@/shared/ui/button";
-import { BookOpen, ShieldCheck, FileText, ArrowRight, Video, GraduationCap, Star, BarChart, Calendar, Gavel, Archive, Search, Bot, Send, Loader2, CheckCircle } from "lucide-react";
+import { BookOpen, ShieldCheck, ArrowRight, Star, BarChart, Calendar, Gavel, Archive, Search, Bot, Send, Loader2, CheckCircle } from "lucide-react";
 import Link from "next/link";
 import { Progress } from "@/shared/ui/progress";
 import React, { useState } from "react";

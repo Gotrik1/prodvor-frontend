@@ -9,6 +9,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "lint:fix": "eslint . --ext .ts,.tsx --config eslint.config.mjs --fix",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {

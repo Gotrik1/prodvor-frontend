@@ -2,18 +2,14 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/shared/ui/card';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/shared/ui/card'; // Assuming CardDescription is used in the original file, keeping it for now
 import { Button } from '@/shared/ui/button';
 import Link from 'next/link';
-import { ArrowLeft, Clock, Dumbbell, Flame, CheckCircle, Repeat } from 'lucide-react';
+import { ArrowLeft, Clock, Dumbbell, Flame, CheckCircle, Repeat } from 'lucide-react'; // Assuming CheckCircle and Repeat are used, keeping them
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/shared/ui/table';
 import { formatDistanceStrict } from 'date-fns';
 import { ru } from 'date-fns/locale';
-import type { WorkoutSession } from '@/views/fitness-plan/ui/types';
-
 export function WorkoutResultsPage({ planId }: { planId: string }) {
-    const router = useRouter();
     const [sessionResult, setSessionResult] = useState<WorkoutSession | null>(null);
 
     useEffect(() => {

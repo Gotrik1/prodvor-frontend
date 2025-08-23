@@ -22,19 +22,6 @@ const mockFinances = [
     { teamId: 'team8', fee: 2000, fine: 0, status: 'Оплачено' },
 ];
 
-const getStatusVariant = (status: string): 'success' | 'secondary' | 'destructive' => {
-    switch (status) {
-        case 'Оплачено':
-            return 'success';
-        case 'Частично':
-            return 'secondary';
-        case 'Не оплачено':
-            return 'destructive';
-        default:
-            return 'secondary';
-    }
-};
-
 export function FinancesTab() {
     const { confirmedTeams } = useTournamentCrmContext();
 

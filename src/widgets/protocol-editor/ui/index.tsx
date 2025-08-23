@@ -40,7 +40,7 @@ export function ProtocolEditor({ match }: { match: BracketMatch }) {
         const p1 = allPlayersInMatch.find(p => p.id === player1);
         if (!p1) return;
 
-        const newEvent: Omit<any, 'id'> = {
+        const newEvent: Omit<unknown, 'id'> = {
             minute: parseInt(minute, 10),
             type: eventType,
             team: team1Members.some(m => m.id === p1.id) ? 'team1' : 'team2',

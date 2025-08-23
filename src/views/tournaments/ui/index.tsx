@@ -1,7 +1,7 @@
 
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/shared/ui/card";
-import { PlusCircle, Trophy, GanttChart, Bell, CheckSquare } from "lucide-react";
+import { GanttChart, Bell, CheckSquare } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { allTournaments } from "../public-page/ui/mock-data";

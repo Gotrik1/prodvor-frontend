@@ -1,6 +1,4 @@
 
-import type { Sport } from './sports';
-import type { Sponsor } from './personnel';
 
 export type UserRole = 'Игрок' | 'Капитан' | 'Тренер' | 'Организатор' | 'Судья' | 'Менеджер' | 'Болельщик' | 'Модератор' | 'Администратор';
 export type UserGender = 'мужской' | 'женский';

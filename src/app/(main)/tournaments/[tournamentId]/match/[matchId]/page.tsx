@@ -6,7 +6,6 @@ import { allTournaments as mockTournaments, registeredTeams } from '@/views/tour
 import { useProtocol } from '@/widgets/protocol-editor/lib/use-protocol';
 import { useEffect } from 'react';
 import type { BracketMatch } from '@/views/tournaments/public-page/ui/mock-data';
-import { users } from '@/mocks';
 
 // This is a client component, so we can't export metadata directly.
 // We'll manage the title dynamically if needed.

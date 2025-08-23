@@ -9,7 +9,7 @@ import { Label } from "@/shared/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/select";
 import { YandexMapV3 } from "@/widgets/yandex-map";
 import { MapPin, UploadCloud } from "lucide-react";
-import { allSports } from "@/mocks";
+import { allSports } from "@/shared/mocks/sports"; // Keep this import
 import { MultiSelect } from "./multi-select";
 import { useState } from "react";
 import { useToast } from "@/shared/hooks/use-toast";

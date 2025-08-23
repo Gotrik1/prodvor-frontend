@@ -3,19 +3,13 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Button } from "@/shared/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
-import { Award, Calendar, GanttChartIcon, Trophy, Users, Info, ArrowRight } from "lucide-react";
+import { Button } from "@/shared/ui/button";import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
+import { Award, Calendar, GanttChartIcon, Users, ArrowRight } from "lucide-react";
 import { allTournaments, sponsors } from './mock-data';
 import { Badge } from "@/shared/ui/badge";
-import { Separator } from "@/shared/ui/separator";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { useState, useEffect } from 'react';
-import type { Tournament } from './mock-data';
-import { DashboardHeader } from "@/widgets/dashboard-header";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/shared/ui/tooltip";
-
-const LOCAL_STORAGE_BANNER_KEY_PREFIX = 'promo-banner-';
 
 const StatCard = ({ title, value, icon: Icon }: { title: string, value: string | React.ReactNode, icon: React.ElementType }) => (
     <Card className="text-center bg-card/50 backdrop-blur-sm">
@@ -30,15 +24,6 @@ const StatCard = ({ title, value, icon: Icon }: { title: string, value: string |
         </CardContent>
     </Card>
 );
-
-const statusColors: Record<string, string> = {
-    'АНОНС': 'bg-purple-500/20 text-purple-300 border-purple-500/30',
-    'ПРЕДРЕГИСТРАЦИЯ': 'bg-cyan-500/20 text-cyan-300 border-cyan-500/30',
-    'РЕГИСТРАЦИЯ': 'bg-blue-500/20 text-blue-300 border-blue-300/30',
-    'ИДЕТ': 'bg-green-500/20 text-green-300 border-green-500/30',
-    'ЗАВЕРШЕН': 'bg-muted text-muted-foreground border-border',
-};
-
 const ParticipateButton = ({ tournament }: { tournament: (typeof allTournaments)[0] }) => {
     const isRegistrationActive = tournament.status === 'РЕГИСТРАЦИЯ';
     const isPreRegistrationActive = tournament.status === 'ПРЕДРЕГИСТРАЦИЯ';
@@ -56,7 +41,7 @@ const ParticipateButton = ({ tournament }: { tournament: (typeof allTournaments)
 }
 
 export function TournamentPublicPage({ tournament: initialTournament }: { tournament: (typeof allTournaments)[0] | undefined}) {
-    const [tournament, setTournament] = useState(initialTournament);
+    const [tournament] = useState(initialTournament);
 
     useEffect(() => {
         if (initialTournament) {

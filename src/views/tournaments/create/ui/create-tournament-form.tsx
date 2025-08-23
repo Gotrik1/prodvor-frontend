@@ -119,16 +119,16 @@ export function CreateTournamentForm() {
                             <Popover>
                                 <PopoverTrigger asChild>
                                 <Button variant={"outline"} className={cn("w-full justify-start text-left font-normal", !true && "text-muted-foreground")}>
-                                    <CalendarIcon className="mr-2 h-4 w-4" />
+                                    <CalendarIcon className="mr-2 h-4 w-4" /> {/* TODO: Replace !true with actual condition */}
                                     <span>Начало регистрации</span>
                                 </Button>
                                 </PopoverTrigger>
                                 <PopoverContent className="w-auto p-0"><Calendar mode="single" initialFocus /></PopoverContent>
                             </Popover>
-                             <Popover>
-                                <PopoverTrigger asChild>
+                            <Popover>
+ <PopoverTrigger asChild> {/* TODO: Replace !true with actual condition */}
                                 <Button variant={"outline"} className={cn("w-full justify-start text-left font-normal", !true && "text-muted-foreground")}>
-                                    <CalendarIcon className="mr-2 h-4 w-4" />
+                                    <CalendarIcon className="mr-2 h-4 w-4" /> 
                                     <span>Конец регистрации</span>
                                 </Button>
                                 </PopoverTrigger>

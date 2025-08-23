@@ -2,8 +2,8 @@
 'use client';
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/shared/ui/accordion";
-import { allSports, achievementsBySport, type User } from "@/mocks";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/shared/ui/accordion';
+import { allSports, achievementsBySport } from '@/mocks';
 import { Award, Gem } from "lucide-react";
 import { Progress } from "@/shared/ui/progress";
 
@@ -17,7 +17,7 @@ const StatCard = ({ title, value, icon: Icon }: { title: string, value: string |
     </Card>
 );
 
-export function AchievementsTab({ player }: { player: User }) {
+export function AchievementsTab() {
     const totalAchievements = Object.values(achievementsBySport).flat().length;
     // Mock player progress
     const unlockedCount = 28; 

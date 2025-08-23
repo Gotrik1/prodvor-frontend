@@ -8,7 +8,7 @@ import { Badge } from "@/shared/ui/badge";
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/shared/ui/table";
-import { Calendar, CheckCircle, Gavel, Shield, Star, XCircle, Gamepad2, Activity, ArrowRight } from "lucide-react";
+import { Calendar, CheckCircle, Gavel, Star, XCircle, Gamepad2, ArrowRight } from "lucide-react";
 import Link from "next/link";
 
 const defaultReferee = users.find(s => s.role === 'Судья')!;

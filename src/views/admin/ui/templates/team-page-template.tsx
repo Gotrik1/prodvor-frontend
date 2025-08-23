@@ -1,12 +1,11 @@
 
 'use client';
 
-import { teams, users, playgrounds, posts } from "@/mocks";
+import { users, playgrounds, posts } from "@/mocks";
 import type { Team } from "@/mocks";
 import { Button } from "@/shared/ui/button";
-import { Card, CardHeader, CardContent, CardTitle, CardDescription } from "@/shared/ui/card";
-import { Rss, Film, Star, Shield, History, Settings, UserPlus, Swords } from "lucide-react";
-import Image from 'next/image';
+import { Card, CardHeader, CardContent, CardTitle } from "@/shared/ui/card";
+import { Rss, Film, History } from "lucide-react";
 import Link from 'next/link';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 import { useUserStore } from "@/widgets/dashboard-header/model/user-store";
@@ -28,7 +27,7 @@ export function TeamPageTemplate({ team }: { team?: Team }) {
                 <Card className="text-center max-w-md w-full">
                     <CardHeader>
                         <CardTitle>Ошибка 404</CardTitle>
-                    </CardHeader>
+                    </CardHeader> 
                     <CardContent>
                         <p className="text-muted-foreground">
                             Команда не найдена.

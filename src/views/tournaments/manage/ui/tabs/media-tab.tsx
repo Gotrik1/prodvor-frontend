@@ -11,7 +11,7 @@ import React from "react";
 import { useTournamentCrmContext } from "../../lib/TournamentCrmContext";
 
 export function MediaTab() {
-    const { mediaItems, handleAddMedia } = useTournamentCrmContext();
+    const { mediaItems } = useTournamentCrmContext();
 
     return (
         <Card>

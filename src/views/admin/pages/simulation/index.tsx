@@ -8,7 +8,6 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrig
 import { Button } from '@/shared/ui/button';
 import { Eye, EyeOff } from 'lucide-react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 
 const rolesOrder: UserRole[] = [
     'Администратор',
@@ -23,7 +22,6 @@ const rolesOrder: UserRole[] = [
 
 export function SimulationPage() {
     const { user: currentUser, setUser } = useUserStore();
-    const router = useRouter();
 
     const groupedUsers = users.reduce((acc, user) => {
         (acc[user.role] = acc[user.role] || []).push(user);

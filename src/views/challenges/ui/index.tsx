@@ -5,18 +5,18 @@ import { useState, useMemo } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
 import { Button } from "@/shared/ui/button";
 import { Check, X, Send, Users, Trophy, Swords, Sparkles } from "lucide-react";
-import Image from "next/image";
-import { challenges, TeamChallenge } from '@/mocks/challenges';
-import { teams, users, teamSports } from '@/mocks';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, SelectGroup, SelectLabel } from "@/shared/ui/select";
+import Image from "next/image"; 
+import { challenges, TeamChallenge } from '@/mocks/challenges'; // Keep challenges and TeamChallenge imports
+import { teams, teamSports } from '@/mocks'; // Removed unused 'users'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/select"; // Removed unused SelectGroup and SelectLabel
 import { Input } from "@/shared/ui/input";
 import { Label } from "@/shared/ui/label";
 import { Separator } from "@/shared/ui/separator";
 import { Checkbox } from "@/shared/ui/checkbox";
 import { Slider } from '@/shared/ui/slider';
-import { Badge } from '@/shared/ui/badge';
+
 import Link from 'next/link';
-import { useUserStore } from '@/widgets/dashboard-header/model/user-store';
+import { useUserStore } from '@/widgets/dashboard-header/model/user-store'; // Keep useUserStore as it's used
 
 const ChallengeCard = ({ challenge, type }: { challenge: TeamChallenge, type: 'incoming' | 'outgoing' }) => {
     const opponent = type === 'incoming' ? challenge.challenger : challenge.challenged;

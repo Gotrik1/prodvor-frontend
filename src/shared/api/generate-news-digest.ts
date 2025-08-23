@@ -8,7 +8,7 @@
  */
 import { z } from 'zod';
 
-const NewsDigestOutputSchema = z.object({
+export const NewsDigestOutputSchema = z.object({
   digest: z.object({
     title: z.string().describe("A catchy headline for the news digest."),
     summary: z.string().describe("A short, engaging summary of the main news."),

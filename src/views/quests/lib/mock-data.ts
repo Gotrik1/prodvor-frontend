@@ -1,6 +1,3 @@
-
-import type { LucideIcon } from "lucide-react";
-
 export interface Quest {
     id: string;
     name: string;

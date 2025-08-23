@@ -8,10 +8,6 @@ import { usePlanStore } from '@/entities/training/model/use-plan-store';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/shared/ui/card';
 import { Button } from '@/shared/ui/button';
 import Link from 'next/link';
-import { ArrowLeft, Check, Timer, X, SkipForward, Flag, Info } from 'lucide-react';
-import { Progress } from '@/shared/ui/progress';
-import { Alert, AlertDescription, AlertTitle } from '@/shared/ui/alert';
-import type { WorkoutPlan, Exercise, PlanDay } from '@/views/fitness-plan/ui/types';
 import { Label } from '@/shared/ui/label';
 import { Input } from '@/shared/ui/input';
 import { useUserStore } from '@/widgets/dashboard-header/model/user-store';
@@ -77,7 +73,7 @@ export function WorkoutSessionPage({ planId }: { planId: string }) {
         setIsResting(false);
     };
     
-    const { start: startTimer, stop: stopTimer, isActive: isTimerActive, time: timerDisplay } = useTimer(60, onTimerEnd);
+    const { start: startTimer, stop: stopTimer, isActive: isTimerActive, time: timerDisplay } = useTimer(60, onTimerEnd); // eslint-disable-line @typescript-eslint/no-unused-vars
 
     if (!activeSession) {
         // This can happen if the user refreshes the page and zustand hasn't rehydrated yet

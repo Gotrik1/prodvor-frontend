@@ -8,21 +8,7 @@
  * - SendTournamentAnnouncementOutput - The return type for the function.
  */
 import { z } from 'zod';
-import type { SendTournamentAnnouncementInput } from '@/views/tournaments/manage/ui/tabs/announcements-tab';
-
-const SendTournamentAnnouncementInputSchema = z.object({
-  tournamentId: z.string().describe("The ID of the tournament."),
-  subject: z.string().min(5, { message: "Тема должна содержать не менее 5 символов." }).describe('The subject of the announcement.'),
-  message: z.string().min(10, { message: "Сообщение или промпт должно содержать не менее 10 символов." }).describe('The content of the announcement message or a prompt for the AI.'),
-  isAiEnhanced: z.boolean().default(false).describe("Whether to use AI to enhance the message.")
-});
-
-const SendTournamentAnnouncementOutputSchema = z.object({
-  success: z.boolean(),
-  error: z.string().optional(),
-});
-type SendTournamentAnnouncementOutput = z.infer<typeof SendTournamentAnnouncementOutputSchema>;
-
+import type { SendTournamentAnnouncementInput, SendTournamentAnnouncementOutput } from '@/views/tournaments/manage/ui/tabs/announcements-tab';
 
 export async function sendTournamentAnnouncement(input: SendTournamentAnnouncementInput): Promise<SendTournamentAnnouncementOutput> {
   console.log("Mocking tournament announcement:", input);

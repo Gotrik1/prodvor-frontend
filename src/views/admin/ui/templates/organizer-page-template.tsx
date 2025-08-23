@@ -9,8 +9,8 @@ import { Badge } from "@/shared/ui/badge";
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/shared/ui/table";
-import { Award, Calendar, DollarSign, ExternalLink, GanttChart, Megaphone, PlusCircle, Users } from "lucide-react";
-import Link from "next/link";
+import { Calendar, DollarSign, GanttChart, Megaphone, PlusCircle, Users } from "lucide-react";
+import Link from "next/link"; // Assuming Link is used elsewhere or should be kept
 import { Progress } from "@/shared/ui/progress";
 
 const defaultOrganizer = users.find(s => s.role === 'Организатор')!;

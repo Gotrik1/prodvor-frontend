@@ -1,22 +1,20 @@
 
 'use client';
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
+import { Card, CardContent, CardDescription, CardHeader } from "@/shared/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 import { users } from '@/mocks';
 import Image from "next/image";
 import { MatchTimeline } from "./match-timeline";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
-import { Crown, Bot } from "lucide-react";
+import { Crown } from "lucide-react";
 import Link from "next/link";
 import { useProtocol } from "@/widgets/protocol-editor/lib/use-protocol";
 import type { BracketMatch, Tournament } from "@/views/tournaments/public-page/ui/mock-data";
 import { LiveTextFeed } from "./live-text-feed";
 
 export function MatchProtocol({ tournament, match }: { tournament: Tournament, match: BracketMatch }) {
-    const { events } = useProtocol();
-    
-    const { team1, team2, id: matchId } = match;
+    const { events } = useProtocol();    const { team1, team2 } = match;
 
     const score1 = events.filter(e => e.type === 'goal' && e.team === 'team1').length;
     const score2 = events.filter(e => e.type === 'goal' && e.team === 'team2').length;
@@ -27,8 +25,6 @@ export function MatchProtocol({ tournament, match }: { tournament: Tournament, m
 
     const team1Members = users.filter(u => team1.members.includes(u.id));
     const team2Members = users.filter(u => team2.members.includes(u.id));
-
-    const isMatchFinished = match.score1 !== null && match.score2 !== null;
 
 
     return (

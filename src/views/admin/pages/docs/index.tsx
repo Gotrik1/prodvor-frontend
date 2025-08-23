@@ -1,7 +1,6 @@
 
 'use client';
-
-import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardBody } from "@/shared/ui/card";
+import { Card, CardBody } from "@/shared/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 import { FileText, DraftingCompass, Info, Gem, Server } from "lucide-react";
 import ReactMarkdown from 'react-markdown';
@@ -12,17 +11,17 @@ import { RolesPage } from "../roles";
 import { RanksPage } from "../ranks";
 
 const markdownComponents = {
-    h1: (props: any) => <h1 className="text-3xl font-bold mt-6 mb-4 font-headline" {...props} />,
-    h2: (props: any) => <h2 className="text-2xl font-bold mt-6 mb-3 font-headline border-b pb-2" {...props} />,
-    h3: (props: any) => <h3 className="text-xl font-semibold mt-4 mb-2 font-headline" {...props} />,
-    p: (props: any) => <p className="leading-relaxed mb-4" {...props} />,
-    ul: (props: any) => <ul className="list-disc list-inside mb-4 space-y-2" {...props} />,
-    ol: (props: any) => <ol className="list-decimal list-inside mb-4 space-y-2" {...props} />,
-    li: (props: any) => <li className="pl-2" {...props} />,
+    h1: (props: unknown) => <h1 className="text-3xl font-bold mt-6 mb-4 font-headline" {...props} />,
+    h2: (props: unknown) => <h2 className="text-2xl font-bold mt-6 mb-3 font-headline border-b pb-2" {...props} />,
+    h3: (props: unknown) => <h3 className="text-xl font-semibold mt-4 mb-2 font-headline" {...props} />,
+    p: (props: unknown) => <p className="leading-relaxed mb-4" {...props} />,
+    ul: (props: unknown) => <ul className="list-disc list-inside mb-4 space-y-2" {...props} />,
+    ol: (props: unknown) => <ol className="list-decimal list-inside mb-4 space-y-2" {...props} />,
+    li: (props: unknown) => <li className="pl-2" {...props} />,
     code: ({ ...props }) => <code className="bg-muted text-foreground px-1 py-0.5 rounded-sm font-mono text-sm" {...props} />,
     pre: ({ ...props }) => <pre className="bg-muted p-4 rounded-md overflow-x-auto" {...props} />,
-    a: (props: any) => <a className="text-primary hover:underline" {...props} />,
-    strong: (props: any) => <strong className="font-bold" {...props} />,
+    a: (props: unknown) => <a className="text-primary hover:underline" {...props} />,
+    strong: (props: unknown) => <strong className="font-bold" {...props} />,
 };
 
 export function DocsPage() {

@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/sha
 import { CreatePost } from "@/widgets/dashboard-feed/ui/create-post";
 import { PostCard } from "@/widgets/dashboard-feed/ui/post-card";
 import { Rss } from "lucide-react";
-import type { Post, Team, User } from "@/mocks";
+import type { Post, Team } from "@/mocks";
 import { users } from "@/mocks";
 
 // Mock the current user for CreatePost component

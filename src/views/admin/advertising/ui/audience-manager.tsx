@@ -7,11 +7,9 @@ import { Button } from "@/shared/ui/button";
 import { Input } from "@/shared/ui/input";
 import { Label } from "@/shared/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/select";
-import { users, teams, allSports } from '@/mocks';
-import { BarChart, Filter, Users, DollarSign, Save } from 'lucide-react';
+import { users, allSports } from '@/mocks';
+import { Filter, Users, DollarSign, Save } from 'lucide-react';
 import { Slider } from '@/shared/ui/slider';
-import { Badge } from "@/shared/ui/badge";
-import type { User } from '@/mocks';
 
 const allDisciplines = allSports.map(s => s.name);
 const allRoles = [...new Set(users.map(u => u.role))];

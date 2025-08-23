@@ -1,12 +1,11 @@
 
 'use client';
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs';
 import { BarChart, Heart, User as UserIcon, Users2, MapPin, Trophy, BarChart3 } from 'lucide-react';
-import Link from 'next/link';
-import { Button } from '@/shared/ui/button';
 import { OverviewTab } from './ui/overview-tab';
+
+
 import { UsersTab } from './ui/users-tab';
 import { TeamsTab } from './ui/teams-tab';
 import { SponsorsTab } from './ui/sponsors-tab';

@@ -6,10 +6,9 @@ import type { User } from '@/mocks';
  * Mock function to simulate user login.
  * @param email - The user's email.
  * @param password - The user's password.
- * @returns The user object if login is successful, otherwise null.
+ * @returns The user object if login is successful, otherwise null. // The password parameter is intentionally unused in this mock.
  */
-export async function signIn(email: string, password?: string): Promise<User | null> {
-    console.log(`Attempting to sign in with email: ${email}`);
+export async function signIn(email: string): Promise<User | null> {
     // This is a mock implementation. It finds the first user with the matching email.
     // In a real app, you would verify the password hash.
     const user = users.find(u => u.email === email);

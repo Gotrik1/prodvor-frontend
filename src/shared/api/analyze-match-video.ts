@@ -29,27 +29,6 @@ const AnalyzeMatchVideoOutputSchema = z.object({
 
 export type AnalyzeMatchVideoOutput = z.infer<typeof AnalyzeMatchVideoOutputSchema>;
 
-
-const analysisPrompt = ai.definePrompt({
-    name: 'videoAnalysisPrompt',
-    input: { schema: AnalyzeMatchVideoInputSchema },
-    output: { schema: z.string() },
-    prompt: `
-        Analyze the provided sports match video (if available) and address the user's prompt.
-        If no video is provided, analyze the tactical situation based on the prompt alone.
-        
-        User's prompt: {{{prompt}}}
-        
-        {{#if videoDataUri}}
-        Video for analysis:
-        {{media url=videoDataUri}}
-        {{/if}}
-        
-        Provide a concise analysis based on the user's query, highlighting key tactical moments, player performance, or any other relevant aspects.
-        Format your response in Markdown.
-    `,
-});
-
 const analyzeMatchVideoFlow = ai.defineFlow(
   {
     name: 'analyzeMatchVideoFlow',

@@ -3,16 +3,14 @@
 
 import { useState } from 'react';
 import { Button } from '@/shared/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card'; // Assuming Card components are used
 import { Textarea } from '@/shared/ui/textarea';
-import { Bot, Clapperboard, Film, Loader2, UploadCloud, Wand2, Star } from 'lucide-react';
+import { Bot, Clapperboard, Loader2, UploadCloud, Wand2, Star } from 'lucide-react';
 import { analyzeMatchVideoAction } from '@/app/actions';
 import { useToast } from '@/shared/hooks/use-toast';
 import { useUserStore } from '@/widgets/dashboard-header/model/user-store';
 import Link from 'next/link';
 import { MarkdownRenderer } from './markdown-renderer';
-import type { AnalyzeMatchVideoInput } from '@/shared/api/analyze-match-video';
-
 const ProAccessCard = () => (
     <Card className="text-center max-w-lg w-full mt-6 border-primary/50">
         <CardHeader>
@@ -85,7 +83,7 @@ export function AiAnalysisTool({ embedded = false }: { embedded?: boolean }) {
                 
                 if (result.analysis) {
                     setAnalysisResult(result.analysis);
-                } else {
+                } else if (result.error) {
                     toast({
                         variant: 'destructive',
                         title: 'Ошибка анализа',
@@ -106,13 +104,13 @@ export function AiAnalysisTool({ embedded = false }: { embedded?: boolean }) {
                 await getAnalysis();
             }
 
-        } catch (error: any) {
-             toast({
+        } catch (error: unknown) {
+            toast({
                 variant: 'destructive',
                 title: 'Ошибка',
-                description: error.message || 'Произошла непредвиденная ошибка.',
+                description: error instanceof Error ? error.message : 'Произошла непредвиденная ошибка.',
             });
-            setIsLoading(false);
+            setIsLoading(false); // Ensure loading state is turned off
         }
     };
 

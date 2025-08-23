@@ -1,22 +1,17 @@
 
 'use client';
 
-import { teams, users } from "@/mocks";
 import type { Team, User } from "@/mocks";
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
 import Link from "next/link";
-import { ArrowLeft, CheckCircle, Crown, Edit, Mail, Shield, Trash2, UserPlus, Users, XCircle, MoreHorizontal, ArrowRightLeft, Handshake, LogOut, Search } from "lucide-react";
-import Image from "next/image";
+import { ArrowLeft, CheckCircle, Mail, UserPlus, XCircle, ArrowRightLeft, Search } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
-import { Badge } from "@/shared/ui/badge";
 import { Input } from "@/shared/ui/input";
 import { Separator } from "@/shared/ui/separator";
 import { LogoGeneratorWidget } from "@/widgets/logo-generator";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/shared/ui/dropdown-menu";
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import { useToast } from "@/shared/hooks/use-toast";
-import { Label } from "@/shared/ui/label";
 import { TacticalBoard } from "./tactical-board";
 import { RosterManagement } from "./roster-management";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
@@ -50,7 +45,6 @@ export function TeamManagementPage({ team }: { team: Team | undefined }) {
     }
 
     const teamMembers = users.filter(u => team.members.includes(u.id));
-    const captain = users.find(u => u.id === team.captainId);
 
     const handleApplication = (applicantId: string, accepted: boolean) => {
         setApplications(prev => prev.filter(app => app.id !== applicantId));

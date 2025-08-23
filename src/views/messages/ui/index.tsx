@@ -2,14 +2,13 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
+import { Card, CardContent } from "@/shared/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { Input } from "@/shared/ui/input";
 import { Button } from "@/shared/ui/button";
 import { Search, Send, Users, User as UserIcon, Phone, Video } from "lucide-react";
 import { cn } from "@/shared/lib/utils";
 import { mockChats, mockMessages, Chat } from '../lib/mock-data';
-import Image from 'next/image';
 import Link from 'next/link';
 import { useUserStore } from '@/widgets/dashboard-header/model/user-store';
 
@@ -35,7 +34,7 @@ const ChatListItem = ({ chat, isActive, onSelect }: { chat: Chat, isActive: bool
     </div>
 );
 
-const ChatWindow = ({ chat, messages, currentUser }: { chat: Chat | null, messages: (typeof mockMessages)[string], currentUser: any }) => {
+const ChatWindow = ({ chat, messages, currentUser }: { chat: Chat | null, messages: (typeof mockMessages)[string], currentUser: unknown }) => {
     const [newMessage, setNewMessage] = useState('');
 
     const handleSendMessage = (e: React.FormEvent) => {

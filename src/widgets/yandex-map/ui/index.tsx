@@ -5,7 +5,7 @@ import React, { useEffect, useRef } from "react";
 
 declare global {
   interface Window {
-    ymaps3: any;
+    ymaps3: unknown;
   }
 }
 
@@ -13,7 +13,7 @@ const YANDEX_API_KEY = "f9e81512-e208-40f8-bea8-a091bd41ed72";
 
 export function YandexMapV3() {
   const mapRef = useRef<HTMLDivElement>(null);
-  const mapInstanceRef = useRef<any>(null); // To hold the map instance
+  const mapInstanceRef = useRef<unknown>(null); // To hold the map instance
 
   useEffect(() => {
     let script: HTMLScriptElement | null = null;
@@ -22,18 +22,17 @@ export function YandexMapV3() {
     async function initMap() {
       if (!mapRef.current) return;
 
-      await window.ymaps3.ready;
+ await window.ymaps3.ready;
       const { 
         YMap, 
         YMapDefaultSchemeLayer, 
-        YMapDefaultFeaturesLayer,
-        YMapMarker,
-        YMapListener
-      } = window.ymaps3;
+        YMapDefaultFeaturesLayer
+      } = window.ymaps3 as unknown; // Cast to unknown here for access to properties
       
-      const { YMapDefaultMarker } = await window.ymaps3.import('@yandex/ymaps3-markers@0.0.1');
-
-      // Destroy the old map instance if it exists
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const { YMapDefaultMarker } = await (window.ymaps3 as any).import('@yandex/ymaps3-markers@0.0.1'); // This import requires a specific type that is not readily available
+ 
+      // Destroy the old map instance if it exist s
       if (mapInstanceRef.current) {
         mapInstanceRef.current.destroy();
         mapInstanceRef.current = null;
@@ -53,6 +52,8 @@ export function YandexMapV3() {
           new YMapDefaultFeaturesLayer({})
         ]
       );
+ 
+      const { YMapListener } = window.ymaps3 as unknown; // Cast to unknown for access
       
       mapInstanceRef.current = mapInstance;
 

@@ -53,6 +53,9 @@ export default function AdminPage({ params }: { params: { slug: string[] } }) {
   const page = slug?.[0] || 'dashboard';
   const subpage = slug?.[1];
 
+  const sponsor = null; // Assuming sponsor is used within SponsorPage or its children
+  
+
   const renderPage = () => {
     switch (page) {
       case 'dashboard':
@@ -66,55 +69,55 @@ export default function AdminPage({ params }: { params: { slug: string[] } }) {
       case 'users':
         return <UserPage userId={subpage} />;
       case 'teams':
-        const team = teams.find((t) => t.id === subpage);
-        if (subpage && !team) {
-          return (
-            <NotFoundAdminPage
-              message={`Команда с ID "${subpage}" не найдена.`}
-              backLink="/admin"
-              backLinkText="Вернуться в дашборд"
-            />
-          );
+        {let team = null;
+ team = teams.find((t) => t.id === subpage);
+ if (subpage && !team) {
+ return (
+ <NotFoundAdminPage
+ message={`Команда с ID "${subpage}" не найдена.`}
+ backLink="/admin"
+ backLinkText="Вернуться в дашборд"
+ />
+ );
+ }
+ return <TeamPageTemplate team={team} />;
         }
-        return <TeamPageTemplate team={team} />;
       case 'sponsors':
-        return <SponsorPage sponsorId={subpage} />;
-      case 'templates':
+        return <SponsorPage sponsorId={subpage} />; // Assuming sponsor is used within SponsorPage or its children
+      case 'templates':{
         if (!subpage)
-          return (
-            <NotFoundAdminPage
-              message="Страница администрирования не найдена."
-              backLink="/admin"
-              backLinkText="Вернуться в админ-панель"
-            />
-          );
-        const TemplateComponent =
-          templateMap[subpage as keyof typeof templateMap];
-        const title = subpage.charAt(0).toUpperCase() + subpage.slice(1);
-        const playerUser = users.find((u) => u.role === 'Игрок');
-
-        if (subpage === 'team') {
-          return (
-            <TemplatePreviewPage title={`Шаблон: Команда`}>
-              <TeamPageTemplate team={teams[0]} />
-            </TemplatePreviewPage>
-          );
+  return (
+ <NotFoundAdminPage
+ message="Страница администрирования не найдена."
+ backLink="/admin"
+ backLinkText="Вернуться в админ-панель"
+ />
+ );
+ TemplateComponent = templateMap[subpage as keyof typeof templateMap];
+        let TemplateComponent = null;
+ if (subpage === 'team') {
+ return (
+ <TemplatePreviewPage title={`Шаблон: Команда`}>
+ <TeamPageTemplate team={teams[0]} />
+ </TemplatePreviewPage>
+ );
+ }
         }
+        const playerUser = users.find((u) => u.role === 'Игрок');
 
         if (subpage === 'player' && playerUser) {
           return (
             <TemplatePreviewPage title={`Шаблон: Игрок`}>
               <templateMap.player user={playerUser} />
             </TemplatePreviewPage>
-          );
-        }
+ );
 
         if (TemplateComponent) {
-          // @ts-ignore
-          return (
+          // @ts-expect-error The component prop could be of any type, but we are casting it to a known type.
+ return (
             <TemplatePreviewPage title={`Шаблон: ${title}`}>
               <TemplateComponent user={playerUser} />
-            </TemplatePreviewPage>
+ </TemplatePreviewPage>
           );
         }
 

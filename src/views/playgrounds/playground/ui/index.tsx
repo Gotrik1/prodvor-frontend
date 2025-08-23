@@ -1,7 +1,7 @@
 
 
-import { playgrounds, teams, users } from "@/mocks";
 import type { Playground, ServiceCategory } from "@/mocks";
+import { teams, users } from "@/mocks";
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
 import { YandexMapV3 } from "@/widgets/yandex-map";
@@ -23,7 +23,7 @@ const features = [
 
 const ServiceCard = ({ service }: { service: ServiceCategory['services'][0] }) => {
     // @ts-ignore
-    const Icon = service.icon ? LucideIcons[service.icon] as React.ElementType : Home;
+    const Icon = service.icon ? LucideIcons[service.icon] as React.ElementType : Home; // @ts-expect-error: Icon name from mock might not exist in LucideIcons
     return (
         <Card className="bg-background/50 h-full">
             <CardHeader className="flex flex-row items-center gap-4">

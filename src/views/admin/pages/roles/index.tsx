@@ -1,5 +1,4 @@
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/shared/ui/table";
 import { User, ClipboardList, Gavel, Briefcase, Shield, Megaphone, Handshake, Star } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
@@ -19,16 +18,16 @@ const roles: { id: string; name: string; description: string; icon: LucideIcon }
 export function RolesPage() {
   return (
     <div className="border rounded-lg">
-        <Table>
-            <TableHeader>
-                <TableRow>
-                    <TableHead className="w-[150px]">ID</TableHead>
-                    <TableHead>Роль</TableHead>
-                    <TableHead>Описание</TableHead>
-                </TableRow>
-            </TableHeader>
-            <TableBody>
-                {roles.map(role => (
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead className="w-[150px]">ID</TableHead>
+            <TableHead>Роль</TableHead>
+            <TableHead>Описание</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {roles.map(role => (
                     <TableRow key={role.id}>
                         <TableCell className="font-mono text-xs">{role.id}</TableCell>
                         <TableCell className="font-medium whitespace-nowrap">
@@ -39,9 +38,9 @@ export function RolesPage() {
                         </TableCell>
                         <TableCell className="text-muted-foreground">{role.description}</TableCell>
                     </TableRow>
-                ))}
-            </TableBody>
-        </Table>
+          ))}
+        </TableBody>
+      </Table>
     </div>
   );
 }

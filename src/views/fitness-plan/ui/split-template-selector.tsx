@@ -1,8 +1,7 @@
 
 'use client';
-
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
-import { ArrowLeft, ArrowRight, Edit } from 'lucide-react';
+import { ArrowLeft, ArrowRight } from 'lucide-react';
 import type { PlanType, Exercise } from './types';
 import { Button } from '@/shared/ui/button';
 
@@ -24,7 +23,7 @@ export const splitDayTemplates: Record<string, {label: string, value: string}[]>
         { label: 'Ноги', value: 'legs' },
         { label: 'Руки и Плечи', value: 'arms-shoulders' },
     ],
-}
+};
 
 interface SplitTemplate {
     name: string;
@@ -135,7 +134,7 @@ export function SplitTemplateSelector({ planType, onSelect, onBack }: SplitTempl
                     onClick={() => onSelect({ name: 'Свой шаблон', days: customTemplateDays })}
                 >
                     <CardHeader>
-                        <CardTitle className="flex justify-between items-center">
+                        <CardTitle className="flex justify-between items-center"> {/* Remove CardTitle if not used */}
                             Свой шаблон
                             <ArrowRight className="h-5 w-5 text-muted-foreground group-hover:text-primary transition-colors transform group-hover:translate-x-1" />
                         </CardTitle>

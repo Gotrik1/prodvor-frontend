@@ -1,5 +1,4 @@
 
-import type { Metadata } from 'next';
 import { Button } from '@/shared/ui/button';
 import Link from 'next/link';
 import { users } from '@/mocks';

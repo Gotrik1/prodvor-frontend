@@ -3,8 +3,8 @@
 
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
-import { CheckCircle, XCircle, ListChecks } from 'lucide-react';
-import { requirements as allRequirements } from '@/views/tournaments/public-page/ui/mock-data';
+import { CheckCircle, ListChecks, XCircle } from 'lucide-react';
+
 import type { Team } from '@/mocks';
 import { users } from '@/mocks';
 

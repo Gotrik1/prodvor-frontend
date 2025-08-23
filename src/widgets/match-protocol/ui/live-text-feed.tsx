@@ -1,8 +1,7 @@
 
 'use client';
 
-import React from 'react';
-import { MatchEvent, EventType, eventTypes } from './match-timeline';
+import { MatchEvent, EventType, eventTypes } from './match-timeline'; // Keep other imports from match-timeline
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
 import { ArrowUp, ArrowDown } from 'lucide-react';
 
@@ -19,7 +18,7 @@ const SubstitutionIcon = () => (
   </div>
 );
 
-const eventIcons: Record<EventType, React.ComponentType> = {
+const eventIcons: Record<EventType, React.ComponentType<{}>> = {
   [eventTypes.GOAL]: GoalIcon,
   [eventTypes.YELLOW_CARD]: YellowCardIcon,
   [eventTypes.RED_CARD]: RedCardIcon,

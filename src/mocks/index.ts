@@ -6,12 +6,6 @@ import { teams } from './teams';
 import { playgrounds } from './playgrounds';
 import { sponsors } from './personnel';
 import { allSports } from './sports';
-import { posts } from './posts';
-import { challenges } from './challenges';
-import { tournaments } from './tournaments';
-import { requirements } from './requirements';
-import { ranks } from './ranks';
-import { achievementsBySport } from './achievements';
 
 // 2. Import and run the central initializer.
 // This function will mutate the imported arrays to establish relationships.

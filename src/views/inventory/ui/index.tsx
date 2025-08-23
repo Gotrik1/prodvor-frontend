@@ -27,7 +27,7 @@ const categoryIcons: Record<string, React.ElementType> = {
 };
 
 export function InventoryPage() {
-  const [inventory, setInventory] = useState(mockStoreItems.filter(item => item.type !== 'pro_status'));
+  const [inventory] = useState(mockStoreItems.filter(item => item.type !== 'pro_status'));
   const [activeItemId, setActiveItemId] = useState('item-1');
   const { toast } = useToast();
 

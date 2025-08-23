@@ -5,16 +5,11 @@
  */
 import { z } from 'zod';
 
-const GenerateTournamentImageInputSchema = z.object({
+export const GenerateTournamentImageInputSchema = z.object({
   prompt: z.string().describe("A detailed text description for the tournament promotional image."),
 });
 export type GenerateTournamentImageInput = z.infer<typeof GenerateTournamentImageInputSchema>;
 
-const GenerateTournamentImageOutputSchema = z.object({
-  imageDataUri: z.string().optional(),
-  error: z.string().optional(),
-});
-type GenerateTournamentImageOutput = z.infer<typeof GenerateTournamentImageOutputSchema>;
 
 export async function generateTournamentImage(input: GenerateTournamentImageInput): Promise<GenerateTournamentImageOutput> {
   console.log("Mocking tournament image generation for prompt:", input.prompt);
@@ -25,3 +20,9 @@ export async function generateTournamentImage(input: GenerateTournamentImageInpu
   
   return { imageDataUri: placeholderUrl };
 }
+
+export const GenerateTournamentImageOutputSchema = z.object({
+  imageDataUri: z.string().optional(),
+  error: z.string().optional(),
+});
+export type GenerateTournamentImageOutput = z.infer<typeof GenerateTournamentImageOutputSchema>;

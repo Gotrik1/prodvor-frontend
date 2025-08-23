@@ -7,9 +7,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/sha
 import { Input } from '@/shared/ui/input';
 import { Label } from '@/shared/ui/label';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/shared/ui/select';
-import { teamSports, users } from '@/mocks';
-import { Bot, PlusCircle, Trash2, UploadCloud, Users, Wand2 } from 'lucide-react';
-import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
+import { teamSports, users } from "@/mocks";
+import { Bot, Trash2, UploadCloud, Users } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar'; // Keeping Avatar import
 import { useToast } from '@/shared/hooks/use-toast';
 import { useRouter } from 'next/navigation';
 import { useUserStore } from '@/widgets/dashboard-header/model/user-store';

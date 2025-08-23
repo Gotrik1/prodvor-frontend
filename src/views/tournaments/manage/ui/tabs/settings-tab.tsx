@@ -3,9 +3,9 @@
 
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
-import { AlertTriangle, ListChecks, Loader2, Save, PlusCircle, MapPin, Trash2, Globe, Building, Flag } from "lucide-react";
+import { AlertTriangle, ListChecks, Loader2, Save, PlusCircle, MapPin, Trash2, Globe, Building } from "lucide-react";
 import { Input } from "@/shared/ui/input";
-import { Textarea } from "@/shared/ui/textarea";
+import { Textarea } from "@/shared/ui/textarea"; // Explicitly import Textarea
 import { Label } from "@/shared/ui/label";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/shared/ui/dialog";
 import React, { useState } from "react";
@@ -20,7 +20,6 @@ import { useToast } from "@/shared/hooks/use-toast";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/select";
 import { useTournamentCrmContext } from "../../lib/TournamentCrmContext";
 
-// Mock data for playgrounds
 const mockPlaygrounds = [
     { id: 'p1', name: 'Стадион "Центральный"', address: 'ул. Ленина, 1' },
     { id: 'p2', name: 'Спортивный комплекс "Олимп"', address: 'пр. Мира, 5' },
@@ -173,16 +172,16 @@ export function SettingsTab() {
                             <Popover>
                                 <PopoverTrigger asChild>
                                 <Button variant={"outline"} className={cn("w-full justify-start text-left font-normal", !true && "text-muted-foreground")}>
-                                    <CalendarIcon className="mr-2 h-4 w-4" />
+                                    <CalendarIcon className="mr-2 h-4 w-4" /> {/* TODO: Implement date selection and display */}
                                     <span>Начало регистрации</span>
                                 </Button>
                                 </PopoverTrigger>
                                 <PopoverContent className="w-auto p-0"><CalendarComponent mode="single" initialFocus /></PopoverContent>
                             </Popover>
-                             <Popover>
-                                <PopoverTrigger asChild>
+                            <Popover>
+                                 <PopoverTrigger asChild>
                                 <Button variant={"outline"} className={cn("w-full justify-start text-left font-normal", !true && "text-muted-foreground")}>
-                                    <CalendarIcon className="mr-2 h-4 w-4" />
+                                    <CalendarIcon className="mr-2 h-4 w-4" /> {/* TODO: Implement date selection and display */}
                                     <span>Конец регистрации</span>
                                 </Button>
                                 </PopoverTrigger>
@@ -191,8 +190,8 @@ export function SettingsTab() {
                              <Popover>
                                 <PopoverTrigger asChild>
                                 <Button variant={"outline"} className={cn("w-full justify-start text-left font-normal", !true && "text-muted-foreground")}>
-                                    <CalendarIcon className="mr-2 h-4 w-4" />
-                                    <span>Начало турнира</span>
+                                    <CalendarIcon className="mr-2 h-4 w-4" /> 
+                                    <span>Начало турнира</span> 
                                 </Button>
                                 </PopoverTrigger>
                                 <PopoverContent className="w-auto p-0"><CalendarComponent mode="single" selected={new Date(tournament.startDate)} onSelect={(date) => handleTournamentChange({ startDate: date?.toISOString() || '' })} initialFocus /></PopoverContent>

@@ -1,13 +1,12 @@
 
 'use client';
 
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
 import { Button } from "@/shared/ui/button";
 import { Users, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
-import { useUserStore } from "@/widgets/dashboard-header/model/user-store";
-import { teams, users as allUsers } from "@/mocks";
+import { teams, users as allUsers } from '@/mocks';
 import type { User } from "@/mocks";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 

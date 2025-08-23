@@ -31,7 +31,7 @@ export function TournamentSchedule({ tournamentId }: { tournamentId: string }) {
             const matches: Match[] = [];
             const teamsCopy = [...registeredTeams]; 
             const venues = tournament.playgrounds;
-            let date = new Date(tournament.startDate);
+            const date = new Date(tournament.startDate);
 
             for (let i = 0; i < teamsCopy.length; i += 2) {
                 if (teamsCopy[i + 1]) {

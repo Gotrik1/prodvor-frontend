@@ -1,9 +1,4 @@
 
-import type { User } from "./users";
-import type { Sport } from "./sports";
-import type { Sponsor } from "./personnel";
-import type { Playground } from "./playgrounds";
-
 export interface Team {
   id: string;
   name: string;
