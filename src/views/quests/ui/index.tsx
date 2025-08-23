@@ -11,14 +11,18 @@ import { Button } from '@/shared/ui/button';
 import { useToast } from '@/shared/hooks/use-toast';
 import { cn } from '@/shared/lib/utils';
 import * as LucideIcons from "lucide-react";
+import type { LucideProps } from 'lucide-react';
+import React from 'react';
 
 const QuestCard = ({ quest: initialQuest, onClaim }: { quest: Quest; onClaim: (questId: string) => void; }) => {
     const isCompleted = initialQuest.progress >= initialQuest.target;
     
     let Icon: React.ElementType = Puzzle;
     const PotentialIcon = LucideIcons[initialQuest.icon as keyof typeof LucideIcons];
-    if (typeof PotentialIcon === 'function') {
-        Icon = PotentialIcon;
+
+    // Check if the imported value is a valid React component (forwardRef components have a displayName)
+    if (PotentialIcon && typeof PotentialIcon === 'object' && 'displayName' in PotentialIcon) {
+        Icon = PotentialIcon as React.ElementType<LucideProps>;
     }
 
     return (
