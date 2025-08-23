@@ -13,6 +13,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { useState, useEffect } from 'react';
 import type { Tournament } from './mock-data';
 import { DashboardHeader } from "@/widgets/dashboard-header";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/shared/ui/tooltip";
 
 const LOCAL_STORAGE_BANNER_KEY_PREFIX = 'promo-banner-';
 
