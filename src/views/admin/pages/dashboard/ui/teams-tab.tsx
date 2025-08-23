@@ -9,6 +9,7 @@ import {
   CardTitle,
 } from '@/shared/ui/card';
 import { teams, users, sponsors, playgrounds } from '@/mocks';
+import type { Team } from '@/mocks';
 import { Badge } from '@/shared/ui/badge';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -55,7 +56,7 @@ export function TeamsTab() {
             '',
           ]}
           data={teams}
-          renderRow={(team) => (
+          renderRow={(team: Team) => (
             <TableRow key={team.id}>
               <TableCell className="font-mono text-xs">{team.id}</TableCell>
               <TableCell>

@@ -3,6 +3,7 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
 import { playgrounds } from '@/mocks';
+import type { Playground } from '@/mocks';
 import { Badge } from '@/shared/ui/badge';
 import Link from 'next/link';
 import { DataTable } from './data-table';
@@ -19,7 +20,7 @@ export function PlaygroundsTab() {
              <DataTable 
                 headers={['ID', 'Название', 'Адрес', 'Тип', 'Покрытие', 'Виды спорта']}
                 data={playgrounds}
-                renderRow={(p) => (
+                renderRow={(p: Playground) => (
                     <TableRow key={p.id}>
                         <TableCell className="font-mono text-xs">{p.id}</TableCell>
                         <TableCell className="font-medium">

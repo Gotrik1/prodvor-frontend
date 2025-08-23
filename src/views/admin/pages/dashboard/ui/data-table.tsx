@@ -1,7 +1,8 @@
 
 import { Table, TableBody, TableHead, TableHeader, TableRow } from '@/shared/ui/table';
+import React from 'react';
 
-export const DataTable = ({ headers, data, renderRow }: { headers: string[], data: unknown[], renderRow: (item: unknown, index: number) => React.ReactNode }) => (
+export const DataTable = <T,>({ headers, data, renderRow }: { headers: string[], data: T[], renderRow: (item: T, index: number) => React.ReactNode }) => (
     <div className="border rounded-lg overflow-x-auto">
         <Table>
             <TableHeader><TableRow>{headers.map(h => <TableHead key={h}>{h}</TableHead>)}</TableRow></TableHeader>

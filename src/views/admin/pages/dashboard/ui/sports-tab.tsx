@@ -3,6 +3,7 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
 import { allSports } from '@/mocks';
+import type { Sport, Subdiscipline } from '@/mocks';
 import { DataTable } from './data-table';
 import { TableCell, TableRow } from '@/shared/ui/table';
 
@@ -17,14 +18,14 @@ export function SportsTab() {
           <DataTable
             headers={['ID', 'Название', 'Поддисциплины']}
             data={allSports.filter((s) => s.isTeamSport)}
-            renderRow={(sport) => (
+            renderRow={(sport: Sport) => (
               <TableRow key={sport.id}>
                 <TableCell className="font-mono text-xs">
                   {sport.id}
                 </TableCell>
                 <TableCell className="font-medium">{sport.name}</TableCell>
                 <TableCell className="text-xs">
-                  {sport.subdisciplines?.map((s) => s.name).join(', ')}
+                  {sport.subdisciplines?.map((s: Subdiscipline) => s.name).join(', ')}
                 </TableCell>
               </TableRow>
             )}
@@ -39,14 +40,14 @@ export function SportsTab() {
           <DataTable
             headers={['ID', 'Название', 'Поддисциплины']}
             data={allSports.filter((s) => !s.isTeamSport)}
-            renderRow={(sport) => (
+            renderRow={(sport: Sport) => (
               <TableRow key={sport.id}>
                 <TableCell className="font-mono text-xs">
                   {sport.id}
                 </TableCell>
                 <TableCell className="font-medium">{sport.name}</TableCell>
                 <TableCell className="text-xs">
-                  {sport.subdisciplines?.map((s) => s.name).join(', ')}
+                  {sport.subdisciplines?.map((s: Subdiscipline) => s.name).join(', ')}
                 </TableCell>
               </TableRow>
             )}

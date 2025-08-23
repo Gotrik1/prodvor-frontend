@@ -3,6 +3,7 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
 import { allTournaments as tournaments } from '@/views/tournaments/public-page/ui/mock-data';
+import type { Tournament } from '@/views/tournaments/public-page/ui/mock-data';
 import { Badge } from '@/shared/ui/badge';
 import { Progress } from '@/shared/ui/progress';
 import { DataTable } from './data-table';
@@ -26,7 +27,7 @@ export function TournamentsTab() {
              <DataTable 
                 headers={['ID', 'Название', 'Дисциплина', 'Участники', 'Статус']}
                 data={tournaments}
-                renderRow={(t) => (
+                renderRow={(t: Tournament) => (
                     <TableRow key={t.id}>
                         <TableCell className="font-mono text-xs">{t.id}</TableCell>
                         <TableCell className="font-medium">{t.name}</TableCell>

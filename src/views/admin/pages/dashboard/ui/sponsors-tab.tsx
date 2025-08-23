@@ -3,6 +3,7 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
 import { sponsors } from '@/mocks';
+import type { Sponsor } from '@/mocks';
 import { Button } from '@/shared/ui/button';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -20,7 +21,7 @@ export function SponsorsTab() {
             <DataTable 
                 headers={['ID', 'Спонсор', 'Вклад', '']}
                 data={sponsors}
-                renderRow={(sponsor) => (
+                renderRow={(sponsor: Sponsor) => (
                     <TableRow key={sponsor.id}>
                         <TableCell className="font-mono text-xs">{sponsor.id}</TableCell>
                         <TableCell>
@@ -34,7 +35,7 @@ export function SponsorsTab() {
                             <div className="flex items-center justify-end gap-2">
                                 <Button asChild variant="ghost" size="sm"><Link href={`/admin/sponsors/${sponsor.id}`}>Просмотр</Link></Button>
                                  <Button asChild variant="ghost" size="icon" className="h-8 w-8">
-                                    <Link href={`/sponsors/${sponsor.id}`} target="_blank" rel="noopener noreferrer">
+                                    <Link href={`/admin/sponsors/${sponsor.id}`} target="_blank" rel="noopener noreferrer">
                                         <ExternalLink className="h-4 w-4"/>
                                     </Link>
                                 </Button>
