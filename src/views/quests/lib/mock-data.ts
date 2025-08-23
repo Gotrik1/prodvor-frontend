@@ -103,3 +103,4 @@ export const mockEventQuests: Quest[] = [
         rewards: { xp: 300, pd_coins: 75 }
     },
 ];
+
