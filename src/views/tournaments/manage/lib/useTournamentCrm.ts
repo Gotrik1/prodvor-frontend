@@ -1,10 +1,9 @@
 
-
 'use client';
 
 import { useState, useMemo, useEffect } from 'react';
 import { allTournaments, registeredTeams as initialRegisteredTeams } from '@/views/tournaments/public-page/ui/mock-data';
-import type { Tournament, BracketMatch, Team } from '@/views/tournaments/public-page/ui/mock-data';
+import type { Tournament, BracketMatch, Team, MediaItem } from '@/views/tournaments/public-page/ui/mock-data';
 import { useProtocol } from '@/widgets/protocol-editor/lib/use-protocol';
 
 const LOCAL_STORAGE_BANNER_KEY_PREFIX = 'promo-banner-';
@@ -39,7 +38,7 @@ export function useTournamentCrm(tournamentId: string) {
         ...team,
         status: ['Подтверждена', 'Подтверждена', 'Ожидает', 'Подтверждена', 'Ожидает', 'Отклонена', 'Подтверждена', 'Подтверждена', 'Ожидает', 'Подтверждена'][team.id.charCodeAt(team.id.length - 1) % 10]
     })));
-    const [mediaItems, setMediaItems] = useState<unknown[]>([
+    const [mediaItems, setMediaItems] = useState<MediaItem[]>([
         { type: 'image', src: 'https://placehold.co/600x400.png', title: 'Фото с открытия', dataAiHint: 'tournament opening' },
         { type: 'image', src: 'https://placehold.co/600x400.png', title: 'Лучший момент дня', dataAiHint: 'sports highlight' },
         { type: 'video', src: 'https://www.youtube.com/embed/dQw4w9WgXcQ', title: 'Прямая трансляция - Финал' },
@@ -71,7 +70,7 @@ export function useTournamentCrm(tournamentId: string) {
         };
     }, [tournamentId, setActiveMatch]);
 
-    const handleAddMedia = (item: unknown) => {
+    const handleAddMedia = (item: MediaItem) => {
         setMediaItems(prev => [item, ...prev]);
     };
 

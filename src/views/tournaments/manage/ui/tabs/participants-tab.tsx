@@ -54,7 +54,7 @@ export function ParticipantsTab() {
                                             <span className="group-hover:text-primary transition-colors">{team.name}</span>
                                         </Link>
                                     </TableCell>
-                                    <TableCell>{(team as unknown).date || new Date().toLocaleDateString()}</TableCell>
+                                    <TableCell>{new Date().toLocaleDateString()}</TableCell>
                                     <TableCell>
                                         <Badge variant={
                                             team.status === 'Подтверждена' ? "secondary" : 

@@ -9,6 +9,7 @@ import { Input } from "@/shared/ui/input";
 import { Label } from "@/shared/ui/label";
 import React from "react";
 import { useTournamentCrmContext } from "../../lib/TournamentCrmContext";
+import type { MediaItem } from "@/views/tournaments/public-page/ui/mock-data";
 
 export function MediaTab() {
     const { mediaItems } = useTournamentCrmContext();
@@ -50,7 +51,7 @@ export function MediaTab() {
                             {mediaItems.map((media, index) => (
                                 <div key={index} className="group relative aspect-video w-full overflow-hidden rounded-lg">
                                     {media.type === 'image' && (
-                                        <Image src={media.src} alt={media.title} layout="fill" objectFit="cover" data-ai-hint={media.dataAiHint}/>
+                                        <Image src={media.src} alt={media.title} fill objectFit="cover" data-ai-hint={media.dataAiHint}/>
                                     )}
                                     {media.type === 'video' && media.src.includes('youtube.com') && (
                                         <iframe

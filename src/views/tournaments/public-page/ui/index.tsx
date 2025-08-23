@@ -40,8 +40,10 @@ const ParticipateButton = ({ tournament }: { tournament: (typeof allTournaments)
     )
 }
 
+const LOCAL_STORAGE_BANNER_KEY_PREFIX = 'promo-banner-';
+
 export function TournamentPublicPage({ tournament: initialTournament }: { tournament: (typeof allTournaments)[0] | undefined}) {
-    const [tournament] = useState(initialTournament);
+    const [tournament, setTournament] = useState(initialTournament);
 
     useEffect(() => {
         if (initialTournament) {

@@ -16,6 +16,13 @@ export interface Team {
   rank: number;
 }
 
+export interface MediaItem {
+    type: 'image' | 'video' | 'promo-video';
+    src: string;
+    title: string;
+    dataAiHint?: string;
+}
+
 export interface BracketMatch {
   id: string;
   team1: Team | null;
