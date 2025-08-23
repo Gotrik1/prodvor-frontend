@@ -1,5 +1,2 @@
 
 export { InventoryPage } from './ui';
-
-
-
