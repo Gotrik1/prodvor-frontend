@@ -1,7 +1,7 @@
 
 'use client';
 
-import { users, teams, allSports } from "@/mocks";
+import { users, teams } from "@/mocks";
 import type { User } from "@/mocks/users";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { Badge } from "@/shared/ui/badge";
@@ -12,6 +12,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { ChartContainer, ChartTooltip, ChartTooltipContent, ChartLegend, ChartLegendContent } from "@/shared/ui/chart";
 import { Bar, BarChart as RechartsBarChart, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from "recharts";
 import React, { useMemo } from "react";
+import { getUserDisciplines } from "@/entities/user/lib";
 
 const defaultCoach = users.find(u => u.role === 'Тренер');
 const coachTeam = teams[0];
@@ -31,19 +32,6 @@ const chartConfig = {
     label: "Процент побед",
     color: "hsl(var(--primary))",
   },
-};
-
-const getUserDisciplines = (user: User): string[] => {
-    const personalDisciplines = user.disciplines
-        .map(id => allSports.find(s => s.id === id)?.name)
-        .filter((name): name is string => !!name);
-    
-    const teamDisciplines = teams
-        .filter(team => team.members.includes(user.id))
-        .map(team => team.game);
-        
-    const allDisciplinesSet = new Set([...personalDisciplines, ...teamDisciplines]);
-    return Array.from(allDisciplinesSet);
 };
 
 export function CoachPageTemplate({ user }: { user?: User }) {

@@ -1,7 +1,7 @@
 
 'use client';
 
-import { teams, users, allSports } from "@/mocks";
+import { teams, users } from "@/mocks";
 import type { User } from "@/mocks/users";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { Badge } from "@/shared/ui/badge";
@@ -10,30 +10,35 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/sha
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/shared/ui/table";
 import { Calendar, CheckCircle, Gavel, Star, XCircle, Gamepad2, ArrowRight } from "lucide-react";
 import Link from "next/link";
+import { useMemo } from "react";
+import { getUserDisciplines } from "@/entities/user/lib";
 
-const defaultReferee = users.find(s => s.role === 'Судья')!;
+const defaultReferee = users.find(s => s.role === 'Судья');
 const mockMatches = [
     { id: 'match1', team1: teams[0], team2: teams[1], result: '5:3', tournament: 'Летний Кубок ProDvor', date: '2025-08-12', status: 'Завершен' },
     { id: 'match2', team1: teams[2], team2: teams[3], result: '1:2', tournament: 'Летний Кубок ProDvor', date: '2025-08-12', status: 'Завершен' },
     { id: 'match3', team1: teams[4], team2: teams[5], result: '-', tournament: 'Летний Кубок ProDvor', date: 'Завтра, 19:00', status: 'Предстоит' },
 ];
 
-const getUserDisciplines = (user: User): string[] => {
-    const personalDisciplines = user.disciplines
-        .map(id => allSports.find(s => s.id === id)?.name)
-        .filter((name): name is string => !!name);
-    
-    const teamDisciplines = teams
-        .filter(team => team.members.includes(user.id))
-        .map(team => team.game);
-        
-    const allDisciplinesSet = new Set([...personalDisciplines, ...teamDisciplines]);
-    return Array.from(allDisciplinesSet);
-};
-
 export function RefereePageTemplate({ user }: { user?: User }) {
     const referee = user || defaultReferee;
-    const refereeDisciplines = getUserDisciplines(referee);
+    const refereeDisciplines = useMemo(() => {
+        if (!referee) return [];
+        return getUserDisciplines(referee);
+    }, [referee]);
+    
+    if (!referee) {
+        return (
+            <div className="flex items-center justify-center min-h-[60vh]">
+                <Card className="text-center">
+                    <CardHeader>
+                        <CardTitle>Ошибка</CardTitle>
+                        <CardDescription>Не удалось загрузить данные судьи.</CardDescription>
+                    </CardHeader>
+                </Card>
+            </div>
+        );
+    }
     
     return (
         <div className="border rounded-lg p-4 md:p-6 space-y-6 bg-muted/20">

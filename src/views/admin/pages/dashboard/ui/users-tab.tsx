@@ -11,9 +11,9 @@ import { Tooltip, TooltipProvider, TooltipContent, TooltipTrigger } from '@/shar
 import { useToast } from '@/shared/hooks/use-toast';
 import { useMemo } from 'react';
 import Link from 'next/link';
-import { getUserDisciplines } from '../lib';
 import { DataTable } from './data-table';
 import { TableCell, TableRow } from '@/shared/ui/table';
+import { getUserDisciplines } from '@/entities/user/lib';
 
 export function UsersTab() {
     const { toast } = useToast();

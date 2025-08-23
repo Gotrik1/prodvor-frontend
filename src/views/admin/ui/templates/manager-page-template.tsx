@@ -1,7 +1,7 @@
 
 'use client';
 
-import { teams, users, allSports } from "@/mocks";
+import { teams, users } from "@/mocks";
 import type { User } from "@/mocks/users";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { Badge } from "@/shared/ui/badge";
@@ -11,27 +11,33 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Briefcase, DollarSign, ExternalLink, Trophy, Users, Gamepad2, Activity } from "lucide-react";
 import Link from "next/link";
 import Image from 'next/image';
+import { useMemo } from "react";
+import { getUserDisciplines } from "@/entities/user/lib";
 
-const defaultManager = users.find(u => u.role === 'Менеджер')!;
+const defaultManager = users.find(u => u.role === 'Менеджер');
 
 const managedTeams = teams.slice(0, 3);
 
-const getUserDisciplines = (user: User): string[] => {
-    const personalDisciplines = user.disciplines
-        .map(id => allSports.find(s => s.id === id)?.name)
-        .filter((name): name is string => !!name);
-    
-    const teamDisciplines = teams
-        .filter(team => team.members.includes(user.id))
-        .map(team => team.game);
-        
-    const allDisciplinesSet = new Set([...personalDisciplines, ...teamDisciplines]);
-    return Array.from(allDisciplinesSet);
-};
-
 export function ManagerPageTemplate({ user }: { user?: User }) {
     const manager = user || defaultManager;
-    const managerDisciplines = getUserDisciplines(manager);
+    
+    const managerDisciplines = useMemo(() => {
+        if (!manager) return [];
+        return getUserDisciplines(manager);
+    }, [manager]);
+
+     if (!manager) {
+        return (
+            <div className="flex items-center justify-center min-h-[60vh]">
+                <Card className="text-center">
+                    <CardHeader>
+                        <CardTitle>Ошибка</CardTitle>
+                        <CardDescription>Не удалось загрузить данные менеджера.</CardDescription>
+                    </CardHeader>
+                </Card>
+            </div>
+        );
+    }
 
     return (
         <div className="border rounded-lg p-4 md:p-6 space-y-6 bg-muted/20">

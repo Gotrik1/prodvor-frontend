@@ -1,7 +1,7 @@
 
 'use client';
 
-import { users, teams, tournaments, allSports } from "@/mocks";
+import { users, teams, tournaments } from "@/mocks";
 import type { User } from "@/mocks/users";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { Badge } from "@/shared/ui/badge";
@@ -12,6 +12,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { CreatePost } from "@/widgets/dashboard-feed/ui/create-post";
 import React, { useMemo } from "react";
+import { getUserDisciplines } from "@/entities/user/lib";
 
 const defaultFan: User | undefined = users.find(u => u.role === 'Болельщик');
 const favoriteTeams = teams.slice(0, 4);
@@ -19,20 +20,6 @@ const upcomingMatches = [
     { team1: teams[0], team2: teams[1], tournament: tournaments.find(t => t.id === 'mytourney1')! },
     { team1: teams[2], team2: teams[3], tournament: tournaments.find(t => t.id === 'mytourney1')! },
 ];
-
-const getUserDisciplines = (user: User): string[] => {
-    const personalDisciplines = user.disciplines
-        .map(id => allSports.find(s => s.id === id)?.name)
-        .filter((name): name is string => !!name);
-    
-    const teamDisciplines = teams
-        .filter(team => team.members.includes(user.id))
-        .map(team => team.game);
-        
-    const allDisciplinesSet = new Set([...personalDisciplines, ...teamDisciplines]);
-    return Array.from(allDisciplinesSet);
-};
-
 
 export function FanPageTemplate({ user }: { user?: User }) {
     const fanUser = user || defaultFan;
