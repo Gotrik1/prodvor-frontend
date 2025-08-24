@@ -34,15 +34,6 @@ import {
 } from '@/shared/ui/tooltip';
 import React from 'react';
 import { GlobalSearch } from './global-search';
-import Image from "next/image";
-
-const Logo = () => (
-    <div className="flex items-center gap-2 font-bold text-xl">
-        <Link href="/" className="flex items-center gap-2">
-            <Image src="https://placehold.co/64x64.png" alt="ProDvor Logo" width={40} height={40} className="object-contain" data-ai-hint="logo" style={{ width: 'auto', height: 'auto' }} />
-        </Link>
-    </div>
-);
 
 export function DashboardHeader() {
   const { user } = useUserStore();
@@ -63,9 +54,7 @@ export function DashboardHeader() {
     <header className="flex h-16 items-center justify-between p-4 border-b bg-card">
       <div className="flex items-center gap-4">
         
-        <div className="hidden md:block">
-            <Logo />
-        </div>
+        
       </div>
       <div className="flex items-center gap-2">
         <div className="relative w-64 hidden md:block">
