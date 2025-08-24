@@ -31,7 +31,7 @@ export default function TournamentMatchPage({ params }: { params: { tournamentId
         team2: registeredTeams[1],
         score1: null, // Let the protocol state handle the score
         score2: null,
-      }, [params.matchId, params.tournamentId, tournament?.id]);
+      }, [params.matchId, tournament?.id]);
 
   useEffect(() => {
     // When the component mounts, set this match as the active one in our global state.

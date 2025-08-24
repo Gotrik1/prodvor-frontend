@@ -16,6 +16,7 @@ import { AchievementsTab } from "./player-page-achievements-tab";
 import { SocialTab } from "./player-page-social-tab";
 import Image from "next/image";
 import { PlayerOverviewTab } from "./player-page-overview-tab";
+import { StatsTab } from "./player-page-stats-tab";
 
 const defaultPlayer = users.find(u => u.role === 'Игрок')!;
 
