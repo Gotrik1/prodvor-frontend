@@ -1,8 +1,9 @@
 
+'use client';
+
 import type { Post, Team } from "@/mocks";
 import { users } from "@/mocks";
 import { CreatePost } from "@/widgets/dashboard-feed/ui/create-post";
-import { PostCard } from "@/widgets/dashboard-feed/ui/post-card";
 import { Card, CardContent } from "@/shared/ui/card";
 import { Button } from "@/shared/ui/button";
 import { Grid3x3, MessageSquare, PlusCircle } from "lucide-react";
@@ -15,6 +16,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/shared/ui/dialog";
+import { useState, useEffect } from "react";
 
 // Mock the current user for CreatePost component
 const currentUser = users[0];
@@ -29,7 +31,12 @@ const mockMedia = [
 
 export function TeamPublicationsTab({ posts, team }: { posts: Post[], team: Team }) {
     const isTeamMember = team.members.includes(currentUser.id);
-    const combinedFeed = [...mockMedia, ...posts].sort(() => 0.5 - Math.random()); // Mix and randomize for demo
+    const [combinedFeed, setCombinedFeed] = useState([...mockMedia, ...posts]);
+
+    useEffect(() => {
+        // Randomize feed only on the client side after initial render
+        setCombinedFeed(prevFeed => [...prevFeed].sort(() => 0.5 - Math.random()));
+    }, []);
 
     return (
         <div className="space-y-6">

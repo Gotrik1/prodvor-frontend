@@ -53,7 +53,12 @@ const MediaPostStats = () => {
 
 export function PublicationsTab({ player, isOwnProfile }: { player: User; isOwnProfile: boolean }) {
     const playerPosts = posts.filter(p => p.author.id === player.id);
-    const combinedFeed = [...mockMedia, ...playerPosts].sort(() => 0.5 - Math.random()); // Mix and randomize for demo
+    const [combinedFeed, setCombinedFeed] = useState([...mockMedia, ...playerPosts]);
+
+    useEffect(() => {
+        // Randomize feed only on the client side after initial render
+        setCombinedFeed(prevFeed => [...prevFeed].sort(() => 0.5 - Math.random()));
+    }, []);
 
     return (
         <div className="space-y-6">
