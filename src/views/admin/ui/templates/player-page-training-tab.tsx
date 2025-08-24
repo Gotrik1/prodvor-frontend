@@ -1,6 +1,6 @@
 
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
 import { Activity, Dumbbell } from "lucide-react";
 import { playgrounds } from "@/mocks";
 import Link from "next/link";
