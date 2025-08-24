@@ -7,7 +7,7 @@ import { Button } from "@/shared/ui/button";
 import type { Post } from "@/mocks/posts";
 import { format, formatDistanceToNow } from 'date-fns';
 import { ru } from 'date-fns/locale';
-import { MessageCircle, Heart } from "lucide-react";
+import { MessageCircle, Heart, Repeat } from "lucide-react";
 import Link from 'next/link';
 import Image from "next/image";
 import { useState, useEffect } from "react";
@@ -59,6 +59,10 @@ export function PostCard({ post }: { post: Post }) {
         <Button variant="ghost" size="sm" className="flex items-center gap-2 text-muted-foreground">
           <MessageCircle className="h-4 w-4" />
           <span>{post.comments}</span>
+        </Button>
+        <Button variant="ghost" size="sm" className="flex items-center gap-2 text-muted-foreground">
+          <Repeat className="h-4 w-4" />
+          <span>{Math.floor(post.likes / 5)}</span>
         </Button>
       </CardFooter>
     </Card>
