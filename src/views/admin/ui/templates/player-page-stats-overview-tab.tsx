@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
@@ -55,7 +54,7 @@ export const PlayerStatsOverviewTab = () => {
     const last5Form: ('W' | 'L' | 'D')[] = ['W', 'L', 'W', 'W', 'W'];
 
     return (
-        <Card className="h-full">
+        <Card>
             <CardHeader>
                 <CardTitle className="flex items-center gap-2"><BarChart3 className="h-5 w-5" />Статистика</CardTitle>
                 <CardDescription>Обзор ключевых показателей и карьерной статистики игрока.</CardDescription>
@@ -64,15 +63,15 @@ export const PlayerStatsOverviewTab = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                         <h3 className="text-base font-semibold mb-2">Навыки и прогресс ELO</h3>
-                        <div className="grid grid-cols-2 gap-4 items-center h-48">
-                            <ChartContainer config={{}} className="w-full h-full">
+                        <div className="grid grid-cols-2 gap-4 items-center">
+                            <ChartContainer config={{}} className="w-full h-40">
                                 <RadarChart data={skillData} cy="50%" cx="50%">
                                     <ChartTooltipContent />
                                     <PolarAngleAxis dataKey="subject" className="text-xs"/>
                                     <Radar name="Skills" dataKey="A" stroke="hsl(var(--primary))" fill="hsl(var(--primary))" fillOpacity={0.6} />
                                 </RadarChart>
                             </ChartContainer>
-                            <ChartContainer config={{elo: {label: 'ELO', color: "hsl(var(--primary))"}}} className="w-full h-full">
+                            <ChartContainer config={{elo: {label: 'ELO', color: "hsl(var(--primary))"}}} className="w-full h-40">
                                 <LineChart data={eloData} margin={{ top: 20, right: 10, left: -20, bottom: 0 }}>
                                     <CartesianGrid vertical={false} />
                                     <XAxis dataKey="month" tickLine={false} axisLine={false} tickMargin={8} className="text-xs"/>

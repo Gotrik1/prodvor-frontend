@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
@@ -55,7 +54,7 @@ export function AchievementsTab({ player }: { player: User }) {
     const levelProgress = ((progressPoints - pointsForCurrentLevel) / (pointsToNextLevel - pointsForCurrentLevel)) * 100;
 
     return (
-        <Card className="h-full">
+        <Card>
             <CardHeader>
                 <CardTitle className="flex items-center gap-2"><Award />Достижения</CardTitle>
                 <CardDescription>Список всех полученных достижений.</CardDescription>
