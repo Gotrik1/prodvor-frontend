@@ -51,45 +51,9 @@ const StatRow = ({ label, value }: { label: string, value: string | number }) =>
 export const PlayerStatsOverviewTab = () => {
     const last5Form: ('W' | 'L' | 'D')[] = ['W', 'L', 'W', 'W', 'W'];
     return (
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div className="lg:col-span-1 space-y-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+             <div className="space-y-6">
                 <Card>
-                    <CardHeader><CardTitle className="text-base">Форма (5 матчей)</CardTitle></CardHeader>
-                    <CardContent className="flex items-center gap-2 justify-center">
-                        {last5Form.map((result, index) => <FormBadge key={index} result={result} />)}
-                    </CardContent>
-                </Card>
-                 <PlayerTrainingStats />
-                <Card>
-                    <CardHeader><CardTitle className="text-base">Навыки</CardTitle></CardHeader>
-                    <CardContent>
-                        <ChartContainer config={{}} className="h-52 w-full">
-                            <RadarChart data={skillData}>
-                                <ChartTooltipContent />
-                                <PolarAngleAxis dataKey="subject" className="text-xs"/>
-                                <PolarGrid />
-                                <Radar name="Skills" dataKey="A" stroke="hsl(var(--primary))" fill="hsl(var(--primary))" fillOpacity={0.6} />
-                            </RadarChart>
-                        </ChartContainer>
-                    </CardContent>
-                </Card>
-                <Card>
-                    <CardHeader><CardTitle className="text-base">Прогресс ELO</CardTitle></CardHeader>
-                    <CardContent>
-                        <ChartContainer config={{elo: {label: 'ELO', color: "hsl(var(--primary))"}}} className="h-48 w-full">
-                            <LineChart data={eloData} margin={{ top: 5, right: 10, left: -20, bottom: 0 }}>
-                                <CartesianGrid vertical={false} />
-                                <XAxis dataKey="month" tickLine={false} axisLine={false} tickMargin={8} className="text-xs"/>
-                                <YAxis domain={['dataMin - 50', 'dataMax + 50']} hide/>
-                                <RechartsTooltip content={<ChartTooltipContent />}/>
-                                <Line type="monotone" dataKey="elo" stroke="hsl(var(--primary))" strokeWidth={2} dot={false} />
-                            </LineChart>
-                        </ChartContainer>
-                    </CardContent>
-                </Card>
-            </div>
-            <div className="lg:col-span-2">
-                 <Card>
                     <CardHeader>
                         <CardTitle className="flex items-center gap-2"><History className="h-5 w-5" /> Карьерная статистика</CardTitle>
                     </CardHeader>
@@ -122,6 +86,36 @@ export const PlayerStatsOverviewTab = () => {
                                 <StatRow label="MVP" value={careerStats['total'].mvp} />
                             </TabsContent>
                         </Tabs>
+                    </CardContent>
+                </Card>
+                <PlayerTrainingStats />
+            </div>
+            <div className="space-y-6">
+                <Card>
+                    <CardHeader><CardTitle className="text-base">Форма (5 матчей)</CardTitle></CardHeader>
+                    <CardContent className="flex items-center gap-2">
+                        {last5Form.map((result, index) => <FormBadge key={index} result={result} />)}
+                    </CardContent>
+                </Card>
+                 <Card>
+                    <CardHeader><CardTitle className="text-base">Навыки и прогресс ELO</CardTitle></CardHeader>
+                    <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
+                        <ChartContainer config={{}} className="h-52 w-full">
+                            <RadarChart data={skillData} cy="45%">
+                                <ChartTooltipContent />
+                                <PolarAngleAxis dataKey="subject" className="text-xs"/>
+                                <Radar name="Skills" dataKey="A" stroke="hsl(var(--primary))" fill="hsl(var(--primary))" fillOpacity={0.6} />
+                            </RadarChart>
+                        </ChartContainer>
+                        <ChartContainer config={{elo: {label: 'ELO', color: "hsl(var(--primary))"}}} className="h-48 w-full">
+                            <LineChart data={eloData} margin={{ top: 5, right: 10, left: -20, bottom: 0 }}>
+                                <CartesianGrid vertical={false} />
+                                <XAxis dataKey="month" tickLine={false} axisLine={false} tickMargin={8} className="text-xs"/>
+                                <YAxis domain={['dataMin - 50', 'dataMax + 50']} hide/>
+                                <RechartsTooltip content={<ChartTooltipContent />}/>
+                                <Line type="monotone" dataKey="elo" stroke="hsl(var(--primary))" strokeWidth={2} dot={false} />
+                            </LineChart>
+                        </ChartContainer>
                     </CardContent>
                 </Card>
             </div>
