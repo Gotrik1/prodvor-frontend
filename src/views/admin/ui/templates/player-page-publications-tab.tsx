@@ -22,7 +22,6 @@ import { useState, useEffect } from "react";
 import { cn } from "@/shared/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { Textarea } from "@/shared/ui/textarea";
-import { SocialTab } from "./player-page-social-tab";
 
 const mockMedia = [
     { type: 'image', src: 'https://placehold.co/600x400.png', title: 'Фото с последней игры', dataAiHint: 'soccer game' },
@@ -135,7 +134,6 @@ export function PublicationsTab({ player, isOwnProfile }: { player: User; isOwnP
     }, []);
 
     return (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <Card>
                 <CardHeader>
                     <div className="flex justify-between items-center">
@@ -186,7 +184,5 @@ export function PublicationsTab({ player, isOwnProfile }: { player: User; isOwnP
                     )}
                 </CardContent>
             </Card>
-            <SocialTab user={player} isOwnProfile={isOwnProfile} />
-        </div>
     )
 };
