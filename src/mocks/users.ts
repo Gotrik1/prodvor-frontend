@@ -23,9 +23,10 @@ export interface User {
   followingUsers: string[]; // Array of user IDs
   following: string[]; // Array of team IDs
   sponsorIds?: string[]; // Array of sponsor IDs
+  unlockedAchievements: string[]; // Array of achievement IDs
 }
 
-const baseUsers: Omit<User, 'disciplines' | 'friends' | 'followers' | 'followingUsers' | 'sponsorIds' | 'following'>[] = [
+const baseUsers: Omit<User, 'disciplines' | 'friends' | 'followers' | 'followingUsers' | 'sponsorIds' | 'following' | 'unlockedAchievements'>[] = [
   // --- Игроки (будут распределены по командам) ---
   { id: 'user1', firstName: 'Иван', lastName: 'Петров', nickname: 'Terminator', avatarUrl: 'https://i.pravatar.cc/150?u=user1', email: 'user1@example.com', role: 'Игрок', gender: 'мужской', age: 28, city: 'Москва', phone: '+7 (916) 123-45-67', bio: 'Опытный нападающий, играю в футбол с детства.', elo: 2650 },
   { id: 'user2', firstName: 'Мария', lastName: 'Сидорова', nickname: 'Valkyrie', avatarUrl: 'https://i.pravatar.cc/150?u=user2', email: 'user2@example.com', role: 'Игрок', gender: 'женский', age: 25, city: 'Москва', phone: '+7 (916) 123-45-68', bio: 'Люблю командный дух и красивые победы. Играю в защите.', elo: 1800 },
@@ -80,4 +81,8 @@ export const users: User[] = baseUsers.map(u => ({
   followingUsers: [],
   following: [],
   sponsorIds: [],
+  // Mock unlocked achievements for demonstration
+  unlockedAchievements: u.role === 'Игрок' ? ['ach-fb-1', 'ach-fb-2', 'ach-fb-8', 'ach-bask-1', 'ach-def-1', 'ach-def-2', 'ach-def-3'] : [],
 }));
+
+    

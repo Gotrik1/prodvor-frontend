@@ -99,7 +99,7 @@ export function PlayerPageTemplate({ user: profileUser }: { user?: User }) {
                     </TabsTrigger>
                 </TabsList>
                 <TabsContent value="overview" className="mt-6"><PlayerOverviewTab /></TabsContent>
-                <TabsContent value="achievements" className="mt-6"><AchievementsTab /></TabsContent>
+                <TabsContent value="achievements" className="mt-6"><AchievementsTab player={player} /></TabsContent>
                 <TabsContent value="stats" className="mt-6"><StatsTab /></TabsContent>
                 <TabsContent value="socials" className="mt-6"><SocialTab user={player} isOwnProfile={isOwnProfile} /></TabsContent>
                 <TabsContent value="training" className="mt-6"><TrainingTab /></TabsContent>
@@ -109,3 +109,5 @@ export function PlayerPageTemplate({ user: profileUser }: { user?: User }) {
         </div>
     )
 }
+
+    
