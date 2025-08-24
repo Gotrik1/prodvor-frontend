@@ -25,7 +25,11 @@ export default function RootLayout({
   
   return (
     <html lang="ru" className={`${inter.variable}`} suppressHydrationWarning>
-      <head />
+      <head>
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta name="apple-mobile-web-app-title" content="ProDvor" />
+      </head>
       <body className="font-body antialiased">
         <ThemeProvider
             attribute="class"
