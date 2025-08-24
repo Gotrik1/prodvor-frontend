@@ -6,6 +6,7 @@ import { ChartContainer, ChartTooltipContent } from "@/shared/ui/chart";
 import { PolarGrid, PolarAngleAxis, Radar, RadarChart, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip } from "recharts";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 import { History } from "lucide-react";
+import { PlayerTrainingStats } from "./player-page-training-tab";
 
 const skillData = [
   { subject: 'Атака', A: 86, fullMark: 100 },
@@ -58,6 +59,7 @@ export const PlayerStatsOverviewTab = () => {
                         {last5Form.map((result, index) => <FormBadge key={index} result={result} />)}
                     </CardContent>
                 </Card>
+                 <PlayerTrainingStats />
                 <Card>
                     <CardHeader><CardTitle className="text-base">Навыки</CardTitle></CardHeader>
                     <CardContent>
