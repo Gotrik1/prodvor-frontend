@@ -1,3 +1,4 @@
+
 import type {Config} from 'tailwindcss';
 
 export default {
@@ -73,6 +74,10 @@ export default {
         lg: 'var(--radius)',
         md: 'calc(var(--radius) - 2px)',
         sm: 'calc(var(--radius) - 4px)',
+      },
+      boxShadow: {
+        'main-sm': '0 2px 8px -1px hsl(var(--foreground) / 0.1)',
+        'main-lg': '0 8px 24px -4px hsl(var(--foreground) / 0.12)',
       },
       keyframes: {
         'accordion-down': {
