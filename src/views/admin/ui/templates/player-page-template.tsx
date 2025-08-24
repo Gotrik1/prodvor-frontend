@@ -16,7 +16,6 @@ import Image from "next/image";
 import { SocialTab } from "./player-page-social-tab";
 import React from "react";
 import { MyTeamWidget } from "@/widgets/dashboard-widgets/ui/my-team-widget";
-import { cn } from "@/shared/lib/utils";
 
 
 const defaultPlayer = users.find(u => u.role === 'Игрок')!;
@@ -34,7 +33,7 @@ export function PlayerPageTemplate({ user: profileUser }: { user?: User }) {
     const isOwnProfile = currentUser?.id === player.id;
 
     return (
-        <div className="space-y-8">
+        <div className="space-y-6">
             {/* --- HEADER --- */}
             <header className="flex flex-col md:flex-row items-center gap-6 p-4 rounded-lg bg-card border">
                 <Avatar className="h-24 w-24 border-4 border-primary">
@@ -78,6 +77,7 @@ export function PlayerPageTemplate({ user: profileUser }: { user?: User }) {
                 <div className="lg:col-span-2 space-y-6">
                     <PlayerStatsOverviewTab />
                     <PublicationsTab player={player} isOwnProfile={isOwnProfile} />
+                    <TrainingTab />
                 </div>
 
                 {/* --- Right Column (Side Content) --- */}
@@ -85,7 +85,6 @@ export function PlayerPageTemplate({ user: profileUser }: { user?: User }) {
                     <AchievementsTab player={player} />
                     <MyTeamWidget user={player} />
                     <SocialTab user={player} isOwnProfile={isOwnProfile} />
-                    <TrainingTab />
                 </div>
             </div>
         </div>
