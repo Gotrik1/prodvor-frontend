@@ -34,6 +34,7 @@ import {
 } from '@/shared/ui/tooltip';
 import React from 'react';
 import { GlobalSearch } from './global-search';
+import { Logo } from '@/views/auth/ui';
 
 export function DashboardHeader() {
   const { user } = useUserStore();
@@ -53,8 +54,9 @@ export function DashboardHeader() {
   return (
     <header className="flex h-16 items-center justify-between p-4 border-b bg-card">
       <div className="flex items-center gap-4">
-        
-        
+         <div className="block md:hidden">
+          <Logo />
+        </div>
       </div>
       <div className="flex items-center gap-2">
         <div className="relative w-64 hidden md:block">

@@ -1,12 +1,6 @@
 
+import { Logo } from "@/views/auth/ui";
 import Link from "next/link";
-
-const Logo = () => (
-    <Link href="/" className="flex items-center gap-2 font-bold text-xl">
-        ProDvor
-    </Link>
-);
-
 
 export function DashboardFooter() {
   return (

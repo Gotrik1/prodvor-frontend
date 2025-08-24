@@ -10,12 +10,7 @@ import { DashboardFooter } from "@/widgets/dashboard-footer";
 import { usePathname } from "next/navigation";
 import { Button } from "@/shared/ui/button";
 import { Construction } from 'lucide-react';
-
-const Logo = () => (
-    <Link href="/" className="flex items-center gap-2 font-bold text-xl">
-        ProDvor
-    </Link>
-);
+import { Logo } from "@/views/auth/ui";
 
 export function AdminLayout({
   children,

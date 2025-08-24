@@ -29,12 +29,7 @@ import {
 } from "lucide-react";
 import Link from 'next/link';
 import { i18n } from "@/shared/lib/i18n";
-
-const Logo = () => (
-    <Link href="/" className="flex items-center gap-2 font-bold text-xl">
-        ProDvor
-    </Link>
-);
+import { Logo } from "@/views/auth/ui";
 
 export function DashboardSidebar() {
     return (
