@@ -10,6 +10,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import Link from 'next/link';
 import { Button } from '@/shared/ui/button';
 import { Check, UserPlus, X } from 'lucide-react';
+import { Badge } from '@/shared/ui/badge';
 
 // Mock friend requests for the current user
 const mockFriendRequests = users.slice(10, 13);
