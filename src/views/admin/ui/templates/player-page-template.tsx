@@ -14,7 +14,6 @@ import { SocialTab } from "./player-page-social-tab";
 import Image from "next/image";
 import { PlayerStatsOverviewTab } from "./player-page-stats-overview-tab";
 import { PublicationsTab } from "./player-page-publications-tab";
-import { Card, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
 
 const defaultPlayer = users.find(u => u.role === 'Игрок')!;
 
@@ -22,8 +21,8 @@ const getRankForElo = (elo: number) => {
     return ranks.find(rank => elo >= rank.eloMin && elo <= rank.eloMax);
 };
 
-const Section = ({ title, icon: Icon, children }: { title: string, icon: React.ElementType, children: React.ReactNode }) => (
-    <section className="space-y-4">
+const Section = ({ title, icon: Icon, children, className }: { title: string, icon: React.ElementType, children: React.ReactNode, className?: string }) => (
+    <section className={cn("space-y-4", className)}>
         <h2 className="text-2xl font-bold flex items-center gap-3">
             <Icon className="h-6 w-6 text-primary" />
             {title}
@@ -78,22 +77,25 @@ export function PlayerPageTemplate({ user: profileUser }: { user?: User }) {
                     </div>
                 )}
             </header>
-
-            <Section title="Статистика" icon={BarChart3}>
-                <PlayerStatsOverviewTab />
-            </Section>
-
-            <Section title="Достижения" icon={Award}>
-                <AchievementsTab player={player} />
-            </Section>
-
-            <Section title="Социальные связи" icon={Users2}>
-                <SocialTab user={player} isOwnProfile={isOwnProfile} />
-            </Section>
             
-            <Section title="Тренировки" icon={Activity}>
-                <TrainingTab />
-            </Section>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+                <div className="lg:col-span-2 space-y-8">
+                     <Section title="Статистика" icon={BarChart3}>
+                        <PlayerStatsOverviewTab />
+                    </Section>
+                    <Section title="Достижения" icon={Award}>
+                        <AchievementsTab player={player} />
+                    </Section>
+                </div>
+                 <div className="lg:col-span-1 space-y-8">
+                     <Section title="Социальные связи" icon={Users2}>
+                        <SocialTab user={player} isOwnProfile={isOwnProfile} />
+                    </Section>
+                    <Section title="Тренировки" icon={Activity}>
+                        <TrainingTab />
+                    </Section>
+                </div>
+            </div>
 
             <Section title="Публикации" icon={Grid3x3}>
                 <PublicationsTab player={player} isOwnProfile={isOwnProfile} />
