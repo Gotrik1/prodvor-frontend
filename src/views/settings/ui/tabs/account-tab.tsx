@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { useForm } from 'react-hook-form';
@@ -55,7 +56,7 @@ export function AccountTab() {
         }
     });
 
-     function onAccountSubmit(_values: z.infer<typeof accountFormSchema>) {
+     function onAccountSubmit() {
         toast({ title: "Настройки аккаунта обновлены", description: "Ваши данные успешно сохранены." });
     }
 

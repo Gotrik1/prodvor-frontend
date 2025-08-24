@@ -1,5 +1,6 @@
 
-import { teams, allSports } from '@/mocks';
+
+import { allSports } from '@/mocks';
 
 // Create a flat list of all sports including subdisciplines for easy lookup
 export const allSportsFlat = allSports.reduce((acc, sport) => {

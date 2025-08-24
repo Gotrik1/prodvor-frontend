@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { allTournaments } from '@/views/tournaments/public-page/ui/mock-data';
@@ -16,51 +17,20 @@ import { useUserStore } from '@/widgets/dashboard-header/model/user-store';
 import { useToast } from '@/shared/hooks/use-toast';
 import { useRouter } from 'next/navigation';
 import { AlertTriangle } from 'lucide-react';
-import React, { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { RequirementsChecklist } from './requirements-checklist';
 
-export function TournamentRegisterPage({ tournament }: { tournament: (typeof allTournaments)[0] | undefined }) {
+function TournamentRegistrationGuard({ tournament }: { tournament: (typeof allTournaments)[0] }) {
     const { user: currentUser } = useUserStore();
-    const { toast } = useToast();
-    const router = useRouter();
-    const [selectedTeamId, setSelectedTeamId] = useState<string | undefined>(undefined);
-
-    if (!tournament) {
-        return (
-            <div className="flex flex-col min-h-screen items-center justify-center p-4">
-                <Card className="text-center max-w-md w-full">
-                    <CardHeader>
-                        <CardTitle>Ошибка 404</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        <p className="text-muted-foreground">
-                            Турнир не найден. Возможно, он был удален или ссылка неверна.
-                        </p>
-                        <Button asChild className="mt-6">
-                            <Link href="/tournaments">К списку турниров</Link>
-                        </Button>
-                    </CardContent>
-                </Card>
-            </div>
-        );
-    }
 
     const userTeams = useMemo(() => {
         if (!currentUser) return [];
         return teams.filter(team => team.captainId === currentUser.id && team.game === tournament.game);
     }, [currentUser, tournament.game]);
 
-    const selectedTeam = useMemo(() => userTeams.find(team => team.id === selectedTeamId), [userTeams, selectedTeamId]);
-    
-    useEffect(() => {
-        if (userTeams.length === 1) {
-            setSelectedTeamId(userTeams[0].id);
-        }
-    }, [userTeams]);
-
     if (!currentUser || userTeams.length === 0) {
         return (
-             <div className="flex flex-col min-h-[80vh] items-center justify-center p-4">
+            <div className="flex flex-col min-h-[80vh] items-center justify-center p-4">
                 <Card className="text-center max-w-md w-full">
                     <CardHeader>
                         <AlertTriangle className="h-12 w-12 text-destructive mx-auto" />
@@ -68,7 +38,7 @@ export function TournamentRegisterPage({ tournament }: { tournament: (typeof all
                     </CardHeader>
                     <CardContent>
                         <p className="text-muted-foreground">
-                            Для регистрации на турнир вы должны быть капитаном команды, соответствующей дисциплине "{tournament.game}".
+                            Для регистрации на турнир вы должны быть капитаном команды, соответствующей дисциплине &quot;{tournament.game}&quot;.
                         </p>
                         <div className="flex gap-2 mt-6">
                             <Button asChild className="w-full">
@@ -83,7 +53,25 @@ export function TournamentRegisterPage({ tournament }: { tournament: (typeof all
             </div>
         )
     }
+
+    return <TournamentRegisterForm tournament={tournament} userTeams={userTeams} />;
+}
+
+
+function TournamentRegisterForm({ tournament, userTeams }: { tournament: (typeof allTournaments)[0], userTeams: typeof teams }) {
+    const { user: currentUser } = useUserStore();
+    const { toast } = useToast();
+    const router = useRouter();
+    const [selectedTeamId, setSelectedTeamId] = useState<string | undefined>(undefined);
+
+    const selectedTeam = useMemo(() => userTeams.find(team => team.id === selectedTeamId), [userTeams, selectedTeamId]);
     
+    useEffect(() => {
+        if (userTeams.length === 1) {
+            setSelectedTeamId(userTeams[0].id);
+        }
+    }, [userTeams]);
+
     const teamMembers = selectedTeam ? users.filter(user => selectedTeam.members.includes(user.id)) : [];
     
     const handleSubmit = () => {
@@ -93,10 +81,9 @@ export function TournamentRegisterPage({ tournament }: { tournament: (typeof all
         });
         router.push(`/tournaments/${tournament.id}`);
     };
-
+    
     return (
-        <div className="p-4 md:p-6 lg:p-8">
-            <div className="max-w-4xl mx-auto space-y-6">
+         <div className="max-w-4xl mx-auto space-y-6">
                 <div className="flex items-center justify-between">
                      <Button asChild variant="outline">
                         <Link href={`/tournaments/${tournament.id}`}>
@@ -169,6 +156,34 @@ export function TournamentRegisterPage({ tournament }: { tournament: (typeof all
                     </div>
                 </div>
             </div>
+    )
+}
+
+
+export function TournamentRegisterPage({ tournament }: { tournament: (typeof allTournaments)[0] | undefined }) {
+    if (!tournament) {
+        return (
+            <div className="flex flex-col min-h-screen items-center justify-center p-4">
+                <Card className="text-center max-w-md w-full">
+                    <CardHeader>
+                        <CardTitle>Ошибка 404</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <p className="text-muted-foreground">
+                            Турнир не найден. Возможно, он был удален или ссылка неверна.
+                        </p>
+                        <Button asChild className="mt-6">
+                            <Link href="/tournaments">К списку турниров</Link>
+                        </Button>
+                    </CardContent>
+                </Card>
+            </div>
+        );
+    }
+    
+    return (
+        <div className="p-4 md:p-6 lg:p-8">
+            <TournamentRegistrationGuard tournament={tournament} />
         </div>
     );
 }

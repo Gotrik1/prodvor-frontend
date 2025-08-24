@@ -9,7 +9,7 @@ export function PlaceholderTemplate({ roleName }: { roleName: string }) {
                     <div className="mx-auto bg-primary/10 text-primary p-4 rounded-full w-fit">
                       <Construction className="h-12 w-12" />
                     </div>
-                    <CardTitle className="mt-4 text-2xl font-headline">Шаблон для роли "{roleName}"</CardTitle>
+                    <CardTitle className="mt-4 text-2xl font-headline">Шаблон для роли &quot;{roleName}&quot;</CardTitle>
                 </CardHeader>
                 <CardContent>
                     <p className="text-muted-foreground">

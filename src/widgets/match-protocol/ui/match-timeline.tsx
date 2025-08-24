@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import React from 'react';
@@ -91,7 +92,7 @@ export function MatchTimeline({ events }: { events: MatchEvent[] }) {
 
     const tooltipContent = (
       <>
-        <p className="font-bold">{event.minute}' {event.player}</p>
+        <p className="font-bold">{event.minute}&apos; {event.player}</p>
         {event.type === 'goal' && event.assist && <p className="text-xs">Пас: {event.assist}</p>}
         {event.type === 'substitution' && <p className="text-xs">↑{event.playerIn} / ↓{event.playerOut}</p>}
       </>

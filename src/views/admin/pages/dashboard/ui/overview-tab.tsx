@@ -1,9 +1,10 @@
 
+
 'use client';
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Button } from '@/shared/ui/button';
-import { Eye, Users as UsersIconComponent, TrendingUp, Trophy } from 'lucide-react';
+import { Eye } from 'lucide-react';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/shared/ui/chart";
 import { Bar as RechartsBar, BarChart as RechartsBarChart, XAxis, YAxis } from "recharts";
 import { users, teams, allSports } from '@/mocks';

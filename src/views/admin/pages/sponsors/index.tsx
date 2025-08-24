@@ -1,4 +1,5 @@
 
+
 import { sponsors } from '@/mocks';
 import { SponsorPageTemplate } from '@/views/admin/ui/templates/sponsor-page-template';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
@@ -28,7 +29,7 @@ export function SponsorPage({ sponsorId }: { sponsorId?: string }) {
             <Card className="text-center max-w-md w-full">
                 <CardHeader><CardTitle>Ошибка 404</CardTitle></CardHeader>
                 <CardContent>
-                    <p className="text-muted-foreground">Спонсор с ID "{sponsorId}" не найден.</p>
+                    <p className="text-muted-foreground">Спонсор с ID &quot;{sponsorId}&quot; не найден.</p>
                     <Button asChild className="mt-6"><Link href="/admin/dashboard">Вернуться к списку</Link></Button>
                 </CardContent>
             </Card>

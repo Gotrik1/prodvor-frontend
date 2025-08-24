@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { MatchEvent, EventType, eventTypes } from './match-timeline';
@@ -52,7 +53,7 @@ export function LiveTextFeed({ events }: { events: MatchEvent[] }) {
                         const Icon = eventIcons[event.type];
                         return (
                             <div key={event.id} className="flex items-start gap-4 p-3 rounded-md bg-card">
-                                <div className="font-mono text-lg text-muted-foreground w-12 text-center">{event.minute}'</div>
+                                <div className="font-mono text-lg text-muted-foreground w-12 text-center">{event.minute}&apos;</div>
                                 <div className="flex-shrink-0 pt-1"><Icon /></div>
                                 <div className="flex-grow text-sm">
                                     <p>{getEventDescription(event)}</p>

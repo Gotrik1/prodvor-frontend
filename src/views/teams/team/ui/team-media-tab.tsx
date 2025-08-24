@@ -1,4 +1,5 @@
 
+
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
 import { Film, UploadCloud } from "lucide-react";
 import Image from "next/image";
@@ -18,7 +19,7 @@ export function TeamMediaTab({ team }: { team: Team }) {
             <CardHeader className="flex flex-row items-center justify-between">
                 <div>
                     <CardTitle>Медиа</CardTitle>
-                    <CardDescription>Фото и видео команды "{team.name}".</CardDescription>
+                    <CardDescription>Фото и видео команды &quot;{team.name}&quot;.</CardDescription>
                 </div>
                 <Button variant="outline"><UploadCloud className="mr-2 h-4 w-4" /> Загрузить</Button>
             </CardHeader>

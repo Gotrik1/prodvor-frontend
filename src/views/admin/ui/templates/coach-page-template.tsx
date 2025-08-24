@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { users, teams } from "@/mocks";
@@ -11,7 +12,7 @@ import { Button } from "@/shared/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/shared/ui/table";
 import { ChartContainer, ChartTooltip, ChartTooltipContent, ChartLegend, ChartLegendContent } from "@/shared/ui/chart";
 import { Bar, BarChart as RechartsBarChart, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from "recharts";
-import React, { useMemo } from "react";
+import { useMemo } from "react";
 import { getUserDisciplines } from "@/entities/user/lib";
 import { StatCard } from "@/entities/team/ui/stat-card";
 
@@ -64,7 +65,7 @@ export function CoachPageTemplate({ user }: { user?: User }) {
                     <AvatarFallback>{coach.firstName.charAt(0)}{coach.lastName.charAt(0)}</AvatarFallback>
                 </Avatar>
                 <div className="text-center md:text-left">
-                    <h1 className="text-3xl font-bold font-headline">{coach.firstName} "{coach.nickname}" {coach.lastName}</h1>
+                    <h1 className="text-3xl font-bold font-headline">{coach.firstName} &quot;{coach.nickname}&quot; {coach.lastName}</h1>
                     <p className="text-muted-foreground text-lg">Роль: {coach.role}, <span className="font-semibold text-foreground">{coachTeam.name}</span></p>
                     <div className="flex items-center gap-2 mt-2 justify-center md:justify-start">
                         <Badge variant="secondary">Специализация: Тактика</Badge>

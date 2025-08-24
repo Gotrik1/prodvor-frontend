@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { useForm } from 'react-hook-form';
@@ -54,7 +55,7 @@ export function ProfileTab() {
         }
     });
 
-    function onProfileSubmit(_values: z.infer<typeof profileFormSchema>) {
+    function onProfileSubmit() {
         toast({ title: "Профиль обновлен", description: "Ваши данные успешно сохранены." });
     }
 

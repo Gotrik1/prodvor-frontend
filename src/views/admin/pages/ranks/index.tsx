@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { ranks, allSports, achievementsBySport } from '@/mocks';
@@ -65,7 +66,7 @@ export function RanksPage() {
                                                 </div>
                                                 <div>
                                                     <CardTitle className="text-xl">{rank.name}</CardTitle>
-                                                    <CardDescription className="italic">"{rank.title}"</CardDescription>
+                                                    <CardDescription className="italic">&quot;{rank.title}&quot;</CardDescription>
                                                 </div>
                                             </div>
                                             <Badge variant="outline" className="font-mono text-base w-fit">

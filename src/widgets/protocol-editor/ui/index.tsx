@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import React, { useState, useMemo } from 'react';
@@ -154,7 +155,7 @@ export function ProtocolEditor({ match }: { match: BracketMatch }) {
                         {events.map(event => (
                             <div key={event.id} className="flex items-center justify-between p-2 rounded-md bg-background hover:bg-muted">
                                 <div className="flex items-center gap-3">
-                                    <span className="font-mono text-sm w-8">{event.minute}'</span>
+                                    <span className="font-mono text-sm w-8">{event.minute}&apos;</span>
                                     <span className="font-semibold">{eventLabels[event.type]}</span>
                                     <span className="text-muted-foreground text-sm">{event.player}{event.assist ? ` (${event.assist})` : ''}{event.playerIn ? `↑${event.playerIn} / ↓${event.playerOut}` : ''}</span>
                                 </div>

@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
@@ -238,7 +239,7 @@ export function RefereeCenterPage() {
                         <CardHeader>
                              <CardTitle className="flex items-center gap-2 text-primary pt-4 border-t"><ShieldCheck />Аттестация</CardTitle>
                              <CardDescription>
-                                Выполните цели для повышения категории до "Первой".
+                                Выполните цели для повышения категории до &quot;Первой&quot;.
                             </CardDescription>
                         </CardHeader>
                          <CardContent>
@@ -250,7 +251,7 @@ export function RefereeCenterPage() {
                                 <Progress value={80} />
                                 <ul className="text-xs text-muted-foreground pt-2 space-y-1.5">
                                     <li className="flex items-center"><CheckCircle className="h-3.5 w-3.5 mr-2 text-green-500" /> Отсудить еще 2 рейтинговых матча.</li>
-                                    <li className="flex items-center"><CheckCircle className="h-3.5 w-3.5 mr-2 text-green-500" /> Пройти курс <Link href="#" className="text-primary hover:underline ml-1">"VAR для дворового футбола"</Link>.</li>
+                                    <li className="flex items-center"><CheckCircle className="h-3.5 w-3.5 mr-2 text-green-500" /> Пройти курс <Link href="#" className="text-primary hover:underline ml-1">&quot;VAR для дворового футбола&quot;</Link>.</li>
                                 </ul>
                             </div>
                             <Button className="w-full mt-6" disabled>

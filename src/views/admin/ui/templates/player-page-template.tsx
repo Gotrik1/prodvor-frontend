@@ -1,22 +1,20 @@
 
+
 'use client';
 
 import { users, teams, ranks } from "@/mocks";
 import type { User } from "@/mocks/users";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
-import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
 import { Briefcase, Dumbbell, Film, MapPin, MessageSquare, Rss, UserPlus, Users2, BarChart3, Award } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 import { Button } from "@/shared/ui/button";
 import { useUserStore } from "@/widgets/dashboard-header/model/user-store";
-import { StatsTab } from "./player-page-stats-tab";
 import { FeedTab } from "./player-page-feed-tab";
 import { TrainingTab } from "./player-page-training-tab";
 import { MediaTab } from "./player-page-media-tab";
 import { AchievementsTab } from "./player-page-achievements-tab";
 import { SocialTab } from "./player-page-social-tab";
 import Image from "next/image";
-import React from "react";
 import { PlayerOverviewTab } from "./player-page-overview-tab";
 
 const defaultPlayer = users.find(u => u.role === 'Игрок')!;
@@ -41,7 +39,7 @@ export function PlayerPageTemplate({ user: profileUser }: { user?: User }) {
                     <AvatarFallback>{player.firstName.charAt(0)}{player.lastName.charAt(0)}</AvatarFallback>
                 </Avatar>
                 <div className="text-center md:text-left flex-grow">
-                    <h1 className="text-3xl font-bold font-headline">{player.firstName} "{player.nickname}" {player.lastName}</h1>
+                    <h1 className="text-3xl font-bold font-headline">{player.firstName} &quot;{player.nickname}&quot; {player.lastName}</h1>
                     <div className="flex items-center justify-center md:justify-start gap-4 mt-1">
                         <p className="text-muted-foreground text-lg">Роль: {player.role}</p>
                         {playerRank && (
