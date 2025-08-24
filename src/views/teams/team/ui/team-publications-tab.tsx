@@ -2,12 +2,12 @@
 
 'use client';
 
-import type { Post, Team } from "@/mocks";
+import type { Post, Team, User } from "@/mocks";
 import { users } from "@/mocks";
 import { CreatePost } from "@/widgets/dashboard-feed/ui/create-post";
 import { Card, CardContent } from "@/shared/ui/card";
 import { Button } from "@/shared/ui/button";
-import { Grid3x3, Heart, MessageSquare, PlusCircle } from "lucide-react";
+import { Grid3x3, Heart, MessageSquare, PlusCircle, Send } from "lucide-react";
 import Image from "next/image";
 import {
   Dialog,
@@ -16,9 +16,12 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
+  DialogFooter,
 } from "@/shared/ui/dialog";
 import { useState, useEffect } from "react";
 import { cn } from "@/shared/lib/utils";
+import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
+import { Textarea } from "@/shared/ui/textarea";
 
 // Mock the current user for CreatePost component
 const currentUser = users[0];
@@ -31,20 +34,56 @@ const mockMedia = [
     { type: 'image', src: 'https://placehold.co/600x400.png', title: 'Награждение', dataAiHint: 'award ceremony' },
 ];
 
+const mockComments = users.slice(2, 6).map((user, i) => ({
+    id: `comment-${i}`,
+    author: user,
+    text: [
+        "Отличный кадр!",
+        "Так держать! Вперед к победам!",
+        "Выглядит мощно! Удачи в следующих играх.",
+        "Супер! Отличная работа на поле."
+    ][i % 4],
+}));
+
+const CommentItem = ({ comment }: { comment: typeof mockComments[0] }) => (
+    <div className="flex items-start gap-3">
+        <Avatar className="h-8 w-8">
+            <AvatarImage src={comment.author.avatarUrl} />
+            <AvatarFallback>{comment.author.nickname.charAt(0)}</AvatarFallback>
+        </Avatar>
+        <div>
+            <span className="font-semibold text-sm">{comment.author.nickname}</span>
+            <p className="text-sm text-muted-foreground">{comment.text}</p>
+        </div>
+    </div>
+);
+
 const MediaPostStats = () => {
     const [likes, setLikes] = useState(0);
-    const [comments, setComments] = useState(0);
+    const [comments, setComments] = useState(() => mockComments);
     const [isLiked, setIsLiked] = useState(false);
-
+    const [newComment, setNewComment] = useState("");
+    
     useEffect(() => {
         // This code runs only on the client, after hydration
         setLikes(Math.floor(Math.random() * 500));
-        setComments(Math.floor(Math.random() * 50));
     }, []);
 
     const handleLike = () => {
         setIsLiked(!isLiked);
         setLikes(prev => isLiked ? prev - 1 : prev + 1);
+    }
+    
+     const handleAddComment = (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!newComment.trim() || !currentUser) return;
+        const newCommentObject = {
+            id: `comment-${Date.now()}`,
+            author: currentUser,
+            text: newComment,
+        };
+        setComments(prev => [...prev, newCommentObject]);
+        setNewComment("");
     }
 
     return (
@@ -57,16 +96,32 @@ const MediaPostStats = () => {
                 <DialogTrigger asChild>
                     <button className="flex items-center gap-2 group">
                         <MessageSquare className="h-7 w-7 transition-all group-hover:scale-110"/>
-                        <span>{comments}</span>
+                        <span>{comments.length}</span>
                     </button>
                 </DialogTrigger>
-                <DialogContent>
+                <DialogContent className="sm:max-w-[525px]">
                     <DialogHeader>
                         <DialogTitle>Комментарии</DialogTitle>
-                         <DialogDescription>
-                            Этот раздел находится в разработке.
-                        </DialogDescription>
                     </DialogHeader>
+                    <div className="space-y-4 max-h-[400px] overflow-y-auto pr-4 my-4">
+                        {comments.map(comment => <CommentItem key={comment.id} comment={comment} />)}
+                    </div>
+                    <DialogFooter>
+                        <form onSubmit={handleAddComment} className="w-full flex items-center gap-2">
+                             <Avatar className="h-8 w-8">
+                                <AvatarImage src={currentUser?.avatarUrl} />
+                                <AvatarFallback>{currentUser?.nickname.charAt(0)}</AvatarFallback>
+                            </Avatar>
+                            <Textarea 
+                                placeholder="Написать комментарий..." 
+                                className="flex-grow" 
+                                rows={1}
+                                value={newComment}
+                                onChange={(e) => setNewComment(e.target.value)}
+                            />
+                            <Button type="submit" size="icon"><Send className="h-4 w-4" /></Button>
+                        </form>
+                    </DialogFooter>
                 </DialogContent>
             </Dialog>
         </div>
