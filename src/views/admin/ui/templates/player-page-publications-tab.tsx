@@ -126,12 +126,11 @@ const MediaPostStats = () => {
 };
 
 export function PublicationsTab({ player, isOwnProfile }: { player: User; isOwnProfile: boolean }) {
-    const playerPosts = posts.filter(p => p.author.id === player.id);
-    const [combinedFeed, setCombinedFeed] = useState<(typeof mockMedia[0] | typeof playerPosts[0])[]>([...mockMedia, ...playerPosts]);
+    const [mediaFeed, setMediaFeed] = useState<(typeof mockMedia[0])[]>(mockMedia);
 
     useEffect(() => {
         // Randomize feed only on the client side after initial render
-        setCombinedFeed(prevFeed => [...prevFeed].sort(() => 0.5 - Math.random()));
+        setMediaFeed(prevFeed => [...prevFeed].sort(() => 0.5 - Math.random()));
     }, []);
 
     return (
@@ -152,45 +151,30 @@ export function PublicationsTab({ player, isOwnProfile }: { player: User; isOwnP
                     </Dialog>
                 </div>
             )}
-            {combinedFeed.length > 0 ? (
+            {mediaFeed.length > 0 ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-1 md:gap-4">
-                    {combinedFeed.map((item, index) => {
-                        if ('content' in item) { // It's a Post
-                            return (
-                                <Card key={`post-${item.id}`} className="flex flex-col justify-between">
-                                    <CardContent className="p-6">
-                                         <p className="whitespace-pre-wrap">{item.content}</p>
-                                    </CardContent>
-                                    <div className="p-4 border-t text-xs text-muted-foreground">
-                                        Пост от @{item.author.nickname}
-                                    </div>
-                                </Card>
-                            )
-                        } else { // It's a Media item
-                             return (
-                                <div key={`media-${index}`} className="group relative aspect-square w-full overflow-hidden rounded-lg">
-                                    <Image 
-                                        src={item.src} 
-                                        alt={item.title} 
-                                        fill
-                                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                                        className="object-cover group-hover:scale-105 transition-transform"
-                                        data-ai-hint={item.dataAiHint}
-                                    />
-                                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                                       <MediaPostStats />
-                                    </div>
-                                </div>
-                            )
-                        }
-                    })}
+                    {mediaFeed.map((item, index) => (
+                        <div key={`media-${index}`} className="group relative aspect-square w-full overflow-hidden rounded-lg">
+                            <Image 
+                                src={item.src} 
+                                alt={item.title} 
+                                fill
+                                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                className="object-cover group-hover:scale-105 transition-transform"
+                                data-ai-hint={item.dataAiHint}
+                            />
+                            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                <MediaPostStats />
+                            </div>
+                        </div>
+                    ))}
                 </div>
             ) : (
                 <Card className="flex items-center justify-center min-h-[40vh] border-dashed">
                     <div className="text-center">
                         <Grid3x3 className="mx-auto h-12 w-12 text-muted-foreground" />
-                        <h3 className="mt-4 text-lg font-semibold">Публикаций пока нет</h3>
-                        <p className="mt-1 text-sm text-muted-foreground">У игрока еще нет постов или фотографий.</p>
+                        <h3 className="mt-4 text-lg font-semibold">Фотографий пока нет</h3>
+                        <p className="mt-1 text-sm text-muted-foreground">У игрока еще нет фотографий или видео.</p>
                     </div>
                 </Card>
             )}
