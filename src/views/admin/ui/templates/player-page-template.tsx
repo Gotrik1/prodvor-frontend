@@ -5,8 +5,7 @@
 import { users, teams, ranks } from "@/mocks";
 import type { User } from "@/mocks/users";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
-import { Briefcase, Dumbbell, MapPin, MessageSquare, UserPlus, Users2, BarChart3, Award, Grid3x3 } from "lucide-react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
+import { Briefcase, Dumbbell, MapPin, MessageSquare, UserPlus, Users2, BarChart3, Award, Grid3x3, History, Activity } from "lucide-react";
 import { Button } from "@/shared/ui/button";
 import { useUserStore } from "@/widgets/dashboard-header/model/user-store";
 import { TrainingTab } from "./player-page-training-tab";
@@ -15,12 +14,24 @@ import { SocialTab } from "./player-page-social-tab";
 import Image from "next/image";
 import { PlayerStatsOverviewTab } from "./player-page-stats-overview-tab";
 import { PublicationsTab } from "./player-page-publications-tab";
+import { Card, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
 
 const defaultPlayer = users.find(u => u.role === 'Игрок')!;
 
 const getRankForElo = (elo: number) => {
     return ranks.find(rank => elo >= rank.eloMin && elo <= rank.eloMax);
 };
+
+const Section = ({ title, icon: Icon, children }: { title: string, icon: React.ElementType, children: React.ReactNode }) => (
+    <section className="space-y-4">
+        <h2 className="text-2xl font-bold flex items-center gap-3">
+            <Icon className="h-6 w-6 text-primary" />
+            {title}
+        </h2>
+        {children}
+    </section>
+);
+
 
 export function PlayerPageTemplate({ user: profileUser }: { user?: User }) {
     const player = profileUser || defaultPlayer;
@@ -31,7 +42,7 @@ export function PlayerPageTemplate({ user: profileUser }: { user?: User }) {
     const isOwnProfile = currentUser?.id === player.id;
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-8">
             <header className="flex flex-col md:flex-row items-center gap-6 p-4 rounded-lg bg-card border">
                 <Avatar className="h-24 w-24 border-4 border-primary">
                     <AvatarImage src={player.avatarUrl} alt={player.nickname} />
@@ -67,36 +78,27 @@ export function PlayerPageTemplate({ user: profileUser }: { user?: User }) {
                     </div>
                 )}
             </header>
+
+            <Section title="Публикации" icon={Grid3x3}>
+                <PublicationsTab player={player} isOwnProfile={isOwnProfile} />
+            </Section>
+
+            <Section title="Статистика" icon={BarChart3}>
+                <PlayerStatsOverviewTab />
+            </Section>
+
+            <Section title="Достижения" icon={Award}>
+                <AchievementsTab player={player} />
+            </Section>
+
+            <Section title="Социальные связи" icon={Users2}>
+                <SocialTab user={player} isOwnProfile={isOwnProfile} />
+            </Section>
             
-             <Tabs defaultValue="publications">
-                <TabsList className="grid w-full grid-cols-2 md:grid-cols-5">
-                    <TabsTrigger value="publications">
-                        <Grid3x3 className="md:mr-2 h-4 w-4" />
-                        <span className="hidden md:inline">Публикации</span>
-                    </TabsTrigger>
-                    <TabsTrigger value="stats">
-                        <BarChart3 className="md:mr-2 h-4 w-4" />
-                        <span className="hidden md:inline">Статистика</span>
-                    </TabsTrigger>
-                    <TabsTrigger value="achievements">
-                        <Award className="md:mr-2 h-4 w-4" />
-                        <span className="hidden md:inline">Достижения</span>
-                    </TabsTrigger>
-                    <TabsTrigger value="socials">
-                        <Users2 className="md:mr-2 h-4 w-4"/>
-                        <span className="hidden md:inline">Соц. связи</span>
-                    </TabsTrigger>
-                    <TabsTrigger value="training">
-                        <Dumbbell className="md:mr-2 h-4 w-4"/>
-                        <span className="hidden md:inline">Тренировки</span>
-                    </TabsTrigger>
-                </TabsList>
-                <TabsContent value="publications" className="mt-6"><PublicationsTab player={player} isOwnProfile={isOwnProfile} /></TabsContent>
-                <TabsContent value="stats" className="mt-6"><PlayerStatsOverviewTab /></TabsContent>
-                <TabsContent value="achievements" className="mt-6"><AchievementsTab player={player} /></TabsContent>
-                <TabsContent value="socials" className="mt-6"><SocialTab user={player} isOwnProfile={isOwnProfile} /></TabsContent>
-                <TabsContent value="training" className="mt-6"><TrainingTab /></TabsContent>
-            </Tabs>
+            <Section title="Тренировки" icon={Activity}>
+                <TrainingTab />
+            </Section>
+
         </div>
     )
 }
