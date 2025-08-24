@@ -33,9 +33,9 @@ export function PlayerPageTemplate({ user: profileUser }: { user?: User }) {
     const isOwnProfile = currentUser?.id === player.id;
 
     return (
-        <div className="space-y-6">
+        <React.Fragment>
             {/* --- HEADER --- */}
-            <header className="flex flex-col md:flex-row items-center gap-6 p-4 rounded-lg bg-card border">
+            <header className="flex flex-col md:flex-row items-center gap-6 p-4 rounded-lg bg-card border mb-6">
                 <Avatar className="h-24 w-24 border-4 border-primary">
                     <AvatarImage src={player.avatarUrl} alt={player.nickname} />
                     <AvatarFallback>{player.firstName.charAt(0)}{player.lastName.charAt(0)}</AvatarFallback>
@@ -73,20 +73,20 @@ export function PlayerPageTemplate({ user: profileUser }: { user?: User }) {
             
             {/* --- MAIN CONTENT GRID --- */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                {/* --- Left Column (Main Content) --- */}
+                {/* Left side (2 columns wide) */}
                 <div className="lg:col-span-2 space-y-6">
                     <PlayerStatsOverviewTab />
                     <PublicationsTab player={player} isOwnProfile={isOwnProfile} />
                     <TrainingTab />
                 </div>
 
-                {/* --- Right Column (Side Content) --- */}
+                {/* Right side (1 column wide) */}
                 <div className="lg:col-span-1 space-y-6">
                     <AchievementsTab player={player} />
                     <MyTeamWidget user={player} />
                     <SocialTab user={player} isOwnProfile={isOwnProfile} />
                 </div>
             </div>
-        </div>
+        </React.Fragment>
     )
 }
