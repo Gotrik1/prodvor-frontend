@@ -4,7 +4,7 @@ import Link from "next/link";
 
 export function DashboardFooter() {
   return (
-    <footer className="p-4 border-t border-layout text-sm text-muted-foreground">
+    <footer className="p-4 border-t border-layout-border text-sm text-muted-foreground">
       <div className="container mx-auto flex justify-between items-center">
         <div className="flex items-center gap-2">
           <Logo />
