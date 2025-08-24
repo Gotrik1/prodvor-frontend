@@ -2,12 +2,13 @@
 
 'use client';
 
-import { Card, CardContent } from "@/shared/ui/card";
-import { CreatePost } from "@/widgets/dashboard-feed/ui/create-post";
+import type { Post, Team, User } from "@/mocks";
 import { users } from "@/mocks";
-import type { User } from "@/mocks";
-import Image from "next/image";
+import { CreatePost } from "@/widgets/dashboard-feed/ui/create-post";
+import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
+import { Button } from "@/shared/ui/button";
 import { Grid3x3, Heart, MessageSquare, PlusCircle, Send, Video, Bookmark, Tag } from "lucide-react";
+import Image from "next/image";
 import {
   Dialog,
   DialogContent,
@@ -17,7 +18,6 @@ import {
   DialogTrigger,
   DialogFooter,
 } from "@/shared/ui/dialog";
-import { Button } from "@/shared/ui/button";
 import { useState, useEffect } from "react";
 import { cn } from "@/shared/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
