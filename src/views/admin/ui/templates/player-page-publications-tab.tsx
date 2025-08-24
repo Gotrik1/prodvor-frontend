@@ -2,7 +2,7 @@
 
 'use client';
 
-import { Card } from "@/shared/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
 import { CreatePost } from "@/widgets/dashboard-feed/ui/create-post";
 import { users } from "@/mocks";
 import type { User } from "@/mocks";
@@ -22,6 +22,7 @@ import { useState, useEffect } from "react";
 import { cn } from "@/shared/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { Textarea } from "@/shared/ui/textarea";
+import { SocialTab } from "./player-page-social-tab";
 
 const mockMedia = [
     { type: 'image', src: 'https://placehold.co/600x400.png', title: 'Фото с последней игры', dataAiHint: 'soccer game' },
@@ -134,50 +135,58 @@ export function PublicationsTab({ player, isOwnProfile }: { player: User; isOwnP
     }, []);
 
     return (
-        <div className="space-y-6">
-            {isOwnProfile && (
-                <div className="flex justify-end">
-                     <Dialog>
-                        <DialogTrigger asChild>
-                           <Button><PlusCircle className="mr-2 h-4 w-4" />Новая публикация</Button>
-                        </DialogTrigger>
-                        <DialogContent>
-                            <DialogHeader>
-                                <DialogTitle>Новая публикация</DialogTitle>
-                                <DialogDescription>Поделитесь новостями с вашими подписчиками.</DialogDescription>
-                            </DialogHeader>
-                            <CreatePost user={player} />
-                        </DialogContent>
-                    </Dialog>
-                </div>
-            )}
-            {mediaFeed.length > 0 ? (
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-1 md:gap-2">
-                    {mediaFeed.map((item, index) => (
-                        <div key={`media-${index}`} className="group relative aspect-square w-full overflow-hidden rounded-lg">
-                            <Image 
-                                src={item.src} 
-                                alt={item.title} 
-                                fill
-                                sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
-                                className="object-cover group-hover:scale-105 transition-transform"
-                                data-ai-hint={item.dataAiHint}
-                            />
-                            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                                <MediaPostStats />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <Card>
+                <CardHeader>
+                    <div className="flex justify-between items-center">
+                        <CardTitle className="flex items-center gap-2"><Grid3x3 />Публикации</CardTitle>
+                        {isOwnProfile && (
+                             <Dialog>
+                                <DialogTrigger asChild>
+                                <Button size="sm" variant="outline"><PlusCircle className="mr-2 h-4 w-4" />Новый пост</Button>
+                                </DialogTrigger>
+                                <DialogContent>
+                                    <DialogHeader>
+                                        <DialogTitle>Новая публикация</DialogTitle>
+                                        <DialogDescription>Поделитесь новостями с вашими подписчиками.</DialogDescription>
+                                    </DialogHeader>
+                                    <CreatePost user={player} />
+                                </DialogContent>
+                            </Dialog>
+                        )}
+                    </div>
+                </CardHeader>
+                <CardContent>
+                     {mediaFeed.length > 0 ? (
+                        <div className="grid grid-cols-2 gap-2">
+                            {mediaFeed.map((item, index) => (
+                                <div key={`media-${index}`} className="group relative aspect-square w-full overflow-hidden rounded-lg">
+                                    <Image 
+                                        src={item.src} 
+                                        alt={item.title} 
+                                        fill
+                                        sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
+                                        className="object-cover group-hover:scale-105 transition-transform"
+                                        data-ai-hint={item.dataAiHint}
+                                    />
+                                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                        <MediaPostStats />
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    ) : (
+                        <div className="flex items-center justify-center min-h-[40vh] border-dashed border rounded-lg">
+                            <div className="text-center">
+                                <Grid3x3 className="mx-auto h-12 w-12 text-muted-foreground" />
+                                <h3 className="mt-4 text-lg font-semibold">Фотографий пока нет</h3>
+                                <p className="mt-1 text-sm text-muted-foreground">У игрока еще нет фотографий или видео.</p>
                             </div>
                         </div>
-                    ))}
-                </div>
-            ) : (
-                <Card className="flex items-center justify-center min-h-[40vh] border-dashed">
-                    <div className="text-center">
-                        <Grid3x3 className="mx-auto h-12 w-12 text-muted-foreground" />
-                        <h3 className="mt-4 text-lg font-semibold">Фотографий пока нет</h3>
-                        <p className="mt-1 text-sm text-muted-foreground">У игрока еще нет фотографий или видео.</p>
-                    </div>
-                </Card>
-            )}
+                    )}
+                </CardContent>
+            </Card>
+            <SocialTab user={player} isOwnProfile={isOwnProfile} />
         </div>
     )
 };

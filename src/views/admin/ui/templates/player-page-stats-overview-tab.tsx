@@ -2,13 +2,11 @@
 
 'use client';
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
 import { ChartContainer, ChartTooltipContent } from "@/shared/ui/chart";
 import { Radar, RadarChart, PolarAngleAxis, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip } from "recharts";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
-import { History } from "lucide-react";
-import { PlayerTrainingStats } from "./player-page-training-tab";
-import { SocialTab } from "./player-page-social-tab";
+import { History, BarChart3 } from "lucide-react";
 import { users } from "@/mocks";
 import type { User } from "@/mocks";
 import { useUserStore } from "@/widgets/dashboard-header/model/user-store";
@@ -55,69 +53,26 @@ const StatRow = ({ label, value }: { label: string, value: string | number }) =>
 
 export const PlayerStatsOverviewTab = () => {
     const last5Form: ('W' | 'L' | 'D')[] = ['W', 'L', 'W', 'W', 'W'];
-    const { user: currentUser } = useUserStore();
-    const player = users.find(u => u.role === 'Игрок')!; // Fallback for template view
-    const isOwnProfile = currentUser?.id === player.id;
-
 
     return (
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-             <div className="lg:col-span-2">
-                <Card className="h-full">
-                    <CardHeader>
-                        <CardTitle className="flex items-center gap-2"><History className="h-5 w-5" /> Карьерная статистика</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        <Tabs defaultValue="2025">
-                            <TabsList>
-                                <TabsTrigger value="2025">Сезон 2025</TabsTrigger>
-                                <TabsTrigger value="2024">Сезон 2024</TabsTrigger>
-                                <TabsTrigger value="total">Всего</TabsTrigger>
-                            </TabsList>
-                            <TabsContent value="2025" className="mt-4">
-                                <StatRow label="Матчи" value={careerStats['2025'].matches} />
-                                <StatRow label="Победы" value={`${careerStats['2025'].wins} (${Math.round(careerStats['2025'].wins / careerStats['2025'].matches * 100)}%)`} />
-                                <StatRow label="Голы" value={careerStats['2025'].goals} />
-                                <StatRow label="Ассисты" value={careerStats['2025'].assists} />
-                                <StatRow label="MVP" value={careerStats['2025'].mvp} />
-                            </TabsContent>
-                            <TabsContent value="2024" className="mt-4">
-                                <StatRow label="Матчи" value={careerStats['2024'].matches} />
-                                <StatRow label="Победы" value={`${careerStats['2024'].wins} (${Math.round(careerStats['2024'].wins / careerStats['2024'].matches * 100)}%)`} />
-                                <StatRow label="Голы" value={careerStats['2024'].goals} />
-                                <StatRow label="Ассисты" value={careerStats['2024'].assists} />
-                                <StatRow label="MVP" value={careerStats['2024'].mvp} />
-                            </TabsContent>
-                            <TabsContent value="total" className="mt-4">
-                                <StatRow label="Матчи" value={careerStats['total'].matches} />
-                                <StatRow label="Победы" value={`${careerStats['total'].wins} (${Math.round(careerStats['total'].wins / careerStats['total'].matches * 100)}%)`} />
-                                <StatRow label="Голы" value={careerStats['total'].goals} />
-                                <StatRow label="Ассисты" value={careerStats['total'].assists} />
-                                <StatRow label="MVP" value={careerStats['total'].mvp} />
-                            </TabsContent>
-                        </Tabs>
-                    </CardContent>
-                </Card>
-            </div>
-            <div className="lg:col-span-1 space-y-6">
-                <Card>
-                    <CardHeader><CardTitle className="text-base">Форма (5 матчей)</CardTitle></CardHeader>
-                    <CardContent className="flex items-center gap-2">
-                        {last5Form.map((result, index) => <FormBadge key={index} result={result} />)}
-                    </CardContent>
-                </Card>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-6">
-                    <Card>
-                        <CardHeader><CardTitle className="text-base">Навыки и прогресс ELO</CardTitle></CardHeader>
-                        <CardContent className="grid grid-cols-2 gap-4 items-center h-full">
-                            <ChartContainer config={{}} className="h-40 w-full">
+        <Card className="h-full">
+            <CardHeader>
+                <CardTitle className="flex items-center gap-2"><BarChart3 className="h-5 w-5" />Статистика</CardTitle>
+                <CardDescription>Обзор ключевых показателей и карьерной статистики игрока.</CardDescription>
+            </CardHeader>
+            <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <h3 className="text-base font-semibold mb-2">Навыки и прогресс ELO</h3>
+                        <div className="grid grid-cols-2 gap-4 items-center h-40">
+                            <ChartContainer config={{}} className="w-full h-full">
                                 <RadarChart data={skillData} cy="45%">
                                     <ChartTooltipContent />
                                     <PolarAngleAxis dataKey="subject" className="text-xs"/>
                                     <Radar name="Skills" dataKey="A" stroke="hsl(var(--primary))" fill="hsl(var(--primary))" fillOpacity={0.6} />
                                 </RadarChart>
                             </ChartContainer>
-                            <ChartContainer config={{elo: {label: 'ELO', color: "hsl(var(--primary))"}}} className="h-40 w-full">
+                            <ChartContainer config={{elo: {label: 'ELO', color: "hsl(var(--primary))"}}} className="w-full h-full">
                                 <LineChart data={eloData} margin={{ top: 5, right: 10, left: -20, bottom: 0 }}>
                                     <CartesianGrid vertical={false} />
                                     <XAxis dataKey="month" tickLine={false} axisLine={false} tickMargin={8} className="text-xs"/>
@@ -126,11 +81,45 @@ export const PlayerStatsOverviewTab = () => {
                                     <Line type="monotone" dataKey="elo" stroke="hsl(var(--primary))" strokeWidth={2} dot={false} />
                                 </LineChart>
                             </ChartContainer>
-                        </CardContent>
-                    </Card>
-                    <SocialTab user={player} isOwnProfile={isOwnProfile} />
+                        </div>
+                        <h3 className="text-base font-semibold mt-4 mb-2">Форма (5 матчей)</h3>
+                         <div className="flex items-center gap-2">
+                            {last5Form.map((result, index) => <FormBadge key={index} result={result} />)}
+                        </div>
+                    </div>
+                    <div>
+                         <h3 className="text-base font-semibold mb-2 flex items-center gap-2"><History className="h-4 w-4" /> Карьера</h3>
+                         <Tabs defaultValue="2025">
+                            <TabsList className="grid grid-cols-3 w-full">
+                                <TabsTrigger value="2025">Сезон 2025</TabsTrigger>
+                                <TabsTrigger value="2024">Сезон 2024</TabsTrigger>
+                                <TabsTrigger value="total">Всего</TabsTrigger>
+                            </TabsList>
+                            <TabsContent value="2025" className="mt-2">
+                                <StatRow label="Матчи" value={careerStats['2025'].matches} />
+                                <StatRow label="Победы" value={`${careerStats['2025'].wins} (${Math.round(careerStats['2025'].wins / careerStats['2025'].matches * 100)}%)`} />
+                                <StatRow label="Голы" value={careerStats['2025'].goals} />
+                                <StatRow label="Ассисты" value={careerStats['2025'].assists} />
+                                <StatRow label="MVP" value={careerStats['2025'].mvp} />
+                            </TabsContent>
+                            <TabsContent value="2024" className="mt-2">
+                                <StatRow label="Матчи" value={careerStats['2024'].matches} />
+                                <StatRow label="Победы" value={`${careerStats['2024'].wins} (${Math.round(careerStats['2024'].wins / careerStats['2024'].matches * 100)}%)`} />
+                                <StatRow label="Голы" value={careerStats['2024'].goals} />
+                                <StatRow label="Ассисты" value={careerStats['2024'].assists} />
+                                <StatRow label="MVP" value={careerStats['2024'].mvp} />
+                            </TabsContent>
+                            <TabsContent value="total" className="mt-2">
+                                <StatRow label="Матчи" value={careerStats['total'].matches} />
+                                <StatRow label="Победы" value={`${careerStats['total'].wins} (${Math.round(careerStats['total'].wins / careerStats['total'].matches * 100)}%)`} />
+                                <StatRow label="Голы" value={careerStats['total'].goals} />
+                                <StatRow label="Ассисты" value={careerStats['total'].assists} />
+                                <StatRow label="MVP" value={careerStats['total'].mvp} />
+                            </TabsContent>
+                        </Tabs>
+                    </div>
                 </div>
-            </div>
-        </div>
+            </CardContent>
+        </Card>
     )
 }

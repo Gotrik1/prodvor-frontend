@@ -5,15 +5,14 @@
 import { users, teams, ranks } from "@/mocks";
 import type { User } from "@/mocks/users";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
-import { Briefcase, MapPin, MessageSquare, UserPlus, Users2, BarChart3, Award, Grid3x3, Activity } from "lucide-react";
+import { Briefcase, MapPin, MessageSquare, UserPlus, Award, Grid3x3, Activity } from "lucide-react";
 import { Button } from "@/shared/ui/button";
 import { useUserStore } from "@/widgets/dashboard-header/model/user-store";
 import { TrainingTab } from "./player-page-training-tab";
 import { AchievementsTab } from "./player-page-achievements-tab";
-import { SocialTab } from "./player-page-social-tab";
-import Image from "next/image";
 import { PlayerStatsOverviewTab } from "./player-page-stats-overview-tab";
 import { PublicationsTab } from "./player-page-publications-tab";
+import Image from "next/image";
 import { cn } from "@/shared/lib/utils";
 
 const defaultPlayer = users.find(u => u.role === 'Игрок')!;
@@ -21,17 +20,6 @@ const defaultPlayer = users.find(u => u.role === 'Игрок')!;
 const getRankForElo = (elo: number) => {
     return ranks.find(rank => elo >= rank.eloMin && elo <= rank.eloMax);
 };
-
-const Section = ({ title, icon: Icon, children, className }: { title: string, icon: React.ElementType, children: React.ReactNode, className?: string }) => (
-    <section className={cn("space-y-4", className)}>
-        <h2 className="text-2xl font-bold flex items-center gap-3">
-            <Icon className="h-6 w-6 text-primary" />
-            {title}
-        </h2>
-        {children}
-    </section>
-);
-
 
 export function PlayerPageTemplate({ user: profileUser }: { user?: User }) {
     const player = profileUser || defaultPlayer;
@@ -43,6 +31,7 @@ export function PlayerPageTemplate({ user: profileUser }: { user?: User }) {
 
     return (
         <div className="space-y-8">
+            {/* --- HEADER --- */}
             <header className="flex flex-col md:flex-row items-center gap-6 p-4 rounded-lg bg-card border">
                 <Avatar className="h-24 w-24 border-4 border-primary">
                     <AvatarImage src={player.avatarUrl} alt={player.nickname} />
@@ -79,21 +68,25 @@ export function PlayerPageTemplate({ user: profileUser }: { user?: User }) {
                 )}
             </header>
             
-            <Section title="Статистика" icon={BarChart3}>
-                <PlayerStatsOverviewTab />
-            </Section>
+            {/* --- PRIMARY INFO GRID (Stats & Achievements) --- */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
+                <div className="lg:col-span-2">
+                    <PlayerStatsOverviewTab />
+                </div>
+                <div className="lg:col-span-1">
+                    <AchievementsTab player={player} />
+                </div>
+            </div>
 
-            <Section title="Достижения" icon={Award}>
-                <AchievementsTab player={player} />
-            </Section>
-
-            <Section title="Тренировки" icon={Activity}>
-                <TrainingTab />
-            </Section>
-            
-            <Section title="Публикации" icon={Grid3x3}>
-                <PublicationsTab player={player} isOwnProfile={isOwnProfile} />
-            </Section>
+            {/* --- SECONDARY INFO GRID (Publications & Training) --- */}
+             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
+                <div className="lg:col-span-2">
+                    <PublicationsTab player={player} isOwnProfile={isOwnProfile} />
+                </div>
+                 <div className="lg:col-span-1">
+                    <TrainingTab />
+                </div>
+            </div>
 
         </div>
     )
