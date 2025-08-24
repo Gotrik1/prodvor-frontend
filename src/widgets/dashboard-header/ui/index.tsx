@@ -1,7 +1,6 @@
 
 'use client';
 
-import { SidebarTrigger } from '@/shared/ui/sidebar';
 import {
   Search,
   ShoppingCart,
@@ -63,7 +62,7 @@ export function DashboardHeader() {
   return (
     <header className="flex h-16 items-center justify-between p-4 border-b bg-card">
       <div className="flex items-center gap-4">
-        <SidebarTrigger />
+        
         <div className="hidden md:block">
             <Logo />
         </div>
