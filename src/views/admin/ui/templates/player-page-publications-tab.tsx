@@ -2,9 +2,9 @@
 
 'use client';
 
-import { Card, CardContent } from "@/shared/ui/card";
+import { Card } from "@/shared/ui/card";
 import { CreatePost } from "@/widgets/dashboard-feed/ui/create-post";
-import { posts, users } from "@/mocks";
+import { users } from "@/mocks";
 import type { User } from "@/mocks";
 import Image from "next/image";
 import { Grid3x3, Heart, MessageSquare, PlusCircle, Send } from "lucide-react";
@@ -126,11 +126,11 @@ const MediaPostStats = () => {
 };
 
 export function PublicationsTab({ player, isOwnProfile }: { player: User; isOwnProfile: boolean }) {
-    const [mediaFeed, setMediaFeed] = useState<(typeof mockMedia[0])[]>(mockMedia);
+    const [mediaFeed, setMediaFeed] = useState<(typeof mockMedia[0])[]>([]);
 
     useEffect(() => {
         // Randomize feed only on the client side after initial render
-        setMediaFeed(prevFeed => [...prevFeed].sort(() => 0.5 - Math.random()));
+        setMediaFeed([...mockMedia].sort(() => 0.5 - Math.random()));
     }, []);
 
     return (
@@ -152,14 +152,14 @@ export function PublicationsTab({ player, isOwnProfile }: { player: User; isOwnP
                 </div>
             )}
             {mediaFeed.length > 0 ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-1 md:gap-4">
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-1 md:gap-2">
                     {mediaFeed.map((item, index) => (
                         <div key={`media-${index}`} className="group relative aspect-square w-full overflow-hidden rounded-lg">
                             <Image 
                                 src={item.src} 
                                 alt={item.title} 
                                 fill
-                                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
                                 className="object-cover group-hover:scale-105 transition-transform"
                                 data-ai-hint={item.dataAiHint}
                             />

@@ -5,7 +5,7 @@
 import { users, teams, ranks } from "@/mocks";
 import type { User } from "@/mocks/users";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
-import { Briefcase, Dumbbell, MapPin, MessageSquare, UserPlus, Users2, BarChart3, Award, Grid3x3, History, Activity } from "lucide-react";
+import { Briefcase, MapPin, MessageSquare, UserPlus, Users2, BarChart3, Award, Grid3x3, Activity } from "lucide-react";
 import { Button } from "@/shared/ui/button";
 import { useUserStore } from "@/widgets/dashboard-header/model/user-store";
 import { TrainingTab } from "./player-page-training-tab";
@@ -79,10 +79,6 @@ export function PlayerPageTemplate({ user: profileUser }: { user?: User }) {
                 )}
             </header>
 
-            <Section title="Публикации" icon={Grid3x3}>
-                <PublicationsTab player={player} isOwnProfile={isOwnProfile} />
-            </Section>
-
             <Section title="Статистика" icon={BarChart3}>
                 <PlayerStatsOverviewTab />
             </Section>
@@ -97,6 +93,10 @@ export function PlayerPageTemplate({ user: profileUser }: { user?: User }) {
             
             <Section title="Тренировки" icon={Activity}>
                 <TrainingTab />
+            </Section>
+
+            <Section title="Публикации" icon={Grid3x3}>
+                <PublicationsTab player={player} isOwnProfile={isOwnProfile} />
             </Section>
 
         </div>
