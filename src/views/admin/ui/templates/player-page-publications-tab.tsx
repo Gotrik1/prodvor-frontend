@@ -1,8 +1,9 @@
 
 
+'use client';
+
 import { Card, CardContent } from "@/shared/ui/card";
 import { CreatePost } from "@/widgets/dashboard-feed/ui/create-post";
-import { PostCard } from "@/widgets/dashboard-feed/ui/post-card";
 import { posts } from "@/mocks";
 import type { User } from "@/mocks";
 import Image from "next/image";
@@ -16,6 +17,7 @@ import {
   DialogTrigger,
 } from "@/shared/ui/dialog";
 import { Button } from "@/shared/ui/button";
+import { useState, useEffect } from "react";
 
 const mockMedia = [
     { type: 'image', src: 'https://placehold.co/600x400.png', title: 'Фото с последней игры', dataAiHint: 'soccer game' },
@@ -23,6 +25,31 @@ const mockMedia = [
     { type: 'image', src: 'https://placehold.co/600x400.png', title: 'Тренировка', dataAiHint: 'sports training' },
     { type: 'image', src: 'https://placehold.co/600x400.png', title: 'Награждение', dataAiHint: 'award ceremony' },
 ];
+
+const MediaPostStats = () => {
+    const [stats, setStats] = useState({ likes: 0, comments: 0 });
+
+    useEffect(() => {
+        // This code runs only on the client, after hydration
+        setStats({
+            likes: Math.floor(Math.random() * 500),
+            comments: Math.floor(Math.random() * 50)
+        });
+    }, []);
+
+    return (
+        <div className="text-white flex items-center gap-4 text-lg font-semibold">
+            <div className="flex items-center gap-2">
+                <Heart className="h-6 w-6"/>
+                <span>{stats.likes}</span>
+            </div>
+            <div className="flex items-center gap-2">
+                <MessageSquare className="h-6 w-6"/>
+                <span>{stats.comments}</span>
+            </div>
+        </div>
+    );
+};
 
 export function PublicationsTab({ player, isOwnProfile }: { player: User; isOwnProfile: boolean }) {
     const playerPosts = posts.filter(p => p.author.id === player.id);
@@ -72,16 +99,7 @@ export function PublicationsTab({ player, isOwnProfile }: { player: User; isOwnP
                                         data-ai-hint={item.dataAiHint}
                                     />
                                     <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                                        <div className="text-white flex items-center gap-4 text-lg font-semibold">
-                                            <div className="flex items-center gap-2">
-                                                <Heart className="h-6 w-6"/>
-                                                <span>{Math.floor(Math.random() * 500)}</span>
-                                            </div>
-                                            <div className="flex items-center gap-2">
-                                                <MessageSquare className="h-6 w-6"/>
-                                                <span>{Math.floor(Math.random() * 50)}</span>
-                                            </div>
-                                        </div>
+                                       <MediaPostStats />
                                     </div>
                                 </div>
                             )
