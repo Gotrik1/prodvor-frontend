@@ -23,6 +23,8 @@ import { cn } from "@/shared/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { Textarea } from "@/shared/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
+import Link from "next/link";
+import { Separator } from "@/shared/ui/separator";
 
 const mockMedia = [
     { type: 'image', src: 'https://placehold.co/600x400.png', title: 'Фото с последней игры', dataAiHint: 'soccer game' },
@@ -50,14 +52,14 @@ const CommentItem = ({ comment }: { comment: typeof mockComments[0] }) => (
             <AvatarImage src={comment.author.avatarUrl} />
             <AvatarFallback>{comment.author.nickname.charAt(0)}</AvatarFallback>
         </Avatar>
-        <div>
-            <span className="font-semibold text-sm">{comment.author.nickname}</span>
-            <p className="text-sm text-muted-foreground">{comment.text}</p>
+        <div className="text-sm">
+            <span className="font-semibold">{comment.author.nickname}</span>
+            <p className="text-muted-foreground">{comment.text}</p>
         </div>
     </div>
 );
 
-const MediaPostStats = () => {
+const MediaPostDialogContent = ({ media, author }: { media: typeof mockMedia[0], author: User }) => {
     const [likes, setLikes] = useState(0);
     const [comments, setComments] = useState(() => mockComments);
     const [isLiked, setIsLiked] = useState(false);
@@ -65,7 +67,6 @@ const MediaPostStats = () => {
     const currentUser = users[0];
 
     useEffect(() => {
-        // This code runs only on the client, after hydration
         setLikes(Math.floor(Math.random() * 500));
     }, []);
 
@@ -82,51 +83,72 @@ const MediaPostStats = () => {
             author: currentUser,
             text: newComment,
         };
-        setComments(prev => [...prev, newCommentObject]);
+        setComments(prev => [newCommentObject, ...prev]);
         setNewComment("");
     }
-
+    
     return (
-        <div className="text-white flex items-center gap-6 text-lg font-semibold">
-            <button className="flex items-center gap-2 group" onClick={handleLike}>
-                <Heart className={cn("h-7 w-7 transition-all group-hover:scale-110", isLiked && "fill-red-500 text-red-500")} />
-                <span>{likes}</span>
-            </button>
-             <Dialog>
-                <DialogTrigger asChild>
-                    <button className="flex items-center gap-2 group">
-                        <MessageSquare className="h-7 w-7 transition-all group-hover:scale-110"/>
-                        <span>{comments.length}</span>
-                    </button>
-                </DialogTrigger>
-                <DialogContent className="sm:max-w-[525px]">
-                    <DialogHeader>
-                        <DialogTitle>Комментарии</DialogTitle>
-                    </DialogHeader>
-                    <div className="space-y-4 max-h-[400px] overflow-y-auto pr-4 my-4">
+        <DialogContent className="sm:max-w-4xl p-0">
+            <div className="grid grid-cols-1 md:grid-cols-2">
+                <div className="relative aspect-square w-full">
+                    <Image 
+                        src={media.src} 
+                        alt={media.title} 
+                        fill
+                        className="object-cover rounded-l-lg"
+                        data-ai-hint={media.dataAiHint}
+                    />
+                </div>
+                <div className="flex flex-col h-full max-h-[90vh]">
+                    <div className="p-4 border-b">
+                         <Link href={`/users/${author.id}`} className="flex items-center gap-3 group">
+                            <Avatar>
+                                <AvatarImage src={author.avatarUrl} />
+                                <AvatarFallback>{author.nickname.charAt(0)}</AvatarFallback>
+                            </Avatar>
+                            <div>
+                                <p className="font-semibold group-hover:text-primary">{author.nickname}</p>
+                                <p className="text-xs text-muted-foreground">{media.title}</p>
+                            </div>
+                        </Link>
+                    </div>
+
+                    <div className="flex-grow overflow-y-auto p-4 space-y-4">
                         {comments.map(comment => <CommentItem key={comment.id} comment={comment} />)}
                     </div>
-                    <DialogFooter>
-                        <form onSubmit={handleAddComment} className="w-full flex items-center gap-2">
-                             <Avatar className="h-8 w-8">
+                    
+                    <div className="p-4 border-t space-y-3 bg-muted/50">
+                        <div className="flex items-center gap-4 text-muted-foreground">
+                            <button className="flex items-center gap-1.5 group" onClick={handleLike}>
+                                <Heart className={cn("h-6 w-6 transition-all group-hover:scale-110", isLiked && "fill-red-500 text-red-500")} />
+                                <span className="font-semibold text-sm">{likes}</span>
+                            </button>
+                             <div className="flex items-center gap-1.5">
+                                <MessageSquare className="h-6 w-6"/>
+                                <span className="font-semibold text-sm">{comments.length}</span>
+                            </div>
+                        </div>
+                         <Separator />
+                         <form onSubmit={handleAddComment} className="w-full flex items-center gap-2">
+                            <Avatar className="h-8 w-8">
                                 <AvatarImage src={currentUser?.avatarUrl} />
                                 <AvatarFallback>{currentUser?.nickname.charAt(0)}</AvatarFallback>
                             </Avatar>
-                            <Textarea 
-                                placeholder="Написать комментарий..." 
-                                className="flex-grow" 
-                                rows={1}
+                            <Input 
+                                placeholder="Добавить комментарий..." 
+                                className="flex-grow bg-background" 
                                 value={newComment}
                                 onChange={(e) => setNewComment(e.target.value)}
                             />
-                            <Button type="submit" size="icon"><Send className="h-4 w-4" /></Button>
+                            <Button type="submit" size="icon" disabled={!newComment.trim()}><Send className="h-4 w-4" /></Button>
                         </form>
-                    </DialogFooter>
-                </DialogContent>
-            </Dialog>
-        </div>
+                    </div>
+                </div>
+            </div>
+        </DialogContent>
     );
 };
+
 
 const EmptyTab = ({ icon: Icon, title, description }: { icon: React.ElementType, title: string, description: string }) => (
     <div className="flex items-center justify-center min-h-[40vh] border-dashed border rounded-lg">
@@ -180,19 +202,21 @@ export function PublicationsTab({ player, isOwnProfile }: { player: User; isOwnP
                              {mediaFeed.length > 0 ? (
                                 <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
                                     {mediaFeed.map((item, index) => (
-                                        <div key={`media-${index}`} className="group relative aspect-square w-full overflow-hidden rounded-lg">
-                                            <Image 
-                                                src={item.src} 
-                                                alt={item.title} 
-                                                fill
-                                                sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
-                                                className="object-cover group-hover:scale-105 transition-transform"
-                                                data-ai-hint={item.dataAiHint}
-                                            />
-                                            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                                                <MediaPostStats />
-                                            </div>
-                                        </div>
+                                        <Dialog key={`media-${index}`}>
+                                            <DialogTrigger asChild>
+                                                <div className="group relative aspect-square w-full overflow-hidden rounded-lg cursor-pointer">
+                                                    <Image 
+                                                        src={item.src} 
+                                                        alt={item.title} 
+                                                        fill
+                                                        sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
+                                                        className="object-cover group-hover:scale-105 transition-transform"
+                                                        data-ai-hint={item.dataAiHint}
+                                                    />
+                                                </div>
+                                            </DialogTrigger>
+                                            <MediaPostDialogContent media={item} author={player} />
+                                        </Dialog>
                                     ))}
                                 </div>
                             ) : (
