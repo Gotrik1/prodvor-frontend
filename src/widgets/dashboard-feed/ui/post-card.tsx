@@ -11,11 +11,14 @@ import { MessageCircle, Heart, Repeat } from "lucide-react";
 import Link from 'next/link';
 import Image from "next/image";
 import { useState, useEffect } from "react";
+import { cn } from "@/shared/lib/utils";
 
 export function PostCard({ post }: { post: Post }) {
   const [timeAgo, setTimeAgo] = useState('');
   const [fullDateTime, setFullDateTime] = useState('');
-  
+  const [isLiked, setIsLiked] = useState(false);
+  const [likeCount, setLikeCount] = useState(post.likes);
+
   useEffect(() => {
     // This runs only on the client, after hydration, preventing mismatch
     const postDate = new Date(post.timestamp);
@@ -23,6 +26,10 @@ export function PostCard({ post }: { post: Post }) {
     setFullDateTime(format(postDate, "d MMM yyyy 'г. в' HH:mm", { locale: ru }));
   }, [post.timestamp]);
 
+  const handleLike = () => {
+    setIsLiked(!isLiked);
+    setLikeCount(prevCount => isLiked ? prevCount - 1 : prevCount + 1);
+  };
 
   return (
     <Card className="bg-card">
@@ -52,9 +59,14 @@ export function PostCard({ post }: { post: Post }) {
         <p className="whitespace-pre-wrap">{post.content}</p>
       </CardContent>
       <CardFooter className="px-4 pb-4 flex items-center gap-4">
-        <Button variant="ghost" size="sm" className="flex items-center gap-2 text-muted-foreground">
-          <Heart className="h-4 w-4" />
-          <span>{post.likes}</span>
+        <Button 
+            variant="ghost" 
+            size="sm" 
+            className="flex items-center gap-2 text-muted-foreground"
+            onClick={handleLike}
+        >
+          <Heart className={cn("h-4 w-4", isLiked && "fill-red-500 text-red-500")} />
+          <span>{likeCount}</span>
         </Button>
         <Button variant="ghost" size="sm" className="flex items-center gap-2 text-muted-foreground">
           <MessageCircle className="h-4 w-4" />
