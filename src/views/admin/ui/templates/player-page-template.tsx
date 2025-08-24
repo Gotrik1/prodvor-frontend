@@ -14,6 +14,7 @@ import { SocialTab } from "./player-page-social-tab";
 import Image from "next/image";
 import { PlayerStatsOverviewTab } from "./player-page-stats-overview-tab";
 import { PublicationsTab } from "./player-page-publications-tab";
+import { cn } from "@/shared/lib/utils";
 
 const defaultPlayer = users.find(u => u.role === 'Игрок')!;
 
