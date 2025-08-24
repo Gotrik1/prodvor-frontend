@@ -1,10 +1,11 @@
 
+
 'use client';
 
 import { users, playgrounds, posts, Team } from "@/mocks";
 import { Button } from "@/shared/ui/button";
 import { Card, CardHeader, CardContent, CardTitle } from "@/shared/ui/card";
-import { Rss, Film, History } from "lucide-react";
+import { History, Grid3x3 } from "lucide-react";
 import Link from 'next/link';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 import { useUserStore } from "@/widgets/dashboard-header/model/user-store";
@@ -14,8 +15,7 @@ import { TeamRosterTab } from "@/entities/team/ui/team-roster-tab";
 import { TeamMatchesTab } from "@/entities/team/ui/team-matches-tab";
 import { TeamChallengesTab } from "@/entities/team/ui/team-challenges-tab";
 import { TeamStatsTab } from "@/entities/team/ui/team-stats-tab";
-import { TeamFeedTab } from "@/views/teams/team/ui/team-feed-tab";
-import { TeamMediaTab } from "@/views/teams/team/ui/team-media-tab";
+import { TeamPublicationsTab } from "@/views/teams/team/ui/team-publications-tab";
 
 export function TeamPageTemplate({ team }: { team?: Team }) {
     const { user: currentUser } = useUserStore();
@@ -50,14 +50,13 @@ export function TeamPageTemplate({ team }: { team?: Team }) {
             <TeamHeader team={team} homePlaygrounds={homePlaygrounds} isCaptain={isCaptain} />
 
             <Tabs defaultValue="overview" className="w-full">
-                <TabsList className="grid w-full grid-cols-4 md:grid-cols-7">
+                <TabsList className="grid w-full grid-cols-4 md:grid-cols-6">
                     <TabsTrigger value="overview">Обзор</TabsTrigger>
                     <TabsTrigger value="roster">Состав</TabsTrigger>
                     <TabsTrigger value="matches">Матчи</TabsTrigger>
                     <TabsTrigger value="challenges">Вызовы</TabsTrigger>
                     <TabsTrigger value="stats"><History className="md:mr-2 h-4 w-4" /><span className="hidden md:inline">Статистика</span></TabsTrigger>
-                    <TabsTrigger value="feed"><Rss className="md:mr-2 h-4 w-4" /><span className="hidden md:inline">Лента</span></TabsTrigger>
-                    <TabsTrigger value="media"><Film className="md:mr-2 h-4 w-4" /><span className="hidden md:inline">Медиа</span></TabsTrigger>
+                    <TabsTrigger value="publications"><Grid3x3 className="md:mr-2 h-4 w-4" /><span className="hidden md:inline">Публикации</span></TabsTrigger>
                 </TabsList>
                 <TabsContent value="overview" className="mt-6">
                     <TeamOverviewTab team={team} teamMembers={teamMembers} />
@@ -74,11 +73,8 @@ export function TeamPageTemplate({ team }: { team?: Team }) {
                  <TabsContent value="stats" className="mt-6">
                     <TeamStatsTab />
                 </TabsContent>
-                <TabsContent value="feed" className="mt-6">
-                   <TeamFeedTab posts={teamPosts} team={team} />
-                </TabsContent>
-                 <TabsContent value="media" className="mt-6">
-                    <TeamMediaTab team={team} />
+                <TabsContent value="publications" className="mt-6">
+                   <TeamPublicationsTab posts={teamPosts} team={team} />
                 </TabsContent>
             </Tabs>
         </div>

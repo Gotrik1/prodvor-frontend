@@ -5,17 +5,16 @@
 import { users, teams, ranks } from "@/mocks";
 import type { User } from "@/mocks/users";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
-import { Briefcase, Dumbbell, Film, MapPin, MessageSquare, Rss, UserPlus, Users2, BarChart3, Award } from "lucide-react";
+import { Briefcase, Dumbbell, MapPin, MessageSquare, UserPlus, Users2, BarChart3, Award, Grid3x3 } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 import { Button } from "@/shared/ui/button";
 import { useUserStore } from "@/widgets/dashboard-header/model/user-store";
-import { FeedTab } from "./player-page-feed-tab";
 import { TrainingTab } from "./player-page-training-tab";
-import { MediaTab } from "./player-page-media-tab";
 import { AchievementsTab } from "./player-page-achievements-tab";
 import { SocialTab } from "./player-page-social-tab";
 import Image from "next/image";
 import { PlayerStatsOverviewTab } from "./player-page-stats-overview-tab";
+import { PublicationsTab } from "./player-page-publications-tab";
 
 const defaultPlayer = users.find(u => u.role === 'Игрок')!;
 
@@ -69,8 +68,12 @@ export function PlayerPageTemplate({ user: profileUser }: { user?: User }) {
                 )}
             </header>
             
-             <Tabs defaultValue="stats">
-                <TabsList className="grid w-full grid-cols-2 md:grid-cols-6">
+             <Tabs defaultValue="publications">
+                <TabsList className="grid w-full grid-cols-2 md:grid-cols-5">
+                    <TabsTrigger value="publications">
+                        <Grid3x3 className="md:mr-2 h-4 w-4" />
+                        <span className="hidden md:inline">Публикации</span>
+                    </TabsTrigger>
                     <TabsTrigger value="stats">
                         <BarChart3 className="md:mr-2 h-4 w-4" />
                         <span className="hidden md:inline">Статистика</span>
@@ -87,21 +90,12 @@ export function PlayerPageTemplate({ user: profileUser }: { user?: User }) {
                         <Dumbbell className="md:mr-2 h-4 w-4"/>
                         <span className="hidden md:inline">Тренировки</span>
                     </TabsTrigger>
-                    <TabsTrigger value="feed">
-                        <Rss className="md:mr-2 h-4 w-4" />
-                        <span className="hidden md:inline">Лента</span>
-                    </TabsTrigger>
-                    <TabsTrigger value="media">
-                        <Film className="md:mr-2 h-4 w-4" />
-                        <span className="hidden md:inline">Медиа</span>
-                    </TabsTrigger>
                 </TabsList>
+                <TabsContent value="publications" className="mt-6"><PublicationsTab player={player} isOwnProfile={isOwnProfile} /></TabsContent>
                 <TabsContent value="stats" className="mt-6"><PlayerStatsOverviewTab /></TabsContent>
                 <TabsContent value="achievements" className="mt-6"><AchievementsTab player={player} /></TabsContent>
                 <TabsContent value="socials" className="mt-6"><SocialTab user={player} isOwnProfile={isOwnProfile} /></TabsContent>
                 <TabsContent value="training" className="mt-6"><TrainingTab /></TabsContent>
-                <TabsContent value="feed" className="mt-6"><FeedTab player={player} isOwnProfile={isOwnProfile} /></TabsContent>
-                <TabsContent value="media" className="mt-6"><MediaTab /></TabsContent>
             </Tabs>
         </div>
     )
