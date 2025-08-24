@@ -15,8 +15,7 @@ import { MediaTab } from "./player-page-media-tab";
 import { AchievementsTab } from "./player-page-achievements-tab";
 import { SocialTab } from "./player-page-social-tab";
 import Image from "next/image";
-import { PlayerOverviewTab } from "./player-page-overview-tab";
-import { StatsTab } from "./player-page-stats-tab";
+import { PlayerStatsOverviewTab } from "./player-page-stats-overview-tab";
 
 const defaultPlayer = users.find(u => u.role === 'Игрок')!;
 
@@ -70,16 +69,15 @@ export function PlayerPageTemplate({ user: profileUser }: { user?: User }) {
                 )}
             </header>
             
-             <Tabs defaultValue="overview">
-                <TabsList className="grid w-full grid-cols-3 md:grid-cols-7">
-                    <TabsTrigger value="overview">Обзор</TabsTrigger>
-                    <TabsTrigger value="achievements">
-                        <Award className="md:mr-2 h-4 w-4" />
-                        <span className="hidden md:inline">Достижения</span>
-                    </TabsTrigger>
+             <Tabs defaultValue="stats">
+                <TabsList className="grid w-full grid-cols-2 md:grid-cols-6">
                     <TabsTrigger value="stats">
                         <BarChart3 className="md:mr-2 h-4 w-4" />
                         <span className="hidden md:inline">Статистика</span>
+                    </TabsTrigger>
+                    <TabsTrigger value="achievements">
+                        <Award className="md:mr-2 h-4 w-4" />
+                        <span className="hidden md:inline">Достижения</span>
                     </TabsTrigger>
                     <TabsTrigger value="socials">
                         <Users2 className="md:mr-2 h-4 w-4"/>
@@ -98,9 +96,8 @@ export function PlayerPageTemplate({ user: profileUser }: { user?: User }) {
                         <span className="hidden md:inline">Медиа</span>
                     </TabsTrigger>
                 </TabsList>
-                <TabsContent value="overview" className="mt-6"><PlayerOverviewTab /></TabsContent>
+                <TabsContent value="stats" className="mt-6"><PlayerStatsOverviewTab /></TabsContent>
                 <TabsContent value="achievements" className="mt-6"><AchievementsTab player={player} /></TabsContent>
-                <TabsContent value="stats" className="mt-6"><StatsTab /></TabsContent>
                 <TabsContent value="socials" className="mt-6"><SocialTab user={player} isOwnProfile={isOwnProfile} /></TabsContent>
                 <TabsContent value="training" className="mt-6"><TrainingTab /></TabsContent>
                 <TabsContent value="feed" className="mt-6"><FeedTab player={player} isOwnProfile={isOwnProfile} /></TabsContent>
@@ -109,5 +106,3 @@ export function PlayerPageTemplate({ user: profileUser }: { user?: User }) {
         </div>
     )
 }
-
-    
