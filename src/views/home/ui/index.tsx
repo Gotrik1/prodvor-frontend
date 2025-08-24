@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Cpu, Users, Trophy } from 'lucide-react';
 import { LogoGeneratorWidget } from '@/widgets/logo-generator';
 import { i18n } from '@/shared/lib/i18n';
+import { Logo } from '@/views/auth/ui';
 
 export function HomePage() {
   return (
@@ -15,15 +16,7 @@ export function HomePage() {
         <section className="relative w-full pt-12 pb-20 md:pt-20 md:pb-32 text-center">
           <div className="container mx-auto px-4 md:px-6 z-10 relative">
             <div className="flex justify-center mb-8">
-              <Image 
-                src="https://placehold.co/250x250.png"
-                alt="ProDvor Hero Image" 
-                width={250} 
-                height={250}
-                className="object-contain"
-                priority
-                data-ai-hint="mascot soccer"
-              />
+                <Logo />
             </div>
             <div className="max-w-4xl mx-auto">
               <h1 className="text-4xl md:text-5xl lg:text-7xl font-black tracking-tighter mb-4 font-headline">

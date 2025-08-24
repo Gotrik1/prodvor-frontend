@@ -21,7 +21,6 @@ export function Logo() {
   return (
     <Link href="/" className="flex items-center gap-2 font-bold text-xl">
         <Image src="https://placehold.co/32x32.png" alt="ProDvor Logo" width={32} height={32} className="rounded-md" data-ai-hint="logo" />
-        <span>ProDvor</span>
     </Link>
   );
 }

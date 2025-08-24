@@ -37,6 +37,7 @@ import { GlobalSearch } from './global-search';
 import { Logo } from '@/views/auth/ui';
 import { useScrollDirection } from '@/shared/hooks/use-scroll-direction';
 import { cn } from '@/shared/lib/utils';
+import { SidebarTrigger } from '@/shared/ui/sidebar';
 
 export function DashboardHeader() {
   const { user } = useUserStore();
@@ -61,6 +62,7 @@ export function DashboardHeader() {
     )}>
       <div className="flex items-center gap-4">
          <div className="block md:hidden">
+            <Logo />
          </div>
       </div>
       <div className="flex items-center gap-2">
