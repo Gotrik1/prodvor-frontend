@@ -51,7 +51,7 @@ const StatRow = ({ label, value }: { label: string, value: string | number }) =>
 export const PlayerStatsOverviewTab = () => {
     const last5Form: ('W' | 'L' | 'D')[] = ['W', 'L', 'W', 'W', 'W'];
     return (
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <div className="lg:col-span-1 space-y-6">
                 <Card>
                     <CardHeader><CardTitle className="text-base">Форма (5 матчей)</CardTitle></CardHeader>
@@ -88,7 +88,7 @@ export const PlayerStatsOverviewTab = () => {
                     </CardContent>
                 </Card>
             </div>
-            <div className="lg:col-span-3">
+            <div className="lg:col-span-2">
                  <Card>
                     <CardHeader>
                         <CardTitle className="flex items-center gap-2"><History className="h-5 w-5" /> Карьерная статистика</CardTitle>
