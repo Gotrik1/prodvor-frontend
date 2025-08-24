@@ -45,21 +45,29 @@ export default function UserProfilePage({ params }: { params: { userId: string }
     );
   }
 
-  switch (user.role) {
-    case 'Судья':
-        return <RefereePageTemplate user={user} />;
-    case 'Тренер':
-        return <CoachPageTemplate user={user} />;
-    case 'Менеджер':
-        return <ManagerPageTemplate user={user} />;
-    case 'Организатор':
-        return <OrganizerPageTemplate user={user} />;
-    case 'Игрок':
-    case 'Капитан':
-        return <PlayerPageTemplate user={user} />;
-    case 'Болельщик':
-        return <FanPageTemplate user={user} />;
-    default:
-        return <PlaceholderTemplate roleName={user.role} />;
+  const renderTemplate = () => {
+    switch (user.role) {
+      case 'Судья':
+          return <RefereePageTemplate user={user} />;
+      case 'Тренер':
+          return <CoachPageTemplate user={user} />;
+      case 'Менеджер':
+          return <ManagerPageTemplate user={user} />;
+      case 'Организатор':
+          return <OrganizerPageTemplate user={user} />;
+      case 'Игрок':
+      case 'Капитан':
+          return <PlayerPageTemplate user={user} />;
+      case 'Болельщик':
+          return <FanPageTemplate user={user} />;
+      default:
+          return <PlaceholderTemplate roleName={user.role} />;
+    }
   }
+
+  return (
+    <div className="p-4 md:p-6 lg:p-8">
+      {renderTemplate()}
+    </div>
+  )
 }
