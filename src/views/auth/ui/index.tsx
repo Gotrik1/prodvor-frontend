@@ -1,3 +1,4 @@
+
 import { Button } from "@/shared/ui/button";
 import {
   Card,
@@ -16,19 +17,11 @@ import Link from 'next/link';
 import { i18n } from '@/shared/lib/i18n';
 
 // ------------------ Логотип ------------------
-export function Logo(
-  props: Omit<React.ComponentProps<typeof Image>, "src" | "alt" | "width" | "height">
-) {
+export function Logo() {
   return (
-    <Image
-      src="https://placehold.co/64x64.png"
-      alt="ProDvor Logo"
-      width={40}
-      height={40}
-      {...props}
-      className="object-contain"
-      data-ai-hint="logo"
-    />
+    <Link href="/" className="flex items-center gap-2 font-bold text-xl">
+        ProDvor
+    </Link>
   );
 }
 

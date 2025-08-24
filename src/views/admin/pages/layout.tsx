@@ -12,11 +12,9 @@ import { Button } from "@/shared/ui/button";
 import { Construction } from 'lucide-react';
 
 const Logo = () => (
-    <div className="flex items-center gap-2 font-bold text-xl">
-        <Link href="/" className="flex items-center gap-2">
-            <Image src="https://placehold.co/64x64.png" alt="ProDvor Logo" width={40} height={40} className="object-contain" data-ai-hint="logo" style={{ width: 'auto', height: 'auto' }} />
-        </Link>
-    </div>
+    <Link href="/" className="flex items-center gap-2 font-bold text-xl">
+        ProDvor
+    </Link>
 );
 
 export function AdminLayout({
