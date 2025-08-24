@@ -16,6 +16,7 @@ import Image from "next/image";
 import { SocialTab } from "./player-page-social-tab";
 import React from "react";
 import { MyTeamWidget } from "@/widgets/dashboard-widgets/ui/my-team-widget";
+import { Card } from "@/shared/ui/card";
 
 const defaultPlayer = users.find(u => u.role === 'Игрок')!;
 
@@ -34,9 +35,9 @@ export function PlayerPageTemplate({ user: profileUser }: { user?: User }) {
     return (
         <React.Fragment>
             {/* --- HEADER --- */}
-            <div className="relative mb-8 rounded-lg overflow-hidden border bg-card">
-                 <div className="relative h-48 md:h-64 w-full">
-                    {player.coverImageUrl ? (
+            <Card className="mb-8 overflow-hidden">
+                 <div className="relative h-48 md:h-64 w-full bg-muted">
+                    {player.coverImageUrl && (
                         <Image 
                             src={player.coverImageUrl} 
                             alt="Обложка профиля"
@@ -44,21 +45,20 @@ export function PlayerPageTemplate({ user: profileUser }: { user?: User }) {
                             className="object-cover"
                             data-ai-hint="profile cover"
                         />
-                    ) : (
-                        <div className="bg-muted h-full w-full"></div>
                     )}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
                  </div>
-                 <div className="relative p-4 md:p-6 pt-0">
-                    <div className="flex flex-col sm:flex-row items-end gap-4 -mt-16 sm:-mt-20">
-                         <Avatar className="h-32 w-32 border-4 border-background shrink-0">
-                            <AvatarImage src={player.avatarUrl} alt={player.nickname} />
-                            <AvatarFallback>{player.firstName.charAt(0)}{player.lastName.charAt(0)}</AvatarFallback>
-                        </Avatar>
-                        <div className="flex-grow text-center sm:text-left pt-10">
-                            <h1 className="text-3xl font-bold font-headline text-white">{player.firstName} &quot;{player.nickname}&quot; {player.lastName}</h1>
-                            {player.bio && <p className="text-sm text-gray-300 mt-1">{player.bio}</p>}
-                             <div className="flex flex-wrap items-center justify-center sm:justify-start gap-x-4 gap-y-1 text-gray-400 mt-2 text-sm">
+                 <div className="relative bg-card px-4 md:px-6 pb-4">
+                    <div className="flex flex-col sm:flex-row sm:items-end gap-4">
+                         <div className="-mt-16 sm:-mt-20 shrink-0">
+                            <Avatar className="h-32 w-32 border-4 border-card">
+                                <AvatarImage src={player.avatarUrl} alt={player.nickname} />
+                                <AvatarFallback>{player.firstName.charAt(0)}{player.lastName.charAt(0)}</AvatarFallback>
+                            </Avatar>
+                         </div>
+                        <div className="flex-grow text-center sm:text-left pt-2">
+                            <h1 className="text-3xl font-bold font-headline">{player.firstName} &quot;{player.nickname}&quot; {player.lastName}</h1>
+                            {player.bio && <p className="text-sm text-muted-foreground mt-1">{player.bio}</p>}
+                             <div className="flex flex-wrap items-center justify-center sm:justify-start gap-x-4 gap-y-1 text-muted-foreground mt-2 text-sm">
                                 {playerTeam && (
                                     <div className="flex items-center gap-2">
                                         <Briefcase className="h-4 w-4" />
@@ -70,14 +70,14 @@ export function PlayerPageTemplate({ user: profileUser }: { user?: User }) {
                              </div>
                         </div>
                          {!isOwnProfile && (
-                            <div className="flex items-center gap-2 shrink-0">
-                                <Button><UserPlus className="mr-2 h-4 w-4" />Добавить в друзья</Button>
-                                <Button variant="secondary"><MessageSquare className="mr-2 h-4 w-4" />Написать</Button>
+                            <div className="flex items-center gap-2 shrink-0 w-full sm:w-auto">
+                                <Button className="w-full"><UserPlus className="mr-2 h-4 w-4" />Добавить в друзья</Button>
+                                <Button variant="secondary" className="w-full"><MessageSquare className="mr-2 h-4 w-4" />Написать</Button>
                             </div>
                         )}
                     </div>
                 </div>
-            </div>
+            </Card>
 
             {/* --- MAIN CONTENT GRID --- */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -85,6 +85,7 @@ export function PlayerPageTemplate({ user: profileUser }: { user?: User }) {
                 <div className="lg:col-span-2 space-y-6">
                     <PlayerStatsOverviewTab />
                     <PublicationsTab player={player} isOwnProfile={isOwnProfile} />
+                    <TrainingTab />
                 </div>
 
                 {/* Right side (1 column wide) */}
@@ -92,7 +93,6 @@ export function PlayerPageTemplate({ user: profileUser }: { user?: User }) {
                     <AchievementsTab player={player} />
                     <MyTeamWidget user={player} />
                     <SocialTab user={player} isOwnProfile={isOwnProfile} />
-                    <TrainingTab />
                 </div>
             </div>
         </React.Fragment>
