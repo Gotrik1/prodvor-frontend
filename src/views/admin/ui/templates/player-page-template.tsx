@@ -75,36 +75,19 @@ export function PlayerPageTemplate({ user: profileUser }: { user?: User }) {
             {/* --- MAIN CONTENT GRID --- */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 
-                {/* --- Игровая статистика --- */}
-                <div className="lg:col-span-2">
+                {/* --- Left Column --- */}
+                <div className="lg:col-span-2 space-y-6">
                     <PlayerStatsOverviewTab />
-                </div>
-
-                {/* --- Достижения --- */}
-                <div className="lg:col-span-1">
-                     <AchievementsTab player={player} />
-                </div>
-
-                {/* --- Команда --- */}
-                <div className="lg:col-span-1">
-                    <MyTeamWidget user={player} />
-                </div>
-
-                {/* --- Публикации --- */}
-                <div className="lg:col-span-2">
                     <PublicationsTab player={player} isOwnProfile={isOwnProfile} />
-                </div>
-
-                {/* --- Социальные связи --- */}
-                <div className="lg:col-span-1">
-                     <SocialTab user={player} isOwnProfile={isOwnProfile} />
-                </div>
-
-                {/* --- Тренировки --- */}
-                <div className="lg:col-span-2">
                     <TrainingTab />
                 </div>
-                
+
+                {/* --- Right Column --- */}
+                <div className="lg:col-span-1 space-y-6">
+                     <AchievementsTab player={player} />
+                     <MyTeamWidget user={player} />
+                     <SocialTab user={player} isOwnProfile={isOwnProfile} />
+                </div>
             </div>
         </div>
     )
