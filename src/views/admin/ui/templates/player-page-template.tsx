@@ -1,10 +1,11 @@
 
+
 'use client';
 
 import { users, teams, ranks } from "@/mocks";
 import type { User } from "@/mocks/users";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
-import { Briefcase, MapPin, MessageSquare, UserPlus, Trophy, Award, Activity, Grid3x3, Users as UsersIcon } from "lucide-react";
+import { Briefcase, MapPin, MessageSquare, UserPlus } from "lucide-react";
 import { Button } from "@/shared/ui/button";
 import { useUserStore } from "@/widgets/dashboard-header/model/user-store";
 import { TrainingTab } from "./player-page-training-tab";
@@ -14,8 +15,8 @@ import { PublicationsTab } from "./player-page-publications-tab";
 import Image from "next/image";
 import { SocialTab } from "./player-page-social-tab";
 import React from "react";
-import { cn } from "@/shared/lib/utils";
 import { MyTeamWidget } from "@/widgets/dashboard-widgets/ui/my-team-widget";
+import { cn } from "@/shared/lib/utils";
 
 
 const defaultPlayer = users.find(u => u.role === 'Игрок')!;
@@ -23,17 +24,6 @@ const defaultPlayer = users.find(u => u.role === 'Игрок')!;
 const getRankForElo = (elo: number) => {
     return ranks.find(rank => elo >= rank.eloMin && elo <= rank.eloMax);
 };
-
-const Section = ({ title, icon: Icon, children, className }: { title: string, icon: React.ElementType, children: React.ReactNode, className?: string }) => (
-    <section className={cn("space-y-4", className)}>
-        <h2 className="text-2xl font-bold flex items-center gap-3">
-            <Icon className="h-6 w-6 text-primary" />
-            {title}
-        </h2>
-        {children}
-    </section>
-);
-
 
 export function PlayerPageTemplate({ user: profileUser }: { user?: User }) {
     const player = profileUser || defaultPlayer;
@@ -82,36 +72,39 @@ export function PlayerPageTemplate({ user: profileUser }: { user?: User }) {
                 )}
             </header>
             
-            <div className="space-y-8">
-                 {/* --- PRIMARY INFO GRID --- */}
-                <Section title="Игровая статистика" icon={Trophy}>
-                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
-                        <div className="lg:col-span-2">
-                            <PlayerStatsOverviewTab />
-                        </div>
-                        <div className="lg:col-span-1 space-y-6">
-                            <AchievementsTab player={player} />
-                            <MyTeamWidget user={player} />
-                        </div>
-                    </div>
-                </Section>
+            {/* --- MAIN CONTENT GRID --- */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 
-                {/* --- SOCIAL INFO GRID --- */}
-                <Section title="Социальная активность" icon={UsersIcon}>
-                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
-                        <div className="lg:col-span-2">
-                            <PublicationsTab player={player} isOwnProfile={isOwnProfile} />
-                        </div>
-                        <div className="lg:col-span-1">
-                            <SocialTab user={player} isOwnProfile={isOwnProfile} />
-                        </div>
-                    </div>
-                </Section>
+                {/* --- Игровая статистика --- */}
+                <div className="lg:col-span-2">
+                    <PlayerStatsOverviewTab />
+                </div>
 
-                {/* --- TRAINING --- */}
-                 <Section title="Тренировочный процесс" icon={Activity}>
+                {/* --- Достижения --- */}
+                <div className="lg:col-span-1">
+                     <AchievementsTab player={player} />
+                </div>
+
+                {/* --- Команда --- */}
+                <div className="lg:col-span-1">
+                    <MyTeamWidget user={player} />
+                </div>
+
+                {/* --- Публикации --- */}
+                <div className="lg:col-span-2">
+                    <PublicationsTab player={player} isOwnProfile={isOwnProfile} />
+                </div>
+
+                {/* --- Социальные связи --- */}
+                <div className="lg:col-span-1">
+                     <SocialTab user={player} isOwnProfile={isOwnProfile} />
+                </div>
+
+                {/* --- Тренировки --- */}
+                <div className="lg:col-span-2">
                     <TrainingTab />
-                 </Section>
+                </div>
+                
             </div>
         </div>
     )
