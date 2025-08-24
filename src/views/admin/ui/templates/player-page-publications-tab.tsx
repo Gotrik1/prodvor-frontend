@@ -7,7 +7,7 @@ import { users } from "@/mocks";
 import { CreatePost } from "@/widgets/dashboard-feed/ui/create-post";
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
 import { Button } from "@/shared/ui/button";
-import { Grid3x3, Heart, MessageSquare, PlusCircle, Send, Video, Bookmark, Tag } from "lucide-react";
+import { Grid3x3, Heart, MessageSquare, PlusCircle, Send, Video, Bookmark, Tag, Image as ImageIcon } from "lucide-react";
 import Image from "next/image";
 import {
   Dialog,
@@ -194,7 +194,7 @@ export function PublicationsTab({ player, isOwnProfile }: { player: User; isOwnP
                 <CardContent>
                      <Tabs defaultValue="photos" className="w-full">
                         <TabsList className="grid w-full grid-cols-4">
-                            <TabsTrigger value="photos">Фото</TabsTrigger>
+                            <TabsTrigger value="photos"><ImageIcon className="mr-2 h-4 w-4"/>Фото</TabsTrigger>
                             <TabsTrigger value="videos"><Video className="mr-2 h-4 w-4"/>Видео</TabsTrigger>
                             <TabsTrigger value="saved"><Bookmark className="mr-2 h-4 w-4"/>Сохраненное</TabsTrigger>
                             <TabsTrigger value="tagged"><Tag className="mr-2 h-4 w-4"/>Отметили</TabsTrigger>
