@@ -1,4 +1,4 @@
-import { MatchAnalysisPage } from '@/views/analysis/match';
+import { MatchAnalysisPage } from '@/app/(main)/analysis/match/ui';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
