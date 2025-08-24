@@ -1,12 +1,17 @@
 
+
 'use client';
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
 import { ChartContainer, ChartTooltipContent } from "@/shared/ui/chart";
-import { PolarGrid, PolarAngleAxis, Radar, RadarChart, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip } from "recharts";
+import { Radar, RadarChart, PolarAngleAxis, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip } from "recharts";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 import { History } from "lucide-react";
 import { PlayerTrainingStats } from "./player-page-training-tab";
+import { SocialTab } from "./player-page-social-tab";
+import { users } from "@/mocks";
+import type { User } from "@/mocks";
+import { useUserStore } from "@/widgets/dashboard-header/model/user-store";
 
 const skillData = [
   { subject: 'Атака', A: 86, fullMark: 100 },
@@ -50,10 +55,15 @@ const StatRow = ({ label, value }: { label: string, value: string | number }) =>
 
 export const PlayerStatsOverviewTab = () => {
     const last5Form: ('W' | 'L' | 'D')[] = ['W', 'L', 'W', 'W', 'W'];
+    const { user: currentUser } = useUserStore();
+    const player = users.find(u => u.role === 'Игрок')!; // Fallback for template view
+    const isOwnProfile = currentUser?.id === player.id;
+
+
     return (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-             <div className="space-y-6">
-                <Card>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+             <div className="lg:col-span-2">
+                <Card className="h-full">
                     <CardHeader>
                         <CardTitle className="flex items-center gap-2"><History className="h-5 w-5" /> Карьерная статистика</CardTitle>
                     </CardHeader>
@@ -88,36 +98,38 @@ export const PlayerStatsOverviewTab = () => {
                         </Tabs>
                     </CardContent>
                 </Card>
-                <PlayerTrainingStats />
             </div>
-            <div className="space-y-6 flex flex-col">
+            <div className="lg:col-span-1 space-y-6">
                 <Card>
                     <CardHeader><CardTitle className="text-base">Форма (5 матчей)</CardTitle></CardHeader>
                     <CardContent className="flex items-center gap-2">
                         {last5Form.map((result, index) => <FormBadge key={index} result={result} />)}
                     </CardContent>
                 </Card>
-                 <Card className="flex-grow">
-                    <CardHeader><CardTitle className="text-base">Навыки и прогресс ELO</CardTitle></CardHeader>
-                    <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4 items-center h-full">
-                        <ChartContainer config={{}} className="h-52 w-full">
-                            <RadarChart data={skillData} cy="45%">
-                                <ChartTooltipContent />
-                                <PolarAngleAxis dataKey="subject" className="text-xs"/>
-                                <Radar name="Skills" dataKey="A" stroke="hsl(var(--primary))" fill="hsl(var(--primary))" fillOpacity={0.6} />
-                            </RadarChart>
-                        </ChartContainer>
-                        <ChartContainer config={{elo: {label: 'ELO', color: "hsl(var(--primary))"}}} className="h-48 w-full">
-                            <LineChart data={eloData} margin={{ top: 5, right: 10, left: -20, bottom: 0 }}>
-                                <CartesianGrid vertical={false} />
-                                <XAxis dataKey="month" tickLine={false} axisLine={false} tickMargin={8} className="text-xs"/>
-                                <YAxis domain={['dataMin - 50', 'dataMax + 50']} hide/>
-                                <RechartsTooltip content={<ChartTooltipContent />}/>
-                                <Line type="monotone" dataKey="elo" stroke="hsl(var(--primary))" strokeWidth={2} dot={false} />
-                            </LineChart>
-                        </ChartContainer>
-                    </CardContent>
-                </Card>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-6">
+                    <Card>
+                        <CardHeader><CardTitle className="text-base">Навыки и прогресс ELO</CardTitle></CardHeader>
+                        <CardContent className="grid grid-cols-2 gap-4 items-center h-full">
+                            <ChartContainer config={{}} className="h-40 w-full">
+                                <RadarChart data={skillData} cy="45%">
+                                    <ChartTooltipContent />
+                                    <PolarAngleAxis dataKey="subject" className="text-xs"/>
+                                    <Radar name="Skills" dataKey="A" stroke="hsl(var(--primary))" fill="hsl(var(--primary))" fillOpacity={0.6} />
+                                </RadarChart>
+                            </ChartContainer>
+                            <ChartContainer config={{elo: {label: 'ELO', color: "hsl(var(--primary))"}}} className="h-40 w-full">
+                                <LineChart data={eloData} margin={{ top: 5, right: 10, left: -20, bottom: 0 }}>
+                                    <CartesianGrid vertical={false} />
+                                    <XAxis dataKey="month" tickLine={false} axisLine={false} tickMargin={8} className="text-xs"/>
+                                    <YAxis domain={['dataMin - 50', 'dataMax + 50']} hide/>
+                                    <RechartsTooltip content={<ChartTooltipContent />}/>
+                                    <Line type="monotone" dataKey="elo" stroke="hsl(var(--primary))" strokeWidth={2} dot={false} />
+                                </LineChart>
+                            </ChartContainer>
+                        </CardContent>
+                    </Card>
+                    <SocialTab user={player} isOwnProfile={isOwnProfile} />
+                </div>
             </div>
         </div>
     )

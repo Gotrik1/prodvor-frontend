@@ -79,25 +79,18 @@ export function PlayerPageTemplate({ user: profileUser }: { user?: User }) {
                 )}
             </header>
             
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
-                <div className="lg:col-span-2 space-y-8">
-                     <Section title="Статистика" icon={BarChart3}>
-                        <PlayerStatsOverviewTab />
-                    </Section>
-                    <Section title="Достижения" icon={Award}>
-                        <AchievementsTab player={player} />
-                    </Section>
-                </div>
-                 <div className="lg:col-span-1 space-y-8">
-                     <Section title="Социальные связи" icon={Users2}>
-                        <SocialTab user={player} isOwnProfile={isOwnProfile} />
-                    </Section>
-                    <Section title="Тренировки" icon={Activity}>
-                        <TrainingTab />
-                    </Section>
-                </div>
-            </div>
+            <Section title="Статистика" icon={BarChart3}>
+                <PlayerStatsOverviewTab />
+            </Section>
 
+            <Section title="Достижения" icon={Award}>
+                <AchievementsTab player={player} />
+            </Section>
+
+            <Section title="Тренировки" icon={Activity}>
+                <TrainingTab />
+            </Section>
+            
             <Section title="Публикации" icon={Grid3x3}>
                 <PublicationsTab player={player} isOwnProfile={isOwnProfile} />
             </Section>
