@@ -76,8 +76,8 @@ export default {
         sm: 'calc(var(--radius) - 4px)',
       },
       boxShadow: {
-        'main-sm': '0 2px 8px -1px hsl(var(--foreground) / 0.1)',
-        'main-lg': '0 8px 24px -4px hsl(var(--foreground) / 0.12)',
+        'main-sm': '0 2px 8px -1px rgba(0,0,0,0.15)',
+        'main-lg': '0 8px 24px -4px rgba(0,0,0,0.2)',
       },
       keyframes: {
         'accordion-down': {
