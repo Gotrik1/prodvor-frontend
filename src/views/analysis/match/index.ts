@@ -1,1 +1,0 @@
-export { MatchAnalysisPage } from './ui';
