@@ -43,7 +43,8 @@ export default {
           DEFAULT: 'hsl(var(--destructive))',
           foreground: 'hsl(var(--destructive-foreground))',
         },
-        border: 'hsl(var(--border))',
+        'ui-border': 'hsl(var(--ui-border))',
+        'layout-border': 'hsl(var(--layout-border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',
         chart: {

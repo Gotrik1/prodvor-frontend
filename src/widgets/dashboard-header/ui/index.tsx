@@ -52,11 +52,10 @@ export function DashboardHeader() {
   }, []);
 
   return (
-    <header className="flex h-16 items-center justify-between p-4 border-b bg-card">
+    <header className="flex h-16 items-center justify-between p-4 border-b border-layout bg-card">
       <div className="flex items-center gap-4">
          <div className="block md:hidden">
-          <Logo />
-        </div>
+         </div>
       </div>
       <div className="flex items-center gap-2">
         <div className="relative w-64 hidden md:block">

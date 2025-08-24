@@ -33,7 +33,7 @@ import { Logo } from "@/views/auth/ui";
 
 export function DashboardSidebar() {
     return (
-        <Sidebar collapsible="icon">
+        <Sidebar collapsible="icon" className="border-r border-layout">
         <SidebarHeader>
             <Logo />
         </SidebarHeader>
