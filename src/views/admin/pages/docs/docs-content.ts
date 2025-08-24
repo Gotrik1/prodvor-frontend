@@ -395,9 +395,3 @@ export const README = `
 6.  **UI Kit и Storybook:**
     *   Хотя используется ShadCN/UI, рекомендуется создать Storybook для всех кастомных компонентов и виджетов. Это поможет поддерживать консистентность интерфейса и упростит разработку новых фич.
 `;
-
-
-```
-- src/views/admin/pages/docs/docs-content.ts
-- src/views/admin/ui/templates/player-page-stats-overview-tab.tsx
-- src/views/admin/ui/templates/player-page-template.tsx
