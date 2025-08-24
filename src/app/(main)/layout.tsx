@@ -18,7 +18,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
     return null; // or a loading spinner
   }
 
-  const isPublicRoute = publicRoutes.includes(pathname) || pathname.startsWith('/teams/') || pathname.startsWith('/tournaments/') || pathname.startsWith('/users/');
+  const isPublicRoute = publicRoutes.includes(pathname) || pathname.startsWith('/teams/') || pathname.startsWith('/tournaments/');
 
   if (isPublicRoute) {
     return (
