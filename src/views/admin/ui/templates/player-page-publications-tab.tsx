@@ -18,6 +18,7 @@ import {
 } from "@/shared/ui/dialog";
 import { Button } from "@/shared/ui/button";
 import { useState, useEffect } from "react";
+import { cn } from "@/shared/lib/utils";
 
 const mockMedia = [
     { type: 'image', src: 'https://placehold.co/600x400.png', title: 'Фото с последней игры', dataAiHint: 'soccer game' },
@@ -27,33 +28,50 @@ const mockMedia = [
 ];
 
 const MediaPostStats = () => {
-    const [stats, setStats] = useState({ likes: 0, comments: 0 });
+    const [likes, setLikes] = useState(0);
+    const [comments, setComments] = useState(0);
+    const [isLiked, setIsLiked] = useState(false);
 
     useEffect(() => {
         // This code runs only on the client, after hydration
-        setStats({
-            likes: Math.floor(Math.random() * 500),
-            comments: Math.floor(Math.random() * 50)
-        });
+        setLikes(Math.floor(Math.random() * 500));
+        setComments(Math.floor(Math.random() * 50));
     }, []);
 
+    const handleLike = () => {
+        setIsLiked(!isLiked);
+        setLikes(prev => isLiked ? prev - 1 : prev + 1);
+    }
+
     return (
-        <div className="text-white flex items-center gap-4 text-lg font-semibold">
-            <div className="flex items-center gap-2">
-                <Heart className="h-6 w-6"/>
-                <span>{stats.likes}</span>
-            </div>
-            <div className="flex items-center gap-2">
-                <MessageSquare className="h-6 w-6"/>
-                <span>{stats.comments}</span>
-            </div>
+        <div className="text-white flex items-center gap-6 text-lg font-semibold">
+            <button className="flex items-center gap-2 group" onClick={handleLike}>
+                <Heart className={cn("h-7 w-7 transition-all group-hover:scale-110", isLiked && "fill-red-500 text-red-500")} />
+                <span>{likes}</span>
+            </button>
+             <Dialog>
+                <DialogTrigger asChild>
+                    <button className="flex items-center gap-2 group">
+                        <MessageSquare className="h-7 w-7 transition-all group-hover:scale-110"/>
+                        <span>{comments}</span>
+                    </button>
+                </DialogTrigger>
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogTitle>Комментарии</DialogTitle>
+                         <DialogDescription>
+                            Этот раздел находится в разработке.
+                        </DialogDescription>
+                    </DialogHeader>
+                </DialogContent>
+            </Dialog>
         </div>
     );
 };
 
 export function PublicationsTab({ player, isOwnProfile }: { player: User; isOwnProfile: boolean }) {
     const playerPosts = posts.filter(p => p.author.id === player.id);
-    const [combinedFeed, setCombinedFeed] = useState([...mockMedia, ...playerPosts]);
+    const [combinedFeed, setCombinedFeed] = useState<(typeof mockMedia[0] | typeof playerPosts[0])[]>([...mockMedia, ...playerPosts]);
 
     useEffect(() => {
         // Randomize feed only on the client side after initial render

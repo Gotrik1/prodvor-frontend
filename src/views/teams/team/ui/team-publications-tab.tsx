@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import type { Post, Team } from "@/mocks";
@@ -6,7 +7,7 @@ import { users } from "@/mocks";
 import { CreatePost } from "@/widgets/dashboard-feed/ui/create-post";
 import { Card, CardContent } from "@/shared/ui/card";
 import { Button } from "@/shared/ui/button";
-import { Grid3x3, MessageSquare, PlusCircle } from "lucide-react";
+import { Grid3x3, Heart, MessageSquare, PlusCircle } from "lucide-react";
 import Image from "next/image";
 import {
   Dialog,
@@ -17,6 +18,7 @@ import {
   DialogTrigger,
 } from "@/shared/ui/dialog";
 import { useState, useEffect } from "react";
+import { cn } from "@/shared/lib/utils";
 
 // Mock the current user for CreatePost component
 const currentUser = users[0];
@@ -29,9 +31,52 @@ const mockMedia = [
     { type: 'image', src: 'https://placehold.co/600x400.png', title: 'Награждение', dataAiHint: 'award ceremony' },
 ];
 
+const MediaPostStats = () => {
+    const [likes, setLikes] = useState(0);
+    const [comments, setComments] = useState(0);
+    const [isLiked, setIsLiked] = useState(false);
+
+    useEffect(() => {
+        // This code runs only on the client, after hydration
+        setLikes(Math.floor(Math.random() * 500));
+        setComments(Math.floor(Math.random() * 50));
+    }, []);
+
+    const handleLike = () => {
+        setIsLiked(!isLiked);
+        setLikes(prev => isLiked ? prev - 1 : prev + 1);
+    }
+
+    return (
+        <div className="text-white flex items-center gap-6 text-lg font-semibold">
+            <button className="flex items-center gap-2 group" onClick={handleLike}>
+                <Heart className={cn("h-7 w-7 transition-all group-hover:scale-110", isLiked && "fill-red-500 text-red-500")} />
+                <span>{likes}</span>
+            </button>
+             <Dialog>
+                <DialogTrigger asChild>
+                    <button className="flex items-center gap-2 group">
+                        <MessageSquare className="h-7 w-7 transition-all group-hover:scale-110"/>
+                        <span>{comments}</span>
+                    </button>
+                </DialogTrigger>
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogTitle>Комментарии</DialogTitle>
+                         <DialogDescription>
+                            Этот раздел находится в разработке.
+                        </DialogDescription>
+                    </DialogHeader>
+                </DialogContent>
+            </Dialog>
+        </div>
+    );
+};
+
+
 export function TeamPublicationsTab({ posts, team }: { posts: Post[], team: Team }) {
     const isTeamMember = team.members.includes(currentUser.id);
-    const [combinedFeed, setCombinedFeed] = useState([...mockMedia, ...posts]);
+    const [combinedFeed, setCombinedFeed] = useState<(typeof mockMedia[0] | typeof posts[0])[]>([...mockMedia, ...posts]);
 
     useEffect(() => {
         // Randomize feed only on the client side after initial render
@@ -82,12 +127,7 @@ export function TeamPublicationsTab({ posts, team }: { posts: Post[], team: Team
                                         data-ai-hint={item.dataAiHint}
                                     />
                                      <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                                        <div className="text-white flex items-center gap-4 text-lg font-semibold">
-                                            <div className="flex items-center gap-2">
-                                                <MessageSquare className="h-6 w-6"/>
-                                                <span>{Math.floor(Math.random() * 50)}</span>
-                                            </div>
-                                        </div>
+                                        <MediaPostStats />
                                     </div>
                                 </div>
                             )
