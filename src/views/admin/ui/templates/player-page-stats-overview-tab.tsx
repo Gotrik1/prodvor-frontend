@@ -64,16 +64,16 @@ export const PlayerStatsOverviewTab = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                         <h3 className="text-base font-semibold mb-2">Навыки и прогресс ELO</h3>
-                        <div className="grid grid-cols-2 gap-4 items-center h-40">
+                        <div className="grid grid-cols-2 gap-4 items-center h-48">
                             <ChartContainer config={{}} className="w-full h-full">
-                                <RadarChart data={skillData} cy="45%">
+                                <RadarChart data={skillData} cy="50%" cx="50%">
                                     <ChartTooltipContent />
                                     <PolarAngleAxis dataKey="subject" className="text-xs"/>
                                     <Radar name="Skills" dataKey="A" stroke="hsl(var(--primary))" fill="hsl(var(--primary))" fillOpacity={0.6} />
                                 </RadarChart>
                             </ChartContainer>
                             <ChartContainer config={{elo: {label: 'ELO', color: "hsl(var(--primary))"}}} className="w-full h-full">
-                                <LineChart data={eloData} margin={{ top: 5, right: 10, left: -20, bottom: 0 }}>
+                                <LineChart data={eloData} margin={{ top: 20, right: 10, left: -20, bottom: 0 }}>
                                     <CartesianGrid vertical={false} />
                                     <XAxis dataKey="month" tickLine={false} axisLine={false} tickMargin={8} className="text-xs"/>
                                     <YAxis domain={['dataMin - 50', 'dataMax + 50']} hide/>
