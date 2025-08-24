@@ -7,7 +7,7 @@ import { CreatePost } from "@/widgets/dashboard-feed/ui/create-post";
 import { users } from "@/mocks";
 import type { User } from "@/mocks";
 import Image from "next/image";
-import { Grid3x3, Heart, MessageSquare, PlusCircle, Send } from "lucide-react";
+import { Grid3x3, Heart, MessageSquare, PlusCircle, Send, Video, Bookmark, Tag } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -22,12 +22,15 @@ import { useState, useEffect } from "react";
 import { cn } from "@/shared/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { Textarea } from "@/shared/ui/textarea";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 
 const mockMedia = [
     { type: 'image', src: 'https://placehold.co/600x400.png', title: 'Фото с последней игры', dataAiHint: 'soccer game' },
     { type: 'image', src: 'https://placehold.co/600x400.png', title: 'Командное фото', dataAiHint: 'team photo' },
     { type: 'image', src: 'https://placehold.co/600x400.png', title: 'Тренировка', dataAiHint: 'sports training' },
     { type: 'image', src: 'https://placehold.co/600x400.png', title: 'Награждение', dataAiHint: 'award ceremony' },
+    { type: 'image', src: 'https://placehold.co/600x400.png', title: 'Победный гол', dataAiHint: 'goal celebration' },
+    { type: 'image', src: 'https://placehold.co/600x400.png', title: 'Разминка', dataAiHint: 'team warmup' },
 ];
 
 const mockComments = users.slice(2, 6).map((user, i) => ({
@@ -125,6 +128,17 @@ const MediaPostStats = () => {
     );
 };
 
+const EmptyTab = ({ icon: Icon, title, description }: { icon: React.ElementType, title: string, description: string }) => (
+    <div className="flex items-center justify-center min-h-[40vh] border-dashed border rounded-lg">
+        <div className="text-center">
+            <Icon className="mx-auto h-12 w-12 text-muted-foreground" />
+            <h3 className="mt-4 text-lg font-semibold">{title}</h3>
+            <p className="mt-1 text-sm text-muted-foreground">{description}</p>
+        </div>
+    </div>
+);
+
+
 export function PublicationsTab({ player, isOwnProfile }: { player: User; isOwnProfile: boolean }) {
     const [mediaFeed, setMediaFeed] = useState<(typeof mockMedia[0])[]>([]);
 
@@ -155,33 +169,46 @@ export function PublicationsTab({ player, isOwnProfile }: { player: User; isOwnP
                     </div>
                 </CardHeader>
                 <CardContent>
-                     {mediaFeed.length > 0 ? (
-                        <div className="grid grid-cols-2 gap-2">
-                            {mediaFeed.map((item, index) => (
-                                <div key={`media-${index}`} className="group relative aspect-square w-full overflow-hidden rounded-lg">
-                                    <Image 
-                                        src={item.src} 
-                                        alt={item.title} 
-                                        fill
-                                        sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
-                                        className="object-cover group-hover:scale-105 transition-transform"
-                                        data-ai-hint={item.dataAiHint}
-                                    />
-                                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                                        <MediaPostStats />
-                                    </div>
+                     <Tabs defaultValue="photos" className="w-full">
+                        <TabsList className="grid w-full grid-cols-4">
+                            <TabsTrigger value="photos">Фото</TabsTrigger>
+                            <TabsTrigger value="videos"><Video className="mr-2 h-4 w-4"/>Видео</TabsTrigger>
+                            <TabsTrigger value="saved"><Bookmark className="mr-2 h-4 w-4"/>Сохраненное</TabsTrigger>
+                            <TabsTrigger value="tagged"><Tag className="mr-2 h-4 w-4"/>Отметили</TabsTrigger>
+                        </TabsList>
+                        <TabsContent value="photos" className="mt-4">
+                             {mediaFeed.length > 0 ? (
+                                <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                                    {mediaFeed.map((item, index) => (
+                                        <div key={`media-${index}`} className="group relative aspect-square w-full overflow-hidden rounded-lg">
+                                            <Image 
+                                                src={item.src} 
+                                                alt={item.title} 
+                                                fill
+                                                sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
+                                                className="object-cover group-hover:scale-105 transition-transform"
+                                                data-ai-hint={item.dataAiHint}
+                                            />
+                                            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                                <MediaPostStats />
+                                            </div>
+                                        </div>
+                                    ))}
                                 </div>
-                            ))}
-                        </div>
-                    ) : (
-                        <div className="flex items-center justify-center min-h-[40vh] border-dashed border rounded-lg">
-                            <div className="text-center">
-                                <Grid3x3 className="mx-auto h-12 w-12 text-muted-foreground" />
-                                <h3 className="mt-4 text-lg font-semibold">Фотографий пока нет</h3>
-                                <p className="mt-1 text-sm text-muted-foreground">У игрока еще нет фотографий или видео.</p>
-                            </div>
-                        </div>
-                    )}
+                            ) : (
+                                <EmptyTab icon={Grid3x3} title="Фотографий пока нет" description="У игрока еще нет фотографий."/>
+                            )}
+                        </TabsContent>
+                        <TabsContent value="videos" className="mt-4">
+                           <EmptyTab icon={Video} title="Видео пока нет" description="У игрока еще нет видео."/>
+                        </TabsContent>
+                        <TabsContent value="saved" className="mt-4">
+                           <EmptyTab icon={Bookmark} title="Нет сохраненных" description="Вы еще ничего не сохранили."/>
+                        </TabsContent>
+                         <TabsContent value="tagged" className="mt-4">
+                           <EmptyTab icon={Tag} title="Вас не отметили" description="Никто еще не отметил вас на публикациях."/>
+                        </TabsContent>
+                    </Tabs>
                 </CardContent>
             </Card>
     )
