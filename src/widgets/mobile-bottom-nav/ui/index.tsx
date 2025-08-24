@@ -21,7 +21,7 @@ const NavItem = ({ href, icon: Icon, label }: { href: string; icon: React.Elemen
     const isActive = pathname === href;
 
     return (
-        <Link href={href} className="flex flex-col items-center justify-center text-center w-full">
+        <Link href={href} className="flex flex-col items-center justify-start text-center w-full pt-3">
             <Icon className={cn("h-6 w-6 transition-colors", isActive ? "text-primary" : "text-muted-foreground")} />
         </Link>
     );
@@ -29,14 +29,14 @@ const NavItem = ({ href, icon: Icon, label }: { href: string; icon: React.Elemen
 
 export function MobileBottomNav() {
     return (
-        <div className="md:hidden fixed bottom-0 left-0 right-0 h-16 bg-card border-t border-layout-border z-50">
+        <div className="md:hidden fixed bottom-0 left-0 right-0 h-24 bg-card border-t border-layout-border z-50">
             <div className="grid grid-cols-5 h-full">
                 {navItems.map((item) => (
                     <NavItem key={item.href} {...item} />
                 ))}
                 <Sheet>
                     <SheetTrigger asChild>
-                         <button className="flex flex-col items-center justify-center text-center w-full">
+                         <button className="flex flex-col items-center justify-start text-center w-full pt-3">
                             <MoreHorizontal className="h-6 w-6 text-muted-foreground" />
                         </button>
                     </SheetTrigger>
