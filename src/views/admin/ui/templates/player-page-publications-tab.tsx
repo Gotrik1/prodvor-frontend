@@ -2,7 +2,7 @@
 
 'use client';
 
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
+import { Card, CardContent } from "@/shared/ui/card";
 import { CreatePost } from "@/widgets/dashboard-feed/ui/create-post";
 import { users } from "@/mocks";
 import type { User } from "@/mocks";
@@ -25,6 +25,7 @@ import { Textarea } from "@/shared/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 import Link from "next/link";
 import { Separator } from "@/shared/ui/separator";
+import { Input } from "@/shared/ui/input";
 
 const mockMedia = [
     { type: 'image', src: 'https://placehold.co/600x400.png', title: 'Фото с последней игры', dataAiHint: 'soccer game' },
