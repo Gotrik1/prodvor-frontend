@@ -43,6 +43,10 @@ export default {
           DEFAULT: 'hsl(var(--destructive))',
           foreground: 'hsl(var(--destructive-foreground))',
         },
+        success: {
+          DEFAULT: 'hsl(142 71% 45%)',
+          foreground: 'hsl(142 71% 95%)',
+        },
         'ui-border': 'hsl(var(--ui-border))',
         'layout-border': 'hsl(var(--layout-border))',
         input: 'hsl(var(--input))',
