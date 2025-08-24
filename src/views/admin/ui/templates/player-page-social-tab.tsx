@@ -88,25 +88,18 @@ export function SocialTab({ user, isOwnProfile }: { user: User, isOwnProfile: bo
             </CardHeader>
             <CardContent>
                 <Tabs defaultValue="friends">
-                    <TabsList className="grid w-full grid-cols-3">
+                    <TabsList className={`grid w-full ${isOwnProfile ? 'grid-cols-4' : 'grid-cols-3'}`}>
                         <TabsTrigger value="friends">Друзья ({user.friends.length})</TabsTrigger>
                         <TabsTrigger value="followers">Подписчики ({user.followers.length})</TabsTrigger>
+                        {isOwnProfile && (
+                            <TabsTrigger value="requests">
+                                <UserPlus className="mr-2 h-4 w-4"/>
+                                Заявки
+                                <Badge variant="destructive" className="ml-2">{mockFriendRequests.length}</Badge>
+                            </TabsTrigger>
+                        )}
                         <TabsTrigger value="following">Подписки ({user.followingUsers.length})</TabsTrigger>
                     </TabsList>
-                    
-                    {isOwnProfile && (
-                        <Card className="my-6">
-                            <CardHeader>
-                                <CardTitle className="flex items-center gap-2 text-lg">
-                                    <UserPlus className="h-5 w-5"/>
-                                    Заявки в друзья
-                                </CardTitle>
-                            </CardHeader>
-                            <CardContent>
-                                <FriendRequests />
-                            </CardContent>
-                        </Card>
-                    )}
                     
                     <TabsContent value="friends" className="mt-6">
                         <UserList userIds={user.friends} emptyText="У этого пользователя пока нет друзей." />
@@ -114,6 +107,11 @@ export function SocialTab({ user, isOwnProfile }: { user: User, isOwnProfile: bo
                     <TabsContent value="followers" className="mt-6">
                          <UserList userIds={user.followers} emptyText="На этого пользователя пока никто не подписан." />
                     </TabsContent>
+                     {isOwnProfile && (
+                        <TabsContent value="requests" className="mt-6">
+                            <FriendRequests />
+                        </TabsContent>
+                     )}
                     <TabsContent value="following" className="mt-6">
                          <UserList userIds={user.followingUsers} emptyText="Этот пользователь ни на кого не подписан." />
                     </TabsContent>
@@ -122,5 +120,3 @@ export function SocialTab({ user, isOwnProfile }: { user: User, isOwnProfile: bo
         </Card>
     );
 }
-
-    
