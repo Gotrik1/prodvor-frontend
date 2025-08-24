@@ -36,7 +36,7 @@ export const API_DOCS = `
   "nickname": "string (unique)",
   "avatarUrl": "string (URL)",
   "email": "string (email, unique)",
-  "roles": ["string (Enum: 'Игрок', 'Капитан', 'Тренер', 'Организатор', 'Судья', 'Менеджер', 'Болельщик', 'Модератор', 'Администратор')", "..."],
+  "roles": ["string (Enum: 'Игрок', 'Капитан', ...)", "..."],
   "gender": "string (Enum: 'мужской', 'женский')",
   "age": "number",
   "city": "string",
@@ -45,7 +45,18 @@ export const API_DOCS = `
   "friends": ["string (userId)", "..."],
   "followers": ["string (userId)", "..."],
   "followingUsers": ["string (userId)", "..."],
-  "followingTeams": ["string (teamId)", "..."]
+  "followingTeams": ["string (teamId)", "..."],
+  "privacySettings": {
+    "profile_visibility": "string (Enum: 'all', 'friends', 'nobody')",
+    "teams_visibility": "string (Enum: 'all', 'friends')",
+    "socials_visibility": "string (Enum: 'all', 'friends', 'nobody')",
+    "media_visibility": "string (Enum: 'all', 'friends', 'nobody')",
+    "tagging_permissions": "string (Enum: 'all', 'friends', 'nobody')",
+    "messages_privacy": "string (Enum: 'all', 'friends')",
+    "invites_privacy": "string (Enum: 'all', 'friends', 'nobody')",
+    "public_profile": "boolean",
+    "is_profile_private": "boolean"
+  }
 }
 \`\`\`
 
@@ -411,6 +422,10 @@ export const API_DOCS = `
 - **GET \`/users/:id\`**: Получение публичного профиля пользователя.
   - **Response:** Возвращает объект \`User\` и связанные профили.
 - **PUT \`/users/me\`**: Обновление профиля текущего пользователя.
+- **PUT \`/users/me/privacy\`**: Обновление настроек приватности.
+  - **Auth:** Требуется.
+  - **Body:** \`{ "privacySettings": { ... } }\`
+  - **Response:** \`{ "success": true }\`.
 
 ### 4.2. Teams (\`/teams\`)
 
@@ -619,3 +634,4 @@ export const API_DOCS = `
 
 ---
 `;
+
