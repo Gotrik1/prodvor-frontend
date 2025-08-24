@@ -59,6 +59,9 @@ export function PlayerPageTemplate({ user: profileUser }: { user?: User }) {
                             <h1 className="text-3xl font-bold font-headline">{player.firstName} &quot;{player.nickname}&quot; {player.lastName}</h1>
                             {player.bio && <p className="text-sm text-muted-foreground mt-1">{player.bio}</p>}
                              <div className="flex flex-wrap items-center justify-center sm:justify-start gap-x-4 gap-y-1 text-muted-foreground mt-2 text-sm">
+                                {player.city && <span>{player.city}</span>}
+                                {player.age && <span>{player.age} лет</span>}
+                                {player.gender && <span>{player.gender}</span>}
                                 {playerTeam && (
                                     <div className="flex items-center gap-2">
                                         <Briefcase className="h-4 w-4" />
@@ -66,7 +69,6 @@ export function PlayerPageTemplate({ user: profileUser }: { user?: User }) {
                                         <span>{playerTeam.name}</span>
                                     </div>
                                 )}
-                                {player.city && <div className="flex items-center gap-2"><MapPin className="h-4 w-4"/><span>{player.city}</span></div>}
                              </div>
                         </div>
                          {!isOwnProfile && (
