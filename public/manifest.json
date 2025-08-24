@@ -1,0 +1,21 @@
+{
+  "name": "ProDvor",
+  "short_name": "ProDvor",
+  "description": "ProDvor — это социальная платформа, объединяющая дворовый спорт и любительский киберспорт.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#17181C",
+  "theme_color": "#17181C",
+  "icons": [
+    {
+      "src": "/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
