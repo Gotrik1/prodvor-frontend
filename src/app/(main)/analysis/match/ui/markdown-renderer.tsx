@@ -4,7 +4,7 @@
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { markdownComponents } from './markdown-styles.tsx';
+import { markdownComponents } from './markdown-styles';
 
 export function MarkdownRenderer({ content }: { content: string }) {
     return (

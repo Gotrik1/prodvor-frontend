@@ -1,5 +1,4 @@
 
-
 'use client';
 import { Card, CardBody } from "@/shared/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
@@ -10,7 +9,7 @@ import { CONCEPT, README } from './docs-content';
 import { API_DOCS } from './api-docs-content';
 import { RolesPage } from "../roles";
 import { RanksPage } from "../ranks";
-import { markdownComponents } from '@/app/(main)/analysis/match/ui/markdown-styles.tsx';
+import { markdownComponents } from '@/app/(main)/analysis/match/ui/markdown-styles';
 
 export function DocsPage() {
   return (

@@ -14,6 +14,10 @@ const publicRoutes = ['/about', '/auth', '/auth/register', '/store', '/store/pro
 export default function MainLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   
+  if (!pathname) {
+    return null; // or a loading spinner
+  }
+
   const isPublicRoute = publicRoutes.includes(pathname) || pathname.startsWith('/teams/') || pathname.startsWith('/tournaments/') || pathname.startsWith('/users/');
 
   if (isPublicRoute) {

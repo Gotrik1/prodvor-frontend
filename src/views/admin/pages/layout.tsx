@@ -27,6 +27,10 @@ export function AdminLayout({
 }) {
     const pathname = usePathname();
 
+    if (!pathname) {
+        return null; // Or a loading state
+    }
+
  return (
         <SidebarProvider>
             <Sidebar>
