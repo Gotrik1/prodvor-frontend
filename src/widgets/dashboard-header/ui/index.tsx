@@ -35,10 +35,13 @@ import {
 import React from 'react';
 import { GlobalSearch } from './global-search';
 import { Logo } from '@/views/auth/ui';
+import { useScrollDirection } from '@/shared/hooks/use-scroll-direction';
+import { cn } from '@/shared/lib/utils';
 
 export function DashboardHeader() {
   const { user } = useUserStore();
   const [open, setOpen] = React.useState(false);
+  const scrollDirection = useScrollDirection();
 
   React.useEffect(() => {
     const down = (e: KeyboardEvent) => {
@@ -52,7 +55,10 @@ export function DashboardHeader() {
   }, []);
 
   return (
-    <header className="flex h-16 items-center justify-between p-4 border-b border-layout-border bg-card">
+    <header className={cn(
+        "sticky top-0 z-40 flex h-16 items-center justify-between p-4 border-b border-layout-border bg-card transition-transform duration-300",
+        scrollDirection === 'down' ? '-translate-y-full' : 'translate-y-0'
+    )}>
       <div className="flex items-center gap-4">
          <div className="block md:hidden">
          </div>
