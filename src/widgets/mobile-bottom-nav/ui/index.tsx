@@ -8,6 +8,7 @@ import { Home, Users, Dumbbell, MessageCircle, MoreHorizontal } from 'lucide-rea
 import { Sheet, SheetContent, SheetTrigger } from '@/shared/ui/sheet';
 import { DashboardSidebar } from '@/widgets/dashboard-sidebar';
 import { cn } from '@/shared/lib/utils';
+import { useScrollDirection } from '@/shared/hooks/use-scroll-direction';
 
 const navItems = [
     { href: '/dashboard', icon: Home, label: 'Лента' },
@@ -28,8 +29,13 @@ const NavItem = ({ href, icon: Icon, label }: { href: string; icon: React.Elemen
 };
 
 export function MobileBottomNav() {
+    const scrollDirection = useScrollDirection();
+
     return (
-        <div className="md:hidden fixed bottom-0 left-0 right-0 h-24 bg-card/80 backdrop-blur-lg border-t border-layout-border z-50">
+        <div className={cn(
+            "md:hidden fixed bottom-0 left-0 right-0 h-24 bg-card/80 backdrop-blur-lg border-t border-layout-border z-50 transition-transform duration-300",
+            scrollDirection === 'up' ? 'translate-y-full' : 'translate-y-0'
+        )}>
             <div className="grid grid-cols-5 h-full">
                 {navItems.map((item) => (
                     <NavItem key={item.href} {...item} />
