@@ -21,7 +21,6 @@ export function HomeHeader() {
             <div className="container mx-auto flex h-16 items-center justify-between px-4 md:px-6">
             <Link href="/" className="flex items-center gap-2 font-bold text-xl">
                 <Logo />
-                <span className="font-headline">ProDvor</span>
             </Link>
             <div className="flex items-center gap-2">
                 <ThemeToggle />
