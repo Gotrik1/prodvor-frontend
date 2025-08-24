@@ -8,9 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/shared/ui/card';
-import {
-  FormLabel,
-} from '@/shared/ui/form';
+import { Label } from '@/shared/ui/label';
 import { ThemeToggle } from '@/shared/ui/theme-toggle';
 
 export function AppearanceTab() {
@@ -22,7 +20,7 @@ export function AppearanceTab() {
             </CardHeader>
             <CardContent className="space-y-4">
                <div className="flex items-center justify-between p-4 rounded-lg border">
-                    <FormLabel>Тема оформления</FormLabel>
+                    <Label className="font-medium">Тема оформления</Label>
                     <ThemeToggle />
                 </div>
             </CardContent>

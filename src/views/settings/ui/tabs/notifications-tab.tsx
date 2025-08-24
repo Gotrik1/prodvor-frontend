@@ -10,10 +10,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/shared/ui/card';
-import {
-  FormDescription,
-  FormLabel,
-} from '@/shared/ui/form';
+import { Label } from '@/shared/ui/label';
 import { Save } from 'lucide-react';
 import { Switch } from '@/shared/ui/switch';
 
@@ -27,22 +24,22 @@ export function NotificationsTab() {
             <CardContent className="space-y-4">
                  <div className="flex items-center justify-between p-4 rounded-lg border">
                     <div>
-                        <FormLabel>Новые вызовы</FormLabel>
-                        <FormDescription>Получать уведомления, когда вам бросают вызов.</FormDescription>
+                        <Label className="font-medium">Новые вызовы</Label>
+                        <p className="text-sm text-muted-foreground">Получать уведомления, когда вам бросают вызов.</p>
                     </div>
                     <Switch defaultChecked/>
                 </div>
                  <div className="flex items-center justify-between p-4 rounded-lg border">
                     <div>
-                        <FormLabel>Комментарии к постам</FormLabel>
-                        <FormDescription>Уведомлять о новых комментариях под вашими постами.</FormDescription>
+                        <Label className="font-medium">Комментарии к постам</Label>
+                        <p className="text-sm text-muted-foreground">Уведомлять о новых комментариях под вашими постами.</p>
                     </div>
                     <Switch defaultChecked/>
                 </div>
                  <div className="flex items-center justify-between p-4 rounded-lg border">
                     <div>
-                        <FormLabel>Новости платформы</FormLabel>
-                        <FormDescription>Получать email-рассылку о новостях и обновлениях.</FormDescription>
+                        <Label className="font-medium">Новости платформы</Label>
+                        <p className="text-sm text-muted-foreground">Получать email-рассылку о новостях и обновлениях.</p>
                     </div>
                     <Switch />
                 </div>
