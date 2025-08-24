@@ -10,7 +10,7 @@ import { HomeHeader } from '@/widgets/home-header';
 import { HomeFooter } from '@/widgets/home-footer';
 import { MobileBottomNav } from '@/widgets/mobile-bottom-nav';
 
-const publicRoutes = ['/about', '/auth', '/auth/register', '/store', '/store/pro'];
+const publicRoutes = ['/', '/about', '/auth', '/auth/register', '/store', '/store/pro'];
 
 export default function MainLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
