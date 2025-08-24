@@ -5,7 +5,7 @@
 import { users, teams, ranks } from "@/mocks";
 import type { User } from "@/mocks/users";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
-import { Briefcase, MapPin, MessageSquare, UserPlus, Award, Grid3x3, Activity } from "lucide-react";
+import { Briefcase, MapPin, MessageSquare, UserPlus } from "lucide-react";
 import { Button } from "@/shared/ui/button";
 import { useUserStore } from "@/widgets/dashboard-header/model/user-store";
 import { TrainingTab } from "./player-page-training-tab";
@@ -14,6 +14,8 @@ import { PlayerStatsOverviewTab } from "./player-page-stats-overview-tab";
 import { PublicationsTab } from "./player-page-publications-tab";
 import Image from "next/image";
 import { cn } from "@/shared/lib/utils";
+import { MyTeamWidget } from "@/widgets/dashboard-widgets/ui/my-team-widget";
+import { SocialTab } from "./player-page-social-tab";
 
 const defaultPlayer = users.find(u => u.role === 'Игрок')!;
 
@@ -68,26 +70,29 @@ export function PlayerPageTemplate({ user: profileUser }: { user?: User }) {
                 )}
             </header>
             
-            {/* --- PRIMARY INFO GRID (Stats & Achievements) --- */}
+             {/* --- SOCIAL INFO GRID --- */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
+                <div className="lg:col-span-2">
+                    <PublicationsTab player={player} isOwnProfile={isOwnProfile} />
+                </div>
+                <div className="lg:col-span-1">
+                     <SocialTab user={player} isOwnProfile={isOwnProfile} />
+                </div>
+            </div>
+
+            {/* --- PRIMARY INFO GRID --- */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
                 <div className="lg:col-span-2">
                     <PlayerStatsOverviewTab />
                 </div>
-                <div className="lg:col-span-1">
+                <div className="lg:col-span-1 space-y-6">
                     <AchievementsTab player={player} />
+                    <MyTeamWidget user={player} />
                 </div>
             </div>
 
-            {/* --- SECONDARY INFO GRID (Publications & Training) --- */}
-             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
-                <div className="lg:col-span-2">
-                    <PublicationsTab player={player} isOwnProfile={isOwnProfile} />
-                </div>
-                 <div className="lg:col-span-1">
-                    <TrainingTab />
-                </div>
-            </div>
-
+            {/* --- TRAINING --- */}
+            <TrainingTab />
         </div>
     )
 }
