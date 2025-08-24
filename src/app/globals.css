@@ -50,10 +50,10 @@ html {
   }
 
   .dark {
-    --background: 220 25% 14%; /* #1A202C */
+    --background: 210 6% 10%; /* #17181C - VK Background */
     --foreground: 210 40% 98%;
 
-    --card: 220 25% 18%;
+    --card: 210 6% 13%; /* #1E1F23 - VK Card */
     --card-foreground: 210 40% 98%;
 
     --popover: 222.2 84% 4.9%;
@@ -62,10 +62,10 @@ html {
     --primary: 198 93% 59%; /* #29ABE2 */
     --primary-foreground: 220 25% 14%;
 
-    --secondary: 217.2 32.6% 17.5%;
+    --secondary: 210 6% 16%;
     --secondary-foreground: 210 40% 98%;
 
-    --muted: 217.2 32.6% 17.5%;
+    --muted: 210 6% 16%;
     --muted-foreground: 215 20.2% 65.1%;
 
     --accent: 33 100% 50%; /* #FF8C00 */
@@ -74,9 +74,9 @@ html {
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
 
-    --ui-border: 217.2 32.6% 17.5%;
-    --layout-border: 217.2 32.6% 25%;
-    --input: 217.2 32.6% 17.5%;
+    --ui-border: 210 6% 20%;
+    --layout-border: 210 6% 23%;
+    --input: 210 6% 16%;
     --ring: 212.7 26.8% 83.9%;
   }
 
