@@ -24,13 +24,19 @@ import {
   FormLabel,
   FormMessage,
 } from '@/shared/ui/form';
-import { Save, Warehouse } from 'lucide-react';
+import { CalendarIcon, Save, Warehouse } from 'lucide-react';
 import { useUserStore } from '@/widgets/dashboard-header/model/user-store';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import { Textarea } from '@/shared/ui/textarea';
 import { useToast } from '@/shared/hooks/use-toast';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shared/ui/select';
 import Link from 'next/link';
+import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/popover';
+import { Calendar } from '@/shared/ui/calendar';
+import { cn } from '@/shared/lib/utils';
+import { allSports } from '@/mocks';
+import { MultiSelect } from '@/shared/ui/multi-select';
+import React from 'react';
 
 const profileFormSchema = z.object({
   firstName: z.string().min(2, 'Имя должно содержать не менее 2 символов.'),
@@ -38,7 +44,19 @@ const profileFormSchema = z.object({
   nickname: z.string().min(3, 'Никнейм должен содержать не менее 3 символов.'),
   gender: z.enum(['мужской', 'женский']),
   bio: z.string().max(160, 'Биография не должна превышать 160 символов.').optional(),
+  birthDate: z.date({
+    required_error: "Пожалуйста, выберите дату рождения.",
+  }),
+  city: z.string().min(2, "Название города должно содержать не менее 2 символов."),
+  disciplines: z.array(z.string()).min(1, "Выберите хотя бы одну дисциплину."),
 });
+
+const sportOptions = allSports.map(sport => ({
+    value: sport.id,
+    label: sport.name,
+    group: sport.isTeamSport ? 'Командные' : 'Индивидуальные',
+}));
+
 
 export function ProfileTab() {
     const { toast } = useToast();
@@ -51,7 +69,10 @@ export function ProfileTab() {
             lastName: currentUser?.lastName || '',
             nickname: currentUser?.nickname || '',
             gender: currentUser?.gender || 'мужской',
-            bio: currentUser?.bio || "Страстный игрок в дворовый футбол и CS2. Ищу команду для серьезных игр."
+            bio: currentUser?.bio || "Страстный игрок в дворовый футбол и CS2. Ищу команду для серьезных игр.",
+            city: currentUser?.city || '',
+            disciplines: currentUser?.disciplines || [],
+            birthDate: currentUser?.age ? new Date(new Date().setFullYear(new Date().getFullYear() - currentUser.age)) : undefined,
         }
     });
 
@@ -110,6 +131,68 @@ export function ProfileTab() {
                                 </FormItem>
                             )}/>
                         </div>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <FormField control={profileForm.control} name="city" render={({ field }) => (
+                                <FormItem><FormLabel>Город</FormLabel><FormControl><Input {...field} placeholder="Например, Москва" /></FormControl><FormMessage /></FormItem>
+                            )}/>
+                            <FormField control={profileForm.control} name="birthDate" render={({ field }) => (
+                                <FormItem className="flex flex-col">
+                                    <FormLabel>Дата рождения</FormLabel>
+                                    <Popover>
+                                        <PopoverTrigger asChild>
+                                        <FormControl>
+                                            <Button
+                                            variant={"outline"}
+                                            className={cn(
+                                                "w-full pl-3 text-left font-normal",
+                                                !field.value && "text-muted-foreground"
+                                            )}
+                                            >
+                                            {field.value ? (
+                                                field.value.toLocaleDateString()
+                                            ) : (
+                                                <span>Выберите дату</span>
+                                            )}
+                                            <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                                            </Button>
+                                        </FormControl>
+                                        </PopoverTrigger>
+                                        <PopoverContent className="w-auto p-0" align="start">
+                                        <Calendar
+                                            mode="single"
+                                            selected={field.value}
+                                            onSelect={field.onChange}
+                                            disabled={(date) =>
+                                                date > new Date() || date < new Date("1900-01-01")
+                                            }
+                                            initialFocus
+                                        />
+                                        </PopoverContent>
+                                    </Popover>
+                                    <FormMessage />
+                                </FormItem>
+                            )}/>
+                        </div>
+                        <FormField
+                            control={profileForm.control}
+                            name="disciplines"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Мои дисциплины</FormLabel>
+                                    <FormControl>
+                                        <MultiSelect
+                                            options={sportOptions}
+                                            selected={field.value}
+                                            onChange={field.onChange}
+                                            placeholder="Выберите ваши виды спорта..."
+                                            className="w-full"
+                                        />
+                                    </FormControl>
+                                    <FormDescription>Выберите виды спорта, в которых вы участвуете.</FormDescription>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
                          <FormField control={profileForm.control} name="bio" render={({ field }) => (
                             <FormItem><FormLabel>О себе</FormLabel><FormControl><Textarea {...field} /></FormControl><FormDescription>Краткая информация о вас.</FormDescription><FormMessage /></FormItem>
                         )}/>

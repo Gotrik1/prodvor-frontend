@@ -10,7 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { YandexMapV3 } from "@/widgets/yandex-map";
 import { UploadCloud } from "lucide-react";
 import { allSports } from "@/mocks";
-import { MultiSelect } from "./multi-select";
+import { MultiSelect } from "@/shared/ui/multi-select";
 import { useState } from "react";
 import { useToast } from "@/shared/hooks/use-toast";
 import { useRouter } from "next/navigation";
