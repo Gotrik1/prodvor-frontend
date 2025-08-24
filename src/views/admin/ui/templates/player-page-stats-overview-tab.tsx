@@ -90,16 +90,16 @@ export const PlayerStatsOverviewTab = () => {
                 </Card>
                 <PlayerTrainingStats />
             </div>
-            <div className="space-y-6">
+            <div className="space-y-6 flex flex-col">
                 <Card>
                     <CardHeader><CardTitle className="text-base">Форма (5 матчей)</CardTitle></CardHeader>
                     <CardContent className="flex items-center gap-2">
                         {last5Form.map((result, index) => <FormBadge key={index} result={result} />)}
                     </CardContent>
                 </Card>
-                 <Card>
+                 <Card className="flex-grow">
                     <CardHeader><CardTitle className="text-base">Навыки и прогресс ELO</CardTitle></CardHeader>
-                    <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
+                    <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4 items-center h-full">
                         <ChartContainer config={{}} className="h-52 w-full">
                             <RadarChart data={skillData} cy="45%">
                                 <ChartTooltipContent />
