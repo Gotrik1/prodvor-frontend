@@ -5,7 +5,7 @@ import Link from "next/link";
 export function DashboardFooter() {
   return (
     <footer className="p-4 border-t border-layout-border text-sm text-muted-foreground">
-      <div className="container mx-auto flex justify-between items-center">
+      <div className="container mx-auto flex flex-col md:flex-row justify-between items-center gap-8 md:gap-4 text-center md:text-left">
         <div className="flex items-center gap-2">
           <Logo />
           <div>
@@ -14,7 +14,7 @@ export function DashboardFooter() {
             <p>Версия 1.0.0 (Прототип)</p>
           </div>
         </div>
-        <div className="flex gap-8">
+        <div className="flex flex-col sm:flex-row gap-8">
           <div>
             <h4 className="font-bold mb-2 text-foreground">Навигация</h4>
             <ul className="space-y-1">
