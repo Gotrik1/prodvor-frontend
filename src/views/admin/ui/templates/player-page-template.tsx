@@ -74,19 +74,18 @@ export function PlayerPageTemplate({ user: profileUser }: { user?: User }) {
             
             {/* --- MAIN CONTENT GRID --- */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                
-                {/* --- Left Column --- */}
+                {/* --- Left Column (Main Content) --- */}
                 <div className="lg:col-span-2 space-y-6">
                     <PlayerStatsOverviewTab />
                     <PublicationsTab player={player} isOwnProfile={isOwnProfile} />
-                    <TrainingTab />
                 </div>
 
-                {/* --- Right Column --- */}
+                {/* --- Right Column (Side Content) --- */}
                 <div className="lg:col-span-1 space-y-6">
-                     <AchievementsTab player={player} />
-                     <MyTeamWidget user={player} />
-                     <SocialTab user={player} isOwnProfile={isOwnProfile} />
+                    <AchievementsTab player={player} />
+                    <MyTeamWidget user={player} />
+                    <SocialTab user={player} isOwnProfile={isOwnProfile} />
+                    <TrainingTab />
                 </div>
             </div>
         </div>
