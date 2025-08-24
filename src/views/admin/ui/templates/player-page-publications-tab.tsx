@@ -2,7 +2,7 @@
 
 'use client';
 
-import type { Post, Team, User } from "@/mocks";
+import type { Team, User } from "@/mocks";
 import { users } from "@/mocks";
 import { CreatePost } from "@/widgets/dashboard-feed/ui/create-post";
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
@@ -90,6 +90,10 @@ const MediaPostDialogContent = ({ media, author }: { media: typeof mockMedia[0],
     
     return (
         <DialogContent className="sm:max-w-4xl p-0">
+             <DialogHeader className="sr-only">
+                <DialogTitle>Публикация от {author.nickname}: {media.title}</DialogTitle>
+                <DialogDescription>Просмотр медиа и комментариев.</DialogDescription>
+            </DialogHeader>
             <div className="grid grid-cols-1 md:grid-cols-2">
                 <div className="relative aspect-square w-full">
                     <Image 
