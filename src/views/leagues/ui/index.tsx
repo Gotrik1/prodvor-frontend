@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
@@ -10,6 +11,7 @@ import { Badge } from '@/shared/ui/badge';
 import Link from 'next/link';
 import { useState, useMemo } from 'react';
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem, SelectGroup, SelectLabel } from '@/shared/ui/select';
+import { ScrollArea, ScrollBar } from "@/shared/ui/scroll-area";
 
 const rankColors = [
     'border-amber-400 shadow-amber-400/20', // 1st
@@ -79,7 +81,7 @@ export function LeaguesPage() {
                 <CardContent className="space-y-8">
                     <div>
                         <h3 className="text-xl font-bold text-center mb-4 text-amber-400">Дивизион Легенд</h3>
-                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                         <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
                             {legendDivision.map((team, index) => (
                                 <LegendCard key={team.id} team={team} rank={index + 1} />
                             ))}
@@ -88,7 +90,7 @@ export function LeaguesPage() {
 
                     <div>
                          <h3 className="text-xl font-bold mb-4">Основная Лига (Топ 50)</h3>
-                        <div className="border rounded-lg">
+                        <ScrollArea className="w-full whitespace-nowrap rounded-lg border">
                             <Table>
                                 <TableHeader>
                                     <TableRow>
@@ -107,7 +109,7 @@ export function LeaguesPage() {
                                             <TableCell>
                                                 <Link href={`/teams/${team.id}`} className="flex items-center gap-3 group">
                                                     <Image src={team.logoUrl} alt={team.name} width={40} height={40} className="rounded-md" data-ai-hint={team.dataAiHint}/>
-                                                    <span className="font-medium group-hover:text-primary transition-colors">{team.name}</span>
+                                                    <span className="font-medium group-hover:text-primary transition-colors whitespace-normal">{team.name}</span>
                                                 </Link>
                                             </TableCell>
                                             <TableCell>
@@ -118,7 +120,8 @@ export function LeaguesPage() {
                                     ))}
                                 </TableBody>
                             </Table>
-                        </div>
+                            <ScrollBar orientation="horizontal" />
+                        </ScrollArea>
                     </div>
                 </CardContent>
             </Card>
