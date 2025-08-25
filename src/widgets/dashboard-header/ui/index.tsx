@@ -57,8 +57,8 @@ export function DashboardHeader() {
 
   return (
     <header className={cn(
-        "sticky top-0 z-40 flex h-16 items-center justify-between p-4 border-b border-layout-border bg-card transition-transform duration-300",
-        scrollDirection === 'up' ? 'translate-y-0' : '-translate-y-full'
+        "fixed top-0 z-40 flex h-16 items-center justify-between p-4 border-b border-layout-border bg-card transition-transform duration-300 w-full",
+        scrollDirection === 'down' ? '-translate-y-full' : 'translate-y-0'
     )}>
       <div className="flex items-center gap-4">
          <div className="block md:hidden">
