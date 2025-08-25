@@ -1,4 +1,3 @@
-
 import { Button } from "@/shared/ui/button";
 import Link from "next/link";
 import { ThemeToggle } from "@/shared/ui/theme-toggle";
