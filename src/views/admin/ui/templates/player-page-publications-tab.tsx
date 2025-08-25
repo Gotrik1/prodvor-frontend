@@ -182,7 +182,10 @@ export function PublicationsTab({ player, isOwnProfile }: { player: User; isOwnP
                         {isOwnProfile && (
                              <Dialog>
                                 <DialogTrigger asChild>
-                                <Button size="sm" variant="outline"><PlusCircle className="mr-2 h-4 w-4" />Новый пост</Button>
+                                <Button size="sm" variant="outline" className="md:w-auto w-10 p-0 md:px-4 md:py-2">
+                                    <PlusCircle className="h-4 w-4 md:mr-2"/>
+                                    <span className="hidden md:inline">Новый пост</span>
+                                </Button>
                                 </DialogTrigger>
                                 <DialogContent>
                                     <DialogHeader>
@@ -198,10 +201,10 @@ export function PublicationsTab({ player, isOwnProfile }: { player: User; isOwnP
                 <CardContent>
                      <Tabs defaultValue="photos" className="w-full">
                         <TabsList className="grid w-full grid-cols-4">
-                            <TabsTrigger value="photos"><ImageIcon className="mr-2 h-4 w-4"/>Фото</TabsTrigger>
-                            <TabsTrigger value="videos"><Video className="mr-2 h-4 w-4"/>Видео</TabsTrigger>
-                            <TabsTrigger value="saved"><Bookmark className="mr-2 h-4 w-4"/>Сохраненное</TabsTrigger>
-                            <TabsTrigger value="tagged"><Tag className="mr-2 h-4 w-4"/>Отметили</TabsTrigger>
+                            <TabsTrigger value="photos"><ImageIcon className="md:mr-2 h-4 w-4"/><span className="hidden md:inline">Фото</span></TabsTrigger>
+                            <TabsTrigger value="videos"><Video className="md:mr-2 h-4 w-4"/><span className="hidden md:inline">Видео</span></TabsTrigger>
+                            <TabsTrigger value="saved"><Bookmark className="md:mr-2 h-4 w-4"/><span className="hidden md:inline">Сохраненное</span></TabsTrigger>
+                            <TabsTrigger value="tagged"><Tag className="md:mr-2 h-4 w-4"/><span className="hidden md:inline">Отметили</span></TabsTrigger>
                         </TabsList>
                         <TabsContent value="photos" className="mt-4">
                              {mediaFeed.length > 0 ? (
