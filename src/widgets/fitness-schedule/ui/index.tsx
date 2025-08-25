@@ -96,13 +96,14 @@ export function FitnessSchedule({ showHeader = false }: { showHeader?: boolean }
                 </CardHeader>
             )}
             <CardContent className={showHeader ? "" : "pt-6"}>
-                <div className="flex justify-between items-center mb-4 flex-wrap gap-1">
+                <div className="flex flex-wrap justify-between items-center mb-4 gap-1">
                     {shortDays.map((day, index) => (
                         <Button
                             key={day}
                             variant={selectedDay === daysOfWeek[index] ? 'default' : 'ghost'}
                             size="sm"
                             onClick={() => setSelectedDay(daysOfWeek[index])}
+                            className="flex-1"
                         >
                             {day}
                         </Button>
