@@ -146,9 +146,9 @@ export function PlaygroundsPage() {
                                             <TableRow>
                                                 <TableHead>Название</TableHead>
                                                 <TableHead>Адрес</TableHead>
-                                                <TableHead>Тип</TableHead>
-                                                <TableHead>Покрытие</TableHead>
-                                                <TableHead>Виды спорта</TableHead>
+                                                <TableHead className="hidden md:table-cell">Тип</TableHead>
+                                                <TableHead className="hidden md:table-cell">Покрытие</TableHead>
+                                                <TableHead className="hidden md:table-cell">Виды спорта</TableHead>
                                             </TableRow>
                                         </TableHeader>
                                         <TableBody>
@@ -160,9 +160,9 @@ export function PlaygroundsPage() {
                                                         </Link>
                                                     </TableCell>
                                                     <TableCell>{p.address}</TableCell>
-                                                    <TableCell><Badge variant="outline">{p.type}</Badge></TableCell>
-                                                    <TableCell>{p.surface}</TableCell>
-                                                    <TableCell className="text-xs">
+                                                    <TableCell className="hidden md:table-cell"><Badge variant="outline">{p.type}</Badge></TableCell>
+                                                    <TableCell className="hidden md:table-cell">{p.surface}</TableCell>
+                                                    <TableCell className="text-xs hidden md:table-cell">
                                                         {p.sportIds.map((id: string) => allSportsFlat.find(s => s.id === id)?.name).filter(Boolean).join(', ')}
                                                     </TableCell>
                                                 </TableRow>
