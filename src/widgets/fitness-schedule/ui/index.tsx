@@ -35,7 +35,7 @@ const EventCard = ({ event, onRemove }: { event: ScheduledActivity; onRemove: (i
                 <Trash2 className="h-4 w-4 text-destructive" />
             </Button>
         </div>
-        <h4 className="font-semibold mt-1">{event.name}</h4>
+        <h4 className="font-semibold mt-1 truncate">{event.name}</h4>
         <div className="text-sm text-muted-foreground space-y-2">
             <div className="flex items-center gap-2">
                 <Clock className="h-4 w-4" />
@@ -57,7 +57,7 @@ export function FitnessSchedule({ showHeader = false }: { showHeader?: boolean }
     // Mock upcoming match for demonstration
     const upcomingMatch: ScheduledActivity = {
         id: 'match-upcoming-1',
-        name: `${registeredTeams[0].name} vs ${registeredTeams[1].name}`,
+        name: `${registeredTeams[0].name} (${registeredTeams[0].game}) vs ${registeredTeams[1].name} (${registeredTeams[1].game})`,
         type: 'match',
         startDate: new Date().toISOString(),
         time: '19:00',
