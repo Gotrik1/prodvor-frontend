@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
@@ -191,7 +190,7 @@ export function RefereeCenterPage() {
                                         <AccordionContent>
                                             <div className="space-y-2 pl-2">
                                                 {sport.documents.map(doc => (
-                                                    <Link href="#" key={doc.id} className="flex items-center gap-3 p-2 rounded-md hover:bg-muted/50 group">
+                                                    <Link href={`/referee-center/rules/${doc.id}`} key={doc.id} className="flex items-center gap-3 p-2 rounded-md hover:bg-muted/50 group">
                                                         <doc.icon className="h-5 w-5 text-muted-foreground group-hover:text-primary transition-colors"/>
                                                         <span className="font-medium group-hover:text-primary transition-colors">{doc.title}</span>
                                                     </Link>
