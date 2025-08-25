@@ -48,21 +48,17 @@ export function StorePage() {
             </div>
             
             <Tabs defaultValue="all" className="w-full">
-                 <div className="relative">
-                    <TabsList className={cn(
-                        "w-full justify-start",
-                        "overflow-x-auto whitespace-nowrap",
-                        // Custom scrollbar hiding
-                        "[&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
-                    )}>
-                        {categories.map(cat => (
-                            <TabsTrigger key={cat.id} value={cat.id} className="flex-shrink-0">
-                                <cat.icon className="mr-2 h-4 w-4" />
-                                {cat.name}
-                            </TabsTrigger>
-                        ))}
-                    </TabsList>
-                 </div>
+                <TabsList className={cn(
+                    // Custom scrollbar hiding
+                    "[&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+                )}>
+                    {categories.map(cat => (
+                        <TabsTrigger key={cat.id} value={cat.id} className="flex-shrink-0">
+                            <cat.icon className="mr-2 h-4 w-4" />
+                            {cat.name}
+                        </TabsTrigger>
+                    ))}
+                </TabsList>
 
                 {categories.map(cat => {
                     const filteredItems = mockStoreItems.filter(item => cat.id === 'all' || item.category === cat.id);
