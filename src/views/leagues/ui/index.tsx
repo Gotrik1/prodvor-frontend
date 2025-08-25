@@ -79,19 +79,22 @@ export function LeaguesPage() {
                         </div>
                     </div>
                 </CardHeader>
-                <CardContent className="space-y-8">
-                    <div>
-                        <h3 className="text-xl font-bold text-center mb-4 text-amber-400">Дивизион Легенд</h3>
-                         <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 md:gap-6">
-                            {legendDivision.map((team, index) => (
-                                <LegendCard key={team.id} team={team} rank={index + 1} />
-                            ))}
-                        </div>
-                    </div>
+            </Card>
 
-                    <div>
-                         <h3 className="text-xl font-bold mb-4">Основная Лига (Топ 50)</h3>
-                        <ScrollArea className="w-full whitespace-nowrap rounded-lg border">
+            <section>
+                <h3 className="text-xl font-bold text-center mb-4 text-amber-400">Дивизион Легенд</h3>
+                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
+                    {legendDivision.map((team, index) => (
+                        <LegendCard key={team.id} team={team} rank={index + 1} />
+                    ))}
+                </div>
+            </section>
+
+            <section>
+                 <h3 className="text-xl font-bold mb-4">Основная Лига (Топ 50)</h3>
+                 <Card>
+                    <CardContent className="p-0">
+                        <ScrollArea className="w-full whitespace-nowrap rounded-lg">
                             <Table>
                                 <TableHeader>
                                     <TableRow>
@@ -123,9 +126,9 @@ export function LeaguesPage() {
                             </Table>
                             <ScrollBar orientation="horizontal" />
                         </ScrollArea>
-                    </div>
-                </CardContent>
-            </Card>
+                    </CardContent>
+                 </Card>
+            </section>
         </div>
     );
 }
