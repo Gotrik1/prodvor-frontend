@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
@@ -63,7 +64,7 @@ export const PlayerStatsOverviewTab = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                         <h3 className="text-base font-semibold mb-2">Навыки и прогресс ELO</h3>
-                        <div className="grid grid-cols-2 gap-4 items-center">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 items-center">
                             <ChartContainer config={{}} className="w-full h-40">
                                 <RadarChart data={skillData} cy="50%" cx="50%">
                                     <ChartTooltipContent />
