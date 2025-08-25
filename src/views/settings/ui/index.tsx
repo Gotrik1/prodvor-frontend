@@ -19,7 +19,7 @@ export function SettingsPage() {
           <TabsList className={cn(
             "grid w-full md:w-auto md:grid-flow-row",
             // The number of items should be reflected here for grid-rows
-            "grid-cols-2 sm:grid-cols-5 md:grid-cols-1 md:grid-rows-5"
+            "grid-cols-2 sm:grid-cols-3 md:grid-cols-1 md:grid-rows-5"
           )}>
             <TabsTrigger value="profile" className="justify-start"><UserIcon className="mr-2 h-4 w-4" />Профиль</TabsTrigger>
             <TabsTrigger value="account" className="justify-start"><Lock className="mr-2 h-4 w-4" />Аккаунт</TabsTrigger>
