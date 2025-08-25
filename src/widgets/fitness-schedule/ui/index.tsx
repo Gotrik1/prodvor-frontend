@@ -21,14 +21,14 @@ const personalActivityColors: Record<Activity['type'] | 'match', string> = {
 };
 
 const EventCard = ({ event, onRemove }: { event: ScheduledActivity; onRemove: (id: string) => void }) => {
-    const isMatch = event.type !== 'template';
+    const isMatch = event.type === 'match';
     const Icon = isMatch ? Trophy : Dumbbell;
     const badgeText = isMatch ? 'Матч' : 'Тренировка';
 
     return (
         <div className="p-4 rounded-lg bg-card border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 group relative">
             <div className="flex items-start gap-4 flex-grow w-full">
-                <Icon className={cn("h-8 w-8 text-primary mt-1 shrink-0", isMatch ? "text-primary" : "text-amber-400")} />
+                <Icon className={cn("h-8 w-8 mt-1 shrink-0", isMatch ? "text-primary" : "text-amber-400")} />
                 <div className="flex-grow overflow-hidden">
                     <Badge className={cn("mb-1", personalActivityColors[event.type])}>{badgeText}</Badge>
                     <h4 className="font-semibold truncate">{event.name}</h4>
