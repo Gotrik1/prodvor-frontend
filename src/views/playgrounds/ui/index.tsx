@@ -118,7 +118,7 @@ export function PlaygroundsPage() {
             </div>
 
             <Tabs defaultValue="map">
-                <TabsList className="grid w-full grid-cols-4">
+                <TabsList className="grid w-full grid-cols-2 md:grid-cols-4">
                     <TabsTrigger value="map"><MapPin className="mr-2 h-4 w-4"/>Карта</TabsTrigger>
                     <TabsTrigger value="list"><List className="mr-2 h-4 w-4"/>Список</TabsTrigger>
                     <TabsTrigger value="favorites"><Star className="mr-2 h-4 w-4"/>Избранное</TabsTrigger>
