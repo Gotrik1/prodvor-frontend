@@ -31,134 +31,81 @@ import Link from 'next/link';
 import { i18n } from "@/shared/lib/i18n";
 import { Logo } from "@/views/auth/ui";
 
-export function DashboardSidebar() {
+const mainNavItems = [
+    { href: "/dashboard", icon: Home, label: i18n.sidebar.feed },
+    { href: "/teams", icon: Users, label: i18n.sidebar.teams },
+    { href: "/competitions", icon: Trophy, label: i18n.sidebar.competitions },
+    { href: "/training-center", icon: Dumbbell, label: i18n.sidebar.training },
+    { href: "/analysis/match", icon: Clapperboard, label: i18n.sidebar.aiAnalyst },
+    { href: "/referee-center", icon: Gavel, label: i18n.sidebar.refereeCenter },
+    { href: "/lfg", icon: Search, label: i18n.sidebar.communityHub },
+    { href: "/playgrounds", icon: Map, label: i18n.sidebar.playgrounds },
+    { href: "/quests", icon: Puzzle, label: i18n.sidebar.quests },
+    { href: "/inventory", icon: Warehouse, label: i18n.sidebar.inventory },
+    { href: "/store", icon: ShoppingCart, label: i18n.sidebar.store },
+];
+
+const secondaryNavItems = [
+    { href: "/support", icon: HelpCircle, label: i18n.sidebar.support },
+    { href: "/settings", icon: Cog, label: i18n.sidebar.settings },
+    { href: "/admin", icon: Shield, label: i18n.sidebar.adminPanel },
+];
+
+export function DashboardSidebar({ isMobileSheet = false }: { isMobileSheet?: boolean }) {
+    
+    // Render as a grid of tiles for the mobile bottom sheet
+    if (isMobileSheet) {
+        const allItems = [...mainNavItems, ...secondaryNavItems];
+        return (
+            <div className="grid grid-cols-4 gap-4 p-4">
+                {allItems.map(item => (
+                    <Link key={item.href} href={item.href} className="flex flex-col items-center justify-center text-center p-2 rounded-lg hover:bg-muted transition-colors">
+                        <div className="p-3 rounded-full bg-muted/50 mb-2">
+                           <item.icon className="h-6 w-6 text-muted-foreground" />
+                        </div>
+                        <span className="text-xs text-muted-foreground">{item.label}</span>
+                    </Link>
+                ))}
+            </div>
+        );
+    }
+    
+    // Default render for desktop sidebar
     return (
         <Sidebar collapsible="icon" className="border-r border-layout-border">
-        <SidebarHeader>
-            <Logo />
-        </SidebarHeader>
-        <SidebarContent>
-            <SidebarMenu>
-                <SidebarMenuItem>
-                    <Link href="/dashboard">
-                        <SidebarMenuButton>
-                            <Home />
-                            <span>{i18n.sidebar.feed}</span>
-                        </SidebarMenuButton>
-                    </Link>
-                </SidebarMenuItem>
-                 <SidebarMenuItem>
-                    <Link href="/teams">
-                        <SidebarMenuButton>
-                            <Users />
-                            <span>{i18n.sidebar.teams}</span>
-                        </SidebarMenuButton>
-                    </Link>
-                </SidebarMenuItem>
-                <SidebarMenuItem>
-                    <Link href="/competitions">
-                        <SidebarMenuButton>
-                            <Trophy />
-                            <span>{i18n.sidebar.competitions}</span>
-                        </SidebarMenuButton>
-                    </Link>
-                </SidebarMenuItem>
-                <SidebarMenuItem>
-                    <Link href="/training-center">
-                        <SidebarMenuButton>
-                            <Dumbbell />
-                            <span>{i18n.sidebar.training}</span>
-                        </SidebarMenuButton>
-                    </Link>
-                </SidebarMenuItem>
-                 <SidebarMenuItem>
-                    <Link href="/analysis/match">
-                        <SidebarMenuButton>
-                            <Clapperboard />
-                            <span>{i18n.sidebar.aiAnalyst}</span>
-                        </SidebarMenuButton>
-                    </Link>
-                </SidebarMenuItem>
-                 <SidebarMenuItem>
-                    <Link href="/referee-center">
-                        <SidebarMenuButton>
-                            <Gavel />
-                            <span>{i18n.sidebar.refereeCenter}</span>
-                        </SidebarMenuButton>
-                    </Link>
-                </SidebarMenuItem>
-                <SidebarMenuItem>
-                    <Link href="/lfg">
-                        <SidebarMenuButton>
-                            <Search />
-                            <span>{i18n.sidebar.communityHub}</span>
-                        </SidebarMenuButton>
-                    </Link>
-                </SidebarMenuItem>
-                <SidebarMenuItem>
-                    <Link href="/playgrounds">
-                        <SidebarMenuButton>
-                            <Map />
-                            <span>{i18n.sidebar.playgrounds}</span>
-                        </SidebarMenuButton>
-                    </Link>
-                </SidebarMenuItem>
-                <SidebarMenuItem>
-                    <Link href="/quests">
-                        <SidebarMenuButton>
-                            <Puzzle />
-                            <span>{i18n.sidebar.quests}</span>
-                        </SidebarMenuButton>
-                    </Link>
-                </SidebarMenuItem>
-                <SidebarMenuItem>
-                    <Link href="/inventory">
-                        <SidebarMenuButton>
-                            <Warehouse />
-                            <span>{i18n.sidebar.inventory}</span>
-                        </SidebarMenuButton>
-                    </Link>
-                </SidebarMenuItem>
-                <SidebarMenuItem>
-                    <Link href="/store">
-                        <SidebarMenuButton>
-                            <ShoppingCart />
-                            <span>{i18n.sidebar.store}</span>
-                        </SidebarMenuButton>
-                    </Link>
-                </SidebarMenuItem>
-            </SidebarMenu>
-        </SidebarContent>
-        <SidebarFooter>
-             <SidebarGroup>
+            <SidebarHeader>
+                <Logo />
+            </SidebarHeader>
+            <SidebarContent>
                 <SidebarMenu>
-                    <SidebarMenuItem>
-                        <Link href="/support">
-                            <SidebarMenuButton>
-                                <HelpCircle />
-                                <span>{i18n.sidebar.support}</span>
-                            </SidebarMenuButton>
-                        </Link>
-                    </SidebarMenuItem>
-                    <SidebarMenuItem>
-                        <Link href="/settings">
-                            <SidebarMenuButton>
-                                <Cog />
-                                <span>{i18n.sidebar.settings}</span>
-                            </SidebarMenuButton>
-                        </Link>
-                    </SidebarMenuItem>
-                     <SidebarMenuItem>
-                        <Link href="/admin">
-                            <SidebarMenuButton>
-                                <Shield />
-                                <span>{i18n.sidebar.adminPanel}</span>
-                            </SidebarMenuButton>
-                        </Link>
-                    </SidebarMenuItem>
+                    {mainNavItems.map(item => (
+                        <SidebarMenuItem key={item.href}>
+                            <Link href={item.href}>
+                                <SidebarMenuButton tooltip={item.label}>
+                                    <item.icon />
+                                    <span>{item.label}</span>
+                                </SidebarMenuButton>
+                            </Link>
+                        </SidebarMenuItem>
+                    ))}
                 </SidebarMenu>
-             </SidebarGroup>
-        </SidebarFooter>
+            </SidebarContent>
+            <SidebarFooter>
+                 <SidebarGroup>
+                    <SidebarMenu>
+                        {secondaryNavItems.map(item => (
+                            <SidebarMenuItem key={item.href}>
+                                <Link href={item.href}>
+                                    <SidebarMenuButton tooltip={item.label}>
+                                        <item.icon />
+                                        <span>{item.label}</span>
+                                    </SidebarMenuButton>
+                                </Link>
+                            </SidebarMenuItem>
+                        ))}
+                    </SidebarMenu>
+                 </SidebarGroup>
+            </SidebarFooter>
       </Sidebar>
     )
 }

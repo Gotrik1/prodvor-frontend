@@ -22,8 +22,9 @@ const NavItem = ({ href, icon: Icon, label }: { href: string; icon: React.Elemen
     const isActive = pathname === href;
 
     return (
-        <Link href={href} className="flex flex-col items-center justify-start text-center w-full pt-3">
+        <Link href={href} className="flex flex-col items-center justify-center text-center w-full pt-2">
             <Icon className={cn("h-6 w-6 transition-colors", isActive ? "text-primary" : "text-muted-foreground")} />
+            <span className={cn("text-xs mt-1",  isActive ? "text-primary" : "text-muted-foreground")}>{label}</span>
         </Link>
     );
 };
@@ -33,8 +34,8 @@ export function MobileBottomNav() {
 
     return (
         <div className={cn(
-            "md:hidden fixed bottom-0 left-0 right-0 h-24 bg-card/80 backdrop-blur-lg border-t border-layout-border z-50 transition-opacity duration-300",
-            scrollDirection === 'down' ? 'opacity-0 pointer-events-none' : 'opacity-100'
+            "md:hidden fixed bottom-0 left-0 right-0 h-16 bg-card/80 backdrop-blur-lg border-t border-layout-border z-50 transition-transform duration-300",
+            scrollDirection === 'down' ? 'translate-y-full' : 'translate-y-0'
         )}>
             <div className="grid grid-cols-5 h-full">
                 {navItems.map((item) => (
@@ -42,16 +43,17 @@ export function MobileBottomNav() {
                 ))}
                 <Sheet>
                     <SheetTrigger asChild>
-                         <button className="flex flex-col items-center justify-start text-center w-full pt-3">
+                         <button className="flex flex-col items-center justify-center text-center w-full pt-2">
                             <MoreHorizontal className="h-6 w-6 text-muted-foreground" />
+                             <span className="text-xs mt-1 text-muted-foreground">Ещё</span>
                         </button>
                     </SheetTrigger>
-                    <SheetContent side="left" className="p-0 w-64 bg-sidebar">
+                    <SheetContent side="bottom" className="p-0 h-auto rounded-t-lg">
                         <SheetHeader className="p-4 border-b">
-                           <SheetTitle>Главное меню</SheetTitle>
+                           <SheetTitle>Навигация</SheetTitle>
                         </SheetHeader>
-                        {/* We reuse the main sidebar component here */}
-                        <DashboardSidebar />
+                        {/* We reuse the main sidebar component here, but tell it to render in a compact grid for mobile */}
+                        <DashboardSidebar isMobileSheet={true} />
                     </SheetContent>
                 </Sheet>
             </div>
