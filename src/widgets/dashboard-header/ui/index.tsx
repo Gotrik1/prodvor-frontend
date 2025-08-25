@@ -116,10 +116,15 @@ export function DashboardHeader() {
             <Button variant="ghost" size="icon" className="relative">
                 <Bell className="animate-ringing" />
             </Button>
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1/2 h-1/2 pointer-events-none">
-                <span className="absolute block w-full h-full rounded-full border border-destructive animate-wave-out opacity-0" style={{ animationDelay: '0s' }}></span>
-                <span className="absolute block w-full h-full rounded-full border border-destructive animate-wave-out opacity-0" style={{ animationDelay: '0.2s' }}></span>
-                <span className="absolute block w-full h-full rounded-full border border-destructive animate-wave-out opacity-0" style={{ animationDelay: '0.4s' }}></span>
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full pointer-events-none">
+                {/* Left Arc */}
+                <span className="absolute block w-full h-full rounded-full border border-r-0 border-t-transparent border-b-transparent border-l-destructive animate-wave-out opacity-0" style={{ animationDelay: '0s' }}></span>
+                <span className="absolute block w-full h-full rounded-full border border-r-0 border-t-transparent border-b-transparent border-l-destructive animate-wave-out opacity-0" style={{ animationDelay: '0.2s' }}></span>
+                <span className="absolute block w-full h-full rounded-full border border-r-0 border-t-transparent border-b-transparent border-l-destructive animate-wave-out opacity-0" style={{ animationDelay: '0.4s' }}></span>
+                {/* Right Arc */}
+                <span className="absolute block w-full h-full rounded-full border border-l-0 border-t-transparent border-b-transparent border-r-destructive animate-wave-out opacity-0" style={{ animationDelay: '0s' }}></span>
+                <span className="absolute block w-full h-full rounded-full border border-l-0 border-t-transparent border-b-transparent border-r-destructive animate-wave-out opacity-0" style={{ animationDelay: '0.2s' }}></span>
+                <span className="absolute block w-full h-full rounded-full border border-l-0 border-t-transparent border-b-transparent border-r-destructive animate-wave-out opacity-0" style={{ animationDelay: '0.4s' }}></span>
             </div>
         </div>
         <ThemeToggle />

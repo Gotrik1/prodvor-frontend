@@ -104,7 +104,7 @@ export default {
         "wave-out": {
             "0%": {
                 transform: "scale(0.5)",
-                opacity: "1",
+                opacity: "0.5",
             },
             "100%": {
                 transform: "scale(2.5)",
@@ -116,7 +116,7 @@ export default {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
         ringing: 'ringing 2s ease-in-out infinite',
-        'wave-out': 'wave-out 2s cubic-bezier(0, 0, 0.2, 1) infinite',
+        'wave-out': 'wave-out 1.5s cubic-bezier(0, 0, 0.2, 1) infinite',
       },
     },
   },
