@@ -3,8 +3,8 @@
 'use client';
 
 import { Button } from "@/shared/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
-import { PlusCircle, Star, MapPin, List } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
+import { PlusCircle, Star, MapPin, List, Search } from "lucide-react";
 import Image from 'next/image';
 import Link from 'next/link';
 import { YandexMapV3 } from '@/widgets/yandex-map';
@@ -12,6 +12,8 @@ import { playgrounds as mockPlaygrounds, allSports } from '@/mocks';
 import { Badge } from '@/shared/ui/badge';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/shared/ui/table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs';
+import { Input } from "@/shared/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, SelectGroup, SelectLabel } from "@/shared/ui/select";
 
 const allSportsFlat = allSports.reduce((acc, sport) => {
     acc.push({ id: sport.id, name: sport.name });
@@ -100,6 +102,9 @@ const NearbyPlaygrounds = () => {
 };
 
 export function PlaygroundsPage() {
+    const teamSports = allSports.filter(s => s.isTeamSport);
+    const individualSports = allSports.filter(s => !s.isTeamSport);
+
     return (
         <div className="p-4 md:p-6 lg:p-8">
              <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
@@ -116,6 +121,54 @@ export function PlaygroundsPage() {
                     </Link>
                 </Button>
             </div>
+            
+            <Card className="mb-8">
+                <CardHeader>
+                    <CardTitle>Поиск и фильтрация</CardTitle>
+                    <CardDescription>Найдите идеальное место для ваших тренировок.</CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <div className="relative lg:col-span-2">
+                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                            <Input placeholder="Название или адрес..." className="pl-9" />
+                        </div>
+                         <Select>
+                            <SelectTrigger><SelectValue placeholder="Тип площадки" /></SelectTrigger>
+                            <SelectContent>
+                               <SelectItem value="any">Любой тип</SelectItem>
+                               <SelectItem value="outdoor">Открытая площадка</SelectItem>
+                               <SelectItem value="indoor">Закрытое помещение</SelectItem>
+                               <SelectItem value="stadium">Стадион</SelectItem>
+                               <SelectItem value="center">Спортивный центр</SelectItem>
+                               <SelectItem value="special">Специализированный объект</SelectItem>
+                            </SelectContent>
+                        </Select>
+                        <Select>
+                            <SelectTrigger><SelectValue placeholder="Дисциплина" /></SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="any">Любая дисциплина</SelectItem>
+                                <SelectGroup>
+                                    <SelectLabel>Командные</SelectLabel>
+                                    {teamSports.map((sport) => (
+                                        <SelectItem key={sport.id} value={sport.name}>
+                                            {sport.name}
+                                        </SelectItem>
+                                    ))}
+                                </SelectGroup>
+                                <SelectGroup>
+                                    <SelectLabel>Индивидуальные</SelectLabel>
+                                     {individualSports.map((sport) => (
+                                        <SelectItem key={sport.id} value={sport.name}>
+                                            {sport.name}
+                                        </SelectItem>
+                                    ))}
+                                </SelectGroup>
+                            </SelectContent>
+                        </Select>
+                    </div>
+                </CardContent>
+            </Card>
 
             <Tabs defaultValue="map">
                 <TabsList className="grid w-full grid-cols-2 md:grid-cols-4">
