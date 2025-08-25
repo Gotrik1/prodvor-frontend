@@ -116,10 +116,10 @@ export function DashboardHeader() {
           <Button variant="ghost" size="icon" className="relative">
             <Bell className="animate-ringing" />
           </Button>
-           <div className="notification-waves absolute top-0 left-0 w-full h-full pointer-events-none">
-                <span></span>
-                <span></span>
-                <span></span>
+           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full pointer-events-none">
+                <span className="absolute block w-full h-full rounded-full border-2 border-destructive animate-wave-out opacity-0" style={{ animationDelay: '0s' }}></span>
+                <span className="absolute block w-full h-full rounded-full border-2 border-destructive animate-wave-out opacity-0" style={{ animationDelay: '0.2s' }}></span>
+                <span className="absolute block w-full h-full rounded-full border-2 border-destructive animate-wave-out opacity-0" style={{ animationDelay: '0.4s' }}></span>
             </div>
         </div>
         <ThemeToggle />
