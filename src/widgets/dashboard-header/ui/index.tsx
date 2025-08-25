@@ -107,8 +107,9 @@ export function DashboardHeader() {
             <ShoppingCart />
           </Link>
         </Button>
-        <Button variant="ghost" size="icon">
+        <Button variant="ghost" size="icon" className="relative">
           <Bell />
+          <span className="absolute top-2 right-2 block h-2 w-2 rounded-full bg-destructive ring-2 ring-card" />
         </Button>
         <ThemeToggle />
         <DropdownMenu>
