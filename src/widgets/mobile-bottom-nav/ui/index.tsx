@@ -30,6 +30,7 @@ const NavItem = ({ href, icon: Icon, label }: { href: string; icon: React.Elemen
 
 export function MobileBottomNav() {
     const scrollDirection = useScrollDirection();
+    const [isSheetOpen, setIsSheetOpen] = React.useState(false);
 
     return (
         <div className={cn(
@@ -40,7 +41,7 @@ export function MobileBottomNav() {
                 {navItems.map((item) => (
                     <NavItem key={item.href} {...item} />
                 ))}
-                <Sheet>
+                <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
                     <SheetTrigger asChild>
                          <button className="flex flex-col items-center justify-start pt-3 text-center w-full h-full" aria-label="Ещё">
                             <MoreHorizontal className="h-6 w-6 text-muted-foreground" />
@@ -50,7 +51,7 @@ export function MobileBottomNav() {
                         <SheetHeader className="sr-only">
                             <SheetTitle>Главное меню</SheetTitle>
                         </SheetHeader>
-                        <DashboardSidebar isMobileSheet={true} />
+                        <DashboardSidebar isMobileSheet={true} onLinkClick={() => setIsSheetOpen(false)} />
                     </SheetContent>
                 </Sheet>
             </div>

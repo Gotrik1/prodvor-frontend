@@ -51,7 +51,7 @@ const secondaryNavItems = [
     { href: "/admin", icon: Shield, label: i18n.sidebar.adminPanel },
 ];
 
-export function DashboardSidebar({ isMobileSheet = false }: { isMobileSheet?: boolean }) {
+export function DashboardSidebar({ isMobileSheet = false, onLinkClick }: { isMobileSheet?: boolean, onLinkClick?: () => void }) {
     
     // Render as a grid of tiles for the mobile bottom sheet
     if (isMobileSheet) {
@@ -61,7 +61,12 @@ export function DashboardSidebar({ isMobileSheet = false }: { isMobileSheet?: bo
         return (
             <div className="grid grid-cols-4 gap-4 p-4">
                 {allItems.map(item => (
-                    <Link key={item.href} href={item.href} className="flex flex-col items-center justify-center text-center p-2 rounded-lg hover:bg-muted transition-colors">
+                    <Link 
+                        key={item.href} 
+                        href={item.href} 
+                        className="flex flex-col items-center justify-center text-center p-2 rounded-lg hover:bg-muted transition-colors"
+                        onClick={onLinkClick}
+                    >
                         <div className="p-3 rounded-full bg-muted/50 mb-2">
                            <item.icon className="h-6 w-6 text-muted-foreground" />
                         </div>
