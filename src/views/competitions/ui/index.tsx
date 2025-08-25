@@ -17,7 +17,7 @@ export function CompetitionsPage() {
         </p>
       </div>
       <Tabs defaultValue="tournaments" className="w-full">
-        <TabsList className="h-auto flex-wrap">
+        <TabsList className="grid w-full grid-cols-1 sm:grid-cols-3 h-auto">
           <TabsTrigger value="tournaments">
             <Trophy className="mr-2 h-4 w-4" />
             Турниры
