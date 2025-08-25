@@ -102,18 +102,18 @@ export function SocialTab({ user, isOwnProfile }: { user: User, isOwnProfile: bo
                         <TabsTrigger value="following">Подписки ({user.followingUsers.length})</TabsTrigger>
                     </TabsList>
                     
-                    <TabsContent value="friends" className="mt-6">
+                    <TabsContent value="friends" className="mt-8">
                         <UserList userIds={user.friends} emptyText="У этого пользователя пока нет друзей." />
                     </TabsContent>
-                    <TabsContent value="followers" className="mt-6">
+                    <TabsContent value="followers" className="mt-8">
                          <UserList userIds={user.followers} emptyText="На этого пользователя пока никто не подписан." />
                     </TabsContent>
                      {isOwnProfile && (
-                        <TabsContent value="requests" className="mt-6">
+                        <TabsContent value="requests" className="mt-8">
                             <FriendRequests />
                         </TabsContent>
                      )}
-                    <TabsContent value="following" className="mt-6">
+                    <TabsContent value="following" className="mt-8">
                          <UserList userIds={user.followingUsers} emptyText="Этот пользователь ни на кого не подписан." />
                     </TabsContent>
                 </Tabs>
