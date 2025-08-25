@@ -1,12 +1,21 @@
 
 'use client';
 
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs"
-import { Calendar, Dumbbell } from "lucide-react"
+import { useState } from 'react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
+import { Calendar, Dumbbell } from "lucide-react";
 import { TrainingPage } from "@/views/training";
 import { FitnessPlanPage } from "@/views/fitness-plan";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shared/ui/select';
+
+const trainingTabs = [
+    { value: 'schedule', label: 'Мое расписание', icon: Calendar, component: <TrainingPage /> },
+    { value: 'constructor', label: 'Конструктор планов', icon: Dumbbell, component: <FitnessPlanPage /> }
+];
 
 export function TrainingCenterPage() {
+  const [activeTab, setActiveTab] = useState('schedule');
+
   return (
     <div className="p-4 md:p-6 lg:p-8 space-y-8">
         <div>
@@ -15,17 +24,43 @@ export function TrainingCenterPage() {
                 Планируйте свою активность, создавайте шаблоны и следите за расписанием.
             </p>
         </div>
-        <Tabs defaultValue="schedule" className="w-full">
-            <TabsList className="h-auto w-full flex-col sm:flex-row">
-                <TabsTrigger value="schedule" className="w-full sm:w-auto"><Calendar className="mr-2 h-4 w-4" />Мое расписание</TabsTrigger>
-                <TabsTrigger value="constructor" className="w-full sm:w-auto"><Dumbbell className="mr-2 h-4 w-4" />Конструктор планов</TabsTrigger>
-            </TabsList>
-            <TabsContent value="schedule" className="mt-6">
-                <TrainingPage />
-            </TabsContent>
-            <TabsContent value="constructor" className="mt-6">
-                <FitnessPlanPage />
-            </TabsContent>
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+            {/* Desktop Tabs */}
+            <div className="hidden sm:block">
+                <TabsList>
+                    {trainingTabs.map(tab => (
+                        <TabsTrigger key={tab.value} value={tab.value}>
+                            <tab.icon className="mr-2 h-4 w-4" />
+                            {tab.label}
+                        </TabsTrigger>
+                    ))}
+                </TabsList>
+            </div>
+            
+            {/* Mobile Select */}
+            <div className="sm:hidden">
+                <Select value={activeTab} onValueChange={setActiveTab}>
+                    <SelectTrigger>
+                        <SelectValue placeholder="Выберите раздел..." />
+                    </SelectTrigger>
+                    <SelectContent>
+                        {trainingTabs.map(tab => (
+                            <SelectItem key={tab.value} value={tab.value}>
+                                <div className="flex items-center gap-2">
+                                    <tab.icon className="h-4 w-4" />
+                                    {tab.label}
+                                </div>
+                            </SelectItem>
+                        ))}
+                    </SelectContent>
+                </Select>
+            </div>
+
+            {trainingTabs.map(tab => (
+                <TabsContent key={tab.value} value={tab.value} className="mt-6">
+                    {tab.component}
+                </TabsContent>
+            ))}
         </Tabs>
     </div>
   );

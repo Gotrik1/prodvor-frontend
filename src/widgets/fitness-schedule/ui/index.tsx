@@ -61,9 +61,10 @@ export function FitnessSchedule({ showHeader = false }: { showHeader?: boolean }
     const { personalSchedule, removeScheduledActivity, addScheduledActivity } = useScheduleStore();
 
     useEffect(() => {
+        // This effect runs only on the client, after initial render, preventing hydration mismatch.
         const todayIndex = (new Date().getDay() + 6) % 7;
         setSelectedDay(daysOfWeek[todayIndex]);
-    }, []);
+    }, []); // Empty dependency array ensures this runs only once on mount
 
     const upcomingMatch: ScheduledActivity = {
         id: 'match-upcoming-1',
