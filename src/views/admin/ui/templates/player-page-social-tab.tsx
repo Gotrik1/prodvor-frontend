@@ -89,7 +89,7 @@ export function SocialTab({ user, isOwnProfile }: { user: User, isOwnProfile: bo
             </CardHeader>
             <CardContent>
                 <Tabs defaultValue="friends">
-                    <TabsList className={`grid w-full grid-cols-2 ${isOwnProfile ? 'md:grid-cols-4' : 'md:grid-cols-3'}`}>
+                    <TabsList className={`grid w-full grid-cols-2 md:grid-cols-4`}>
                         <TabsTrigger value="friends">Друзья ({user.friends.length})</TabsTrigger>
                         <TabsTrigger value="followers">Подписчики ({user.followers.length})</TabsTrigger>
                         {isOwnProfile && (
