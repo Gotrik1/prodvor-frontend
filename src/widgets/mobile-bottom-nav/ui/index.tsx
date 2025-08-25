@@ -22,7 +22,7 @@ const NavItem = ({ href, icon: Icon, label }: { href: string; icon: React.Elemen
     const isActive = pathname === href;
 
     return (
-        <Link href={href} className="flex flex-col items-center justify-center text-center w-full h-full" aria-label={label}>
+        <Link href={href} className="flex flex-col items-center justify-start pt-3 text-center w-full h-full" aria-label={label}>
             <Icon className={cn("h-6 w-6 transition-colors", isActive ? "text-primary" : "text-muted-foreground")} />
         </Link>
     );
@@ -33,7 +33,7 @@ export function MobileBottomNav() {
 
     return (
         <div className={cn(
-            "md:hidden fixed bottom-0 left-0 right-0 h-16 bg-card/80 backdrop-blur-lg border-t border-layout-border z-50 transition-opacity duration-300",
+            "md:hidden fixed bottom-0 left-0 right-0 h-24 bg-card/80 backdrop-blur-lg border-t border-layout-border z-50 transition-opacity duration-300",
             scrollDirection === 'down' ? 'opacity-0 pointer-events-none' : 'opacity-100'
         )}>
             <div className="grid grid-cols-5 h-full">
@@ -42,7 +42,7 @@ export function MobileBottomNav() {
                 ))}
                 <Sheet>
                     <SheetTrigger asChild>
-                         <button className="flex flex-col items-center justify-center text-center w-full h-full" aria-label="Ещё">
+                         <button className="flex flex-col items-center justify-start pt-3 text-center w-full h-full" aria-label="Ещё">
                             <MoreHorizontal className="h-6 w-6 text-muted-foreground" />
                         </button>
                     </SheetTrigger>
