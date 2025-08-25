@@ -37,7 +37,6 @@ import { GlobalSearch } from './global-search';
 import { Logo } from '@/views/auth/ui';
 import { useScrollDirection } from '@/shared/hooks/use-scroll-direction';
 import { cn } from '@/shared/lib/utils';
-import { SidebarTrigger } from '@/shared/ui/sidebar';
 
 export function DashboardHeader() {
   const { user } = useUserStore();
@@ -57,7 +56,9 @@ export function DashboardHeader() {
 
   return (
     <header className={cn(
-        "fixed top-0 z-40 flex h-16 w-full items-center justify-between border-b border-layout-border bg-card p-4 transition-opacity duration-300",
+        "fixed top-0 z-40 flex h-16 items-center justify-between border-b border-layout-border bg-card p-4 transition-all duration-300",
+        "md:w-[calc(100%-var(--sidebar-width-icon))] group-data-[state=expanded]:md:w-[calc(100%-var(--sidebar-width))]",
+        "md:left-[var(--sidebar-width-icon)] group-data-[state=expanded]:md:left-[var(--sidebar-width)]",
         scrollDirection === 'down' ? 'opacity-0 pointer-events-none' : 'opacity-100'
     )}>
       <div className="flex items-center gap-4">

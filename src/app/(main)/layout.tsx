@@ -49,14 +49,8 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
   return (
     <SidebarProvider>
       <DashboardSidebar />
+      <DashboardHeader />
       <SidebarInset>
-        <div className={cn(
-            'md:w-[calc(100%-var(--sidebar-width-icon))]',
-            'group-data-[state=expanded]:md:w-[calc(100%-var(--sidebar-width))]',
-            'transition-[width] duration-200 ease-linear'
-        )}>
-            <DashboardHeader />
-        </div>
         <main className="flex-1 bg-background/95 pb-16 md:pb-0 pt-16">
           {children}
         </main>
