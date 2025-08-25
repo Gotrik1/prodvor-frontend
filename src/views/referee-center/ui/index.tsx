@@ -152,7 +152,7 @@ export function RefereeCenterPage() {
                                 <Link href="#" key={caseItem.id} className="block group">
                                     <div className="p-4 rounded-lg border bg-background hover:border-primary/50 transition-colors">
                                         <h4 className="font-semibold group-hover:text-primary">{caseItem.title}</h4>
-                                        <div className="flex items-center gap-2 mt-2">
+                                        <div className="flex items-center flex-wrap gap-2 mt-2">
                                             <Badge variant="secondary">{caseItem.discipline}</Badge>
                                             {caseItem.tags.map(tag => (
                                                 <Badge key={tag} variant="outline">{tag}</Badge>
