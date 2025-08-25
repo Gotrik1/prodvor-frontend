@@ -2,6 +2,7 @@
 
 'use client';
 
+import { useState, useMemo } from 'react';
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
 import { PlusCircle, Star, MapPin, List, Search } from "lucide-react";
@@ -102,8 +103,27 @@ const NearbyPlaygrounds = () => {
 };
 
 export function PlaygroundsPage() {
+    const [searchQuery, setSearchQuery] = useState('');
+    const [typeFilter, setTypeFilter] = useState('any');
+    const [disciplineFilter, setDisciplineFilter] = useState('any');
+    
     const teamSports = allSports.filter(s => s.isTeamSport);
     const individualSports = allSports.filter(s => !s.isTeamSport);
+
+    const filteredPlaygrounds = useMemo(() => {
+        const lowercasedQuery = searchQuery.toLowerCase();
+        return mockPlaygrounds.filter(playground => {
+            const queryMatch = lowercasedQuery === '' ||
+                playground.name.toLowerCase().includes(lowercasedQuery) ||
+                playground.address.toLowerCase().includes(lowercasedQuery);
+            
+            const typeMatch = typeFilter === 'any' || playground.type === typeFilter;
+            
+            const disciplineMatch = disciplineFilter === 'any' || playground.sportIds.includes(disciplineFilter);
+
+            return queryMatch && typeMatch && disciplineMatch;
+        });
+    }, [searchQuery, typeFilter, disciplineFilter]);
 
     return (
         <div className="p-4 md:p-6 lg:p-8">
@@ -131,27 +151,32 @@ export function PlaygroundsPage() {
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                         <div className="relative lg:col-span-2">
                             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                            <Input placeholder="Название или адрес..." className="pl-9" />
+                            <Input 
+                                placeholder="Название или адрес..." 
+                                className="pl-9"
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                            />
                         </div>
-                         <Select>
-                            <SelectTrigger><SelectValue placeholder="Тип площадки" /></SelectTrigger>
+                         <Select value={typeFilter} onValueChange={setTypeFilter}>
+                            <SelectTrigger><SelectValue /></SelectTrigger>
                             <SelectContent>
                                <SelectItem value="any">Любой тип</SelectItem>
-                               <SelectItem value="outdoor">Открытая площадка</SelectItem>
-                               <SelectItem value="indoor">Закрытое помещение</SelectItem>
-                               <SelectItem value="stadium">Стадион</SelectItem>
-                               <SelectItem value="center">Спортивный центр</SelectItem>
-                               <SelectItem value="special">Специализированный объект</SelectItem>
+                               <SelectItem value="Открытая площадка">Открытая площадка</SelectItem>
+                               <SelectItem value="Закрытое помещение">Закрытое помещение</SelectItem>
+                               <SelectItem value="Стадион">Стадион</SelectItem>
+                               <SelectItem value="Спортивный центр">Спортивный центр</SelectItem>
+                               <SelectItem value="Специализированный объект">Специализированный объект</SelectItem>
                             </SelectContent>
                         </Select>
-                        <Select>
+                        <Select value={disciplineFilter} onValueChange={setDisciplineFilter}>
                             <SelectTrigger><SelectValue placeholder="Дисциплина" /></SelectTrigger>
                             <SelectContent>
                                 <SelectItem value="any">Любая дисциплина</SelectItem>
                                 <SelectGroup>
                                     <SelectLabel>Командные</SelectLabel>
                                     {teamSports.map((sport) => (
-                                        <SelectItem key={sport.id} value={sport.name}>
+                                        <SelectItem key={sport.id} value={sport.id}>
                                             {sport.name}
                                         </SelectItem>
                                     ))}
@@ -159,7 +184,7 @@ export function PlaygroundsPage() {
                                 <SelectGroup>
                                     <SelectLabel>Индивидуальные</SelectLabel>
                                      {individualSports.map((sport) => (
-                                        <SelectItem key={sport.id} value={sport.name}>
+                                        <SelectItem key={sport.id} value={sport.id}>
                                             {sport.name}
                                         </SelectItem>
                                     ))}
@@ -190,7 +215,7 @@ export function PlaygroundsPage() {
                     <TabsContent value="list">
                          <Card>
                             <CardHeader>
-                                <CardTitle>Список площадок ({mockPlaygrounds.length})</CardTitle>
+                                <CardTitle>Список площадок ({filteredPlaygrounds.length})</CardTitle>
                             </CardHeader>
                             <CardContent>
                                 <div className="border rounded-lg overflow-x-auto">
@@ -205,7 +230,7 @@ export function PlaygroundsPage() {
                                             </TableRow>
                                         </TableHeader>
                                         <TableBody>
-                                            {mockPlaygrounds.map((p) => (
+                                            {filteredPlaygrounds.map((p) => (
                                                 <TableRow key={p.id}>
                                                     <TableCell className="font-medium">
                                                         <Link href={`/playgrounds/${p.id}`} className="hover:text-primary transition-colors">
