@@ -11,7 +11,7 @@ import {
   CardFooter,
 } from '@/shared/ui/card';
 import { Button } from '@/shared/ui/button';
-import { CheckCircle, Gem, Package, Palette, Sparkles, Wand2 } from 'lucide-react';
+import { CheckCircle, Gem, Package, Palette, Sparkles, Wand2, ArrowLeft } from 'lucide-react';
 import Image from 'next/image';
 import { Badge } from '@/shared/ui/badge';
 import { cn } from '@/shared/lib/utils';
@@ -41,14 +41,22 @@ export function InventoryPage() {
 
   return (
     <div className="p-4 md:p-6 lg:p-8 space-y-8">
-      <div>
-        <h1 className="text-3xl font-bold font-headline flex items-center gap-3">
-          <Package className="h-8 w-8" />
-          Мой инвентарь
-        </h1>
-        <p className="text-muted-foreground mt-1">
-          Здесь хранятся все ваши купленные предметы, награды и бустеры.
-        </p>
+       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <div>
+            <h1 className="text-3xl font-bold font-headline flex items-center gap-3">
+            <Package className="h-8 w-8" />
+            Мой инвентарь
+            </h1>
+            <p className="text-muted-foreground mt-1">
+            Здесь хранятся все ваши купленные предметы, награды и бустеры.
+            </p>
+        </div>
+         <Button asChild variant="outline">
+            <Link href="/store">
+                <ArrowLeft className="mr-2 h-4 w-4" />
+                Назад в магазин
+            </Link>
+        </Button>
       </div>
 
       {inventory.length > 0 ? (
