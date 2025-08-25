@@ -11,7 +11,7 @@ import { HomeFooter } from '@/widgets/home-footer';
 import { MobileBottomNav } from '@/widgets/mobile-bottom-nav';
 import { cn } from '@/shared/lib/utils';
 
-const publicRoutes = ['/', '/about', '/auth', '/auth/register', '/store', '/store/pro'];
+const publicRoutes = ['/', '/about', '/auth', '/auth/register'];
 
 export default function MainLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
