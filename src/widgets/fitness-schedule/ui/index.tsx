@@ -57,7 +57,7 @@ export function FitnessSchedule({ showHeader = false }: { showHeader?: boolean }
     // Mock upcoming match for demonstration
     const upcomingMatch: ScheduledActivity = {
         id: 'match-upcoming-1',
-        name: `${registeredTeams[0].name} (${registeredTeams[0].game}) vs ${registeredTeams[1].name} (${registeredTeams[1].game})`,
+        name: `${registeredTeams[0].name} vs ${registeredTeams[1].name}`,
         type: 'match',
         startDate: new Date().toISOString(),
         time: '19:00',
@@ -103,7 +103,6 @@ export function FitnessSchedule({ showHeader = false }: { showHeader?: boolean }
                             variant={selectedDay === daysOfWeek[index] ? 'default' : 'ghost'}
                             size="sm"
                             onClick={() => setSelectedDay(daysOfWeek[index])}
-                            className="w-full"
                         >
                             {day}
                         </Button>
