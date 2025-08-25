@@ -101,16 +101,14 @@ export default {
             "10%, 30%, 50%, 70%, 90%": { transform: "rotate(-10deg)" },
             "20%, 40%, 60%, 80%": { transform: "rotate(10deg)" },
         },
-        wave: {
+        "wave-out": {
             "0%": {
                 transform: "scale(0.5)",
-                opacity: "0.5",
-                boxShadow: "0 0 0 0 hsl(var(--destructive) / 0.8)",
+                opacity: "1",
             },
             "100%": {
-                transform: "scale(2)",
+                transform: "scale(2.5)",
                 opacity: "0",
-                boxShadow: "0 0 0 10px hsl(var(--destructive) / 0)",
             },
         },
       },
@@ -118,7 +116,7 @@ export default {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
         ringing: 'ringing 2s ease-in-out infinite',
-        wave: 'wave 2s ease-in-out infinite',
+        'wave-out': 'wave-out 2s cubic-bezier(0, 0, 0.2, 1) infinite',
       },
     },
   },

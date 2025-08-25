@@ -116,7 +116,11 @@ export function DashboardHeader() {
           <Button variant="ghost" size="icon" className="relative">
             <Bell className="animate-ringing" />
           </Button>
-          <span className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-8 w-8 rounded-full bg-destructive/50 animate-wave pointer-events-none"></span>
+           <div className="notification-waves absolute top-0 left-0 w-full h-full pointer-events-none">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
         </div>
         <ThemeToggle />
         <DropdownMenu>
