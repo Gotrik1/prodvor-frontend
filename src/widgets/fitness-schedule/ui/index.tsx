@@ -10,6 +10,7 @@ import type { ScheduledActivity, Activity } from '@/views/fitness-plan/ui/types'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
 import { ActivityLibraryDialog } from '@/views/fitness-plan/ui/activity-library';
 import { registeredTeams } from '@/views/tournaments/public-page/ui/mock-data';
+import { cn } from '@/shared/lib/utils';
 
 const personalActivityColors: Record<Activity['type'] | 'match', string> = {
     'template': 'bg-amber-500/10 text-amber-300 border-amber-500/20',
@@ -19,31 +20,36 @@ const personalActivityColors: Record<Activity['type'] | 'match', string> = {
     'match': 'bg-primary/10 text-primary border-primary/20',
 };
 
-const EventCard = ({ event, onRemove }: { event: ScheduledActivity; onRemove: (id: string) => void }) => (
-    <div className="p-3 rounded-lg bg-card border flex flex-col gap-3 group relative">
-        <div className="flex justify-between items-start">
-            <Badge className={`${personalActivityColors[event.type === 'template' ? 'template' : 'match']}`}>
-                {event.type === 'template' ? <Dumbbell className="h-3 w-3 mr-1.5" /> : <Trophy className="h-3 w-3 mr-1.5" />}
-                {event.type === 'template' ? 'Тренировка' : 'Матч'}
-            </Badge>
-            <Button
+const EventCard = ({ event, onRemove }: { event: ScheduledActivity; onRemove: (id: string) => void }) => {
+    const isMatch = event.type !== 'template';
+    const Icon = isMatch ? Trophy : Dumbbell;
+    const badgeText = isMatch ? 'Матч' : 'Тренировка';
+
+    return (
+        <div className="p-4 rounded-lg bg-card border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 group relative">
+            <div className="flex items-start gap-4 flex-grow w-full">
+                <Icon className={cn("h-8 w-8 text-primary mt-1 shrink-0", isMatch ? "text-primary" : "text-amber-400")} />
+                <div className="flex-grow overflow-hidden">
+                    <Badge className={cn("mb-1", personalActivityColors[event.type])}>{badgeText}</Badge>
+                    <h4 className="font-semibold truncate">{event.name}</h4>
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground mt-1">
+                        <Clock className="h-4 w-4" />
+                        <span>{event.time}</span>
+                    </div>
+                </div>
+            </div>
+             <Button
                 variant="ghost"
                 size="icon"
-                className="h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity absolute top-2 right-2"
+                className="h-7 w-7 opacity-0 group-hover:opacity-100 transition-opacity absolute top-2 right-2 sm:static"
                 onClick={() => onRemove(event.id)}
             >
                 <Trash2 className="h-4 w-4 text-destructive" />
             </Button>
         </div>
-        <h4 className="font-semibold mt-1 truncate">{event.name}</h4>
-        <div className="text-sm text-muted-foreground space-y-2">
-            <div className="flex items-center gap-2">
-                <Clock className="h-4 w-4" />
-                <span>{event.time}</span>
-            </div>
-        </div>
-    </div>
-);
+    );
+};
+
 
 export function FitnessSchedule({ showHeader = false }: { showHeader?: boolean }) {
     const daysOfWeek = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота', 'Воскресенье'];
