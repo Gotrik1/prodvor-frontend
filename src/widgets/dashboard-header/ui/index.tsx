@@ -115,17 +115,17 @@ export function DashboardHeader() {
         <div className="relative">
              <Button variant="ghost" size="icon" className="relative">
                 <Bell className="animate-ringing" />
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[35%] h-[35%] pointer-events-none">
-                    {/* Left Arcs */}
-                    <span className="absolute block w-full h-full rounded-full border border-t-transparent border-b-transparent border-l-destructive animate-wave-out opacity-100" style={{ animationDelay: '0s' }}></span>
-                    <span className="absolute block w-full h-full rounded-full border border-t-transparent border-b-transparent border-l-destructive animate-wave-out opacity-100" style={{ animationDelay: '0.2s' }}></span>
-                    <span className="absolute block w-full h-full rounded-full border border-t-transparent border-b-transparent border-l-destructive animate-wave-out opacity-100" style={{ animationDelay: '0.4s' }}></span>
-                    {/* Right Arcs */}
-                    <span className="absolute block w-full h-full rounded-full border border-t-transparent border-b-transparent border-r-destructive animate-wave-out opacity-100" style={{ animationDelay: '0s' }}></span>
-                    <span className="absolute block w-full h-full rounded-full border border-t-transparent border-b-transparent border-r-destructive animate-wave-out opacity-100" style={{ animationDelay: '0.2s' }}></span>
-                    <span className="absolute block w-full h-full rounded-full border border-t-transparent border-b-transparent border-r-destructive animate-wave-out opacity-100" style={{ animationDelay: '0.4s' }}></span>
-                </div>
             </Button>
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1/2 h-1/2 pointer-events-none">
+                {/* Left arcs */}
+                <span className="absolute block w-full h-full rounded-full border-2 border-transparent border-l-destructive opacity-50 animate-wave-out" style={{ animationDelay: '0s' }}></span>
+                <span className="absolute block w-full h-full rounded-full border-2 border-transparent border-l-destructive opacity-50 animate-wave-out" style={{ animationDelay: '0.2s' }}></span>
+                <span className="absolute block w-full h-full rounded-full border-2 border-transparent border-l-destructive opacity-50 animate-wave-out" style={{ animationDelay: '0.4s' }}></span>
+                {/* Right arcs */}
+                <span className="absolute block w-full h-full rounded-full border-2 border-transparent border-r-destructive opacity-50 animate-wave-out" style={{ animationDelay: '0s' }}></span>
+                <span className="absolute block w-full h-full rounded-full border-2 border-transparent border-r-destructive opacity-50 animate-wave-out" style={{ animationDelay: '0.2s' }}></span>
+                <span className="absolute block w-full h-full rounded-full border-2 border-transparent border-r-destructive opacity-50 animate-wave-out" style={{ animationDelay: '0.4s' }}></span>
+            </div>
         </div>
         <ThemeToggle />
         <DropdownMenu>

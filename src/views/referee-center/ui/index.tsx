@@ -187,7 +187,7 @@ export function RefereeCenterPage() {
                             <Accordion type="single" collapsible className="w-full" defaultValue="football">
                                 {filteredKnowledgeBase.map(sport => (
                                     <AccordionItem value={sport.id} key={sport.id}>
-                                        <AccordionTrigger className="text-lg font-semibold">{sport.name}</AccordionTrigger>
+                                        <AccordionTrigger className="text-lg font-semibold text-left">{sport.name}</AccordionTrigger>
                                         <AccordionContent>
                                             <div className="space-y-2 pl-2">
                                                 {sport.documents.map(doc => (
