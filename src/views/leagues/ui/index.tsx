@@ -23,13 +23,15 @@ const LegendCard = ({ team, rank }: { team: typeof allTeams[0], rank: number }) 
     const color = rank === 1 ? 'text-amber-400' : rank === 2 ? 'text-slate-400' : 'text-amber-600';
     return (
          <Card className={`w-full bg-card/50 shadow-lg ${rankColors[rank - 1]}`}>
-             <CardContent className="p-4 flex flex-col items-center text-center">
-                 <div className="relative mb-3">
-                    <Icon className={`absolute -top-2 -left-2 h-6 w-6 ${color}`} />
-                    <Image src={team.logoUrl} alt={team.name} width={64} height={64} className="rounded-lg border-2" data-ai-hint={team.dataAiHint}/>
-                 </div>
-                 <Link href={`/teams/${team.id}`} className="font-bold text-lg hover:text-primary transition-colors">{team.name}</Link>
-                 <p className="text-sm text-muted-foreground">{team.rank} ELO</p>
+             <CardContent className="p-0">
+                <div className="p-4 flex flex-col items-center text-center">
+                    <div className="relative mb-3">
+                        <Icon className={`absolute -top-2 -left-2 h-6 w-6 ${color}`} />
+                        <Image src={team.logoUrl} alt={team.name} width={64} height={64} className="rounded-lg border-2" data-ai-hint={team.dataAiHint}/>
+                    </div>
+                    <Link href={`/teams/${team.id}`} className="font-bold text-lg hover:text-primary transition-colors">{team.name}</Link>
+                    <p className="text-sm text-muted-foreground">{team.rank} ELO</p>
+                </div>
              </CardContent>
         </Card>
     );
@@ -80,7 +82,7 @@ export function LeaguesPage() {
                 <CardContent className="space-y-8">
                     <div>
                         <h3 className="text-xl font-bold text-center mb-4 text-amber-400">Дивизион Легенд</h3>
-                         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-6">
+                         <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 md:gap-6">
                             {legendDivision.map((team, index) => (
                                 <LegendCard key={team.id} team={team} rank={index + 1} />
                             ))}
