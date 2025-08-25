@@ -96,14 +96,14 @@ export function FitnessSchedule({ showHeader = false }: { showHeader?: boolean }
                 </CardHeader>
             )}
             <CardContent className={showHeader ? "" : "pt-6"}>
-                <div className="grid grid-cols-7 gap-1 mb-4">
+                <div className="flex gap-1 mb-4">
                     {shortDays.map((day, index) => (
                         <Button
                             key={day}
                             variant={selectedDay === daysOfWeek[index] ? 'default' : 'ghost'}
                             size="sm"
                             onClick={() => setSelectedDay(daysOfWeek[index])}
-                            className="w-full"
+                            className="flex-1"
                         >
                             {day}
                         </Button>
