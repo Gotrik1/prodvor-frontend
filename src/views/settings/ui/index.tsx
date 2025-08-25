@@ -8,40 +8,47 @@ import { AccountTab } from './tabs/account-tab';
 import { NotificationsTab } from './tabs/notifications-tab';
 import { AppearanceTab } from './tabs/appearance-tab';
 import { PrivacyTab } from './tabs/privacy-tab';
+import { cn } from '@/shared/lib/utils';
 
 export function SettingsPage() {
   return (
     <div className="p-4 md:p-6 lg:p-8">
       <div className="mx-auto w-full max-w-4xl">
         <h1 className="text-3xl font-bold mb-6">Настройки</h1>
-        <Tabs defaultValue="profile" className="w-full">
-          <TabsList className="grid w-full grid-cols-5">
-            <TabsTrigger value="profile"><UserIcon className="mr-2 h-4 w-4" />Профиль</TabsTrigger>
-            <TabsTrigger value="account"><Lock className="mr-2 h-4 w-4" />Аккаунт</TabsTrigger>
-            <TabsTrigger value="notifications"><Bell className="mr-2 h-4 w-4" />Уведомления</TabsTrigger>
-            <TabsTrigger value="appearance"><Brush className="mr-2 h-4 w-4" />Внешний вид</TabsTrigger>
-            <TabsTrigger value="privacy"><Shield className="mr-2 h-4 w-4"/>Приватность</TabsTrigger>
+        <Tabs defaultValue="profile" className="w-full flex flex-col md:flex-row gap-6">
+          <TabsList className={cn(
+            "grid w-full md:w-auto md:grid-flow-row",
+            // The number of items should be reflected here for grid-rows
+            "grid-cols-2 sm:grid-cols-5 md:grid-cols-1 md:grid-rows-5"
+          )}>
+            <TabsTrigger value="profile" className="justify-start"><UserIcon className="mr-2 h-4 w-4" />Профиль</TabsTrigger>
+            <TabsTrigger value="account" className="justify-start"><Lock className="mr-2 h-4 w-4" />Аккаунт</TabsTrigger>
+            <TabsTrigger value="notifications" className="justify-start"><Bell className="mr-2 h-4 w-4" />Уведомления</TabsTrigger>
+            <TabsTrigger value="appearance" className="justify-start"><Brush className="mr-2 h-4 w-4" />Внешний вид</TabsTrigger>
+            <TabsTrigger value="privacy" className="justify-start"><Shield className="mr-2 h-4 w-4"/>Приватность</TabsTrigger>
           </TabsList>
           
-          <TabsContent value="profile" className="mt-6">
-            <ProfileTab />
-          </TabsContent>
+          <div className="w-full">
+            <TabsContent value="profile" className="mt-0">
+              <ProfileTab />
+            </TabsContent>
 
-          <TabsContent value="account" className="mt-6">
-            <AccountTab />
-          </TabsContent>
+            <TabsContent value="account" className="mt-0">
+              <AccountTab />
+            </TabsContent>
 
-          <TabsContent value="notifications" className="mt-6">
-            <NotificationsTab />
-          </TabsContent>
-          
-          <TabsContent value="appearance" className="mt-6">
-            <AppearanceTab />
-          </TabsContent>
-          
-          <TabsContent value="privacy" className="mt-6">
-            <PrivacyTab />
-          </TabsContent>
+            <TabsContent value="notifications" className="mt-0">
+              <NotificationsTab />
+            </TabsContent>
+            
+            <TabsContent value="appearance" className="mt-0">
+              <AppearanceTab />
+            </TabsContent>
+            
+            <TabsContent value="privacy" className="mt-0">
+              <PrivacyTab />
+            </TabsContent>
+          </div>
         </Tabs>
       </div>
     </div>
