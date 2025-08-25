@@ -55,7 +55,9 @@ export function DashboardSidebar({ isMobileSheet = false }: { isMobileSheet?: bo
     
     // Render as a grid of tiles for the mobile bottom sheet
     if (isMobileSheet) {
-        const allItems = [...mainNavItems, ...secondaryNavItems];
+        const excludedHrefs = ["/teams", "/training-center"];
+        const allItems = [...mainNavItems, ...secondaryNavItems]
+            .filter(item => !excludedHrefs.includes(item.href));
         return (
             <div className="grid grid-cols-4 gap-4 p-4">
                 {allItems.map(item => (
