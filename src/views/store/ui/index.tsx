@@ -10,7 +10,6 @@ import { useToast } from "@/shared/hooks/use-toast";
 import Link from "next/link";
 import { mockStoreItems } from '../lib/mock-data';
 import { cn } from "@/shared/lib/utils";
-import { ScrollArea, ScrollBar } from "@/shared/ui/scroll-area";
 
 
 const categories = [
@@ -49,17 +48,14 @@ export function StorePage() {
             </div>
             
             <Tabs defaultValue="all" className="w-full">
-                 <ScrollArea className="w-full whitespace-nowrap">
-                    <TabsList className="inline-flex">
-                        {categories.map(cat => (
-                            <TabsTrigger key={cat.id} value={cat.id} className="flex-shrink-0">
-                                <cat.icon className="mr-2 h-4 w-4" />
-                                {cat.name}
-                            </TabsTrigger>
-                        ))}
-                    </TabsList>
-                    <ScrollBar orientation="horizontal" className="invisible" />
-                </ScrollArea>
+                <TabsList className="flex flex-wrap h-auto">
+                    {categories.map(cat => (
+                        <TabsTrigger key={cat.id} value={cat.id} className="flex-shrink-0 flex-grow">
+                            <cat.icon className="mr-2 h-4 w-4" />
+                            {cat.name}
+                        </TabsTrigger>
+                    ))}
+                </TabsList>
 
                 {categories.map(cat => {
                     const filteredItems = mockStoreItems.filter(item => cat.id === 'all' || item.category === cat.id);
