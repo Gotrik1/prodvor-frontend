@@ -64,7 +64,7 @@ export function DashboardHeader() {
          <div className="block md:hidden">
             <Logo />
          </div>
-         <SidebarTrigger className="hidden md:flex" />
+         
       </div>
       <div className="flex items-center gap-2">
         <div className="relative w-64 hidden md:block">
