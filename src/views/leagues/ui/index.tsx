@@ -10,7 +10,6 @@ import { Badge } from '@/shared/ui/badge';
 import Link from 'next/link';
 import { useState, useMemo } from 'react';
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem, SelectGroup, SelectLabel } from '@/shared/ui/select';
-import { ScrollArea, ScrollBar } from "@/shared/ui/scroll-area";
 
 const rankColors = [
     'border-amber-400 shadow-amber-400/20', // 1st
@@ -83,7 +82,7 @@ export function LeaguesPage() {
 
             <section>
                 <h3 className="text-xl font-bold text-center mb-4 text-amber-400">Дивизион Легенд</h3>
-                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
+                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 md:gap-6">
                     {legendDivision.map((team, index) => (
                         <LegendCard key={team.id} team={team} rank={index + 1} />
                     ))}
@@ -94,7 +93,7 @@ export function LeaguesPage() {
                  <h3 className="text-xl font-bold mb-4">Основная Лига (Топ 50)</h3>
                  <Card>
                     <CardContent className="p-0">
-                        <ScrollArea className="w-full whitespace-nowrap rounded-lg">
+                        <div className="overflow-x-auto">
                             <Table>
                                 <TableHeader>
                                     <TableRow>
@@ -124,8 +123,7 @@ export function LeaguesPage() {
                                     ))}
                                 </TableBody>
                             </Table>
-                            <ScrollBar orientation="horizontal" />
-                        </ScrollArea>
+                        </div>
                     </CardContent>
                  </Card>
             </section>
