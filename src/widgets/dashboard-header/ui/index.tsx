@@ -58,12 +58,13 @@ export function DashboardHeader() {
   return (
     <header className={cn(
         "sticky top-0 z-40 flex h-16 items-center justify-between p-4 border-b border-layout-border bg-card transition-transform duration-300",
-        scrollDirection === 'down' ? '-translate-y-full' : 'translate-y-0'
+        scrollDirection === 'up' ? 'translate-y-0' : '-translate-y-full'
     )}>
       <div className="flex items-center gap-4">
          <div className="block md:hidden">
             <Logo />
          </div>
+         <SidebarTrigger className="hidden md:flex" />
       </div>
       <div className="flex items-center gap-2">
         <div className="relative w-64 hidden md:block">
