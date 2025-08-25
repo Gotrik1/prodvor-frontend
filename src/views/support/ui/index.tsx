@@ -74,7 +74,7 @@ export function SupportPage() {
                                     <h3 className="text-lg font-semibold mt-4 mb-2">{category.category}</h3>
                                     {category.questions.map(item => (
                                         <AccordionItem value={item.q} key={item.q}>
-                                            <AccordionTrigger>{item.q}</AccordionTrigger>
+                                            <AccordionTrigger className="text-left">{item.q}</AccordionTrigger>
                                             <AccordionContent>
                                                 {item.a}
                                             </AccordionContent>
