@@ -103,6 +103,7 @@ export function FitnessSchedule({ showHeader = false }: { showHeader?: boolean }
                             variant={selectedDay === daysOfWeek[index] ? 'default' : 'ghost'}
                             size="sm"
                             onClick={() => setSelectedDay(daysOfWeek[index])}
+                            className="w-full"
                         >
                             {day}
                         </Button>
