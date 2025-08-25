@@ -117,9 +117,9 @@ export function DashboardHeader() {
             <Bell className="animate-ringing" />
           </Button>
            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full pointer-events-none">
-                <span className="absolute block w-full h-full rounded-full border-2 border-destructive animate-wave-out opacity-0" style={{ animationDelay: '0s' }}></span>
-                <span className="absolute block w-full h-full rounded-full border-2 border-destructive animate-wave-out opacity-0" style={{ animationDelay: '0.2s' }}></span>
-                <span className="absolute block w-full h-full rounded-full border-2 border-destructive animate-wave-out opacity-0" style={{ animationDelay: '0.4s' }}></span>
+                <span className="absolute block w-full h-full rounded-full border border-destructive animate-wave-out opacity-0" style={{ animationDelay: '0s' }}></span>
+                <span className="absolute block w-full h-full rounded-full border border-destructive animate-wave-out opacity-0" style={{ animationDelay: '0.2s' }}></span>
+                <span className="absolute block w-full h-full rounded-full border border-destructive animate-wave-out opacity-0" style={{ animationDelay: '0.4s' }}></span>
             </div>
         </div>
         <ThemeToggle />
