@@ -31,6 +31,8 @@ import {
   SelectGroup,
   SelectLabel,
 } from '@/shared/ui/select';
+import { useIsMobile } from '@/hooks/use-mobile';
+import { ScrollArea } from '@/shared/ui/scroll-area';
 
 const rankColors = [
   'border-amber-400 shadow-amber-400/20', // 1st
@@ -56,32 +58,54 @@ const LegendCard = ({
     <Card
       className={`w-full bg-card/50 shadow-lg ${rankColors[rank - 1]}`}
     >
-      <CardContent className="p-4 flex flex-col items-center text-center">
-        <div className="relative mb-3">
-          <Icon className={`absolute -top-2 -left-2 h-6 w-6 ${color}`} />
-          <Image
-            src={team.logoUrl}
-            alt={team.name}
-            width={64}
-            height={64}
-            className="rounded-lg border-2"
-            data-ai-hint={team.dataAiHint}
-          />
+      <CardContent className="p-0">
+        <div className="p-4 flex flex-col items-center text-center">
+            <div className="relative mb-3">
+            <Icon className={`absolute -top-2 -left-2 h-6 w-6 ${color}`} />
+            <Image
+                src={team.logoUrl}
+                alt={team.name}
+                width={64}
+                height={64}
+                className="rounded-lg border-2"
+                data-ai-hint={team.dataAiHint}
+            />
+            </div>
+            <Link
+            href={`/teams/${team.id}`}
+            className="font-bold text-lg hover:text-primary transition-colors"
+            >
+            {team.name}
+            </Link>
+            <p className="text-sm text-muted-foreground">{team.rank} ELO</p>
         </div>
-        <Link
-          href={`/teams/${team.id}`}
-          className="font-bold text-lg hover:text-primary transition-colors"
-        >
-          {team.name}
-        </Link>
-        <p className="text-sm text-muted-foreground">{team.rank} ELO</p>
       </CardContent>
     </Card>
   );
 };
 
+const MobileTeamCard = ({ team, rank }: { team: (typeof allTeams)[0], rank: number }) => (
+    <Card>
+        <CardContent className="p-4 flex items-center justify-between">
+            <div className="flex items-center gap-4">
+                <span className="text-xl font-bold text-muted-foreground w-8 text-center">{rank}</span>
+                <Image src={team.logoUrl} alt={team.name} width={40} height={40} className="rounded-md" data-ai-hint={team.dataAiHint} />
+                <div>
+                    <Link href={`/teams/${team.id}`} className="font-semibold hover:text-primary transition-colors">{team.name}</Link>
+                    <p className="text-xs text-muted-foreground">{team.game}</p>
+                </div>
+            </div>
+            <div className="text-right">
+                <p className="font-bold text-lg">{team.rank}</p>
+                <p className="text-xs text-muted-foreground">ELO</p>
+            </div>
+        </CardContent>
+    </Card>
+);
+
 export function LeaguesPage() {
   const [selectedDiscipline, setSelectedDiscipline] = useState('all');
+  const isMobile = useIsMobile();
 
   const filteredAndSortedTeams = useMemo(() => {
     return allTeams
@@ -96,19 +120,17 @@ export function LeaguesPage() {
 
   return (
     <div className="space-y-8">
-      <Card>
-        <CardHeader>
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+      <div>
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-              <CardTitle className="text-2xl flex items-center gap-2">
-                <Trophy /> Рейтинговые лиги
-              </CardTitle>
-              <CardDescription>
-                Отслеживайте свое место среди лучших команд платформы. Лучшие из
-                лучших попадают в Дивизион Легенд.
-              </CardDescription>
+                <h2 className="text-2xl font-bold flex items-center gap-2">
+                    <Trophy /> Рейтинговые лиги
+                </h2>
+                <p className="text-muted-foreground mt-1">
+                    Отслеживайте свое место среди лучших команд платформы.
+                </p>
             </div>
-            <div className="mt-4 sm:mt-0">
+            <div className="w-full sm:w-auto">
               <Select
                 value={selectedDiscipline}
                 onValueChange={setSelectedDiscipline}
@@ -129,77 +151,81 @@ export function LeaguesPage() {
                 </SelectContent>
               </Select>
             </div>
-          </div>
-        </CardHeader>
-      </Card>
-
+        </div>
+      </div>
+      
       <section>
         <h3 className="text-xl font-bold text-center mb-4 text-amber-400">
           Дивизион Легенд
         </h3>
-        <div className="flex flex-wrap justify-center gap-4 md:gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
           {legendDivision.map((team, index) => (
-            <div
-              key={team.id}
-              className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/5"
-            >
-              <LegendCard team={team} rank={index + 1} />
-            </div>
+              <LegendCard key={team.id} team={team} rank={index + 1} />
           ))}
         </div>
       </section>
 
       <section>
         <h3 className="text-xl font-bold mb-4">Основная Лига (Топ 50)</h3>
-        <Card>
-          <CardContent className="p-0">
-            <div className="overflow-x-auto">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead className="w-16 text-center">Ранг</TableHead>
-                    <TableHead>Команда</TableHead>
-                    <TableHead>Дисциплина</TableHead>
-                    <TableHead className="text-right">Рейтинг (ELO)</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {mainLeague.slice(0, 47).map((team, index) => (
-                    <TableRow key={team.id}>
-                      <TableCell className="text-center font-bold text-lg">
-                        <span>{index + 4}</span>
-                      </TableCell>
-                      <TableCell>
-                        <Link
-                          href={`/teams/${team.id}`}
-                          className="flex items-center gap-3 group"
-                        >
-                          <Image
-                            src={team.logoUrl}
-                            alt={team.name}
-                            width={40}
-                            height={40}
-                            className="rounded-md"
-                            data-ai-hint={team.dataAiHint}
-                          />
-                          <span className="font-medium group-hover:text-primary transition-colors whitespace-normal">
-                            {team.name}
-                          </span>
-                        </Link>
-                      </TableCell>
-                      <TableCell>
-                        <Badge variant="secondary">{team.game}</Badge>
-                      </TableCell>
-                      <TableCell className="text-right font-mono text-lg font-semibold">
-                        {team.rank}
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
+        {isMobile ? (
+            <div className="space-y-3">
+                {mainLeague.slice(0, 47).map((team, index) => (
+                    <MobileTeamCard key={team.id} team={team} rank={index + 4} />
+                ))}
             </div>
-          </CardContent>
-        </Card>
+        ) : (
+            <Card>
+                <CardContent className="p-0">
+                    <ScrollArea>
+                    <div className="overflow-x-auto">
+                    <Table>
+                        <TableHeader>
+                        <TableRow>
+                            <TableHead className="w-16 text-center">Ранг</TableHead>
+                            <TableHead>Команда</TableHead>
+                            <TableHead>Дисциплина</TableHead>
+                            <TableHead className="text-right">Рейтинг (ELO)</TableHead>
+                        </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                        {mainLeague.slice(0, 47).map((team, index) => (
+                            <TableRow key={team.id}>
+                            <TableCell className="text-center font-bold text-lg">
+                                <span>{index + 4}</span>
+                            </TableCell>
+                            <TableCell>
+                                <Link
+                                href={`/teams/${team.id}`}
+                                className="flex items-center gap-3 group"
+                                >
+                                <Image
+                                    src={team.logoUrl}
+                                    alt={team.name}
+                                    width={40}
+                                    height={40}
+                                    className="rounded-md"
+                                    data-ai-hint={team.dataAiHint}
+                                />
+                                <span className="font-medium group-hover:text-primary transition-colors whitespace-normal">
+                                    {team.name}
+                                </span>
+                                </Link>
+                            </TableCell>
+                            <TableCell>
+                                <Badge variant="secondary">{team.game}</Badge>
+                            </TableCell>
+                            <TableCell className="text-right font-mono text-lg font-semibold">
+                                {team.rank}
+                            </TableCell>
+                            </TableRow>
+                        ))}
+                        </TableBody>
+                    </Table>
+                    </div>
+                    </ScrollArea>
+                </CardContent>
+            </Card>
+        )}
       </section>
     </div>
   );
