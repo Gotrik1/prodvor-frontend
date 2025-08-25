@@ -16,9 +16,9 @@ export function TrainingCenterPage() {
             </p>
         </div>
         <Tabs defaultValue="schedule" className="w-full">
-            <TabsList className="grid w-full grid-cols-1 sm:grid-cols-2 h-auto">
-                <TabsTrigger value="schedule"><Calendar className="mr-2 h-4 w-4" />Мое расписание</TabsTrigger>
-                <TabsTrigger value="constructor"><Dumbbell className="mr-2 h-4 w-4" />Конструктор планов</TabsTrigger>
+            <TabsList className="h-auto w-full flex-col sm:flex-row">
+                <TabsTrigger value="schedule" className="w-full sm:w-auto"><Calendar className="mr-2 h-4 w-4" />Мое расписание</TabsTrigger>
+                <TabsTrigger value="constructor" className="w-full sm:w-auto"><Dumbbell className="mr-2 h-4 w-4" />Конструктор планов</TabsTrigger>
             </TabsList>
             <TabsContent value="schedule" className="mt-6">
                 <TrainingPage />

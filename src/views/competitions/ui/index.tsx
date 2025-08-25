@@ -17,16 +17,16 @@ export function CompetitionsPage() {
         </p>
       </div>
       <Tabs defaultValue="tournaments" className="w-full">
-        <TabsList className="grid w-full grid-cols-1 sm:grid-cols-3 h-auto">
-          <TabsTrigger value="tournaments">
+        <TabsList className="h-auto w-full flex-col sm:flex-row">
+          <TabsTrigger value="tournaments" className="w-full sm:w-auto">
             <Trophy className="mr-2 h-4 w-4" />
             Турниры
           </TabsTrigger>
-          <TabsTrigger value="leagues">
+          <TabsTrigger value="leagues" className="w-full sm:w-auto">
             <BarChart className="mr-2 h-4 w-4" />
             Лиги
           </TabsTrigger>
-          <TabsTrigger value="challenges">
+          <TabsTrigger value="challenges" className="w-full sm:w-auto">
             <Swords className="mr-2 h-4 w-4" />
             Вызовы
           </TabsTrigger>

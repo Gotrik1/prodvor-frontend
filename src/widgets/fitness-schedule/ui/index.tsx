@@ -61,13 +61,10 @@ export function FitnessSchedule({ showHeader = false }: { showHeader?: boolean }
     const { personalSchedule, removeScheduledActivity, addScheduledActivity } = useScheduleStore();
 
     useEffect(() => {
-        // This code runs only on the client, after the component has mounted.
-        // This prevents hydration mismatch errors.
-        const todayIndex = (new Date().getDay() + 6) % 7; // Monday is 0
+        const todayIndex = (new Date().getDay() + 6) % 7;
         setSelectedDay(daysOfWeek[todayIndex]);
     }, []);
 
-    // Mock upcoming match for demonstration
     const upcomingMatch: ScheduledActivity = {
         id: 'match-upcoming-1',
         name: `${registeredTeams[0].name} vs ${registeredTeams[1].name}`,
@@ -80,7 +77,6 @@ export function FitnessSchedule({ showHeader = false }: { showHeader?: boolean }
 
     const eventsForSelectedDay = selectedDay ? personalSchedule[selectedDay] || [] : [];
     
-    // Add the mock match to today's schedule for demonstration if it's the current day
     if (selectedDay === daysOfWeek[(new Date().getDay() + 6) % 7]) {
         if (!eventsForSelectedDay.find(e => e.id === 'match-upcoming-1')) {
             eventsForSelectedDay.push(upcomingMatch);
@@ -89,11 +85,10 @@ export function FitnessSchedule({ showHeader = false }: { showHeader?: boolean }
     eventsForSelectedDay.sort((a,b) => a.time.localeCompare(b.time));
 
     const handleSelectActivity = (activity: Activity) => {
-        // For demonstration, we'll add it with a default time
         const newActivity: ScheduledActivity = {
             ...activity,
             id: `scheduled-${activity.id}-${Date.now()}`,
-            startDate: new Date().toISOString(), // This should be tied to the selected day
+            startDate: new Date().toISOString(),
             time: "12:00",
             repeat: 'none',
             customInterval: 0,
