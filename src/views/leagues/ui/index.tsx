@@ -22,7 +22,7 @@ const LegendCard = ({ team, rank }: { team: typeof allTeams[0], rank: number }) 
     const Icon = rank === 1 ? Crown : rank === 2 ? Star : Shield;
     const color = rank === 1 ? 'text-amber-400' : rank === 2 ? 'text-slate-400' : 'text-amber-600';
     return (
-         <Card className={`bg-card/50 shadow-lg ${rankColors[rank - 1]}`}>
+         <Card className={`w-full bg-card/50 shadow-lg ${rankColors[rank - 1]}`}>
              <CardContent className="p-4 flex flex-col items-center text-center">
                  <div className="relative mb-3">
                     <Icon className={`absolute -top-2 -left-2 h-6 w-6 ${color}`} />
