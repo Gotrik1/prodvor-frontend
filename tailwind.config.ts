@@ -107,7 +107,7 @@ export default {
                 opacity: "0.5",
             },
             "100%": {
-                transform: "scale(2.5)",
+                transform: "scale(1.25)",
                 opacity: "0",
             },
         },
