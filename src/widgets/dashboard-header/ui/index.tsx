@@ -113,10 +113,10 @@ export function DashboardHeader() {
           </Link>
         </Button>
         <div className="relative">
-          <Button variant="ghost" size="icon" className="relative">
-            <Bell className="animate-ringing" />
-          </Button>
-           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full pointer-events-none">
+            <Button variant="ghost" size="icon" className="relative">
+                <Bell className="animate-ringing" />
+            </Button>
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1/2 h-1/2 pointer-events-none">
                 <span className="absolute block w-full h-full rounded-full border border-destructive animate-wave-out opacity-0" style={{ animationDelay: '0s' }}></span>
                 <span className="absolute block w-full h-full rounded-full border border-destructive animate-wave-out opacity-0" style={{ animationDelay: '0.2s' }}></span>
                 <span className="absolute block w-full h-full rounded-full border border-destructive animate-wave-out opacity-0" style={{ animationDelay: '0.4s' }}></span>
