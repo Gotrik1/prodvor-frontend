@@ -102,7 +102,6 @@ export function FitnessSchedule({ showHeader = false }: { showHeader?: boolean }
                             key={day}
                             variant={selectedDay === daysOfWeek[index] ? 'default' : 'ghost'}
                             size="sm"
-                            className="flex-1"
                             onClick={() => setSelectedDay(daysOfWeek[index])}
                         >
                             {day}
