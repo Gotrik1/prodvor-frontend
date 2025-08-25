@@ -1,7 +1,7 @@
 
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Badge } from '@/shared/ui/badge';
 import { Button } from '@/shared/ui/button';
 import { Clock, Trash2, Calendar, Trophy, Dumbbell } from 'lucide-react';
@@ -11,6 +11,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/sha
 import { ActivityLibraryDialog } from '@/views/fitness-plan/ui/activity-library';
 import { registeredTeams } from '@/views/tournaments/public-page/ui/mock-data';
 import { cn } from '@/shared/lib/utils';
+import { Skeleton } from '@/shared/ui/skeleton';
 
 const personalActivityColors: Record<Activity['type'] | 'match', string> = {
     'template': 'bg-amber-500/10 text-amber-300 border-amber-500/20',
@@ -55,10 +56,16 @@ export function FitnessSchedule({ showHeader = false }: { showHeader?: boolean }
     const daysOfWeek = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота', 'Воскресенье'];
     const shortDays = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
     
-    const todayIndex = (new Date().getDay() + 6) % 7; // Monday is 0
-    const [selectedDay, setSelectedDay] = useState(daysOfWeek[todayIndex]);
+    const [selectedDay, setSelectedDay] = useState<string | null>(null);
     
     const { personalSchedule, removeScheduledActivity, addScheduledActivity } = useScheduleStore();
+
+    useEffect(() => {
+        // This code runs only on the client, after the component has mounted.
+        // This prevents hydration mismatch errors.
+        const todayIndex = (new Date().getDay() + 6) % 7; // Monday is 0
+        setSelectedDay(daysOfWeek[todayIndex]);
+    }, []);
 
     // Mock upcoming match for demonstration
     const upcomingMatch: ScheduledActivity = {
@@ -71,9 +78,10 @@ export function FitnessSchedule({ showHeader = false }: { showHeader?: boolean }
         customInterval: 0,
     };
 
-    const eventsForSelectedDay = personalSchedule[selectedDay] || [];
-    // Add the mock match to today's schedule for demonstration
-    if (selectedDay === daysOfWeek[todayIndex]) {
+    const eventsForSelectedDay = selectedDay ? personalSchedule[selectedDay] || [] : [];
+    
+    // Add the mock match to today's schedule for demonstration if it's the current day
+    if (selectedDay === daysOfWeek[(new Date().getDay() + 6) % 7]) {
         if (!eventsForSelectedDay.find(e => e.id === 'match-upcoming-1')) {
             eventsForSelectedDay.push(upcomingMatch);
         }
@@ -109,13 +117,19 @@ export function FitnessSchedule({ showHeader = false }: { showHeader?: boolean }
                             variant={selectedDay === daysOfWeek[index] ? 'default' : 'ghost'}
                             size="sm"
                             onClick={() => setSelectedDay(daysOfWeek[index])}
+                            disabled={!selectedDay}
                         >
                             {day}
                         </Button>
                     ))}
                 </div>
                 <div className="space-y-3 min-h-[150px]">
-                    {eventsForSelectedDay.length > 0 ? (
+                    {!selectedDay ? (
+                        <>
+                            <Skeleton className="h-24 w-full" />
+                            <Skeleton className="h-12 w-full" />
+                        </>
+                    ) : eventsForSelectedDay.length > 0 ? (
                         eventsForSelectedDay.map(event => <EventCard key={event.id} event={event} onRemove={removeScheduledActivity} />)
                     ) : (
                          <div className="text-center text-muted-foreground pt-10">
