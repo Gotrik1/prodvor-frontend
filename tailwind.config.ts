@@ -96,10 +96,29 @@ export default {
             height: '0',
           },
         },
+        ringing: {
+            "0%, 100%": { transform: "rotate(0)" },
+            "10%, 30%, 50%, 70%, 90%": { transform: "rotate(-10deg)" },
+            "20%, 40%, 60%, 80%": { transform: "rotate(10deg)" },
+        },
+        wave: {
+            "0%": {
+                transform: "scale(0.5)",
+                opacity: "0.5",
+                boxShadow: "0 0 0 0 hsl(var(--destructive) / 0.8)",
+            },
+            "100%": {
+                transform: "scale(2)",
+                opacity: "0",
+                boxShadow: "0 0 0 10px hsl(var(--destructive) / 0)",
+            },
+        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
+        ringing: 'ringing 2s ease-in-out infinite',
+        wave: 'wave 2s ease-in-out infinite',
       },
     },
   },
