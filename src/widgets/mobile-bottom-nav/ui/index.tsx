@@ -5,7 +5,7 @@ import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Home, Users, Dumbbell, MessageCircle, MoreHorizontal } from 'lucide-react';
-import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/shared/ui/sheet';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/shared/ui/sheet';
 import { DashboardSidebar } from '@/widgets/dashboard-sidebar';
 import { cn } from '@/shared/lib/utils';
 import { useScrollDirection } from '@/shared/hooks/use-scroll-direction';
@@ -34,7 +34,7 @@ export function MobileBottomNav() {
     return (
         <div className={cn(
             "md:hidden fixed bottom-0 left-0 right-0 h-24 bg-card/80 backdrop-blur-lg border-t border-layout-border z-50 transition-opacity duration-300",
-            scrollDirection === 'down' ? 'opacity-100' : 'opacity-0 pointer-events-none'
+            scrollDirection === 'down' ? 'opacity-0 pointer-events-none' : 'opacity-100'
         )}>
             <div className="grid grid-cols-5 h-full">
                 {navItems.map((item) => (
@@ -47,7 +47,7 @@ export function MobileBottomNav() {
                         </button>
                     </SheetTrigger>
                     <SheetContent side="left" className="p-0 w-64 bg-sidebar">
-                        <SheetHeader className="sr-only">
+                        <SheetHeader className="p-4 border-b">
                            <SheetTitle>Главное меню</SheetTitle>
                         </SheetHeader>
                         {/* We reuse the main sidebar component here */}
