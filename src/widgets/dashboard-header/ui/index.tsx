@@ -108,7 +108,8 @@ export function DashboardHeader() {
           </Link>
         </Button>
         <Button variant="ghost" size="icon" className="relative">
-          <Bell className="animate-[ringing_2s_ease-in-out_infinite]" />
+          <Bell className="animate-ringing" />
+          <span className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-8 w-8 rounded-full bg-primary/50 animate-wave pointer-events-none"></span>
         </Button>
         <ThemeToggle />
         <DropdownMenu>
