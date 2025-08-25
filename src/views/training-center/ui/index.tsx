@@ -7,6 +7,7 @@ import { Calendar, Dumbbell } from "lucide-react";
 import { TrainingPage } from "@/views/training";
 import { FitnessPlanPage } from "@/views/fitness-plan";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shared/ui/select';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 const trainingTabs = [
     { value: 'schedule', label: 'Мое расписание', icon: Calendar, component: <TrainingPage /> },
@@ -15,6 +16,7 @@ const trainingTabs = [
 
 export function TrainingCenterPage() {
   const [activeTab, setActiveTab] = useState('schedule');
+  const isMobile = useIsMobile();
 
   return (
     <div className="p-4 md:p-6 lg:p-8 space-y-8">
@@ -25,20 +27,7 @@ export function TrainingCenterPage() {
             </p>
         </div>
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-            {/* Desktop Tabs */}
-            <div className="hidden sm:block">
-                <TabsList>
-                    {trainingTabs.map(tab => (
-                        <TabsTrigger key={tab.value} value={tab.value}>
-                            <tab.icon className="mr-2 h-4 w-4" />
-                            {tab.label}
-                        </TabsTrigger>
-                    ))}
-                </TabsList>
-            </div>
-            
-            {/* Mobile Select */}
-            <div className="sm:hidden">
+            {isMobile ? (
                 <Select value={activeTab} onValueChange={setActiveTab}>
                     <SelectTrigger>
                         <SelectValue placeholder="Выберите раздел..." />
@@ -54,7 +43,16 @@ export function TrainingCenterPage() {
                         ))}
                     </SelectContent>
                 </Select>
-            </div>
+            ) : (
+                <TabsList>
+                    {trainingTabs.map(tab => (
+                        <TabsTrigger key={tab.value} value={tab.value}>
+                            <tab.icon className="mr-2 h-4 w-4" />
+                            {tab.label}
+                        </TabsTrigger>
+                    ))}
+                </TabsList>
+            )}
 
             {trainingTabs.map(tab => (
                 <TabsContent key={tab.value} value={tab.value} className="mt-6">

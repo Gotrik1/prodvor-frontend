@@ -8,6 +8,7 @@ import { TournamentsPage } from '@/views/tournaments';
 import { LeaguesPage } from '@/views/leagues';
 import { ChallengesPage } from '@/views/challenges';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shared/ui/select';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 const competitionTabs = [
   { value: 'tournaments', label: 'Турниры', icon: Trophy, component: <TournamentsPage /> },
@@ -17,6 +18,7 @@ const competitionTabs = [
 
 export function CompetitionsPage() {
   const [activeTab, setActiveTab] = useState('tournaments');
+  const isMobile = useIsMobile();
 
   return (
     <div className="p-4 md:p-6 lg:p-8 space-y-8">
@@ -27,20 +29,7 @@ export function CompetitionsPage() {
         </p>
       </div>
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        {/* Desktop Tabs */}
-        <div className="hidden sm:block">
-          <TabsList>
-            {competitionTabs.map(tab => (
-              <TabsTrigger key={tab.value} value={tab.value}>
-                <tab.icon className="mr-2 h-4 w-4" />
-                {tab.label}
-              </TabsTrigger>
-            ))}
-          </TabsList>
-        </div>
-        
-        {/* Mobile Select */}
-        <div className="sm:hidden">
+        {isMobile ? (
           <Select value={activeTab} onValueChange={setActiveTab}>
             <SelectTrigger>
               <SelectValue placeholder="Выберите раздел..." />
@@ -56,7 +45,16 @@ export function CompetitionsPage() {
               ))}
             </SelectContent>
           </Select>
-        </div>
+        ) : (
+          <TabsList>
+            {competitionTabs.map(tab => (
+              <TabsTrigger key={tab.value} value={tab.value}>
+                <tab.icon className="mr-2 h-4 w-4" />
+                {tab.label}
+              </TabsTrigger>
+            ))}
+          </TabsList>
+        )}
 
         {competitionTabs.map(tab => (
           <TabsContent key={tab.value} value={tab.value} className="mt-6">
