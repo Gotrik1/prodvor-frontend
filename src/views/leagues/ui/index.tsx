@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
@@ -81,7 +80,7 @@ export function LeaguesPage() {
                 <CardContent className="space-y-8">
                     <div>
                         <h3 className="text-xl font-bold text-center mb-4 text-amber-400">Дивизион Легенд</h3>
-                         <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
+                         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-6">
                             {legendDivision.map((team, index) => (
                                 <LegendCard key={team.id} team={team} rank={index + 1} />
                             ))}
