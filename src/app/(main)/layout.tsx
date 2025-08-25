@@ -11,7 +11,7 @@ import { HomeFooter } from '@/widgets/home-footer';
 import { MobileBottomNav } from '@/widgets/mobile-bottom-nav';
 import { cn } from '@/shared/lib/utils';
 
-const publicRoutes = ['/', '/about', '/auth', '/auth/register'];
+const publicRoutesWithHeader = ['/about', '/auth', '/auth/register'];
 
 export default function MainLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -19,10 +19,22 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
   if (!pathname) {
     return null; // or a loading spinner
   }
+  
+  const isHomePage = pathname === '/';
+  const isPublicRouteWithHeader = publicRoutesWithHeader.includes(pathname) || pathname.startsWith('/teams/') || pathname.startsWith('/tournaments/');
 
-  const isPublicRoute = publicRoutes.includes(pathname) || pathname.startsWith('/teams/') || pathname.startsWith('/tournaments/');
+  if (isHomePage) {
+    return (
+      <div className="flex flex-col min-h-screen bg-background text-foreground">
+          <main className="flex-1">
+              {children}
+          </main>
+          <HomeFooter />
+      </div>
+    )
+  }
 
-  if (isPublicRoute) {
+  if (isPublicRouteWithHeader) {
     return (
         <div className="flex flex-col min-h-screen bg-background text-foreground">
             <HomeHeader />

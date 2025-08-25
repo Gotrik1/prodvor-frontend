@@ -7,6 +7,7 @@ import { Cpu, Users, Trophy } from 'lucide-react';
 import { LogoGeneratorWidget } from '@/widgets/logo-generator';
 import { i18n } from '@/shared/lib/i18n';
 import { Logo } from '@/views/auth/ui';
+import { ThemeToggle } from '@/shared/ui/theme-toggle';
 
 export function HomePage() {
   return (
@@ -14,6 +15,15 @@ export function HomePage() {
       <main className="flex-1">
         {/* Hero Section */}
         <section className="relative w-full pt-12 pb-20 md:pt-20 md:pb-32 text-center">
+            <div className="absolute top-4 right-4 flex items-center gap-2">
+                 <ThemeToggle />
+                <Button variant="outline" asChild>
+                    <Link href="/auth">Войти</Link>
+                </Button>
+                 <Button asChild>
+                    <Link href="/auth/register">Регистрация</Link>
+                </Button>
+            </div>
           <div className="container mx-auto px-4 md:px-6 z-10 relative">
             <div className="flex justify-center mb-8">
                 <Logo />
