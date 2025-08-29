@@ -61,7 +61,7 @@ export function DashboardHeader() {
 
   return (
     <header className={cn(
-        "fixed top-0 z-40 flex h-16 items-center justify-between border-b border-layout-border bg-card p-4 transition-transform duration-300",
+        "fixed top-0 z-30 flex h-16 items-center justify-between border-b border-layout-border bg-card p-4 transition-transform duration-300",
         "md:w-[calc(100%-var(--sidebar-width-icon))] group-data-[state=expanded]:md:w-[calc(100%-var(--sidebar-width))]",
         "md:left-[var(--sidebar-width-icon)] group-data-[state=expanded]:md:left-[var(--sidebar-width)]",
         isMounted && scrollDirection === 'down' ? '-translate-y-full' : 'translate-y-0'
