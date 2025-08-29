@@ -21,7 +21,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
   }
   
   const isHomePage = pathname === '/';
-  const isPublicRouteWithHeader = publicRoutesWithHeader.includes(pathname) || pathname.startsWith('/teams/') || pathname.startsWith('/tournaments/');
+  const isPublicRouteWithHeader = publicRoutesWithHeader.includes(pathname);
 
   if (isHomePage) {
     return (
