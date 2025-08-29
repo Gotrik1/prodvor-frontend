@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { Button } from '@/shared/ui/button';
@@ -25,6 +26,7 @@ import {
   GanttChart,
   BarChart,
   DollarSign,
+  Database,
 } from 'lucide-react';
 
 const roles = [
@@ -202,14 +204,13 @@ export function AdminPage() {
                     <Card className="cursor-pointer h-full hover:border-primary transition-colors hover:shadow-lg">
                       <CardHeader className="flex flex-row items-center gap-4">
                         <div className="p-3 rounded-md bg-primary/10 text-primary">
-                          <BarChart className="w-6 h-6" />
+                          <Database className="w-6 h-6" />
                         </div>
-                        <CardTitle>Дашборд</CardTitle>
+                        <CardTitle>База данных</CardTitle>
                       </CardHeader>
                       <CardContent>
                         <p className="text-sm text-muted-foreground">
-                          Просмотр списков всех пользователей, команд и
-                          спонсоров.
+                          Просмотр и управление всеми пользователями, командами, спонсорами и другими сущностями.
                         </p>
                       </CardContent>
                     </Card>

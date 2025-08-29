@@ -1,8 +1,9 @@
 
+
 'use client';
 
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarProvider, SidebarInset } from "@/shared/ui/sidebar";
-import { DollarSign, Home, Eye, BookOpen, Trophy } from "lucide-react";
+import { DollarSign, Home, Eye, BookOpen, Trophy, Database } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { DashboardHeader } from "@/widgets/dashboard-header";
@@ -34,18 +35,10 @@ export function AdminLayout({
                 <SidebarContent>
                     <SidebarMenu>
                          <SidebarMenuItem>
-                            <Link href="/admin">
-                                <SidebarMenuButton isActive={pathname === '/admin' || (pathname === '/admin/dashboard' && !currentTab)}>
-                                    <Home />
-                                    <span>Дашборд</span>
-                                </SidebarMenuButton>
-                            </Link>
-                        </SidebarMenuItem>
-                         <SidebarMenuItem>
-                            <Link href="/admin/dashboard?tab=tournaments">
-                                <SidebarMenuButton isActive={pathname.startsWith('/admin/dashboard') && currentTab === 'tournaments'}>
-                                    <Trophy />
-                                    <span>Турниры</span>
+                            <Link href="/admin/dashboard">
+                                <SidebarMenuButton isActive={pathname.startsWith('/admin/dashboard') && !currentTab}>
+                                    <Database />
+                                    <span>База данных</span>
                                 </SidebarMenuButton>
                             </Link>
                         </SidebarMenuItem>
