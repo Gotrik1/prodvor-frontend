@@ -67,10 +67,12 @@ export function AdminLayout({
                             </Link>
                         </SidebarMenuItem>
                          <SidebarMenuItem>
-                            <SidebarMenuButton disabled>
-                                <Construction />
-                                <span>В разработке</span>
-                            </SidebarMenuButton>
+                             <Link href="/admin/dashboard?tab=tournaments">
+                                <SidebarMenuButton isActive={pathname.startsWith('/admin/dashboard') && currentTab === 'tournaments'}>
+                                    <Trophy />
+                                    <span>Турниры</span>
+                                </SidebarMenuButton>
+                            </Link>
                         </SidebarMenuItem>
                     </SidebarMenu>
                 </SidebarContent>
