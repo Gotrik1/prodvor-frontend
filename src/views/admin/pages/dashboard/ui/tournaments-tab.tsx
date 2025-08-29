@@ -1,13 +1,16 @@
 
 'use client';
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/shared/ui/card';
 import { allTournaments as tournaments } from '@/views/tournaments/public-page/ui/mock-data';
 import type { Tournament } from '@/views/tournaments/public-page/ui/mock-data';
 import { Badge } from '@/shared/ui/badge';
 import { Progress } from '@/shared/ui/progress';
 import { DataTable } from './data-table';
 import { TableCell, TableRow } from '@/shared/ui/table';
+import { Button } from '@/shared/ui/button';
+import Link from 'next/link';
+import { GanttChart, PlusCircle } from 'lucide-react';
 
 const statusColors: Record<string, string> = {
     'АНОНС': 'bg-purple-500/20 text-purple-300 border-purple-500/30',
@@ -22,17 +25,30 @@ const statusColors: Record<string, string> = {
 export function TournamentsTab() {
   return (
     <Card>
-        <CardHeader>
-            <CardTitle>Список турниров ({tournaments.length})</CardTitle>
+        <CardHeader className="flex flex-row items-center justify-between">
+            <div>
+                <CardTitle>Список турниров ({tournaments.length})</CardTitle>
+                <CardDescription>Полный список всех турниров на платформе.</CardDescription>
+            </div>
+            <Button asChild>
+                <Link href="/tournaments/create">
+                    <PlusCircle className="mr-2 h-4 w-4" />
+                    Создать новый турнир
+                </Link>
+            </Button>
         </CardHeader>
         <CardContent>
             <DataTable
-                headers={['ID', 'Название', 'Дисциплина', 'Участники', 'Статус']}
+                headers={['ID', 'Название', 'Дисциплина', 'Участники', 'Статус', '']}
                 data={tournaments}
                 renderRow={(t: Tournament) => (
                     <TableRow key={t.id}>
                         <TableCell className="font-mono text-xs">{t.id}</TableCell>
-                        <TableCell className="font-medium">{t.name}</TableCell>
+                        <TableCell className="font-medium">
+                             <Link href={`/tournaments/${t.id}`} className="hover:text-primary transition-colors">
+                                {t.name}
+                            </Link>
+                        </TableCell>
                         <TableCell>{t.game}</TableCell>
                         <TableCell>
                             <div className="flex items-center gap-2">
@@ -42,6 +58,14 @@ export function TournamentsTab() {
                         </TableCell>
                         <TableCell>
                             <Badge className={statusColors[t.status]}>{t.status}</Badge>
+                        </TableCell>
+                         <TableCell className="text-right">
+                            <Button asChild variant="outline" size="sm">
+                                <Link href={`/tournaments/${t.id}/manage`}>
+                                    <GanttChart className="mr-2 h-3 w-3" />
+                                    Управлять
+                                </Link>
+                            </Button>
                         </TableCell>
                     </TableRow>
                 )}

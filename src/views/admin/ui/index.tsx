@@ -136,10 +136,10 @@ export function AdminPage() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <Card className="lg:col-span-2">
               <CardHeader>
-                <CardTitle>Шаблоны страниц</CardTitle>
+                <CardTitle>Шаблоны страниц и CRM</CardTitle>
                 <CardDescription>
                   Здесь можно увидеть, как выглядят страницы для разных ролей и
-                  сущностей с использованием моковых данных.
+                  сущностей, а также получить доступ к CRM-системам.
                 </CardDescription>
               </CardHeader>
               <CardContent>
