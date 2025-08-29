@@ -13,17 +13,21 @@ import { SponsorsTab } from './sponsors-tab';
 import { PlaygroundsTab } from './playgrounds-tab';
 import { TournamentsTab } from './tournaments-tab';
 import { SportsTab } from './sports-tab';
+import { useSearchParams } from 'next/navigation';
 
 export function AdminDashboardPage() {
+    const searchParams = useSearchParams();
+    const defaultTab = searchParams.get('tab') || 'overview';
+
     return (
         <div className="space-y-6">
             <div>
                 <h1 className="text-3xl font-bold font-headline">Управление данными</h1>
                 <p className="text-muted-foreground mt-1">Просмотр и управление всеми сущностями платформы.</p>
             </div>
-            <Tabs defaultValue="overview">
+            <Tabs defaultValue={defaultTab}>
                 <div className="flex items-center justify-between">
-                    <TabsList>
+                    <TabsList className="flex flex-wrap h-auto">
                         <TabsTrigger value="overview"><BarChart className="mr-2 h-4 w-4" />Обзор</TabsTrigger>
                         <TabsTrigger value="users"><UserIcon className="mr-2 h-4 w-4" />Пользователи</TabsTrigger>
                         <TabsTrigger value="teams"><Users2 className="mr-2 h-4 w-4" />Команды</TabsTrigger>
