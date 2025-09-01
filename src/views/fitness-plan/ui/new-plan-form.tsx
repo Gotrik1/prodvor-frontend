@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -18,6 +19,7 @@ interface NewPlanFormProps {
     prefilledExercises?: Record<string, Omit<Exercise, 'id'>[]>;
     onSave: (plan: WorkoutPlan) => void;
     onBack: () => void;
+    clientName?: string; // Optional: To show who the plan is for
 }
 
 const createInitialDays = (dayNames: string[], prefilledExercises?: Record<string, Omit<Exercise, 'id'>[]>): Record<string, PlanDay> => {
@@ -34,7 +36,7 @@ const createInitialDays = (dayNames: string[], prefilledExercises?: Record<strin
     return days;
 };
 
-export const NewPlanForm = ({ planType, dayNames, templateName, prefilledExercises, onSave, onBack }: NewPlanFormProps) => {
+export const NewPlanForm = ({ planType, dayNames, templateName, prefilledExercises, onSave, onBack, clientName }: NewPlanFormProps) => {
     const [planName, setPlanName] = useState(templateName || '');
     const [days, setDays] = useState<Record<string, PlanDay>>({});
     
@@ -81,6 +83,11 @@ export const NewPlanForm = ({ planType, dayNames, templateName, prefilledExercis
 
     return (
         <div className="space-y-6 max-h-[70vh] overflow-y-auto pr-4">
+            {clientName && (
+                <div className="p-3 bg-primary/10 text-primary rounded-md text-sm font-medium">
+                    План для клиента: <strong>{clientName}</strong>
+                </div>
+            )}
             <div className="space-y-2">
                 <Label htmlFor="plan-name">Название плана</Label>
                 <Input id="plan-name" placeholder="Например, Моя программа на массу" value={planName} onChange={(e) => setPlanName(e.target.value)} />
@@ -164,7 +171,7 @@ export const NewPlanForm = ({ planType, dayNames, templateName, prefilledExercis
                     Назад
                 </Button>
                 <Button onClick={handleSave} disabled={!planName}>
-                    <Save className="mr-2 h-4 w-4" /> Сохранить план
+                    <Save className="mr-2 h-4 w-4" /> Сохранить {clientName ? 'и назначить' : 'план'}
                 </Button>
             </div>
         </div>

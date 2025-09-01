@@ -2,49 +2,37 @@
 
 'use client';
 
-import { users, teams } from "@/mocks";
-import type { User } from "@/mocks/users";
+import { users, teams, User } from "@/mocks";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { Badge } from "@/shared/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
-import { BarChart, Dumbbell, Shield, Trophy, Users, Gamepad2, Activity } from "lucide-react";
+import { Briefcase, Users as UsersIcon, Dumbbell, Shield, Trophy, Gamepad2, UserPlus } from "lucide-react";
 import { Button } from "@/shared/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/shared/ui/table";
-import { ChartContainer, ChartTooltip, ChartTooltipContent, ChartLegend, ChartLegendContent } from "@/shared/ui/chart";
-import { Bar, BarChart as RechartsBarChart, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from "recharts";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { getUserDisciplines } from "@/entities/user/lib";
 import { StatCard } from "@/entities/team/ui/stat-card";
+import Link from "next/link";
+import Image from "next/image";
+import { CreatePlanDialog } from "./create-plan-dialog";
 
 const defaultCoach = users.find(u => u.role === 'Тренер');
-const coachTeam = teams[0];
-const teamMembers = coachTeam ? users.filter(u => coachTeam.members.includes(u.id)) : [];
+// A coach can now manage multiple teams and clients
+const managedTeams = teams.slice(0, 2);
+const individualClients = users.filter(u => u.role === 'Игрок').slice(5, 8);
 
-const chartData = [
-  { month: "Январь", winrate: 65 },
-  { month: "Февраль", winrate: 70 },
-  { month: "Март", winrate: 72 },
-  { month: "Апрель", winrate: 68 },
-  { month: "Май", winrate: 75 },
-  { month: "Июнь", winrate: 80 },
-];
-
-const chartConfig = {
-  winrate: {
-    label: "Процент побед",
-    color: "hsl(var(--primary))",
-  },
-};
 
 export function CoachPageTemplate({ user }: { user?: User }) {
     const coach = user || defaultCoach;
+    const [dialogOpen, setDialogOpen] = useState(false);
+    const [selectedClient, setSelectedClient] = useState<User | null>(null);
 
     const coachDisciplines = useMemo(() => {
         if (!coach) return [];
         return getUserDisciplines(coach);
     }, [coach]);
-    
-    if (!coach || !coachTeam) {
+
+    if (!coach) {
          return (
             <div className="flex items-center justify-center min-h-[60vh]">
                 <Card className="text-center">
@@ -56,6 +44,11 @@ export function CoachPageTemplate({ user }: { user?: User }) {
             </div>
         );
     }
+
+    const handleCreatePlanClick = (client: User) => {
+        setSelectedClient(client);
+        setDialogOpen(true);
+    };
     
     return (
         <div className="border rounded-lg p-4 md:p-6 space-y-6 bg-muted/20">
@@ -66,9 +59,9 @@ export function CoachPageTemplate({ user }: { user?: User }) {
                 </Avatar>
                 <div className="text-center md:text-left">
                     <h1 className="text-3xl font-bold font-headline">{coach.firstName} &quot;{coach.nickname}&quot; {coach.lastName}</h1>
-                    <p className="text-muted-foreground text-lg">Роль: {coach.role}, <span className="font-semibold text-foreground">{coachTeam.name}</span></p>
+                    <p className="text-muted-foreground text-lg">Роль: {coach.role}</p>
                     <div className="flex items-center gap-2 mt-2 justify-center md:justify-start">
-                        <Badge variant="secondary">Специализация: Тактика</Badge>
+                        <Badge variant="secondary">Специализация: Тактика и Фитнес</Badge>
                         <Badge variant="outline">Опыт: 8 лет</Badge>
                     </div>
                 </div>
@@ -89,107 +82,87 @@ export function CoachPageTemplate({ user }: { user?: User }) {
                         </div>
                     </CardContent>
                 </Card>
-                <StatCard title="Команд в управлении" value="1" icon={Users} />
-                <StatCard title="Процент побед (сезон)" value={<span className="text-green-400">78%</span>} icon={Trophy} />
-                <StatCard title="Ближайшая тренировка" value="Завтра, 18:00" icon={Dumbbell} />
+                <StatCard title="Команд в управлении" value={managedTeams.length} icon={UsersIcon} />
+                <StatCard title="Индивидуальных клиентов" value={individualClients.length} icon={UserPlus} />
+                <StatCard title="Всего побед (сезон)" value={<span className="text-green-400">78</span>} icon={Trophy} />
                 <StatCard title="Лицензия" value="PRO-1583" icon={Shield} />
             </div>
             
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                 <Card className="lg:col-span-2">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                 <Card>
                     <CardHeader>
-                        <CardTitle className="flex items-center gap-2">
-                            <BarChart className="h-5 w-5" />
-                            Динамика побед команды
-                        </CardTitle>
-                        <CardDescription>Процент побед за последние 6 месяцев.</CardDescription>
+                        <CardTitle>Управляемые команды</CardTitle>
                     </CardHeader>
                     <CardContent>
-                       <ChartContainer config={chartConfig} className="h-64 w-full">
-                            <ResponsiveContainer>
-                                <RechartsBarChart data={chartData} accessibilityLayer>
-                                    <CartesianGrid vertical={false} />
-                                    <XAxis dataKey="month" tickLine={false} tickMargin={10} axisLine={false} />
-                                    <YAxis />
-                                    <ChartTooltip content={<ChartTooltipContent />} />
-                                    <ChartLegend content={<ChartLegendContent />} />
-                                    <Bar dataKey="winrate" fill="var(--color-winrate)" radius={[4, 4, 0, 0]} />
-                                </RechartsBarChart>
-                            </ResponsiveContainer>
-                        </ChartContainer>
+                       <Table>
+                            <TableHeader>
+                                <TableRow>
+                                    <TableHead>Команда</TableHead>
+                                    <TableHead>ELO</TableHead>
+                                </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                                {managedTeams.map(team => (
+                                    <TableRow key={team.id}>
+                                        <TableCell>
+                                            <Link href={`/teams/${team.id}`} className="flex items-center gap-3 group">
+                                                <Image src={team.logoUrl} alt={team.name} width={32} height={32} className="rounded-md" data-ai-hint="team logo"/>
+                                                <span className="font-medium group-hover:text-primary">{team.name}</span>
+                                            </Link>
+                                        </TableCell>
+                                        <TableCell className="font-mono">{team.rank}</TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
                     </CardContent>
                 </Card>
                  <Card>
                     <CardHeader>
-                        <CardTitle className="flex items-center gap-2">
-                            <Activity />
-                            Режим тренировок
-                        </CardTitle>
+                        <CardTitle>Индивидуальные клиенты</CardTitle>
                     </CardHeader>
-                    <CardContent className="space-y-3">
-                         <div className="p-2 rounded-md bg-muted/50">
-                            <p className="font-semibold">Тактическая подготовка</p>
-                            <p className="text-xs text-muted-foreground">Пн, Чт (18:00 - 20:00)</p>
-                        </div>
-                        <div className="p-2 rounded-md bg-muted/50">
-                            <p className="font-semibold">Силовая тренировка</p>
-                            <p className="text-xs text-muted-foreground">Вт, Пт (19:00 - 20:30)</p>
-                        </div>
-                        <div className="p-2 rounded-md bg-muted/50">
-                            <p className="font-semibold">Кардио</p>
-                            <p className="text-xs text-muted-foreground">Ср (08:00 - 09:00)</p>
-                        </div>
-                         <Button className="w-full mt-2">Управлять расписанием</Button>
+                    <CardContent>
+                         <Table>
+                            <TableHeader>
+                                <TableRow>
+                                    <TableHead>Игрок</TableHead>
+                                    <TableHead className="text-right">План</TableHead>
+                                </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                                {individualClients.map(client => (
+                                    <TableRow key={client.id}>
+                                        <TableCell>
+                                            <Link href={`/users/${client.id}`} className="flex items-center gap-3 group">
+                                                <Avatar className="h-8 w-8">
+                                                    <AvatarImage src={client.avatarUrl} />
+                                                    <AvatarFallback>{client.nickname.charAt(0)}</AvatarFallback>
+                                                </Avatar>
+                                                <span className="font-medium group-hover:text-primary">{client.nickname}</span>
+                                            </Link>
+                                        </TableCell>
+                                        <TableCell className="text-right">
+                                            <Button variant="outline" size="sm" onClick={() => handleCreatePlanClick(client)}>
+                                                <Dumbbell className="mr-2 h-4 w-4"/>
+                                                Создать план
+                                            </Button>
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
                     </CardContent>
                 </Card>
             </div>
 
-             <Card>
-                <CardHeader>
-                    <CardTitle>Состав команды: {coachTeam.name}</CardTitle>
-                    <CardDescription>Обзор и статистика игроков.</CardDescription>
-                </CardHeader>
-                <CardContent>
-                   <Table>
-                        <TableHeader>
-                            <TableRow>
-                                <TableHead>Игрок</TableHead>
-                                <TableHead>Роль в команде</TableHead>
-                                <TableHead className="text-center">Матчей</TableHead>
-                                <TableHead className="text-center">Форма</TableHead>
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            {teamMembers.map(member => (
-                                <TableRow key={member.id}>
-                                    <TableCell>
-                                        <div className="flex items-center gap-3">
-                                            <Avatar className="h-9 w-9">
-                                                <AvatarImage src={member.avatarUrl} />
-                                                <AvatarFallback>{member.firstName.charAt(0)}</AvatarFallback>
-                                            </Avatar>
-                                            <div>
-                                                <p className="font-medium">{member.nickname}</p>
-                                                <p className="text-xs text-muted-foreground">{member.firstName} {member.lastName}</p>
-                                            </div>
-                                        </div>
-                                    </TableCell>
-                                    <TableCell>
-                                        <Badge variant={member.id === coachTeam.captainId ? "default" : "secondary"}>
-                                            {member.id === coachTeam.captainId ? "Капитан" : "Игрок"}
-                                        </Badge>
-                                    </TableCell>
-                                    <TableCell className="text-center">58</TableCell>
-                                    <TableCell className="text-center">
-                                         <Badge variant="success" className="bg-green-500/20 text-green-300 border-green-500/30">Отличная</Badge>
-                                    </TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                </CardContent>
-            </Card>
-
+            {selectedClient && (
+                <CreatePlanDialog 
+                    isOpen={dialogOpen} 
+                    setIsOpen={setDialogOpen} 
+                    client={selectedClient} 
+                    coach={coach}
+                />
+            )}
         </div>
     );
 }

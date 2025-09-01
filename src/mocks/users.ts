@@ -1,7 +1,15 @@
 
 
+
 export type UserRole = 'Игрок' | 'Капитан' | 'Тренер' | 'Организатор' | 'Судья' | 'Менеджер' | 'Болельщик' | 'Модератор' | 'Администратор';
 export type UserGender = 'мужской' | 'женский';
+
+export interface CoachProfile {
+    specialization: string;
+    experienceYears: number;
+    licenseId: string;
+    clients: string[]; // Array of user IDs for individual clients
+}
 
 export interface User {
   id: string;
@@ -25,6 +33,7 @@ export interface User {
   following: string[]; // Array of team IDs
   sponsorIds?: string[]; // Array of sponsor IDs
   unlockedAchievements: string[]; // Array of achievement IDs
+  coachProfile?: CoachProfile;
 }
 
 const baseUsers: Omit<User, 'disciplines' | 'friends' | 'followers' | 'followingUsers' | 'sponsorIds' | 'following' | 'unlockedAchievements'>[] = [
@@ -83,8 +92,15 @@ export const users: User[] = baseUsers.map(u => ({
   followingUsers: [],
   following: [],
   sponsorIds: [],
+  coachProfile: u.role === 'Тренер' ? {
+      specialization: 'Тактика и Фитнес',
+      experienceYears: 8,
+      licenseId: `PRO-${u.id.slice(-4)}`,
+      clients: [], // Will be populated in initialize.ts
+  } : undefined,
   // Mock unlocked achievements for demonstration
   unlockedAchievements: u.role === 'Игрок' ? ['ach-fb-1', 'ach-fb-2', 'ach-fb-8', 'ach-bask-1', 'ach-def-1', 'ach-def-2', 'ach-def-3'] : [],
 }));
 
     
+

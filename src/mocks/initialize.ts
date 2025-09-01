@@ -1,4 +1,5 @@
 
+
 import type { User } from './users';
 import type { Team } from './teams';
 import type { Playground } from './playgrounds';
@@ -51,6 +52,10 @@ export function initializeMockData(data: MockData) {
 
     // --- 8. Link teams to playgrounds after teams are created ---
     assignTeamsToPlaygrounds(teams, playgrounds);
+    
+    // --- 9. Assign clients to coaches ---
+    assignClientsToCoaches(users);
+
 
     isInitialized = true;
 }
@@ -254,6 +259,24 @@ function assignTeamsToPlaygrounds(allTeams: Team[], allPlaygrounds: Playground[]
                     playground.residentTeamIds.push(team.id);
                 }
             });
+        }
+    });
+}
+
+function assignClientsToCoaches(allUsers: User[]) {
+    const coaches = allUsers.filter(u => u.role === 'Тренер');
+    const players = allUsers.filter(u => u.role === 'Игрок');
+
+    coaches.forEach((coach, index) => {
+        if (coach.coachProfile) {
+            // Assign 3-5 random players to each coach
+            const clientCount = 3 + (index % 3);
+            const clients: string[] = [];
+            for (let i = 0; i < clientCount; i++) {
+                const playerIndex = (index * 5 + i) % players.length;
+                clients.push(players[playerIndex].id);
+            }
+            coach.coachProfile.clients = clients;
         }
     });
 }
