@@ -17,22 +17,29 @@ import Image from "next/image";
 import { CreatePlanDialog } from "./create-plan-dialog";
 
 const defaultCoach = users.find(u => u.role === 'Тренер');
-// A coach can now manage multiple teams and clients
-const managedTeams = teams.slice(0, 2);
-const individualClients = users.filter(u => u.role === 'Игрок').slice(5, 8);
-
 
 export function CoachPageTemplate({ user }: { user?: User }) {
     const coach = user || defaultCoach;
     const [dialogOpen, setDialogOpen] = useState(false);
     const [selectedClient, setSelectedClient] = useState<User | null>(null);
 
+    const managedTeams = useMemo(() => {
+        if (!coach?.coachProfile?.managedTeams) return [];
+        return teams.filter(t => coach.coachProfile.managedTeams.includes(t.id));
+    }, [coach]);
+    
+    const individualClients = useMemo(() => {
+        if (!coach?.coachProfile?.clients) return [];
+        const managedTeamMembers = new Set(managedTeams.flatMap(t => t.members));
+        return users.filter(u => coach.coachProfile.clients.includes(u.id) && !managedTeamMembers.has(u.id));
+    }, [coach, managedTeams]);
+
     const coachDisciplines = useMemo(() => {
         if (!coach) return [];
         return getUserDisciplines(coach);
     }, [coach]);
 
-    if (!coach) {
+    if (!coach || !coach.coachProfile) {
          return (
             <div className="flex items-center justify-center min-h-[60vh]">
                 <Card className="text-center">
@@ -61,8 +68,8 @@ export function CoachPageTemplate({ user }: { user?: User }) {
                     <h1 className="text-3xl font-bold font-headline">{coach.firstName} &quot;{coach.nickname}&quot; {coach.lastName}</h1>
                     <p className="text-muted-foreground text-lg">Роль: {coach.role}</p>
                     <div className="flex items-center gap-2 mt-2 justify-center md:justify-start">
-                        <Badge variant="secondary">Специализация: Тактика и Фитнес</Badge>
-                        <Badge variant="outline">Опыт: 8 лет</Badge>
+                        <Badge variant="secondary">Специализация: {coach.coachProfile.specialization}</Badge>
+                        <Badge variant="outline">Опыт: {coach.coachProfile.experienceYears} лет</Badge>
                     </div>
                 </div>
             </header>
@@ -85,7 +92,7 @@ export function CoachPageTemplate({ user }: { user?: User }) {
                 <StatCard title="Команд в управлении" value={managedTeams.length} icon={UsersIcon} />
                 <StatCard title="Индивидуальных клиентов" value={individualClients.length} icon={UserPlus} />
                 <StatCard title="Всего побед (сезон)" value={<span className="text-green-400">78</span>} icon={Trophy} />
-                <StatCard title="Лицензия" value="PRO-1583" icon={Shield} />
+                <StatCard title="Лицензия" value={coach.coachProfile.licenseId} icon={Shield} />
             </div>
             
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

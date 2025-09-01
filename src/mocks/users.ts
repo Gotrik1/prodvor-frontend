@@ -9,6 +9,7 @@ export interface CoachProfile {
     experienceYears: number;
     licenseId: string;
     clients: string[]; // Array of user IDs for individual clients
+    managedTeams: string[]; // Array of team IDs
 }
 
 export interface User {
@@ -93,14 +94,14 @@ export const users: User[] = baseUsers.map(u => ({
   following: [],
   sponsorIds: [],
   coachProfile: u.role === 'Тренер' ? {
-      specialization: 'Тактика и Фитнес',
-      experienceYears: 8,
+      specialization: 'Футбол и Фитнес', // Default, can be overridden by specific coach
+      experienceYears: 5 + (u.id.charCodeAt(u.id.length - 1) % 10), // Random experience
       licenseId: `PRO-${u.id.slice(-4)}`,
-      clients: [], // Will be populated in initialize.ts
+      clients: [], 
+      managedTeams: [],
   } : undefined,
   // Mock unlocked achievements for demonstration
   unlockedAchievements: u.role === 'Игрок' ? ['ach-fb-1', 'ach-fb-2', 'ach-fb-8', 'ach-bask-1', 'ach-def-1', 'ach-def-2', 'ach-def-3'] : [],
 }));
 
     
-

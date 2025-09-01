@@ -54,7 +54,7 @@ export function initializeMockData(data: MockData) {
     assignTeamsToPlaygrounds(teams, playgrounds);
     
     // --- 9. Assign clients to coaches ---
-    assignClientsToCoaches(users);
+    assignClientsToCoaches(users, teams);
 
 
     isInitialized = true;
@@ -263,20 +263,35 @@ function assignTeamsToPlaygrounds(allTeams: Team[], allPlaygrounds: Playground[]
     });
 }
 
-function assignClientsToCoaches(allUsers: User[]) {
+function assignClientsToCoaches(allUsers: User[], allTeams: Team[]) {
     const coaches = allUsers.filter(u => u.role === 'Тренер');
     const players = allUsers.filter(u => u.role === 'Игрок');
 
     coaches.forEach((coach, index) => {
         if (coach.coachProfile) {
-            // Assign 3-5 random players to each coach
-            const clientCount = 3 + (index % 3);
-            const clients: string[] = [];
-            for (let i = 0; i < clientCount; i++) {
-                const playerIndex = (index * 5 + i) % players.length;
-                clients.push(players[playerIndex].id);
+            // Find teams related to the coach's primary discipline for realism
+            const coachDiscipline = coach.disciplines[0];
+            const relevantTeams = allTeams.filter(t => t.sportId === coachDiscipline);
+            
+            if(relevantTeams.length > 0) {
+                 // Assign 1-2 teams to the coach
+                coach.coachProfile.managedTeams = relevantTeams.slice(index % relevantTeams.length, (index % relevantTeams.length) + 2).map(t => t.id);
+
+                // Assign players from those teams as clients
+                const clientIds = new Set<string>();
+                coach.coachProfile.managedTeams.forEach(teamId => {
+                    const team = allTeams.find(t => t.id === teamId);
+                    team?.members.forEach(memberId => clientIds.add(memberId));
+                });
+                
+                // Add a few extra random players who might be in the same discipline
+                 const extraPlayers = players
+                    .filter(p => p.disciplines.includes(coachDiscipline) && !clientIds.has(p.id))
+                    .slice(0, 3);
+                extraPlayers.forEach(p => clientIds.add(p.id));
+                
+                coach.coachProfile.clients = Array.from(clientIds);
             }
-            coach.coachProfile.clients = clients;
         }
     });
 }
