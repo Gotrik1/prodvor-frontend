@@ -2,6 +2,7 @@
 import { TeamPublicPage } from '@/views/teams/team';
 import { teams as mockTeams } from '@/mocks';
 import type { Metadata } from 'next';
+import MainLayout from '@/app/(main)/layout';
 
 export async function generateMetadata({ params }: { params: { teamId: string } }): Promise<Metadata> {
   const team = mockTeams.find(t => t.id === params.teamId);
@@ -17,9 +18,9 @@ export async function generateMetadata({ params }: { params: { teamId: string } 
 export default function TeamPage({ params }: { params: { teamId: string } }) {
   const team = mockTeams.find(t => t.id === params.teamId);
   
-  if (!team) {
-    return <TeamPublicPage team={undefined} />;
-  }
-  
-  return <TeamPublicPage team={team} />;
+  return (
+    <MainLayout>
+        <TeamPublicPage team={team} />
+    </MainLayout>
+  );
 }
