@@ -1,6 +1,5 @@
 
 
-
 export type UserRole = 'Игрок' | 'Капитан' | 'Тренер' | 'Организатор' | 'Судья' | 'Менеджер' | 'Болельщик' | 'Модератор' | 'Администратор';
 export type UserGender = 'мужской' | 'женский';
 
@@ -104,4 +103,9 @@ export const users: User[] = baseUsers.map(u => ({
   unlockedAchievements: u.role === 'Игрок' ? ['ach-fb-1', 'ach-fb-2', 'ach-fb-8', 'ach-bask-1', 'ach-def-1', 'ach-def-2', 'ach-def-3'] : [],
 }));
 
+// Override specific coach for template consistency
+const coachElena = users.find(u => u.id === 'staff2');
+if (coachElena && coachElena.coachProfile) {
+    coachElena.coachProfile.specialization = "Хоккей на траве и ОФП";
+}
     

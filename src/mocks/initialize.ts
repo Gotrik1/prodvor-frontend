@@ -271,11 +271,14 @@ function assignClientsToCoaches(allUsers: User[], allTeams: Team[]) {
         if (coach.coachProfile) {
             // Find teams related to the coach's primary discipline for realism
             const coachDiscipline = coach.disciplines[0];
-            const relevantTeams = allTeams.filter(t => t.sportId === coachDiscipline);
+
+            const relevantTeams = allTeams.filter(t => {
+                return t.sportId === coachDiscipline && !coaches.some(c => c.coachProfile?.managedTeams.includes(t.id));
+            });
             
             if(relevantTeams.length > 0) {
                  // Assign 1-2 teams to the coach
-                coach.coachProfile.managedTeams = relevantTeams.slice(index % relevantTeams.length, (index % relevantTeams.length) + 2).map(t => t.id);
+                coach.coachProfile.managedTeams = relevantTeams.slice(0, 2).map(t => t.id);
 
                 // Assign players from those teams as clients
                 const clientIds = new Set<string>();

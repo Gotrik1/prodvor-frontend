@@ -16,7 +16,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { CreatePlanDialog } from "./create-plan-dialog";
 
-const defaultCoach = users.find(u => u.role === 'Тренер');
+const defaultCoach = users.find(u => u.id === 'staff2');
 
 export function CoachPageTemplate({ user }: { user?: User }) {
     const coach = user || defaultCoach;
