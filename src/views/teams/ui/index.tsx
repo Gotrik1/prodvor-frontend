@@ -80,46 +80,44 @@ export function TeamsPage() {
                 </section>
             )}
             
-            <section className="space-y-8">
-                <Card>
-                    <CardHeader>
-                        <CardTitle>Фильтр по дисциплине</CardTitle>
-                        <CardDescription>Выберите вид спорта, чтобы увидеть соответствующие команды и рейтинги.</CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                        <Select value={disciplineFilter} onValueChange={setDisciplineFilter}>
-                            <SelectTrigger className="w-full md:w-[280px]">
-                                <SelectValue placeholder="Дисциплина" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="all">Все дисциплины</SelectItem>
-                                <SelectGroup>
-                                    <SelectLabel>Командные виды спорта</SelectLabel>
-                                    {teamSports.map((sport) => (
-                                        <SelectItem key={sport.id} value={sport.name}>
-                                            {sport.name}
-                                        </SelectItem>
-                                    ))}
-                                </SelectGroup>
-                            </SelectContent>
-                        </Select>
-                    </CardContent>
-                </Card>
-                
-                <TopTeamsWidget 
-                    userCity={currentUser?.city} 
-                    selectedDiscipline={disciplineFilter} 
-                />
+            <Card>
+                <CardHeader>
+                    <CardTitle>Фильтр по дисциплине</CardTitle>
+                    <CardDescription>Выберите вид спорта, чтобы увидеть соответствующие команды и рейтинги.</CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <Select value={disciplineFilter} onValueChange={setDisciplineFilter}>
+                        <SelectTrigger className="w-full md:w-[280px]">
+                            <SelectValue placeholder="Дисциплина" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="all">Все дисциплины</SelectItem>
+                            <SelectGroup>
+                                <SelectLabel>Командные виды спорта</SelectLabel>
+                                {teamSports.map((sport) => (
+                                    <SelectItem key={sport.id} value={sport.name}>
+                                        {sport.name}
+                                    </SelectItem>
+                                ))}
+                            </SelectGroup>
+                        </SelectContent>
+                    </Select>
+                </CardContent>
+            </Card>
+            
+            <TopTeamsWidget 
+                userCity={currentUser?.city} 
+                selectedDiscipline={disciplineFilter} 
+            />
 
-                <div>
-                    <h2 className="text-2xl font-bold mb-4">Все команды</h2>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                        {teams.filter(team => disciplineFilter === 'all' || team.game === disciplineFilter).map(team => (
-                            <TeamCard key={team.id} team={team} />
-                        ))}
-                    </div>
+            <div>
+                <h2 className="text-2xl font-bold mb-4">Все команды</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                    {teams.filter(team => disciplineFilter === 'all' || team.game === disciplineFilter).map(team => (
+                        <TeamCard key={team.id} team={team} />
+                    ))}
                 </div>
-            </section>
+            </div>
         </div>
     );
 }
