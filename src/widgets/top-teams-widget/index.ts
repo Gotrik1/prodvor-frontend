@@ -1,0 +1,1 @@
+export { TopTeamsWidget } from './ui';

@@ -12,7 +12,8 @@ import { teams, teamSports } from "@/mocks";
 import { Badge } from "@/shared/ui/badge";
 import Link from "next/link";
 import { useUserStore } from "@/widgets/dashboard-header/model/user-store";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
+import { TopTeamsWidget } from "@/widgets/top-teams-widget";
 
 const TeamCard = ({ team }: { team: typeof teams[0] }) => (
     <Card key={team.id} className="flex flex-col">
@@ -48,6 +49,7 @@ const TeamCard = ({ team }: { team: typeof teams[0] }) => (
 
 export function TeamsPage() {
     const { user: currentUser } = useUserStore();
+    const [disciplineFilter, setDisciplineFilter] = useState('all');
 
     const myTeams = useMemo(() => {
         if (!currentUser) return [];
@@ -81,48 +83,41 @@ export function TeamsPage() {
             <section className="space-y-8">
                 <Card>
                     <CardHeader>
-                        <CardTitle>Поиск и фильтрация</CardTitle>
-                        <CardDescription>Найдите идеальную команду для себя или достойного соперника.</CardDescription>
+                        <CardTitle>Фильтр по дисциплине</CardTitle>
+                        <CardDescription>Выберите вид спорта, чтобы увидеть соответствующие команды и рейтинги.</CardDescription>
                     </CardHeader>
                     <CardContent>
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                            <div className="relative">
-                                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                                <Input placeholder="Название команды..." className="pl-9" />
-                            </div>
-                            <Select>
-                                <SelectTrigger><SelectValue placeholder="Дисциплина" /></SelectTrigger>
-                                <SelectContent>
-                                    <SelectGroup>
-                                        <SelectLabel>Командные виды спорта</SelectLabel>
-                                        {teamSports.map((sport) => (
-                                            <SelectItem key={sport.id} value={sport.id}>
-                                                {sport.name}
-                                            </SelectItem>
-                                        ))}
-                                    </SelectGroup>
-                                </SelectContent>
-                            </Select>
-                            <Select>
-                                <SelectTrigger><SelectValue placeholder="Рейтинг ELO" /></SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="any">Любой</SelectItem>
-                                    <SelectItem value="1000">1000+</SelectItem>
-                                    <SelectItem value="1500">1500+</SelectItem>
-                                    <SelectItem value="2000">2000+</SelectItem>
-                                </SelectContent>
-                            </Select>
-                            <Button>
-                                <Search className="mr-2 h-4 w-4" /> Найти
-                            </Button>
-                        </div>
+                        <Select value={disciplineFilter} onValueChange={setDisciplineFilter}>
+                            <SelectTrigger className="w-full md:w-[280px]">
+                                <SelectValue placeholder="Дисциплина" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="all">Все дисциплины</SelectItem>
+                                <SelectGroup>
+                                    <SelectLabel>Командные виды спорта</SelectLabel>
+                                    {teamSports.map((sport) => (
+                                        <SelectItem key={sport.id} value={sport.name}>
+                                            {sport.name}
+                                        </SelectItem>
+                                    ))}
+                                </SelectGroup>
+                            </SelectContent>
+                        </Select>
                     </CardContent>
                 </Card>
+                
+                <TopTeamsWidget 
+                    userCity={currentUser?.city} 
+                    selectedDiscipline={disciplineFilter} 
+                />
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                    {teams.map(team => (
-                        <TeamCard key={team.id} team={team} />
-                    ))}
+                <div>
+                    <h2 className="text-2xl font-bold mb-4">Все команды</h2>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                        {teams.filter(team => disciplineFilter === 'all' || team.game === disciplineFilter).map(team => (
+                            <TeamCard key={team.id} team={team} />
+                        ))}
+                    </div>
                 </div>
             </section>
         </div>
