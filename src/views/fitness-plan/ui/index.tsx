@@ -140,9 +140,9 @@ export function FitnessPlanPage() {
                                         ))}
                                     </ul>
                                 </CardContent>
-                                <CardFooter className="gap-2">
-                                     <Button variant="secondary" className="w-full" onClick={() => setPlanToSchedule(plan)}><CalendarIcon className="mr-2 h-4 w-4"/>В расписание</Button>
-                                     <Button className="w-full" onClick={() => handleStartWorkout(plan)}>
+                                <CardFooter className="grid grid-cols-2 gap-2">
+                                     <Button variant="secondary" onClick={() => setPlanToSchedule(plan)}><CalendarIcon className="mr-2 h-4 w-4"/>В расписание</Button>
+                                     <Button onClick={() => handleStartWorkout(plan)}>
                                         <PlayCircle className="mr-2 h-4 w-4"/>Запустить
                                      </Button>
                                 </CardFooter>
