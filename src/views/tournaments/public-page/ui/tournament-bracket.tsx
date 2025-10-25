@@ -5,7 +5,7 @@ import { registeredTeams } from './mock-data';
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { Trophy } from 'lucide-react';
-import React, { useState } from 'react';
+import React, { useMemo } from 'react';
 import Link from 'next/link';
 import { Skeleton } from '@/shared/ui/skeleton';
 
@@ -100,7 +100,7 @@ const MatchCard = React.memo(({ match, tournamentId }: { match: Match, tournamen
 MatchCard.displayName = 'MatchCard';
 
 export function TournamentBracket({ tournamentId }: { tournamentId: string }) {
-    const [matches] = useState(generateInitialMatches);
+    const matches = useMemo(() => generateInitialMatches(), []);
 
     if (matches.length === 0) {
         return (
