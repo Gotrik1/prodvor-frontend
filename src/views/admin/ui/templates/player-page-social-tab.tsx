@@ -86,8 +86,8 @@ export function SocialTab({ user, isOwnProfile }: { user: User, isOwnProfile: bo
                 <CardDescription>Друзья, подписчики и подписки пользователя.</CardDescription>
             </CardHeader>
             <CardContent>
-                <Tabs defaultValue="friends" className="flex flex-col gap-4">
-                    <TabsList className="grid grid-cols-2 md:grid-cols-4 h-auto w-full">
+                 <Tabs defaultValue="friends" className="w-full">
+                    <TabsList className={cn("grid w-full h-auto", isOwnProfile ? "grid-cols-4" : "grid-cols-3")}>
                         <TabsTrigger value="friends" className="w-full justify-center gap-2">
                             <UsersIcon className="h-4 w-4" />
                             <span className="hidden lg:inline">Друзья ({user.friends.length})</span>
@@ -109,22 +109,20 @@ export function SocialTab({ user, isOwnProfile }: { user: User, isOwnProfile: bo
                         </TabsTrigger>
                     </TabsList>
                     
-                    <div className="w-full">
-                        <TabsContent value="friends" className="mt-0">
-                            <UserList userIds={user.friends} emptyText="У этого пользователя пока нет друзей." />
+                    <TabsContent value="friends" className="mt-4">
+                        <UserList userIds={user.friends} emptyText="У этого пользователя пока нет друзей." />
+                    </TabsContent>
+                    <TabsContent value="followers" className="mt-4">
+                            <UserList userIds={user.followers} emptyText="На этого пользователя пока никто не подписан." />
+                    </TabsContent>
+                        {isOwnProfile && (
+                        <TabsContent value="requests" className="mt-4">
+                            <FriendRequests />
                         </TabsContent>
-                        <TabsContent value="followers" className="mt-0">
-                             <UserList userIds={user.followers} emptyText="На этого пользователя пока никто не подписан." />
-                        </TabsContent>
-                         {isOwnProfile && (
-                            <TabsContent value="requests" className="mt-0">
-                                <FriendRequests />
-                            </TabsContent>
-                         )}
-                        <TabsContent value="following" className="mt-0">
-                             <UserList userIds={user.followingUsers} emptyText="Этот пользователь ни на кого не подписан." />
-                        </TabsContent>
-                    </div>
+                        )}
+                    <TabsContent value="following" className="mt-4">
+                            <UserList userIds={user.followingUsers} emptyText="Этот пользователь ни на кого не подписан." />
+                    </TabsContent>
                 </Tabs>
             </CardContent>
         </Card>
