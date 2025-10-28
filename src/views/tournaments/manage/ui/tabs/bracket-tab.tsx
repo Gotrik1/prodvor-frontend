@@ -180,7 +180,7 @@ export function BracketTab() {
                                     const isFinished = match.score1 !== null && match.score2 !== null;
                                     const winner = isFinished ? (match.score1! > match.score2! ? 'team1' : 'team2') : null;
                                     return (
-                                    <Card key={match.id} className={`bg-muted/50 transition-all ${activeMatch?.id === match.id ? 'border-primary' : 'hover:border-primary/50'}`}>
+                                    <Card key={match.id} className={`bg-card-nested transition-all ${activeMatch?.id === match.id ? 'border-primary' : 'hover:border-primary/50'}`}>
                                         <div className="cursor-pointer" onClick={() => setActiveMatch(match)}>
                                             <CardContent className="flex items-center justify-between p-4">
                                                 <div className={`flex items-center gap-3 w-2/5 transition-opacity ${winner && winner !== 'team1' && 'opacity-50'}`}>
