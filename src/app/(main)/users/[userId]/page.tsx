@@ -1,6 +1,6 @@
 
 import { users } from '@/mocks';
-import { PlayerPageTemplate } from '@/views/admin/ui/templates/player-page-template';
+import { PlayerPage } from '@/views/users/player';
 import type { Metadata } from 'next';
 import { CoachPageTemplate } from '@/views/admin/ui/templates/coach-page-template';
 import { FanPageTemplate } from '@/views/admin/ui/templates/fan-page-template';
@@ -23,7 +23,6 @@ export async function generateMetadata({ params }: { params: { userId: string } 
   };
 }
 
-
 export default function UserProfilePage({ params }: { params: { userId: string } }) {
    const user = users.find(s => s.id === params.userId);
 
@@ -45,7 +44,7 @@ export default function UserProfilePage({ params }: { params: { userId: string }
     );
   }
 
-  const renderTemplate = () => {
+  const renderContent = () => {
     switch (user.role) {
       case 'Судья':
           return <RefereePageTemplate user={user} />;
@@ -57,7 +56,7 @@ export default function UserProfilePage({ params }: { params: { userId: string }
           return <OrganizerPageTemplate user={user} />;
       case 'Игрок':
       case 'Капитан':
-          return <PlayerPageTemplate user={user} />;
+          return <PlayerPage user={user} />;
       case 'Болельщик':
           return <FanPageTemplate user={user} />;
       default:
@@ -67,7 +66,7 @@ export default function UserProfilePage({ params }: { params: { userId: string }
 
   return (
     <div className="p-4 md:p-6 lg:p-8">
-      {renderTemplate()}
+      {renderContent()}
     </div>
   )
 }
