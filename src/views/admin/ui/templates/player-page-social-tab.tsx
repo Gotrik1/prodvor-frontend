@@ -25,17 +25,13 @@ const UserList = ({ userIds, emptyText }: { userIds: string[], emptyText: string
     }
 
     return (
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+        <div className="flex flex-wrap gap-2">
             {userList.map(user => (
                 <Link href={`/users/${user.id}`} key={user.id} className="group">
-                    <Card className="text-center p-4 hover:border-primary transition-colors h-full flex flex-col items-center justify-center">
-                        <Avatar className="h-16 w-16 mx-auto">
-                            <AvatarImage src={user.avatarUrl} />
-                            <AvatarFallback>{user.nickname.charAt(0)}</AvatarFallback>
-                        </Avatar>
-                        <p className="font-semibold mt-2 group-hover:text-primary transition-colors">{user.nickname}</p>
-                        <p className="text-xs text-muted-foreground">{user.firstName} {user.lastName}</p>
-                    </Card>
+                     <Avatar className="h-12 w-12 border-2 border-transparent group-hover:border-primary transition-colors">
+                        <AvatarImage src={user.avatarUrl} alt={user.nickname} />
+                        <AvatarFallback>{user.nickname.charAt(0)}</AvatarFallback>
+                    </Avatar>
                 </Link>
             ))}
         </div>
@@ -90,45 +86,45 @@ export function SocialTab({ user, isOwnProfile }: { user: User, isOwnProfile: bo
                 <CardDescription>Друзья, подписчики и подписки пользователя.</CardDescription>
             </CardHeader>
             <CardContent>
-                <Tabs defaultValue="friends">
-                    <TabsList className={cn(
-                        "grid grid-cols-2 md:grid-cols-4 w-full"
-                    )}>
-                        <TabsTrigger value="friends">
-                            <UsersIcon className="h-4 w-4 lg:mr-2" />
-                            <span className="hidden lg:inline">Друзья ({user.friends.length})</span>
+                <Tabs defaultValue="friends" orientation="vertical" className="flex flex-col md:flex-row gap-8">
+                    <TabsList className="flex md:flex-col h-auto w-full md:w-48 shrink-0">
+                        <TabsTrigger value="friends" className="w-full justify-start gap-2">
+                            <UsersIcon className="h-4 w-4" />
+                            Друзья ({user.friends.length})
                         </TabsTrigger>
-                        <TabsTrigger value="followers">
-                            <Rss className="h-4 w-4 lg:mr-2" />
-                            <span className="hidden lg:inline">Подписчики ({user.followers.length})</span>
+                        <TabsTrigger value="followers" className="w-full justify-start gap-2">
+                            <Rss className="h-4 w-4" />
+                            Подписчики ({user.followers.length})
                         </TabsTrigger>
                         {isOwnProfile && (
-                            <TabsTrigger value="requests">
-                                <UserPlus className="h-4 w-4 lg:mr-2" />
-                                <span className="hidden lg:inline">Заявки</span>
-                                <Badge variant="destructive" className="ml-2">{mockFriendRequests.length}</Badge>
+                            <TabsTrigger value="requests" className="w-full justify-start gap-2">
+                                <UserPlus className="h-4 w-4" />
+                                Заявки
+                                <Badge variant="destructive" className="ml-auto">{mockFriendRequests.length}</Badge>
                             </TabsTrigger>
                         )}
-                        <TabsTrigger value="following">
-                            <UsersIcon className="h-4 w-4 lg:mr-2" />
-                             <span className="hidden lg:inline">Подписки ({user.followingUsers.length})</span>
+                        <TabsTrigger value="following" className="w-full justify-start gap-2">
+                             <UsersIcon className="h-4 w-4" />
+                             Подписки ({user.followingUsers.length})
                         </TabsTrigger>
                     </TabsList>
                     
-                    <TabsContent value="friends" className="mt-8">
-                        <UserList userIds={user.friends} emptyText="У этого пользователя пока нет друзей." />
-                    </TabsContent>
-                    <TabsContent value="followers" className="mt-8">
-                         <UserList userIds={user.followers} emptyText="На этого пользователя пока никто не подписан." />
-                    </TabsContent>
-                     {isOwnProfile && (
-                        <TabsContent value="requests" className="mt-8">
-                            <FriendRequests />
+                    <div className="w-full">
+                        <TabsContent value="friends" className="mt-0">
+                            <UserList userIds={user.friends} emptyText="У этого пользователя пока нет друзей." />
                         </TabsContent>
-                     )}
-                    <TabsContent value="following" className="mt-8">
-                         <UserList userIds={user.followingUsers} emptyText="Этот пользователь ни на кого не подписан." />
-                    </TabsContent>
+                        <TabsContent value="followers" className="mt-0">
+                             <UserList userIds={user.followers} emptyText="На этого пользователя пока никто не подписан." />
+                        </TabsContent>
+                         {isOwnProfile && (
+                            <TabsContent value="requests" className="mt-0">
+                                <FriendRequests />
+                            </TabsContent>
+                         )}
+                        <TabsContent value="following" className="mt-0">
+                             <UserList userIds={user.followingUsers} emptyText="Этот пользователь ни на кого не подписан." />
+                        </TabsContent>
+                    </div>
                 </Tabs>
             </CardContent>
         </Card>
