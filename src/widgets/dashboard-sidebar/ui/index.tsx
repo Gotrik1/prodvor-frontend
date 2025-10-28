@@ -79,7 +79,7 @@ export function DashboardSidebar({ isMobileSheet = false, onLinkClick }: { isMob
     
     // Default render for desktop sidebar
     return (
-        <Sidebar collapsible="icon" className="border-r border-layout-border">
+        <Sidebar collapsible="icon">
             <SidebarHeader>
                 <Logo />
             </SidebarHeader>
