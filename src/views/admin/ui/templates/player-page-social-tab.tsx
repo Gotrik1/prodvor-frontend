@@ -86,26 +86,26 @@ export function SocialTab({ user, isOwnProfile }: { user: User, isOwnProfile: bo
                 <CardDescription>Друзья, подписчики и подписки пользователя.</CardDescription>
             </CardHeader>
             <CardContent>
-                <Tabs defaultValue="friends" orientation="vertical" className="flex flex-col md:flex-row gap-8">
-                    <TabsList className="flex md:flex-col h-auto w-full md:w-48 shrink-0">
-                        <TabsTrigger value="friends" className="w-full justify-start gap-2">
+                <Tabs defaultValue="friends" className="flex flex-col gap-4">
+                    <TabsList className="grid grid-cols-2 md:grid-cols-4 h-auto w-full">
+                        <TabsTrigger value="friends" className="w-full justify-center gap-2">
                             <UsersIcon className="h-4 w-4" />
-                            Друзья ({user.friends.length})
+                            <span className="hidden lg:inline">Друзья ({user.friends.length})</span>
                         </TabsTrigger>
-                        <TabsTrigger value="followers" className="w-full justify-start gap-2">
+                        <TabsTrigger value="followers" className="w-full justify-center gap-2">
                             <Rss className="h-4 w-4" />
-                            Подписчики ({user.followers.length})
+                            <span className="hidden lg:inline">Подписчики ({user.followers.length})</span>
                         </TabsTrigger>
                         {isOwnProfile && (
-                            <TabsTrigger value="requests" className="w-full justify-start gap-2">
+                            <TabsTrigger value="requests" className="w-full justify-center gap-2">
                                 <UserPlus className="h-4 w-4" />
-                                Заявки
-                                <Badge variant="destructive" className="ml-auto">{mockFriendRequests.length}</Badge>
+                                <span className="hidden lg:inline">Заявки</span>
+                                <Badge variant="destructive" className="ml-auto lg:ml-1">{mockFriendRequests.length}</Badge>
                             </TabsTrigger>
                         )}
-                        <TabsTrigger value="following" className="w-full justify-start gap-2">
+                        <TabsTrigger value="following" className="w-full justify-center gap-2">
                              <UsersIcon className="h-4 w-4" />
-                             Подписки ({user.followingUsers.length})
+                             <span className="hidden lg:inline">Подписки ({user.followingUsers.length})</span>
                         </TabsTrigger>
                     </TabsList>
                     
