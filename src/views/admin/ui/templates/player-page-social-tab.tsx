@@ -25,7 +25,7 @@ const UserList = ({ userIds, emptyText }: { userIds: string[], emptyText: string
     }
 
     return (
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
             {userList.map(user => (
                 <Link href={`/users/${user.id}`} key={user.id} className="group">
                     <Card className="text-center p-4 hover:border-primary transition-colors h-full flex flex-col items-center justify-center">
@@ -33,8 +33,10 @@ const UserList = ({ userIds, emptyText }: { userIds: string[], emptyText: string
                             <AvatarImage src={user.avatarUrl} />
                             <AvatarFallback>{user.nickname.charAt(0)}</AvatarFallback>
                         </Avatar>
-                        <p className="font-semibold mt-2 truncate group-hover:text-primary transition-colors">{user.nickname}</p>
-                        <p className="text-xs text-muted-foreground truncate">{user.firstName} {user.lastName}</p>
+                        <div className="w-full mt-2">
+                             <p className="font-semibold truncate group-hover:text-primary transition-colors">{user.nickname}</p>
+                             <p className="text-xs text-muted-foreground truncate">{user.firstName} {user.lastName}</p>
+                        </div>
                     </Card>
                 </Link>
             ))}
@@ -91,25 +93,28 @@ export function SocialTab({ user, isOwnProfile }: { user: User, isOwnProfile: bo
             </CardHeader>
             <CardContent>
                 <Tabs defaultValue="friends">
-                    <TabsList className="h-auto flex flex-wrap justify-start">
-                        <TabsTrigger value="friends" className="flex-grow w-auto">
-                            <UsersIcon className="h-4 w-4 lg:mr-2" />
-                            <span className="hidden lg:inline">Друзья ({user.friends.length})</span>
+                    <TabsList className={cn(
+                        "grid w-full",
+                        isOwnProfile ? "grid-cols-4" : "grid-cols-3"
+                    )}>
+                        <TabsTrigger value="friends" className="w-auto">
+                            <UsersIcon className="h-4 w-4" />
+                            <span className="hidden lg:inline ml-2">Друзья ({user.friends.length})</span>
                         </TabsTrigger>
-                        <TabsTrigger value="followers" className="flex-grow w-auto">
-                            <Rss className="h-4 w-4 lg:mr-2" />
-                            <span className="hidden lg:inline">Подписчики ({user.followers.length})</span>
+                        <TabsTrigger value="followers" className="w-auto">
+                            <Rss className="h-4 w-4" />
+                            <span className="hidden lg:inline ml-2">Подписчики ({user.followers.length})</span>
                         </TabsTrigger>
                         {isOwnProfile && (
-                            <TabsTrigger value="requests" className="flex-grow w-auto">
-                                <UserPlus className="h-4 w-4 lg:mr-2" />
-                                <span className="hidden lg:inline">Заявки</span>
+                            <TabsTrigger value="requests" className="w-auto">
+                                <UserPlus className="h-4 w-4" />
+                                <span className="hidden lg:inline ml-2">Заявки</span>
                                 <Badge variant="destructive" className="ml-2">{mockFriendRequests.length}</Badge>
                             </TabsTrigger>
                         )}
-                        <TabsTrigger value="following" className="flex-grow w-auto">
-                            <UsersIcon className="h-4 w-4 lg:mr-2" />
-                            <span className="hidden lg:inline">Подписки ({user.followingUsers.length})</span>
+                        <TabsTrigger value="following" className="w-auto">
+                            <UsersIcon className="h-4 w-4" />
+                             <span className="hidden lg:inline ml-2">Подписки ({user.followingUsers.length})</span>
                         </TabsTrigger>
                     </TabsList>
                     
