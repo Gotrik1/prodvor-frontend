@@ -10,9 +10,10 @@ import { users } from '@/mocks';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import Link from 'next/link';
 import { Button } from '@/shared/ui/button';
-import { Check, UserPlus, X, Users as UsersIcon, Rss, MessageSquare, Mail } from 'lucide-react';
+import { Check, UserPlus, X, Users as UsersIcon, Rss, Heart } from 'lucide-react';
 import { Badge } from '@/shared/ui/badge';
 import { cn } from '@/shared/lib/utils';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/shared/ui/tooltip';
 
 // Mock friend requests for the current user
 const mockFriendRequests = users.slice(10, 13);
@@ -27,12 +28,21 @@ const UserList = ({ userIds, emptyText }: { userIds: string[], emptyText: string
     return (
         <div className="flex flex-wrap gap-2">
             {userList.map(user => (
-                <Link href={`/users/${user.id}`} key={user.id} className="group">
-                     <Avatar className="h-12 w-12 border-2 border-transparent group-hover:border-primary transition-colors">
-                        <AvatarImage src={user.avatarUrl} alt={user.nickname} />
-                        <AvatarFallback>{user.nickname.charAt(0)}</AvatarFallback>
-                    </Avatar>
-                </Link>
+                 <TooltipProvider key={user.id}>
+                    <Tooltip>
+                        <TooltipTrigger asChild>
+                            <Link href={`/users/${user.id}`} className="group">
+                                <Avatar className="h-12 w-12 border-2 border-transparent group-hover:border-primary transition-colors">
+                                    <AvatarImage src={user.avatarUrl} alt={user.nickname} />
+                                    <AvatarFallback>{user.nickname.charAt(0)}</AvatarFallback>
+                                </Avatar>
+                            </Link>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                            <p>{user.nickname}</p>
+                        </TooltipContent>
+                    </Tooltip>
+                </TooltipProvider>
             ))}
         </div>
     );
@@ -79,6 +89,16 @@ const FriendRequests = () => {
 
 export function SocialTab({ user, isOwnProfile }: { user: User, isOwnProfile: boolean }) {
     
+    const tabs = [
+        { value: 'friends', icon: UsersIcon, label: `Друзья (${user.friends.length})` },
+        { value: 'followers', icon: Rss, label: `Подписчики (${user.followers.length})` },
+        { value: 'following', icon: Heart, label: `Подписки (${user.followingUsers.length})` },
+    ];
+    
+    if (isOwnProfile) {
+        tabs.splice(2, 0, { value: 'requests', icon: UserPlus, label: 'Заявки' });
+    }
+
     return (
         <Card>
             <CardHeader>
@@ -87,26 +107,24 @@ export function SocialTab({ user, isOwnProfile }: { user: User, isOwnProfile: bo
             </CardHeader>
             <CardContent>
                  <Tabs defaultValue="friends" className="w-full">
-                    <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 mb-4">
-                         <TabsTrigger value="friends" className="w-full justify-center gap-2">
-                            <UsersIcon className="h-4 w-4" />
-                            <span className="hidden lg:inline">Друзья ({user.friends.length})</span>
-                        </TabsTrigger>
-                        <TabsTrigger value="followers" className="w-full justify-center gap-2">
-                            <Rss className="h-4 w-4" />
-                            <span className="hidden lg:inline">Подписчики ({user.followers.length})</span>
-                        </TabsTrigger>
-                        {isOwnProfile && (
-                            <TabsTrigger value="requests" className="w-full justify-center gap-2">
-                                <UserPlus className="h-4 w-4" />
-                                <span className="hidden lg:inline">Заявки</span>
-                                <Badge variant="destructive" className="ml-auto">{mockFriendRequests.length}</Badge>
-                            </TabsTrigger>
-                        )}
-                        <TabsTrigger value="following" className="w-full justify-center gap-2">
-                             <UsersIcon className="h-4 w-4" />
-                             <span className="hidden lg:inline">Подписки ({user.followingUsers.length})</span>
-                        </TabsTrigger>
+                    <TabsList className={cn("grid w-full mb-4", isOwnProfile ? "grid-cols-4" : "grid-cols-3")}>
+                        {tabs.map(tab => (
+                            <TooltipProvider key={tab.value}>
+                                <Tooltip>
+                                    <TooltipTrigger asChild>
+                                        <TabsTrigger value={tab.value} className="relative w-full justify-center gap-2">
+                                            <tab.icon className="h-5 w-5" />
+                                            {tab.value === 'requests' && isOwnProfile && mockFriendRequests.length > 0 && (
+                                                <Badge variant="destructive" className="absolute -top-1 -right-1 h-5 w-5 p-0 justify-center">{mockFriendRequests.length}</Badge>
+                                            )}
+                                        </TabsTrigger>
+                                    </TooltipTrigger>
+                                    <TooltipContent>
+                                        <p>{tab.label}</p>
+                                    </TooltipContent>
+                                </Tooltip>
+                            </TooltipProvider>
+                        ))}
                     </TabsList>
                     
                     <TabsContent value="friends">
