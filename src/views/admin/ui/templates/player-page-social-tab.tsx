@@ -10,7 +10,7 @@ import { users } from '@/mocks';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import Link from 'next/link';
 import { Button } from '@/shared/ui/button';
-import { Check, UserPlus, X, Users as UsersIcon, Rss } from 'lucide-react';
+import { Check, UserPlus, X, Users as UsersIcon, Rss, MessageSquare, Mail } from 'lucide-react';
 import { Badge } from '@/shared/ui/badge';
 import { cn } from '@/shared/lib/utils';
 
@@ -86,45 +86,43 @@ export function SocialTab({ user, isOwnProfile }: { user: User, isOwnProfile: bo
                 <CardDescription>Друзья, подписчики и подписки пользователя.</CardDescription>
             </CardHeader>
             <CardContent>
-                 <Tabs defaultValue="friends" orientation="vertical" className="flex flex-col md:flex-row gap-6">
-                    <TabsList className="flex flex-row md:flex-col md:w-auto h-auto md:h-full flex-wrap justify-start">
-                        <TabsTrigger value="friends" className="w-full justify-start gap-2">
+                 <Tabs defaultValue="friends" className="w-full">
+                    <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 mb-4">
+                         <TabsTrigger value="friends" className="w-full justify-center gap-2">
                             <UsersIcon className="h-4 w-4" />
-                            <span>Друзья ({user.friends.length})</span>
+                            <span className="hidden lg:inline">Друзья ({user.friends.length})</span>
                         </TabsTrigger>
-                        <TabsTrigger value="followers" className="w-full justify-start gap-2">
+                        <TabsTrigger value="followers" className="w-full justify-center gap-2">
                             <Rss className="h-4 w-4" />
-                            <span>Подписчики ({user.followers.length})</span>
+                            <span className="hidden lg:inline">Подписчики ({user.followers.length})</span>
                         </TabsTrigger>
                         {isOwnProfile && (
-                            <TabsTrigger value="requests" className="w-full justify-start gap-2">
+                            <TabsTrigger value="requests" className="w-full justify-center gap-2">
                                 <UserPlus className="h-4 w-4" />
-                                <span>Заявки</span>
+                                <span className="hidden lg:inline">Заявки</span>
                                 <Badge variant="destructive" className="ml-auto">{mockFriendRequests.length}</Badge>
                             </TabsTrigger>
                         )}
-                        <TabsTrigger value="following" className="w-full justify-start gap-2">
+                        <TabsTrigger value="following" className="w-full justify-center gap-2">
                              <UsersIcon className="h-4 w-4" />
-                             <span>Подписки ({user.followingUsers.length})</span>
+                             <span className="hidden lg:inline">Подписки ({user.followingUsers.length})</span>
                         </TabsTrigger>
                     </TabsList>
                     
-                    <div className="w-full">
-                        <TabsContent value="friends" className="mt-0">
-                            <UserList userIds={user.friends} emptyText="У этого пользователя пока нет друзей." />
+                    <TabsContent value="friends">
+                        <UserList userIds={user.friends} emptyText="У этого пользователя пока нет друзей." />
+                    </TabsContent>
+                    <TabsContent value="followers">
+                        <UserList userIds={user.followers} emptyText="На этого пользователя пока никто не подписан." />
+                    </TabsContent>
+                    {isOwnProfile && (
+                        <TabsContent value="requests">
+                            <FriendRequests />
                         </TabsContent>
-                        <TabsContent value="followers" className="mt-0">
-                                <UserList userIds={user.followers} emptyText="На этого пользователя пока никто не подписан." />
-                        </TabsContent>
-                            {isOwnProfile && (
-                            <TabsContent value="requests" className="mt-0">
-                                <FriendRequests />
-                            </TabsContent>
-                            )}
-                        <TabsContent value="following" className="mt-0">
-                                <UserList userIds={user.followingUsers} emptyText="Этот пользователь ни на кого не подписан." />
-                        </TabsContent>
-                    </div>
+                    )}
+                    <TabsContent value="following">
+                        <UserList userIds={user.followingUsers} emptyText="Этот пользователь ни на кого не подписан." />
+                    </TabsContent>
                 </Tabs>
             </CardContent>
         </Card>
