@@ -46,6 +46,15 @@ html {
     --ring: 222.2 84% 4.9%;
 
     --radius: 0.5rem;
+
+    --sidebar-background: var(--background);
+    --sidebar-foreground: var(--foreground);
+    --sidebar-primary: var(--primary);
+    --sidebar-primary-foreground: var(--primary-foreground);
+    --sidebar-accent: var(--accent);
+    --sidebar-accent-foreground: var(--accent-foreground);
+    --sidebar-border: var(--ui-border);
+    --sidebar-ring: var(--ring);
   }
 
   .dark {
@@ -53,10 +62,10 @@ html {
     --foreground: 210 40% 98%;
 
     --card: 210 6% 13%; /* #1E1F23 - VK Card */
-    --card-foreground: 240 40% 98%;
+    --card-foreground: 210 6% 10%;
 
     --popover: 210 6% 13%;
-    --popover-foreground: 210 40% 98%;
+    --popover-foreground: 210 6% 10%;
 
     --primary: 198 93% 59%; /* #29ABE2 */
     --primary-foreground: 220 25% 14%;
@@ -76,6 +85,15 @@ html {
     --ui-border: 210 6% 13%;
     --input: 210 6% 16%;
     --ring: 212.7 26.8% 83.9%;
+    
+    --sidebar-background: var(--background);
+    --sidebar-foreground: var(--foreground);
+    --sidebar-primary: var(--primary);
+    --sidebar-primary-foreground: var(--primary-foreground);
+    --sidebar-accent: var(--accent);
+    --sidebar-accent-foreground: var(--accent-foreground);
+    --sidebar-border: var(--ui-border);
+    --sidebar-ring: var(--ring);
   }
 
   /* Accent color themes */
@@ -110,19 +128,6 @@ html {
   .theme-cyan {
     --accent: 199 98% 48%;
     --accent-foreground: 199 98% 98%;
-  }
-
-  /* Sidebar variables */
-  :root,
-  .dark {
-    --sidebar-background: var(--background);
-    --sidebar-foreground: var(--foreground);
-    --sidebar-primary: var(--primary);
-    --sidebar-primary-foreground: var(--primary-foreground);
-    --sidebar-accent: var(--accent);
-    --sidebar-accent-foreground: var(--sidebar-accent-foreground);
-    --sidebar-border: var(--ui-border);
-    --sidebar-ring: var(--ring);
   }
 }
 
