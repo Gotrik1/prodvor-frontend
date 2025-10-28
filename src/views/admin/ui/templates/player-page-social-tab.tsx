@@ -33,10 +33,8 @@ const UserList = ({ userIds, emptyText }: { userIds: string[], emptyText: string
                             <AvatarImage src={user.avatarUrl} />
                             <AvatarFallback>{user.nickname.charAt(0)}</AvatarFallback>
                         </Avatar>
-                        <div className="w-full mt-2">
-                             <p className="font-semibold truncate group-hover:text-primary transition-colors">{user.nickname}</p>
-                             <p className="text-xs text-muted-foreground truncate">{user.firstName} {user.lastName}</p>
-                        </div>
+                        <p className="font-semibold mt-2 group-hover:text-primary transition-colors">{user.nickname}</p>
+                        <p className="text-xs text-muted-foreground">{user.firstName} {user.lastName}</p>
                     </Card>
                 </Link>
             ))}
@@ -94,27 +92,26 @@ export function SocialTab({ user, isOwnProfile }: { user: User, isOwnProfile: bo
             <CardContent>
                 <Tabs defaultValue="friends">
                     <TabsList className={cn(
-                        "grid w-full",
-                        isOwnProfile ? "grid-cols-4" : "grid-cols-3"
+                        "grid grid-cols-2 md:grid-cols-4 w-full"
                     )}>
-                        <TabsTrigger value="friends" className="w-auto">
-                            <UsersIcon className="h-4 w-4" />
-                            <span className="hidden lg:inline ml-2">Друзья ({user.friends.length})</span>
+                        <TabsTrigger value="friends">
+                            <UsersIcon className="h-4 w-4 lg:mr-2" />
+                            <span className="hidden lg:inline">Друзья ({user.friends.length})</span>
                         </TabsTrigger>
-                        <TabsTrigger value="followers" className="w-auto">
-                            <Rss className="h-4 w-4" />
-                            <span className="hidden lg:inline ml-2">Подписчики ({user.followers.length})</span>
+                        <TabsTrigger value="followers">
+                            <Rss className="h-4 w-4 lg:mr-2" />
+                            <span className="hidden lg:inline">Подписчики ({user.followers.length})</span>
                         </TabsTrigger>
                         {isOwnProfile && (
-                            <TabsTrigger value="requests" className="w-auto">
-                                <UserPlus className="h-4 w-4" />
-                                <span className="hidden lg:inline ml-2">Заявки</span>
+                            <TabsTrigger value="requests">
+                                <UserPlus className="h-4 w-4 lg:mr-2" />
+                                <span className="hidden lg:inline">Заявки</span>
                                 <Badge variant="destructive" className="ml-2">{mockFriendRequests.length}</Badge>
                             </TabsTrigger>
                         )}
-                        <TabsTrigger value="following" className="w-auto">
-                            <UsersIcon className="h-4 w-4" />
-                             <span className="hidden lg:inline ml-2">Подписки ({user.followingUsers.length})</span>
+                        <TabsTrigger value="following">
+                            <UsersIcon className="h-4 w-4 lg:mr-2" />
+                             <span className="hidden lg:inline">Подписки ({user.followingUsers.length})</span>
                         </TabsTrigger>
                     </TabsList>
                     
