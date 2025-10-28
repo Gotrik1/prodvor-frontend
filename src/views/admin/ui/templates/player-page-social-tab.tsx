@@ -11,6 +11,7 @@ import Link from 'next/link';
 import { Button } from '@/shared/ui/button';
 import { Check, UserPlus, X } from 'lucide-react';
 import { Badge } from '@/shared/ui/badge';
+import { cn } from '@/shared/lib/utils';
 
 // Mock friend requests for the current user
 const mockFriendRequests = users.slice(10, 13);
@@ -23,7 +24,7 @@ const UserList = ({ userIds, emptyText }: { userIds: string[], emptyText: string
     }
 
     return (
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
             {userList.map(user => (
                 <Link href={`/users/${user.id}`} key={user.id} className="group">
                     <Card className="text-center p-4 hover:border-primary transition-colors h-full flex flex-col items-center justify-center">
@@ -89,7 +90,7 @@ export function SocialTab({ user, isOwnProfile }: { user: User, isOwnProfile: bo
             </CardHeader>
             <CardContent>
                 <Tabs defaultValue="friends">
-                    <TabsList className={`grid w-full grid-cols-2 md:grid-cols-4`}>
+                     <TabsList className={cn("grid w-full h-auto", isOwnProfile ? "grid-cols-2 md:grid-cols-4" : "grid-cols-3")}>
                         <TabsTrigger value="friends">Друзья ({user.friends.length})</TabsTrigger>
                         <TabsTrigger value="followers">Подписчики ({user.followers.length})</TabsTrigger>
                         {isOwnProfile && (
