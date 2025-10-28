@@ -106,27 +106,17 @@ export function SocialTab({ user, isOwnProfile }: { user: User, isOwnProfile: bo
                 <CardDescription>Друзья, подписчики и подписки пользователя.</CardDescription>
             </CardHeader>
             <CardContent>
-                 <Tabs defaultValue="friends" className="w-full">
+                <Tabs defaultValue="friends" className="w-full">
                     <TabsList className={cn("grid w-full mb-4", isOwnProfile ? "grid-cols-4" : "grid-cols-3")}>
                         {tabs.map(tab => (
-                            <TooltipProvider key={tab.value}>
-                                <Tooltip>
-                                    <TooltipTrigger asChild>
-                                        <TabsTrigger value={tab.value} className="relative w-full justify-center gap-2">
-                                            <tab.icon className="h-5 w-5" />
-                                            {tab.value === 'requests' && isOwnProfile && mockFriendRequests.length > 0 && (
-                                                <Badge variant="destructive" className="absolute -top-1 -right-1 h-5 w-5 p-0 justify-center">{mockFriendRequests.length}</Badge>
-                                            )}
-                                        </TabsTrigger>
-                                    </TooltipTrigger>
-                                    <TooltipContent>
-                                        <p>{tab.label}</p>
-                                    </TooltipContent>
-                                </Tooltip>
-                            </TooltipProvider>
+                            <TabsTrigger key={tab.value} value={tab.value} className="relative">
+                                <tab.icon className="h-5 w-5" />
+                                {tab.value === 'requests' && isOwnProfile && mockFriendRequests.length > 0 && (
+                                    <Badge variant="destructive" className="absolute -top-1 -right-1 h-5 w-5 p-0 justify-center">{mockFriendRequests.length}</Badge>
+                                )}
+                            </TabsTrigger>
                         ))}
                     </TabsList>
-                    
                     <TabsContent value="friends">
                         <UserList userIds={user.friends} emptyText="У этого пользователя пока нет друзей." />
                     </TabsContent>
