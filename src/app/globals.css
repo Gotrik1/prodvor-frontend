@@ -17,34 +17,36 @@ html {
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 220 80% 15%;
+    /* --- Светлая тема --- */
+    --background: 0 0% 100%; /* Основной фон страницы */
+    --foreground: 220 80% 15%; /* Основной цвет текста */
 
-    --card: 0 0% 100%;
-    --card-foreground: 220 40% 40%;
+    --card: 0 0% 100%; /* Фон карточек, панелей */
+    --card-foreground: 220 40% 40%; /* Текст на карточках */
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%; /* Фон всплывающих окон (popover) */
+    --popover-foreground: 222.2 84% 4.9%; /* Текст во всплывающих окнах */
 
-    --primary: 198 93% 59%; /* #29ABE2 */
-    --primary-foreground: 210 40% 98%;
+    --primary: 198 93% 59%; /* Главный акцентный цвет (кнопки, ссылки) */
+    --primary-foreground: 210 40% 98%; /* Цвет текста на элементах с --primary фоном */
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 210 40% 96.1%; /* Второстепенный цвет для кнопок и фонов */
+    --secondary-foreground: 222.2 47.4% 11.2%; /* Цвет текста на элементах с --secondary фоном */
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 210 40% 96.1%; /* Приглушенный фон для неактивных элементов */
+    --muted-foreground: 215.4 16.3% 46.9%; /* Приглушенный цвет текста */
 
-    --accent: 33 100% 50%; /* #FF8C00 */
-    --accent-foreground: 210 40% 98%;
+    --accent: 33 100% 50%; /* Дополнительный акцентный цвет (например, для уведомлений) */
+    --accent-foreground: 210 40% 98%; /* Цвет текста на элементах с --accent фоном */
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 84.2% 60.2%; /* Цвет для "разрушительных" действий (удаление, ошибки) */
+    --destructive-foreground: 210 40% 98%; /* Текст на "разрушительных" элементах */
 
-    --ui-border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --ui-border: 214.3 31.8% 91.4%; /* Цвет границ (input, card borders) */
+    --input: 214.3 31.8% 91.4%; /* Цвет фона полей ввода */
+    --ring: 222.2 84% 4.9%; /* Цвет кольца фокуса (focus ring) */
 
+    /* Переменные сайдбара, наследующие основные цвета */
     --sidebar-background: var(--background);
     --sidebar-foreground: var(--foreground);
     --sidebar-primary: var(--primary);
@@ -56,34 +58,36 @@ html {
   }
 
   .dark {
-    --background: 210 6% 13%; /* #1E1F23 - VK Card */
-    --foreground: 210 40% 98%;
+    /* --- Темная тема --- */
+    --background: 210 6% 13%; /* Основной фон страницы */
+    --foreground: 210 40% 98%; /* Основной цвет текста */
 
-    --card: 210 6% 13%; /* #1E1F23 - VK Card */
-    --card-foreground: 210 6% 10%;
+    --card: 210 6% 13%; /* Фон карточек, панелей */
+    --card-foreground: 210 6% 13%; /* Текст на карточках */
 
-    --popover: 210 6% 13%;
-    --popover-foreground: 210 6% 10%;
+    --popover: 210 6% 13%; /* Фон всплывающих окон (popover) */
+    --popover-foreground: 210 6% 13%; /* Текст во всплывающих окнах */
 
-    --primary: 198 93% 59%; /* #29ABE2 */
-    --primary-foreground: 220 25% 14%;
+    --primary: 198 93% 59%; /* Главный акцентный цвет */
+    --primary-foreground: 220 25% 14%; /* Текст на primary элементах */
 
-    --secondary: 210 6% 16%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 210 6% 16%; /* Второстепенный цвет */
+    --secondary-foreground: 210 40% 98%; /* Текст на secondary элементах */
 
-    --muted: 210 6% 16%;
-    --muted-foreground: 215 20.2% 65.1%;
+    --muted: 210 6% 16%; /* Приглушенный фон */
+    --muted-foreground: 215 20.2% 65.1%; /* Приглушенный текст */
 
-    --accent: 33 100% 50%; /* #FF8C00 */
-    --accent-foreground: 210 40% 98%;
+    --accent: 33 100% 50%; /* Дополнительный акцентный цвет */
+    --accent-foreground: 210 40% 98%; /* Текст на accent элементах */
 
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%; /* Цвет для "разрушительных" действий */
+    --destructive-foreground: 210 40% 98%; /* Текст на "разрушительных" элементах */
 
-    --ui-border: 210 6% 13%;
-    --input: 210 6% 16%;
-    --ring: 212.7 26.8% 83.9%;
+    --ui-border: 210 6% 13%; /* Цвет границ (должен совпадать с фоном для "бесшовного" вида) */
+    --input: 210 6% 16%; /* Цвет фона полей ввода */
+    --ring: 212.7 26.8% 83.9%; /* Цвет кольца фокуса */
     
+    /* Переменные сайдбара, наследующие основные цвета */
     --sidebar-background: var(--background);
     --sidebar-foreground: var(--foreground);
     --sidebar-primary: var(--primary);
