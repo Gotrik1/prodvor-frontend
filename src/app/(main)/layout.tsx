@@ -9,7 +9,6 @@ import { DashboardFooter } from "@/widgets/dashboard-footer";
 import { HomeHeader } from '@/widgets/home-header';
 import { HomeFooter } from '@/widgets/home-footer';
 import { MobileBottomNav } from '@/widgets/mobile-bottom-nav';
-import { cn } from '@/shared/lib/utils';
 
 const publicRoutesWithHeader = ['/about', '/auth', '/auth/register'];
 
@@ -49,8 +48,8 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
   return (
     <SidebarProvider>
       <DashboardSidebar />
-      <DashboardHeader />
       <SidebarInset>
+        <DashboardHeader />
         <main className="flex-1 bg-background/95 pb-16 md:pb-0 pt-16">
           {children}
         </main>
