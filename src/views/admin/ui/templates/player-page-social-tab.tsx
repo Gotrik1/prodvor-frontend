@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { useState } from 'react';
@@ -9,7 +10,7 @@ import { users } from '@/mocks';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import Link from 'next/link';
 import { Button } from '@/shared/ui/button';
-import { Check, UserPlus, X } from 'lucide-react';
+import { Check, UserPlus, X, Users as UsersIcon, Rss } from 'lucide-react';
 import { Badge } from '@/shared/ui/badge';
 import { cn } from '@/shared/lib/utils';
 
@@ -90,17 +91,26 @@ export function SocialTab({ user, isOwnProfile }: { user: User, isOwnProfile: bo
             </CardHeader>
             <CardContent>
                 <Tabs defaultValue="friends">
-                     <TabsList className={cn("grid w-full h-auto", isOwnProfile ? "grid-cols-2 md:grid-cols-4" : "grid-cols-3")}>
-                        <TabsTrigger value="friends">Друзья ({user.friends.length})</TabsTrigger>
-                        <TabsTrigger value="followers">Подписчики ({user.followers.length})</TabsTrigger>
+                     <TabsList className={cn("grid w-full h-auto", isOwnProfile ? "grid-cols-4" : "grid-cols-3")}>
+                        <TabsTrigger value="friends">
+                            <UsersIcon className="h-4 w-4 md:mr-2"/>
+                            <span className="hidden md:inline">Друзья ({user.friends.length})</span>
+                        </TabsTrigger>
+                        <TabsTrigger value="followers">
+                            <Rss className="h-4 w-4 md:mr-2"/>
+                             <span className="hidden md:inline">Подписчики ({user.followers.length})</span>
+                        </TabsTrigger>
                         {isOwnProfile && (
                             <TabsTrigger value="requests">
-                                <UserPlus className="mr-2 h-4 w-4"/>
-                                Заявки
+                                <UserPlus className="h-4 w-4 md:mr-2"/>
+                                <span className="hidden md:inline">Заявки</span>
                                 <Badge variant="destructive" className="ml-2">{mockFriendRequests.length}</Badge>
                             </TabsTrigger>
                         )}
-                        <TabsTrigger value="following">Подписки ({user.followingUsers.length})</TabsTrigger>
+                        <TabsTrigger value="following">
+                            <UsersIcon className="h-4 w-4 md:mr-2"/>
+                             <span className="hidden md:inline">Подписки ({user.followingUsers.length})</span>
+                        </TabsTrigger>
                     </TabsList>
                     
                     <TabsContent value="friends" className="mt-8">
