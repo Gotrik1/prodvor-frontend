@@ -2,7 +2,7 @@
 'use client';
 
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarProvider } from "@/shared/ui/sidebar";
-import { DollarSign, Home, Eye, BookOpen, KeyRound, Database, Shield } from "lucide-react";
+import { DollarSign, Home, Eye, BookOpen, KeyRound, Database, Shield, Map } from "lucide-react";
 import Link from "next/link";
 import { DashboardHeader } from "@/widgets/dashboard-header";
 import { usePathname, useSearchParams } from "next/navigation";
@@ -37,6 +37,14 @@ export function AdminLayout({
                                 <SidebarMenuButton isActive={pathname.startsWith('/admin/dashboard') && !currentTab}>
                                     <Database />
                                     <span>База данных</span>
+                                </SidebarMenuButton>
+                            </Link>
+                        </SidebarMenuItem>
+                         <SidebarMenuItem>
+                            <Link href="/admin/app-map">
+                                <SidebarMenuButton isActive={pathname.startsWith('/admin/app-map')}>
+                                    <Map />
+                                    <span>Карта приложения</span>
                                 </SidebarMenuButton>
                             </Link>
                         </SidebarMenuItem>
