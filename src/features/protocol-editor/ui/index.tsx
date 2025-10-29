@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import React, { useState, useMemo } from 'react';
@@ -10,7 +9,7 @@ import { Input } from '@/shared/ui/input';
 import { Label } from '@/shared/ui/label';
 import { Trash2, PlusCircle } from 'lucide-react';
 import { useProtocol } from '../lib/use-protocol';
-import { EventType, eventTypes, MatchEvent } from '@/widgets/match-protocol/ui/match-timeline';
+import { EventType, eventTypes, MatchEvent } from '@/features/match-protocol/ui/match-timeline';
 import { users } from '@/mocks';
 import type { BracketMatch } from '@/views/tournaments/public-page/ui/mock-data';
 

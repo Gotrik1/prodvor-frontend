@@ -7,8 +7,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Button } from '@/shared/ui/button';
 import Link from 'next/link';
 import { ArrowLeft, Bot } from 'lucide-react';
-import { MatchProtocol } from '@/widgets/match-protocol';
-import { useProtocol } from '@/widgets/protocol-editor/lib/use-protocol';
+import { MatchProtocol } from '@/features/match-protocol';
+import { useProtocol } from '@/features/protocol-editor/lib/use-protocol';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs';
 import { AiAnalysisTool } from '@/features/ai-analysis-tool/ui';
 

@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import { MatchEvent, EventType, eventTypes } from './match-timeline';

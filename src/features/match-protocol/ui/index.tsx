@@ -9,7 +9,7 @@ import { MatchTimeline } from "./match-timeline";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { Crown } from "lucide-react";
 import Link from "next/link";
-import { useProtocol } from "@/widgets/protocol-editor/lib/use-protocol";
+import { useProtocol } from "@/features/protocol-editor/lib/use-protocol";
 import type { BracketMatch, Tournament } from "@/views/tournaments/public-page/ui/mock-data";
 import { LiveTextFeed } from "./live-text-feed";
 

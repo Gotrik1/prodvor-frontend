@@ -2,7 +2,7 @@
 'use client';
 
 import { create } from 'zustand';
-import { matchEvents as initialMatchEvents, MatchEvent } from '@/widgets/match-protocol/ui/match-timeline';
+import { matchEvents as initialMatchEvents, MatchEvent } from '@/features/match-protocol/ui/match-timeline';
 import type { BracketMatch } from '@/views/tournaments/public-page/ui/mock-data';
 
 const DEMO_MATCH_ID = 'rd1-match0';

@@ -34,7 +34,7 @@ import { ScrollArea, ScrollBar } from '@/shared/ui/scroll-area';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs';
 import { useTournamentCrm } from '../lib/useTournamentCrm';
 import { TournamentCrmContext } from '../lib/TournamentCrmContext';
-import { ProtocolEditor } from '@/widgets/protocol-editor';
+import { ProtocolEditor } from '@/features/protocol-editor';
 
 const crmTabs = [
   { value: 'overview', icon: GanttChartIcon, label: 'Обзор' },
