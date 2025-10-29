@@ -1,14 +1,14 @@
 
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs';
 import { Trophy, BarChart, Swords } from 'lucide-react';
 import { TournamentsPage } from '@/views/tournaments';
 import { LeaguesPage } from '@/views/leagues';
 import { ChallengesPage } from '@/views/challenges';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shared/ui/select';
-import { useIsMobile } from '@/hooks/use-mobile';
+import { useIsMobile } from '@/shared/hooks/use-mobile';
 
 const competitionTabs = [
   { value: 'tournaments', label: 'Турниры', icon: Trophy, component: <TournamentsPage /> },
@@ -19,6 +19,11 @@ const competitionTabs = [
 export function CompetitionsPage() {
   const [activeTab, setActiveTab] = useState('tournaments');
   const isMobile = useIsMobile();
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   return (
     <div className="p-4 md:p-6 lg:p-8 space-y-8">
@@ -29,7 +34,7 @@ export function CompetitionsPage() {
         </p>
       </div>
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        {isMobile ? (
+        {isClient && isMobile ? (
           <Select value={activeTab} onValueChange={setActiveTab}>
             <SelectTrigger>
               <SelectValue placeholder="Выберите раздел..." />

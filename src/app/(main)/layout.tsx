@@ -16,7 +16,6 @@ const publicRoutesWithHeader = ['/about', '/auth', '/auth/register'];
 
 export default function MainLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const isMobile = useIsMobile();
   
   if (!pathname) {
     return null; // or a loading spinner
@@ -65,7 +64,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
             </div>
           </div>
         </div>
-        {isMobile && !isAdminRoute && <MobileBottomNav />}
+        <MobileBottomNav />
     </SidebarProvider>
   );
 }

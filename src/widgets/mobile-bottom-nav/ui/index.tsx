@@ -1,7 +1,7 @@
 
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Home, Users, Dumbbell, MessageCircle, MoreHorizontal } from 'lucide-react';
@@ -32,16 +32,21 @@ const NavItem = ({ href, icon: Icon, label }: { href: string; icon: React.Elemen
 
 export function MobileBottomNav() {
     const scrollDirection = useScrollDirection();
-    const [isSheetOpen, setIsSheetOpen] = React.useState(false);
+    const [isSheetOpen, setIsSheetOpen] = useState(false);
     const isMobile = useIsMobile();
+    const [isClient, setIsClient] = useState(false);
 
-    if (!isMobile) {
+    useEffect(() => {
+        setIsClient(true);
+    }, []);
+
+    if (!isClient || !isMobile) {
         return null;
     }
 
     return (
         <div className={cn(
-            "fixed bottom-0 left-0 right-0 h-20 bg-card/80 backdrop-blur-lg border-t z-40 transition-transform duration-300",
+            "fixed bottom-0 left-0 right-0 h-20 bg-card/80 backdrop-blur-lg border-t z-40 transition-transform duration-300 md:hidden",
             scrollDirection === 'down' ? 'translate-y-full' : 'translate-y-0'
         )}>
             <div className="grid grid-cols-5 h-full">
