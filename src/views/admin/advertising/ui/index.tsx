@@ -3,7 +3,15 @@
 
 import React, { createContext, useContext } from 'react';
 import { useAdSettings } from '../lib/use-ad-settings';
-import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
+import { AssumptionsCard } from './assumptions-card';
+import { GrowthLeversCard } from './growth-levers-card';
+import { RevenueForecastCard } from './revenue-forecast-card';
+import { PaybackChartCard } from './payback-chart-card';
+import { SensitivityAnalysisCard } from './sensitivity-analysis-card';
+import { AudienceManager } from './audience-manager';
+import { CampaignManager } from './campaign-manager';
+import { InventoryMap } from './inventory-map';
+
 
 // Create a context and a hook to use it
 type AdSettingsContextType = ReturnType<typeof useAdSettings>;
@@ -35,19 +43,26 @@ export function AdvertisingPage() {
                     <h1 className="text-4xl font-bold font-headline">Ad-CRM: Монетизация</h1>
                     <p className="text-muted-foreground mt-2">Интерактивный симулятор для анализа и прогнозирования рекламных доходов платформы.</p>
                 </div>
-                 <Card className="text-center">
-                    <CardHeader>
-                        <div className="mx-auto bg-primary/10 text-primary p-4 rounded-full w-fit">
- {/* <Construction className="h-12 w-12" /> Temporarily removed as the section is under development */}
-                        </div>
-                        <CardTitle className="mt-4 text-2xl font-headline">Раздел в разработке</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        <p className="text-muted-foreground">
-                            Этот увлекательный функционал скоро появится.
-                        </p>
-                    </CardContent>
-                </Card>
+
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
+                    <div className="lg:col-span-1 space-y-6">
+                        <AssumptionsCard />
+                        <GrowthLeversCard />
+                    </div>
+                    <div className="lg:col-span-2 space-y-6">
+                        <RevenueForecastCard />
+                        <PaybackChartCard />
+                    </div>
+                </div>
+
+                <SensitivityAnalysisCard />
+                
+                <InventoryMap />
+                
+                <AudienceManager />
+
+                <CampaignManager />
+                
             </div>
         </AdSettingsProvider>
     );
