@@ -12,13 +12,25 @@ export default {
         headline: ['Inter', 'sans-serif'],
         code: ['monospace'],
       },
+      fontSize: {
+        'xs': 'clamp(0.75rem, 0.6vw + 0.6rem, 0.875rem)',    // ~12px to 14px
+        'sm': 'clamp(0.875rem, 0.5vw + 0.7rem, 1rem)',      // ~14px to 16px
+        'base': 'clamp(1rem, 0.5vw + 0.8rem, 1.125rem)',      // ~16px to 18px
+        'lg': 'clamp(1.125rem, 0.6vw + 0.9rem, 1.25rem)',   // ~18px to 20px
+        'xl': 'clamp(1.25rem, 0.8vw + 1rem, 1.5rem)',      // ~20px to 24px
+        '2xl': 'clamp(1.5rem, 1vw + 1.2rem, 1.875rem)',    // ~24px to 30px
+        '3xl': 'clamp(1.875rem, 1.5vw + 1.4rem, 2.25rem)', // ~30px to 36px
+        '4xl': 'clamp(2.25rem, 2.5vw + 1.5rem, 3rem)',     // ~36px to 48px
+        '5xl': 'clamp(3rem, 3.5vw + 2rem, 3.75rem)',       // ~48px to 60px
+        '6xl': 'clamp(3.75rem, 5vw + 2.5rem, 4.5rem)',     // ~60px to 72px
+        '7xl': 'clamp(4.5rem, 7vw + 3rem, 6rem)',         // ~72px to 96px
+      },
       colors: {
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
         card: {
           DEFAULT: 'hsl(var(--card))',
           foreground: 'hsl(var(--card-foreground))',
-          nested: 'hsl(var(--card-nested-background))',
         },
         popover: {
           DEFAULT: 'hsl(var(--popover))',
