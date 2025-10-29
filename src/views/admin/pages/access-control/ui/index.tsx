@@ -2,12 +2,12 @@
 
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/shared/ui/table";
 import { Badge } from "@/shared/ui/badge";
 import { Button } from "@/shared/ui/button";
-import { MoreHorizontal, Send, Settings, Shield, User, Users, KeyRound, PlusCircle } from "lucide-react";
+import { MoreHorizontal, Send, Settings, Shield, User, KeyRound, PlusCircle } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -24,11 +24,11 @@ import { Label } from '@/shared/ui/label';
 const mockAdmins = [
   { id: 'user92', name: 'Макс Барских', role: 'Главный администратор', section: 'Все разделы', status: 'Активен' },
   { id: 'user93', name: 'Светлана Лобода', role: 'Менеджер турниров', section: 'Турниры, Расписание', status: 'Активен' },
-  { id: 'staff2', name: 'Елена Павлова', role: 'Менеджер по спорту', section: 'Виды спорта, Дисциплины', status: 'Активен' },
-  { id: 'staff1', name: 'Игорь Вольнов', role: 'Модератор контента', section: 'Лента, Комментарии', status: 'Ожидает пароль' },
   { id: 'staff4', name: 'Александр Громов', role: 'Менеджер по рекламе', section: 'Ad-CRM', status: 'Активен' },
-  { id: 'user15', name: 'Сергей Кузнецов', role: 'Продакт-менеджер', section: 'Аналитика, Пользователи, A/B тесты', status: 'Ожидает пароль' },
   { id: 'user8', name: 'Ольга Иванова', role: 'Проджект-менеджер', section: 'Документация, Справка', status: 'Активен' },
+  { id: 'staff2', name: 'Елена Павлова', role: 'Менеджер по спорту', section: 'Виды спорта, Дисциплины', status: 'Ожидает пароль' },
+  { id: 'staff1', name: 'Игорь Вольнов', role: 'Модератор контента', section: 'Лента, Комментарии', status: 'Ожидает пароль' },
+  { id: 'user15', name: 'Сергей Кузнецов', role: 'Продакт-менеджер', section: 'Аналитика, Пользователи, A/B тесты', status: 'Ожидает пароль' },
 ];
 
 type AdminRole = 'Главный администратор' | 'Менеджер турниров' | 'Модератор контента' | 'Менеджер по рекламе' | 'Менеджер по спорту' | 'Продакт-менеджер' | 'Проджект-менеджер';
@@ -119,10 +119,79 @@ const AddAdminDialog = ({ onAddAdmin }: { onAddAdmin: (name: string, role: Admin
     );
 };
 
+
+const AdminTable = ({ admins, onSendPassword, onOpenDialog }: { admins: typeof mockAdmins, onSendPassword: (id: string, name: string) => void, onOpenDialog: (id: string) => void }) => {
+    return (
+        <div className="border rounded-lg">
+            <Table>
+                <TableHeader>
+                    <TableRow>
+                        <TableHead>Администратор</TableHead>
+                        <TableHead>Роль</TableHead>
+                        <TableHead>Раздел</TableHead>
+                        <TableHead className="text-right">Действия</TableHead>
+                    </TableRow>
+                </TableHeader>
+                <TableBody>
+                    {admins.map((admin) => (
+                        <TableRow key={admin.id}>
+                            <TableCell>
+                                <div className="flex items-center gap-3">
+                                    <Avatar>
+                                        <AvatarImage src={`https://i.pravatar.cc/150?u=${admin.id}`} />
+                                        <AvatarFallback>{admin.name.charAt(0)}</AvatarFallback>
+                                    </Avatar>
+                                    <span className="font-medium">{admin.name}</span>
+                                </div>
+                            </TableCell>
+                            <TableCell>
+                                <div className="flex items-center gap-2">
+                                    {admin.role === 'Главный администратор' && <Shield className="h-4 w-4 text-primary"/>}
+                                    {admin.role !== 'Главный администратор' && <User className="h-4 w-4 text-muted-foreground"/>}
+                                    {admin.role}
+                                </div>
+                            </TableCell>
+                            <TableCell className="text-muted-foreground">{admin.section}</TableCell>
+                            <TableCell className="text-right">
+                                {admin.role !== 'Главный администратор' && (
+                                    <>
+                                        <Button variant="secondary" size="sm" onClick={() => onSendPassword(admin.id, admin.name)} disabled={admin.status === 'Активен'}>
+                                            <Send className="mr-2 h-4 w-4" />
+                                            Прислать пароль
+                                        </Button>
+                                        <DropdownMenu>
+                                            <DropdownMenuTrigger asChild>
+                                                <Button variant="ghost" className="h-8 w-8 p-0 ml-2">
+                                                    <span className="sr-only">Открыть меню</span>
+                                                    <MoreHorizontal className="h-4 w-4" />
+                                                </Button>
+                                            </DropdownMenuTrigger>
+                                            <DropdownMenuContent align="end">
+                                                <DropdownMenuItem onClick={() => onOpenDialog(admin.id)}>
+                                                    <Settings className="mr-2 h-4 w-4" />
+                                                    Настроить доступ
+                                                </DropdownMenuItem>
+                                            </DropdownMenuContent>
+                                        </DropdownMenu>
+                                    </>
+                                )}
+                            </TableCell>
+                        </TableRow>
+                    ))}
+                </TableBody>
+            </Table>
+        </div>
+    );
+};
+
+
 export function AccessControlPage() {
     const [admins, setAdmins] = useState(mockAdmins);
     const { toast } = useToast();
     const [dialogState, setDialogState] = useState<Record<string, boolean>>({});
+
+    const activeAdmins = admins.filter(a => a.status === 'Активен');
+    const pendingAdmins = admins.filter(a => a.status === 'Ожидает пароль');
 
     const handleSendPassword = (adminId: string, adminName: string) => {
         setAdmins(prev => prev.map(admin => admin.id === adminId ? { ...admin, status: 'Активен' } : admin));
@@ -136,7 +205,7 @@ export function AccessControlPage() {
          setAdmins(prev => prev.map(admin => admin.role !== 'Главный администратор' ? { ...admin, status: 'Активен' } : admin));
          toast({
             title: 'Пароли отправлены',
-            description: 'Новые пароли были разосланы всем администраторам.',
+            description: 'Новые пароли были разосланы всем администраторам, ожидающим доступ.',
         });
     };
     
@@ -154,7 +223,6 @@ export function AccessControlPage() {
             description: `${name} был добавлен в список. Теперь вы можете отправить ему пароль.`,
         });
     };
-
 
     const handleOpenDialog = (adminId: string) => {
         setDialogState(prev => ({ ...prev, [adminId]: true }));
@@ -174,98 +242,56 @@ export function AccessControlPage() {
 
   return (
     <div className="space-y-6">
-        <div>
-            <h1 className="text-3xl font-bold font-headline flex items-center gap-3"><KeyRound />Управление доступом</h1>
-            <p className="text-muted-foreground mt-1">Управление администраторами и их правами доступа к панели.</p>
-        </div>
-      <Card>
-        <CardHeader className="flex flex-row items-center justify-between">
-            <div>
-                <CardTitle>Список администраторов</CardTitle>
-                <CardDescription>Отправляйте пароли и настраивайте роли для персонала.</CardDescription>
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+             <div>
+                <h1 className="text-3xl font-bold font-headline flex items-center gap-3"><KeyRound />Управление доступом</h1>
+                <p className="text-muted-foreground mt-1">Управление администраторами и их правами доступа к панели.</p>
             </div>
-             <div className="flex gap-2">
+             <div className="flex gap-2 w-full md:w-auto">
                 <AddAdminDialog onAddAdmin={handleAddAdmin} />
-                <Button variant="secondary" onClick={handleSendAll}>
+                <Button variant="secondary" onClick={handleSendAll} className="w-full">
                     <Send className="mr-2 h-4 w-4" />
                     Прислать пароли всем
                 </Button>
             </div>
-        </CardHeader>
-        <CardContent>
-          <div className="border rounded-lg">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Администратор</TableHead>
-                  <TableHead>Роль</TableHead>
-                  <TableHead>Раздел</TableHead>
-                  <TableHead>Статус</TableHead>
-                  <TableHead className="text-right">Действия</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {admins.map((admin) => (
-                  <TableRow key={admin.id}>
-                    <TableCell>
-                        <div className="flex items-center gap-3">
-                             <Avatar>
-                                <AvatarImage src={`https://i.pravatar.cc/150?u=${admin.id}`} />
-                                <AvatarFallback>{admin.name.charAt(0)}</AvatarFallback>
-                            </Avatar>
-                            <span className="font-medium">{admin.name}</span>
-                        </div>
-                    </TableCell>
-                    <TableCell>
-                        <div className="flex items-center gap-2">
-                             {admin.role === 'Главный администратор' && <Shield className="h-4 w-4 text-primary"/>}
-                             {admin.role !== 'Главный администратор' && <User className="h-4 w-4 text-muted-foreground"/>}
-                             {admin.role}
-                        </div>
-                    </TableCell>
-                    <TableCell className="text-muted-foreground">{admin.section}</TableCell>
-                    <TableCell>
-                        <Badge className={statusColors[admin.status]}>{admin.status}</Badge>
-                    </TableCell>
-                    <TableCell className="text-right">
-                        {admin.role !== 'Главный администратор' && (
-                             <>
-                                <Button variant="secondary" size="sm" onClick={() => handleSendPassword(admin.id, admin.name)}>
-                                    <Send className="mr-2 h-4 w-4" />
-                                    Прислать пароль
-                                </Button>
-                                <DropdownMenu>
-                                    <DropdownMenuTrigger asChild>
-                                        <Button variant="ghost" className="h-8 w-8 p-0 ml-2">
-                                            <span className="sr-only">Открыть меню</span>
-                                            <MoreHorizontal className="h-4 w-4" />
-                                        </Button>
-                                    </DropdownMenuTrigger>
-                                    <DropdownMenuContent align="end">
-                                        <DropdownMenuItem onClick={() => handleOpenDialog(admin.id)}>
-                                            <Settings className="mr-2 h-4 w-4" />
-                                            Настроить доступ
-                                        </DropdownMenuItem>
-                                    </DropdownMenuContent>
-                                </DropdownMenu>
-                                <RoleSettingsDialog 
-                                    admin={admin}
-                                    open={!!dialogState[admin.id]} 
-                                    onOpenChange={(open) => open ? handleOpenDialog(admin.id) : handleCloseDialog(admin.id)}
-                                    onSave={(newRole) => handleSaveRole(admin.id, newRole)}
-                                />
-                             </>
-                        )}
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </div>
-        </CardContent>
-      </Card>
+        </div>
+
+        <Card>
+            <CardHeader>
+                <CardTitle>Активные администраторы</CardTitle>
+                <CardDescription>Пользователи, имеющие доступ к панели в данный момент.</CardDescription>
+            </CardHeader>
+            <CardContent>
+                <AdminTable admins={activeAdmins} onSendPassword={handleSendPassword} onOpenDialog={handleOpenDialog} />
+            </CardContent>
+        </Card>
+
+        {pendingAdmins.length > 0 && (
+             <Card>
+                <CardHeader>
+                    <CardTitle>Ожидающие доступа</CardTitle>
+                    <CardDescription>Этим администраторам необходимо отправить пароль для входа.</CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <AdminTable admins={pendingAdmins} onSendPassword={handleSendPassword} onOpenDialog={handleOpenDialog} />
+                </CardContent>
+            </Card>
+        )}
+
+        {Object.keys(dialogState).map(adminId => {
+            const admin = admins.find(a => a.id === adminId);
+            if (!admin) return null;
+            return (
+                <RoleSettingsDialog
+                    key={adminId}
+                    admin={admin}
+                    open={!!dialogState[adminId]}
+                    onOpenChange={(open) => open ? handleOpenDialog(adminId) : handleCloseDialog(adminId)}
+                    onSave={(newRole) => handleSaveRole(adminId, newRole)}
+                />
+            )
+        })}
     </div>
   );
 }
-
     
