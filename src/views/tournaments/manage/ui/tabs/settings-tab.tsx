@@ -5,7 +5,7 @@ import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
 import { AlertTriangle, ListChecks, Loader2, Save, PlusCircle, MapPin, Trash2, Globe, Building } from "lucide-react";
 import { Input } from "@/shared/ui/input";
-import { Textarea } from "@/shared/ui/textarea"; // Explicitly import Textarea
+import { Textarea } from "@/shared/ui/textarea";
 import { Label } from "@/shared/ui/label";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/shared/ui/dialog";
 import React, { useState } from "react";

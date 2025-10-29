@@ -12,6 +12,8 @@ import { RosterManagement } from "./roster-management";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 import { TransfersTab } from "./transfers-tab";
 import { users } from "@/mocks";
+import { AnnouncementsTab } from "../../manage/ui/tabs/announcements-tab";
+import { SettingsTab } from "../../manage/ui/tabs/settings-tab";
 
 export function TeamManagementPage({ team }: { team: Team | undefined }) {
 
@@ -54,10 +56,12 @@ export function TeamManagementPage({ team }: { team: Team | undefined }) {
                 </Button>
             </div>
             <Tabs defaultValue="roster" className="w-full">
-                <TabsList className="grid w-full grid-cols-3">
+                <TabsList className="grid w-full grid-cols-5">
                     <TabsTrigger value="roster">Состав и Тактика</TabsTrigger>
                     <TabsTrigger value="branding">Брендинг</TabsTrigger>
                     <TabsTrigger value="transfers">Трансферы</TabsTrigger>
+                    <TabsTrigger value="announcements">Анонсы</TabsTrigger>
+                    <TabsTrigger value="settings">Настройки</TabsTrigger>
                 </TabsList>
                 <TabsContent value="roster" className="mt-6 space-y-8">
                     <RosterManagement allTeamMembers={teamMembers} />
@@ -68,6 +72,12 @@ export function TeamManagementPage({ team }: { team: Team | undefined }) {
                 </TabsContent>
                 <TabsContent value="transfers" className="mt-6">
                    <TransfersTab team={team} />
+                </TabsContent>
+                <TabsContent value="announcements" className="mt-6">
+                   <AnnouncementsTab />
+                </TabsContent>
+                <TabsContent value="settings" className="mt-6">
+                   <Card><CardHeader><CardTitle>Настройки команды</CardTitle></CardHeader><CardContent><p className="text-muted-foreground">Раздел в разработке.</p></CardContent></Card>
                 </TabsContent>
             </Tabs>
         </div>
