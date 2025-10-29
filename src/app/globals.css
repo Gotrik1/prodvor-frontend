@@ -66,8 +66,8 @@ html {
 
     --card-nested-background: 210 30% 95%; /* Фон для вложенных карточек, чуть темнее основного */
     
-    --sidebar-accent: 210 40% 96.1%;
-    --sidebar-accent-foreground: 222.2 47.4% 11.2%;
+    --sidebar-accent: var(--primary);
+    --sidebar-accent-foreground: var(--primary-foreground);
   }
 
   .dark {
@@ -103,8 +103,8 @@ html {
     
     --card-nested-background: 210 6% 18%; /* Фон для вложенных карточек, чуть светлее основного */
 
-    --sidebar-accent: 210 6% 16%;
-    --sidebar-accent-foreground: 210 40% 98%;
+    --sidebar-accent: var(--primary);
+    --sidebar-accent-foreground: var(--primary-foreground);
   }
 
   /* Accent color themes */
