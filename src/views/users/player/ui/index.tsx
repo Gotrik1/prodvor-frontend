@@ -19,6 +19,7 @@ import { MyTeamWidget } from "@/widgets/dashboard-widgets/ui/my-team-widget";
 import { Card, CardBody } from "@/shared/ui/card";
 import { Badge } from "@/shared/ui/badge";
 import { getUserDisciplines } from "@/entities/user/lib";
+import { Popover, PopoverContent, PopoverTrigger } from "@/shared/ui/popover";
 
 const getRankForElo = (elo: number) => {
     return ranks.find(rank => elo >= rank.eloMin && elo <= rank.eloMax);
@@ -68,7 +69,22 @@ export function PlayerPage({ user: profileUser }: { user: User }) {
                                     {userDisciplines.slice(0, 3).map(discipline => (
                                         <Badge key={discipline} variant="secondary">{discipline}</Badge>
                                     ))}
-                                    {userDisciplines.length > 3 && <Badge variant="outline">+{userDisciplines.length - 3}</Badge>}
+                                    {userDisciplines.length > 3 && (
+                                        <Popover>
+                                            <PopoverTrigger asChild>
+                                                <Badge variant="outline" className="cursor-pointer hover:bg-muted">
+                                                    +{userDisciplines.length - 3}
+                                                </Badge>
+                                            </PopoverTrigger>
+                                            <PopoverContent className="w-auto p-2">
+                                                <div className="flex flex-wrap gap-1">
+                                                    {userDisciplines.slice(3).map(discipline => (
+                                                        <Badge key={discipline} variant="secondary">{discipline}</Badge>
+                                                    ))}
+                                                </div>
+                                            </PopoverContent>
+                                        </Popover>
+                                    )}
                                 </div>
                             </div>
                             {!isOwnProfile && (
