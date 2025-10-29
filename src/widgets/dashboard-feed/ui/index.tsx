@@ -11,7 +11,6 @@ import { generateNewsDigestAction } from "@/app/actions";
 import type { NewsDigestOutput } from "@/shared/api/generate-news-digest";
 import { PostCard } from "./post-card";
 import { useUserStore } from "@/widgets/dashboard-header/model/user-store";
-import { CreatePost } from "./create-post";
 import Link from 'next/link';
 
 function AiDigest() {
@@ -100,7 +99,6 @@ export function DashboardFeed() {
 
   return (
     <>
-      <CreatePost user={currentUser} />
       <Card className="bg-card">
         <CardHeader className="flex flex-row items-center justify-between">
           <div className="flex items-center gap-2">
