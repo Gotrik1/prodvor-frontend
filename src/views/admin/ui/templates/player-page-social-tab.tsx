@@ -109,11 +109,15 @@ export function SocialTab({ user, isOwnProfile }: { user: User, isOwnProfile: bo
                 <Tabs defaultValue="friends" className="w-full">
                     <TabsList className={cn("grid w-full mb-4", isOwnProfile ? "grid-cols-4" : "grid-cols-3")}>
                         {tabs.map(tab => (
-                            <TabsTrigger key={tab.value} value={tab.value} className="relative">
-                                <tab.icon className="h-5 w-5" />
-                                {tab.value === 'requests' && isOwnProfile && mockFriendRequests.length > 0 && (
-                                    <Badge variant="destructive" className="absolute -top-1 -right-1 h-5 w-5 p-0 justify-center">{mockFriendRequests.length}</Badge>
-                                )}
+                            <TabsTrigger key={tab.value} value={tab.value}>
+                                <div className="relative">
+                                    <tab.icon className="h-5 w-5" />
+                                    {tab.value === 'requests' && isOwnProfile && mockFriendRequests.length > 0 && (
+                                        <Badge variant="destructive" className="absolute -top-2 -right-2 h-4 w-4 p-0 justify-center text-xs">
+                                            {mockFriendRequests.length}
+                                        </Badge>
+                                    )}
+                                </div>
                             </TabsTrigger>
                         ))}
                     </TabsList>
