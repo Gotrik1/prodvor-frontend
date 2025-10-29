@@ -11,7 +11,7 @@ import { cn } from "@/shared/lib/utils"
 import { Button } from "@/shared/ui/button"
 import { Input } from "@/shared/ui/input"
 import { Separator } from "@/shared/ui/separator"
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/shared/ui/sheet"
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetTrigger } from "@/shared/ui/sheet"
 import { Skeleton } from "@/shared/ui/skeleton"
 import {
   Tooltip,
@@ -132,7 +132,7 @@ const Sidebar = React.forwardRef<
       <div
         ref={ref}
         className={cn(
-          "group hidden md:flex flex-col h-screen bg-sidebar text-sidebar-foreground border-r border-layout-border w-[var(--sidebar-width)]",
+          "group hidden md:flex flex-col h-screen bg-card text-card-foreground border-r border-layout-border w-64 sticky top-0",
           className
         )}
         data-state="expanded"
@@ -217,7 +217,7 @@ const SidebarContent = React.forwardRef<
       ref={ref}
       data-sidebar="content"
       className={cn(
-        "flex min-h-0 flex-1 flex-col gap-2 overflow-auto",
+        "flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto custom-scrollbar",
         className
       )}
       {...props}
@@ -567,4 +567,10 @@ export {
   SidebarProvider,
   SidebarSeparator,
   useSidebar,
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetDescription,
+  SheetTrigger
 }
