@@ -9,6 +9,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetTr
 import { DashboardSidebar } from '@/widgets/dashboard-sidebar';
 import { cn } from '@/shared/lib/utils';
 import { useScrollDirection } from '@/shared/hooks/use-scroll-direction';
+import { useIsMobile } from '@/shared/hooks/use-mobile';
 
 const navItems = [
     { href: '/dashboard', icon: Home, label: 'Лента' },
@@ -32,10 +33,15 @@ const NavItem = ({ href, icon: Icon, label }: { href: string; icon: React.Elemen
 export function MobileBottomNav() {
     const scrollDirection = useScrollDirection();
     const [isSheetOpen, setIsSheetOpen] = React.useState(false);
+    const isMobile = useIsMobile();
+
+    if (!isMobile) {
+        return null;
+    }
 
     return (
         <div className={cn(
-            "md:hidden fixed bottom-0 left-0 right-0 h-20 bg-card/80 backdrop-blur-lg border-t z-40 transition-transform duration-300",
+            "fixed bottom-0 left-0 right-0 h-20 bg-card/80 backdrop-blur-lg border-t z-40 transition-transform duration-300",
             scrollDirection === 'down' ? 'translate-y-full' : 'translate-y-0'
         )}>
             <div className="grid grid-cols-5 h-full">

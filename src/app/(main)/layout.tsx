@@ -10,11 +10,13 @@ import { HomeHeader } from '@/widgets/home-header';
 import { HomeFooter } from '@/widgets/home-footer';
 import { MobileBottomNav } from '@/widgets/mobile-bottom-nav';
 import { cn } from '@/shared/lib/utils';
+import { useIsMobile } from '@/shared/hooks/use-mobile';
 
 const publicRoutesWithHeader = ['/about', '/auth', '/auth/register'];
 
 export default function MainLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const isMobile = useIsMobile();
   
   if (!pathname) {
     return null; // or a loading spinner
@@ -49,7 +51,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
 
   return (
     <SidebarProvider>
-        <div className="flex min-h-screen">
+        <div className="min-h-screen md:flex">
           <DashboardSidebar />
           <div className="flex-1 flex flex-col min-w-0">
             <DashboardHeader />
@@ -63,7 +65,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
             </div>
           </div>
         </div>
-        {!isAdminRoute && <MobileBottomNav />}
+        {isMobile && !isAdminRoute && <MobileBottomNav />}
     </SidebarProvider>
   );
 }

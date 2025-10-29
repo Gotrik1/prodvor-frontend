@@ -79,7 +79,7 @@ export function DashboardSidebar({ isMobileSheet = false, onLinkClick }: { isMob
     
     // Default render for desktop sidebar
     return (
-        <Sidebar collapsible="icon">
+        <Sidebar>
             <SidebarHeader>
                 <Logo />
             </SidebarHeader>
@@ -88,7 +88,7 @@ export function DashboardSidebar({ isMobileSheet = false, onLinkClick }: { isMob
                     {mainNavItems.map(item => (
                         <SidebarMenuItem key={item.href}>
                             <Link href={item.href}>
-                                <SidebarMenuButton tooltip={item.label}>
+                                <SidebarMenuButton tooltip={item.label} size="lg">
                                     <item.icon />
                                     <span>{item.label}</span>
                                 </SidebarMenuButton>
@@ -103,7 +103,7 @@ export function DashboardSidebar({ isMobileSheet = false, onLinkClick }: { isMob
                         {secondaryNavItems.map(item => (
                             <SidebarMenuItem key={item.href}>
                                 <Link href={item.href}>
-                                    <SidebarMenuButton tooltip={item.label}>
+                                    <SidebarMenuButton tooltip={item.label} size="lg">
                                         <item.icon />
                                         <span>{item.label}</span>
                                     </SidebarMenuButton>
