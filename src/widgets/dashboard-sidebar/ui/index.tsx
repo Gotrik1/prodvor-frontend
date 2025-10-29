@@ -30,6 +30,7 @@ import {
 import Link from 'next/link';
 import { i18n } from "@/shared/lib/i18n";
 import { Logo } from "@/views/auth/ui";
+import { usePathname } from "next/navigation";
 
 const mainNavItems = [
     { href: "/dashboard", icon: Home, label: i18n.sidebar.feed },
@@ -52,6 +53,7 @@ const secondaryNavItems = [
 ];
 
 export function DashboardSidebar({ isMobileSheet = false, onLinkClick }: { isMobileSheet?: boolean, onLinkClick?: () => void }) {
+    const pathname = usePathname();
     
     // Render as a grid of tiles for the mobile bottom sheet
     if (isMobileSheet) {
@@ -88,7 +90,7 @@ export function DashboardSidebar({ isMobileSheet = false, onLinkClick }: { isMob
                     {mainNavItems.map(item => (
                         <SidebarMenuItem key={item.href}>
                             <Link href={item.href}>
-                                <SidebarMenuButton tooltip={item.label}>
+                                <SidebarMenuButton tooltip={item.label} isActive={pathname.startsWith(item.href) && (item.href !== '/dashboard' || pathname === '/dashboard')}>
                                     <item.icon />
                                     <span>{item.label}</span>
                                 </SidebarMenuButton>
@@ -103,7 +105,7 @@ export function DashboardSidebar({ isMobileSheet = false, onLinkClick }: { isMob
                         {secondaryNavItems.map(item => (
                             <SidebarMenuItem key={item.href}>
                                 <Link href={item.href}>
-                                    <SidebarMenuButton tooltip={item.label}>
+                                    <SidebarMenuButton tooltip={item.label} isActive={pathname.startsWith(item.href)}>
                                         <item.icon />
                                         <span>{item.label}</span>
                                     </SidebarMenuButton>
