@@ -68,7 +68,7 @@ export const PlayerStatsOverviewTab = () => {
                             <ChartContainer config={{}} className="w-full h-40">
                                 <RadarChart data={skillData} cy="50%" cx="50%">
                                     <ChartTooltipContent />
-                                    <PolarAngleAxis dataKey="subject" className="text-xs"/>
+                                    <PolarAngleAxis dataKey="subject" tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: '10px' }} className="lg:text-xs" />
                                     <Radar name="Skills" dataKey="A" stroke="hsl(var(--primary))" fill="hsl(var(--primary))" fillOpacity={0.6} />
                                 </RadarChart>
                             </ChartContainer>
