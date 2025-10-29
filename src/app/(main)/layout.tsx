@@ -51,7 +51,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
       <SidebarInset>
         <DashboardHeader />
         <div className="flex flex-col flex-1 pt-16">
-          <main className="flex-1 bg-card pb-16 md:pb-0">
+          <main className="flex-1 pb-16 md:pb-0">
             {children}
           </main>
           <div className="hidden md:block">
