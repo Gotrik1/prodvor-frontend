@@ -22,6 +22,13 @@ const statusColors: Record<TournamentStatus, string> = {
 };
 
 
+const AdBannerPlaceholder = () => (
+    <div className="w-full h-64 bg-muted/50 rounded-lg flex items-center justify-center">
+        <span className="text-muted-foreground text-sm">Здесь могла быть ваша реклама</span>
+    </div>
+)
+
+
 export function DashboardAside() {
   const { user } = useUserStore();
 
@@ -76,6 +83,7 @@ export function DashboardAside() {
           )}
         </CardContent>
       </Card>
+      <AdBannerPlaceholder />
     </>
   );
 }
