@@ -129,7 +129,7 @@ const Sidebar = React.forwardRef<
       <div
         ref={ref}
         className={cn(
-          "group sticky top-0 hidden md:flex flex-col h-screen bg-card text-card-foreground border-r border-layout-border transition-all duration-300 ease-in-out",
+          "group sticky top-0 z-50 hidden md:flex flex-col h-screen bg-card text-card-foreground border-r border-layout-border transition-all duration-300 ease-in-out",
           "md:w-16 xl:w-64",
           className
         )}
