@@ -1,17 +1,17 @@
 
 'use client';
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
 import { Alert, AlertDescription, AlertTitle } from "@/shared/ui/alert";
 import { Button } from "@/shared/ui/button";
-import { Trophy, Bot, Loader2, ListChecks, RefreshCw, ArrowRight } from "lucide-react";
-import { posts } from "@/mocks";
+import { Trophy, Bot, Loader2, ListChecks, RefreshCw, ArrowRight, Rss, Award, UserPlus } from "lucide-react";
 import { useEffect, useState, useMemo } from "react";
 import { generateNewsDigestAction } from "@/app/actions";
 import type { NewsDigestOutput } from "@/shared/api/generate-news-digest";
-import { PostCard } from "./post-card";
 import { useUserStore } from "@/widgets/dashboard-header/model/user-store";
 import Link from 'next/link';
+import { mockFeedEvents, FeedEvent } from '@/mocks/feed-events';
+import { EventCard } from './event-card';
 
 function AiDigest() {
     const [digestData, setDigestData] = useState<NewsDigestOutput | null>(null);
@@ -69,32 +69,44 @@ function AiDigest() {
     );
 }
 
+const feedFilters = [
+    { id: 'all', label: 'Все', icon: Rss },
+    { id: 'match_win', label: 'Матчи', icon: Trophy },
+    { id: 'achievement_unlocked', label: 'Достижения', icon: Award },
+    { id: 'team_join', label: 'Команды', icon: UserPlus },
+]
 
 export function DashboardFeed() {
-  const [key, setKey] = useState(0); // Add state to force re-render
+  const [digestKey, setDigestKey] = useState(0);
+  const [activeFilter, setActiveFilter] = useState('all');
   const { user: currentUser } = useUserStore();
 
-  const feedPosts = useMemo(() => {
+  const feedEvents: FeedEvent[] = useMemo(() => {
     if (!currentUser) return [];
     
-    // Create a set of relevant IDs: user's own ID, friends' IDs, and followed teams' IDs
-    const relevantAuthorIds = new Set(currentUser.friends);
+    const relevantUserIds = new Set(currentUser.friends);
     const relevantTeamIds = new Set(currentUser.following);
+    relevantUserIds.add(currentUser.id);
 
-    return posts
-      .filter(post => 
-        // Post is from a friend
-        relevantAuthorIds.has(post.author.id) ||
-        // Post is from a followed team
-        (post.team && relevantTeamIds.has(post.team.id))
-      )
-      // Sort by timestamp, newest first
+    return mockFeedEvents
+      .filter(event => {
+            const isUserEvent = event.userIds.some(id => relevantUserIds.has(id));
+            const isTeamEvent = event.teamIds.some(id => relevantTeamIds.has(id));
+            return isUserEvent || isTeamEvent;
+      })
+      .filter(event => {
+          if (activeFilter === 'all') return true;
+          if (activeFilter === 'match_win' && event.type === 'match_win') return true;
+          if (activeFilter === 'achievement_unlocked' && event.type === 'achievement_unlocked') return true;
+          if (activeFilter === 'team_join' && event.type === 'team_join') return true;
+          return false;
+      })
       .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
 
-  }, [currentUser]);
+  }, [currentUser, activeFilter]);
 
   if (!currentUser) {
-    return null; // Or some loading/placeholder state
+    return null;
   }
 
   return (
@@ -105,27 +117,43 @@ export function DashboardFeed() {
             <Trophy className="h-5 w-5 text-primary" />
             <CardTitle>AI-Дайджест</CardTitle>
           </div>
-           <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => setKey(prev => prev + 1)}>
+           <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => setDigestKey(prev => prev + 1)}>
               <RefreshCw className="h-4 w-4"/>
           </Button>
         </CardHeader>
         <CardContent>
-          <AiDigest key={key} />
+          <AiDigest key={digestKey} />
         </CardContent>
       </Card>
-      <div className="space-y-4">
-        {feedPosts.length > 0 ? (
-            feedPosts.map(post => <PostCard key={post.id} post={post} />)
-        ) : (
-            <Card className="text-center py-12">
-                <CardContent>
-                    <h3 className="text-xl font-semibold">Ваша лента пока пуста</h3>
-                    <p className="text-muted-foreground mt-2">
-                        Найдите друзей или подпишитесь на команды, чтобы видеть их обновления здесь.
-                    </p>
-                </CardContent>
-            </Card>
-        )}
+      
+      <div>
+         <div className="flex items-center gap-2 mb-4">
+            {feedFilters.map(filter => (
+                <Button 
+                    key={filter.id}
+                    variant={activeFilter === filter.id ? 'default' : 'outline'}
+                    size="sm"
+                    onClick={() => setActiveFilter(filter.id)}
+                >
+                    <filter.icon className="mr-2 h-4 w-4" />
+                    {filter.label}
+                </Button>
+            ))}
+        </div>
+        <div className="space-y-4">
+            {feedEvents.length > 0 ? (
+                feedEvents.map(event => <EventCard key={event.id} event={event} />)
+            ) : (
+                <Card className="text-center py-12">
+                    <CardContent>
+                        <h3 className="text-xl font-semibold">В этом разделе пока пусто</h3>
+                        <p className="text-muted-foreground mt-2">
+                            Нет событий, соответствующих вашим фильтрам.
+                        </p>
+                    </CardContent>
+                </Card>
+            )}
+        </div>
       </div>
     </>
   );

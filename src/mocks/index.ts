@@ -32,3 +32,4 @@ export * from './playgrounds';
 export * from './tournaments';
 export * from './ranks';
 export * from './achievements';
+export * from './feed-events';
