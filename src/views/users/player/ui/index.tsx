@@ -1,10 +1,11 @@
 
+
 'use client';
 
 import { teams, ranks } from "@/mocks";
 import type { User } from "@/mocks/users";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
-import { Briefcase, MessageSquare, UserPlus } from "lucide-react";
+import { MapPin, Cake, User as UserIcon, MessageSquare, UserPlus } from "lucide-react";
 import { Button } from "@/shared/ui/button";
 import { useUserStore } from "@/widgets/dashboard-header/model/user-store";
 import { TrainingTab } from "@/views/admin/ui/templates/player-page-training-tab";
@@ -56,12 +57,11 @@ export function PlayerPage({ user: profileUser }: { user: User }) {
                                 <h1 className="text-3xl font-bold font-headline">{profileUser.firstName} &quot;{profileUser.nickname}&quot; {profileUser.lastName}</h1>
                                 {profileUser.bio && <p className="text-sm text-muted-foreground mt-1">{profileUser.bio}</p>}
                                 <div className="flex flex-wrap items-center justify-center sm:justify-start gap-x-4 gap-y-1 text-muted-foreground mt-2 text-sm">
-                                    {profileUser.city && <span>{profileUser.city}</span>}
-                                    {profileUser.age && <span>{profileUser.age} лет</span>}
-                                    {profileUser.gender && <span>{profileUser.gender}</span>}
+                                    {profileUser.city && <span className="flex items-center gap-1.5"><MapPin className="h-4 w-4" />{profileUser.city}</span>}
+                                    {profileUser.age && <span className="flex items-center gap-1.5"><Cake className="h-4 w-4" />{profileUser.age} лет</span>}
+                                    {profileUser.gender && <span className="flex items-center gap-1.5"><UserIcon className="h-4 w-4" />{profileUser.gender}</span>}
                                     {playerTeam && (
                                         <div className="flex items-center gap-2">
-                                            <Briefcase className="h-4 w-4" />
                                             <Image src={playerTeam.logoUrl} alt={playerTeam.name} width={16} height={16} className="rounded-sm" data-ai-hint="team logo" />
                                             <span>{playerTeam.name}</span>
                                         </div>
