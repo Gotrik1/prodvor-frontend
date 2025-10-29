@@ -1,4 +1,4 @@
-import { MatchAnalysisPage } from '@/app/(main)/analysis/match/ui';
+import { MatchAnalysisPage } from '@/features/ai-analysis-tool';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {

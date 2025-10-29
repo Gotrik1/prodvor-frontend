@@ -12,7 +12,7 @@ import { useUserStore } from '@/widgets/dashboard-header/model/user-store';
 import Link from 'next/link';
 import { MarkdownRenderer } from './markdown-renderer';
 import { analyzeMatchVideoAction } from '@/app/actions';
-import { useFileReader } from './use-file-reader';
+import { useFileReader } from '../lib/use-file-reader';
 
 // --- Sub-components for better readability ---
 

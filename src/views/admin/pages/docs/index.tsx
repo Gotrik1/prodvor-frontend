@@ -10,7 +10,7 @@ import { API_DOCS } from './api-docs-content';
 import { ALGORITHMS } from './algorithms-content';
 import { RolesPage } from "../roles";
 import { RanksPage } from "../ranks";
-import { markdownComponents } from '@/app/(main)/analysis/match/ui/markdown-styles';
+import { markdownComponents } from '@/features/ai-analysis-tool/ui/markdown-styles';
 
 export function DocsPage() {
   return (

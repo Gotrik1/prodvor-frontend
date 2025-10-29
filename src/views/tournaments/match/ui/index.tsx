@@ -10,7 +10,7 @@ import { ArrowLeft, Bot } from 'lucide-react';
 import { MatchProtocol } from '@/widgets/match-protocol';
 import { useProtocol } from '@/widgets/protocol-editor/lib/use-protocol';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs';
-import { AiAnalysisTool } from '@/app/(main)/analysis/match/ui';
+import { AiAnalysisTool } from '@/features/ai-analysis-tool/ui';
 
 function MatchNotFound() {
     return (

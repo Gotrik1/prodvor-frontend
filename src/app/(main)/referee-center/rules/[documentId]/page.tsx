@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Button } from '@/shared/ui/button';
 import Link from 'next/link';
 import { ArrowLeft, BookOpen } from 'lucide-react';
-import { MarkdownRenderer } from '@/app/(main)/analysis/match/ui/markdown-renderer';
+import { MarkdownRenderer } from '@/features/ai-analysis-tool/ui/markdown-renderer';
 
 // Flatten the data for easier lookup
 const allDocuments = knowledgeBaseData.flatMap(category => category.documents);
