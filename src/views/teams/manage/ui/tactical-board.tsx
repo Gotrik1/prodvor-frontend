@@ -32,12 +32,12 @@ const formations: Record<string, { x: number, y: number, role: string }[]> = {
     ],
     '4-3-3': [
         { x: 50, y: 92, role: 'GK' },
-        { x: 18, y: 75, role: 'LB' },
+        { x: 20, y: 75, role: 'LB' },
         { x: 40, y: 78, role: 'LCB' },
         { x: 60, y: 78, role: 'RCB' },
-        { x: 82, y: 75, role: 'RB' },
+        { x: 80, y: 75, role: 'RB' },
         { x: 35, y: 50, role: 'LCM' },
-        { x: 50, y: 60, role: 'CDM' },
+        { x: 50, y: 55, role: 'CDM' },
         { x: 65, y: 50, role: 'RCM' },
         { x: 25, y: 25, role: 'LW' },
         { x: 50, y: 20, role: 'ST' },
@@ -78,7 +78,7 @@ const PositionMarker = ({ position, assignedPlayer, onDrop, onDragOver }: { posi
 );
 
 export function TacticalBoard({ teamMembers }: TacticalBoardProps) {
-    const [selectedFormation, setSelectedFormation] = useState('4-4-2');
+    const [selectedFormation, setSelectedFormation] = useState('4-3-3');
     const [assignments, setAssignments] = useState<Record<string, string | null>>({}); // { role: playerId }
     
     const availablePlayers = teamMembers.filter(p => !Object.values(assignments).includes(p.id));
