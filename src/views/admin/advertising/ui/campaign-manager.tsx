@@ -1,6 +1,7 @@
 
 'use client';
 
+import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
 import { Button } from "@/shared/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/shared/ui/table";
@@ -11,6 +12,7 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Input } from "@/shared/ui/input";
 import { Label } from "@/shared/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/select";
+import { Textarea } from '@/shared/ui/textarea';
 
 const mockCampaigns = [
     { id: 'camp1', name: 'Летний Кубок - Регистрация', status: 'Активна', segment: 'Игроки в футбол (Москва)', impressions: '1.2M', clicks: '2,450', ctr: '0.20%' },
@@ -32,6 +34,8 @@ const getStatusVariant = (status: string) => {
 
 
 export function CampaignManager() {
+    const [campaignType, setCampaignType] = useState('');
+
     return (
         <Card>
             <CardHeader className="flex flex-row items-center justify-between">
@@ -73,7 +77,7 @@ export function CampaignManager() {
                             </div>
                              <div className="grid grid-cols-4 items-center gap-4">
                                 <Label htmlFor="type" className="text-right">Тип</Label>
-                                <Select>
+                                <Select onValueChange={setCampaignType}>
                                     <SelectTrigger className="col-span-3">
                                         <SelectValue placeholder="Выберите тип кампании" />
                                     </SelectTrigger>
@@ -84,18 +88,48 @@ export function CampaignManager() {
                                     </SelectContent>
                                 </Select>
                             </div>
-                             <div className="grid grid-cols-4 items-start gap-4">
-                                <Label className="text-right pt-2">Креатив</Label>
-                                <div className="col-span-3">
-                                    <label htmlFor="dropzone-file" className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed rounded-lg cursor-pointer bg-muted/50 hover:bg-muted">
-                                        <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                                            <UploadCloud className="w-8 h-8 mb-4 text-muted-foreground"/>
-                                            <p className="mb-2 text-sm text-muted-foreground"><span className="font-semibold">Загрузите баннер</span></p>
+                            
+                            {campaignType === 'native' ? (
+                                <div className='space-y-4 pt-4 border-t'>
+                                    <div className="grid grid-cols-4 items-center gap-4">
+                                        <Label htmlFor="native-title" className="text-right">Заголовок поста</Label>
+                                        <Input id="native-title" placeholder="Напр., Выиграй призы от Brand X!" className="col-span-3" />
+                                    </div>
+                                    <div className="grid grid-cols-4 items-start gap-4">
+                                        <Label htmlFor="native-text" className="text-right pt-2">Текст поста</Label>
+                                        <Textarea id="native-text" placeholder="Участвуй в новом челлендже..." className="col-span-3" />
+                                    </div>
+                                     <div className="grid grid-cols-4 items-start gap-4">
+                                        <Label className="text-right pt-2">Изображение</Label>
+                                        <div className="col-span-3">
+                                            <label htmlFor="native-file" className="flex flex-col items-center justify-center w-full h-24 border-2 border-dashed rounded-lg cursor-pointer bg-muted/50 hover:bg-muted">
+                                                <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                                                    <UploadCloud className="w-6 h-6 mb-2 text-muted-foreground"/>
+                                                    <p className="text-xs text-muted-foreground"><span className="font-semibold">Загрузить</span></p>
+                                                </div>
+                                                <input id="native-file" type="file" className="hidden" />
+                                            </label>
                                         </div>
-                                        <input id="dropzone-file" type="file" className="hidden" />
-                                    </label>
+                                    </div>
+                                     <div className="grid grid-cols-4 items-center gap-4">
+                                        <Label htmlFor="native-link" className="text-right">Ссылка (CTA)</Label>
+                                        <Input id="native-link" placeholder="https://example.com/promo" className="col-span-3" />
+                                    </div>
                                 </div>
-                            </div>
+                            ) : (
+                                <div className="grid grid-cols-4 items-start gap-4">
+                                    <Label className="text-right pt-2">Креатив</Label>
+                                    <div className="col-span-3">
+                                        <label htmlFor="dropzone-file" className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed rounded-lg cursor-pointer bg-muted/50 hover:bg-muted">
+                                            <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                                                <UploadCloud className="w-8 h-8 mb-4 text-muted-foreground"/>
+                                                <p className="mb-2 text-sm text-muted-foreground"><span className="font-semibold">Загрузите баннер</span></p>
+                                            </div>
+                                            <input id="dropzone-file" type="file" className="hidden" />
+                                        </label>
+                                    </div>
+                                </div>
+                            )}
                         </div>
                         <DialogFooter>
                             <Button type="submit">Запустить кампанию</Button>
