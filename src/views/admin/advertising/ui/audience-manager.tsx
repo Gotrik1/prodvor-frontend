@@ -13,7 +13,7 @@ import { Slider } from '@/shared/ui/slider';
 
 const allDisciplines = allSports.map(s => s.name);
 const allRoles = [...new Set(users.map(u => u.role))];
-const allCities = ["Москва", "Санкт-Петербург", "Новосибирск", "Екатеринбург"]; // Mock cities
+const allCities = ["Москва", "Санкт-Петербург", "Новосибирск", "Екатеринбург", "Казань"];
 
 export function AudienceManager() {
     const [filters, setFilters] = useState({
@@ -30,23 +30,23 @@ export function AudienceManager() {
     
     const filteredUsers = useMemo(() => {
         return users.filter(user => {
-            // This is a simplified filtering logic for demonstration.
-            // A real implementation would involve more complex data lookups.
-            const eloMatch = true; // Assume ELO matches for now
-            const roleMatch = filters.role ? user.role === filters.role : true;
-            const cityMatch = true; // Assume city matches for now
-            const disciplineMatch = true; // Assume discipline matches for now
+            const userDisciplines = allSports.filter(s => user.disciplines.includes(s.id)).map(s => s.name);
             
-            return roleMatch && eloMatch && cityMatch && disciplineMatch;
+            const eloMatch = user.elo ? user.elo >= filters.elo[0] && user.elo <= filters.elo[1] : true;
+            const ageMatch = user.age ? user.age >= filters.age[0] && user.age <= filters.age[1] : true;
+            const roleMatch = filters.role ? user.role === filters.role : true;
+            const cityMatch = filters.city ? user.city === filters.city : true;
+            const disciplineMatch = filters.discipline ? userDisciplines.includes(filters.discipline) : true;
+            
+            return roleMatch && eloMatch && cityMatch && disciplineMatch && ageMatch;
         });
     }, [filters]);
 
     const audienceSize = filteredUsers.length;
     
     const potentialRevenue = useMemo(() => {
-        // Simplified calculation based on audience size and average revenue per user
-        const ARPU = 44; // From our initial analysis
-        const annualRevenue = (audienceSize * ARPU) / 1000000; // in millions
+        const ARPU = 44; 
+        const annualRevenue = (audienceSize * ARPU) / 1000000;
         return annualRevenue;
     }, [audienceSize]);
 
@@ -67,7 +67,7 @@ export function AudienceManager() {
                                 <SelectTrigger><SelectValue placeholder="Любая" /></SelectTrigger>
                                 <SelectContent>
                                     <SelectItem value="all">Любая</SelectItem>
-                                    {allDisciplines.slice(0,10).map(d => <SelectItem key={d} value={d}>{d}</SelectItem>)}
+                                    {allDisciplines.slice(0,15).map(d => <SelectItem key={d} value={d}>{d}</SelectItem>)}
                                 </SelectContent>
                             </Select>
                         </div>
@@ -96,8 +96,8 @@ export function AudienceManager() {
                             <Slider
                                 value={filters.elo}
                                 onValueChange={(value) => handleFilterChange('elo', value)}
-                                min={500}
-                                max={3000}
+                                min={0}
+                                max={10000}
                                 step={100}
                             />
                         </div>

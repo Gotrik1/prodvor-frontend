@@ -15,10 +15,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from '@/shared/ui/textarea';
 
 const mockCampaigns = [
-    { id: 'camp1', name: 'Летний Кубок - Регистрация', status: 'Активна', segment: 'Игроки в футбол (Москва)', impressions: '1.2M', clicks: '2,450', ctr: '0.20%' },
-    { id: 'camp2', name: 'Спонсорская интеграция Red Energy', status: 'Активна', segment: 'Все пользователи', impressions: '5.8M', clicks: '1,160', ctr: '0.02%' },
-    { id: 'camp3', name: 'Турнир CS2 Open', status: 'На паузе', segment: 'Игроки CS2', impressions: '560k', clicks: '1,960', ctr: '0.35%' },
-    { id: 'camp4', name: 'Весенний сезон - Анонс', status: 'Завершена', segment: 'Все пользователи', impressions: '10.2M', clicks: '15,300', ctr: '0.15%' },
+    { id: 'camp1', name: 'Летний Кубок - Регистрация', status: 'Активна', segment: 'Игроки в футбол (Москва)', impressions: '1.2M', budget: '5000 ₽', spent: '3450 ₽' },
+    { id: 'camp2', name: 'Спонсорская интеграция Red Energy', status: 'Активна', segment: 'Все пользователи', impressions: '5.8M', budget: '25000 ₽', spent: '21800 ₽' },
+    { id: 'camp3', name: 'Турнир CS2 Open', status: 'На паузе', segment: 'Игроки CS2', impressions: '560k', budget: '3000 ₽', spent: '1120 ₽' },
+    { id: 'camp4', name: 'Весенний сезон - Анонс', status: 'Завершена', segment: 'Все пользователи', impressions: '10.2M', budget: '10000 ₽', spent: '10000 ₽' },
 ];
 
 const getStatusVariant = (status: string) => {
@@ -58,9 +58,13 @@ export function CampaignManager() {
                             </DialogDescription>
                         </DialogHeader>
                         <div className="grid gap-4 py-4">
-                            <div className="grid grid-cols-4 items-center gap-4">
+                             <div className="grid grid-cols-4 items-center gap-4">
                                 <Label htmlFor="name" className="text-right">Название</Label>
                                 <Input id="name" placeholder="Напр., Спонсорская интеграция 'Brand X'" className="col-span-3" />
+                            </div>
+                            <div className="grid grid-cols-4 items-center gap-4">
+                                <Label htmlFor="budget" className="text-right">Бюджет, ₽</Label>
+                                <Input id="budget" type="number" placeholder="Напр., 10000" className="col-span-3" />
                             </div>
                             <div className="grid grid-cols-4 items-center gap-4">
                                 <Label htmlFor="segment" className="text-right">Аудитория</Label>
@@ -144,10 +148,9 @@ export function CampaignManager() {
                             <TableRow>
                                 <TableHead>Название</TableHead>
                                 <TableHead>Статус</TableHead>
-                                <TableHead>Сегмент</TableHead>
+                                <TableHead>Бюджет</TableHead>
+                                <TableHead>Потрачено</TableHead>
                                 <TableHead className="text-right">Показы</TableHead>
-                                <TableHead className="text-right">Клики</TableHead>
-                                <TableHead className="text-right">CTR</TableHead>
                                 <TableHead><span className="sr-only">Действия</span></TableHead>
                             </TableRow>
                         </TableHeader>
@@ -158,10 +161,9 @@ export function CampaignManager() {
                                     <TableCell>
                                         <Badge className={getStatusVariant(campaign.status)}>{campaign.status}</Badge>
                                     </TableCell>
-                                    <TableCell>{campaign.segment}</TableCell>
+                                    <TableCell className="font-mono">{campaign.budget}</TableCell>
+                                    <TableCell className="font-mono">{campaign.spent}</TableCell>
                                     <TableCell className="text-right font-mono">{campaign.impressions}</TableCell>
-                                    <TableCell className="text-right font-mono">{campaign.clicks}</TableCell>
-                                    <TableCell className="text-right font-mono">{campaign.ctr}</TableCell>
                                     <TableCell>
                                         <DropdownMenu>
                                             <DropdownMenuTrigger asChild>
