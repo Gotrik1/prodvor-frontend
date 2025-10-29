@@ -42,29 +42,20 @@ html {
     --destructive: 0 84.2% 60.2%; /* Цвет для "разрушительных" действий (удаление, ошибки) */
     --destructive-foreground: 210 40% 98%; /* Текст на "разрушительных" элементах */
 
-    --ui-border: 214.3 31.8% 91.4%; /* Цвет границ (input, card borders) */
+    --ui-border: 214.3 31.8% 91.4%; /* Цвет границ для UI-элементов (input, card borders) */
+    --layout-border: var(--background); /* Цвет границ для разметки (сайдбар, хедер), совпадает с фоном */
     --input: 214.3 31.8% 91.4%; /* Цвет фона полей ввода */
     --ring: 222.2 84% 4.9%; /* Цвет кольца фокуса (focus ring) */
 
-    --card-nested-background: 210 30% 95%; /* Фон для вложенных карточек */
-
-    /* Переменные сайдбара, наследующие основные цвета */
-    --sidebar-background: var(--background);
-    --sidebar-foreground: var(--foreground);
-    --sidebar-primary: var(--primary);
-    --sidebar-primary-foreground: var(--primary-foreground);
-    --sidebar-accent: var(--accent);
-    --sidebar-accent-foreground: var(--accent-foreground);
-    --sidebar-border: var(--ui-border);
-    --sidebar-ring: var(--ring);
+    --card-nested-background: 210 30% 95%; /* Фон для вложенных карточек, чуть темнее основного */
   }
 
   .dark {
     /* --- Темная тема --- */
-    --background: 210 6% 13%; /* Основной фон страницы, карточек, панелей */
+    --background: 210 6% 13%; /* Основной фон страницы */
     --foreground: 210 40% 98%; /* Основной цвет текста */
 
-    --card: 210 6% 13%; /* Фон основных карточек, панелей */
+    --card: 210 6% 13%; /* Фон карточек, панелей */
     --card-foreground: 210 6% 90%; /* Текст на карточках */
 
     --popover: 210 6% 10%; /* Фон всплывающих окон (popover) */
@@ -85,21 +76,12 @@ html {
     --destructive: 0 62.8% 30.6%; /* Цвет для "разрушительных" действий */
     --destructive-foreground: 210 40% 98%; /* Текст на "разрушительных" элементах */
 
-    --ui-border: 210 6% 13%; /* Цвет границ (должен совпадать с фоном для "бесшовного" вида) */
+    --ui-border: 210 6% 13%; /* Цвет границ для UI-элементов, совпадает с фоном для "бесшовного" вида */
+    --layout-border: var(--background); /* Цвет границ для разметки (сайдбар, хедер), совпадает с фоном */
     --input: 210 6% 16%; /* Цвет фона полей ввода */
     --ring: 212.7 26.8% 83.9%; /* Цвет кольца фокуса */
     
-    --card-nested-background: 210 6% 18%; /* Фон для вложенных карточек */
-
-    /* Переменные сайдбара, наследующие основные цвета */
-    --sidebar-background: var(--background);
-    --sidebar-foreground: var(--foreground);
-    --sidebar-primary: var(--primary);
-    --sidebar-primary-foreground: var(--primary-foreground);
-    --sidebar-accent: var(--accent);
-    --sidebar-accent-foreground: var(--accent-foreground);
-    --sidebar-border: var(--ui-border);
-    --sidebar-ring: var(--ring);
+    --card-nested-background: 210 6% 18%; /* Фон для вложенных карточек, чуть светлее основного */
   }
 
   /* Accent color themes */

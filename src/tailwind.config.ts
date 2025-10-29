@@ -49,6 +49,7 @@ export default {
           foreground: 'hsl(142 71% 95%)',
         },
         'ui-border': 'hsl(var(--ui-border))',
+        'layout-border': 'hsl(var(--layout-border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',
         chart: {

@@ -55,7 +55,7 @@ export function DashboardHeader() {
   }, []);
 
   return (
-    <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b bg-card p-4">
+    <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-layout-border bg-card p-4">
       <div className="flex items-center gap-4">
          <div className="block md:hidden">
             <Logo />
