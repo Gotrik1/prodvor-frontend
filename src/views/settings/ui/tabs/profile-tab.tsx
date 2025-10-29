@@ -234,7 +234,7 @@ export function ProfileTab() {
                                 <FormItem><FormLabel>Город</FormLabel><FormControl><Input {...field} placeholder="Например, Москва" /></FormControl><FormMessage /></FormItem>
                             )}/>
                             <FormField control={profileForm.control} name="birthDate" render={({ field }) => (
-                                <FormItem className="flex flex-col">
+                                <FormItem>
                                     <FormLabel>Дата рождения</FormLabel>
                                     <Popover>
                                         <PopoverTrigger asChild>
