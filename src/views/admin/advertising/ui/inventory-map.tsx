@@ -17,8 +17,8 @@ const adSlots = [
 ];
 
 const saleTypeClasses = {
-    managed: 'bg-blue-200 border-blue-300 text-blue-900 hover:bg-blue-300/80 dark:bg-blue-900/40 dark:border-blue-700 dark:text-blue-200 dark:hover:bg-blue-900/60',
-    auction: 'bg-green-200 border-green-300 text-green-900 hover:bg-green-300/80 dark:bg-green-900/40 dark:border-green-700 dark:text-green-200 dark:hover:bg-green-900/60',
+    managed: 'bg-blue-300 border-blue-400 text-blue-900 hover:bg-blue-400/80 dark:bg-blue-900/60 dark:border-blue-700 dark:text-blue-100 dark:hover:bg-blue-900/80',
+    auction: 'bg-green-300 border-green-400 text-green-900 hover:bg-green-400/80 dark:bg-green-900/60 dark:border-green-700 dark:text-green-100 dark:hover:bg-green-900/80',
 };
 
 const trafficClasses = {
