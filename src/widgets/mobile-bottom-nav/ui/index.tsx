@@ -5,7 +5,7 @@ import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Home, Users, Dumbbell, MessageCircle, MoreHorizontal } from 'lucide-react';
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from '@/shared/ui/sheet';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetTrigger } from '@/shared/ui/sheet';
 import { DashboardSidebar } from '@/widgets/dashboard-sidebar';
 import { cn } from '@/shared/lib/utils';
 import { useScrollDirection } from '@/shared/hooks/use-scroll-direction';
@@ -50,7 +50,7 @@ export function MobileBottomNav() {
                         </button>
                     </SheetTrigger>
                     <SheetContent side="bottom" className="p-0 h-auto rounded-t-lg max-h-[80vh] flex flex-col">
-                        <SheetHeader className="p-4 border-b">
+                        <SheetHeader className="p-4 border-b sr-only">
                             <SheetTitle>Главное меню</SheetTitle>
                             <SheetDescription>
                                 Дополнительные разделы навигации по платформе.
