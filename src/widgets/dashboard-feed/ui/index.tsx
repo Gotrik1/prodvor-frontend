@@ -4,7 +4,7 @@
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
 import { Alert, AlertDescription, AlertTitle } from "@/shared/ui/alert";
 import { Button } from "@/shared/ui/button";
-import { Trophy, Bot, Loader2, ListChecks, RefreshCw, ArrowRight, Rss, Award, UserPlus } from "lucide-react";
+import { Trophy, Bot, Loader2, ListChecks, RefreshCw, ArrowRight, Rss, Award, UserPlus, Cog } from "lucide-react";
 import { useEffect, useState, useMemo } from "react";
 import { generateNewsDigestAction } from "@/app/actions";
 import type { NewsDigestOutput } from "@/shared/api/generate-news-digest";
@@ -12,6 +12,8 @@ import { useUserStore } from "@/widgets/dashboard-header/model/user-store";
 import Link from 'next/link';
 import { mockFeedEvents, FeedEvent } from '@/mocks/feed-events';
 import { EventCard } from './event-card';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription, DialogFooter } from '@/shared/ui/dialog';
+import { FeedTab } from '@/views/settings/ui/tabs/feed-tab';
 
 function AiDigest() {
     const [digestData, setDigestData] = useState<NewsDigestOutput | null>(null);
@@ -127,18 +129,30 @@ export function DashboardFeed() {
       </Card>
       
       <div>
-         <div className="flex items-center gap-2 mb-4">
-            {feedFilters.map(filter => (
-                <Button 
-                    key={filter.id}
-                    variant={activeFilter === filter.id ? 'default' : 'outline'}
-                    size="sm"
-                    onClick={() => setActiveFilter(filter.id)}
-                >
-                    <filter.icon className="mr-2 h-4 w-4" />
-                    {filter.label}
-                </Button>
-            ))}
+         <div className="flex items-center justify-between gap-2 mb-4">
+            <div className="flex items-center gap-2">
+                {feedFilters.map(filter => (
+                    <Button 
+                        key={filter.id}
+                        variant={activeFilter === filter.id ? 'default' : 'outline'}
+                        size="sm"
+                        onClick={() => setActiveFilter(filter.id)}
+                    >
+                        <filter.icon className="mr-2 h-4 w-4" />
+                        {filter.label}
+                    </Button>
+                ))}
+            </div>
+             <Dialog>
+                <DialogTrigger asChild>
+                    <Button variant="ghost" size="icon">
+                        <Cog className="h-5 w-5" />
+                    </Button>
+                </DialogTrigger>
+                <DialogContent className="max-w-2xl">
+                    <FeedTab />
+                </DialogContent>
+            </Dialog>
         </div>
         <div className="space-y-4">
             {feedEvents.length > 0 ? (
