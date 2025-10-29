@@ -16,7 +16,7 @@ export function DashboardFooter() {
         </div>
         <div className="flex flex-col sm:flex-row gap-8">
           <div>
-            <h4 className="font-bold text-xs mb-2 text-foreground">Навигация</h4>
+            <h4 className="font-bold mb-2 text-foreground">Навигация</h4>
             <ul className="space-y-1">
               <li>
                 <Link href="/teams" className="hover:text-primary">
@@ -36,7 +36,7 @@ export function DashboardFooter() {
             </ul>
           </div>
           <div>
-            <h4 className="font-bold text-xs mb-2 text-foreground">Информация</h4>
+            <h4 className="font-bold mb-2 text-foreground">Информация</h4>
             <ul className="space-y-1">
               <li>
                 <Link href="/about" className="hover:text-primary">
