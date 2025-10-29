@@ -17,8 +17,8 @@ const adSlots = [
 ];
 
 const statusClasses = {
-    sold: 'bg-primary/30 border-primary/50 text-primary-foreground hover:bg-primary/40',
-    available: 'bg-green-500/20 border-green-500/40 text-green-200 hover:bg-green-500/30',
+    sold: 'bg-blue-200 border-blue-300 text-blue-900 hover:bg-blue-300/80 dark:bg-blue-900/40 dark:border-blue-700 dark:text-blue-200 dark:hover:bg-blue-900/60',
+    available: 'bg-green-200 border-green-300 text-green-900 hover:bg-green-300/80 dark:bg-green-900/40 dark:border-green-700 dark:text-green-200 dark:hover:bg-green-900/60',
 };
 
 const trafficClasses = {
@@ -63,7 +63,7 @@ export function InventoryMap() {
                             </Tooltip>
                         ))}
                          <div className="absolute bottom-4 right-4 flex gap-4 text-xs text-muted-foreground">
-                            <div className="flex items-center gap-2"><div className="w-3 h-3 rounded-full bg-primary/30 border border-primary/50"/><span>Продано</span></div>
+                            <div className="flex items-center gap-2"><div className="w-3 h-3 rounded-full bg-blue-500/30 border border-blue-500/50"/><span>Продано</span></div>
                             <div className="flex items-center gap-2"><div className="w-3 h-3 rounded-full bg-green-500/20 border border-green-500/40"/><span>Свободно</span></div>
                         </div>
                     </div>
