@@ -5,7 +5,7 @@
 import { teams, ranks } from "@/mocks";
 import type { User } from "@/mocks/users";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
-import { MapPin, Cake, User as UserIcon, MessageSquare, UserPlus } from "lucide-react";
+import { MapPin, Cake, User as UserIcon, MessageSquare, UserPlus, Gamepad2 } from "lucide-react";
 import { Button } from "@/shared/ui/button";
 import { useUserStore } from "@/widgets/dashboard-header/model/user-store";
 import { TrainingTab } from "@/views/admin/ui/templates/player-page-training-tab";
@@ -14,9 +14,11 @@ import { PlayerStatsOverviewTab } from "@/views/admin/ui/templates/player-page-s
 import { PublicationsTab } from "@/views/admin/ui/templates/player-page-publications-tab";
 import Image from "next/image";
 import { SocialTab } from "@/views/admin/ui/templates/player-page-social-tab";
-import React from "react";
+import React, { useMemo } from "react";
 import { MyTeamWidget } from "@/widgets/dashboard-widgets/ui/my-team-widget";
 import { Card, CardBody } from "@/shared/ui/card";
+import { Badge } from "@/shared/ui/badge";
+import { getUserDisciplines } from "@/entities/user/lib";
 
 const getRankForElo = (elo: number) => {
     return ranks.find(rank => elo >= rank.eloMin && elo <= rank.eloMax);
@@ -24,10 +26,10 @@ const getRankForElo = (elo: number) => {
 
 export function PlayerPage({ user: profileUser }: { user: User }) {
     const { user: currentUser } = useUserStore();
-    const playerTeam = teams.find(t => t.members.includes(profileUser.id));
     const playerRank = profileUser.elo ? getRankForElo(profileUser.elo) : null;
-
     const isOwnProfile = currentUser?.id === profileUser.id;
+    
+    const userDisciplines = useMemo(() => getUserDisciplines(profileUser), [profileUser]);
 
     return (
         <Card>
@@ -60,12 +62,13 @@ export function PlayerPage({ user: profileUser }: { user: User }) {
                                     {profileUser.city && <span className="flex items-center gap-1.5"><MapPin className="h-4 w-4 text-red-500" />{profileUser.city}</span>}
                                     {profileUser.age && <span className="flex items-center gap-1.5"><Cake className="h-4 w-4 text-purple-500" />{profileUser.age} лет</span>}
                                     {profileUser.gender && <span className="flex items-center gap-1.5"><UserIcon className={`h-4 w-4 ${profileUser.gender === 'мужской' ? 'text-blue-500' : 'text-pink-500'}`} />{profileUser.gender}</span>}
-                                    {playerTeam && (
-                                        <div className="flex items-center gap-2">
-                                            <Image src={playerTeam.logoUrl} alt={playerTeam.name} width={16} height={16} className="rounded-sm" data-ai-hint="team logo" />
-                                            <span>{playerTeam.name}</span>
-                                        </div>
-                                    )}
+                                </div>
+                                <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 mt-3">
+                                    <Gamepad2 className="h-4 w-4 text-muted-foreground" />
+                                    {userDisciplines.slice(0, 3).map(discipline => (
+                                        <Badge key={discipline} variant="secondary">{discipline}</Badge>
+                                    ))}
+                                    {userDisciplines.length > 3 && <Badge variant="outline">+{userDisciplines.length - 3}</Badge>}
                                 </div>
                             </div>
                             {!isOwnProfile && (
