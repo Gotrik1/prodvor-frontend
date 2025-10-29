@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import React, { useState } from 'react';
@@ -21,12 +22,13 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 const mockAdmins = [
   { id: 'user92', name: 'Макс Барских', role: 'Главный администратор', section: 'Все разделы', status: 'Активен' },
   { id: 'user93', name: 'Светлана Лобода', role: 'Менеджер турниров', section: 'Турниры, Расписание', status: 'Активен' },
+  { id: 'staff2', name: 'Елена Павлова', role: 'Менеджер по спорту', section: 'Виды спорта, Дисциплины', status: 'Ожидает пароль' },
   { id: 'staff1', name: 'Игорь Вольнов', role: 'Модератор контента', section: 'Лента, Комментарии', status: 'Ожидает пароль' },
   { id: 'staff4', name: 'Александр Громов', role: 'Менеджер по рекламе', section: 'Ad-CRM', status: 'Активен' },
 ];
 
-type AdminRole = 'Главный администратор' | 'Менеджер турниров' | 'Модератор контента' | 'Менеджер по рекламе';
-const adminRoles: AdminRole[] = ['Главный администратор', 'Менеджер турниров', 'Модератор контента', 'Менеджер по рекламе'];
+type AdminRole = 'Главный администратор' | 'Менеджер турниров' | 'Модератор контента' | 'Менеджер по рекламе' | 'Менеджер по спорту';
+const adminRoles: AdminRole[] = ['Главный администратор', 'Менеджер турниров', 'Модератор контента', 'Менеджер по рекламе', 'Менеджер по спорту'];
 
 const statusColors: Record<string, string> = {
   Активен: 'bg-green-500/20 text-green-300 border-green-500/30',
