@@ -64,14 +64,6 @@ export function AdminLayout({
                                 </SidebarMenuButton>
                             </Link>
                         </SidebarMenuItem>
-                        <SidebarMenuItem>
-                            <Link href="/admin/dashboard?tab=tournaments">
-                                <SidebarMenuButton isActive={pathname.startsWith('/admin/dashboard') && currentTab === 'tournaments'}>
-                                    <Trophy />
-                                    <span>Турниры</span>
-                                </SidebarMenuButton>
-                            </Link>
-                        </SidebarMenuItem>
                     </SidebarMenu>
                 </SidebarContent>
                 <SidebarFooter>
