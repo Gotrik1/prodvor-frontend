@@ -2,7 +2,7 @@
 'use client'
 
 import { usePathname } from 'next/navigation';
-import { SidebarProvider, SidebarInset } from "@/shared/ui/sidebar";
+import { SidebarProvider } from "@/shared/ui/sidebar";
 import { DashboardHeader } from "@/widgets/dashboard-header";
 import { DashboardSidebar } from "@/widgets/dashboard-sidebar";
 import { DashboardFooter } from "@/widgets/dashboard-footer";
@@ -47,19 +47,19 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
 
   return (
     <SidebarProvider>
-      <DashboardSidebar />
-      <SidebarInset>
-        <DashboardHeader />
-        <div className="flex flex-col flex-1 pt-16">
-          <main className="flex-1 pb-16 md:pb-0">
-            {children}
-          </main>
-          <div className="hidden md:block">
-            <DashboardFooter />
+        <div className="flex min-h-screen">
+          <DashboardSidebar />
+          <div className="flex-1 flex flex-col">
+            <DashboardHeader />
+            <main className="flex-1 pb-16 md:pb-0">
+                {children}
+            </main>
+            <div className="hidden md:block">
+              <DashboardFooter />
+            </div>
           </div>
         </div>
-      </SidebarInset>
-      <MobileBottomNav />
+        <MobileBottomNav />
     </SidebarProvider>
   );
 }

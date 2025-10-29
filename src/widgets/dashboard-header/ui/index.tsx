@@ -42,13 +42,7 @@ import { SidebarTrigger } from '@/shared/ui/sidebar';
 export function DashboardHeader() {
   const { user } = useUserStore();
   const [open, setOpen] = React.useState(false);
-  const scrollDirection = useScrollDirection();
-  const [isMounted, setIsMounted] = React.useState(false);
-
-  React.useEffect(() => {
-    setIsMounted(true);
-  }, []);
-
+  
   React.useEffect(() => {
     const down = (e: KeyboardEvent) => {
       if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
@@ -61,12 +55,7 @@ export function DashboardHeader() {
   }, []);
 
   return (
-    <header className={cn(
-        "fixed top-0 z-30 flex h-16 items-center justify-between border-b border-sidebar-border bg-card p-4 transition-transform duration-300",
-        "md:w-[calc(100%-var(--sidebar-width-icon))] group-data-[state=expanded]:md:w-[calc(100%-var(--sidebar-width))]",
-        "md:left-[var(--sidebar-width-icon)] group-data-[state=expanded]:md:left-[var(--sidebar-width)]",
-        isMounted && scrollDirection === 'down' ? '-translate-y-full' : 'translate-y-0'
-    )}>
+    <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b bg-card p-4">
       <div className="flex items-center gap-4">
          <div className="block md:hidden">
             <Logo />
