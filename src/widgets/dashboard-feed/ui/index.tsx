@@ -150,6 +150,12 @@ export function DashboardFeed() {
                     </Button>
                 </DialogTrigger>
                 <DialogContent className="max-w-2xl">
+                    <DialogHeader>
+                        <DialogTitle>Настройки ленты</DialogTitle>
+                        <DialogDescription>
+                            Выберите, какие события вы хотите видеть в вашей новостной ленте.
+                        </DialogDescription>
+                    </DialogHeader>
                     <FeedTab />
                 </DialogContent>
             </Dialog>
