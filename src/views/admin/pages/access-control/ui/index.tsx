@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/sha
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/shared/ui/table";
 import { Badge } from "@/shared/ui/badge";
 import { Button } from "@/shared/ui/button";
-import { MoreHorizontal, Send, Settings, Shield, User, KeyRound, PlusCircle } from "lucide-react";
+import { MoreHorizontal, Send, Settings, Shield, User, KeyRound, PlusCircle, Lock, Users as UsersIcon, Link2 } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -20,48 +20,71 @@ import { useToast } from '@/shared/hooks/use-toast';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import { Input } from '@/shared/ui/input';
 import { Label } from '@/shared/ui/label';
+import { Tooltip, TooltipProvider, TooltipTrigger } from '@/shared/ui/tooltip';
 
 const mockAdmins = [
   { id: 'user92', name: 'Макс Барских', role: 'Главный администратор', section: 'Все разделы', status: 'Активен' },
-  { id: 'user93', name: 'Светлана Лобода', role: 'Менеджер турниров', section: 'Турниры, Расписание', status: 'Активен' },
   { id: 'staff4', name: 'Александр Громов', role: 'Менеджер по рекламе', section: 'Ad-CRM', status: 'Активен' },
   { id: 'user8', name: 'Ольга Иванова', role: 'Проджект-менеджер', section: 'Документация, Справка', status: 'Активен' },
+  { id: 'user15', name: 'Сергей Кузнецов', role: 'Продакт-менеджер', section: 'Аналитика, Пользователи, A/B тесты', status: 'Активен' },
+  { id: 'user93', name: 'Светлана Лобода', role: 'Менеджер турниров', section: 'Турниры, Расписание', status: 'Ожидает пароль' },
   { id: 'staff2', name: 'Елена Павлова', role: 'Менеджер по спорту', section: 'Виды спорта, Дисциплины', status: 'Ожидает пароль' },
   { id: 'staff1', name: 'Игорь Вольнов', role: 'Модератор контента', section: 'Лента, Комментарии', status: 'Ожидает пароль' },
-  { id: 'user15', name: 'Сергей Кузнецов', role: 'Продакт-менеджер', section: 'Аналитика, Пользователи, A/B тесты', status: 'Ожидает пароль' },
 ];
 
 type AdminRole = 'Главный администратор' | 'Менеджер турниров' | 'Модератор контента' | 'Менеджер по рекламе' | 'Менеджер по спорту' | 'Продакт-менеджер' | 'Проджект-менеджер';
 const adminRoles: AdminRole[] = ['Менеджер турниров', 'Модератор контента', 'Менеджер по рекламе', 'Менеджер по спорту', 'Продакт-менеджер', 'Проджект-менеджер'];
+const managementRoles: AdminRole[] = ['Продакт-менеджер', 'Проджект-менеджер'];
 
-const statusColors: Record<string, string> = {
-  Активен: 'bg-green-500/20 text-green-300 border-green-500/30',
-  'Ожидает пароль': 'bg-amber-500/20 text-amber-300 border-amber-500/30',
+const roleIcons: Record<AdminRole, React.ElementType> = {
+    'Главный администратор': Shield,
+    'Менеджер турниров': UsersIcon,
+    'Модератор контента': UsersIcon,
+    'Менеджер по рекламе': UsersIcon,
+    'Менеджер по спорту': UsersIcon,
+    'Продакт-менеджер': Lock,
+    'Проджект-менеджер': Lock
 };
 
-const RoleSettingsDialog = ({ admin, open, onOpenChange, onSave }: { admin: typeof mockAdmins[0], open: boolean, onOpenChange: (open: boolean) => void, onSave: (role: AdminRole) => void }) => {
+
+const RoleSettingsDialog = ({ admin, open, onOpenChange, onSave }: { admin: typeof mockAdmins[0], open: boolean, onOpenChange: (open: boolean) => void, onSave: (role: AdminRole, duration: string) => void }) => {
     const [selectedRole, setSelectedRole] = useState<AdminRole>(admin.role as AdminRole);
+    const [selectedDuration, setSelectedDuration] = useState('1');
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent>
                 <DialogHeader>
                     <DialogTitle>Настроить доступ для {admin.name}</DialogTitle>
-                    <DialogDescription>Измените роль, чтобы предоставить доступ к соответствующему разделу админ-панели.</DialogDescription>
+                    <DialogDescription>Измените роль и срок действия пароля для администратора.</DialogDescription>
                 </DialogHeader>
-                 <div className="py-4">
-                     <Select value={selectedRole} onValueChange={(value) => setSelectedRole(value as AdminRole)}>
-                        <SelectTrigger><SelectValue /></SelectTrigger>
-                        <SelectContent>
-                            {adminRoles.map(role => (
-                                <SelectItem key={role} value={role}>{role}</SelectItem>
-                            ))}
-                        </SelectContent>
-                    </Select>
+                 <div className="py-4 grid grid-cols-2 gap-4">
+                     <div className="space-y-2">
+                        <Label htmlFor="role-select">Роль</Label>
+                        <Select value={selectedRole} onValueChange={(value) => setSelectedRole(value as AdminRole)}>
+                            <SelectTrigger id="role-select"><SelectValue /></SelectTrigger>
+                            <SelectContent>
+                                {adminRoles.map(role => (
+                                    <SelectItem key={role} value={role}>{role}</SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+                     </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="duration-select">Срок действия пароля</Label>
+                        <Select value={selectedDuration} onValueChange={setSelectedDuration}>
+                            <SelectTrigger id="duration-select"><SelectValue /></SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="1">1 день</SelectItem>
+                                <SelectItem value="7">7 дней</SelectItem>
+                                <SelectItem value="30">30 дней</SelectItem>
+                            </SelectContent>
+                        </Select>
+                     </div>
                  </div>
                 <DialogFooter>
                     <Button variant="outline" onClick={() => onOpenChange(false)}>Отмена</Button>
-                    <Button onClick={() => { onSave(selectedRole); onOpenChange(false); }}>Сохранить</Button>
+                    <Button onClick={() => { onSave(selectedRole, selectedDuration); onOpenChange(false); }}>Сохранить</Button>
                 </DialogFooter>
             </DialogContent>
         </Dialog>
@@ -133,51 +156,65 @@ const AdminTable = ({ admins, onSendPassword, onOpenDialog }: { admins: typeof m
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    {admins.map((admin) => (
-                        <TableRow key={admin.id}>
-                            <TableCell>
-                                <div className="flex items-center gap-3">
-                                    <Avatar>
-                                        <AvatarImage src={`https://i.pravatar.cc/150?u=${admin.id}`} />
-                                        <AvatarFallback>{admin.name.charAt(0)}</AvatarFallback>
-                                    </Avatar>
-                                    <span className="font-medium">{admin.name}</span>
-                                </div>
-                            </TableCell>
-                            <TableCell>
-                                <div className="flex items-center gap-2">
-                                    {admin.role === 'Главный администратор' && <Shield className="h-4 w-4 text-primary"/>}
-                                    {admin.role !== 'Главный администратор' && <User className="h-4 w-4 text-muted-foreground"/>}
-                                    {admin.role}
-                                </div>
-                            </TableCell>
-                            <TableCell className="text-muted-foreground">{admin.section}</TableCell>
-                            <TableCell className="text-right">
-                                {admin.role !== 'Главный администратор' && (
-                                    <>
-                                        <Button variant="secondary" size="sm" onClick={() => onSendPassword(admin.id, admin.name)} disabled={admin.status === 'Активен'}>
-                                            <Send className="mr-2 h-4 w-4" />
-                                            Прислать пароль
-                                        </Button>
-                                        <DropdownMenu>
-                                            <DropdownMenuTrigger asChild>
-                                                <Button variant="ghost" className="h-8 w-8 p-0 ml-2">
-                                                    <span className="sr-only">Открыть меню</span>
-                                                    <MoreHorizontal className="h-4 w-4" />
-                                                </Button>
-                                            </DropdownMenuTrigger>
-                                            <DropdownMenuContent align="end">
-                                                <DropdownMenuItem onClick={() => onOpenDialog(admin.id)}>
-                                                    <Settings className="mr-2 h-4 w-4" />
-                                                    Настроить доступ
-                                                </DropdownMenuItem>
-                                            </DropdownMenuContent>
-                                        </DropdownMenu>
-                                    </>
-                                )}
-                            </TableCell>
-                        </TableRow>
-                    ))}
+                    {admins.map((admin) => {
+                        const Icon = roleIcons[admin.role as AdminRole] || User;
+                        const isManager = managementRoles.includes(admin.role as AdminRole);
+                        return (
+                            <TableRow key={admin.id}>
+                                <TableCell>
+                                    <div className="flex items-center gap-3">
+                                        <Avatar>
+                                            <AvatarImage src={`https://i.pravatar.cc/150?u=${admin.id}`} />
+                                            <AvatarFallback>{admin.name.charAt(0)}</AvatarFallback>
+                                        </Avatar>
+                                        <span className="font-medium">{admin.name}</span>
+                                    </div>
+                                </TableCell>
+                                <TableCell>
+                                     <TooltipProvider>
+                                        <Tooltip>
+                                            <TooltipTrigger asChild>
+                                                <div className="flex items-center gap-2">
+                                                    <Icon className={`h-4 w-4 ${isManager ? 'text-blue-400' : 'text-muted-foreground'}`}/>
+                                                    {admin.role}
+                                                </div>
+                                            </TooltipTrigger>
+                                            {isManager && (
+                                                <TooltipContent>
+                                                    <p>Долгосрочный доступ</p>
+                                                </TooltipContent>
+                                            )}
+                                        </Tooltip>
+                                    </TooltipProvider>
+                                </TableCell>
+                                <TableCell className="text-muted-foreground">{admin.section}</TableCell>
+                                <TableCell className="text-right">
+                                    {admin.role !== 'Главный администратор' && (
+                                        <>
+                                            <Button variant="secondary" size="sm" onClick={() => onSendPassword(admin.id, admin.name)} disabled={admin.status === 'Активен'}>
+                                                <Link2 className="mr-2 h-4 w-4" />
+                                                Прислать пароль
+                                            </Button>
+                                            <DropdownMenu>
+                                                <DropdownMenuTrigger asChild>
+                                                    <Button variant="ghost" className="h-8 w-8 p-0 ml-2">
+                                                        <span className="sr-only">Открыть меню</span>
+                                                        <MoreHorizontal className="h-4 w-4" />
+                                                    </Button>
+                                                </DropdownMenuTrigger>
+                                                <DropdownMenuContent align="end">
+                                                    <DropdownMenuItem onClick={() => onOpenDialog(admin.id)}>
+                                                        <Settings className="mr-2 h-4 w-4" />
+                                                        Настроить доступ
+                                                    </DropdownMenuItem>
+                                                </DropdownMenuContent>
+                                            </DropdownMenu>
+                                        </>
+                                    )}
+                                </TableCell>
+                            </TableRow>
+                        );
+                    })}
                 </TableBody>
             </Table>
         </div>
@@ -232,11 +269,11 @@ export function AccessControlPage() {
         setDialogState(prev => ({ ...prev, [adminId]: false }));
     }
 
-    const handleSaveRole = (adminId: string, newRole: AdminRole) => {
+    const handleSaveRole = (adminId: string, newRole: AdminRole, duration: string) => {
         setAdmins(prev => prev.map(admin => admin.id === adminId ? { ...admin, role: newRole } : admin));
         toast({
-            title: 'Роль обновлена',
-            description: `Роль для администратора была успешно изменена.`,
+            title: 'Настройки доступа обновлены',
+            description: `Для администратора установлена роль "${newRole}" со сроком доступа ${duration} д.`,
         });
     }
 
@@ -287,7 +324,7 @@ export function AccessControlPage() {
                     admin={admin}
                     open={!!dialogState[adminId]}
                     onOpenChange={(open) => open ? handleOpenDialog(adminId) : handleCloseDialog(adminId)}
-                    onSave={(newRole) => handleSaveRole(adminId, newRole)}
+                    onSave={(newRole, duration) => handleSaveRole(adminId, newRole, duration)}
                 />
             )
         })}
