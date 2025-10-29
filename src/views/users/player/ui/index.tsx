@@ -44,7 +44,7 @@ export function PlayerPage({ user: profileUser }: { user: User }) {
                             />
                         )}
                     </div>
-                    <div className="relative bg-card px-4 md:px-6 pb-4">
+                    <div className="bg-card px-4 md:px-6 pb-4">
                         <div className="flex flex-col sm:flex-row sm:items-end gap-4">
                             <div className="-mt-16 sm:-mt-20 shrink-0">
                                 <Avatar className="h-32 w-32 border-4 border-card">
