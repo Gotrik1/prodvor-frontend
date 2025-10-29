@@ -12,7 +12,7 @@ export default function Error({
   reset: () => void;
 }) {
   return (
-    <div className="flex min-h-[80vh] items-center justify-center p-4">
+    <div className="flex min-h-[calc(100vh-8rem)] items-center justify-center p-4">
       <Card className="text-center max-w-md w-full">
         <CardHeader>
           <div className="mx-auto bg-destructive/10 text-destructive p-4 rounded-full w-fit">

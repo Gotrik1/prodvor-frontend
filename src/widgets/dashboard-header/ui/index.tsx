@@ -35,13 +35,12 @@ import {
 import React from 'react';
 import { GlobalSearch } from './global-search';
 import { Logo } from '@/views/auth/ui';
-import { useScrollDirection } from '@/shared/hooks/use-scroll-direction';
-import { cn } from '@/shared/lib/utils';
-import { SidebarTrigger } from '@/shared/ui/sidebar';
+import { usePathname } from 'next/navigation';
 
 export function DashboardHeader() {
   const { user } = useUserStore();
   const [open, setOpen] = React.useState(false);
+  const pathname = usePathname();
   
   React.useEffect(() => {
     const down = (e: KeyboardEvent) => {
@@ -53,6 +52,8 @@ export function DashboardHeader() {
     document.addEventListener('keydown', down);
     return () => document.removeEventListener('keydown', down);
   }, []);
+
+  const isAdminPage = pathname.startsWith('/admin');
 
   return (
     <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-layout-border bg-card p-4">
@@ -76,46 +77,52 @@ export function DashboardHeader() {
           </Button>
           <GlobalSearch open={open} setOpen={setOpen} />
         </div>
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                variant="outline"
-                className="hidden sm:flex items-center gap-2"
-                asChild
-              >
-                <Link href="/store">
-                  <Gem className="h-4 w-4 text-primary" />
-                  <span className="font-bold">1,250</span>
-                </Link>
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>Ваш баланс PD Coins</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
+        
+        {!isAdminPage && (
+          <React.Fragment>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="outline"
+                    className="hidden sm:flex items-center gap-2"
+                    asChild
+                  >
+                    <Link href="/store">
+                      <Gem className="h-4 w-4 text-primary" />
+                      <span className="font-bold">1,250</span>
+                    </Link>
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Ваш баланс PD Coins</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
 
-        <Button variant="ghost" size="icon" asChild>
-          <Link href="/store">
-            <ShoppingCart />
-          </Link>
-        </Button>
-        <div className="relative">
-             <Button variant="ghost" size="icon" className="relative">
-                <Bell className="animate-ringing" />
+            <Button variant="ghost" size="icon" asChild>
+              <Link href="/store">
+                <ShoppingCart />
+              </Link>
             </Button>
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1/2 h-1/2 pointer-events-none">
-                {/* Left arcs */}
-                <span className="absolute block w-full h-full rounded-full border-2 border-transparent border-l-destructive opacity-50 animate-wave-out" style={{ animationDelay: '0s' }}></span>
-                <span className="absolute block w-full h-full rounded-full border-2 border-transparent border-l-destructive opacity-50 animate-wave-out" style={{ animationDelay: '0.2s' }}></span>
-                <span className="absolute block w-full h-full rounded-full border-2 border-transparent border-l-destructive opacity-50 animate-wave-out" style={{ animationDelay: '0.4s' }}></span>
-                {/* Right arcs */}
-                <span className="absolute block w-full h-full rounded-full border-2 border-transparent border-r-destructive opacity-50 animate-wave-out" style={{ animationDelay: '0s' }}></span>
-                <span className="absolute block w-full h-full rounded-full border-2 border-transparent border-r-destructive opacity-50 animate-wave-out" style={{ animationDelay: '0.2s' }}></span>
-                <span className="absolute block w-full h-full rounded-full border-2 border-transparent border-r-destructive opacity-50 animate-wave-out" style={{ animationDelay: '0.4s' }}></span>
+            <div className="relative">
+                <Button variant="ghost" size="icon" className="relative">
+                    <Bell className="animate-ringing" />
+                </Button>
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1/2 h-1/2 pointer-events-none">
+                    {/* Left arcs */}
+                    <span className="absolute block w-full h-full rounded-full border-2 border-transparent border-l-destructive opacity-50 animate-wave-out" style={{ animationDelay: '0s' }}></span>
+                    <span className="absolute block w-full h-full rounded-full border-2 border-transparent border-l-destructive opacity-50 animate-wave-out" style={{ animationDelay: '0.2s' }}></span>
+                    <span className="absolute block w-full h-full rounded-full border-2 border-transparent border-l-destructive opacity-50 animate-wave-out" style={{ animationDelay: '0.4s' }}></span>
+                    {/* Right arcs */}
+                    <span className="absolute block w-full h-full rounded-full border-2 border-transparent border-r-destructive opacity-50 animate-wave-out" style={{ animationDelay: '0s' }}></span>
+                    <span className="absolute block w-full h-full rounded-full border-2 border-transparent border-r-destructive opacity-50 animate-wave-out" style={{ animationDelay: '0.2s' }}></span>
+                    <span className="absolute block w-full h-full rounded-full border-2 border-transparent border-r-destructive opacity-50 animate-wave-out" style={{ animationDelay: '0.4s' }}></span>
+                </div>
             </div>
-        </div>
+          </React.Fragment>
+        )}
+
         <ThemeToggle />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
