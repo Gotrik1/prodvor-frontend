@@ -36,7 +36,7 @@ import { Calendar } from '@/shared/ui/calendar';
 import { cn } from '@/shared/lib/utils';
 import { allSports } from '@/mocks';
 import { MultiSelect } from '@/shared/ui/multi-select';
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/shared/ui/dialog';
 import Image from 'next/image';
 
@@ -149,16 +149,30 @@ export function ProfileTab() {
     const profileForm = useForm<z.infer<typeof profileFormSchema>>({
         resolver: zodResolver(profileFormSchema),
         defaultValues: {
-            firstName: currentUser?.firstName || '',
-            lastName: currentUser?.lastName || '',
-            nickname: currentUser?.nickname || '',
-            gender: currentUser?.gender || 'мужской',
-            bio: currentUser?.bio || "Страстный игрок в дворовый футбол и CS2. Ищу команду для серьезных игр.",
-            city: currentUser?.city || '',
-            disciplines: currentUser?.disciplines || [],
-            birthDate: currentUser?.age ? new Date(new Date().setFullYear(new Date().getFullYear() - currentUser.age)) : undefined,
+            firstName: '',
+            lastName: '',
+            nickname: '',
+            gender: 'мужской',
+            bio: "Страстный игрок в дворовый футбол и CS2. Ищу команду для серьезных игр.",
+            city: '',
+            disciplines: [],
         }
     });
+
+    useEffect(() => {
+        if (currentUser) {
+            profileForm.reset({
+                firstName: currentUser.firstName || '',
+                lastName: currentUser.lastName || '',
+                nickname: currentUser.nickname || '',
+                gender: currentUser.gender || 'мужской',
+                bio: currentUser.bio || "Страстный игрок в дворовый футбол и CS2. Ищу команду для серьезных игр.",
+                city: currentUser.city || '',
+                disciplines: currentUser.disciplines || [],
+                birthDate: currentUser.age ? new Date(new Date().setFullYear(new Date().getFullYear() - currentUser.age)) : undefined,
+            });
+        }
+    }, [currentUser, profileForm]);
 
     function onProfileSubmit() {
         toast({ title: "Профиль обновлен", description: "Ваши данные успешно сохранены." });
@@ -200,7 +214,7 @@ export function ProfileTab() {
                             <FormField control={profileForm.control} name="gender" render={({ field }) => (
                                 <FormItem>
                                     <FormLabel>Пол</FormLabel>
-                                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                    <Select onValueChange={field.onChange} value={field.value}>
                                         <FormControl>
                                             <SelectTrigger>
                                                 <SelectValue placeholder="Выберите пол" />
