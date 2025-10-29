@@ -2,7 +2,7 @@
 'use client';
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
-import { Trophy } from "lucide-react";
+import { Trophy, Megaphone } from "lucide-react";
 import { allTournaments } from "@/views/tournaments/public-page/ui/mock-data";
 import Link from "next/link";
 import { Progress } from "@/shared/ui/progress";
@@ -23,9 +23,14 @@ const statusColors: Record<TournamentStatus, string> = {
 
 
 const AdBannerPlaceholder = () => (
-    <div className="w-full h-64 bg-muted/50 rounded-lg flex items-center justify-center">
-        <span className="text-muted-foreground text-sm">Здесь могла быть ваша реклама</span>
-    </div>
+    <Card className="bg-muted/30 border-dashed">
+        <CardContent className="p-4 text-center text-muted-foreground text-sm flex items-center justify-center h-48">
+            <div>
+                <Megaphone className="mx-auto h-8 w-8 mb-2" />
+                <p>Рекламное место</p>
+            </div>
+        </CardContent>
+    </Card>
 )
 
 
