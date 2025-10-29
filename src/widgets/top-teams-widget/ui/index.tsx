@@ -50,9 +50,8 @@ export function TopTeamsWidget({ userCity, selectedDiscipline }: { userCity?: st
             .filter(team => selectedDiscipline === 'all' || team.game === selectedDiscipline)
             .sort((a, b) => b.rank - a.rank);
         
-        // For this mock, we assume all teams are from Russia and some are from the user's city
         const topCountryTeams = filteredTeams;
-        const topCityTeams = userCity ? topCountryTeams.filter((_, index) => index % 2 === 0 || index % 3 === 0) : [];
+        const topCityTeams = userCity ? topCountryTeams.filter(team => team.city === userCity) : [];
 
         return { topCityTeams, topCountryTeams };
     }, [userCity, selectedDiscipline]);

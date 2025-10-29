@@ -13,6 +13,7 @@ export interface Team {
   followers: string[]; // Array of user IDs or team IDs
   following: string[]; // Array of team IDs
   sponsorIds?: string[]; // Array of sponsor IDs
+  city: string; // Added city to the team interface
 }
 
 // Base teams array, to be populated by the initializer.

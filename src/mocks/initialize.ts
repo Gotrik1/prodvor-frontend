@@ -29,17 +29,17 @@ export function initializeMockData(data: MockData) {
 
     const { users, teams, playgrounds, sponsors, allSports } = data;
 
-    // --- 1. Generate Teams ---
-    generateTeams(users, playgrounds, allSports, sponsors, teams);
-
-    // --- 2. Assign initial disciplines to all users ---
+    // --- 1. Assign initial disciplines to all users ---
     assignInitialDisciplines(users, allSports);
+    
+    // --- 2. Generate Teams based on geography and sport ---
+    generateTeams(users, playgrounds, allSports, teams);
 
     // --- 3. Establish Social Graph (Friends, Followers) for users ---
     generateUserSocialGraph(users);
     
     // --- 4. Establish Following relationships for teams ---
-    generateTeamFollowing(teams);
+    generateTeamFollowing(teams, users);
     
     // --- 5. Assign Sponsors to users and teams ---
     assignSponsors(users, teams, sponsors);
@@ -65,81 +65,67 @@ function generateTeams(
     allUsers: User[],
     allPlaygrounds: Playground[],
     allSportsList: Sport[],
-    allSponsors: Sponsor[],
     teamsOutput: Team[] // This array will be populated
 ) {
-    const playerTeamAssignments: Record<string, { count: number, sports: Set<string> }> = {};
-    allUsers.forEach(p => {
-        if (p.role === 'Игрок') {
-            playerTeamAssignments[p.id] = { count: 0, sports: new Set() };
-        }
-    });
-
-    const MAX_TEAMS_PER_PLAYER = 5;
+    const players = allUsers.filter(u => u.role === 'Игрок');
+    const teamSports = allSportsList.filter(s => s.isTeamSport);
+    const cities = [...new Set(players.map(p => p.city))];
     let teamIdCounter = 1;
-    const players = allUsers.filter(u => u.role === 'Игрок').sort((a, b) => a.id.localeCompare(b.id));
-    const teamSportsList = allSportsList.filter(s => s.isTeamSport);
 
-    teamSportsList.forEach(sport => {
-        const teamCountForSport = (sport.id.charCodeAt(sport.id.length - 1) % 3) + 2;
+    cities.forEach(city => {
+        const cityPlayers = players.filter(p => p.city === city);
+        const cityPlaygrounds = allPlaygrounds.filter(p => p.address.includes(city));
 
-        for (let i = 0; i < teamCountForSport; i++) {
-            const availableCaptains = players.filter(p => {
-                const assignment = playerTeamAssignments[p.id];
-                return assignment && assignment.count < MAX_TEAMS_PER_PLAYER && !assignment.sports.has(sport.id);
-            });
-            
-            const memberCount = 4; // 4 members + 1 captain
-            if (availableCaptains.length < memberCount + 1) continue;
-            
-            const captainIndex = (teamIdCounter * 13 + i * 29) % availableCaptains.length;
-            const captain = availableCaptains[captainIndex];
+        teamSports.forEach(sport => {
+            const cityPlaygroundsForSport = cityPlaygrounds.filter(p => p.sportIds.includes(sport.id));
+            // Only create a team if there are enough players and at least one playground in the city for that sport
+            if (cityPlayers.length >= 5 && cityPlaygroundsForSport.length > 0) {
+                // Create 1-2 teams per sport per city for variety
+                const teamCount = (sport.id.charCodeAt(sport.id.length - 1) % 2) + 1;
+                
+                for (let i = 0; i < teamCount; i++) {
+                    if (cityPlayers.length < 5 * (i + 1)) break; // Ensure enough unique players for multiple teams
 
-            const availableMembers = players.filter(p => {
-                 const assignment = playerTeamAssignments[p.id];
-                 return p.id !== captain.id && assignment && assignment.count < MAX_TEAMS_PER_PLAYER && !assignment.sports.has(sport.id);
-            });
-            
-            if (availableMembers.length < memberCount) continue;
+                    const potentialMembers = cityPlayers.filter(p => {
+                        // A simple way to avoid a player being in too many teams of the same sport in the same city
+                        const teamsOfSameSport = teamsOutput.filter(t => t.sportId === sport.id && t.members.includes(p.id));
+                        return teamsOfSameSport.length === 0;
+                    });
+                    
+                    if (potentialMembers.length < 5) continue;
 
-            const shuffledMembers = [...availableMembers].sort((a, b) => (a.id.charCodeAt(3) * teamIdCounter * (i + 1)) % 13 - (b.id.charCodeAt(3) * teamIdCounter * (i + 1)) % 13);
-            const newMembers = shuffledMembers.slice(0, memberCount);
-            const teamMembersIds = [captain.id, ...newMembers.map(m => m.id)];
-            
-            const sportPlaygrounds = allPlaygrounds.filter(p => p.sportIds.includes(sport.id));
-            let homePlaygroundIds: string[] | undefined = undefined;
-            if ((teamIdCounter % 4) !== 0 && sportPlaygrounds.length > 0) {
-                homePlaygroundIds = [sportPlaygrounds[teamIdCounter % sportPlaygrounds.length].id];
-            }
-            
-            const baseTeamNames = ['Ночные Снайперы', 'Короли Асфальта', 'Стальные Ястребы', 'Бетонные Тигры', 'Разрушители', 'Фортуна', 'Красная Фурия', 'Легион', 'Авангард', 'Молот', 'Звезда', 'Циклон'];
-            const teamName = `${baseTeamNames[teamIdCounter % baseTeamNames.length]} (${sport.name})`;
+                    const shuffledMembers = [...potentialMembers].sort(() => 0.5 - Math.random());
+                    const teamMembers = shuffledMembers.slice(0, 5 + (i % 3)); // Team size 5 to 7
+                    
+                    if (teamMembers.length < 5) continue;
+                    
+                    const captain = teamMembers[0];
+                    const memberIds = teamMembers.map(m => m.id);
 
-            const newTeam: Team = {
-                id: `team${teamIdCounter++}`,
-                name: teamName,
-                logoUrl: `https://placehold.co/100x100.png`,
-                dataAiHint: 'sports emblem',
-                game: sport.name,
-                sportId: sport.id,
-                captainId: captain.id,
-                members: teamMembersIds,
-                rank: 1200, // Standard starting ELO rank
-                homePlaygroundIds,
-                followers: [],
-                following: [],
-                sponsorIds: [],
-            };
-            
-            teamsOutput.push(newTeam);
+                    const baseTeamNames = ['Ночные Снайперы', 'Короли Асфальта', 'Стальные Ястребы', 'Бетонные Тигры', 'Разрушители', 'Фортуна', 'Красная Фурия', 'Легион', 'Авангард', 'Молот', 'Звезда', 'Циклон'];
+                    const teamName = `${baseTeamNames[teamIdCounter % baseTeamNames.length]} (${city})`;
+                    
+                    const newTeam: Team = {
+                        id: `team${teamIdCounter++}`,
+                        name: teamName,
+                        logoUrl: `https://placehold.co/100x100.png`,
+                        dataAiHint: 'sports emblem',
+                        game: sport.name,
+                        sportId: sport.id,
+                        captainId: captain.id,
+                        members: memberIds,
+                        rank: 1200 + Math.floor(Math.random() * 800 - 400),
+                        homePlaygroundIds: [cityPlaygroundsForSport[i % cityPlaygroundsForSport.length].id],
+                        followers: [],
+                        following: [],
+                        sponsorIds: [],
+                        city: city, // Add city to team data
+                    };
 
-            teamMembersIds.forEach(memberId => {
-                if (playerTeamAssignments[memberId]) {
-                    playerTeamAssignments[memberId].count++;
-                    playerTeamAssignments[memberId].sports.add(sport.id);
+                    teamsOutput.push(newTeam);
                 }
-            });
-        }
+            }
+        });
     });
 }
 
@@ -187,12 +173,21 @@ function generateUserSocialGraph(allUsers: User[]) {
     });
 }
 
-function generateTeamFollowing(allTeams: Team[]) {
+function generateTeamFollowing(allTeams: Team[], allUsers: User[]) {
     const allTeamIds = allTeams.map(t => t.id);
     allTeams.forEach((team, index) => {
         // All members automatically follow their team
         team.followers = [...team.members];
         
+        // Add some random external followers from the same city
+        const cityFollowers = allUsers.filter(u => u.city === team.city && !team.members.includes(u.id));
+        const extraFollowersCount = Math.min(cityFollowers.length, (index % 10) + 5);
+        for(let i=0; i < extraFollowersCount; i++) {
+            team.followers.push(cityFollowers[i].id);
+        }
+        team.followers = [...new Set(team.followers)];
+
+
         const followingCount = (index % 3) + 1;
         for (let i = 0; i < followingCount; i++) {
             const followedTeamId = allTeamIds[(index * 5 + i * 3 + 1) % allTeamIds.length];
@@ -267,13 +262,15 @@ function assignClientsToCoaches(allUsers: User[], allTeams: Team[]) {
     const coaches = allUsers.filter(u => u.role === 'Тренер');
     const players = allUsers.filter(u => u.role === 'Игрок');
 
-    coaches.forEach((coach, index) => {
+    coaches.forEach((coach) => {
         if (coach.coachProfile) {
-            // Find teams related to the coach's primary discipline for realism
+            // Find teams related to the coach's primary discipline AND city for realism
             const coachDiscipline = coach.disciplines[0];
 
             const relevantTeams = allTeams.filter(t => {
-                return t.sportId === coachDiscipline && !coaches.some(c => c.coachProfile?.managedTeams.includes(t.id));
+                return t.sportId === coachDiscipline && 
+                       t.city === coach.city &&
+                       !coaches.some(c => c.coachProfile?.managedTeams.includes(t.id));
             });
             
             if(relevantTeams.length > 0) {
@@ -287,9 +284,9 @@ function assignClientsToCoaches(allUsers: User[], allTeams: Team[]) {
                     team?.members.forEach(memberId => clientIds.add(memberId));
                 });
                 
-                // Add a few extra random players who might be in the same discipline
+                // Add a few extra random players from the same city and discipline
                  const extraPlayers = players
-                    .filter(p => p.disciplines.includes(coachDiscipline) && !clientIds.has(p.id))
+                    .filter(p => p.disciplines.includes(coachDiscipline) && p.city === coach.city && !clientIds.has(p.id))
                     .slice(0, 3);
                 extraPlayers.forEach(p => clientIds.add(p.id));
                 
