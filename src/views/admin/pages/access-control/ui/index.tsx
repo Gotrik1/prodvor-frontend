@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/sha
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/shared/ui/table";
 import { Badge } from "@/shared/ui/badge";
 import { Button } from "@/shared/ui/button";
-import { MoreHorizontal, Send, Settings, Shield, User, Users, KeyRound } from "lucide-react";
+import { MoreHorizontal, Send, Settings, Shield, User, Users, KeyRound, PlusCircle } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -18,6 +18,8 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shared/ui/select';
 import { useToast } from '@/shared/hooks/use-toast';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
+import { Input } from '@/shared/ui/input';
+import { Label } from '@/shared/ui/label';
 
 const mockAdmins = [
   { id: 'user92', name: 'Макс Барских', role: 'Главный администратор', section: 'Все разделы', status: 'Активен' },
@@ -28,7 +30,7 @@ const mockAdmins = [
 ];
 
 type AdminRole = 'Главный администратор' | 'Менеджер турниров' | 'Модератор контента' | 'Менеджер по рекламе' | 'Менеджер по спорту';
-const adminRoles: AdminRole[] = ['Главный администратор', 'Менеджер турниров', 'Модератор контента', 'Менеджер по рекламе', 'Менеджер по спорту'];
+const adminRoles: AdminRole[] = ['Менеджер турниров', 'Модератор контента', 'Менеджер по рекламе', 'Менеджер по спорту'];
 
 const statusColors: Record<string, string> = {
   Активен: 'bg-green-500/20 text-green-300 border-green-500/30',
@@ -64,6 +66,57 @@ const RoleSettingsDialog = ({ admin, open, onOpenChange, onSave }: { admin: type
     )
 }
 
+const AddAdminDialog = ({ onAddAdmin }: { onAddAdmin: (name: string, role: AdminRole) => void }) => {
+    const [name, setName] = useState('');
+    const [role, setRole] = useState<AdminRole | ''>('');
+    const [open, setOpen] = useState(false);
+
+    const handleAdd = () => {
+        if (name && role) {
+            onAddAdmin(name, role);
+            setName('');
+            setRole('');
+            setOpen(false);
+        }
+    }
+
+    return (
+        <Dialog open={open} onOpenChange={setOpen}>
+            <DialogTrigger asChild>
+                 <Button>
+                    <PlusCircle className="mr-2 h-4 w-4" />
+                    Добавить администратора
+                </Button>
+            </DialogTrigger>
+            <DialogContent>
+                <DialogHeader>
+                    <DialogTitle>Новый администратор</DialogTitle>
+                    <DialogDescription>Введите данные нового администратора. Он будет добавлен в список со статусом "Ожидает пароль".</DialogDescription>
+                </DialogHeader>
+                <div className="grid gap-4 py-4">
+                    <div className="grid grid-cols-4 items-center gap-4">
+                        <Label htmlFor="name" className="text-right">Имя</Label>
+                        <Input id="name" value={name} onChange={(e) => setName(e.target.value)} placeholder="Имя Фамилия" className="col-span-3" />
+                    </div>
+                     <div className="grid grid-cols-4 items-center gap-4">
+                        <Label htmlFor="role" className="text-right">Роль</Label>
+                        <Select value={role} onValueChange={(value) => setRole(value as AdminRole)}>
+                            <SelectTrigger className="col-span-3"><SelectValue placeholder="Выберите роль..." /></SelectTrigger>
+                            <SelectContent>
+                                {adminRoles.map(r => <SelectItem key={r} value={r}>{r}</SelectItem>)}
+                            </SelectContent>
+                        </Select>
+                    </div>
+                </div>
+                <DialogFooter>
+                    <Button variant="outline" onClick={() => setOpen(false)}>Отмена</Button>
+                    <Button onClick={handleAdd}>Добавить</Button>
+                </DialogFooter>
+            </DialogContent>
+        </Dialog>
+    );
+};
+
 export function AccessControlPage() {
     const [admins, setAdmins] = useState(mockAdmins);
     const { toast } = useToast();
@@ -84,6 +137,22 @@ export function AccessControlPage() {
             description: 'Новые пароли были разосланы всем администраторам.',
         });
     };
+    
+     const handleAddAdmin = (name: string, role: AdminRole) => {
+        const newAdmin = {
+            id: `new-admin-${Date.now()}`,
+            name,
+            role,
+            section: 'Определяется ролью',
+            status: 'Ожидает пароль'
+        };
+        setAdmins(prev => [...prev, newAdmin]);
+        toast({
+            title: 'Администратор добавлен',
+            description: `${name} был добавлен в список. Теперь вы можете отправить ему пароль.`,
+        });
+    };
+
 
     const handleOpenDialog = (adminId: string) => {
         setDialogState(prev => ({ ...prev, [adminId]: true }));
@@ -113,10 +182,13 @@ export function AccessControlPage() {
                 <CardTitle>Список администраторов</CardTitle>
                 <CardDescription>Отправляйте пароли и настраивайте роли для персонала.</CardDescription>
             </div>
-             <Button onClick={handleSendAll}>
-                <Send className="mr-2 h-4 w-4" />
-                Прислать пароли всем
-            </Button>
+             <div className="flex gap-2">
+                <AddAdminDialog onAddAdmin={handleAddAdmin} />
+                <Button variant="secondary" onClick={handleSendAll}>
+                    <Send className="mr-2 h-4 w-4" />
+                    Прислать пароли всем
+                </Button>
+            </div>
         </CardHeader>
         <CardContent>
           <div className="border rounded-lg">
