@@ -9,15 +9,15 @@ export function DashboardFooter() {
         <div className="flex items-center gap-2">
           <Logo />
           <div>
-            <p className="font-bold text-2xs">© 2025 ProDvor.</p>
-            <p className="text-2xs">Все права защищены.</p>
-            <p className="text-2xs">Версия 1.0.0 (Прототип)</p>
+            <p className="font-bold text-xs">© 2025 ProDvor.</p>
+            <p className="text-xs">Все права защищены.</p>
+            <p className="text-xs">Версия 1.0.0 (Прототип)</p>
           </div>
         </div>
         <div className="flex flex-col sm:flex-row gap-8">
           <div>
             <h4 className="font-bold mb-2 text-foreground text-xs">Навигация</h4>
-            <ul className="space-y-1 text-2xs">
+            <ul className="space-y-1 text-xs">
               <li>
                 <Link href="/teams" className="hover:text-primary">
                   Команды
@@ -37,7 +37,7 @@ export function DashboardFooter() {
           </div>
           <div>
             <h4 className="font-bold mb-2 text-foreground text-xs">Информация</h4>
-            <ul className="space-y-1 text-2xs">
+            <ul className="space-y-1 text-xs">
               <li>
                 <Link href="/about" className="hover:text-primary">
                   О проекте

@@ -14,7 +14,6 @@ export default {
         code: ['monospace'],
       },
       fontSize: {
-        '2xs': '0.5rem',   // 8px
         'xs': '0.75rem',    // 12px
         'sm': '0.875rem',      // 14px
         'base': '1rem',      // 16px
