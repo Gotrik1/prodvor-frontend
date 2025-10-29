@@ -370,3 +370,4 @@ export const README = `
 5.  Откройте [http://localhost:9002](http://localhost:9002) в вашем браузере.
 
 ---
+`;
