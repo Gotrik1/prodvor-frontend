@@ -55,8 +55,8 @@ export function ManagerPageTemplate({ user }: { user?: User }) {
                 </div>
             </header>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                 <Card className="md:col-span-2 lg:col-span-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+                 <Card className="md:col-span-2 xl:col-span-4">
                     <CardHeader>
                         <CardTitle className="flex items-center gap-2"><Gamepad2 />Дисциплины</CardTitle>
                     </CardHeader>
@@ -107,8 +107,8 @@ export function ManagerPageTemplate({ user }: { user?: User }) {
                     </CardContent>
                 </Card>
             </div>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <Card className="lg:col-span-2">
+            <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+                <Card className="xl:col-span-2">
                     <CardHeader>
                         <CardTitle>Управляемые команды</CardTitle>
                         <CardDescription>Обзор производительности команд, находящихся под вашим управлением.</CardDescription>

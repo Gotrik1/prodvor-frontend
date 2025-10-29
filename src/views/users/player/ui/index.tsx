@@ -88,7 +88,7 @@ export function PlayerPage({ user: profileUser }: { user: User }) {
                     </div>
 
                     {/* Right side (1 column wide) */}
-                    <div className="xl:col-span-1 space-y-6">
+                    <div className="space-y-6">
                         <AchievementsTab player={profileUser} />
                         <MyTeamWidget user={profileUser} />
                         <SocialTab user={profileUser} isOwnProfile={isOwnProfile} />

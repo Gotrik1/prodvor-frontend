@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
@@ -61,7 +60,7 @@ export const PlayerStatsOverviewTab = () => {
                 <CardDescription>Обзор ключевых показателей и карьерной статистики игрока.</CardDescription>
             </CardHeader>
             <CardContent>
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
                     <div>
                         <h3 className="text-base font-semibold mb-2">Навыки и прогресс ELO</h3>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
@@ -91,9 +90,9 @@ export const PlayerStatsOverviewTab = () => {
                          <h3 className="text-base font-semibold mb-2 flex items-center gap-2"><History className="h-4 w-4" /> Карьера</h3>
                          <Tabs defaultValue="2025">
                             <TabsList className="grid grid-cols-3 w-full">
-                                <TabsTrigger value="2025" className="px-2 lg:px-3"><span className="lg:inline">Сезон </span>2025</TabsTrigger>
-                                <TabsTrigger value="2024" className="px-2 lg:px-3"><span className="lg:inline">Сезон </span>2024</TabsTrigger>
-                                <TabsTrigger value="total" className="px-2 lg:px-3">Всего</TabsTrigger>
+                                <TabsTrigger value="2025" className="px-2 xl:px-3"><span className="lg:inline">Сезон </span>2025</TabsTrigger>
+                                <TabsTrigger value="2024" className="px-2 xl:px-3"><span className="lg:inline">Сезон </span>2024</TabsTrigger>
+                                <TabsTrigger value="total" className="px-2 xl:px-3">Всего</TabsTrigger>
                             </TabsList>
                             <TabsContent value="2025" className="mt-2">
                                 <StatRow label="Матчи" value={careerStats['2025'].matches} />

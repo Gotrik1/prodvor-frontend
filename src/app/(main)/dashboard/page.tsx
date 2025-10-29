@@ -32,11 +32,11 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 p-4 md:p-6 lg:p-8 items-start">
-        <div className="lg:col-span-3 space-y-6">
+    <div className="grid grid-cols-1 xl:grid-cols-4 gap-8 p-4 md:p-6 lg:p-8 items-start">
+        <div className="xl:col-span-3 space-y-6">
             <DashboardFeed />
         </div>
-        <aside className="lg:col-span-1 space-y-6 lg:sticky top-24">
+        <aside className="space-y-6 xl:sticky top-24">
             <DashboardAside />
         </aside>
     </div>
