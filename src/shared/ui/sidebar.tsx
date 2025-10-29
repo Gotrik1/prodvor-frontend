@@ -130,7 +130,7 @@ const Sidebar = React.forwardRef<
         ref={ref}
         className={cn(
           "group sticky top-0 hidden md:flex flex-col h-screen bg-card text-card-foreground border-r border-layout-border transition-all duration-300 ease-in-out",
-          "w-16 lg:w-64",
+          "w-16 xl:w-64",
           className
         )}
         data-state="expanded"
@@ -153,7 +153,7 @@ const SidebarInput = React.forwardRef<
       data-sidebar="input"
       className={cn(
         "h-8 w-full bg-background shadow-none focus-visible:ring-2 focus-visible:ring-sidebar-ring",
-        "lg:block hidden",
+        "xl:block hidden",
         className
       )}
       {...props}
@@ -170,7 +170,7 @@ const SidebarHeader = React.forwardRef<
     <div
       ref={ref}
       data-sidebar="header"
-      className={cn("flex flex-col gap-2 p-2 items-center lg:items-start", className)}
+      className={cn("flex flex-col gap-2 p-2 items-center xl:items-start", className)}
       {...props}
     />
   )
@@ -365,9 +365,9 @@ const SidebarMenuButton = React.forwardRef<
   ) => {
     
     const buttonContent = (
-        <div className="flex items-center justify-center lg:justify-start gap-3 w-full">
+        <div className="flex items-center justify-center xl:justify-start gap-3 w-full">
             {React.Children.toArray(children).find(child => React.isValidElement(child) && child.type !== 'span')}
-            <span className="truncate hidden lg:inline">{React.Children.toArray(children).find(child => React.isValidElement(child) && child.type === 'span')}</span>
+            <span className="truncate hidden xl:inline">{React.Children.toArray(children).find(child => React.isValidElement(child) && child.type === 'span')}</span>
         </div>
     );
 
@@ -377,7 +377,7 @@ const SidebarMenuButton = React.forwardRef<
         data-sidebar="menu-button"
         data-size={size}
         data-active={isActive}
-        className={cn(sidebarMenuButtonVariants({ variant, size }), "justify-center lg:justify-start", className)}
+        className={cn(sidebarMenuButtonVariants({ variant, size }), "justify-center xl:justify-start", className)}
         {...(props as React.HTMLAttributes<HTMLButtonElement | HTMLAnchorElement>)}
       >
           {buttonContent}
@@ -394,7 +394,7 @@ const SidebarMenuButton = React.forwardRef<
         <TooltipContent
           side="right"
           align="center"
-          className="hidden md:block lg:hidden"
+          className="hidden md:block xl:hidden"
         >
           {tooltip}
         </TooltipContent>
