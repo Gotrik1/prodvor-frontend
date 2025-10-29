@@ -63,8 +63,20 @@ export function AchievementsTab({ player }: { player: User }) {
             <CardContent>
                 <div className="space-y-4 mb-4">
                     <div className="grid grid-cols-2 gap-4">
-                        <StatCard title="Достижения" value={`${unlockedCount}`} icon={Award} />
-                        <StatCard title="Очки Прогресса" value={progressPoints.toLocaleString('ru-RU')} icon={Gem} />
+                       <Card className="bg-muted/50 text-center">
+                            <CardContent className="p-4">
+                                <Award className="h-8 w-8 text-primary mx-auto mb-2" />
+                                <p className="text-2xl font-bold">{unlockedCount}</p>
+                                <p className="text-muted-foreground text-xs lg:text-sm">Достижения</p>
+                            </CardContent>
+                        </Card>
+                         <Card className="bg-muted/50 text-center">
+                            <CardContent className="p-4">
+                                <Gem className="h-8 w-8 text-primary mx-auto mb-2" />
+                                <p className="text-2xl font-bold">{progressPoints.toLocaleString('ru-RU')}</p>
+                                <p className="text-muted-foreground text-xs lg:text-sm">Очки Прогресса</p>
+                            </CardContent>
+                        </Card>
                     </div>
                     <div>
                         <div className="flex justify-between items-baseline mb-1">

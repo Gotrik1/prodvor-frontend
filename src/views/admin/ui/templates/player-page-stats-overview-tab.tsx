@@ -91,9 +91,9 @@ export const PlayerStatsOverviewTab = () => {
                          <h3 className="text-base font-semibold mb-2 flex items-center gap-2"><History className="h-4 w-4" /> Карьера</h3>
                          <Tabs defaultValue="2025">
                             <TabsList className="grid grid-cols-3 w-full">
-                                <TabsTrigger value="2025"><span className="hidden md:inline">Сезон </span>2025</TabsTrigger>
-                                <TabsTrigger value="2024"><span className="hidden md:inline">Сезон </span>2024</TabsTrigger>
-                                <TabsTrigger value="total">Всего</TabsTrigger>
+                                <TabsTrigger value="2025" className="px-2 md:px-3"><span className="hidden lg:inline">Сезон </span>2025</TabsTrigger>
+                                <TabsTrigger value="2024" className="px-2 md:px-3"><span className="hidden lg:inline">Сезон </span>2024</TabsTrigger>
+                                <TabsTrigger value="total" className="px-2 md:px-3">Всего</TabsTrigger>
                             </TabsList>
                             <TabsContent value="2025" className="mt-2">
                                 <StatRow label="Матчи" value={careerStats['2025'].matches} />
