@@ -2,13 +2,13 @@
 'use client';
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs';
-import { Bell, Brush, Lock, User as UserIcon, Shield } from 'lucide-react';
+import { Bell, Brush, Lock, User as UserIcon, Shield, Rss } from 'lucide-react';
 import { ProfileTab } from './tabs/profile-tab';
 import { AccountTab } from './tabs/account-tab';
 import { NotificationsTab } from './tabs/notifications-tab';
 import { AppearanceTab } from './tabs/appearance-tab';
 import { PrivacyTab } from './tabs/privacy-tab';
-import { cn } from '@/shared/lib/utils';
+import { FeedTab } from './tabs/feed-tab';
 
 export function SettingsPage() {
   return (
@@ -19,6 +19,7 @@ export function SettingsPage() {
           <TabsList className="flex flex-row md:flex-col md:w-auto h-auto md:h-full">
             <TabsTrigger value="profile"><UserIcon className="mr-2 h-4 w-4" />Профиль</TabsTrigger>
             <TabsTrigger value="account"><Lock className="mr-2 h-4 w-4" />Аккаунт</TabsTrigger>
+            <TabsTrigger value="feed"><Rss className="mr-2 h-4 w-4" />Лента</TabsTrigger>
             <TabsTrigger value="notifications"><Bell className="mr-2 h-4 w-4" />Уведомления</TabsTrigger>
             <TabsTrigger value="appearance"><Brush className="mr-2 h-4 w-4" />Внешний вид</TabsTrigger>
             <TabsTrigger value="privacy"><Shield className="mr-2 h-4 w-4"/>Приватность</TabsTrigger>
@@ -31,6 +32,10 @@ export function SettingsPage() {
 
             <TabsContent value="account" className="mt-0">
               <AccountTab />
+            </TabsContent>
+            
+            <TabsContent value="feed" className="mt-0">
+              <FeedTab />
             </TabsContent>
 
             <TabsContent value="notifications" className="mt-0">
