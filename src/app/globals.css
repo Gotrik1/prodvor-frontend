@@ -146,6 +146,10 @@ html {
   * {
     @apply border-ui-border;
   }
+  html {
+    /* Base font size that respects user's browser settings and our scale variable */
+    font-size: calc(100% * var(--app-scale, 1));
+  }
   body {
     @apply bg-background text-foreground;
   }

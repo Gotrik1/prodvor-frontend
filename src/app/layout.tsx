@@ -4,6 +4,7 @@ import './globals.css';
 import { Toaster } from "@/shared/ui/toaster";
 import { Inter } from 'next/font/google';
 import { ThemeProvider } from '@/shared/ui/theme-provider';
+import { ScaleProvider } from '@/shared/ui/scale-provider';
 
 
 export const metadata: Metadata = {
@@ -39,7 +40,9 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
         >
-            {children}
+            <ScaleProvider>
+              {children}
+            </ScaleProvider>
             <Toaster />
         </ThemeProvider>
       </body>
