@@ -24,7 +24,7 @@ import {
   FormLabel,
   FormMessage,
 } from '@/shared/ui/form';
-import { CalendarIcon, Save, Warehouse } from 'lucide-react';
+import { CalendarIcon, Save, Warehouse, UploadCloud, Loader2 } from 'lucide-react';
 import { useUserStore } from '@/widgets/dashboard-header/model/user-store';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import { Textarea } from '@/shared/ui/textarea';
@@ -36,7 +36,9 @@ import { Calendar } from '@/shared/ui/calendar';
 import { cn } from '@/shared/lib/utils';
 import { allSports } from '@/mocks';
 import { MultiSelect } from '@/shared/ui/multi-select';
-import React from 'react';
+import React, { useState, useCallback } from 'react';
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/shared/ui/dialog';
+import Image from 'next/image';
 
 const profileFormSchema = z.object({
   firstName: z.string().min(2, 'Имя должно содержать не менее 2 символов.'),
@@ -56,6 +58,88 @@ const sportOptions = allSports.map(sport => ({
     label: sport.name,
     group: sport.isTeamSport ? 'Командные' : 'Индивидуальные',
 }));
+
+const AvatarUploadDialog = () => {
+    const { user, setUser } = useUserStore();
+    const { toast } = useToast();
+    const [filePreview, setFilePreview] = useState<string | null>(null);
+    const [isLoading, setIsLoading] = useState(false);
+    const [isOpen, setIsOpen] = useState(false);
+
+    const handleFileChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+        const selectedFile = event.target.files?.[0];
+        if (!selectedFile) return;
+
+        const reader = new FileReader();
+        reader.readAsDataURL(selectedFile);
+        reader.onloadend = () => {
+            setFilePreview(reader.result as string);
+        };
+    }, []);
+
+    const handleSaveAvatar = () => {
+        if (!filePreview || !user) return;
+        setIsLoading(true);
+
+        // Simulate backend upload
+        setTimeout(() => {
+            setUser({ ...user, avatarUrl: filePreview });
+            setIsLoading(false);
+            setIsOpen(false);
+            setFilePreview(null);
+            toast({
+                title: "Аватар обновлен!",
+                description: "Ваш новый аватар успешно сохранен.",
+            });
+        }, 1500);
+    };
+
+    return (
+        <Dialog open={isOpen} onOpenChange={setIsOpen}>
+            <DialogTrigger asChild>
+                <Button type="button" variant="outline">Загрузить новый аватар</Button>
+            </DialogTrigger>
+            <DialogContent>
+                <DialogHeader>
+                    <DialogTitle>Обновить аватар</DialogTitle>
+                    <CardDescription>Выберите новое изображение для вашего профиля.</CardDescription>
+                </DialogHeader>
+                <div className="py-4">
+                    {filePreview ? (
+                        <div className="space-y-4">
+                            <div className="relative w-48 h-48 mx-auto">
+                                <Image src={filePreview} alt="Превью аватара" layout="fill" className="object-cover rounded-full" />
+                            </div>
+                            <Button variant="outline" className="w-full" onClick={() => setFilePreview(null)}>Выбрать другой файл</Button>
+                        </div>
+                    ) : (
+                         <div className="flex items-center justify-center w-full">
+                            <label htmlFor="dropzone-file" className="flex flex-col items-center justify-center w-full h-48 border-2 border-dashed rounded-lg cursor-pointer bg-muted/50 hover:bg-muted">
+                                <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                                    <UploadCloud className="w-10 h-10 mb-4 text-muted-foreground" />
+                                    <p className="mb-2 text-sm text-muted-foreground"><span className="font-semibold">Нажмите, чтобы загрузить</span></p>
+                                    <p className="text-xs text-muted-foreground">PNG, JPG, GIF (макс. 800x800px)</p>
+                                </div>
+                                <input id="dropzone-file" type="file" className="hidden" accept="image/*" onChange={handleFileChange} />
+                            </label>
+                        </div>
+                    )}
+                </div>
+                <DialogFooter>
+                    <Button variant="ghost" onClick={() => setIsOpen(false)} disabled={isLoading}>Отмена</Button>
+                    <Button onClick={handleSaveAvatar} disabled={!filePreview || isLoading}>
+                        {isLoading ? (
+                            <>
+                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                Сохранение...
+                            </>
+                        ) : 'Сохранить'}
+                    </Button>
+                </DialogFooter>
+            </DialogContent>
+        </Dialog>
+    );
+};
 
 
 export function ProfileTab() {
@@ -95,7 +179,7 @@ export function ProfileTab() {
                                 <AvatarFallback>{currentUser?.nickname?.charAt(0)}</AvatarFallback>
                             </Avatar>
                             <div className="flex flex-col gap-2">
-                                <Button type="button" variant="outline">Загрузить новый аватар</Button>
+                                <AvatarUploadDialog />
                                 <Button asChild type="button" variant="secondary">
                                     <Link href="/inventory"><Warehouse className="mr-2 h-4 w-4"/>Настроить рамку</Link>
                                 </Button>
