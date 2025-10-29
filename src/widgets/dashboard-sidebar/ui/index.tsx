@@ -87,7 +87,7 @@ export function DashboardSidebar({ isMobileSheet = false, onLinkClick }: { isMob
                 <SidebarMenu>
                     {mainNavItems.map(item => (
                         <SidebarMenuItem key={item.href}>
-                            <Link href={item.href} className="relative overflow-hidden">
+                            <Link href={item.href}>
                                 <SidebarMenuButton tooltip={item.label}>
                                     <item.icon />
                                     <span>{item.label}</span>
@@ -102,7 +102,7 @@ export function DashboardSidebar({ isMobileSheet = false, onLinkClick }: { isMob
                     <SidebarMenu>
                         {secondaryNavItems.map(item => (
                             <SidebarMenuItem key={item.href}>
-                                <Link href={item.href} className="relative overflow-hidden">
+                                <Link href={item.href}>
                                     <SidebarMenuButton tooltip={item.label}>
                                         <item.icon />
                                         <span>{item.label}</span>
