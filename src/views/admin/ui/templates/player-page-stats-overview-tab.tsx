@@ -91,8 +91,8 @@ export const PlayerStatsOverviewTab = () => {
                          <h3 className="text-base font-semibold mb-2 flex items-center gap-2"><History className="h-4 w-4" /> Карьера</h3>
                          <Tabs defaultValue="2025">
                             <TabsList className="grid grid-cols-3 w-full">
-                                <TabsTrigger value="2025" className="px-2 lg:px-3"><span className="hidden lg:inline">Сезон </span>2025</TabsTrigger>
-                                <TabsTrigger value="2024" className="px-2 lg:px-3"><span className="hidden lg:inline">Сезон </span>2024</TabsTrigger>
+                                <TabsTrigger value="2025" className="px-2 lg:px-3"><span className="lg:inline">Сезон </span>2025</TabsTrigger>
+                                <TabsTrigger value="2024" className="px-2 lg:px-3"><span className="lg:inline">Сезон </span>2024</TabsTrigger>
                                 <TabsTrigger value="total" className="px-2 lg:px-3">Всего</TabsTrigger>
                             </TabsList>
                             <TabsContent value="2025" className="mt-2">
