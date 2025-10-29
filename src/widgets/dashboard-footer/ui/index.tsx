@@ -4,20 +4,20 @@ import Link from "next/link";
 
 export function DashboardFooter() {
   return (
-    <footer className="p-4 border-t border-layout-border text-2xs text-muted-foreground">
+    <footer className="p-4 border-t border-layout-border text-muted-foreground">
       <div className="container mx-auto flex flex-col md:flex-row justify-between items-center gap-8 md:gap-4 text-center md:text-left">
         <div className="flex items-center gap-2">
           <Logo />
           <div>
-            <p className="font-bold">© 2025 ProDvor.</p>
-            <p>Все права защищены.</p>
-            <p>Версия 1.0.0 (Прототип)</p>
+            <p className="font-bold text-2xs">© 2025 ProDvor.</p>
+            <p className="text-2xs">Все права защищены.</p>
+            <p className="text-2xs">Версия 1.0.0 (Прототип)</p>
           </div>
         </div>
         <div className="flex flex-col sm:flex-row gap-8">
           <div>
-            <h4 className="font-bold mb-2 text-foreground">Навигация</h4>
-            <ul className="space-y-1">
+            <h4 className="font-bold mb-2 text-foreground text-xs">Навигация</h4>
+            <ul className="space-y-1 text-2xs">
               <li>
                 <Link href="/teams" className="hover:text-primary">
                   Команды
@@ -36,8 +36,8 @@ export function DashboardFooter() {
             </ul>
           </div>
           <div>
-            <h4 className="font-bold mb-2 text-foreground">Информация</h4>
-            <ul className="space-y-1">
+            <h4 className="font-bold mb-2 text-foreground text-xs">Информация</h4>
+            <ul className="space-y-1 text-2xs">
               <li>
                 <Link href="/about" className="hover:text-primary">
                   О проекте
