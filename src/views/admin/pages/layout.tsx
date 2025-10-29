@@ -2,7 +2,7 @@
 'use client';
 
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarProvider } from "@/shared/ui/sidebar";
-import { DollarSign, Home, Eye, BookOpen, Trophy, Database } from "lucide-react";
+import { DollarSign, Home, Eye, BookOpen, KeyRound, Database, Shield } from "lucide-react";
 import Link from "next/link";
 import { DashboardHeader } from "@/widgets/dashboard-header";
 import { usePathname, useSearchParams } from "next/navigation";
@@ -45,6 +45,14 @@ export function AdminLayout({
                                 <SidebarMenuButton isActive={pathname.startsWith('/admin/advertising')}>
                                     <DollarSign />
                                     <span>Ad-CRM</span>
+                                </SidebarMenuButton>
+                            </Link>
+                        </SidebarMenuItem>
+                         <SidebarMenuItem>
+                            <Link href="/admin/access-control">
+                                <SidebarMenuButton isActive={pathname.startsWith('/admin/access-control')}>
+                                    <KeyRound />
+                                    <span>Управление доступом</span>
                                 </SidebarMenuButton>
                             </Link>
                         </SidebarMenuItem>

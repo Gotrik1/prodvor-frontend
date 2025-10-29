@@ -16,6 +16,7 @@ import { SimulationPage } from '@/views/admin/pages/simulation';
 import { teams, users } from '@/mocks';
 import { TeamPageTemplate } from '@/views/admin/ui/templates/team-page-template';
 import { DocsPage } from '@/views/admin/pages/docs';
+import { AccessControlPage } from '@/views/admin/pages/access-control';
 
 export const metadata: Metadata = {
   title: 'Администрирование | ProDvor',
@@ -63,6 +64,8 @@ export default function AdminPage({ params }: { params: { slug: string[] } }) {
         return <SimulationPage />;
       case 'docs':
         return <DocsPage />;
+      case 'access-control':
+        return <AccessControlPage />;
       case 'users':
         return <UserPage userId={subpage} />;
       case 'teams': {

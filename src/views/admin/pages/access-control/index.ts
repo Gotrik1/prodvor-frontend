@@ -1,0 +1,2 @@
+
+export { AccessControlPage } from './ui';
