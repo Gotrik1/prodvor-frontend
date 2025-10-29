@@ -14,7 +14,7 @@ import { useToast } from '@/shared/hooks/use-toast';
 import { useRouter } from 'next/navigation';
 import { useUserStore } from '@/widgets/dashboard-header/model/user-store';
 import { GameplayEvent, awardProgressPoints } from '@/shared/lib/gamification';
-import { LogoGeneratorWidget } from '@/widgets/logo-generator';
+import { LogoGeneratorWidget } from '@/features/logo-generator';
 
 export function CreateTeamPage() {
     const { toast } = useToast();

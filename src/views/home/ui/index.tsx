@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { Button } from '@/shared/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Cpu, Users, Trophy } from 'lucide-react';
-import { LogoGeneratorWidget } from '@/widgets/logo-generator';
+import { LogoGeneratorWidget } from '@/features/logo-generator';
 import { i18n } from '@/shared/lib/i18n';
 import { Logo } from '@/views/auth/ui';
 import { ThemeToggle } from '@/shared/ui/theme-toggle';
