@@ -4,7 +4,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
 import { Alert, AlertDescription, AlertTitle } from "@/shared/ui/alert";
 import { Button } from "@/shared/ui/button";
-import { Trophy, Bot, Loader2, ListChecks, RefreshCw } from "lucide-react";
+import { Trophy, Bot, Loader2, ListChecks, RefreshCw, ArrowRight } from "lucide-react";
 import { posts } from "@/mocks";
 import { useEffect, useState, useMemo } from "react";
 import { generateNewsDigestAction } from "@/app/actions";
@@ -12,6 +12,7 @@ import type { NewsDigestOutput } from "@/shared/api/generate-news-digest";
 import { PostCard } from "./post-card";
 import { useUserStore } from "@/widgets/dashboard-header/model/user-store";
 import { CreatePost } from "./create-post";
+import Link from 'next/link';
 
 function AiDigest() {
     const [digestData, setDigestData] = useState<NewsDigestOutput | null>(null);
@@ -54,11 +55,14 @@ function AiDigest() {
         <div>
             <h3 className="text-lg font-semibold">{digest.title}</h3>
             <p className="text-sm text-muted-foreground mt-2 mb-4">{digest.summary}</p>
-            <ul className="space-y-2">
+            <ul className="space-y-1">
                 {digest.highlights.map((highlight, index) => (
-                    <li key={index} className="flex items-start gap-2 text-sm">
-                        <ListChecks className="h-4 w-4 mt-0.5 text-primary flex-shrink-0" />
-                        <span>{highlight}</span>
+                    <li key={index}>
+                       <Link href={highlight.href} className="flex items-start gap-2 text-sm p-2 rounded-md hover:bg-muted/50 transition-colors group">
+                            <ListChecks className="h-4 w-4 mt-0.5 text-primary flex-shrink-0" />
+                            <span className="group-hover:text-foreground transition-colors">{highlight.text}</span>
+                             <ArrowRight className="h-4 w-4 mt-0.5 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity ml-auto" />
+                       </Link>
                     </li>
                 ))}
             </ul>
