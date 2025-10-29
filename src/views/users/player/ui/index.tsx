@@ -57,9 +57,9 @@ export function PlayerPage({ user: profileUser }: { user: User }) {
                                 <h1 className="text-3xl font-bold font-headline">{profileUser.firstName} &quot;{profileUser.nickname}&quot; {profileUser.lastName}</h1>
                                 {profileUser.bio && <p className="text-sm text-muted-foreground mt-1">{profileUser.bio}</p>}
                                 <div className="flex flex-wrap items-center justify-center sm:justify-start gap-x-4 gap-y-1 text-muted-foreground mt-2 text-sm">
-                                    {profileUser.city && <span className="flex items-center gap-1.5"><MapPin className="h-4 w-4" />{profileUser.city}</span>}
-                                    {profileUser.age && <span className="flex items-center gap-1.5"><Cake className="h-4 w-4" />{profileUser.age} лет</span>}
-                                    {profileUser.gender && <span className="flex items-center gap-1.5"><UserIcon className="h-4 w-4" />{profileUser.gender}</span>}
+                                    {profileUser.city && <span className="flex items-center gap-1.5"><MapPin className="h-4 w-4 text-red-500" />{profileUser.city}</span>}
+                                    {profileUser.age && <span className="flex items-center gap-1.5"><Cake className="h-4 w-4 text-purple-500" />{profileUser.age} лет</span>}
+                                    {profileUser.gender && <span className="flex items-center gap-1.5"><UserIcon className={`h-4 w-4 ${profileUser.gender === 'мужской' ? 'text-blue-500' : 'text-pink-500'}`} />{profileUser.gender}</span>}
                                     {playerTeam && (
                                         <div className="flex items-center gap-2">
                                             <Image src={playerTeam.logoUrl} alt={playerTeam.name} width={16} height={16} className="rounded-sm" data-ai-hint="team logo" />
