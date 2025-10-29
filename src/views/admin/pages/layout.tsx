@@ -86,7 +86,7 @@ export function AdminLayout({
             </Sidebar>
             <SidebarInset>
                 <DashboardHeader />
-                <main className="flex-1 bg-background p-4 md:p-6 lg:p-8 pt-20">
+                <main className="flex-1 bg-background p-4 md:p-6 lg:p-8 pt-24">
                     {children}
                 </main>
                 <DashboardFooter />
