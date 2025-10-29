@@ -4,9 +4,7 @@
 
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/shared/ui/card";
-import { Input } from "@/shared/ui/input";
-import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/shared/ui/select";
-import { BarChart, PlusCircle, Search, UserPlus, Users } from "lucide-react";
+import { PlusCircle, UserCheck, Users, BarChart } from "lucide-react";
 import Image from "next/image";
 import { teams, teamSports } from "@/mocks";
 import { Badge } from "@/shared/ui/badge";
@@ -14,8 +12,9 @@ import Link from "next/link";
 import { useUserStore } from "@/widgets/dashboard-header/model/user-store";
 import { useMemo, useState } from "react";
 import { TopTeamsWidget } from "@/widgets/top-teams-widget";
+import { Separator } from "@/shared/ui/separator";
 
-const TeamCard = ({ team }: { team: typeof teams[0] }) => (
+const TeamCard = ({ team, isMember }: { team: typeof teams[0], isMember: boolean }) => (
     <Card key={team.id} className="flex flex-col">
         <CardHeader>
             <Link href={`/teams/${team.id}`} className="flex items-center gap-4 group">
@@ -40,9 +39,15 @@ const TeamCard = ({ team }: { team: typeof teams[0] }) => (
             </div>
         </CardContent>
         <CardFooter>
-            <Button className="w-full">
-                <UserPlus className="mr-2 h-4 w-4" /> Подать заявку
-            </Button>
+            {isMember ? (
+                <Button asChild className="w-full" variant="secondary">
+                     <Link href={`/teams/${team.id}`}>Перейти в профиль</Link>
+                </Button>
+            ) : (
+                <Button className="w-full">
+                    <UserCheck className="mr-2 h-4 w-4" /> Подать заявку
+                </Button>
+            )}
         </CardFooter>
     </Card>
 );
@@ -51,10 +56,19 @@ export function TeamsPage() {
     const { user: currentUser } = useUserStore();
     const [disciplineFilter, setDisciplineFilter] = useState('all');
 
-    const myTeams = useMemo(() => {
-        if (!currentUser) return [];
-        return teams.filter(team => team.members.includes(currentUser.id));
+    const { myTeams, otherTeams } = useMemo(() => {
+        if (!currentUser) {
+            return { myTeams: [], otherTeams: teams };
+        }
+        const myTeams = teams.filter(team => team.members.includes(currentUser.id));
+        const otherTeams = teams.filter(team => !team.members.includes(currentUser.id));
+        return { myTeams, otherTeams };
     }, [currentUser]);
+
+    const filteredOtherTeams = useMemo(() => {
+        if (disciplineFilter === 'all') return otherTeams;
+        return otherTeams.filter(team => team.game === disciplineFilter);
+    }, [disciplineFilter, otherTeams]);
 
     return (
         <div className="p-4 md:p-6 lg:p-8 space-y-8">
@@ -75,35 +89,11 @@ export function TeamsPage() {
                 <section>
                     <h2 className="text-2xl font-bold mb-4">Мои команды</h2>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                        {myTeams.map(team => <TeamCard key={team.id} team={team} />)}
+                        {myTeams.map(team => <TeamCard key={team.id} team={team} isMember={true} />)}
                     </div>
+                     <Separator className="my-8"/>
                 </section>
             )}
-            
-            <Card>
-                <CardHeader>
-                    <CardTitle>Фильтр по дисциплине</CardTitle>
-                    <CardDescription>Выберите вид спорта, чтобы увидеть соответствующие команды и рейтинги.</CardDescription>
-                </CardHeader>
-                <CardContent>
-                    <Select value={disciplineFilter} onValueChange={setDisciplineFilter}>
-                        <SelectTrigger className="w-full md:w-[280px]">
-                            <SelectValue placeholder="Дисциплина" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectItem value="all">Все дисциплины</SelectItem>
-                            <SelectGroup>
-                                <SelectLabel>Командные виды спорта</SelectLabel>
-                                {teamSports.map((sport) => (
-                                    <SelectItem key={sport.id} value={sport.name}>
-                                        {sport.name}
-                                    </SelectItem>
-                                ))}
-                            </SelectGroup>
-                        </SelectContent>
-                    </Select>
-                </CardContent>
-            </Card>
             
             <TopTeamsWidget 
                 userCity={currentUser?.city} 
@@ -113,8 +103,8 @@ export function TeamsPage() {
             <div>
                 <h2 className="text-2xl font-bold mb-4">Все команды</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                    {teams.filter(team => disciplineFilter === 'all' || team.game === disciplineFilter).map(team => (
-                        <TeamCard key={team.id} team={team} />
+                    {filteredOtherTeams.map(team => (
+                        <TeamCard key={team.id} team={team} isMember={false} />
                     ))}
                 </div>
             </div>
