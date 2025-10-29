@@ -55,6 +55,7 @@ function Calendar({
         day_range_middle:
           "aria-selected:bg-accent aria-selected:text-accent-foreground",
         day_hidden: "invisible",
+        vhidden: "hidden",
         ...classNames,
       }}
       components={{
@@ -71,4 +72,3 @@ function Calendar({
 Calendar.displayName = "Calendar"
 
 export { Calendar }
-
