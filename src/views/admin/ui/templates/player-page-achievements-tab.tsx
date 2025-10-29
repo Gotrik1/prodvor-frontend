@@ -14,7 +14,7 @@ const StatCard = ({ title, value, icon: Icon }: { title: string, value: string |
         <CardContent className="p-4">
             <Icon className="h-8 w-8 text-primary mx-auto mb-2" />
             <p className="text-2xl font-bold">{value}</p>
-            <p className="text-xs text-muted-foreground">{title}</p>
+            <p className="text-muted-foreground" style={{ fontSize: 'clamp(0.6rem, 2.5vw - 0.5rem, 0.75rem)' }}>{title}</p>
         </CardContent>
     </Card>
 );
