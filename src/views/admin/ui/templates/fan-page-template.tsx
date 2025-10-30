@@ -70,7 +70,7 @@ export function FanPageTemplate({ user }: { user?: User }) {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                  <Link href="/teams">
-                    <Card className="hover:border-primary transition-all">
+                    <Card className="hover:border-primary transition-transform duration-150 active:scale-95">
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                             <CardTitle className="text-sm font-medium">Любимые команды</CardTitle>
                             <Heart className="h-4 w-4 text-muted-foreground" />
@@ -81,7 +81,7 @@ export function FanPageTemplate({ user }: { user?: User }) {
                     </Card>
                 </Link>
                 <Link href="/competitions">
-                    <Card className="hover:border-primary transition-all">
+                    <Card className="hover:border-primary transition-transform duration-150 active:scale-95">
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                             <CardTitle className="text-sm font-medium">Просмотрено матчей</CardTitle>
                             <Ticket className="h-4 w-4 text-muted-foreground" />
@@ -92,7 +92,7 @@ export function FanPageTemplate({ user }: { user?: User }) {
                     </Card>
                 </Link>
                  <Link href="/competitions">
-                    <Card className="hover:border-primary transition-all">
+                    <Card className="hover:border-primary transition-transform duration-150 active:scale-95">
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                             <CardTitle className="text-sm font-medium">Стрик посещений</CardTitle>
                             <Flame className="h-4 w-4 text-muted-foreground" />
@@ -103,7 +103,7 @@ export function FanPageTemplate({ user }: { user?: User }) {
                     </Card>
                 </Link>
                 <Link href={`/users/${fanUser.id}`}>
-                    <Card className="hover:border-primary transition-all">
+                    <Card className="hover:border-primary transition-transform duration-150 active:scale-95">
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                             <CardTitle className="text-sm font-medium">Достижения</CardTitle>
                             <Star className="h-4 w-4 text-muted-foreground" />
