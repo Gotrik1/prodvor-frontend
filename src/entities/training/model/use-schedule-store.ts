@@ -6,8 +6,34 @@ import { persist, createJSONStorage } from 'zustand/middleware';
 import type { WorkoutPlan, ScheduledActivity } from '@/views/fitness-plan/ui/types';
 import { produce } from 'immer';
 
-const initialPersonalSchedule = {
-    'Понедельник': [], 'Вторник': [], 'Среда': [], 'Четверг': [], 'Пятница': [], 'Суббота': [], 'Воскресенье': []
+const initialPersonalSchedule: Record<string, ScheduledActivity[]> = {
+    'Понедельник': [
+        {
+            id: 'mock-team-training-1',
+            name: 'Тренировка команды "Ночные Снайперы"',
+            type: 'group',
+            startDate: new Date().toISOString(),
+            time: '19:00',
+            repeat: 'weekly',
+            customInterval: 0,
+        }
+    ], 
+    'Вторник': [], 
+    'Среда': [
+         {
+            id: 'mock-personal-training-1',
+            name: 'Силовая программа (День 1)',
+            type: 'template',
+            startDate: new Date().toISOString(),
+            time: '20:00',
+            repeat: 'weekly',
+            customInterval: 0,
+        }
+    ], 
+    'Четверг': [], 
+    'Пятница': [], 
+    'Суббота': [], 
+    'Воскресенье': []
 };
 
 interface ScheduleState {
