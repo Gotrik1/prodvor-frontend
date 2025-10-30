@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import {
@@ -63,9 +62,7 @@ export function DashboardHeader() {
          <div className="block md:hidden">
             <Logo />
          </div>
-      </div>
-      <div className="flex items-center gap-2">
-        <div className="relative w-64 hidden md:block">
+         <div className="relative w-64 hidden md:block">
           <Button
             variant="outline"
             className="w-full justify-start text-muted-foreground"
@@ -79,6 +76,8 @@ export function DashboardHeader() {
           </Button>
           <GlobalSearch open={open} setOpen={setOpen} />
         </div>
+      </div>
+      <div className="flex items-center gap-2">
         
         {isAdminPage ? (
              <Button asChild variant="outline">
