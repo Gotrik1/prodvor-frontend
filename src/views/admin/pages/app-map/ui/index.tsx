@@ -9,11 +9,11 @@ import * as LucideIcons from 'lucide-react';
 import { Map, File as FileIcon } from 'lucide-react';
 
 const DynamicIcon = ({ name, ...props }: { name: keyof typeof LucideIcons } & React.ComponentProps<'svg'>) => {
-    const IconComponent = LucideIcons[name];
+    const IconComponent = LucideIcons[name] as React.ElementType;
     if (!IconComponent) {
         return <FileIcon {...props} />; // Fallback Icon
     }
-    return React.createElement(IconComponent, props);
+    return <IconComponent {...props} />;
 };
 
 

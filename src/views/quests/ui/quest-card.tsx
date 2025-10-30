@@ -11,11 +11,11 @@ import { Quest } from '../lib/mock-data';
 import React from 'react';
 
 const DynamicIcon = ({ name, ...props }: { name: keyof typeof LucideIcons } & React.ComponentProps<'svg'>) => {
-    const IconComponent = LucideIcons[name];
+    const IconComponent = LucideIcons[name] as React.ElementType;
     if (!IconComponent) {
         return <Puzzle {...props} />; // Fallback Icon
     }
-    return React.createElement(IconComponent, props);
+    return <IconComponent {...props} />;
 };
 
 
