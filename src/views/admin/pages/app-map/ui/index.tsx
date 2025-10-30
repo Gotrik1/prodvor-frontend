@@ -13,7 +13,7 @@ const DynamicIcon = ({ name, ...props }: { name: keyof typeof LucideIcons } & Re
     if (!IconComponent) {
         return <FileIcon {...props} />; // Fallback Icon
     }
-    return <IconComponent {...props} />;
+    return React.createElement(IconComponent, props);
 };
 
 

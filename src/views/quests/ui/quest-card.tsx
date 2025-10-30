@@ -8,13 +8,14 @@ import { Button } from '@/shared/ui/button';
 import { Gem, CheckCircle, Puzzle } from 'lucide-react';
 import { useToast } from '@/shared/hooks/use-toast';
 import { Quest } from '../lib/mock-data';
+import React from 'react';
 
 const DynamicIcon = ({ name, ...props }: { name: keyof typeof LucideIcons } & React.ComponentProps<'svg'>) => {
     const IconComponent = LucideIcons[name];
     if (!IconComponent) {
         return <Puzzle {...props} />; // Fallback Icon
     }
-    return <IconComponent {...props} />;
+    return React.createElement(IconComponent, props);
 };
 
 
