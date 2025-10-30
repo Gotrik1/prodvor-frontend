@@ -177,7 +177,7 @@ export function PublicationsTab({ player, isOwnProfile }: { player: User; isOwnP
 
     return (
             <Card className="md:shadow-main-sm shadow-none md:bg-card bg-transparent">
-                <CardHeader>
+                <CardHeader className="hidden md:flex">
                     <div className="flex justify-between items-center">
                         <CardTitle className="hidden md:flex items-center gap-2"><Grid3x3 />Публикации</CardTitle>
                         {isOwnProfile && (
@@ -229,9 +229,9 @@ export function PublicationsTab({ player, isOwnProfile }: { player: User; isOwnP
                                         </Dialog>
                                     ))}
                                 </div>
-                                <div className="md:hidden -mx-0">
+                                <div className="md:hidden">
                                      <Carousel opts={{ align: "start", loop: true }}>
-                                        <CarouselContent className="-ml-1 pl-4">
+                                        <CarouselContent className="pl-4">
                                             {mediaFeed.map((item, index) => (
                                                 <CarouselItem key={`media-mobile-${index}`} className="pl-1 basis-1/3">
                                                     <Dialog>
