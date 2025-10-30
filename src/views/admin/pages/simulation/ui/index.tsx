@@ -11,6 +11,7 @@ import { Eye, EyeOff } from 'lucide-react';
 import Link from 'next/link';
 
 const rolesOrder: UserRole[] = [
+    'Болельщик',
     'Администратор',
     'Модератор',
     'Организатор',
@@ -19,7 +20,6 @@ const rolesOrder: UserRole[] = [
     'Менеджер',
     'Спонсор',
     'Игрок',
-    'Болельщик',
 ];
 
 export function SimulationPage() {
