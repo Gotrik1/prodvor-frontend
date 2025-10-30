@@ -87,7 +87,7 @@ export function DashboardSidebar({ isMobileSheet = false, onLinkClick }: { isMob
     // Default render for desktop sidebar
     return (
         <Sidebar>
-            <SidebarHeader>
+            <SidebarHeader className="xl:items-start">
                 <Logo />
             </SidebarHeader>
             <SidebarContent>
