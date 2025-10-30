@@ -1,7 +1,7 @@
 
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Card, CardContent } from "@/shared/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { Input } from "@/shared/ui/input";
@@ -12,6 +12,8 @@ import { mockChats, mockMessages, Chat } from '../lib/mock-data';
 import Link from 'next/link';
 import { useUserStore } from '@/widgets/dashboard-header/model/user-store';
 import type { User } from '@/mocks';
+import { teams } from '@/mocks';
+
 
 const ChatListItem = ({ chat, isActive, onSelect }: { chat: Chat, isActive: boolean, onSelect: (chatId: string) => void }) => (
     <div
@@ -155,10 +157,33 @@ const InfoPanel = ({ chat }: { chat: Chat | null }) => {
 
 
 export function MessagesPage() {
-    const [selectedChatId, setSelectedChatId] = useState<string | null>(mockChats[0].id);
     const { user: currentUser } = useUserStore();
 
-    const selectedChat = mockChats.find(c => c.id === selectedChatId);
+    const availableChats = useMemo(() => {
+        if (!currentUser) return [];
+
+        const isPlayerOrCoach = currentUser.role === 'Игрок' || currentUser.role === 'Тренер' || currentUser.role === 'Капитан';
+
+        return mockChats.filter(chat => {
+            if (chat.type === 'personal') {
+                return true; // Personal chats are always visible
+            }
+            if (chat.type === 'team') {
+                if (!isPlayerOrCoach) return false;
+                
+                const team = teams.find(t => t.id === chat.entityId);
+                if (!team) return false;
+
+                // Check if user is a member or the coach of the team
+                return team.members.includes(currentUser.id);
+            }
+            return false;
+        });
+    }, [currentUser]);
+
+    const [selectedChatId, setSelectedChatId] = useState<string | null>(availableChats.length > 0 ? availableChats[0].id : null);
+    
+    const selectedChat = availableChats.find(c => c.id === selectedChatId);
     const messagesForSelectedChat = selectedChatId ? mockMessages[selectedChatId] || [] : [];
     
     if (!currentUser) {
@@ -177,7 +202,7 @@ export function MessagesPage() {
                     </div>
                 </div>
                 <div className="flex-grow overflow-y-auto p-2">
-                    {mockChats.map(chat => (
+                    {availableChats.map(chat => (
                         <ChatListItem 
                             key={chat.id} 
                             chat={chat} 
