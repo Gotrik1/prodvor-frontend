@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { users, UserRole } from '@/mocks';
@@ -16,6 +17,7 @@ const rolesOrder: UserRole[] = [
     'Судья',
     'Тренер',
     'Менеджер',
+    'Спонсор',
     'Игрок',
     'Болельщик',
 ];

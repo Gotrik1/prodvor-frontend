@@ -1,6 +1,6 @@
 
 
-export type UserRole = 'Игрок' | 'Капитан' | 'Тренер' | 'Организатор' | 'Судья' | 'Менеджер' | 'Болельщик' | 'Модератор' | 'Администратор';
+export type UserRole = 'Игрок' | 'Капитан' | 'Тренер' | 'Организатор' | 'Судья' | 'Менеджер' | 'Болельщик' | 'Модератор' | 'Администратор' | 'Спонсор';
 export type UserGender = 'мужской' | 'женский';
 
 export interface CoachProfile {
@@ -56,6 +56,8 @@ const baseUsers: Omit<User, 'disciplines' | 'friends' | 'followers' | 'following
   { id: 'staff7', firstName: 'Светлана', lastName: 'Белова', nickname: 'CoachSveta', avatarUrl: 'https://i.pravatar.cc/150?u=staff7', coverImageUrl: 'https://placehold.co/1200x400.png', email: 'coach3@example.com', role: 'Тренер', gender: 'женский', age: 31, city: 'Москва', phone: '+7 (916) 555-10-07' },
   { id: 'user92', firstName: 'Макс', lastName: 'Барских', nickname: 'Barskih', avatarUrl: 'https://i.pravatar.cc/150?u=user92', coverImageUrl: 'https://placehold.co/1200x400.png', email: 'user92@example.com', role: 'Администратор', gender: 'мужской', age: 32, city: 'Рязань', phone: '+7 (910) 111-22-33' },
   { id: 'user93', firstName: 'Светлана', lastName: 'Лобода', nickname: 'Loboda', avatarUrl: 'https://i.pravatar.cc/150?u=user93', coverImageUrl: 'https://placehold.co/1200x400.png', email: 'user93@example.com', role: 'Администратор', gender: 'женский', age: 39, city: 'Рязань', phone: '+7 (910) 222-33-44' },
+  { id: 'user94', firstName: 'Олег', lastName: 'Винник', nickname: 'Fan1', avatarUrl: 'https://i.pravatar.cc/150?u=user94', coverImageUrl: 'https://placehold.co/1200x400.png', email: 'fan1@example.com', role: 'Болельщик', gender: 'мужской', age: 48, city: 'Москва', phone: '+7 (916) 444-55-66' },
+  { id: 'user95', firstName: 'Ирина', lastName: 'Билык', nickname: 'SponsorRep', avatarUrl: 'https://i.pravatar.cc/150?u=user95', coverImageUrl: 'https://placehold.co/1200x400.png', email: 'sponsor1@example.com', role: 'Спонсор', gender: 'женский', age: 51, city: 'Москва', phone: '+7 (916) 777-88-99' },
 ];
 
 // Generate additional players to reach ~150 total users
