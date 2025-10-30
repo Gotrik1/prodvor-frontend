@@ -6,7 +6,7 @@ import { ranks, allSports, achievementsBySport, Rank } from '@/mocks';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Badge } from '@/shared/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs';
-import { Construction, User, Gavel, Megaphone, ClipboardList, Briefcase, Handshake, Star, Award } from 'lucide-react';
+import { Construction, User, Gavel, Megaphone, ClipboardList, Briefcase, Handshake, Star, Award, Shield } from 'lucide-react';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/shared/ui/accordion';
 
 const rankColors = [

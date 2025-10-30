@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import React from 'react';
@@ -9,8 +8,16 @@ import type { SitemapCategory, SitemapItem } from '../lib/sitemap-data';
 import * as LucideIcons from 'lucide-react';
 import { Map, File as FileIcon, Folder } from 'lucide-react';
 
+const DynamicIcon = ({ name, ...props }: { name: keyof typeof LucideIcons } & React.ComponentProps<'svg'>) => {
+    const IconComponent = LucideIcons[name];
+    if (!IconComponent) {
+        return <FileIcon {...props} />; // Fallback Icon
+    }
+    return <IconComponent {...props} />;
+};
+
+
 const SitemapNode: React.FC<{ item: SitemapItem; isLast: boolean }> = ({ item, isLast }) => {
-  const Icon = LucideIcons[item.icon as keyof typeof LucideIcons] || FileIcon;
   const hasChildren = item.children && item.children.length > 0;
 
   return (
@@ -26,7 +33,7 @@ const SitemapNode: React.FC<{ item: SitemapItem; isLast: boolean }> = ({ item, i
           className="group flex items-center gap-3 p-3 rounded-lg border bg-card hover:border-primary transition-colors"
         >
           <div className="p-2 bg-primary/10 text-primary rounded-md">
-            <Icon className="h-5 w-5" />
+            <DynamicIcon name={item.icon} className="h-5 w-5" />
           </div>
           <div>
             <p className="font-semibold group-hover:text-primary transition-colors">{item.name}</p>
@@ -47,13 +54,12 @@ const SitemapNode: React.FC<{ item: SitemapItem; isLast: boolean }> = ({ item, i
 
 
 const SitemapCategoryTree: React.FC<{ category: SitemapCategory }> = ({ category }) => {
-  const Icon = LucideIcons[category.icon as keyof typeof LucideIcons] || Folder;
 
   return (
     <div className="space-y-4">
        <div className="flex items-center gap-3 p-4 rounded-lg bg-muted/50">
             <div className="p-3 rounded-full bg-secondary text-secondary-foreground">
-                <Icon className="h-6 w-6" />
+                <DynamicIcon name={category.icon} className="h-6 w-6" />
             </div>
             <h2 className="text-xl font-bold font-headline">{category.name}</h2>
        </div>

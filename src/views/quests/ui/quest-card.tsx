@@ -10,6 +10,15 @@ import { Gem, CheckCircle, Puzzle } from 'lucide-react';
 import { useToast } from '@/shared/hooks/use-toast';
 import { Quest } from '../lib/mock-data';
 
+const DynamicIcon = ({ name, ...props }: { name: keyof typeof LucideIcons } & React.ComponentProps<'svg'>) => {
+    const IconComponent = LucideIcons[name];
+    if (!IconComponent) {
+        return <Puzzle {...props} />; // Fallback Icon
+    }
+    return <IconComponent {...props} />;
+};
+
+
 export const QuestCard = ({ quest }: { quest: Quest }) => {
     const { toast } = useToast();
     const isCompleted = quest.progress >= quest.target;
@@ -22,14 +31,12 @@ export const QuestCard = ({ quest }: { quest: Quest }) => {
         // In a real app, you'd update the quest state to 'claimed'.
     };
 
-    const Icon = LucideIcons[quest.icon as keyof typeof LucideIcons] || Puzzle;
-
     return (
         <Card className="flex flex-col">
             <CardHeader>
                 <div className="flex items-start gap-4">
                     <div className="p-3 bg-primary/10 text-primary rounded-md mt-1">
-                        <Icon className="h-6 w-6" />
+                        <DynamicIcon name={quest.icon} className="h-6 w-6" />
                     </div>
                     <div>
                         <CardTitle className="text-lg">{quest.name}</CardTitle>
