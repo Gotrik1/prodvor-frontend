@@ -1,27 +1,55 @@
 
+
 'use client';
 
 import Image from 'next/image';
 import Link from 'next/link';
 import type { Team, Playground } from '@/mocks';
 import { Button } from '@/shared/ui/button';
-import { Home, Settings, Rss, Swords } from 'lucide-react';
+import { Home, Settings, Rss, Swords, UserPlus } from 'lucide-react';
+import { useUserStore } from '@/widgets/dashboard-header/model/user-store';
+import { useState } from 'react';
+import { useToast } from '@/shared/hooks/use-toast';
+import { cn } from '@/shared/lib/utils';
 
 interface TeamHeaderProps {
     team: Team;
     homePlaygrounds?: (Playground | undefined)[];
-    isCaptain?: boolean;
 }
 
-export const TeamHeader = ({ team, homePlaygrounds, isCaptain }: TeamHeaderProps) => {
+export const TeamHeader = ({ team, homePlaygrounds }: TeamHeaderProps) => {
+    const { user: currentUser } = useUserStore();
+    const { toast } = useToast();
+    
+    // In a real app, this would come from user data
+    const [isFollowing, setIsFollowing] = useState(false); 
+
+    const handleFollow = () => {
+        setIsFollowing(!isFollowing);
+        toast({
+            title: isFollowing ? 'Вы отписались' : 'Вы подписались!',
+            description: `Вы ${isFollowing ? 'больше не будете' : 'будете'} следить за новостями команды "${team.name}".`
+        });
+    }
+
+    const isCaptain = currentUser?.id === team.captainId;
+
     return (
         <header className="flex flex-col md:flex-row items-center gap-6 p-4 rounded-lg bg-card border">
             <Image src={team.logoUrl} alt={team.name} width={96} height={96} className="rounded-lg border-4 border-primary" data-ai-hint="team logo" />
             <div className="text-center md:text-left flex-grow">
                 <h1 className="text-3xl font-bold font-headline">{team.name}</h1>
                 <p className="text-muted-foreground text-lg">Дисциплина: {team.game}</p>
+                 <div className="mt-2 flex items-center justify-center md:justify-start gap-4 text-sm text-muted-foreground">
+                    <div className="flex items-center gap-1">
+                        <Users className="h-4 w-4" /> {team.members.length} игроков
+                    </div>
+                     <div className="flex items-center gap-1">
+                        <Rss className="h-4 w-4" /> {team.followers.length} подписчиков
+                    </div>
+                </div>
                 {homePlaygrounds && homePlaygrounds.length > 0 && (
-                    <div className="flex flex-col items-center md:items-start mt-1 space-y-1">
+                    <div className="flex flex-col items-center md:items-start mt-2 space-y-1">
                         {homePlaygrounds.map(pg => pg && (
                             <Link key={pg.id} href={`/playgrounds/${pg.id}`} className="text-sm text-muted-foreground hover:text-primary transition-colors flex items-center gap-2">
                                 <Home className="h-4 w-4" />
@@ -43,8 +71,9 @@ export const TeamHeader = ({ team, homePlaygrounds, isCaptain }: TeamHeaderProps
                         <Swords className="mr-2 h-4 w-4" /> Бросить вызов
                     </Button>
                 )}
-                <Button variant="outline" className="w-full">
-                    <Rss className="mr-2 h-4 w-4" /> Подписаться
+                <Button variant={isFollowing ? 'secondary' : 'outline'} className="w-full" onClick={handleFollow}>
+                    <UserPlus className={cn("mr-2 h-4 w-4", isFollowing && "text-primary")} />
+                    {isFollowing ? 'Вы подписаны' : 'Подписаться'}
                 </Button>
             </div>
         </header>

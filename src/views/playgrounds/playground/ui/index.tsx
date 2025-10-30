@@ -1,4 +1,7 @@
 
+
+'use client';
+
 import type { Playground, ServiceCategory } from "@/mocks";
 import { teams, users } from "@/mocks";
 import { Button } from "@/shared/ui/button";
@@ -12,6 +15,8 @@ import { Badge } from "@/shared/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 import { FitnessSchedule } from "@/widgets/fitness-schedule";
+import { useState } from "react";
+import { useToast } from "@/shared/hooks/use-toast";
 
 const features = [
     { id: "lighting", label: "Освещение" },
@@ -65,6 +70,8 @@ const FitnessServicesSection = ({ services }: { services: ServiceCategory[] }) =
 
 
 export function PlaygroundPage({ playground }: { playground: Playground | undefined }) {
+    const [isFollowed, setIsFollowed] = useState(false);
+    const { toast } = useToast();
 
     if (!playground) {
         return (
@@ -85,6 +92,14 @@ export function PlaygroundPage({ playground }: { playground: Playground | undefi
             </div>
         );
     }
+
+    const handleFollow = () => {
+        setIsFollowed(!isFollowed);
+        toast({
+            title: isFollowed ? "Вы отписались" : "Вы подписались!",
+            description: `Вы ${isFollowed ? 'больше не будете' : 'будете'} получать уведомления о событиях на площадке "${playground.name}".`,
+        });
+    }
     
     const residentTeams = teams.filter(team => playground.residentTeamIds.includes(team.id));
     const followerUsers = users.filter(user => playground.followers.includes(user.id));
@@ -99,10 +114,16 @@ export function PlaygroundPage({ playground }: { playground: Playground | undefi
                             Назад ко всем площадкам
                         </Link>
                     </Button>
-                    <Button variant="outline">
-                        <Star className="mr-2 h-4 w-4" />
-                        Добавить в избранное
-                    </Button>
+                    <div className="flex items-center gap-2">
+                         <Button variant="outline" onClick={handleFollow}>
+                            <Rss className="mr-2 h-4 w-4" />
+                           {isFollowed ? 'Вы подписаны' : 'Подписаться'}
+                        </Button>
+                        <Button variant="outline">
+                            <Star className="mr-2 h-4 w-4" />
+                            Добавить в избранное
+                        </Button>
+                    </div>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">

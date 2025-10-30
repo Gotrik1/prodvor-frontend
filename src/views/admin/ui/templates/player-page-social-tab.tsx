@@ -5,8 +5,8 @@
 import { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
-import type { User } from '@/mocks';
-import { users } from '@/mocks';
+import type { User, Team } from '@/mocks';
+import { users, teams } from '@/mocks';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import Link from 'next/link';
 import { Button } from '@/shared/ui/button';
@@ -47,6 +47,36 @@ const UserList = ({ userIds, emptyText }: { userIds: string[], emptyText: string
         </div>
     );
 };
+
+const TeamList = ({ teamIds, emptyText }: { teamIds: string[], emptyText: string }) => {
+    const teamList = teams.filter(t => teamIds.includes(t.id));
+
+    if (teamList.length === 0) {
+        return <p className="text-sm text-muted-foreground text-center py-4">{emptyText}</p>;
+    }
+
+    return (
+         <div className="flex flex-wrap gap-2">
+            {teamList.map(team => (
+                 <TooltipProvider key={team.id}>
+                    <Tooltip>
+                        <TooltipTrigger asChild>
+                            <Link href={`/teams/${team.id}`} className="group">
+                                <Avatar className="h-12 w-12 border-2 border-transparent group-hover:border-primary transition-colors rounded-md">
+                                    <AvatarImage src={team.logoUrl} alt={team.name} />
+                                    <AvatarFallback>{team.name.charAt(0)}</AvatarFallback>
+                                </Avatar>
+                            </Link>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                            <p>{team.name}</p>
+                        </TooltipContent>
+                    </Tooltip>
+                </TooltipProvider>
+            ))}
+        </div>
+    )
+}
 
 const FriendRequests = () => {
     const [requests, setRequests] = useState(mockFriendRequests);
@@ -92,7 +122,7 @@ export function SocialTab({ user, isOwnProfile }: { user: User, isOwnProfile: bo
     const tabs = [
         { value: 'friends', icon: UsersIcon, label: `Друзья (${user.friends.length})` },
         { value: 'followers', icon: Rss, label: `Подписчики (${user.followers.length})` },
-        { value: 'following', icon: Heart, label: `Подписки (${user.followingUsers.length})` },
+        { value: 'following', icon: Heart, label: `Подписки (${user.followingUsers.length + user.following.length})` },
     ];
     
     if (isOwnProfile) {
@@ -132,8 +162,15 @@ export function SocialTab({ user, isOwnProfile }: { user: User, isOwnProfile: bo
                             <FriendRequests />
                         </TabsContent>
                     )}
-                    <TabsContent value="following">
-                        <UserList userIds={user.followingUsers} emptyText="Этот пользователь ни на кого не подписан." />
+                    <TabsContent value="following" className="space-y-4">
+                        <div>
+                             <h3 className="text-sm font-semibold text-muted-foreground mb-2">Команды ({user.following.length})</h3>
+                             <TeamList userIds={user.following} emptyText="Не подписан на команды." />
+                        </div>
+                        <div>
+                            <h3 className="text-sm font-semibold text-muted-foreground mb-2">Игроки ({user.followingUsers.length})</h3>
+                            <UserList userIds={user.followingUsers} emptyText="Не подписан на игроков." />
+                        </div>
                     </TabsContent>
                 </Tabs>
             </CardContent>
