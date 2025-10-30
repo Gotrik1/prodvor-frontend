@@ -38,6 +38,9 @@ const mockMedia = [
     { type: 'image', src: 'https://placehold.co/1920x1080.png', title: 'Разминка', dataAiHint: 'team warmup' },
 ];
 
+const taggedUsers = users.slice(2, 5);
+
+
 const CommentItem = ({ comment }: { comment: {id: string, author: User, text: string} }) => (
     <div className="flex items-start gap-3">
         <Avatar className="h-8 w-8">
@@ -56,6 +59,7 @@ export const MediaPostDialogContent = ({ post }: { post: Post }) => {
     const postData = posts.find(p => p.id === post.id) || post;
     const [isLiked, setIsLiked] = useState(false);
     const [newComment, setNewComment] = useState("");
+    const [showTags, setShowTags] = useState(false);
     const currentUser = users[0];
     const { toast } = useToast();
 
@@ -91,17 +95,37 @@ export const MediaPostDialogContent = ({ post }: { post: Post }) => {
                 <DialogDescription>Просмотр медиа и комментариев.</DialogDescription>
             </DialogHeader>
             <div className="grid grid-cols-1 md:grid-cols-2">
-                <div className="relative aspect-square w-full">
+                <div className="relative aspect-square w-full bg-black">
                     <Image 
                         src={mockMedia[0].src} 
                         alt={postData.content} 
                         fill
-                        className="object-cover rounded-l-lg"
+                        className={cn("object-contain transition-all duration-300", showTags && "opacity-50")}
                         data-ai-hint="post image"
                     />
+                    {showTags && (
+                        <div className="absolute inset-0 flex items-center justify-center">
+                            <Card className="w-4/5">
+                                <CardHeader>
+                                    <CardTitle>Отмечены на фото</CardTitle>
+                                </CardHeader>
+                                <CardContent className="space-y-3">
+                                    {taggedUsers.map(user => (
+                                         <Link href={`/users/${user.id}`} key={user.id} className="flex items-center gap-3 p-2 rounded-lg hover:bg-muted">
+                                            <Avatar className="h-9 w-9">
+                                                <AvatarImage src={user.avatarUrl} />
+                                                <AvatarFallback>{user.nickname.charAt(0)}</AvatarFallback>
+                                            </Avatar>
+                                            <span className="font-semibold">{user.nickname}</span>
+                                        </Link>
+                                    ))}
+                                </CardContent>
+                            </Card>
+                        </div>
+                    )}
                 </div>
                 <div className="flex flex-col h-full max-h-[90vh]">
-                    <div className="p-4 border-b">
+                    <div className="p-4 border-b flex justify-between items-start">
                          <Link href={`/users/${postData.author.id}`} className="flex items-center gap-3 group">
                             <Avatar>
                                 <AvatarImage src={postData.author.avatarUrl} />
@@ -112,6 +136,9 @@ export const MediaPostDialogContent = ({ post }: { post: Post }) => {
                                 <p className="text-xs text-muted-foreground">{postData.content}</p>
                             </div>
                         </Link>
+                        <Button variant="ghost" size="icon" onClick={() => setShowTags(!showTags)}>
+                            <Tag className={cn("h-5 w-5", showTags && "text-primary")} />
+                        </Button>
                     </div>
 
                     <div className="flex-grow overflow-y-auto p-4 space-y-4">
@@ -206,7 +233,7 @@ export function PublicationsTab({ player, isOwnProfile }: { player: User; isOwnP
                         <TabsContent value="photos" className="mt-4">
                              {playerPosts.length > 0 ? (
                                 <>
-                                <div className="hidden md:grid grid-cols-2 md:grid-cols-3 gap-2">
+                                <div className="hidden md:grid grid-cols-2 md:grid-cols-3 gap-1 md:gap-4">
                                     {playerPosts.map((post) => (
                                         <Dialog key={`media-desktop-${post.id}`}>
                                             <DialogTrigger asChild>

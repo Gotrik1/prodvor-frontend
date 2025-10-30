@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { Button } from '@/shared/ui/button';
@@ -11,7 +12,7 @@ import {
   CardTitle,
 } from '@/shared/ui/card';
 import { Label } from '@/shared/ui/label';
-import { Save, Users, User as UserIcon, Trophy, Award, ArrowRightLeft, Megaphone } from 'lucide-react';
+import { Save, Users, User as UserIcon, Trophy, Award, ArrowRightLeft, Megaphone, Tag } from 'lucide-react';
 import { Switch } from '@/shared/ui/switch';
 import { Separator } from '@/shared/ui/separator';
 

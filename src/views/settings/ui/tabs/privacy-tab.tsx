@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { Button } from '@/shared/ui/button';
@@ -11,7 +12,7 @@ import {
   CardTitle,
 } from '@/shared/ui/card';
 import { Label } from '@/shared/ui/label';
-import { Save, User, Image as ImageIcon, MessageSquare, Globe, Lock } from 'lucide-react';
+import { Save, User, Image as ImageIcon, MessageSquare, Globe, Lock, Tag } from 'lucide-react';
 import { Switch } from '@/shared/ui/switch';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shared/ui/select';
 import { Separator } from '@/shared/ui/separator';
@@ -88,7 +89,7 @@ export function PrivacyTab() {
                             </SelectContent>
                         </Select>
                     </PrivacySettingRow>
-                     <PrivacySettingRow label="Кто может отмечать меня на фото" description="Разрешить другим отмечать вас.">
+                     <PrivacySettingRow label="Кто может отмечать меня" description="Разрешить другим отмечать вас на фото и видео.">
                         <Select defaultValue="friends">
                             <SelectTrigger><SelectValue /></SelectTrigger>
                             <SelectContent>
