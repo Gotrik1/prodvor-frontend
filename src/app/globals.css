@@ -161,6 +161,26 @@ html {
   h6 {
     font-family: theme("fontFamily.headline");
   }
+
+  /* Custom calendar day styles */
+  .day-weekend:not(.day-selected) {
+    color: hsl(var(--destructive));
+  }
+  .day-holiday:not(.day-selected) {
+    color: hsl(var(--destructive));
+  }
+  .day-with-event > .rdp-button_reset::after {
+    content: "";
+    display: block;
+    position: absolute;
+    bottom: 4px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background-color: hsl(var(--primary));
+  }
 }
 
 @layer utilities {

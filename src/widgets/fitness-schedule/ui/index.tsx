@@ -4,15 +4,14 @@
 import React, { useState, useEffect } from 'react';
 import { Badge } from '@/shared/ui/badge';
 import { Button } from '@/shared/ui/button';
-import { Clock, Trash2, Calendar as CalendarIcon, Trophy, Dumbbell } from 'lucide-react';
+import { Clock, Trash2, Trophy, Dumbbell } from 'lucide-react';
 import { useScheduleStore } from '@/entities/training/model/use-schedule-store';
 import type { ScheduledActivity, Activity } from '@/views/fitness-plan/ui/types';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
 import { ActivityLibraryDialog } from '@/views/fitness-plan/ui/activity-library';
 import { registeredTeams } from '@/views/tournaments/public-page/ui/mock-data';
 import { cn } from '@/shared/lib/utils';
-import { Skeleton } from '@/shared/ui/skeleton';
 import { Calendar } from '@/shared/ui/calendar';
+import { publicHolidays2025 } from '@/shared/lib/holidays';
 
 const personalActivityColors: Record<Activity['type'] | 'match', string> = {
     'template': 'bg-amber-500/10 text-amber-300 border-amber-500/20',
@@ -72,36 +71,43 @@ export function FitnessSchedule({ showHeader = false }: { showHeader?: boolean }
         customInterval: 0,
     };
 
+    const allEventsByDate = useMemo(() => {
+        const eventsMap = new Map<string, ScheduledActivity[]>();
+        Object.entries(personalSchedule).forEach(([day, activities]) => {
+            // This is a simplified logic. A real implementation would map day names to actual dates.
+            // For now, we'll just use this to find which dates have *any* events.
+             if (activities.length > 0) {
+                 // Mocking event dates for demonstration
+                 const mockDate = new Date();
+                 mockDate.setDate(mockDate.getDate() + (Object.keys(personalSchedule).indexOf(day) % 5));
+                 eventsMap.set(mockDate.toDateString(), activities);
+             }
+        });
+        // Add the mock match for today
+        eventsMap.set(new Date().toDateString(), [upcomingMatch]);
+        return eventsMap;
+    }, [personalSchedule, upcomingMatch]);
+
     const eventsForSelectedDay = React.useMemo(() => {
         if (!selectedDate) return [];
-        const dayString = getDayOfWeekString(selectedDate);
-        const dayKey = dayString.charAt(0).toUpperCase() + dayString.slice(1);
-        const events = personalSchedule[dayKey] || [];
-        
-        // Add mock match for today for demonstration
-        const today = new Date();
-        if (selectedDate.getDate() === today.getDate() && 
-            selectedDate.getMonth() === today.getMonth() && 
-            selectedDate.getFullYear() === today.getFullYear()) {
-            if (!events.find(e => e.id === upcomingMatch.id)) {
-                 return [...events, upcomingMatch].sort((a,b) => a.time.localeCompare(b.time));
-            }
-        }
-        
-        return events.sort((a,b) => a.time.localeCompare(b.time));
-    }, [selectedDate, personalSchedule, upcomingMatch]);
+        const dateKey = selectedDate.toDateString();
+        return allEventsByDate.get(dateKey) || [];
+    }, [selectedDate, allEventsByDate]);
 
     const handleSelectActivity = (activity: Activity) => {
+        if (!selectedDate) return;
         const newActivity: ScheduledActivity = {
             ...activity,
             id: `scheduled-${activity.id}-${Date.now()}`,
-            startDate: new Date().toISOString(),
+            startDate: selectedDate.toISOString(),
             time: "12:00",
             repeat: 'none',
             customInterval: 0,
         };
         addScheduledActivity(newActivity);
     };
+    
+    const daysWithEvents = Array.from(allEventsByDate.keys()).map(dateString => new Date(dateString));
 
     return (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
@@ -111,6 +117,16 @@ export function FitnessSchedule({ showHeader = false }: { showHeader?: boolean }
                     selected={selectedDate}
                     onSelect={setSelectedDate}
                     className="rounded-md border shadow-main-sm"
+                    modifiers={{ 
+                        weekend: { dayOfWeek: [0, 6] },
+                        holiday: publicHolidays2025,
+                        withEvent: daysWithEvents,
+                    }}
+                    modifiersClassNames={{
+                        weekend: 'day-weekend',
+                        holiday: 'day-holiday',
+                        withEvent: 'day-with-event'
+                    }}
                 />
             </div>
             <div className="space-y-3 min-h-[350px]">
@@ -125,9 +141,7 @@ export function FitnessSchedule({ showHeader = false }: { showHeader?: boolean }
                             <p className="text-sm">На этот день активностей нет.</p>
                         </div>
                     )
-                ) : (
-                    <Skeleton className="h-48 w-full" />
-                )}
+                ) : null }
                 {!showHeader && <ActivityLibraryDialog onSelectActivity={handleSelectActivity}/>}
             </div>
         </div>
