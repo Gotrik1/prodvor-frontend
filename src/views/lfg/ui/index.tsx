@@ -32,7 +32,8 @@ const PlayerCard = ({ player }: { player: typeof playersLookingForTeam[0] }) => 
             </div>
         </CardHeader>
         <CardContent className="space-y-3">
-             <p className="text-sm"><strong>Роль:</strong> <Badge variant="outline">{player.lookingFor}</Badge></p>
+             <p className="text-sm"><strong>Роль:</strong> <Badge variant="outline">{player.role}</Badge></p>
+             <p className="text-sm"><strong>Ищут позицию:</strong> <Badge variant="secondary">{player.lookingFor}</Badge></p>
              <p className="text-sm"><strong>Дисциплины:</strong> {player.disciplines.map(d => allSports.find(s => s.id === d)?.name).slice(0,2).join(', ')}</p>
         </CardContent>
         <CardFooter className="gap-2">
