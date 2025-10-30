@@ -18,7 +18,6 @@ import { Dialog, DialogTrigger } from "@/shared/ui/dialog";
 import { MediaPostDialogContent } from "@/views/admin/ui/templates/player-page-publications-tab";
 
 const defaultFan: User | undefined = users.find(u => u.role === 'Болельщик');
-const favoriteTeams = teams.slice(0, 4);
 const upcomingMatches = [
     { team1: teams[0], team2: teams[1], tournament: tournaments.find(t => t.id === 'mytourney1')! },
     { team1: teams[2], team2: teams[3], tournament: tournaments.find(t => t.id === 'mytourney1')! },
@@ -38,6 +37,12 @@ export function FanPageTemplate({ user }: { user?: User }) {
         if (!fanUser) return [];
         return getUserDisciplines(fanUser);
     }, [fanUser]);
+    
+    const favoriteTeams = useMemo(() => {
+        if (!fanUser) return [];
+        return teams.filter(team => fanUser.following.includes(team.id));
+    }, [fanUser]);
+
 
     if (!fanUser) {
         return (
@@ -140,9 +145,9 @@ export function FanPageTemplate({ user }: { user?: User }) {
                                                             data-ai-hint={mockMedia[index % mockMedia.length].dataAiHint}
                                                         />
                                                         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                                                        <div className="absolute bottom-2 left-3 flex items-center gap-1 text-white font-semibold text-sm">
+                                                        <div className="absolute bottom-2 left-3 flex items-center gap-1.5 text-white">
                                                             <Heart className="h-4 w-4" />
-                                                            {post.likes}
+                                                            <span className="font-semibold text-sm">{post.likes}</span>
                                                         </div>
                                                     </div>
                                                 </DialogTrigger>
