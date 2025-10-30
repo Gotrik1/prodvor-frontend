@@ -1,7 +1,7 @@
 
 'use client';
 
-import type { Post, Team, User } from "@/mocks";
+import type { Post, User } from "@/mocks";
 import { users } from "@/mocks";
 import { CreatePost } from "@/widgets/dashboard-feed/ui/create-post";
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
@@ -37,17 +37,6 @@ const mockMedia = [
     { type: 'image', src: 'https://placehold.co/600x400.png', title: 'Разминка', dataAiHint: 'team warmup' },
 ];
 
-const mockComments = users.slice(2, 6).map((user, i) => ({
-    id: `comment-${i}`,
-    author: user,
-    text: [
-        "Отличный кадр!",
-        "Так держать! Вперед к победам!",
-        "Выглядит мощно! Удачи в следующих играх.",
-        "Супер! Отличная работа на поле."
-    ][i % 4],
-}));
-
 const CommentItem = ({ comment }: { comment: {id: string, author: User, text: string} }) => (
     <div className="flex items-start gap-3">
         <Avatar className="h-8 w-8">
@@ -62,14 +51,15 @@ const CommentItem = ({ comment }: { comment: {id: string, author: User, text: st
 );
 
 export const MediaPostDialogContent = ({ post }: { post: Post }) => {
-    const { addComment, likePost } = usePostStore();
+    const { posts, addComment, likePost } = usePostStore();
+    const postData = posts.find(p => p.id === post.id) || post;
     const [isLiked, setIsLiked] = useState(false);
     const [newComment, setNewComment] = useState("");
     const currentUser = users[0];
     const { toast } = useToast();
 
     const handleLike = () => {
-        likePost(post.id, !isLiked);
+        likePost(postData.id, !isLiked);
         setIsLiked(!isLiked);
     }
     
@@ -81,7 +71,7 @@ export const MediaPostDialogContent = ({ post }: { post: Post }) => {
             author: currentUser,
             text: newComment,
         };
-        addComment(post.id, newCommentObject);
+        addComment(postData.id, newCommentObject);
         setNewComment("");
     }
 
@@ -96,14 +86,14 @@ export const MediaPostDialogContent = ({ post }: { post: Post }) => {
     return (
         <DialogContent className="sm:max-w-4xl p-0">
              <DialogHeader className="sr-only">
-                <DialogTitle>Публикация от {post.author.nickname}</DialogTitle>
+                <DialogTitle>Публикация от {postData.author.nickname}</DialogTitle>
                 <DialogDescription>Просмотр медиа и комментариев.</DialogDescription>
             </DialogHeader>
             <div className="grid grid-cols-1 md:grid-cols-2">
                 <div className="relative aspect-square w-full">
                     <Image 
                         src={mockMedia[0].src} 
-                        alt={post.content} 
+                        alt={postData.content} 
                         fill
                         className="object-cover rounded-l-lg"
                         data-ai-hint="post image"
@@ -111,20 +101,20 @@ export const MediaPostDialogContent = ({ post }: { post: Post }) => {
                 </div>
                 <div className="flex flex-col h-full max-h-[90vh]">
                     <div className="p-4 border-b">
-                         <Link href={`/users/${post.author.id}`} className="flex items-center gap-3 group">
+                         <Link href={`/users/${postData.author.id}`} className="flex items-center gap-3 group">
                             <Avatar>
-                                <AvatarImage src={post.author.avatarUrl} />
-                                <AvatarFallback>{post.author.nickname.charAt(0)}</AvatarFallback>
+                                <AvatarImage src={postData.author.avatarUrl} />
+                                <AvatarFallback>{postData.author.nickname.charAt(0)}</AvatarFallback>
                             </Avatar>
                             <div>
-                                <p className="font-semibold group-hover:text-primary">{post.author.nickname}</p>
-                                <p className="text-xs text-muted-foreground">{post.content}</p>
+                                <p className="font-semibold group-hover:text-primary">{postData.author.nickname}</p>
+                                <p className="text-xs text-muted-foreground">{postData.content}</p>
                             </div>
                         </Link>
                     </div>
 
                     <div className="flex-grow overflow-y-auto p-4 space-y-4">
-                        {post.comments.map(comment => <CommentItem key={comment.id} comment={comment} />)}
+                        {postData.comments.map(comment => <CommentItem key={comment.id} comment={comment} />)}
                     </div>
                     
                     <div className="p-4 border-t space-y-3 bg-muted/50">
@@ -132,11 +122,11 @@ export const MediaPostDialogContent = ({ post }: { post: Post }) => {
                              <div className="flex items-center gap-4">
                                 <button className="flex items-center gap-1.5 group" onClick={handleLike}>
                                     <Heart className={cn("h-6 w-6 transition-all group-hover:scale-110", isLiked && "fill-red-500 text-red-500")} />
-                                    <span className="font-semibold text-sm">{post.likes}</span>
+                                    <span className="font-semibold text-sm">{postData.likes}</span>
                                 </button>
                                 <div className="flex items-center gap-1.5">
                                     <MessageSquare className="h-6 w-6"/>
-                                    <span className="font-semibold text-sm">{post.comments.length}</span>
+                                    <span className="font-semibold text-sm">{postData.comments.length}</span>
                                 </div>
                              </div>
                               <Button variant="ghost" size="icon" onClick={handleShare}>
