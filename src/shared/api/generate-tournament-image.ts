@@ -15,7 +15,7 @@ export async function generateTournamentImage(input: GenerateTournamentImageInpu
   await new Promise(resolve => setTimeout(resolve, 2000));
   
   // Return a placeholder image URL, which the component can handle.
-  const placeholderUrl = 'https://placehold.co/1200x400.png';
+  const placeholderUrl = 'https://placehold.co/1920x1080.png';
   
   return { imageDataUri: placeholderUrl };
 }

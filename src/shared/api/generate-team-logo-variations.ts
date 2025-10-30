@@ -39,10 +39,10 @@ const generateTeamLogoVariationsFlow = ai.defineFlow(
         }
 
         const mockLogos = [
-            `https://placehold.co/256x256/E34F4F/FFFFFF.png`,
-            `https://placehold.co/256x256/4F86E3/FFFFFF.png`,
-            `https://placehold.co/256x256/4FE364/FFFFFF.png`,
-            `https://placehold.co/256x256/E3B44F/FFFFFF.png`,
+            `https://placehold.co/512x512/E34F4F/FFFFFF.png`,
+            `https://placehold.co/512x512/4F86E3/FFFFFF.png`,
+            `https://placehold.co/512x512/4FE364/FFFFFF.png`,
+            `https://placehold.co/512x512/E3B44F/FFFFFF.png`,
         ];
         
         // The front-end is designed to handle URLs, so we return them directly.

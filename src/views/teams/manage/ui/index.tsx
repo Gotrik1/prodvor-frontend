@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import type { Team } from "@/mocks";
@@ -19,7 +20,7 @@ export function TeamManagementPage({ team }: { team: Team | undefined }) {
 
     if (!team) {
         return (
-             <div className="flex flex-col min-h-screen items-center justify-center p-4">
+             <div className="flex flex-col min-h-[80vh] items-center justify-center p-4">
                 <Card className="text-center max-w-md w-full">
                     <CardHeader>
                         <CardTitle>Ошибка 404</CardTitle>

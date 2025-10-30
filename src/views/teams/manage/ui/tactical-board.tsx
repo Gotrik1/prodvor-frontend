@@ -9,11 +9,7 @@ import { Dices, Save } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shared/ui/select';
 import { Label } from '@/shared/ui/label';
 
-interface TacticalBoardProps {
-    teamMembers: User[];
-}
-
-const soccerFieldImage = 'https://placehold.co/800x500/34D399/FFFFFF.png';
+const soccerFieldImage = 'https://placehold.co/1920x1080/34D399/FFFFFF.png';
 
 // Positions for a 4-4-2 formation (as percentages of width/height)
 const formations: Record<string, { x: number, y: number, role: string }[]> = {

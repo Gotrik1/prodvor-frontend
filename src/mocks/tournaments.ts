@@ -1,3 +1,4 @@
+
 import type { Playground } from './playgrounds';
 import { playgrounds } from './playgrounds';
 
@@ -25,7 +26,7 @@ export const tournaments: Tournament[] = [
       participants: 12,
       maxParticipants: 16,
       startDate: '2025-07-15',
-      bannerUrl: 'https://placehold.co/1200x400.png',
+      bannerUrl: 'https://placehold.co/1920x1080.png',
       dataAiHint: 'basketball court sunset',
       playgrounds: [playgrounds[2], playgrounds[3]]
     },
@@ -38,7 +39,7 @@ export const tournaments: Tournament[] = [
         participants: 8,
         maxParticipants: 8,
         startDate: '2025-05-10',
-        bannerUrl: 'https://placehold.co/1200x400.png',
+        bannerUrl: 'https://placehold.co/1920x1080.png',
         dataAiHint: 'futsal court lights',
         playgrounds: [playgrounds[1]]
     },
@@ -51,7 +52,7 @@ export const tournaments: Tournament[] = [
       participants: 0,
       maxParticipants: 16,
       startDate: '2025-12-01',
-      bannerUrl: 'https://placehold.co/1200x400.png',
+      bannerUrl: 'https://placehold.co/1920x1080.png',
       dataAiHint: 'winter soccer snow',
       playgrounds: [playgrounds[0]]
     },
@@ -64,7 +65,7 @@ export const tournaments: Tournament[] = [
       participants: 4,
       maxParticipants: 8,
       startDate: '2025-07-25',
-      bannerUrl: 'https://placehold.co/1200x400.png',
+      bannerUrl: 'https://placehold.co/1920x1080.png',
       dataAiHint: 'amateur soccer players',
       playgrounds: [playgrounds[2]]
     },
@@ -77,7 +78,7 @@ export const tournaments: Tournament[] = [
       participants: 8,
       maxParticipants: 8,
       startDate: '2025-08-01',
-      bannerUrl: 'https://placehold.co/1200x400.png',
+      bannerUrl: 'https://placehold.co/1920x1080.png',
       dataAiHint: 'street soccer action',
       playgrounds: [playgrounds[0]]
     }

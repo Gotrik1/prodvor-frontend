@@ -30,12 +30,12 @@ import { useToast } from "@/shared/hooks/use-toast";
 import { usePostStore } from "@/widgets/dashboard-feed/model/post-store";
 
 const mockMedia = [
-    { type: 'image', src: 'https://placehold.co/600x400.png', title: 'Фото с последней игры', dataAiHint: 'soccer game' },
-    { type: 'image', src: 'https://placehold.co/600x400.png', title: 'Командное фото', dataAiHint: 'team photo' },
-    { type: 'image', src: 'https://placehold.co/600x400.png', title: 'Тренировка', dataAiHint: 'sports training' },
-    { type: 'image', src: 'https://placehold.co/600x400.png', title: 'Награждение', dataAiHint: 'award ceremony' },
-    { type: 'image', src: 'https://placehold.co/600x400.png', title: 'Победный гол', dataAiHint: 'goal celebration' },
-    { type: 'image', src: 'https://placehold.co/600x400.png', title: 'Разминка', dataAiHint: 'team warmup' },
+    { type: 'image', src: 'https://placehold.co/1920x1080.png', title: 'Фото с последней игры', dataAiHint: 'soccer game' },
+    { type: 'image', src: 'https://placehold.co/1920x1080.png', title: 'Командное фото', dataAiHint: 'team photo' },
+    { type: 'image', src: 'https://placehold.co/1920x1080.png', title: 'Тренировка', dataAiHint: 'sports training' },
+    { type: 'image', src: 'https://placehold.co/1920x1080.png', title: 'Награждение', dataAiHint: 'award ceremony' },
+    { type: 'image', src: 'https://placehold.co/1920x1080.png', title: 'Победный гол', dataAiHint: 'goal celebration' },
+    { type: 'image', src: 'https://placehold.co/1920x1080.png', title: 'Разминка', dataAiHint: 'team warmup' },
 ];
 
 const CommentItem = ({ comment }: { comment: {id: string, author: User, text: string} }) => (
