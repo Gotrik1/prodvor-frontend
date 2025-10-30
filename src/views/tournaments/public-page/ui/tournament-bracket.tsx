@@ -2,7 +2,7 @@
 
 'use client';
 
-import { registeredTeams } from '@/mocks';
+import { registeredTeams } from "@/mocks";
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { Trophy } from 'lucide-react';

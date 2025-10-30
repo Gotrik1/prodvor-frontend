@@ -1,4 +1,5 @@
 
+
 export interface Team {
   id: string;
   name: string;
@@ -18,3 +19,6 @@ export interface Team {
 
 // Base teams array, to be populated by the initializer.
 export const teams: Team[] = [];
+
+// This will also be populated by the initializer, but we export it for use in mocks.
+export const registeredTeams: Team[] = [];

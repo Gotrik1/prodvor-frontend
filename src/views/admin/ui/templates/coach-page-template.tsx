@@ -26,13 +26,13 @@ export function CoachPageTemplate({ user }: { user?: User }) {
 
     const managedTeams = useMemo(() => {
         if (!coach?.coachProfile?.managedTeams) return [];
-        return teams.filter(t => coach.coachProfile.managedTeams.includes(t.id));
+        return teams.filter(t => coach.coachProfile!.managedTeams.includes(t.id));
     }, [coach]);
     
     const individualClients = useMemo(() => {
         if (!coach?.coachProfile?.clients) return [];
         const managedTeamMembers = new Set(managedTeams.flatMap(t => t.members));
-        return users.filter(u => coach.coachProfile.clients.includes(u.id) && !managedTeamMembers.has(u.id));
+        return users.filter(u => coach.coachProfile!.clients.includes(u.id) && !managedTeamMembers.has(u.id));
     }, [coach, managedTeams]);
 
     const coachDisciplines = useMemo(() => {

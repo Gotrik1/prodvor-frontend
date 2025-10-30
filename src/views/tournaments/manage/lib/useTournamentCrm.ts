@@ -37,7 +37,7 @@ export function useTournamentCrm(tournamentId: string) {
     const [tournament, setTournament] = useState<Tournament | undefined>(initialTournament);
     const [teams, setTeams] = useState(initialRegisteredTeams.map(team => ({
         ...team,
-        status: ['Подтверждена', 'Подтверждена', 'Ожидает', 'Подтверждена', 'Ожидает', 'Отклонена', 'Подтверждена', 'Подтверждена', 'Ожидает', 'Подтверждена'][team.id.charCodeAt(team.id.length - 1) % 10]
+        status: ['Подтверждена', 'Подтверждена', 'Ожидает', 'Подтверждена', 'Ожидает', 'Отклонена', 'Подтверждена', 'Подтверждена', 'Ожидает', 'Подтверждена'][(team.id.charCodeAt(team.id.length - 1)) % 10]
     })));
     const [mediaItems, setMediaItems] = useState<MediaItem[]>([
         { type: 'image', src: 'https://placehold.co/600x400.png', title: 'Фото с открытия', dataAiHint: 'tournament opening' },

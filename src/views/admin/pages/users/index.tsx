@@ -11,6 +11,7 @@ import { ManagerPageTemplate } from '@/views/admin/ui/templates/manager-page-tem
 import { OrganizerPageTemplate } from '@/views/admin/ui/templates/organizer-page-template';
 import { PlayerPage } from '@/views/users/player';
 import { FanPageTemplate } from '@/views/admin/ui/templates/fan-page-template';
+import { PlayerPageTemplate } from '@/views/admin/ui/templates/player-page-template';
 
 export function UserPage({ userId }: { userId?: string }) {
    if (!userId) {
@@ -59,7 +60,7 @@ export function UserPage({ userId }: { userId?: string }) {
             return <OrganizerPageTemplate user={user} />;
         case 'Игрок':
         case 'Капитан':
-            return <PlayerPage user={user} />;
+            return <PlayerPageTemplate user={user} />;
         case 'Болельщик':
             return <FanPageTemplate user={user} />;
         default:

@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { Button } from "@/shared/ui/button";
@@ -7,8 +8,8 @@ import { GanttChartIcon, Save } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { Input } from "@/shared/ui/input";
 import React, { useState, useEffect } from "react";
-import type { Team, BracketMatch } from '@/views/tournaments/public-page/ui/mock-data';
-import { useProtocol } from "@/widgets/protocol-editor/lib/use-protocol";
+import type { Team, BracketMatch } from '@/mocks';
+import { useProtocol } from "@/features/protocol-editor";
 import { useTournamentCrmContext } from "../../lib/TournamentCrmContext";
 import { updateRatings } from "@/shared/lib/rating";
 import { GameplayEvent, awardProgressPoints } from "@/shared/lib/gamification";

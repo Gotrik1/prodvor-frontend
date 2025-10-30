@@ -10,20 +10,21 @@ import { Input } from '@/shared/ui/input';
 import { Label } from '@/shared/ui/label';
 import { Trash2, PlusCircle } from 'lucide-react';
 import { useProtocol } from '../lib/use-protocol';
-import { EventType, eventTypes } from '@/mocks';
-import { users } from '@/mocks';
+import { EventType, users, teams } from '@/mocks';
 import type { BracketMatch, MatchEvent } from '@/mocks';
 
 const eventLabels: Record<EventType, string> = {
-    [eventTypes.GOAL]: 'Гол',
-    [eventTypes.YELLOW_CARD]: 'Желтая карточка',
-    [eventTypes.RED_CARD]: 'Красная карточка',
-    [eventTypes.SUBSTITUTION]: 'Замена',
+    'goal': 'Гол',
+    'yellow_card': 'Желтая карточка',
+    'red_card': 'Красная карточка',
+    'substitution': 'Замена',
 };
+
+const eventTypes = Object.keys(eventLabels) as EventType[];
 
 export function ProtocolEditor({ match }: { match: BracketMatch }) {
     const { events, addEvent, removeEvent } = useProtocol();
-    const [eventType, setEventType] = useState<EventType>(eventTypes.GOAL);
+    const [eventType, setEventType] = useState<EventType>('goal');
     const [minute, setMinute] = useState('');
     const [player1, setPlayer1] = useState('');
     const [player2, setPlayer2] = useState('');
@@ -36,7 +37,7 @@ export function ProtocolEditor({ match }: { match: BracketMatch }) {
 
 
     const handleAddEvent = () => {
-        if (!minute || !player1 || (eventType === eventTypes.SUBSTITUTION && !player2)) return;
+        if (!minute || !player1 || (eventType === 'substitution' && !player2)) return;
 
         const p1 = allPlayersInMatch.find(p => p.id === player1);
         if (!p1) return;
@@ -51,11 +52,11 @@ export function ProtocolEditor({ match }: { match: BracketMatch }) {
             playerOut: undefined,
         };
 
-        if (eventType === eventTypes.GOAL && player2) {
+        if (eventType === 'goal' && player2) {
             newEvent.assist = allPlayersInMatch.find(p => p.id === player2)?.nickname;
         }
 
-        if (eventType === eventTypes.SUBSTITUTION && player2) {
+        if (eventType === 'substitution' && player2) {
             newEvent.playerOut = p1.nickname;
             newEvent.playerIn = allPlayersInMatch.find(p => p.id === player2)?.nickname;
             newEvent.player = ''; // Substitution doesn't have a single primary player
@@ -70,18 +71,18 @@ export function ProtocolEditor({ match }: { match: BracketMatch }) {
 
     const getPlayerLabel = () => {
         switch (eventType) {
-            case eventTypes.GOAL: return "Автор гола";
-            case eventTypes.YELLOW_CARD:
-            case eventTypes.RED_CARD: return "Игрок";
-            case eventTypes.SUBSTITUTION: return "Ушедший игрок";
+            case 'goal': return "Автор гола";
+            case 'yellow_card':
+            case 'red_card': return "Игрок";
+            case 'substitution': return "Ушедший игрок";
             default: return "Игрок 1";
         }
     };
     
     const getPlayer2Label = () => {
         switch (eventType) {
-            case eventTypes.GOAL: return "Ассистент (необязательно)";
-            case eventTypes.SUBSTITUTION: return "Вышедший игрок";
+            case 'goal': return "Ассистент (необязательно)";
+            case 'substitution': return "Вышедший игрок";
             default: return null;
         }
     };
@@ -99,7 +100,7 @@ export function ProtocolEditor({ match }: { match: BracketMatch }) {
                         <Select value={eventType} onValueChange={(value) => setEventType(value as EventType)}>
                             <SelectTrigger><SelectValue /></SelectTrigger>
                             <SelectContent>
-                                {Object.values(eventTypes).map(type => (
+                                {eventTypes.map(type => (
                                     <SelectItem key={type} value={type}>{eventLabels[type]}</SelectItem>
                                 ))}
                             </SelectContent>
@@ -156,7 +157,7 @@ export function ProtocolEditor({ match }: { match: BracketMatch }) {
                             <div key={event.id} className="flex items-center justify-between p-2 rounded-md bg-background hover:bg-muted">
                                 <div className="flex items-center gap-3">
                                     <span className="font-mono text-sm w-8">{event.minute}&apos;</span>
-                                    <span className="font-semibold">{eventLabels[event.type as EventType]}</span>
+                                    <span className="font-semibold">{eventLabels[event.type]}</span>
                                     <span className="text-muted-foreground text-sm">{event.player}{event.assist ? ` (${event.assist})` : ''}{event.playerIn ? `↑${event.playerIn} / ↓${event.playerOut}` : ''}</span>
                                 </div>
                                 <Button variant="ghost" size="icon" className="h-7 w-7 text-muted-foreground hover:text-destructive" onClick={() => removeEvent(event.id)}>

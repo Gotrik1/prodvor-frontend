@@ -6,14 +6,14 @@ import { MatchPage } from '@/views/tournaments/match';
 import { tournaments } from '@/mocks';
 import { useProtocol } from '@/features/protocol-editor';
 import { useEffect, useMemo } from 'react';
-import type { BracketMatch, Team } from '@/mocks';
+import type { BracketMatch, Team, Tournament } from '@/mocks';
 
 // This is a client component, so we can't export metadata directly.
 // We'll manage the title dynamically if needed.
 
 export default function TournamentMatchPage({ params }: { params: { tournamentId: string, matchId: string } }) {
   const { setActiveMatch, activeMatch } = useProtocol();
-  const tournament = useMemo(() => tournaments.find((t: typeof tournaments[0]) => t.id === params.tournamentId), [params.tournamentId]);
+  const tournament: Tournament | undefined = useMemo(() => tournaments.find((t: Tournament) => t.id === params.tournamentId), [params.tournamentId]);
   
   // In a real app, you would fetch match details based on matchId
   // For this mock, we'll find the match in our generated bracket if it exists
@@ -29,8 +29,8 @@ export default function TournamentMatchPage({ params }: { params: { tournamentId
     // Fallback for demo purposes if not found in bracket
     return {
         id: params.matchId,
-        team1: { id: 'team1', name: 'Команда 1', logoUrl: 'https://placehold.co/100x100.png', captainId: 'user1', members: [], game: 'Футбол', rank: 1500 } as Team,
-        team2: { id: 'team2', name: 'Команда 2', logoUrl: 'https://placehold.co/100x100.png', captainId: 'user2', members: [], game: 'Футбол', rank: 1450 } as Team,
+        team1: { id: 'team1', name: 'Команда 1', logoUrl: 'https://placehold.co/100x100.png', captainId: 'user1', members: [], game: 'Футбол', rank: 1500, sportId: 'sport-1', dataAiHint: 'logo', followers: [], following: [], city: 'Москва' } as Team,
+        team2: { id: 'team2', name: 'Команда 2', logoUrl: 'https://placehold.co/100x100.png', captainId: 'user2', members: [], game: 'Футбол', rank: 1450, sportId: 'sport-1', dataAiHint: 'logo', followers: [], following: [], city: 'Москва' } as Team,
         score1: null,
         score2: null,
       };

@@ -5,6 +5,7 @@ import type { Team } from './teams';
 import type { Playground } from './playgrounds';
 import type { Sponsor } from './personnel';
 import type { Sport } from './sports';
+import type { Tournament } from './tournaments';
 
 interface MockData {
     users: User[];
@@ -12,6 +13,8 @@ interface MockData {
     playgrounds: Playground[];
     sponsors: Sponsor[];
     allSports: Sport[];
+    tournaments: Tournament[];
+    registeredTeams: Team[];
 }
 
 let isInitialized = false;
@@ -34,6 +37,8 @@ export function initializeMockData(data: MockData): MockData {
         playgrounds: JSON.parse(JSON.stringify(data.playgrounds)),
         sponsors: JSON.parse(JSON.stringify(data.sponsors)),
         allSports: JSON.parse(JSON.stringify(data.allSports)),
+        tournaments: JSON.parse(JSON.stringify(data.tournaments)),
+        registeredTeams: JSON.parse(JSON.stringify(data.registeredTeams)),
     };
     
     assignInitialDisciplines(processedData.users, processedData.allSports);
@@ -45,6 +50,12 @@ export function initializeMockData(data: MockData): MockData {
     assignDisciplinesFromTeams(processedData.users, processedData.teams);
     assignTeamsToPlaygrounds(processedData.teams, processedData.playgrounds);
     assignClientsToCoaches(processedData.users, processedData.teams);
+    
+    // Populate registeredTeams after teams have been generated
+    if (processedData.teams.length >= 8) {
+        processedData.registeredTeams.push(...processedData.teams.slice(0, 8));
+    }
+
 
     isInitialized = true;
     initializedData = processedData;
@@ -186,8 +197,8 @@ function generateTeamFollowing(allTeams: Team[], allUsers: User[]) {
             if (followedTeamId !== team.id && !team.following.includes(followedTeamId)) {
                 team.following.push(followedTeamId);
                 const followedTeam = allTeams.find(t => t.id === followedTeamId);
-                if (followedTeam && !followedTeam.followers.includes(team.id)) {
-                    followedTeam.followers.push(team.id);
+                if (followedTeam && !followedTeam.followers.includes(team.id as never)) {
+                    followedTeam.followers.push(team.id as never);
                 }
             }
         }

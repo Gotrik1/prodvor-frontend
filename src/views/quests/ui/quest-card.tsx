@@ -1,11 +1,12 @@
 
+
 'use client';
 
 import * as LucideIcons from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '@/shared/ui/card';
 import { Progress } from '@/shared/ui/progress';
 import { Button } from '@/shared/ui/button';
-import { Gem, CheckCircle } from 'lucide-react';
+import { Gem, CheckCircle, Puzzle } from 'lucide-react';
 import { useToast } from '@/shared/hooks/use-toast';
 import { Quest } from '../lib/mock-data';
 
@@ -21,7 +22,7 @@ export const QuestCard = ({ quest }: { quest: Quest }) => {
         // In a real app, you'd update the quest state to 'claimed'.
     };
 
-    const Icon = LucideIcons[quest.icon as keyof typeof LucideIcons] || LucideIcons.Puzzle;
+    const Icon = LucideIcons[quest.icon as keyof typeof LucideIcons] || Puzzle;
 
     return (
         <Card className="flex flex-col">

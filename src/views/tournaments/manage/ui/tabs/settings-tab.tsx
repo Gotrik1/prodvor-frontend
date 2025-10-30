@@ -45,7 +45,7 @@ export function SettingsTab() {
     };
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        handleTournamentChange({ [e.target.id]: e.target.value });
+        handleTournamentChange({ [e.target.id]: e.target.value } as Partial<Tournament>);
     };
     
     const handleSelectChange = (id: 'level', value: TournamentLevel) => {

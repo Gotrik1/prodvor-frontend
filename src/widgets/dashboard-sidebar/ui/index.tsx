@@ -29,17 +29,12 @@ import {
   Map,
   Gavel,
   MessageCircle,
-  MoreHorizontal,
 } from "lucide-react";
 import Link from 'next/link';
 import { i18n } from "@/shared/lib/i18n";
 import { Logo } from "@/views/auth/ui";
 import { usePathname } from "next/navigation";
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetTrigger } from "@/shared/ui/sheet";
-import { cn } from "@/shared/lib/utils";
-import { useScrollDirection } from '@/shared/hooks/use-scroll-direction';
-import { useIsMobile } from '@/shared/hooks/use-mobile';
-import { useState, useEffect } from 'react';
+
 
 const mainNavItems = [
     { href: "/dashboard", icon: Home, label: i18n.sidebar.feed },

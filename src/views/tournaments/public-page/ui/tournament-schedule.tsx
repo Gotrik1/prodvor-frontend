@@ -2,12 +2,12 @@
 
 'use client';
 
-import { registeredTeams, tournaments } from '@/mocks';
+import { registeredTeams, tournaments } from "@/mocks";
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { Calendar, MapPin } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import type { Playground } from '@/mocks';
+import type { Playground, Tournament } from '@/mocks';
 import Link from 'next/link';
 
 interface Match {
@@ -23,7 +23,7 @@ export function TournamentSchedule({ tournamentId }: { tournamentId: string }) {
     const [schedule, setSchedule] = useState<Match[]>([]);
 
     useEffect(() => {
-        const tournament = tournaments.find(t => t.id === tournamentId);
+        const tournament = tournaments.find((t: Tournament) => t.id === tournamentId);
         if (!tournament) return;
 
         // Mock schedule generation

@@ -2,7 +2,7 @@
 
 'use client';
 
-import { ranks, teams } from "@/mocks";
+import { ranks } from "@/mocks";
 import type { User } from "@/mocks/users";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { MapPin, Cake, User as UserIcon, MessageSquare, UserPlus, Gamepad2 } from "lucide-react";

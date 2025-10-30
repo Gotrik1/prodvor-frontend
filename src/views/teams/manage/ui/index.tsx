@@ -13,7 +13,8 @@ import { RosterManagement } from "./roster-management";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 import { TransfersTab } from "./transfers-tab";
 import { users } from "@/mocks";
-import { AnnouncementsTab } from "@/views/tournaments/manage/ui/tabs/announcements-tab";
+import { AnnouncementsTab } from "./announcements-tab";
+import { SettingsTab } from "./settings-tab";
 
 export function TeamManagementPage({ team }: { team: Team | undefined }) {
 
@@ -77,7 +78,7 @@ export function TeamManagementPage({ team }: { team: Team | undefined }) {
                    <AnnouncementsTab />
                 </TabsContent>
                 <TabsContent value="settings" className="mt-6">
-                   <Card><CardHeader><CardTitle>Настройки команды</CardTitle></CardHeader><CardContent><p className="text-muted-foreground">Раздел в разработке.</p></CardContent></Card>
+                   <SettingsTab />
                 </TabsContent>
             </Tabs>
         </div>
