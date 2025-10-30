@@ -51,7 +51,7 @@ export function CompetitionsPage() {
             </SelectContent>
           </Select>
         ) : (
-          <TabsList>
+          <TabsList className="grid w-full grid-cols-3">
             {competitionTabs.map(tab => (
               <TabsTrigger key={tab.value} value={tab.value}>
                 <tab.icon className="mr-2 h-4 w-4" />
