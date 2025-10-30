@@ -7,7 +7,7 @@
 
 ---
 
-## Шаг 1: Настройка проекта и создание моделей данных
+## Шаг 1: Настройка проекта и создание всех моделей данных
 
 **Промпт 1:**
 
@@ -15,7 +15,7 @@
 1.  Убедиться, что в `requirements.txt` добавлены `Flask-SQLAlchemy`, `psycopg2-binary` и `Flask-Cors`.
 2.  Инициализировать Flask-приложение.
 3.  Настроить SQLAlchemy для работы с базой данных PostgreSQL. Используй стандартную строку подключения, например: `postgresql://user:password@host:port/database`. Не забудь также инициализировать `CORS`.
-4.  Создать модели данных (SQLAlchemy models) для следующих сущностей: `User`, `Team`, `PlayerProfile`, `Tournament`.
+4.  Создать модели данных (SQLAlchemy models) для следующих сущностей: `User`, `Team`, `PlayerProfile`, `RefereeProfile`, `CoachProfile`, `Tournament`, `Post`, `Playground`, `Quest`, `Achievement`.
 
 Вот структура моделей:
 
@@ -33,6 +33,7 @@
     -   `captainId`: `Integer`, внешний ключ к `user.id`
     -   `game`: `String(100)`
     -   `rank`: `Integer`, по умолчанию `1200`
+    -   `city`: `String(100)`
 
 -   **PlayerProfile**:
     -   `id`: `Integer`, первичный ключ
@@ -41,15 +42,55 @@
     -   `matchesPlayed`: `Integer`, по умолчанию `0`
     -   `wins`: `Integer`, по умолчанию `0`
 
+-   **RefereeProfile**:
+    -   `id`: `Integer`, первичный ключ
+    -   `userId`: `Integer`, внешний ключ к `user.id`, уникальный
+    -   `category`: `String(50)`
+    -   `matchesJudged`: `Integer`, по умолчанию `0`
+
+-   **CoachProfile**:
+    -   `id`: `Integer`, первичный ключ
+    -   `userId`: `Integer`, внешний ключ к `user.id`, уникальный
+    -   `specialization`: `String(150)`
+    -   `experienceYears`: `Integer`
+    
 -   **Tournament**:
     -   `id`: `Integer`, первичный ключ
     -   `name`: `String(150)`, не может быть null
     -   `game`: `String(100)`
     -   `status`: `String(50)`
     -   `prizePool`: `String(100)`
-    -   `participants`: `Integer`
+    -   `participants`: `Integer`, по умолчанию `0`
     -   `maxParticipants`: `Integer`
     -   `startDate`: `String(100)`
+    
+-   **Post**:
+    -   `id`: `Integer`, первичный ключ
+    -   `authorId`: `Integer`, внешний ключ к `user.id`
+    -   `teamId`: `Integer`, внешний ключ к `team.id` (может быть null)
+    -   `content`: `Text`
+    -   `timestamp`: `DateTime`, по умолчанию `func.now()`
+
+-   **Playground**:
+    -   `id`: `Integer`, первичный ключ
+    -   `name`: `String(150)`
+    -   `address`: `String(250)`
+    -   `type`: `String(100)`
+    -   `surface`: `String(100)`
+    
+-   **Quest**:
+    -   `id`: `Integer`, первичный ключ
+    -   `name`: `String(150)`
+    -   `description`: `Text`
+    -   `type`: `String(50)`
+    -   `xp_reward`: `Integer`
+    
+-   **Achievement**:
+    -   `id`: `Integer`, первичный ключ
+    -   `name`: `String(150)`
+    -   `description`: `Text`
+    -   `icon`: `String(50)`
+
 
 Пожалуйста, создай файл `app.py` со всем этим кодом и инициализируй базу данных."
 
@@ -93,7 +134,7 @@
 
 3.  **`POST /api/v1/teams`**:
     -   Должен создавать новую команду.
-    -   Принимает JSON с полями: `name`, `captainId`, `game`.
+    -   Принимает JSON с полями: `name`, `captainId`, `game`, `city`.
     -   `logoUrl` и `rank` должны иметь значения по умолчанию.
     -   Возвращает созданный объект команды со статусом 201."
 
@@ -103,7 +144,7 @@
 
 **Промпт 4:**
 
-"Почти готово. Осталось реализовать API для турниров в том же файле `app.py`.
+"Реализуй API для турниров в том же файле `app.py`.
 
 1.  **`GET /api/v1/tournaments`**:
     -   Должен возвращать список всех турниров со всеми полями.
@@ -119,4 +160,34 @@
 
 ---
 
-После выполнения этих четырех шагов у вас будет готов базовый Python-бэкенд, полностью соответствующий потребностям текущего фронтенда. Вы сможете заменить моковые данные в файлах фронтенда на реальные вызовы к этим API.
+## Шаг 5: Создание API для остальных сущностей
+
+**Промпт 5:**
+
+"Почти готово. Давай добавим базовые `GET` эндпоинты для оставшихся сущностей, чтобы фронтенд мог получать эти данные. Добавь в `app.py`:
+
+1.  **`GET /api/v1/posts`**:
+    -   Должен возвращать список всех постов.
+
+2.  **`GET /api/v1/playgrounds`**:
+    -   Должен возвращать список всех площадок.
+
+3.  **`GET /api/v1/quests`**:
+    -   Должен возвращать список всех квестов.
+
+4.  **`GET /api/v1/achievements`**:
+    -   Должен возвращать список всех достижений.
+
+5.  **`GET /api/v1/profiles/player`**:
+    -   Должен возвращать список всех профилей игроков (`PlayerProfile`).
+    
+6.  **`GET /api/v1/profiles/referee`**:
+    -   Должен возвращать список всех профилей судей (`RefereeProfile`).
+
+7.  **`GET /api/v1/profiles/coach`**:
+    -   Должен возвращать список всех профилей тренеров (`CoachProfile`).
+"
+
+---
+
+После выполнения этих пяти шагов у вас будет готов базовый Python-бэкенд, полностью соответствующий потребностям текущего фронтенда. Вы сможете заменить моковые данные в файлах фронтенда на реальные вызовы к этим API.
