@@ -2,7 +2,7 @@
 
 'use client';
 
-import type { Playground, ServiceCategory } from "@/mocks";
+import type { Playground, User, ServiceCategory } from "@/mocks";
 import { teams, users } from "@/mocks";
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
@@ -37,26 +37,6 @@ const mockPhotos = users.slice(0, 8).map((user, index) => ({
 const sortedPhotos = [...mockPhotos].sort((a, b) => b.votes - a.votes);
 const mainPhoto = sortedPhotos[0];
 const galleryPhotos = sortedPhotos.slice(1);
-
-const ServiceCard = ({ service }: { service: ServiceCategory['services'][0] }) => {
-    // @ts-expect-error - Icon name from mock might not exist in LucideIcons, we handle this.
-    const Icon = service.icon && (service.icon in LucideIcons) ? LucideIcons[service.icon] as React.ElementType : Home;
-    return (
-        <Card className="bg-background/50 h-full">
-            <CardHeader className="flex flex-row items-center gap-4">
-                <div className="p-3 rounded-md bg-primary/10 text-primary">
-                    <Icon className="w-6 h-6" />
-                </div>
-                <div>
-                    <CardTitle>{service.name}</CardTitle>
-                </div>
-            </CardHeader>
-            <CardContent>
-                <p className="text-sm text-muted-foreground">{service.description}</p>
-            </CardContent>
-        </Card>
-    );
-};
 
 const PhotoContest = () => {
     const [userUploads, setUserUploads] = useState(0);

@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import {
@@ -32,7 +33,8 @@ import Link from 'next/link';
 import { i18n } from "@/shared/lib/i18n";
 import { Logo } from "@/views/auth/ui";
 import { usePathname } from "next/navigation";
-import React from 'react';
+import React, { useState } from 'react';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetTrigger } from "@/shared/ui/sheet";
 
 const mainNavItems = [
     { href: "/dashboard", icon: Home, label: i18n.sidebar.feed },

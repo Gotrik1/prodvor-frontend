@@ -2,7 +2,7 @@
 
 'use client';
 
-import { users, teams, posts } from "@/mocks";
+import { users, teams, posts, Achievement } from "@/mocks";
 import type { User } from "@/mocks/users";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { Badge } from "@/shared/ui/badge";
@@ -14,7 +14,7 @@ import React, { useMemo } from "react";
 import { getUserDisciplines } from "@/entities/user/lib";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 import { Dialog, DialogTrigger } from "@/shared/ui/dialog";
-import { AchievementsTab } from "../../ui/templates/player-page-achievements-tab";
+import { AchievementsTab } from "@/views/admin/ui/templates/player-page-achievements-tab";
 import { MediaPostDialog } from "@/widgets/media-post-dialog";
 
 

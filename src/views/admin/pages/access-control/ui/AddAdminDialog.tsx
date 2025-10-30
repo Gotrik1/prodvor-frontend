@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import React, { useState } from 'react';
@@ -10,7 +11,7 @@ import { Label } from '@/shared/ui/label';
 import { PlusCircle } from "lucide-react";
 import type { UserRole } from '@/mocks/users';
 
-const adminRoles: UserRole[] = ['Менеджер' as any, 'Модератор' as any, 'Менеджер' as any, 'Менеджер' as any, 'Продакт-менеджер' as any, 'Проджект-менеджер' as any];
+const adminRoles: UserRole[] = ['Менеджер турниров', 'Модератор контента', 'Менеджер по рекламе', 'Менеджер по спорту', 'Продакт-менеджер', 'Проджект-менеджер'];
 
 export const AddAdminDialog = ({ onAddAdmin }: { onAddAdmin: (name: string, role: UserRole) => void }) => {
     const [name, setName] = useState('');

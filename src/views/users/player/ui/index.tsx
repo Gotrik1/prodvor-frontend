@@ -2,7 +2,7 @@
 
 'use client';
 
-import { ranks } from "@/mocks";
+import { ranks, teams } from "@/mocks";
 import type { User } from "@/mocks/users";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { MapPin, Cake, User as UserIcon, MessageSquare, UserPlus, Gamepad2 } from "lucide-react";
@@ -12,7 +12,7 @@ import { TrainingInfoWidget } from "@/widgets/training-info-widget";
 import { AchievementsWidget } from "@/widgets/achievements-widget";
 import { PlayerStatsOverviewWidget } from "@/widgets/player-stats-overview-widget";
 import { SocialConnectionsWidget } from "@/widgets/social-connections-widget";
-import React, { useMemo } from "react";
+import React, { useMemo, useEffect, useState } from "react";
 import { MyTeamWidget } from "@/widgets/dashboard-widgets/ui/my-team-widget";
 import { Card, CardBody } from "@/shared/ui/card";
 import { Badge } from "@/shared/ui/badge";
@@ -21,10 +21,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/shared/ui/popover";
 import { useIsMobile } from "@/shared/hooks/use-mobile";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/shared/ui/sheet";
 import { PublicationsFeed } from "@/widgets/publications-feed";
-
-const getRankForElo = (elo: number) => {
-    return ranks.find(rank => elo >= rank.eloMin && elo <= rank.eloMax);
-};
+import Image from "next/image";
 
 const MoreDisciplines = ({ disciplines }: { disciplines: string[] }) => {
     const isMobile = useIsMobile();

@@ -1,7 +1,6 @@
 
-export interface TeamJoinEventDetails extends Record<string, never> {
-    // No specific details needed for this event type
-}
+
+export type TeamJoinEventDetails = Record<string, never>;
 
 export interface MatchWinEventDetails {
     score1: number;
