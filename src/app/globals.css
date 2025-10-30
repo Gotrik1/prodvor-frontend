@@ -171,15 +171,15 @@ html {
     color: hsl(var(--destructive) / 0.8);
   }
   .day-with-event > .rdp-button_reset {
-    background-color: hsl(142 71% 45% / 0.1);
+    background-color: hsl(142 71% 45% / 0.1) !important;
     font-weight: 600;
   }
   .day-with-event:not(.day-selected) > .rdp-button_reset {
     color: hsl(142 71% 45%) !important;
   }
   .day-with-event.day-selected > .rdp-button_reset {
-    background-color: hsl(142 71% 45% / 0.3);
-    border: 1px solid hsl(142 71% 45% / 0.6);
+    background-color: hsl(142 71% 45% / 0.3) !important;
+    border: 1px solid hsl(142 71% 45% / 0.6) !important;
   }
 }
 
