@@ -65,7 +65,7 @@ export default function UserProfilePage({ params }: { params: { userId: string }
   }
 
   return (
-    <div className="p-4 md:p-6 lg:p-8">
+    <div className="p-0 md:p-6 lg:p-8">
       {renderContent()}
     </div>
   )
