@@ -97,8 +97,8 @@ function generateTeams(
                     
                     if (potentialMembers.length < 5) continue;
 
-                    const shuffledMembers = [...potentialMembers].sort(() => 0.5 - Math.random());
-                    const teamMembers = shuffledMembers.slice(0, 5 + (i % 3)); // Team size 5 to 7
+                    const sortedMembers = [...potentialMembers].sort((a, b) => a.id.localeCompare(b.id));
+                    const teamMembers = sortedMembers.slice(0, 5 + (i % 3)); // Team size 5 to 7
                     
                     if (teamMembers.length < 5) continue;
                     
@@ -138,7 +138,7 @@ function assignInitialDisciplines(allUsers: User[], allSportsList: Sport[]) {
         const userDisciplines = new Set<string>();
         if (allSportIds.length > 0) {
             userDisciplines.add(allSportIds[index % allSportIds.length]);
-            if (index % 3 === 0) {
+            if (index % 3 === 0 && userDisciplines.size < 6) {
                  userDisciplines.add(allSportIds[(index * 7) % allSportIds.length]);
             }
         }
