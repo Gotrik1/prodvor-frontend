@@ -29,7 +29,7 @@ const features = [
 
 const mockPhotos = users.slice(0, 8).map((user, index) => ({
   id: `photo-${index + 1}`,
-  url: `https://picsum.photos/seed/${100 + index}/1600/900`,
+  url: `https://placehold.co/1600x900.png?text=Photo+${index+1}`,
   author: user,
   votes: Math.floor(Math.random() * (150 - 10 + 1)) + 10,
 }));
