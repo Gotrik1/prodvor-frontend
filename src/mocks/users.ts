@@ -92,7 +92,7 @@ export const users: User[] = baseUsers.map(u => ({
   friends: [],
   followers: [],
   followingUsers: [],
-  following: [],
+  following: u.id === 'user94' ? ['team1', 'team2', 'team3'] : [],
   sponsorIds: [],
   coachProfile: u.role === 'Тренер' ? {
       specialization: 'Футбол и Фитнес', // Default, can be overridden by specific coach
