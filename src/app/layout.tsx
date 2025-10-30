@@ -6,7 +6,7 @@ import { Toaster } from "@/shared/ui/toaster";
 import { Inter } from 'next/font/google';
 import { ThemeProvider } from '@/shared/ui/theme-provider';
 import { ScaleProvider } from '@/shared/ui/scale-provider';
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 
 
 // export const metadata: Metadata = {
@@ -25,11 +25,6 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const [isClient, setIsClient] = useState(false)
- 
-  useEffect(() => {
-    setIsClient(true)
-  }, [])
 
   return (
     <html lang="ru" className={`${inter.variable}`} suppressHydrationWarning>
@@ -48,7 +43,7 @@ export default function RootLayout({
             disableTransitionOnChange
         >
             <ScaleProvider>
-              {isClient ? children : null}
+              {children}
             </ScaleProvider>
             <Toaster />
         </ThemeProvider>

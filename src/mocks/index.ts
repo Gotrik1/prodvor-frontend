@@ -1,34 +1,31 @@
+
 // IMPORTANT: Order of imports and exports matters to avoid circular dependencies.
 
 // 1. Import all base data definitions and raw data.
-import { users } from './users';
-import { teams } from './teams';
-import { playgrounds } from './playgrounds';
-import { sponsors } from './personnel';
-import { allSports } from './sports';
+import { users as baseUsers } from './users';
+import { teams as baseTeams } from './teams';
+import { playgrounds as basePlaygrounds } from './playgrounds';
+import { sponsors as baseSponsors } from './personnel';
+import { allSports as baseAllSports } from './sports';
 
 // 2. Import and run the central initializer.
-// This function will mutate the imported arrays to establish relationships.
 import { initializeMockData } from './initialize';
 
-initializeMockData({
-    users,
-    teams,
-    playgrounds,
-    sponsors,
-    allSports
+const { users, teams, playgrounds, sponsors, allSports } = initializeMockData({
+    users: baseUsers,
+    teams: baseTeams,
+    playgrounds: basePlaygrounds,
+    sponsors: baseSponsors,
+    allSports: baseAllSports
 });
 
-
 // 4. Export everything for use in the application.
-export * from './users';
-export * from './teams';
+export { users, teams, playgrounds, sponsors, allSports };
 export * from './posts';
 export * from './sports';
 export * from './personnel';
 export * from './requirements';
 export * from './challenges';
-export * from './playgrounds';
 export * from './tournaments';
 export * from './ranks';
 export * from './achievements';

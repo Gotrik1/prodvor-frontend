@@ -10,6 +10,7 @@ import { HomeHeader } from '@/widgets/home-header';
 import { HomeFooter } from '@/widgets/home-footer';
 import { MobileBottomNav } from '@/widgets/mobile-bottom-nav';
 import { cn } from '@/shared/lib/utils';
+import React from 'react';
 
 const publicRoutesWithHeader = ['/about', '/auth', '/auth/register'];
 

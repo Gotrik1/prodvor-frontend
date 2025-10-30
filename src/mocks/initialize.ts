@@ -15,49 +15,41 @@ interface MockData {
 }
 
 let isInitialized = false;
+let initializedData: MockData | null = null;
 
 /**
  * Centralized initializer for all mock data.
  * This function takes raw data arrays and establishes relationships between them.
- * It MUTATES the arrays passed in.
+ * It now returns a new object with the processed data, avoiding direct mutations.
  * @param data - An object containing all the raw data arrays.
  */
-export function initializeMockData(data: MockData) {
-    if (isInitialized) {
-        return;
+export function initializeMockData(data: MockData): MockData {
+    if (isInitialized && initializedData) {
+        return initializedData;
     }
 
-    const { users, teams, playgrounds, sponsors, allSports } = data;
-
-    // --- 1. Assign initial disciplines to all users ---
-    assignInitialDisciplines(users, allSports);
+    const processedData: MockData = {
+        users: JSON.parse(JSON.stringify(data.users)),
+        teams: JSON.parse(JSON.stringify(data.teams)),
+        playgrounds: JSON.parse(JSON.stringify(data.playgrounds)),
+        sponsors: JSON.parse(JSON.stringify(data.sponsors)),
+        allSports: JSON.parse(JSON.stringify(data.allSports)),
+    };
     
-    // --- 2. Generate Teams based on geography and sport ---
-    generateTeams(users, playgrounds, allSports, teams);
-
-    // --- 3. Establish Social Graph (Friends, Followers) for users ---
-    generateUserSocialGraph(users);
-    
-    // --- 4. Establish Following relationships for teams ---
-    generateTeamFollowing(teams, users);
-    
-    // --- 5. Assign Sponsors to users and teams ---
-    assignSponsors(users, teams, sponsors);
-    
-    // --- 6. Assign Followers to playgrounds ---
-    assignPlaygroundFollowers(users, playgrounds);
-
-    // --- 7. Final link: Assign disciplines to users based on their final team memberships ---
-    assignDisciplinesFromTeams(users, teams);
-
-    // --- 8. Link teams to playgrounds after teams are created ---
-    assignTeamsToPlaygrounds(teams, playgrounds);
-    
-    // --- 9. Assign clients to coaches ---
-    assignClientsToCoaches(users, teams);
-
+    assignInitialDisciplines(processedData.users, processedData.allSports);
+    generateTeams(processedData.users, processedData.playgrounds, processedData.allSports, processedData.teams);
+    generateUserSocialGraph(processedData.users);
+    generateTeamFollowing(processedData.teams, processedData.users);
+    assignSponsors(processedData.users, processedData.teams, processedData.sponsors);
+    assignPlaygroundFollowers(processedData.users, processedData.playgrounds);
+    assignDisciplinesFromTeams(processedData.users, processedData.teams);
+    assignTeamsToPlaygrounds(processedData.teams, processedData.playgrounds);
+    assignClientsToCoaches(processedData.users, processedData.teams);
 
     isInitialized = true;
+    initializedData = processedData;
+    
+    return initializedData;
 }
 
 
