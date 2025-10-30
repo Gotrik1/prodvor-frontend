@@ -69,24 +69,28 @@ export function FanPageTemplate({ user }: { user?: User }) {
             </header>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                 <Card>
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium">Любимые команды</CardTitle>
-                        <Heart className="h-4 w-4 text-muted-foreground" />
-                    </CardHeader>
-                    <CardContent>
-                        <div className="text-2xl font-bold">{favoriteTeams.length}</div>
-                    </CardContent>
-                </Card>
-                <Card>
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium">Просмотрено матчей</CardTitle>
-                        <Ticket className="h-4 w-4 text-muted-foreground" />
-                    </CardHeader>
-                    <CardContent>
-                        <div className="text-2xl font-bold">78</div>
-                    </CardContent>
-                </Card>
+                 <Link href="/teams">
+                    <Card className="hover:border-primary transition-all">
+                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                            <CardTitle className="text-sm font-medium">Любимые команды</CardTitle>
+                            <Heart className="h-4 w-4 text-muted-foreground" />
+                        </CardHeader>
+                        <CardContent>
+                            <div className="text-2xl font-bold">{favoriteTeams.length}</div>
+                        </CardContent>
+                    </Card>
+                </Link>
+                <Link href="/competitions">
+                    <Card className="hover:border-primary transition-all">
+                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                            <CardTitle className="text-sm font-medium">Просмотрено матчей</CardTitle>
+                            <Ticket className="h-4 w-4 text-muted-foreground" />
+                        </CardHeader>
+                        <CardContent>
+                            <div className="text-2xl font-bold">78</div>
+                        </CardContent>
+                    </Card>
+                </Link>
                 <Card>
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                         <CardTitle className="text-sm font-medium">Стрик посещений</CardTitle>
@@ -96,15 +100,17 @@ export function FanPageTemplate({ user }: { user?: User }) {
                         <div className="text-2xl font-bold">12 дней</div>
                     </CardContent>
                 </Card>
-                <Card>
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium">Достижения</CardTitle>
-                        <Star className="h-4 w-4 text-muted-foreground" />
-                    </CardHeader>
-                    <CardContent>
-                        <div className="text-2xl font-bold">15</div>
-                    </CardContent>
-                </Card>
+                <Link href={`/users/${fanUser.id}`}>
+                    <Card className="hover:border-primary transition-all">
+                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                            <CardTitle className="text-sm font-medium">Достижения</CardTitle>
+                            <Star className="h-4 w-4 text-muted-foreground" />
+                        </CardHeader>
+                        <CardContent>
+                            <div className="text-2xl font-bold">15</div>
+                        </CardContent>
+                    </Card>
+                </Link>
             </div>
             
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -113,8 +119,8 @@ export function FanPageTemplate({ user }: { user?: User }) {
                         <Tabs defaultValue="media">
                              <CardHeader>
                                  <TabsList className="grid w-full grid-cols-2">
-                                    <TabsTrigger value="media"><Camera className="mr-2 h-4 w-4"/>Медиа</TabsTrigger>
-                                    <TabsTrigger value="broadcasts"><Tv className="mr-2 h-4 w-4"/>Трансляции</TabsTrigger>
+                                    <TabsTrigger value="media"><Camera className="md:mr-2 h-4 w-4"/>Медиа</TabsTrigger>
+                                    <TabsTrigger value="broadcasts"><Tv className="md:mr-2 h-4 w-4"/>Трансляции</TabsTrigger>
                                 </TabsList>
                             </CardHeader>
                              <CardContent>
