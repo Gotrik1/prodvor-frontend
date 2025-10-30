@@ -19,7 +19,7 @@ import { Card, CardBody } from "@/shared/ui/card";
 import { Badge } from "@/shared/ui/badge";
 import { getUserDisciplines } from "@/entities/user/lib";
 import { Popover, PopoverContent, PopoverTrigger } from "@/shared/ui/popover";
-import { useIsMobile } from "@/shared/hooks/use-is-mobile";
+import { useIsMobile } from "@/shared/hooks/use-mobile";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/shared/ui/sheet";
 import { PublicationsFeed } from "@/widgets/publications-feed";
 
