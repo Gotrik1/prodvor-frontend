@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState } from 'react';
@@ -7,7 +6,7 @@ import { Calendar, Dumbbell } from "lucide-react";
 import { TrainingPage } from "@/views/training";
 import { FitnessPlanPage } from "@/views/fitness-plan/ui";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shared/ui/select';
-import { useIsMobile } from '@/shared/hooks/use-is-mobile';
+import { useIsMobile } from '@/shared/hooks/use-mobile';
 
 const trainingTabs = [
     { value: 'schedule', label: 'Мое расписание', icon: Calendar, component: <TrainingPage /> },
