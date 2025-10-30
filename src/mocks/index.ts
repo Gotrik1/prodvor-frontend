@@ -32,6 +32,7 @@ export * from './requirements';
 export * from './challenges';
 export * from './achievements';
 export * from './feed-events';
+export * from './ranks';
 
 
 // Export types
@@ -43,7 +44,15 @@ export type { Sport, Subdiscipline } from './sports';
 export type { Post, Comment } from './posts';
 export type { Requirement } from './requirements';
 export type { TeamChallenge } from './challenges';
-export type { Tournament, BracketMatch, TournamentStatus, TournamentLevel, MediaItem, MatchEvent, EventType } from './tournaments';
+export type {
+    Tournament,
+    BracketMatch,
+    TournamentStatus,
+    TournamentLevel,
+    MediaItem,
+    MatchEvent,
+    EventType
+} from './tournaments';
 export type { Rank } from './ranks';
 export type { Achievement } from './achievements';
 export type { FeedEvent, TeamJoinEventDetails, MatchWinEventDetails, AchievementUnlockedEventDetails } from './feed-events';

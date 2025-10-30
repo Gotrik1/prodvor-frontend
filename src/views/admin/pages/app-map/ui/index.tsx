@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { siteMapData } from '../lib/sitemap-data';
 import type { SitemapCategory, SitemapItem } from '../lib/sitemap-data';
 import * as LucideIcons from 'lucide-react';
-import { Map, File as FileIcon, Folder } from 'lucide-react';
+import { Map, File as FileIcon } from 'lucide-react';
 
 const DynamicIcon = ({ name, ...props }: { name: keyof typeof LucideIcons } & React.ComponentProps<'svg'>) => {
     const IconComponent = LucideIcons[name];
