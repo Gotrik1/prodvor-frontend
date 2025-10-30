@@ -26,6 +26,7 @@ import {
   Puzzle,
   Map,
   Gavel,
+  MessageCircle,
 } from "lucide-react";
 import Link from 'next/link';
 import { i18n } from "@/shared/lib/i18n";
@@ -35,6 +36,7 @@ import { usePathname } from "next/navigation";
 const mainNavItems = [
     { href: "/dashboard", icon: Home, label: i18n.sidebar.feed },
     { href: "/teams", icon: Users, label: i18n.sidebar.teams },
+    { href: "/messages", icon: MessageCircle, label: "Сообщения" },
     { href: "/competitions", icon: Trophy, label: i18n.sidebar.competitions },
     { href: "/training-center", icon: Dumbbell, label: i18n.sidebar.training },
     { href: "/analysis/match", icon: Clapperboard, label: i18n.sidebar.aiAnalyst },
