@@ -45,8 +45,12 @@ export const PlayerTrainingStats = () => (
 export const TrainingTab = () => (
     <Card className="md:shadow-main-sm shadow-none md:bg-card bg-transparent">
         <CardHeader>
-            <CardTitle className="flex items-center gap-2"><Activity /> Тренировочный процесс</CardTitle>
-            <CardDescription>Информация о тренировочной активности и предпочтениях игрока.</CardDescription>
+            <CardTitle className="flex items-center gap-2">
+                <Activity />
+                <span className="md:hidden">Тренировки</span>
+                <span className="hidden md:inline">Тренировочный процесс</span>
+            </CardTitle>
+            <CardDescription className="hidden md:block">Информация о тренировочной активности и предпочтениях игрока.</CardDescription>
         </CardHeader>
         <CardContent className="md:p-6 space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
