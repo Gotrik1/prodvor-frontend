@@ -4,7 +4,7 @@
 import type { Team, User } from "@/mocks";
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
 import { Crown, Shield, Star, Trophy, TrendingUp } from "lucide-react";
-import { StatCard } from "./stat-card";
+import { StatCard } from "@/entities/team/ui/stat-card";
 
 const FormBadge = ({ result }: { result: 'W' | 'L' | 'D' }) => {
     const baseClasses = "flex items-center justify-center w-8 h-8 rounded-md font-bold";
@@ -13,12 +13,12 @@ const FormBadge = ({ result }: { result: 'W' | 'L' | 'D' }) => {
     return <div className={`${baseClasses} bg-secondary text-secondary-foreground border border-secondary/30`}>D</div>;
 };
 
-interface TeamOverviewTabProps {
+interface TeamOverviewWidgetProps {
     team: Team;
     teamMembers: User[];
 }
 
-export const TeamOverviewTab = ({ team, teamMembers }: TeamOverviewTabProps) => {
+export const TeamOverviewWidget = ({ team, teamMembers }: TeamOverviewWidgetProps) => {
     // Mock statistics
     const wins = 45;
     const losses = 12;

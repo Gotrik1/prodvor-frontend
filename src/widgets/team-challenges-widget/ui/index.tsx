@@ -18,7 +18,7 @@ const statusMap = {
 }
 
 
-export const TeamChallengesTab = ({ teamId }: { teamId: string }) => {
+export const TeamChallengesWidget = ({ teamId }: { teamId: string }) => {
     const incomingChallenges = challenges.filter(c => c.challenged.id === teamId);
     const outgoingChallenges = challenges.filter(c => c.challenger.id === teamId);
 

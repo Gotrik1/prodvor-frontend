@@ -16,7 +16,7 @@ const StatRow = ({ label, value }: { label: string, value: string | number }) =>
     </div>
 );
 
-export const TeamStatsTab = () => (
+export const TeamStatsWidget = () => (
     <Card>
         <CardHeader>
             <CardTitle>Статистика по сезонам</CardTitle>

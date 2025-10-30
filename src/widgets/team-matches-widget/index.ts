@@ -1,0 +1,2 @@
+
+export { TeamMatchesWidget } from './ui';

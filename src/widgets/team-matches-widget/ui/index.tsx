@@ -27,7 +27,7 @@ const TeamMatches = () => (
     </ul>
 );
 
-export const TeamMatchesTab = () => (
+export const TeamMatchesWidget = () => (
     <Card>
         <CardHeader>
             <CardTitle>История матчей</CardTitle>

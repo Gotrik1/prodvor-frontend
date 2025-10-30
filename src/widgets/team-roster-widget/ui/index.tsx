@@ -36,7 +36,7 @@ const TeamRoster = ({ teamMembers, captainId }: { teamMembers: User[], captainId
 );
 
 
-export const TeamRosterTab = ({ teamMembers, captainId }: { teamMembers: User[], captainId: string }) => {
+export const TeamRosterWidget = ({ teamMembers, captainId }: { teamMembers: User[], captainId: string }) => {
     const { toast } = useToast();
 
     const handleApply = () => {

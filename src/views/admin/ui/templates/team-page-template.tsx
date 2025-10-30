@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import { users, playgrounds, posts, Team } from "@/mocks";
@@ -10,12 +9,12 @@ import Link from 'next/link';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 import { useUserStore } from "@/widgets/dashboard-header/model/user-store";
 import { TeamHeader } from "@/entities/team/ui/team-header";
-import { TeamOverviewTab } from "@/entities/team/ui/team-overview-tab";
-import { TeamRosterTab } from "@/entities/team/ui/team-roster-tab";
-import { TeamMatchesTab } from "@/entities/team/ui/team-matches-tab";
-import { TeamChallengesTab } from "@/entities/team/ui/team-challenges-tab";
-import { TeamStatsTab } from "@/entities/team/ui/team-stats-tab";
 import { TeamPublicationsTab } from "@/views/teams/team/ui/team-publications-tab";
+import { TeamOverviewWidget } from "@/widgets/team-overview-widget";
+import { TeamRosterWidget } from "@/widgets/team-roster-widget";
+import { TeamMatchesWidget } from "@/widgets/team-matches-widget";
+import { TeamChallengesWidget } from "@/widgets/team-challenges-widget";
+import { TeamStatsWidget } from "@/widgets/team-stats-widget";
 
 export function TeamPageTemplate({ team }: { team?: Team }) {
     const { user: currentUser } = useUserStore();
@@ -47,7 +46,7 @@ export function TeamPageTemplate({ team }: { team?: Team }) {
 
     return (
         <div className="p-4 md:p-6 lg:p-8 space-y-6">
-            <TeamHeader team={team} homePlaygrounds={homePlaygrounds} isCaptain={isCaptain} />
+            <TeamHeader team={team} homePlaygrounds={homePlaygrounds} />
 
             <Tabs defaultValue="overview" className="w-full">
                 <TabsList className="grid w-full grid-cols-4 md:grid-cols-6">
@@ -59,19 +58,19 @@ export function TeamPageTemplate({ team }: { team?: Team }) {
                     <TabsTrigger value="publications"><Grid3x3 className="md:mr-2 h-4 w-4" /><span className="hidden md:inline">Публикации</span></TabsTrigger>
                 </TabsList>
                 <TabsContent value="overview" className="mt-6">
-                    <TeamOverviewTab team={team} teamMembers={teamMembers} />
+                    <TeamOverviewWidget team={team} teamMembers={teamMembers} />
                 </TabsContent>
                 <TabsContent value="roster" className="mt-6">
-                    <TeamRosterTab teamMembers={teamMembers} captainId={team.captainId} />
+                    <TeamRosterWidget teamMembers={teamMembers} captainId={team.captainId} />
                 </TabsContent>
                 <TabsContent value="matches" className="mt-6">
-                    <TeamMatchesTab />
+                    <TeamMatchesWidget />
                 </TabsContent>
                  <TabsContent value="challenges" className="mt-6">
-                    <TeamChallengesTab teamId={team.id} />
+                    <TeamChallengesWidget teamId={team.id} />
                 </TabsContent>
                  <TabsContent value="stats" className="mt-6">
-                    <TeamStatsTab />
+                    <TeamStatsWidget />
                 </TabsContent>
                 <TabsContent value="publications" className="mt-6">
                    <TeamPublicationsTab posts={teamPosts} team={team} />
