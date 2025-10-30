@@ -174,11 +174,11 @@ html {
     content: "";
     display: block;
     position: absolute;
-    bottom: 2px;
+    bottom: 4px;
     left: 50%;
     transform: translateX(-50%);
     width: 60%;
-    height: 3px;
+    height: 4px;
     border-radius: 2px;
     background-color: hsl(142 71% 45%); /* bright green */
   }
