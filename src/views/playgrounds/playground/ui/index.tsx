@@ -2,12 +2,11 @@
 
 'use client';
 
-import type { Playground, ServiceCategory } from "@/mocks";
+import type { Playground, ServiceCategory, User } from "@/mocks";
 import { teams, users, posts } from "@/mocks";
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
-import { YandexMapV3 } from "@/widgets/yandex-map";
-import { ArrowLeft, CheckCircle, Home, MapPin, Star, Users, Rss, Info, MessageSquare, Newspaper, Calendar } from "lucide-react";
+import { ArrowLeft, CheckCircle, Home, MapPin, Star, Users, Rss, Info, MessageSquare, Newspaper, Calendar, ThumbsUp, Upload, Trophy as TrophyIcon } from "lucide-react";
 import * as LucideIcons from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -15,12 +14,9 @@ import { Badge } from "@/shared/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 import { FitnessSchedule } from "@/widgets/fitness-schedule";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useToast } from "@/shared/hooks/use-toast";
 import { Alert, AlertDescription, AlertTitle } from "@/shared/ui/alert";
-import { PostCard } from "@/widgets/dashboard-feed/ui/post-card";
-import { ChatWindow } from "@/views/messages/ui";
-import { mockMessages } from "@/views/messages/lib/mock-data";
 import { useUserStore } from "@/widgets/dashboard-header/model/user-store";
 
 const features = [
@@ -29,6 +25,19 @@ const features = [
     { id: "fence", label: "Ограждение" },
     { id: "water_source", label: "Источник воды" },
 ];
+
+const mockPhotos = users.slice(0, 8).map((user, index) => ({
+  id: `photo-${index + 1}`,
+  url: `https://picsum.photos/seed/${100 + index}/1600/900`,
+  author: user,
+  votes: Math.floor(Math.random() * (150 - 10 + 1)) + 10,
+}));
+
+// Sort photos by votes to determine the main one
+const sortedPhotos = [...mockPhotos].sort((a, b) => b.votes - a.votes);
+const mainPhoto = sortedPhotos[0];
+const galleryPhotos = sortedPhotos.slice(1);
+
 
 const ServiceCard = ({ service }: { service: ServiceCategory['services'][0] }) => {
     const Icon = service.icon && (service.icon in LucideIcons) 
@@ -52,26 +61,74 @@ const ServiceCard = ({ service }: { service: ServiceCategory['services'][0] }) =
     );
 };
 
-const FitnessServicesSection = ({ services }: { services: ServiceCategory[] }) => (
-     <Tabs defaultValue={services[0].category} className="w-full">
-        <TabsList className="grid w-full grid-cols-1 md:grid-cols-3">
-            {services.map(category => (
-                <TabsTrigger key={category.category} value={category.category}>
-                    {category.category}
-                </TabsTrigger>
-            ))}
-        </TabsList>
-        {services.map(category => (
-            <TabsContent key={category.category} value={category.category} className="mt-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {category.services.map(service => (
-                        <ServiceCard key={service.name} service={service} />
+const PhotoContest = () => {
+    const [userUploads, setUserUploads] = useState(0);
+    const { toast } = useToast();
+
+    const handleUpload = () => {
+        if (userUploads >= 5) {
+            toast({
+                variant: 'destructive',
+                title: 'Лимит достигнут',
+                description: 'Вы уже загрузили максимальное количество фотографий для этого конкурса.',
+            });
+            return;
+        }
+        // Mock upload
+        setUserUploads(prev => prev + 1);
+        toast({
+            title: 'Фотография загружена',
+            description: `Вы можете загрузить еще ${5 - (userUploads + 1)} фото.`,
+        });
+    }
+
+    return (
+         <Card>
+            <CardHeader>
+                <CardTitle>Фотогалерея и конкурс</CardTitle>
+                <CardDescription>Проголосуйте за лучшее фото площадки или загрузите свое. Конкурс завершится через 25 дней.</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    {galleryPhotos.map(photo => (
+                        <div key={photo.id} className="relative group">
+                            <Image src={photo.url} alt={`Фото от ${photo.author.nickname}`} width={400} height={300} className="rounded-lg object-cover aspect-video" />
+                            <div className="absolute inset-0 bg-black/40 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-between p-3">
+                                <div className="text-white text-xs">
+                                    <p>Автор: <span className="font-semibold">{photo.author.nickname}</span></p>
+                                </div>
+                                <div className="flex items-center gap-4">
+                                     <Button variant="ghost" size="sm" className="text-white hover:bg-white/20 hover:text-white w-full">
+                                        <ThumbsUp className="mr-2 h-4 w-4" /> {photo.votes}
+                                    </Button>
+                                </div>
+                            </div>
+                        </div>
                     ))}
                 </div>
-            </TabsContent>
-        ))}
-    </Tabs>
-);
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="p-4 rounded-lg border-dashed border-2 flex flex-col items-center justify-center text-center">
+                        <h4 className="font-semibold">Призы за лучшие фото:</h4>
+                        <ul className="text-sm text-muted-foreground mt-2 space-y-1">
+                            <li><span className="font-bold text-amber-400">1 место:</span> PRO на 1 месяц</li>
+                            <li><span className="font-bold text-slate-400">2 место:</span> PRO на 2 недели</li>
+                            <li><span className="font-bold text-amber-600">3 место:</span> PRO на 1 неделю</li>
+                        </ul>
+                    </div>
+                     <div className="p-4 rounded-lg border-dashed border-2 flex flex-col items-center justify-center text-center">
+                        <Upload className="h-8 w-8 text-primary mb-2" />
+                        <h4 className="font-semibold">Хотите участвовать?</h4>
+                        <p className="text-sm text-muted-foreground mt-1 mb-3">Вы можете загрузить до 5 фотографий.</p>
+                        <Button onClick={handleUpload}>
+                            <Upload className="mr-2 h-4 w-4" /> Загрузить фото ({userUploads}/5)
+                        </Button>
+                    </div>
+                </div>
+            </CardContent>
+        </Card>
+    )
+}
+
 
 const PlaceholderTab = ({ icon: Icon, title, description }: { icon: React.ElementType, title: string, description: string }) => (
     <Card className="mt-6">
@@ -121,8 +178,6 @@ export function PlaygroundPage({ playground }: { playground: Playground | undefi
     const residentTeams = teams.filter(team => playground.residentTeamIds.includes(team.id));
     const followerUsers = users.filter(user => playground.followers.includes(user.id));
     const isPublicPlayground = playground.type === 'Открытая площадка';
-    const mockChat = { id: `chat-playground-${playground.id}`, type: 'team' as const, name: playground.name, avatarUrl: playground.imageUrl, entityId: playground.id, lastMessage: '', lastMessageTime: '' };
-
 
     return (
         <div className="p-4 md:p-6 lg:p-8">
@@ -145,14 +200,27 @@ export function PlaygroundPage({ playground }: { playground: Playground | undefi
                         </Button>
                     </div>
                 </div>
-                 <div className="relative w-full h-48 md:h-64 rounded-lg overflow-hidden border mb-8">
+                 <div className="relative w-full h-[30vh] md:h-[50vh] rounded-lg overflow-hidden border mb-8 group">
                     <Image
-                        src={playground.imageUrl}
+                        src={mainPhoto.url}
                         alt={playground.name}
                         fill
                         className="object-cover"
+                        priority
                         data-ai-hint={playground.dataAiHint}
                     />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                    <div className="absolute bottom-4 left-4 text-white">
+                        <h1 className="text-3xl md:text-5xl font-bold font-headline drop-shadow-lg">{playground.name}</h1>
+                        <p className="flex items-center gap-2 mt-2 drop-shadow-md">
+                            <MapPin className="h-5 w-5" />
+                            {playground.address}
+                        </p>
+                    </div>
+                    <div className="absolute bottom-4 right-4 text-white text-right">
+                        <p className="text-sm">Фото от <span className="font-semibold">{mainPhoto.author.nickname}</span></p>
+                        <p className="text-sm flex items-center justify-end gap-1"><ThumbsUp className="h-4 w-4" /> {mainPhoto.votes}</p>
+                    </div>
                 </div>
                 
                 <Tabs defaultValue="overview" className="w-full">
@@ -165,34 +233,24 @@ export function PlaygroundPage({ playground }: { playground: Playground | undefi
                     <TabsContent value="overview" className="mt-6">
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                             <div className="md:col-span-2">
-                                <Card>
-                                    <CardHeader>
-                                        <CardTitle>{playground.name}</CardTitle>
-                                        <CardDescription className="flex items-center gap-2 pt-2">
-                                            <MapPin className="h-4 w-4" />
-                                            {playground.address}
-                                        </CardDescription>
-                                    </CardHeader>
-                                    <CardContent className="space-y-4">
-                                        <div className="flex flex-wrap gap-2">
-                                            <Badge variant="secondary">{playground.type}</Badge>
-                                            <Badge variant="outline">{playground.surface}</Badge>
-                                        </div>
-                                        <div>
-                                            <h4 className="font-semibold mb-2">Особенности</h4>
-                                            <ul className="space-y-2">
-                                                {features.map(feature => (
-                                                    <li key={feature.id} className="flex items-center gap-2 text-sm">
-                                                        <CheckCircle className="h-4 w-4 text-green-500" />
-                                                        {feature.label}
-                                                    </li>
-                                                ))}
-                                            </ul>
-                                        </div>
-                                    </CardContent>
-                                </Card>
+                                <PhotoContest />
                             </div>
                             <div className="space-y-6">
+                                <Card>
+                                    <CardHeader>
+                                        <CardTitle>Особенности</CardTitle>
+                                    </CardHeader>
+                                    <CardContent>
+                                        <ul className="space-y-2">
+                                            {features.map(feature => (
+                                                <li key={feature.id} className="flex items-center gap-2 text-sm">
+                                                    <CheckCircle className="h-4 w-4 text-green-500" />
+                                                    {feature.label}
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </CardContent>
+                                </Card>
                                <Card>
                                     <CardHeader>
                                         <CardTitle className="flex items-center gap-2">
