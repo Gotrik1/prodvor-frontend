@@ -2,7 +2,7 @@
 'use client';
 
 import React from 'react';
-import type { Tournament } from '@/views/tournaments/public-page/ui/mock-data';
+import type { Tournament } from '@/mocks';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Button } from '@/shared/ui/button';
 import Link from 'next/link';
