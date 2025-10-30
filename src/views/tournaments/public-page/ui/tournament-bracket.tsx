@@ -32,7 +32,7 @@ const generateInitialMatches = (): BracketMatch[] => {
                 score1: Math.floor(seededRandom() * 5),
                 score2: Math.floor(seededRandom() * 5)
             };
-            if (match.score1 === match.score2) {
+            if (match.score1 === match.score2 && match.score2 !== null) {
                 match.score2 = (match.score2 + 1) % 5;
             }
             generatedMatches.push(match);

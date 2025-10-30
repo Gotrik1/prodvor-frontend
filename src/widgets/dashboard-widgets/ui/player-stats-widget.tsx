@@ -6,11 +6,11 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
 import { Button } from "@/shared/ui/button";
 import { User as UserIcon, Gem, ArrowRight } from "lucide-react";
 import Link from "next/link";
-import { ranks, User } from "@/mocks";
+import { ranks, User, Rank } from "@/mocks";
 import { Progress } from "@/shared/ui/progress";
 
 const getRankForElo = (elo: number) => {
-    return ranks.find(rank => elo >= rank.eloMin && elo <= rank.eloMax);
+    return ranks.find((rank: Rank) => elo >= rank.eloMin && elo <= rank.eloMax);
 };
 
 export function PlayerStatsWidget({ user }: { user: User }) {

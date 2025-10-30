@@ -2,8 +2,7 @@
 
 'use client';
 
-import { ranks } from "@/mocks";
-import type { User } from "@/mocks/users";
+import { ranks, User } from "@/mocks";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { MapPin, Cake, User as UserIcon, MessageSquare, UserPlus, Gamepad2 } from "lucide-react";
 import { Button } from "@/shared/ui/button";
@@ -12,7 +11,7 @@ import { TrainingInfoWidget } from "@/widgets/training-info-widget";
 import { AchievementsWidget } from "@/widgets/achievements-widget";
 import { PlayerStatsOverviewWidget } from "@/widgets/player-stats-overview-widget";
 import { SocialConnectionsWidget } from "@/widgets/social-connections-widget";
-import React, { useMemo, useEffect, useState } from "react";
+import React, { useMemo } from "react";
 import { MyTeamWidget } from "@/widgets/dashboard-widgets/ui/my-team-widget";
 import { Card, CardBody } from "@/shared/ui/card";
 import { Badge } from "@/shared/ui/badge";

@@ -2,11 +2,11 @@
 
 'use client';
 
-import { ranks, allSports, achievementsBySport } from '@/mocks';
+import { ranks, allSports, achievementsBySport, Rank } from '@/mocks';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Badge } from '@/shared/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs';
-import { Construction, User, Gavel, Megaphone, ClipboardList, Briefcase, Handshake, Star, Shield, Award } from 'lucide-react';
+import { Construction, User, Gavel, Megaphone, ClipboardList, Briefcase, Handshake, Star, Award } from 'lucide-react';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/shared/ui/accordion';
 
 const rankColors = [
@@ -56,7 +56,7 @@ export function RanksPage() {
                     <div>
                         <h3 className="text-xl font-bold mb-4">Ранги (ELO)</h3>
                         <div className="space-y-4">
-                            {ranks.map((rank, index) => (
+                            {ranks.map((rank: Rank, index: number) => (
                                 <Card key={rank.name} className={`bg-card/50 ${rankColors[index] || 'border-border'}`}>
                                     <CardHeader>
                                         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">

@@ -3,10 +3,10 @@
 'use client';
 
 import { MatchPage } from '@/views/tournaments/match';
-import { tournaments } from '@/mocks';
+import { tournaments, Team } from '@/mocks';
 import { useProtocol } from '@/features/protocol-editor';
 import { useEffect, useMemo } from 'react';
-import type { BracketMatch, Team, Tournament } from '@/mocks';
+import type { BracketMatch, Tournament } from '@/mocks';
 
 // This is a client component, so we can't export metadata directly.
 // We'll manage the title dynamically if needed.
@@ -22,7 +22,7 @@ export default function TournamentMatchPage({ params }: { params: { tournamentId
 
     // A more robust way to find a match in a multi-round bracket
     for (const round of (tournament.bracket || [])) {
-        const found = round.matches.find((m: BracketMatch) => m.id === params.matchId);
+        const found = round.find((m: BracketMatch) => m.id === params.matchId);
         if (found) return found;
     }
     
