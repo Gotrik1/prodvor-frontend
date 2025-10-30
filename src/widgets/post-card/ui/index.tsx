@@ -14,7 +14,7 @@ import { Button } from "@/shared/ui/button";
 import { Heart, MessageSquare, Share2 } from "lucide-react";
 import { cn } from "@/shared/lib/utils";
 import { usePostStore } from "@/widgets/dashboard-feed/model/post-store";
-import { Dialog, DialogTrigger } from "@/shared/ui/dialog";
+import { Dialog, DialogContent, DialogTrigger } from "@/shared/ui/dialog";
 import { MediaPostDialog } from "@/widgets/media-post-dialog";
 
 export function PostCard({ post }: { post: Post }) {
@@ -77,7 +77,9 @@ export function PostCard({ post }: { post: Post }) {
                         <span>{post.comments.length}</span>
                     </Button>
                 </DialogTrigger>
-                <MediaPostDialog post={post} />
+                <DialogContent className="sm:max-w-4xl p-0">
+                    <MediaPostDialog post={post} />
+                </DialogContent>
             </Dialog>
             <Button variant="ghost" size="sm" className="flex items-center gap-2">
                 <Share2 className="h-5 w-5"/>

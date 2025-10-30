@@ -78,7 +78,9 @@ export function PublicationsFeed({ player, isOwnProfile }: { player: User; isOwn
                                                     </div>
                                                 </div>
                                             </DialogTrigger>
-                                            <MediaPostDialog post={post} />
+                                            <DialogContent className="sm:max-w-4xl p-0">
+                                                <MediaPostDialog post={post} />
+                                            </DialogContent>
                                         </Dialog>
                                     ))}
                                 </div>
@@ -105,7 +107,9 @@ export function PublicationsFeed({ player, isOwnProfile }: { player: User; isOwn
                                                                 </div>
                                                             </div>
                                                         </DialogTrigger>
-                                                        <MediaPostDialog post={post} />
+                                                        <DialogContent className="sm:max-w-4xl p-0">
+                                                            <MediaPostDialog post={post} />
+                                                        </DialogContent>
                                                     </Dialog>
                                                 </CarouselItem>
                                             ))}

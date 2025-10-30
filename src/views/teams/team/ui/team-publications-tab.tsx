@@ -7,7 +7,7 @@ import { users } from "@/mocks";
 import { CreatePost } from "@/widgets/dashboard-feed/ui/create-post";
 import { Card } from "@/shared/ui/card";
 import { Button } from "@/shared/ui/button";
-import { Grid3x3, PlusCircle } from "lucide-react";
+import { Grid3x3, PlusCircle, Heart } from "lucide-react";
 import Image from "next/image";
 import {
   Dialog,
@@ -80,9 +80,16 @@ export function TeamPublicationsTab({ team }: TeamPublicationsTabProps) {
                                         className="object-cover group-hover:scale-105 transition-transform"
                                         data-ai-hint="team activity"
                                     />
+                                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                                    <div className="absolute bottom-2 left-3 flex items-center gap-1.5 text-white">
+                                        <Heart className="h-4 w-4" />
+                                        <span className="font-semibold text-sm">{post.likes}</span>
+                                    </div>
                                 </div>
                             </DialogTrigger>
-                            <MediaPostDialog post={post} />
+                             <DialogContent className="sm:max-w-4xl p-0">
+                                <MediaPostDialog post={post} />
+                            </DialogContent>
                         </Dialog>
                     ))}
                 </div>
