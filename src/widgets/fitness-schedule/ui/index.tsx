@@ -43,7 +43,7 @@ const EventCard = ({ event, onRemove }: { event: ScheduledActivity; onRemove: (i
              <Button
                 variant="ghost"
                 size="icon"
-                className="h-7 w-7 opacity-0 group-hover:opacity-100 transition-opacity absolute top-2 right-2 sm:static"
+                className="h-7 w-7 opacity-0 group-hover:opacity-100 transition-opacity absolute top-2 right-2 z-10"
                 onClick={() => onRemove(event.id)}
             >
                 <Trash2 className="h-4 w-4 text-destructive" />
