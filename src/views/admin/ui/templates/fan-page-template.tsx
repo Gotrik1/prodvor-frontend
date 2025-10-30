@@ -15,8 +15,8 @@ import React, { useMemo, useState, useEffect } from "react";
 import { getUserDisciplines } from "@/entities/user/lib";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 import { Dialog, DialogTrigger } from "@/shared/ui/dialog";
-import { MediaPostDialogContent } from "@/views/admin/ui/templates/player-page-publications-tab";
 import { AchievementsTab } from "../../ui/templates/player-page-achievements-tab";
+import { MediaPostDialog } from "@/widgets/media-post-dialog";
 
 
 const defaultFan: User | undefined = users.find(u => u.role === 'Болельщик');
@@ -155,7 +155,7 @@ export function FanPageTemplate({ user }: { user?: User }) {
                                                         </div>
                                                     </div>
                                                 </DialogTrigger>
-                                                <MediaPostDialogContent post={post} />
+                                                <MediaPostDialog post={post} />
                                             </Dialog>
                                         ))}
                                     </div>
