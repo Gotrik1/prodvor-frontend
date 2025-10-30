@@ -6,21 +6,19 @@ import { useState, useEffect } from 'react';
 const MOBILE_BREAKPOINT = 768;
 
 export function useIsMobile() {
-  const [isMobile, setIsMobile] = useState(false);
-  const [isClient, setIsClient] = useState(false);
+  const [isMobile, setIsMobile] = useState<boolean | undefined>(undefined);
 
   useEffect(() => {
-    setIsClient(true);
-
     const checkDevice = () => {
       setIsMobile(window.innerWidth < MOBILE_BREAKPOINT);
     };
 
-    checkDevice(); // Check on initial client mount
+    // Check on initial client-side mount
+    checkDevice();
 
     window.addEventListener('resize', checkDevice);
     return () => window.removeEventListener('resize', checkDevice);
   }, []);
 
-  return isClient ? isMobile : false;
+  return isMobile;
 }
