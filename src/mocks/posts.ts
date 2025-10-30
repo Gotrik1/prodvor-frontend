@@ -1,6 +1,13 @@
 
+
 import { User, users } from './users';
 import { Team, teams } from './teams';
+
+export interface Comment {
+    id: string;
+    author: User;
+    text: string;
+}
 
 export interface Post {
   id: string;
@@ -9,7 +16,7 @@ export interface Post {
   content: string;
   timestamp: string;
   likes: number;
-  comments: number;
+  comments: Comment[];
   shares: number;
 }
 
@@ -21,7 +28,7 @@ export const posts: Post[] = [
     content: 'Отличная игра сегодня! Всех с победой над "Стальными Ястребами"! Готовимся к следующему вызову.',
     timestamp: '2025-08-15T10:00:00.000Z',
     likes: 125,
-    comments: 14,
+    comments: [],
     shares: 5,
   },
   {
@@ -30,7 +37,7 @@ export const posts: Post[] = [
     content: 'Ищем вратаря в команду на постоянку. Пишите в ЛС.',
     timestamp: '2025-08-14T11:30:00.000Z',
     likes: 42,
-    comments: 8,
+    comments: [],
     shares: 2,
   },
    {
@@ -39,7 +46,7 @@ export const posts: Post[] = [
     content: 'Кто-нибудь знает, где можно купить хорошие футбольные бутсы?',
     timestamp: '2025-08-13T14:00:00.000Z',
     likes: 15,
-    comments: 3,
+    comments: [],
     shares: 0,
   },
   {
@@ -49,7 +56,7 @@ export const posts: Post[] = [
     content: 'Тренировка завтра в 19:00 на нашей домашней площадке. Не опаздывать!',
     timestamp: '2025-08-13T09:00:00.000Z',
     likes: 31,
-    comments: 2,
+    comments: [],
     shares: 1,
   },
   {
@@ -59,7 +66,7 @@ export const posts: Post[] = [
     content: 'Провели отличную тренировку по тактике. "Ночные Снайперы", ждите нас!',
     timestamp: '2025-08-12T18:45:00.000Z',
     likes: 58,
-    comments: 6,
+    comments: [],
     shares: 3,
   },
   {
@@ -68,7 +75,7 @@ export const posts: Post[] = [
     content: 'Есть у кого-нибудь ненужный мяч? Наш приказал долго жить...',
     timestamp: '2025-08-11T20:00:00.000Z',
     likes: 7,
-    comments: 3,
+    comments: [],
     shares: 0,
   },
 ].filter(p => p.author); // Ensure no posts with undefined authors are included

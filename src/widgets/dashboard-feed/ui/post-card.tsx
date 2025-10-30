@@ -13,6 +13,8 @@ import { Button } from "@/shared/ui/button";
 import { Heart, MessageSquare, Share2 } from "lucide-react";
 import { cn } from "@/shared/lib/utils";
 import { usePostStore } from "../model/post-store";
+import { Dialog, DialogContent, DialogTrigger } from "@/shared/ui/dialog";
+import { MediaPostDialogContent } from "@/views/admin/ui/templates/player-page-publications-tab";
 
 export function PostCard({ post }: { post: Post }) {
   const [timeAgo, setTimeAgo] = useState('');
@@ -67,10 +69,15 @@ export function PostCard({ post }: { post: Post }) {
                 <Heart className={cn("h-5 w-5", isLiked && "fill-red-500 text-red-500")} />
                 <span>{post.likes}</span>
             </Button>
-            <Button variant="ghost" size="sm" className="flex items-center gap-2">
-                <MessageSquare className="h-5 w-5"/>
-                <span>{post.comments}</span>
-            </Button>
+            <Dialog>
+                <DialogTrigger asChild>
+                    <Button variant="ghost" size="sm" className="flex items-center gap-2">
+                        <MessageSquare className="h-5 w-5"/>
+                        <span>{post.comments.length}</span>
+                    </Button>
+                </DialogTrigger>
+                <MediaPostDialogContent post={post} />
+            </Dialog>
             <Button variant="ghost" size="sm" className="flex items-center gap-2">
                 <Share2 className="h-5 w-5"/>
                 <span>{post.shares}</span>

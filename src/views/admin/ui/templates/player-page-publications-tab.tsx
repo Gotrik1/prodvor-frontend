@@ -1,8 +1,7 @@
 
-
 'use client';
 
-import type { Team, User } from "@/mocks";
+import type { Post, Team, User } from "@/mocks";
 import { users } from "@/mocks";
 import { CreatePost } from "@/widgets/dashboard-feed/ui/create-post";
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
@@ -21,13 +20,13 @@ import {
 import { useState, useEffect } from "react";
 import { cn } from "@/shared/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
-import { Textarea } from "@/shared/ui/textarea";
+import { Input } from "@/shared/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 import Link from "next/link";
 import { Separator } from "@/shared/ui/separator";
-import { Input } from "@/shared/ui/input";
 import { Carousel, CarouselContent, CarouselItem } from "@/shared/ui/carousel";
 import { useToast } from "@/shared/hooks/use-toast";
+import { usePostStore } from "@/widgets/dashboard-feed/model/post-store";
 
 const mockMedia = [
     { type: 'image', src: 'https://placehold.co/600x400.png', title: 'Фото с последней игры', dataAiHint: 'soccer game' },
@@ -49,7 +48,7 @@ const mockComments = users.slice(2, 6).map((user, i) => ({
     ][i % 4],
 }));
 
-const CommentItem = ({ comment }: { comment: typeof mockComments[0] }) => (
+const CommentItem = ({ comment }: { comment: {id: string, author: User, text: string} }) => (
     <div className="flex items-start gap-3">
         <Avatar className="h-8 w-8">
             <AvatarImage src={comment.author.avatarUrl} />
@@ -62,21 +61,16 @@ const CommentItem = ({ comment }: { comment: typeof mockComments[0] }) => (
     </div>
 );
 
-const MediaPostDialogContent = ({ media, author }: { media: typeof mockMedia[0], author: User }) => {
-    const [likes, setLikes] = useState(0);
-    const [comments, setComments] = useState(() => mockComments);
+export const MediaPostDialogContent = ({ post }: { post: Post }) => {
+    const { addComment, likePost } = usePostStore();
     const [isLiked, setIsLiked] = useState(false);
     const [newComment, setNewComment] = useState("");
     const currentUser = users[0];
     const { toast } = useToast();
 
-    useEffect(() => {
-        setLikes(Math.floor(Math.random() * 500));
-    }, []);
-
     const handleLike = () => {
+        likePost(post.id, !isLiked);
         setIsLiked(!isLiked);
-        setLikes(prev => isLiked ? prev - 1 : prev + 1);
     }
     
     const handleAddComment = (e: React.FormEvent) => {
@@ -87,7 +81,7 @@ const MediaPostDialogContent = ({ media, author }: { media: typeof mockMedia[0],
             author: currentUser,
             text: newComment,
         };
-        setComments(prev => [newCommentObject, ...prev]);
+        addComment(post.id, newCommentObject);
         setNewComment("");
     }
 
@@ -102,35 +96,35 @@ const MediaPostDialogContent = ({ media, author }: { media: typeof mockMedia[0],
     return (
         <DialogContent className="sm:max-w-4xl p-0">
              <DialogHeader className="sr-only">
-                <DialogTitle>Публикация от {author.nickname}: {media.title}</DialogTitle>
+                <DialogTitle>Публикация от {post.author.nickname}</DialogTitle>
                 <DialogDescription>Просмотр медиа и комментариев.</DialogDescription>
             </DialogHeader>
             <div className="grid grid-cols-1 md:grid-cols-2">
                 <div className="relative aspect-square w-full">
                     <Image 
-                        src={media.src} 
-                        alt={media.title} 
+                        src={mockMedia[0].src} 
+                        alt={post.content} 
                         fill
                         className="object-cover rounded-l-lg"
-                        data-ai-hint={media.dataAiHint}
+                        data-ai-hint="post image"
                     />
                 </div>
                 <div className="flex flex-col h-full max-h-[90vh]">
                     <div className="p-4 border-b">
-                         <Link href={`/users/${author.id}`} className="flex items-center gap-3 group">
+                         <Link href={`/users/${post.author.id}`} className="flex items-center gap-3 group">
                             <Avatar>
-                                <AvatarImage src={author.avatarUrl} />
-                                <AvatarFallback>{author.nickname.charAt(0)}</AvatarFallback>
+                                <AvatarImage src={post.author.avatarUrl} />
+                                <AvatarFallback>{post.author.nickname.charAt(0)}</AvatarFallback>
                             </Avatar>
                             <div>
-                                <p className="font-semibold group-hover:text-primary">{author.nickname}</p>
-                                <p className="text-xs text-muted-foreground">{media.title}</p>
+                                <p className="font-semibold group-hover:text-primary">{post.author.nickname}</p>
+                                <p className="text-xs text-muted-foreground">{post.content}</p>
                             </div>
                         </Link>
                     </div>
 
                     <div className="flex-grow overflow-y-auto p-4 space-y-4">
-                        {comments.map(comment => <CommentItem key={comment.id} comment={comment} />)}
+                        {post.comments.map(comment => <CommentItem key={comment.id} comment={comment} />)}
                     </div>
                     
                     <div className="p-4 border-t space-y-3 bg-muted/50">
@@ -138,11 +132,11 @@ const MediaPostDialogContent = ({ media, author }: { media: typeof mockMedia[0],
                              <div className="flex items-center gap-4">
                                 <button className="flex items-center gap-1.5 group" onClick={handleLike}>
                                     <Heart className={cn("h-6 w-6 transition-all group-hover:scale-110", isLiked && "fill-red-500 text-red-500")} />
-                                    <span className="font-semibold text-sm">{likes}</span>
+                                    <span className="font-semibold text-sm">{post.likes}</span>
                                 </button>
                                 <div className="flex items-center gap-1.5">
                                     <MessageSquare className="h-6 w-6"/>
-                                    <span className="font-semibold text-sm">{comments.length}</span>
+                                    <span className="font-semibold text-sm">{post.comments.length}</span>
                                 </div>
                              </div>
                               <Button variant="ghost" size="icon" onClick={handleShare}>
@@ -183,12 +177,8 @@ const EmptyTab = ({ icon: Icon, title, description }: { icon: React.ElementType,
 
 
 export function PublicationsTab({ player, isOwnProfile }: { player: User; isOwnProfile: boolean }) {
-    const [mediaFeed, setMediaFeed] = useState<(typeof mockMedia[0])[]>([]);
-
-    useEffect(() => {
-        // Randomize feed only on the client side after initial render
-        setMediaFeed([...mockMedia].sort(() => 0.5 - Math.random()));
-    }, []);
+    const { getPostsForUser } = usePostStore();
+    const playerPosts = getPostsForUser(player.id);
 
     return (
             <Card className="shadow-none md:shadow-main-sm md:bg-card bg-transparent">
@@ -223,46 +213,46 @@ export function PublicationsTab({ player, isOwnProfile }: { player: User; isOwnP
                             <TabsTrigger value="tagged"><Tag className="md:mr-2 h-4 w-4"/><span className="hidden md:inline">Отметили</span></TabsTrigger>
                         </TabsList>
                         <TabsContent value="photos" className="mt-4">
-                             {mediaFeed.length > 0 ? (
+                             {playerPosts.length > 0 ? (
                                 <>
                                 <div className="hidden md:grid grid-cols-2 md:grid-cols-3 gap-2">
-                                    {mediaFeed.map((item, index) => (
-                                        <Dialog key={`media-desktop-${index}`}>
+                                    {playerPosts.map((post) => (
+                                        <Dialog key={`media-desktop-${post.id}`}>
                                             <DialogTrigger asChild>
                                                 <div className="group relative aspect-square w-full overflow-hidden rounded-lg cursor-pointer">
                                                     <Image 
-                                                        src={item.src} 
-                                                        alt={item.title} 
+                                                        src={mockMedia[0].src} 
+                                                        alt={post.content} 
                                                         fill
                                                         sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
                                                         className="object-cover group-hover:scale-105 transition-transform"
-                                                        data-ai-hint={item.dataAiHint}
+                                                        data-ai-hint="post image"
                                                     />
                                                 </div>
                                             </DialogTrigger>
-                                            <MediaPostDialogContent media={item} author={player} />
+                                            <MediaPostDialogContent post={post} />
                                         </Dialog>
                                     ))}
                                 </div>
                                 <div className="md:hidden">
                                      <Carousel opts={{ align: "start", loop: true }}>
                                         <CarouselContent>
-                                            {mediaFeed.map((item, index) => (
-                                                <CarouselItem key={`media-mobile-${index}`} className="pl-4 basis-1/3">
+                                            {playerPosts.map((post) => (
+                                                <CarouselItem key={`media-mobile-${post.id}`} className="pl-4 basis-1/3">
                                                     <Dialog>
                                                         <DialogTrigger asChild>
                                                             <div className="group relative aspect-square w-full overflow-hidden rounded-lg cursor-pointer">
                                                                 <Image 
-                                                                    src={item.src} 
-                                                                    alt={item.title} 
+                                                                    src={mockMedia[0].src} 
+                                                                    alt={post.content} 
                                                                     fill
                                                                     sizes="33vw"
                                                                     className="object-cover"
-                                                                    data-ai-hint={item.dataAiHint}
+                                                                    data-ai-hint="post image"
                                                                 />
                                                             </div>
                                                         </DialogTrigger>
-                                                        <MediaPostDialogContent media={item} author={player} />
+                                                        <MediaPostDialogContent post={post} />
                                                     </Dialog>
                                                 </CarouselItem>
                                             ))}
