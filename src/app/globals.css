@@ -170,7 +170,7 @@ html {
   .day-holiday:not(.day-selected) {
     color: hsl(var(--destructive) / 0.8);
   }
-  .day-with-event > .rdp-button_reset {
+  .day-with-event:not(.day-selected) > .rdp-button_reset {
     background-color: hsl(142 71% 45% / 0.1);
     font-weight: 600;
     color: hsl(142 71% 45%) !important;
@@ -178,7 +178,6 @@ html {
   .day-with-event.day-selected > .rdp-button_reset {
     background-color: hsl(142 71% 45% / 0.3);
     border: 1px solid hsl(142 71% 45% / 0.6);
-    border-radius: 0.375rem; /* 6px */
   }
 }
 
