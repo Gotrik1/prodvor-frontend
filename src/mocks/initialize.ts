@@ -238,7 +238,9 @@ function assignDisciplinesFromTeams(allUsers: User[], allTeams: Team[]) {
         const userDisciplines = new Set(user.disciplines);
         const userTeams = allTeams.filter(t => t.members.includes(user.id));
         userTeams.forEach(team => {
-            userDisciplines.add(team.sportId);
+            if (userDisciplines.size < 6) {
+                userDisciplines.add(team.sportId);
+            }
             // Also, users who are members of this team should follow it
             if (!user.following.includes(team.id)) {
                 user.following.push(team.id);
