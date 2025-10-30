@@ -7,7 +7,7 @@ import { users } from "@/mocks";
 import { CreatePost } from "@/widgets/dashboard-feed/ui/create-post";
 import { Card, CardContent } from "@/shared/ui/card";
 import { Button } from "@/shared/ui/button";
-import { Grid3x3, Heart, MessageSquare, PlusCircle, Send } from "lucide-react";
+import { Grid3x3, Heart, MessageSquare, PlusCircle, Send, Share2 } from "lucide-react";
 import Image from "next/image";
 import {
   Dialog,
@@ -22,6 +22,9 @@ import { useState, useEffect } from "react";
 import { cn } from "@/shared/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { Textarea } from "@/shared/ui/textarea";
+import { usePostStore } from "@/widgets/dashboard-feed/model/post-store";
+import { useToast } from "@/shared/hooks/use-toast";
+
 
 // Mock the current user for CreatePost component
 const currentUser = users[0];
@@ -58,20 +61,15 @@ const CommentItem = ({ comment }: { comment: typeof mockComments[0] }) => (
     </div>
 );
 
-const MediaPostStats = () => {
-    const [likes, setLikes] = useState(0);
-    const [comments, setComments] = useState(() => mockComments);
+const MediaPostStats = ({ post }: { post: Post }) => {
+    const { addComment, likePost } = usePostStore();
     const [isLiked, setIsLiked] = useState(false);
     const [newComment, setNewComment] = useState("");
-    
-    useEffect(() => {
-        // This code runs only on the client, after hydration
-        setLikes(Math.floor(Math.random() * 500));
-    }, []);
+    const { toast } = useToast();
 
     const handleLike = () => {
+        likePost(post.id, !isLiked);
         setIsLiked(!isLiked);
-        setLikes(prev => isLiked ? prev - 1 : prev + 1);
     }
     
      const handleAddComment = (e: React.FormEvent) => {
@@ -82,54 +80,71 @@ const MediaPostStats = () => {
             author: currentUser,
             text: newComment,
         };
-        setComments(prev => [...prev, newCommentObject]);
+        addComment(post.id, newCommentObject);
         setNewComment("");
+    }
+    
+    const handleShare = () => {
+        navigator.clipboard.writeText(window.location.href);
+        toast({
+            title: "Ссылка скопирована!",
+            description: "Вы можете поделиться этой публикацией.",
+        });
     }
 
     return (
-        <div className="text-white flex items-center gap-6 text-lg font-semibold">
-            <button className="flex items-center gap-2 group" onClick={handleLike}>
-                <Heart className={cn("h-7 w-7 transition-all group-hover:scale-110", isLiked && "fill-red-500 text-red-500")} />
-                <span>{likes}</span>
-            </button>
-             <Dialog>
-                <DialogTrigger asChild>
-                    <button className="flex items-center gap-2 group">
-                        <MessageSquare className="h-7 w-7 transition-all group-hover:scale-110"/>
-                        <span>{comments.length}</span>
-                    </button>
-                </DialogTrigger>
-                <DialogContent className="sm:max-w-[525px]">
-                    <DialogHeader>
-                        <DialogTitle>Комментарии</DialogTitle>
-                    </DialogHeader>
-                    <div className="space-y-4 max-h-[400px] overflow-y-auto pr-4 my-4">
-                        {comments.map(comment => <CommentItem key={comment.id} comment={comment} />)}
-                    </div>
-                    <DialogFooter>
-                        <form onSubmit={handleAddComment} className="w-full flex items-center gap-2">
-                             <Avatar className="h-8 w-8">
-                                <AvatarImage src={currentUser?.avatarUrl} />
-                                <AvatarFallback>{currentUser?.nickname.charAt(0)}</AvatarFallback>
-                            </Avatar>
-                            <Textarea 
-                                placeholder="Написать комментарий..." 
-                                className="flex-grow" 
-                                rows={1}
-                                value={newComment}
-                                onChange={(e) => setNewComment(e.target.value)}
-                            />
-                            <Button type="submit" size="icon"><Send className="h-4 w-4" /></Button>
-                        </form>
-                    </DialogFooter>
-                </DialogContent>
-            </Dialog>
+        <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/70 to-transparent">
+            <div className="text-white flex items-center justify-around gap-6 text-lg font-semibold">
+                <button className="flex items-center gap-2 group" onClick={handleLike}>
+                    <Heart className={cn("h-7 w-7 transition-all group-hover:scale-110", isLiked && "fill-red-500 text-red-500")} />
+                    <span>{post.likes}</span>
+                </button>
+                 <Dialog>
+                    <DialogTrigger asChild>
+                        <button className="flex items-center gap-2 group">
+                            <MessageSquare className="h-7 w-7 transition-all group-hover:scale-110"/>
+                            <span>{post.comments}</span>
+                        </button>
+                    </DialogTrigger>
+                    <DialogContent className="sm:max-w-[525px]">
+                        <DialogHeader>
+                            <DialogTitle>Комментарии</DialogTitle>
+                        </DialogHeader>
+                        <div className="space-y-4 max-h-[400px] overflow-y-auto pr-4 my-4">
+                            {mockComments.map(comment => <CommentItem key={comment.id} comment={comment} />)}
+                        </div>
+                        <DialogFooter>
+                            <form onSubmit={handleAddComment} className="w-full flex items-center gap-2">
+                                 <Avatar className="h-8 w-8">
+                                    <AvatarImage src={currentUser?.avatarUrl} />
+                                    <AvatarFallback>{currentUser?.nickname.charAt(0)}</AvatarFallback>
+                                </Avatar>
+                                <Textarea 
+                                    placeholder="Написать комментарий..." 
+                                    className="flex-grow" 
+                                    rows={1}
+                                    value={newComment}
+                                    onChange={(e) => setNewComment(e.target.value)}
+                                />
+                                <Button type="submit" size="icon"><Send className="h-4 w-4" /></Button>
+                            </form>
+                        </DialogFooter>
+                    </DialogContent>
+                </Dialog>
+                <button className="flex items-center gap-2 group" onClick={handleShare}>
+                    <Share2 className="h-7 w-7 transition-all group-hover:scale-110"/>
+                    <span>{post.shares}</span>
+                </button>
+            </div>
         </div>
     );
 };
 
 
-export function TeamPublicationsTab({ posts, team }: { posts: Post[], team: Team }) {
+export function TeamPublicationsTab({ team }: { team: Team }) {
+    const { posts, getPostsForTeam } = usePostStore();
+    const teamPosts = getPostsForTeam(team.id);
+
     const isTeamMember = team.members.includes(currentUser.id);
     const [mediaFeed, setMediaFeed] = useState<(typeof mockMedia[0])[]>(mockMedia);
 
@@ -156,21 +171,19 @@ export function TeamPublicationsTab({ posts, team }: { posts: Post[], team: Team
                     </Dialog>
                 </div>
             )}
-            {mediaFeed.length > 0 ? (
+            {teamPosts.length > 0 ? (
                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-1 md:gap-4">
-                    {mediaFeed.map((item, index) => (
-                        <div key={`media-${index}`} className="group relative aspect-square w-full overflow-hidden rounded-lg">
+                    {teamPosts.map((post, index) => (
+                        <div key={post.id} className="group relative aspect-square w-full overflow-hidden rounded-lg">
                             <Image 
-                                src={item.src} 
-                                alt={item.title} 
+                                src={mockMedia[index % mockMedia.length].src}
+                                alt={post.content}
                                 fill
                                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                                 className="object-cover group-hover:scale-105 transition-transform"
-                                data-ai-hint={item.dataAiHint}
+                                data-ai-hint="team activity"
                             />
-                                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                                <MediaPostStats />
-                            </div>
+                            <MediaPostStats post={post} />
                         </div>
                     ))}
                 </div>
