@@ -130,7 +130,7 @@ const Sidebar = React.forwardRef<
         ref={ref}
         className={cn(
           "group sticky top-0 z-50 hidden md:flex flex-col h-screen bg-card text-card-foreground border-r border-layout-border transition-all duration-300 ease-in-out",
-          "lg:w-64",
+          "md:w-16 xl:w-64",
           className
         )}
         data-state="expanded"
@@ -170,7 +170,7 @@ const SidebarHeader = React.forwardRef<
     <div
       ref={ref}
       data-sidebar="header"
-      className={cn("flex flex-col gap-2 p-2 items-center xl:items-start", className)}
+      className={cn("flex flex-col gap-2 p-2 items-center", className)}
       {...props}
     />
   )

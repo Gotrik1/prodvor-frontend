@@ -28,13 +28,18 @@ export function AdminLayout({
         <div className="flex min-h-screen">
             <Sidebar>
                 <SidebarHeader>
-                    <Logo />
+                    <div className="xl:hidden">
+                        <Logo />
+                    </div>
+                     <div className="hidden xl:block">
+                        <Logo />
+                    </div>
                 </SidebarHeader>
                 <SidebarContent>
                     <SidebarMenu>
                         <SidebarMenuItem>
                             <Link href="/admin/dashboard">
-                                <SidebarMenuButton isActive={pathname.startsWith('/admin/dashboard') && !currentTab}>
+                                <SidebarMenuButton tooltip="База данных" isActive={pathname.startsWith('/admin/dashboard') && !currentTab}>
                                     <Database />
                                     <span>База данных</span>
                                 </SidebarMenuButton>
@@ -42,7 +47,7 @@ export function AdminLayout({
                         </SidebarMenuItem>
                          <SidebarMenuItem>
                             <Link href="/admin/app-map">
-                                <SidebarMenuButton isActive={pathname.startsWith('/admin/app-map')}>
+                                <SidebarMenuButton tooltip="Карта приложения" isActive={pathname.startsWith('/admin/app-map')}>
                                     <Map />
                                     <span>Карта приложения</span>
                                 </SidebarMenuButton>
@@ -50,7 +55,7 @@ export function AdminLayout({
                         </SidebarMenuItem>
                         <SidebarMenuItem>
                             <Link href="/admin/advertising">
-                                <SidebarMenuButton isActive={pathname.startsWith('/admin/advertising')}>
+                                <SidebarMenuButton tooltip="Ad-CRM" isActive={pathname.startsWith('/admin/advertising')}>
                                     <DollarSign />
                                     <span>Ad-CRM</span>
                                 </SidebarMenuButton>
@@ -58,7 +63,7 @@ export function AdminLayout({
                         </SidebarMenuItem>
                          <SidebarMenuItem>
                             <Link href="/admin/access-control">
-                                <SidebarMenuButton isActive={pathname.startsWith('/admin/access-control')}>
+                                <SidebarMenuButton tooltip="Управление доступом" isActive={pathname.startsWith('/admin/access-control')}>
                                     <KeyRound />
                                     <span>Управление доступом</span>
                                 </SidebarMenuButton>
@@ -66,7 +71,7 @@ export function AdminLayout({
                         </SidebarMenuItem>
                         <SidebarMenuItem>
                             <Link href="/admin/simulation">
-                                <SidebarMenuButton isActive={pathname.startsWith('/admin/simulation')}>
+                                <SidebarMenuButton tooltip="Симуляция" isActive={pathname.startsWith('/admin/simulation')}>
                                     <Eye />
                                     <span>Симуляция</span>
                                 </SidebarMenuButton>
@@ -74,7 +79,7 @@ export function AdminLayout({
                         </SidebarMenuItem>
                         <SidebarMenuItem>
                             <Link href="/admin/docs">
-                                <SidebarMenuButton isActive={pathname.startsWith('/admin/docs')}>
+                                <SidebarMenuButton tooltip="Справка" isActive={pathname.startsWith('/admin/docs')}>
                                     <BookOpen />
                                     <span>Справка</span>
                                 </SidebarMenuButton>
