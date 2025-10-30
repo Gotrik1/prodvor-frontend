@@ -56,7 +56,7 @@ export const PlayerStatsOverviewTab = () => {
 
     return (
         <Card className="md:shadow-main-sm shadow-none md:bg-card bg-transparent">
-            <CardHeader>
+            <CardHeader className="hidden md:flex">
                 <CardTitle className="flex items-center gap-2"><BarChart3 className="h-5 w-5" />Статистика</CardTitle>
                 <CardDescription>Обзор ключевых показателей и карьерной статистики игрока.</CardDescription>
             </CardHeader>

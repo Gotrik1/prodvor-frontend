@@ -57,7 +57,7 @@ export function AchievementsTab({ player }: { player: User }) {
 
     return (
         <Card className="md:shadow-main-sm shadow-none md:bg-card bg-transparent">
-            <CardHeader>
+            <CardHeader className="hidden md:flex">
                 <CardTitle className="flex items-center gap-2"><Award />Достижения</CardTitle>
                 <CardDescription>Список всех полученных достижений.</CardDescription>
             </CardHeader>
