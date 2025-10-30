@@ -63,7 +63,7 @@ export function DashboardHeader() {
          <div className="block md:hidden">
             <Logo />
          </div>
-         <div className="relative hidden md:block w-64">
+         <div className="relative hidden md:block w-64 ml-4">
           <Button
             variant="outline"
             className="w-full justify-start text-muted-foreground"
