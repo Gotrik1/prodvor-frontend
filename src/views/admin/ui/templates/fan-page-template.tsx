@@ -11,7 +11,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/sha
 import { Bell, Calendar, Flame, Heart, Rss, Star, Ticket, Gamepad2, Tv, Camera } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useMemo } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import { getUserDisciplines } from "@/entities/user/lib";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 import { Dialog, DialogTrigger } from "@/shared/ui/dialog";
@@ -132,7 +132,10 @@ export function FanPageTemplate({ user }: { user?: User }) {
                                                             data-ai-hint={mockMedia[index % mockMedia.length].dataAiHint}
                                                         />
                                                         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                                                        <p className="absolute bottom-2 left-3 text-white font-semibold text-sm">{post.content}</p>
+                                                        <div className="absolute bottom-2 left-3 flex items-center gap-1 text-white font-semibold text-sm">
+                                                            <Heart className="h-4 w-4" />
+                                                            {post.likes}
+                                                        </div>
                                                     </div>
                                                 </DialogTrigger>
                                                 <MediaPostDialogContent post={post} />
