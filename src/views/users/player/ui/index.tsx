@@ -54,9 +54,9 @@ export function PlayerPage({ user: profileUser }: { user: User }) {
                             />
                         )}
                     </div>
-                    <div className="bg-card px-4 md:px-6 pb-4">
+                    <div className="bg-card px-0 md:px-6 pb-4">
                         <div className="flex flex-col sm:flex-row sm:items-end gap-4">
-                            <div className="-mt-16 sm:-mt-20 shrink-0">
+                            <div className="-mt-16 sm:-mt-20 shrink-0 w-full flex justify-center sm:w-auto sm:justify-start">
                                 <Avatar className="h-32 w-32 border-4 border-card">
                                     <AvatarImage src={profileUser.avatarUrl} alt={profileUser.nickname} />
                                     <AvatarFallback>{profileUser.firstName.charAt(0)}{profileUser.lastName.charAt(0)}</AvatarFallback>
@@ -94,7 +94,7 @@ export function PlayerPage({ user: profileUser }: { user: User }) {
                                 </div>
                             </div>
                             {!isOwnProfile && (
-                                <div className="flex items-center gap-2 shrink-0 w-full sm:w-auto">
+                                <div className="flex items-center gap-2 shrink-0 w-full sm:w-auto px-4 sm:px-0">
                                     <Button className="w-full"><UserPlus className="mr-2 h-4 w-4" />Добавить в друзья</Button>
                                     <Button variant="secondary" className="w-full"><MessageSquare className="mr-2 h-4 w-4" />Написать</Button>
                                 </div>
@@ -104,7 +104,7 @@ export function PlayerPage({ user: profileUser }: { user: User }) {
                 </div>
 
                 {/* --- MAIN CONTENT GRID --- */}
-                <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 px-4 md:px-0 pb-6 md:pb-0">
+                <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 md:px-0 pb-6 md:pb-0">
                     {/* Left side (2 columns wide) */}
                     <div className="xl:col-span-2 space-y-6">
                         <PlayerStatsOverviewTab />
@@ -115,10 +115,10 @@ export function PlayerPage({ user: profileUser }: { user: User }) {
                         <div className="md:hidden">
                             <AchievementsTab player={profileUser} />
                         </div>
-                         <div className="md:hidden">
+                         <div className="hidden md:block">
                              <TrainingTab />
                         </div>
-                         <div className="md:hidden">
+                         <div className="hidden md:block">
                              <MyTeamWidget user={profileUser} />
                         </div>
                     </div>
