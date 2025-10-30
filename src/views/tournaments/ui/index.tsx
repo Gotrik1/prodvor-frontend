@@ -1,11 +1,13 @@
 
 
+'use client';
+
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/shared/ui/card";
 import { GanttChart, Bell, CheckSquare } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
-import { allTournaments, Tournament } from "@/mocks";
+import { tournaments, Tournament } from "@/mocks";
 import { Badge } from "@/shared/ui/badge";
 import { Progress } from "@/shared/ui/progress";
 import { MyTournamentsEmptyState } from "./my-tournaments-empty-state";
@@ -104,7 +106,7 @@ export function TournamentsPage() {
             <section>
                 <h2 className="text-2xl font-bold mb-4">Все турниры</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {allTournaments.map(tournament => (
+                    {tournaments.map(tournament => (
                         <Card key={tournament.id} className="flex flex-col hover:border-primary/50 transition-colors group">
                             <CardContent className="p-0 pt-0">
                                 <Link href={`/tournaments/${tournament.id}`} className="block">
