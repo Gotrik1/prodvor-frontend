@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
@@ -14,6 +15,8 @@ import { mockFeedEvents, FeedEvent } from '@/mocks/feed-events';
 import { EventCard } from './event-card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription, DialogFooter } from '@/shared/ui/dialog';
 import { FeedTab } from '@/views/settings/ui/tabs/feed-tab';
+import { useIsMobile } from "@/shared/hooks/use-mobile";
+import { cn } from "@/shared/lib/utils";
 
 function AiDigest() {
     const [digestData, setDigestData] = useState<NewsDigestOutput | null>(null);
@@ -82,6 +85,7 @@ export function DashboardFeed() {
   const [digestKey, setDigestKey] = useState(0);
   const [activeFilter, setActiveFilter] = useState('all');
   const { user: currentUser } = useUserStore();
+  const isMobile = useIsMobile();
 
   const feedEvents: FeedEvent[] = useMemo(() => {
     if (!currentUser) return [];
@@ -135,11 +139,12 @@ export function DashboardFeed() {
                     <Button 
                         key={filter.id}
                         variant={activeFilter === filter.id ? 'default' : 'outline'}
-                        size="sm"
+                        size={isMobile ? 'icon' : 'sm'}
                         onClick={() => setActiveFilter(filter.id)}
+                        aria-label={filter.label}
                     >
-                        <filter.icon className="mr-2 h-4 w-4" />
-                        {filter.label}
+                        <filter.icon className={cn("h-4 w-4", !isMobile && "mr-2")} />
+                        <span className="hidden md:inline">{filter.label}</span>
                     </Button>
                 ))}
             </div>
