@@ -296,3 +296,5 @@ export function PublicationsTab({ player, isOwnProfile }: { player: User; isOwnP
             </Card>
     )
 };
+
+    
