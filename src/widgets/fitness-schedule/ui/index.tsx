@@ -8,7 +8,7 @@ import { Clock, Trash2, Calendar as CalendarIcon, Trophy, Dumbbell } from 'lucid
 import { useScheduleStore } from '@/entities/training/model/use-schedule-store';
 import type { ScheduledActivity, Activity } from '@/views/fitness-plan/ui/types';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
-import { ActivityLibraryDialog } from '@/features/fitness-plan/ui/activity-library';
+import { ActivityLibraryDialog } from '@/views/fitness-plan/ui/activity-library';
 import { registeredTeams } from '@/views/tournaments/public-page/ui/mock-data';
 import { cn } from '@/shared/lib/utils';
 import { Skeleton } from '@/shared/ui/skeleton';
@@ -104,7 +104,7 @@ export function FitnessSchedule({ showHeader = false }: { showHeader?: boolean }
     };
 
     return (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
              <div className="flex justify-center">
                 <Calendar
                     mode="single"
@@ -114,7 +114,7 @@ export function FitnessSchedule({ showHeader = false }: { showHeader?: boolean }
                 />
             </div>
             <div className="space-y-3 min-h-[350px]">
-                <h3 className="text-lg font-semibold text-center md:text-left">
+                <h3 className="text-lg font-semibold text-center lg:text-left">
                     {selectedDate ? selectedDate.toLocaleDateString('ru-RU', { weekday: 'long', day: 'numeric', month: 'long' }) : 'Выберите дату'}
                 </h3>
                 {selectedDate ? (
