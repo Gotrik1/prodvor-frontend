@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
@@ -22,7 +23,7 @@ export function MyTeamWidget({ user }: { user: User }) {
   }, [user]);
 
   return (
-    <Card className="bg-card">
+    <Card className="bg-card shadow-none md:shadow-main-sm">
       <CardHeader>
         <CardTitle className="flex items-center gap-2"><Users /> Мои команды</CardTitle>
       </CardHeader>
@@ -38,13 +39,16 @@ export function MyTeamWidget({ user }: { user: User }) {
                     <Link href={`/teams/${team.id}`} key={team.id} className="block group">
                          <div className="flex items-center justify-between gap-3 p-2 rounded-md hover:bg-muted/50 transition-colors">
                             <div className="flex items-center gap-3">
-                                <Image src={team.logoUrl} alt={team.name} width={40} height={40} className="rounded-md border" data-ai-hint="team logo" />
-                                <div>
+                                <Image src={team.logoUrl} alt={team.name} width={32} height={32} className="rounded-md border md:w-10 md:h-10" data-ai-hint="team logo" />
+                                <div className="md:hidden">
+                                    <p className="font-semibold text-sm leading-tight group-hover:text-primary transition-colors">{team.name}</p>
+                                </div>
+                                <div className="hidden md:block">
                                     <p className="font-semibold leading-tight group-hover:text-primary transition-colors">{team.name}</p>
                                     <p className="text-xs text-muted-foreground">{team.game}</p>
                                 </div>
                             </div>
-                            <div className="text-right">
+                            <div className="text-right hidden md:block">
                                 <p className="font-mono text-sm font-semibold">{team.rank}</p>
                                 <p className="text-xs text-muted-foreground">ELO</p>
                             </div>
