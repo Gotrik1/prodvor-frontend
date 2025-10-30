@@ -1,10 +1,9 @@
 
-
 'use client';
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
 import { Trophy, Megaphone } from "lucide-react";
-import { allTournaments } from "@/mocks";
+import { tournaments as allTournaments } from "@/mocks";
 import Link from "next/link";
 import { Progress } from "@/shared/ui/progress";
 import { Badge } from "@/shared/ui/badge";
