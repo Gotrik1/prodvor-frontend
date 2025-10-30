@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import {
@@ -31,7 +32,7 @@ import {
   SelectGroup,
   SelectLabel,
 } from '@/shared/ui/select';
-import { useIsMobile } from '@/hooks/use-mobile';
+import { useIsMobile } from '@/shared/hooks/use-mobile';
 import { ScrollArea } from '@/shared/ui/scroll-area';
 
 const rankColors = [
@@ -39,6 +40,8 @@ const rankColors = [
   'border-slate-400 shadow-slate-400/20', // 2nd
   'border-amber-600 shadow-amber-600/20', // 3rd
 ];
+
+const MAIN_LEAGUE_SIZE = 47;
 
 const LegendCard = ({
   team,
@@ -169,7 +172,7 @@ export function LeaguesPage() {
         <h3 className="text-xl font-bold mb-4">Основная Лига (Топ 50)</h3>
         {isMobile ? (
             <div className="space-y-3">
-                {mainLeague.slice(0, 47).map((team, index) => (
+                {mainLeague.slice(0, MAIN_LEAGUE_SIZE).map((team, index) => (
                     <MobileTeamCard key={team.id} team={team} rank={index + 4} />
                 ))}
             </div>
@@ -188,7 +191,7 @@ export function LeaguesPage() {
                         </TableRow>
                         </TableHeader>
                         <TableBody>
-                        {mainLeague.slice(0, 47).map((team, index) => (
+                        {mainLeague.slice(0, MAIN_LEAGUE_SIZE).map((team, index) => (
                             <TableRow key={team.id}>
                             <TableCell className="text-center font-bold text-lg">
                                 <span>{index + 4}</span>

@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { TeamPageTemplate } from "@/views/admin/ui/templates/team-page-template";
