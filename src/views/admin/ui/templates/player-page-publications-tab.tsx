@@ -230,10 +230,10 @@ export function PublicationsTab({ player, isOwnProfile }: { player: User; isOwnP
                                     ))}
                                 </div>
                                 <div className="md:hidden -mx-4">
-                                     <Carousel opts={{ align: "start" }}>
-                                        <CarouselContent>
+                                     <Carousel opts={{ align: "start", loop: true }}>
+                                        <CarouselContent className="-ml-1">
                                             {mediaFeed.map((item, index) => (
-                                                <CarouselItem key={`media-mobile-${index}`} className="basis-1/2 xs:basis-1/3">
+                                                <CarouselItem key={`media-mobile-${index}`} className="pl-1 basis-1/3">
                                                     <Dialog>
                                                         <DialogTrigger asChild>
                                                             <div className="group relative aspect-square w-full overflow-hidden rounded-lg cursor-pointer">
@@ -241,7 +241,7 @@ export function PublicationsTab({ player, isOwnProfile }: { player: User; isOwnP
                                                                     src={item.src} 
                                                                     alt={item.title} 
                                                                     fill
-                                                                    sizes="(max-width: 768px) 50vw, 33vw"
+                                                                    sizes="33vw"
                                                                     className="object-cover"
                                                                     data-ai-hint={item.dataAiHint}
                                                                 />
