@@ -28,7 +28,7 @@ const EventCard = ({ event, onRemove }: { event: ScheduledActivity; onRemove: (i
     const badgeText = isMatch ? 'Матч' : 'Тренировка';
 
     return (
-        <div className="p-4 rounded-lg bg-card border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 group relative">
+        <div className="p-4 rounded-lg bg-card border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 group relative shadow-main-sm">
             <div className="flex items-start gap-4 w-full">
                 <Icon className={cn("h-8 w-8 mt-1 shrink-0", isMatch ? "text-primary" : "text-amber-400")} />
                 <div className="flex-grow overflow-hidden">
@@ -104,7 +104,7 @@ export function FitnessSchedule({ showHeader = false }: { showHeader?: boolean }
     };
 
     return (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
              <div className="flex justify-center">
                 <Calendar
                     mode="single"
