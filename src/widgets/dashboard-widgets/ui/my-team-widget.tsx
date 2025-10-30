@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
@@ -11,6 +10,7 @@ import { teams } from '@/mocks';
 import type { User, Team } from "@/mocks";
 import React, { useState, useEffect } from "react";
 import { Skeleton } from "@/shared/ui/skeleton";
+import { ScrollArea, ScrollBar } from "@/shared/ui/scroll-area";
 
 export function MyTeamWidget({ user }: { user: User }) {
   const [myTeams, setMyTeams] = useState<Team[]>([]);
@@ -34,21 +34,36 @@ export function MyTeamWidget({ user }: { user: User }) {
                 <div className="flex items-center gap-3"><Skeleton className="h-10 w-10 rounded-md" /><div className="space-y-2"><Skeleton className="h-4 w-20" /><Skeleton className="h-3 w-12" /></div></div>
             </div>
         ) : myTeams.length > 0 ? (
-            <div className="space-y-3">
+            <>
+            <div className="md:hidden">
+                <ScrollArea>
+                    <div className="flex space-x-4 pb-4">
+                        {myTeams.map(team => (
+                            <Link href={`/teams/${team.id}`} key={team.id} className="block group w-32 flex-shrink-0">
+                                <div className="flex flex-col items-center text-center gap-2">
+                                    <Image src={team.logoUrl} alt={team.name} width={64} height={64} className="rounded-md border w-16 h-16 object-cover" data-ai-hint="team logo" />
+                                    <div>
+                                        <p className="font-semibold text-xs leading-tight group-hover:text-primary transition-colors truncate">{team.name}</p>
+                                    </div>
+                                </div>
+                            </Link>
+                        ))}
+                    </div>
+                    <ScrollBar orientation="horizontal" />
+                </ScrollArea>
+            </div>
+            <div className="hidden md:block space-y-3">
                 {myTeams.map(team => (
                     <Link href={`/teams/${team.id}`} key={team.id} className="block group">
                          <div className="flex items-center justify-between gap-3 p-2 rounded-md hover:bg-muted/50 transition-colors">
                             <div className="flex items-center gap-3">
-                                <Image src={team.logoUrl} alt={team.name} width={32} height={32} className="rounded-md border md:w-10 md:h-10" data-ai-hint="team logo" />
-                                <div className="md:hidden">
-                                    <p className="font-semibold text-sm leading-tight group-hover:text-primary transition-colors">{team.name}</p>
-                                </div>
-                                <div className="hidden md:block">
+                                <Image src={team.logoUrl} alt={team.name} width={40} height={40} className="rounded-md border" data-ai-hint="team logo" />
+                                <div>
                                     <p className="font-semibold leading-tight group-hover:text-primary transition-colors">{team.name}</p>
                                     <p className="text-xs text-muted-foreground">{team.game}</p>
                                 </div>
                             </div>
-                            <div className="text-right hidden md:block">
+                            <div className="text-right">
                                 <p className="font-mono text-sm font-semibold">{team.rank}</p>
                                 <p className="text-xs text-muted-foreground">ELO</p>
                             </div>
@@ -56,6 +71,7 @@ export function MyTeamWidget({ user }: { user: User }) {
                     </Link>
                 ))}
             </div>
+            </>
         ) : (
              <div className="text-center">
                 <p className="text-sm text-muted-foreground mb-4">Вы еще не состоите в команде.</p>
