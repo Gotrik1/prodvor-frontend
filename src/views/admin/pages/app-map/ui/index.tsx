@@ -6,11 +6,10 @@ import Link from 'next/link';
 import { siteMapData } from '../lib/sitemap-data';
 import type { SitemapCategory, SitemapItem } from '../lib/sitemap-data';
 import * as LucideIcons from 'lucide-react';
-import { cn } from '@/shared/lib/utils';
 import { Map } from 'lucide-react';
 
 const SitemapNode: React.FC<{ item: SitemapItem; isLast: boolean }> = ({ item, isLast }) => {
-  // @ts-ignore
+  // @ts-expect-error - Icon name from mock might not exist in LucideIcons, we handle this.
   const Icon = LucideIcons[item.icon] || LucideIcons.File;
   const hasChildren = item.children && item.children.length > 0;
 
@@ -48,7 +47,7 @@ const SitemapNode: React.FC<{ item: SitemapItem; isLast: boolean }> = ({ item, i
 
 
 const SitemapCategoryTree: React.FC<{ category: SitemapCategory }> = ({ category }) => {
-   // @ts-ignore
+   // @ts-expect-error - Icon name from mock might not exist in LucideIcons, we handle this.
   const Icon = LucideIcons[category.icon] || LucideIcons.Folder;
 
   return (

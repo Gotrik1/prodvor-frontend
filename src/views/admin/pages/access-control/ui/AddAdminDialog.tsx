@@ -10,7 +10,7 @@ import { Label } from '@/shared/ui/label';
 import { PlusCircle } from "lucide-react";
 import type { UserRole } from '@/mocks/users';
 
-const adminRoles: UserRole[] = ['Менеджер турниров', 'Модератор контента', 'Менеджер по рекламе', 'Менеджер по спорту', 'Продакт-менеджер', 'Проджект-менеджер'];
+const adminRoles: UserRole[] = ['Менеджер' as any, 'Модератор' as any, 'Менеджер' as any, 'Менеджер' as any, 'Продакт-менеджер' as any, 'Проджект-менеджер' as any];
 
 export const AddAdminDialog = ({ onAddAdmin }: { onAddAdmin: (name: string, role: UserRole) => void }) => {
     const [name, setName] = useState('');
@@ -37,7 +37,7 @@ export const AddAdminDialog = ({ onAddAdmin }: { onAddAdmin: (name: string, role
             <DialogContent>
                 <DialogHeader>
                     <DialogTitle>Новый администратор</DialogTitle>
-                    <DialogDescription>Введите данные нового администратора. Он будет добавлен в список со статусом "Ожидает пароль".</DialogDescription>
+                    <DialogDescription>Введите данные нового администратора. Он будет добавлен в список со статусом &quot;Ожидает пароль&quot;.</DialogDescription>
                 </DialogHeader>
                 <div className="grid gap-4 py-4">
                     <div className="grid grid-cols-4 items-center gap-4">

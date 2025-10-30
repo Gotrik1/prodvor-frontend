@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/shared/ui/card";
@@ -9,8 +10,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 import { useToast } from "@/shared/hooks/use-toast";
 import Link from "next/link";
 import { mockStoreItems } from '../lib/mock-data';
-import { cn } from "@/shared/lib/utils";
-
 
 const categories = [
     { id: 'all', name: 'Все товары', icon: Gem },

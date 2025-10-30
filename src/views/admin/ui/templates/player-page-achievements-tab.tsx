@@ -9,17 +9,6 @@ import { Award, Gem } from "lucide-react";
 import { Progress } from "@/shared/ui/progress";
 import type { User } from "@/mocks";
 import React, { useMemo } from "react";
-import { cn } from "@/shared/lib/utils";
-
-const StatCard = ({ title, value, icon: Icon }: { title: string, value: string | number, icon: React.ElementType }) => (
-    <Card className="bg-muted/50 text-center">
-        <CardContent className="p-4">
-            <Icon className="h-8 w-8 text-primary mx-auto mb-2" />
-            <p className="text-2xl font-bold">{value}</p>
-            <p className="text-muted-foreground text-xs lg:text-sm">{title}</p>
-        </CardContent>
-    </Card>
-);
 
 export function AchievementsTab({ player }: { player: User }) {
     const allAchievementsFlat: Achievement[] = useMemo(() => Object.values(achievementsBySport).flat(), []);

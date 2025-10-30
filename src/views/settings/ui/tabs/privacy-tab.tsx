@@ -12,7 +12,7 @@ import {
   CardTitle,
 } from '@/shared/ui/card';
 import { Label } from '@/shared/ui/label';
-import { Save, User, Image as ImageIcon, MessageSquare, Globe, Lock, Tag } from 'lucide-react';
+import { Save, User, Image as ImageIcon, MessageSquare, Globe, Lock } from 'lucide-react';
 import { Switch } from '@/shared/ui/switch';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shared/ui/select';
 import { Separator } from '@/shared/ui/separator';
@@ -152,5 +152,3 @@ export function PrivacyTab() {
         </Card>
     );
 }
-
-    

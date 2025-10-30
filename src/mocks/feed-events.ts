@@ -1,4 +1,5 @@
-export interface TeamJoinEventDetails {
+
+export interface TeamJoinEventDetails extends Record<string, never> {
     // No specific details needed for this event type
 }
 

@@ -1,11 +1,10 @@
 
-
 'use client';
 
 import React, { useState, useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
 import { Button } from "@/shared/ui/button";
-import { Send, KeyRound, PlusCircle } from "lucide-react";
+import { Send, KeyRound } from "lucide-react";
 import { useToast } from '@/shared/hooks/use-toast';
 import type { UserRole } from '@/mocks/users';
 import { AddAdminDialog } from './AddAdminDialog';
@@ -70,7 +69,7 @@ export function AccessControlPage() {
     }
 
     const handleSaveRole = (adminId: string, newRole: UserRole, duration: string) => {
-        setAdmins(prev => prev.map(admin => admin.id === adminId ? { ...admin, role: newRole } : admin));
+        setAdmins(prev => prev.map(admin => admin.id === adminId ? { ...admin, role: newRole as string } : admin));
         toast({
             title: 'Настройки доступа обновлены',
             description: `Для администратора установлена роль "${newRole}" со сроком доступа ${duration} д.`,
@@ -131,4 +130,3 @@ export function AccessControlPage() {
     </div>
   );
 }
-    

@@ -22,14 +22,15 @@ function Calendar({
 
   React.useEffect(() => {
     // This check runs only on the client, where navigator is available.
-    const isDeviceIos = /iPad|iPhone|iPod/.test(navigator.userAgent) && !(window as any).MSStream;
+    // @ts-expect-error - MSStream is a non-standard property for IE11
+    const isDeviceIos = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
     setIsIos(isDeviceIos);
   }, []);
 
   const components = {
-        IconLeft: ({ ...props }) => <ChevronLeft className="h-4 w-4" />,
-        IconRight: ({ ...props }) => <ChevronRight className="h-4 w-4" />,
-        Dropdown: !isIos ? (({ value, onChange, children, ...props }: DropdownProps) => {
+        IconLeft: () => <ChevronLeft className="h-4 w-4" />,
+        IconRight: () => <ChevronRight className="h-4 w-4" />,
+        Dropdown: !isIos ? (({ value, onChange, children }: DropdownProps) => {
           const options = React.Children.toArray(children) as React.ReactElement<React.HTMLProps<HTMLOptionElement>>[];
           const selected = options.find((child) => child.props.value === value);
           const handleChange = (value: string) => {

@@ -14,7 +14,7 @@ import { Button } from "@/shared/ui/button";
 import { Heart, MessageSquare, Share2 } from "lucide-react";
 import { cn } from "@/shared/lib/utils";
 import { usePostStore } from "@/widgets/dashboard-feed/model/post-store";
-import { Dialog, DialogContent, DialogTrigger } from "@/shared/ui/dialog";
+import { Dialog, DialogTrigger } from "@/shared/ui/dialog";
 import { MediaPostDialog } from "@/widgets/media-post-dialog";
 
 export function PostCard({ post }: { post: Post }) {

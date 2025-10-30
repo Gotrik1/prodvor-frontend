@@ -17,7 +17,6 @@ interface CreatePlanDialogProps {
     isOpen: boolean;
     setIsOpen: (isOpen: boolean) => void;
     client: User;
-    coach: User;
 }
 
 interface SplitTemplate {
@@ -27,7 +26,7 @@ interface SplitTemplate {
     exercises?: Record<string, Omit<Exercise, 'id'>[]>;
 }
 
-export function CreatePlanDialog({ isOpen, setIsOpen, client, coach }: CreatePlanDialogProps) {
+export function CreatePlanDialog({ isOpen, setIsOpen, client }: CreatePlanDialogProps) {
     const { toast } = useToast();
     // This is a bit of a trick: we get the `addPlan` function but we won't use it directly on the coach.
     // Instead, we'll simulate adding the plan to the client's store.

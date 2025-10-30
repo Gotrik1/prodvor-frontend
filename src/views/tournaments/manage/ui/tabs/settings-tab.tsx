@@ -15,8 +15,8 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/shared/ui/popover";
 import { cn } from "@/shared/lib/utils";
 import { Calendar as CalendarIcon } from 'lucide-react';
 import { Calendar as CalendarComponent } from "@/shared/ui/calendar";
-import { requirements } from '@/mocks';
-import type { Tournament } from '@/mocks';
+import { requirements as initialRequirements } from '@/mocks';
+import type { Tournament, TournamentLevel } from '@/mocks';
 import { useToast } from "@/shared/hooks/use-toast";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/select";
 import { useTournamentCrmContext } from "../../lib/TournamentCrmContext";
@@ -49,7 +49,7 @@ export function SettingsTab() {
         handleTournamentChange({ [e.target.id]: e.target.value });
     };
     
-    const handleSelectChange = (id: 'level', value: Tournament['level']) => {
+    const handleSelectChange = (id: 'level', value: TournamentLevel) => {
         handleTournamentChange({ [id]: value });
     };
 
@@ -104,7 +104,7 @@ export function SettingsTab() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="space-y-2">
                             <Label htmlFor="level">Уровень турнира</Label>
-                             <Select value={tournament.level} onValueChange={(value) => handleSelectChange('level', value as Tournament['level'])}>
+                             <Select value={tournament.level} onValueChange={(value) => handleSelectChange('level', value as TournamentLevel)}>
                                 <SelectTrigger id="level">
                                     <SelectValue placeholder="Выберите уровень" />
                                 </SelectTrigger>

@@ -2,14 +2,11 @@
 
 'use client';
 
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
+import { Card, CardContent } from "@/shared/ui/card";
 import { ChartContainer, ChartTooltipContent } from "@/shared/ui/chart";
 import { Radar, RadarChart, PolarAngleAxis, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip } from "recharts";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
-import { History, BarChart3 } from "lucide-react";
-import { users } from "@/mocks";
-import type { User } from "@/mocks";
-import { useUserStore } from "@/widgets/dashboard-header/model/user-store";
+import { History } from "lucide-react";
 
 const skillData = [
   { subject: 'Атака', A: 86, fullMark: 100 },
@@ -56,10 +53,7 @@ export const PlayerStatsOverviewTab = () => {
 
     return (
         <Card className="md:shadow-main-sm shadow-none md:bg-card bg-transparent">
-            <CardHeader className="hidden md:flex">
-                <CardTitle className="flex items-center gap-2"><BarChart3 className="h-5 w-5" />Статистика</CardTitle>
-                <CardDescription>Обзор ключевых показателей и карьерной статистики игрока.</CardDescription>
-            </CardHeader>
+            
             <CardContent className="md:p-6">
                 <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
                     <div>

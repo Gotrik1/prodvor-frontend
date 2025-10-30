@@ -1,8 +1,8 @@
 
+
 'use client';
 
 import { Card, CardContent, CardHeader } from "@/shared/ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { formatDistanceToNow } from 'date-fns';
 import { ru } from 'date-fns/locale';
 import Link from 'next/link';
@@ -10,7 +10,7 @@ import Image from "next/image";
 import { useState, useEffect } from "react";
 import type { FeedEvent } from '@/mocks/feed-events';
 import { users, teams, achievementsBySport } from '@/mocks';
-import { Award, Swords, UserPlus, Trophy } from 'lucide-react';
+import { Award, UserPlus, Trophy } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 
 const eventTypeConfig: Record<FeedEvent['type'], { icon: LucideIcon, verb: string }> = {

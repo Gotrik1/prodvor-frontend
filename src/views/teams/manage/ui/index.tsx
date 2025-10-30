@@ -14,7 +14,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 import { TransfersTab } from "./transfers-tab";
 import { users } from "@/mocks";
 import { AnnouncementsTab } from "@/views/tournaments/manage/ui/tabs/announcements-tab";
-import { SettingsTab } from "@/views/tournaments/manage/ui/tabs/settings-tab";
 
 export function TeamManagementPage({ team }: { team: Team | undefined }) {
 

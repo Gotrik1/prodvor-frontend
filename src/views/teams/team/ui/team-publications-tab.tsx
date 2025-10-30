@@ -2,7 +2,7 @@
 
 'use client';
 
-import type { Team, User } from "@/mocks";
+import type { Team } from "@/mocks";
 import { users } from "@/mocks";
 import { CreatePost } from "@/widgets/dashboard-feed/ui/create-post";
 import { Card } from "@/shared/ui/card";
@@ -17,7 +17,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/shared/ui/dialog";
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import { usePostStore } from "@/widgets/dashboard-feed/model/post-store";
 import { MediaPostDialog } from "@/widgets/media-post-dialog";
 
@@ -37,7 +37,7 @@ export function TeamPublicationsTab({ team }: { team: Team }) {
     const teamPosts = getPostsForTeam(team.id);
 
     const isTeamMember = team.members.includes(currentUser.id);
-    const [mediaFeed, setMediaFeed] = useState<(typeof mockMedia[0])[]>(mockMedia);
+    const [, setMediaFeed] = useState<(typeof mockMedia[0])[]>(mockMedia);
 
     useEffect(() => {
         // Randomize feed only on the client side after initial render

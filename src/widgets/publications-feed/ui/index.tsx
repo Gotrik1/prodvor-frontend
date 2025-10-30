@@ -2,8 +2,7 @@
 
 'use client';
 
-import type { Post, User } from "@/mocks";
-import { users } from "@/mocks";
+import type { User } from "@/mocks";
 import { CreatePost } from "@/widgets/dashboard-feed/ui/create-post";
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
 import { Button } from "@/shared/ui/button";
@@ -17,7 +16,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/shared/ui/dialog";
-import { useState, useEffect } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 import { Carousel, CarouselContent, CarouselItem } from "@/shared/ui/carousel";
 import { usePostStore } from "@/widgets/dashboard-feed/model/post-store";

@@ -9,11 +9,9 @@ import { Trophy } from 'lucide-react';
 import React, { useMemo } from 'react';
 import Link from 'next/link';
 import { Skeleton } from '@/shared/ui/skeleton';
-import type { BracketMatch, Match } from '@/mocks';
+import type { BracketMatch } from '@/mocks';
 
-
-
-const generateInitialMatches = (): Match[] => {
+const generateInitialMatches = (): BracketMatch[] => {
     const createSeededRandom = (seed: number) => () => {
         let t = seed += 0x6D2B79F5;
         t = Math.imul(t ^ t >>> 15, t | 1);
@@ -21,13 +19,13 @@ const generateInitialMatches = (): Match[] => {
         return ((t ^ t >>> 14) >>> 0) / 4294967296;
     };
 
-    const generatedMatches: Match[] = [];
+    const generatedMatches: BracketMatch[] = [];
     const teamsCopy = [...registeredTeams].sort((a, b) => a.id.localeCompare(b.id)); 
     
     for (let i = 0; i < teamsCopy.length; i += 2) {
         if (teamsCopy[i + 1]) {
             const seededRandom = createSeededRandom(i);
-            const match: Match = {
+            const match: BracketMatch = {
                 id: `rd1-match${i / 2}`,
                 team1: teamsCopy[i],
                 team2: teamsCopy[i + 1],
@@ -43,7 +41,9 @@ const generateInitialMatches = (): Match[] => {
     return generatedMatches;
 };
 
-const MatchCard = React.memo(({ match, tournamentId }: { match: Match, tournamentId: string }) => {
+const MatchCard = React.memo(({ match, tournamentId }: { match: BracketMatch, tournamentId: string }) => {
+    if (!match.team1 || !match.team2 || match.score1 === null || match.score2 === null) return null;
+    
     const winner = match.score1 > match.score2 ? 'team1' : 'team2';
     const winnerTeam = winner === 'team1' ? match.team1 : match.team2;
 

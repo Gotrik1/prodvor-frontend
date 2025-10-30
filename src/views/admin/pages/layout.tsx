@@ -1,13 +1,11 @@
 
 'use client';
 
-import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarProvider } from "@/shared/ui/sidebar";
-import { DollarSign, Home, Eye, BookOpen, KeyRound, Database, Shield, Map } from "lucide-react";
+import { Sidebar, SidebarContent, SidebarHeader, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarProvider } from "@/shared/ui/sidebar";
+import { DollarSign, Eye, BookOpen, KeyRound, Database, Map } from "lucide-react";
 import Link from "next/link";
 import { DashboardHeader } from "@/widgets/dashboard-header";
 import { usePathname, useSearchParams } from "next/navigation";
-import { Button } from "@/shared/ui/button";
-import { Construction } from 'lucide-react';
 import { Logo } from "@/views/auth/ui";
 
 export function AdminLayout({

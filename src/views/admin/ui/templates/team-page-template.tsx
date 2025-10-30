@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { users, playgrounds, posts, Team } from "@/mocks";
@@ -7,7 +8,6 @@ import { Card, CardHeader, CardContent, CardTitle } from "@/shared/ui/card";
 import { History, Grid3x3 } from "lucide-react";
 import Link from 'next/link';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
-import { useUserStore } from "@/widgets/dashboard-header/model/user-store";
 import { TeamHeader } from "@/entities/team/ui/team-header";
 import { TeamPublicationsTab } from "@/views/teams/team/ui/team-publications-tab";
 import { TeamOverviewWidget } from "@/widgets/team-overview-widget";
@@ -17,7 +17,6 @@ import { TeamChallengesWidget } from "@/widgets/team-challenges-widget";
 import { TeamStatsWidget } from "@/widgets/team-stats-widget";
 
 export function TeamPageTemplate({ team }: { team?: Team }) {
-    const { user: currentUser } = useUserStore();
     
     if (!team) {
        return (
@@ -42,7 +41,6 @@ export function TeamPageTemplate({ team }: { team?: Team }) {
     const teamMembers = users.filter(u => team.members.includes(u.id));
     const homePlaygrounds = team.homePlaygroundIds?.map(id => playgrounds.find(p => p.id === id)).filter(Boolean);
     const teamPosts = posts.filter(p => p.team?.id === team.id);
-    const isCaptain = currentUser?.id === team.captainId;
 
     return (
         <div className="p-4 md:p-6 lg:p-8 space-y-6">

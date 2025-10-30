@@ -2,9 +2,8 @@
 'use client';
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/shared/ui/table";
-import { Badge } from "@/shared/ui/badge";
 import { Button } from "@/shared/ui/button";
-import { MoreHorizontal, Send, Settings, Shield, User, KeyRound, Lock, Users as UsersIcon, Link2 } from "lucide-react";
+import { MoreHorizontal, Settings, Shield, User, Lock, Users as UsersIcon, Link2 } from "lucide-react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/shared/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import { Tooltip, TooltipProvider, TooltipTrigger, TooltipContent } from '@/shared/ui/tooltip';

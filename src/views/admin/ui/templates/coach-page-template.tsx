@@ -6,7 +6,7 @@ import { users, teams, User } from "@/mocks";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { Badge } from "@/shared/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
-import { Briefcase, Users as UsersIcon, Dumbbell, Shield, Trophy, Gamepad2, UserPlus, Calendar } from "lucide-react";
+import { Users as UsersIcon, Dumbbell, Shield, Trophy, Gamepad2, UserPlus, Calendar } from "lucide-react";
 import { Button } from "@/shared/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/shared/ui/table";
 import { useMemo, useState } from "react";
@@ -178,7 +178,6 @@ export function CoachPageTemplate({ user }: { user?: User }) {
                     isOpen={dialogOpen} 
                     setIsOpen={setDialogOpen} 
                     client={selectedClient} 
-                    coach={coach}
                 />
             )}
         </div>

@@ -1,15 +1,16 @@
 
+
 'use client';
 
 import { useMemo } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
-import { teams } from "@/mocks";
+import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
+import { teams as allTeams } from "@/mocks";
 import { BarChart, ChevronsRight, Globe, MapPin } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '@/shared/ui/button';
 
-const TopTeamRow = ({ team, rank }: { team: typeof teams[0], rank: number }) => (
+const TopTeamRow = ({ team, rank }: { team: typeof allTeams[0], rank: number }) => (
     <Link href={`/teams/${team.id}`} className="flex items-center gap-3 p-2 rounded-md hover:bg-muted/50 group transition-colors">
         <span className="font-bold text-lg w-6 text-center text-muted-foreground">{rank}</span>
         <Image src={team.logoUrl} alt={team.name} width={32} height={32} className="rounded-md" data-ai-hint="team logo" />
@@ -46,7 +47,7 @@ const TopTeamsList = ({ title, teams, icon: Icon }: { title: string, teams: type
 export function TopTeamsWidget({ userCity, selectedDiscipline }: { userCity?: string, selectedDiscipline: string }) {
     
     const { topCityTeams, topCountryTeams } = useMemo(() => {
-        const filteredTeams = teams
+        const filteredTeams = allTeams
             .filter(team => selectedDiscipline === 'all' || team.game === selectedDiscipline)
             .sort((a, b) => b.rank - a.rank);
         

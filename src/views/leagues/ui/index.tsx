@@ -5,9 +5,6 @@
 import {
   Card,
   CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
 } from '@/shared/ui/card';
 import {
   Table,

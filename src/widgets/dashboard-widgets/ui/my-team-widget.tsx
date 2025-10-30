@@ -3,14 +3,14 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
 import { Button } from "@/shared/ui/button";
-import { Users, ArrowRight } from "lucide-react";
+import { Users } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { teams } from '@/mocks';
 import type { User, Team } from "@/mocks";
 import React, { useState, useEffect } from "react";
 import { Skeleton } from "@/shared/ui/skeleton";
-import { ScrollArea, ScrollBar } from "@/shared/ui/scroll-area";
+import { ScrollArea } from "@/shared/ui/scroll-area";
 
 export function MyTeamWidget({ user }: { user: User }) {
   const [myTeams, setMyTeams] = useState<Team[]>([]);

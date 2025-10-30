@@ -4,7 +4,6 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/sha
 import { Activity, Dumbbell } from "lucide-react";
 import { playgrounds } from "@/mocks";
 import Link from "next/link";
-import { cn } from "@/shared/lib/utils";
 
 export const PlayerTrainingStats = () => (
      <Card>

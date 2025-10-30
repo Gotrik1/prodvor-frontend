@@ -2,7 +2,7 @@
 
 'use client';
 
-import { teams, ranks } from "@/mocks";
+import { ranks } from "@/mocks";
 import type { User } from "@/mocks/users";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { MapPin, Cake, User as UserIcon, MessageSquare, UserPlus, Gamepad2 } from "lucide-react";
@@ -11,9 +11,8 @@ import { useUserStore } from "@/widgets/dashboard-header/model/user-store";
 import { TrainingInfoWidget } from "@/widgets/training-info-widget";
 import { AchievementsWidget } from "@/widgets/achievements-widget";
 import { PlayerStatsOverviewWidget } from "@/widgets/player-stats-overview-widget";
-import Image from "next/image";
 import { SocialConnectionsWidget } from "@/widgets/social-connections-widget";
-import React, { useMemo, useState, useEffect } from "react";
+import React, { useMemo } from "react";
 import { MyTeamWidget } from "@/widgets/dashboard-widgets/ui/my-team-widget";
 import { Card, CardBody } from "@/shared/ui/card";
 import { Badge } from "@/shared/ui/badge";
@@ -29,13 +28,8 @@ const getRankForElo = (elo: number) => {
 
 const MoreDisciplines = ({ disciplines }: { disciplines: string[] }) => {
     const isMobile = useIsMobile();
-    const [isClient, setIsClient] = useState(false);
 
-    useEffect(() => {
-        setIsClient(true);
-    }, []);
-
-    if (!isClient || disciplines.length === 0) return null;
+    if (disciplines.length === 0) return null;
 
     const trigger = (
         <Badge variant="outline" className="cursor-pointer hover:bg-muted">
@@ -76,15 +70,9 @@ const MoreDisciplines = ({ disciplines }: { disciplines: string[] }) => {
 
 export function PlayerPage({ user: profileUser }: { user: User }) {
     const { user: currentUser } = useUserStore();
-    const playerRank = profileUser.elo ? getRankForElo(profileUser.elo) : null;
     const isOwnProfile = currentUser?.id === profileUser.id;
     
     const userDisciplines = useMemo(() => getUserDisciplines(profileUser), [profileUser]);
-    const [isClient, setIsClient] = useState(false);
-
-    useEffect(() => {
-        setIsClient(true);
-    }, []);
 
 
     return (

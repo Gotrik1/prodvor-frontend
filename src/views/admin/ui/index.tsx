@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import { Button } from '@/shared/ui/button';
@@ -24,7 +23,6 @@ import {
   Star,
   PlusCircle,
   GanttChart,
-  BarChart,
   DollarSign,
   Database,
 } from 'lucide-react';

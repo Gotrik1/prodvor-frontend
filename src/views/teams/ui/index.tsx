@@ -6,7 +6,7 @@ import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/shared/ui/card";
 import { PlusCircle, UserCheck, Users, BarChart } from "lucide-react";
 import Image from "next/image";
-import { teams, teamSports } from "@/mocks";
+import { teams } from "@/mocks";
 import { Badge } from "@/shared/ui/badge";
 import Link from "next/link";
 import { useUserStore } from "@/widgets/dashboard-header/model/user-store";
@@ -54,7 +54,7 @@ const TeamCard = ({ team, isMember }: { team: typeof teams[0], isMember: boolean
 
 export function TeamsPage() {
     const { user: currentUser } = useUserStore();
-    const [disciplineFilter, setDisciplineFilter] = useState('all');
+    const [disciplineFilter] = useState('all');
 
     const { myTeams, otherTeams } = useMemo(() => {
         if (!currentUser) {

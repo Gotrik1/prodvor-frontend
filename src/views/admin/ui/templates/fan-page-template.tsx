@@ -2,16 +2,15 @@
 
 'use client';
 
-import { users, teams, posts, Achievement } from "@/mocks";
+import { users, teams, posts } from "@/mocks";
 import type { User } from "@/mocks/users";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { Badge } from "@/shared/ui/badge";
-import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
-import { Bell, Calendar, Flame, Heart, Rss, Star, Ticket, Gamepad2, Tv, Camera, User as UserIcon } from "lucide-react";
+import { Calendar, Flame, Heart, Ticket, Gamepad2, Tv, Camera, User as UserIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useMemo, useState, useEffect } from "react";
+import React, { useMemo } from "react";
 import { getUserDisciplines } from "@/entities/user/lib";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 import { Dialog, DialogTrigger } from "@/shared/ui/dialog";

@@ -1,4 +1,4 @@
-import type { UserRole } from '@/mocks';
+
 
 export interface Quest {
     id: string;
@@ -133,3 +133,6 @@ export const eventQuests: Quest[] = [
         rewards: { xp: 300, pd_coins: 75 }
     },
 ];
+
+export const mockDailyQuests = playerDaily;
+export const mockWeeklyQuests = playerWeekly;

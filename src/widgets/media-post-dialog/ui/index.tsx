@@ -4,21 +4,17 @@
 
 import type { Post, User } from "@/mocks";
 import { users } from "@/mocks";
-import { CreatePost } from "@/widgets/dashboard-feed/ui/create-post";
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
 import { Button } from "@/shared/ui/button";
-import { Heart, MessageSquare, PlusCircle, Send, Video, Bookmark, Tag, Image as ImageIcon, Share2 } from "lucide-react";
+import { Heart, MessageSquare, Send, Tag, Share2 } from "lucide-react";
 import Image from "next/image";
 import {
-  Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
-  DialogFooter,
 } from "@/shared/ui/dialog";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { cn } from "@/shared/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { Input } from "@/shared/ui/input";
