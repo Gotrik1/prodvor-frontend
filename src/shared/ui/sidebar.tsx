@@ -1,4 +1,5 @@
 
+
 "use client"
 
 import * as React from "react"
@@ -45,8 +46,6 @@ const SidebarProvider = React.forwardRef<
   HTMLDivElement,
   React.ComponentProps<"div"> & {
     defaultOpen?: boolean
-    open?: boolean
-    onOpenChange?: (open: boolean) => void
   }
 >(
   (
@@ -71,7 +70,7 @@ const SidebarProvider = React.forwardRef<
         state,
         open,
         setOpen,
-        isMobile,
+        isMobile: !!isMobile,
         openMobile,
         setOpenMobile,
       }),
@@ -343,7 +342,7 @@ const SidebarMenuButton = React.forwardRef<
   (React.ComponentProps<"button"> | React.ComponentProps<"a">) & {
     as?: 'button' | 'a'
     isActive?: boolean
-    tooltip?: string | React.ComponentProps<typeof TooltipContent>
+    tooltip?: React.ReactNode;
   } & VariantProps<typeof sidebarMenuButtonVariants>
 >(
   (
@@ -392,7 +391,7 @@ const SidebarMenuButton = React.forwardRef<
           align="center"
           className="hidden md:block xl:hidden z-[99]"
         >
-          {tooltip}
+          {tooltip as React.ReactNode}
         </TooltipContent>
       </Tooltip>
     )

@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import {
@@ -54,7 +55,7 @@ export function DashboardHeader() {
     return () => document.removeEventListener('keydown', down);
   }, []);
 
-  const isAdminPage = pathname.startsWith('/admin');
+  const isAdminPage = pathname?.startsWith('/admin');
 
   return (
     <header className="sticky top-0 z-40 flex h-16 items-center justify-between border-b border-layout-border bg-card p-4">

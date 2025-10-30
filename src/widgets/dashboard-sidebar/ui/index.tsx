@@ -2,6 +2,7 @@
 
 'use client';
 
+import React from 'react';
 import {
   Sidebar,
   SidebarHeader,
@@ -28,13 +29,17 @@ import {
   Map,
   Gavel,
   MessageCircle,
+  MoreHorizontal,
 } from "lucide-react";
 import Link from 'next/link';
 import { i18n } from "@/shared/lib/i18n";
 import { Logo } from "@/views/auth/ui";
 import { usePathname } from "next/navigation";
-import React, { useState } from 'react';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetTrigger } from "@/shared/ui/sheet";
+import { cn } from "@/shared/lib/utils";
+import { useScrollDirection } from '@/shared/hooks/use-scroll-direction';
+import { useIsMobile } from '@/shared/hooks/use-mobile';
+import { useState, useEffect } from 'react';
 
 const mainNavItems = [
     { href: "/dashboard", icon: Home, label: i18n.sidebar.feed },
@@ -95,7 +100,7 @@ export function DashboardSidebar({ isMobileSheet = false, onLinkClick }: { isMob
                     {mainNavItems.map(item => (
                         <SidebarMenuItem key={item.href}>
                             <Link href={item.href}>
-                                <SidebarMenuButton tooltip={item.label} isActive={pathname.startsWith(item.href) && (item.href !== '/dashboard' || pathname === '/dashboard')}>
+                                <SidebarMenuButton tooltip={item.label} isActive={pathname?.startsWith(item.href) && (item.href !== '/dashboard' || pathname === '/dashboard')}>
                                     <item.icon />
                                     <span>{item.label}</span>
                                 </SidebarMenuButton>
@@ -110,7 +115,7 @@ export function DashboardSidebar({ isMobileSheet = false, onLinkClick }: { isMob
                         {secondaryNavItems.map(item => (
                             <SidebarMenuItem key={item.href}>
                                 <Link href={item.href}>
-                                    <SidebarMenuButton tooltip={item.label} isActive={pathname.startsWith(item.href)}>
+                                    <SidebarMenuButton tooltip={item.label} isActive={pathname?.startsWith(item.href)}>
                                         <item.icon />
                                         <span>{item.label}</span>
                                     </SidebarMenuButton>

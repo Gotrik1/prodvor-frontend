@@ -2,7 +2,7 @@
 
 'use client';
 
-import type { Team } from "@/mocks";
+import type { Team, Post } from "@/mocks";
 import { users } from "@/mocks";
 import { CreatePost } from "@/widgets/dashboard-feed/ui/create-post";
 import { Card } from "@/shared/ui/card";
@@ -32,12 +32,16 @@ const mockMedia = [
     { type: 'image', src: 'https://placehold.co/600x400.png', title: 'Награждение', dataAiHint: 'award ceremony' },
 ];
 
-export function TeamPublicationsTab({ team }: { team: Team }) {
+interface TeamPublicationsTabProps {
+    team: Team;
+}
+
+export function TeamPublicationsTab({ team }: TeamPublicationsTabProps) {
     const { getPostsForTeam } = usePostStore();
     const teamPosts = getPostsForTeam(team.id);
 
     const isTeamMember = team.members.includes(currentUser.id);
-    const [, setMediaFeed] = useState<(typeof mockMedia[0])[]>(mockMedia);
+    const [mediaFeed, setMediaFeed] = useState<(typeof mockMedia[0])[]>(mockMedia);
 
     useEffect(() => {
         // Randomize feed only on the client side after initial render
@@ -64,12 +68,12 @@ export function TeamPublicationsTab({ team }: { team: Team }) {
             )}
             {teamPosts.length > 0 ? (
                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-1 md:gap-4">
-                    {teamPosts.map((post, index) => (
+                    {teamPosts.map((post: Post, index: number) => (
                         <Dialog key={post.id}>
                             <DialogTrigger asChild>
                                 <div className="group relative aspect-square w-full overflow-hidden rounded-lg cursor-pointer">
                                     <Image
-                                        src={mockMedia[index % mockMedia.length].src}
+                                        src={mediaFeed[index % mediaFeed.length].src}
                                         alt={post.content}
                                         fill
                                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"

@@ -13,15 +13,15 @@ export const eventTypes = {
 } as const;
 
 export const matchEvents: MatchEvent[] = [
-  { id: 1, minute: 9, type: eventTypes.GOAL, team: 'team1', player: 'Денис Черышев' },
-  { id: 2, minute: 22, type: eventTypes.GOAL, team: 'team1', player: 'Артем Дзюба', assist: 'Александр Головин' },
-  { id: 3, minute: 38, type: eventTypes.RED_CARD, team: 'team2', player: 'Костакис Артиматас' },
-  { id: 4, minute: 55, type: eventTypes.SUBSTITUTION, team: 'team2', player: '', playerIn: 'Матия Шполярич', playerOut: 'Фотис Папулис' },
-  { id: 5, minute: 61, type: eventTypes.SUBSTITUTION, team: 'team1', player: '', playerIn: 'Федор Кудряшов', playerOut: 'Сергей Петров' },
-  { id: 6, minute: 68, type: eventTypes.YELLOW_CARD, team: 'team2', player: 'Иоаннис Коусулос' },
-  { id: 7, minute: 79, type: eventTypes.GOAL, team: 'team1', player: 'Александр Головин' },
-  { id: 8, minute: 89, type: eventTypes.GOAL, team: 'team1', player: 'Денис Черышев' },
-  { id: 10, minute: 91, type: eventTypes.GOAL, team: 'team1', player: 'Денис Черышев' },
+  { id: 1, minute: 9, type: eventTypes.GOAL, team: 'team1', player: 'Денис Черышев', assist: undefined, playerIn: undefined, playerOut: undefined },
+  { id: 2, minute: 22, type: eventTypes.GOAL, team: 'team1', player: 'Артем Дзюба', assist: 'Александр Головин', playerIn: undefined, playerOut: undefined },
+  { id: 3, minute: 38, type: eventTypes.RED_CARD, team: 'team2', player: 'Костакис Артиматас', assist: undefined, playerIn: undefined, playerOut: undefined },
+  { id: 4, minute: 55, type: eventTypes.SUBSTITUTION, team: 'team2', player: '', playerIn: 'Матия Шполярич', playerOut: 'Фотис Папулис', assist: undefined },
+  { id: 5, minute: 61, type: eventTypes.SUBSTITUTION, team: 'team1', player: '', playerIn: 'Федор Кудряшов', playerOut: 'Сергей Петров', assist: undefined },
+  { id: 6, minute: 68, type: eventTypes.YELLOW_CARD, team: 'team2', player: 'Иоаннис Коусулос', assist: undefined, playerIn: undefined, playerOut: undefined },
+  { id: 7, minute: 79, type: eventTypes.GOAL, team: 'team1', player: 'Александр Головин', assist: undefined, playerIn: undefined, playerOut: undefined },
+  { id: 8, minute: 89, type: eventTypes.GOAL, team: 'team1', player: 'Денис Черышев', assist: undefined, playerIn: undefined, playerOut: undefined },
+  { id: 10, minute: 91, type: eventTypes.GOAL, team: 'team1', player: 'Денис Черышев', assist: undefined, playerIn: undefined, playerOut: undefined },
 ];
 
 const DEMO_MATCH_ID = 'rd1-match0';

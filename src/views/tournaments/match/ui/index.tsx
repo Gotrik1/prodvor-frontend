@@ -1,14 +1,15 @@
 
+
 'use client';
 
 import React from 'react';
-import type { Tournament } from '@/mocks';
+import type { Tournament, BracketMatch } from '@/mocks';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Button } from '@/shared/ui/button';
 import Link from 'next/link';
 import { ArrowLeft, Bot } from 'lucide-react';
 import { MatchProtocol } from '@/features/match-protocol';
-import { useProtocol } from '@/features/protocol-editor/lib/use-protocol';
+import { useProtocol } from '@/features/protocol-editor';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs';
 import { AiAnalysisTool } from '@/features/ai-analysis-tool/ui';
 
@@ -32,14 +33,16 @@ function MatchNotFound() {
     );
 }
 
-export function MatchPage({ tournament }: { tournament?: Tournament }) {
+export function MatchPage({ tournament, match }: { tournament?: Tournament, match?: BracketMatch }) {
     const { activeMatch } = useProtocol();
 
-    if (!tournament || !activeMatch) {
+    const displayMatch = match || activeMatch;
+
+    if (!tournament || !displayMatch) {
         return <MatchNotFound />;
     }
     
-    const isMatchFinished = activeMatch.score1 !== null && activeMatch.score2 !== null;
+    const isMatchFinished = displayMatch.score1 !== null && displayMatch.score2 !== null;
 
     return (
         <div className="container mx-auto p-4 md:p-6 lg:p-8">
@@ -57,7 +60,7 @@ export function MatchPage({ tournament }: { tournament?: Tournament }) {
                     <TabsTrigger value="analysis" disabled={!isMatchFinished}><Bot className="mr-2 h-4 w-4"/>AI-Аналитика</TabsTrigger>
                 </TabsList>
                 <TabsContent value="protocol" className="mt-6">
-                     <MatchProtocol tournament={tournament} match={activeMatch} />
+                     <MatchProtocol tournament={tournament} match={displayMatch} />
                 </TabsContent>
                  <TabsContent value="analysis" className="mt-6">
                     <AiAnalysisTool embedded={true} />

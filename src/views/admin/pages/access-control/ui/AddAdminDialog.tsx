@@ -9,7 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Input } from '@/shared/ui/input';
 import { Label } from '@/shared/ui/label';
 import { PlusCircle } from "lucide-react";
-import type { UserRole } from '@/mocks/users';
+import type { UserRole } from '@/mocks';
 
 const adminRoles: UserRole[] = ['Менеджер турниров', 'Модератор контента', 'Менеджер по рекламе', 'Менеджер по спорту', 'Продакт-менеджер', 'Проджект-менеджер'];
 

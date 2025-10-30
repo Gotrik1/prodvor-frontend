@@ -3,7 +3,7 @@
 'use client';
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/shared/ui/card';
-import { allTournaments } from '@/mocks';
+import { tournaments } from '@/mocks';
 import type { Tournament } from '@/mocks';
 import { Badge } from '@/shared/ui/badge';
 import { Progress } from '@/shared/ui/progress';
@@ -16,7 +16,7 @@ import { GanttChart, PlusCircle } from 'lucide-react';
 const statusColors: Record<string, string> = {
     'АНОНС': 'bg-purple-500/20 text-purple-300 border-purple-500/30',
     'ПРЕДРЕГИСТРАЦИЯ': 'bg-cyan-500/20 text-cyan-300 border-cyan-500/30',
-    'РЕГИСТРАЦИЯ': 'bg-blue-500/20 text-blue-300 border-blue-500/30',
+    'РЕГИСТРАЦИЯ': 'bg-blue-500/20 text-blue-300 border-blue-300/30',
     'ИДЕТ': 'bg-green-500/20 text-green-300 border-green-500/30',
     'ЗАВЕРШЕН': 'bg-muted text-muted-foreground border-border',
     'ПРИОСТАНОВЛЕН': 'bg-amber-500/20 text-amber-300 border-amber-500/30',
@@ -28,7 +28,7 @@ export function TournamentsTab() {
     <Card>
         <CardHeader className="flex flex-row items-center justify-between">
             <div>
-                <CardTitle>Список турниров ({allTournaments.length})</CardTitle>
+                <CardTitle>Список турниров ({tournaments.length})</CardTitle>
                 <CardDescription>Полный список всех турниров на платформе.</CardDescription>
             </div>
             <Button asChild>
@@ -41,7 +41,7 @@ export function TournamentsTab() {
         <CardContent>
             <DataTable
                 headers={['ID', 'Название', 'Дисциплина', 'Участники', 'Статус', '']}
-                data={allTournaments}
+                data={tournaments}
                 renderRow={(t: Tournament) => (
                     <TableRow key={t.id}>
                         <TableCell className="font-mono text-xs">{t.id}</TableCell>

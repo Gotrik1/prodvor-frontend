@@ -6,7 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/shared/ui/button";import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
 import { Award, Calendar, GanttChartIcon, Users, ArrowRight } from "lucide-react";
-import { allTournaments, sponsors } from "@/mocks";
+import { sponsors, Tournament } from "@/mocks";
 import { Badge } from "@/shared/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { useState, useEffect } from 'react';
@@ -25,7 +25,7 @@ const StatCard = ({ title, value, icon: Icon }: { title: string, value: string |
         </CardContent>
     </Card>
 );
-const ParticipateButton = ({ tournament }: { tournament: (typeof allTournaments)[0] }) => {
+const ParticipateButton = ({ tournament }: { tournament: Tournament }) => {
     const isRegistrationActive = tournament.status === 'РЕГИСТРАЦИЯ';
     const isPreRegistrationActive = tournament.status === 'ПРЕДРЕГИСТРАЦИЯ';
     const canParticipate = isRegistrationActive || isPreRegistrationActive;
@@ -43,7 +43,7 @@ const ParticipateButton = ({ tournament }: { tournament: (typeof allTournaments)
 
 const LOCAL_STORAGE_BANNER_KEY_PREFIX = 'promo-banner-';
 
-export function TournamentPublicPage({ tournament: initialTournament }: { tournament: (typeof allTournaments)[0] | undefined}) {
+export function TournamentPublicPage({ tournament: initialTournament }: { tournament: Tournament | undefined}) {
     const [tournament, setTournament] = useState(initialTournament);
 
     useEffect(() => {
@@ -51,7 +51,7 @@ export function TournamentPublicPage({ tournament: initialTournament }: { tourna
             const storageKey = `${LOCAL_STORAGE_BANNER_KEY_PREFIX}${initialTournament.id}`;
             const savedBanner = localStorage.getItem(storageKey);
             if (savedBanner) {
-                setTournament(prev => prev ? { ...prev, bannerUrl: savedBanner } : undefined);
+                setTournament((prev: Tournament | undefined) => prev ? { ...prev, bannerUrl: savedBanner } : undefined);
             } else {
                 setTournament(initialTournament);
             }

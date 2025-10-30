@@ -1,12 +1,12 @@
 
+
 'use client';
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
 import { Button } from "@/shared/ui/button";
 import { User as UserIcon, Gem, ArrowRight } from "lucide-react";
 import Link from "next/link";
-import { ranks } from "@/mocks/ranks";
-import type { User } from "@/mocks";
+import { ranks, User } from "@/mocks";
 import { Progress } from "@/shared/ui/progress";
 
 const getRankForElo = (elo: number) => {

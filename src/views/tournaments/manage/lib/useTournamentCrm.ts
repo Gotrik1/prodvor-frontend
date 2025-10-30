@@ -1,10 +1,11 @@
 
+
 'use client';
 
 import { useState, useMemo, useEffect } from 'react';
-import { allTournaments, registeredTeams as initialRegisteredTeams } from '@/views/tournaments/public-page/ui/mock-data';
-import type { Tournament, BracketMatch, Team, MediaItem } from '@/views/tournaments/public-page/ui/mock-data';
-import { useProtocol } from '@/widgets/protocol-editor/lib/use-protocol';
+import { tournaments, registeredTeams as initialRegisteredTeams } from '@/mocks';
+import type { Tournament, BracketMatch, Team, MediaItem } from '@/mocks';
+import { useProtocol } from '@/features/protocol-editor';
 
 const LOCAL_STORAGE_BANNER_KEY_PREFIX = 'promo-banner-';
 
@@ -30,7 +31,7 @@ const generatePredictableBracket = (teams: Team[]): BracketMatch[][] => {
 };
 
 export function useTournamentCrm(tournamentId: string) {
-    const initialTournament = allTournaments.find(t => t.id === tournamentId);
+    const initialTournament = tournaments.find(t => t.id === tournamentId);
     
     const { setActiveMatch, activeMatch } = useProtocol();
     const [tournament, setTournament] = useState<Tournament | undefined>(initialTournament);
@@ -59,7 +60,7 @@ export function useTournamentCrm(tournamentId: string) {
     useEffect(() => {
         const savedBanner = localStorage.getItem(storageKey);
         if (savedBanner && tournament && tournament.bannerUrl !== savedBanner) {
-            setTournament(prev => prev ? ({...prev!, bannerUrl: savedBanner}) : undefined);
+            setTournament((prev: Tournament | undefined) => prev ? ({...prev!, bannerUrl: savedBanner}) : undefined);
         }
     }, [storageKey, tournament]);
 
@@ -76,12 +77,12 @@ export function useTournamentCrm(tournamentId: string) {
 
     const handleTournamentChange = (data: Partial<Tournament>) => {
         if (tournament) {
-            setTournament(prev => prev ? ({ ...prev!, ...data }) : undefined);
+            setTournament((prev: Tournament | undefined) => prev ? ({ ...prev!, ...data }) : undefined);
         }
     };
      const handleBannerChange = (url: string) => {
         if (tournament) {
-            setTournament(prev => prev ? ({ ...prev!, bannerUrl: url }) : undefined);
+            setTournament((prev: Tournament | undefined) => prev ? ({ ...prev!, bannerUrl: url }) : undefined);
             localStorage.setItem(storageKey, url);
         }
     };

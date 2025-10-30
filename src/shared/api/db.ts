@@ -1,6 +1,6 @@
 
 
-import { users, teams, posts, allTournaments as tournaments } from '@/mocks';
+import { users, teams, posts, tournaments } from '@/mocks';
 import type { User, Team, Tournament } from '@/mocks';
 
 /**

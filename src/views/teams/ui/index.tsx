@@ -6,7 +6,7 @@ import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/shared/ui/card";
 import { PlusCircle, UserCheck, Users, BarChart } from "lucide-react";
 import Image from "next/image";
-import { teams } from "@/mocks";
+import { teams, Team } from "@/mocks";
 import { Badge } from "@/shared/ui/badge";
 import Link from "next/link";
 import { useUserStore } from "@/widgets/dashboard-header/model/user-store";
@@ -14,7 +14,7 @@ import { useMemo, useState } from "react";
 import { TopTeamsWidget } from "@/widgets/top-teams-widget";
 import { Separator } from "@/shared/ui/separator";
 
-const TeamCard = ({ team, isMember }: { team: typeof teams[0], isMember: boolean }) => (
+const TeamCard = ({ team, isMember }: { team: Team, isMember: boolean }) => (
     <Card key={team.id} className="flex flex-col">
         <CardHeader>
             <Link href={`/teams/${team.id}`} className="flex items-center gap-4 group">

@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { Sidebar, SidebarContent, SidebarHeader, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarProvider } from "@/shared/ui/sidebar";
@@ -15,7 +16,7 @@ export function AdminLayout({
 }) {
     const pathname = usePathname();
     const searchParams = useSearchParams();
-    const currentTab = searchParams.get('tab');
+    const currentTab = searchParams?.get('tab');
 
     if (!pathname) {
         return null; // Or a loading state

@@ -8,7 +8,7 @@ import { ru } from 'date-fns/locale';
 import Link from 'next/link';
 import Image from "next/image";
 import { useState, useEffect } from "react";
-import type { FeedEvent } from '@/mocks/feed-events';
+import type { FeedEvent, MatchWinEventDetails, AchievementUnlockedEventDetails } from '@/mocks';
 import { users, teams, achievementsBySport } from '@/mocks';
 import { Award, UserPlus, Trophy } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
@@ -50,6 +50,7 @@ export function EventCard({ event }: { event: FeedEvent }) {
         case 'match_win': {
             const team1 = mainTeam;
             const team2 = teams.find(t => t.id === event.teamIds[1]);
+            const details = event.details as MatchWinEventDetails;
             if (!team1 || !team2) return null;
             return (
                 <div className="flex items-center justify-between p-3 rounded-md bg-muted/50">
@@ -57,7 +58,7 @@ export function EventCard({ event }: { event: FeedEvent }) {
                          <Image src={team1.logoUrl} width={24} height={24} alt={team1.name} data-ai-hint="team logo" className="rounded-md" />
                          {team1.name}
                     </div>
-                    <div className="font-bold text-lg">{event.details.score1} : {event.details.score2}</div>
+                    <div className="font-bold text-lg">{details.score1} : {details.score2}</div>
                     <div className="flex items-center gap-2 font-semibold justify-end">
                          {team2.name}
                          <Image src={team2.logoUrl} width={24} height={24} alt={team2.name} data-ai-hint="team logo" className="rounded-md" />
@@ -66,7 +67,8 @@ export function EventCard({ event }: { event: FeedEvent }) {
             )
         }
         case 'achievement_unlocked': {
-            const achievement = Object.values(achievementsBySport).flat().find(a => a.id === event.details.achievementId);
+            const details = event.details as AchievementUnlockedEventDetails;
+            const achievement = Object.values(achievementsBySport).flat().find(a => a.id === details.achievementId);
             if (!achievement) return null;
             return (
                 <div className="flex items-center gap-3 p-3 rounded-md bg-muted/50">

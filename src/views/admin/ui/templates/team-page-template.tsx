@@ -39,8 +39,7 @@ export function TeamPageTemplate({ team }: { team?: Team }) {
     }
 
     const teamMembers = users.filter(u => team.members.includes(u.id));
-    const homePlaygrounds = team.homePlaygroundIds?.map(id => playgrounds.find(p => p.id === id)).filter(Boolean);
-    const teamPosts = posts.filter(p => p.team?.id === team.id);
+    const homePlaygrounds = team.homePlaygroundIds?.map((id: string) => playgrounds.find(p => p.id === id)).filter(Boolean);
 
     return (
         <div className="p-4 md:p-6 lg:p-8 space-y-6">
@@ -71,7 +70,7 @@ export function TeamPageTemplate({ team }: { team?: Team }) {
                     <TeamStatsWidget />
                 </TabsContent>
                 <TabsContent value="publications" className="mt-6">
-                   <TeamPublicationsTab posts={teamPosts} team={team} />
+                   <TeamPublicationsTab team={team} />
                 </TabsContent>
             </Tabs>
         </div>

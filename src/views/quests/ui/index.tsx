@@ -2,17 +2,13 @@
 
 'use client';
 
-import { useMemo, useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
+import { useMemo } from 'react';
+import { Card, CardHeader, CardTitle } from "@/shared/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 import { QuestCard } from './quest-card';
 import { questsByRole, eventQuests } from '../lib/mock-data';
 import { useUserStore } from '@/widgets/dashboard-header/model/user-store';
-import { Puzzle, Gem, CheckCircle } from 'lucide-react';
-import { Progress } from '@/shared/ui/progress';
-import { Button } from '@/shared/ui/button';
-import { useToast } from '@/shared/hooks/use-toast';
-import { cn } from '@/shared/lib/utils';
+import { Puzzle } from 'lucide-react';
 
 export function QuestsPage() {
     const { user } = useUserStore();
@@ -28,15 +24,23 @@ export function QuestsPage() {
 
     return (
         <div className="p-4 md:p-6 lg:p-8 space-y-8">
-            <div>
-                <h1 className="text-3xl font-bold font-headline flex items-center gap-3">
-                    <Puzzle className="h-8 w-8" />
-                    Квесты
-                </h1>
-                <p className="text-muted-foreground mt-1">
-                    Выполняйте задания, чтобы получать награды и ускорять свой прогресс.
-                </p>
-            </div>
+            <header>
+                <Card>
+                    <CardHeader>
+                        <div className="flex items-center gap-3">
+                            <div className="p-3 bg-primary/10 text-primary rounded-md">
+                                <Puzzle className="h-8 w-8" />
+                            </div>
+                            <div>
+                                <CardTitle className="text-3xl font-bold font-headline">Квесты</CardTitle>
+                                <p className="text-muted-foreground mt-1">
+                                    Выполняйте задания, чтобы получать награды и ускорять свой прогресс.
+                                </p>
+                            </div>
+                        </div>
+                    </CardHeader>
+                </Card>
+            </header>
             
             <Tabs defaultValue="daily" className="w-full">
                 <TabsList className="grid w-full grid-cols-3">

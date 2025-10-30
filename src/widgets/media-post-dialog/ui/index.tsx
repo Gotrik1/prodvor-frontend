@@ -2,20 +2,17 @@
 
 'use client';
 
-import type { Post, User, Comment } from "@/mocks";
+import type { Post, Comment } from "@/mocks";
 import { users } from "@/mocks";
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
 import { Button } from "@/shared/ui/button";
-import { Heart, MessageSquare, Send, Tag, Share2, PlusCircle, Video, Bookmark, Image as ImageIcon } from "lucide-react";
+import { Heart, MessageSquare, Send, Tag, Share2 } from "lucide-react";
 import Image from "next/image";
 import {
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  Dialog,
-  DialogTrigger,
-  DialogFooter,
 } from "@/shared/ui/dialog";
 import { useState } from "react";
 import { cn } from "@/shared/lib/utils";
@@ -25,8 +22,6 @@ import Link from "next/link";
 import { Separator } from "@/shared/ui/separator";
 import { useToast } from "@/shared/hooks/use-toast";
 import { usePostStore } from "@/widgets/dashboard-feed/model/post-store";
-import { CreatePost } from "@/widgets/dashboard-feed/ui/create-post";
-
 
 const mockMedia = [
     { type: 'image', src: 'https://placehold.co/1920x1080.png', title: 'Фото с последней игры', dataAiHint: 'soccer game' },

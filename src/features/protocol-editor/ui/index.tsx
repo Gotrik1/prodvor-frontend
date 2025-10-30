@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import React, { useState, useMemo } from 'react';
@@ -9,9 +10,9 @@ import { Input } from '@/shared/ui/input';
 import { Label } from '@/shared/ui/label';
 import { Trash2, PlusCircle } from 'lucide-react';
 import { useProtocol } from '../lib/use-protocol';
-import { EventType, eventTypes, MatchEvent } from '@/features/match-protocol/ui/match-timeline';
+import { EventType, eventTypes } from '@/mocks';
 import { users } from '@/mocks';
-import type { BracketMatch } from '@/views/tournaments/public-page/ui/mock-data';
+import type { BracketMatch, MatchEvent } from '@/mocks';
 
 const eventLabels: Record<EventType, string> = {
     [eventTypes.GOAL]: 'Гол',
@@ -155,7 +156,7 @@ export function ProtocolEditor({ match }: { match: BracketMatch }) {
                             <div key={event.id} className="flex items-center justify-between p-2 rounded-md bg-background hover:bg-muted">
                                 <div className="flex items-center gap-3">
                                     <span className="font-mono text-sm w-8">{event.minute}&apos;</span>
-                                    <span className="font-semibold">{eventLabels[event.type]}</span>
+                                    <span className="font-semibold">{eventLabels[event.type as EventType]}</span>
                                     <span className="text-muted-foreground text-sm">{event.player}{event.assist ? ` (${event.assist})` : ''}{event.playerIn ? `↑${event.playerIn} / ↓${event.playerOut}` : ''}</span>
                                 </div>
                                 <Button variant="ghost" size="icon" className="h-7 w-7 text-muted-foreground hover:text-destructive" onClick={() => removeEvent(event.id)}>

@@ -1,4 +1,5 @@
 
+
 // IMPORTANT: Order of imports and exports matters to avoid circular dependencies.
 
 // 1. Import all base data definitions and raw data.
@@ -30,3 +31,18 @@ export * from './tournaments';
 export * from './ranks';
 export * from './achievements';
 export * from './feed-events';
+
+
+// Export types
+export type { User, UserRole, UserGender, CoachProfile } from './users';
+export type { Team } from './teams';
+export type { Playground, FitnessService, ServiceCategory } from './playgrounds';
+export type { Sponsor } from './personnel';
+export type { Sport, Subdiscipline } from './sports';
+export type { Post, Comment } from './posts';
+export type { Requirement } from './requirements';
+export type { TeamChallenge } from './challenges';
+export type { Tournament, BracketMatch, TournamentStatus, TournamentLevel, MediaItem, MatchEvent, EventType } from './tournaments';
+export type { Rank } from './ranks';
+export type { Achievement } from './achievements';
+export type { FeedEvent, TeamJoinEventDetails, MatchWinEventDetails, AchievementUnlockedEventDetails } from './feed-events';

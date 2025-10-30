@@ -1,14 +1,15 @@
 
+
 import { Button } from '@/shared/ui/button';
 import Link from 'next/link';
-import { users } from '@/mocks';
+import { users, User } from '@/mocks';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
 import { PlaceholderTemplate } from '@/views/admin/ui/templates/placeholder-template';
 import { RefereePageTemplate } from '@/views/admin/ui/templates/referee-page-template';
 import { CoachPageTemplate } from '@/views/admin/ui/templates/coach-page-template';
 import { ManagerPageTemplate } from '@/views/admin/ui/templates/manager-page-template';
 import { OrganizerPageTemplate } from '@/views/admin/ui/templates/organizer-page-template';
-import { PlayerPageTemplate } from '@/views/admin/ui/templates/player-page-template';
+import { PlayerPage } from '@/views/users/player';
 import { FanPageTemplate } from '@/views/admin/ui/templates/fan-page-template';
 
 export function UserPage({ userId }: { userId?: string }) {
@@ -26,7 +27,7 @@ export function UserPage({ userId }: { userId?: string }) {
     );
   }
   
-  const user = users.find(s => s.id === userId);
+  const user = users.find((s: User) => s.id === userId);
 
   if (!user) {
     return (
@@ -58,7 +59,7 @@ export function UserPage({ userId }: { userId?: string }) {
             return <OrganizerPageTemplate user={user} />;
         case 'Игрок':
         case 'Капитан':
-            return <PlayerPageTemplate user={user} />;
+            return <PlayerPage user={user} />;
         case 'Болельщик':
             return <FanPageTemplate user={user} />;
         default:

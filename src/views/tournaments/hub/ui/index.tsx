@@ -4,12 +4,13 @@ import Link from "next/link";
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
 import { ArrowLeft, Users, Trophy } from "lucide-react";
-import { allTournaments, registeredTeams } from "@/mocks";
+import { tournaments, registeredTeams } from "@/mocks";
+import type { Tournament, Team } from "@/mocks";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { TournamentBracket } from "@/views/tournaments/public-page/ui/tournament-bracket";
 import { TournamentSchedule } from "@/views/tournaments/public-page/ui/tournament-schedule";
 
-export function TournamentHubPage({ tournament }: { tournament: (typeof allTournaments)[0] | undefined}) {
+export function TournamentHubPage({ tournament }: { tournament: Tournament | undefined}) {
      if (!tournament) {
         return (
             <div className="flex flex-col min-h-screen items-center justify-center">
@@ -60,7 +61,7 @@ export function TournamentHubPage({ tournament }: { tournament: (typeof allTourn
                                 <CardContent>
                                 {registeredTeams.length > 0 ? (
                                     <div className="grid grid-cols-5 gap-3">
-                                        {registeredTeams.map(team => (
+                                        {registeredTeams.map((team: Team) => (
                                             <Link href={`/teams/${team.id}`} key={team.id} className="block group">
                                                 <Avatar className="h-14 w-14 transition-transform group-hover:scale-110">
                                                     <AvatarImage src={team.logoUrl} alt={team.name} />

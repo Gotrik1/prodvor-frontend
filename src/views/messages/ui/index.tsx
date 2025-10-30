@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import React, { useState, useMemo } from 'react';
@@ -8,7 +9,7 @@ import { Input } from "@/shared/ui/input";
 import { Button } from "@/shared/ui/button";
 import { Search, Send, Users, User as UserIcon, Phone, Video } from "lucide-react";
 import { cn } from "@/shared/lib/utils";
-import { mockChats, mockMessages, Chat } from '../lib/mock-data';
+import { mockChats, mockMessages, Chat, Message } from '../lib/mock-data';
 import Link from 'next/link';
 import { useUserStore } from '@/widgets/dashboard-header/model/user-store';
 import type { User } from '@/mocks';
@@ -51,7 +52,7 @@ const ChatWindowHeader = ({ chat }: { chat: Chat }) => (
     </header>
 );
 
-const ChatMessage = ({ msg, isOwnMessage }: { msg: (typeof mockMessages)[string][0], isOwnMessage: boolean }) => (
+const ChatMessage = ({ msg, isOwnMessage }: { msg: Message, isOwnMessage: boolean }) => (
     <div className={cn("flex items-end gap-2", isOwnMessage ? "justify-end" : "justify-start")}>
         {!isOwnMessage && (
              <Avatar className="h-8 w-8">
@@ -99,7 +100,7 @@ const ChatInput = ({ onSendMessage }: { onSendMessage: (text: string) => void })
     );
 }
 
-const ChatWindow = ({ chat, messages, currentUser }: { chat: Chat | null, messages: (typeof mockMessages)[string], currentUser: User }) => {
+const ChatWindow = ({ chat, messages, currentUser }: { chat: Chat | null, messages: Message[], currentUser: User }) => {
     
     const handleSendMessage = (text: string) => {
         // In a real app, this would send the message to a backend

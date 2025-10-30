@@ -9,7 +9,7 @@ import { StatCard } from "@/shared/ui/stat-card";
 
 const FormBadge = ({ result }: { result: 'W' | 'L' | 'D' }) => {
     const baseClasses = "flex items-center justify-center w-8 h-8 rounded-md font-bold";
-    if (result === 'W') return <div className={`${baseClasses} bg-success/80 text-success-foreground border border-success/30`}>W</div>;
+    if (result === 'W') return <div className={`${baseClasses} bg-green-500/80 text-green-50 border border-green-500/30`}>W</div>;
     if (result === 'L') return <div className={`${baseClasses} bg-destructive/80 text-destructive-foreground border border-destructive/30`}>L</div>;
     return <div className={`${baseClasses} bg-secondary text-secondary-foreground border border-secondary/30`}>D</div>;
 };

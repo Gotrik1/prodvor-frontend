@@ -26,7 +26,7 @@ export function SimulationPage() {
     const { user: currentUser, setUser } = useUserStore();
 
     const groupedUsers = users.reduce((acc, user) => {
-        (acc[user.role] = acc[user.role] || []).push(user);
+        (acc[user.role as UserRole] = acc[user.role as UserRole] || []).push(user);
         return acc;
     }, {} as Record<UserRole, typeof users>);
 

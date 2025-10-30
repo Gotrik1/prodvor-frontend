@@ -15,7 +15,7 @@ import { useSearchParams } from 'next/navigation';
 
 export function AdminDashboardPage() {
     const searchParams = useSearchParams();
-    const defaultTab = searchParams.get('tab') || 'overview';
+    const defaultTab = searchParams?.get('tab') || 'overview';
 
     return (
         <div className="space-y-6">

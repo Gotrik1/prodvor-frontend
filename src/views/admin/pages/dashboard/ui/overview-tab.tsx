@@ -5,9 +5,9 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Button } from '@/shared/ui/button';
 import { Eye } from 'lucide-react';
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/shared/ui/chart";
+import { ChartContainer, ChartTooltipContent } from "@/shared/ui/chart";
 import { Bar as RechartsBar, BarChart as RechartsBarChart, XAxis, YAxis } from "recharts";
-import { users, teams, allSports, allTournaments } from '@/mocks';
+import { users, teams, allSports, tournaments, Tournament } from '@/mocks';
 import Link from 'next/link';
 import { TeamStatCard } from '@/entities/team/ui/stat-card';
 
@@ -47,7 +47,7 @@ export function OverviewTab() {
             />
              <TeamStatCard 
                 title="Текущие турниры" 
-                value={allTournaments.filter(t => t.status === 'ИДЕТ').length.toString()}
+                value={tournaments.filter((t: Tournament) => t.status === 'ИДЕТ').length.toString()}
                 description="+2 новых на этой неделе"
             />
         </div>
@@ -62,7 +62,7 @@ export function OverviewTab() {
                         <RechartsBarChart data={userRegistrationData} accessibilityLayer>
                             <XAxis dataKey="month" tickLine={false} axisLine={false} />
                             <YAxis tickLine={false} axisLine={false} />
-                            <ChartTooltip content={<ChartTooltipContent />} />
+                            <ChartTooltipContent />
                             <RechartsBar dataKey="registrations" fill="var(--color-registrations)" radius={4} />
                         </RechartsBarChart>
                     </ChartContainer>
@@ -78,7 +78,7 @@ export function OverviewTab() {
                         <RechartsBarChart data={topSportsData} layout="vertical" accessibilityLayer>
                             <XAxis type="number" hide />
                             <YAxis dataKey="sport" type="category" tickLine={false} axisLine={false} width={80} />
-                            <ChartTooltip content={<ChartTooltipContent />} />
+                            <ChartTooltipContent />
                             <RechartsBar dataKey="teams" fill="var(--color-teams)" radius={4} />
                         </RechartsBarChart>
                     </ChartContainer>

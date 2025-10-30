@@ -1,9 +1,10 @@
 
+
 'use client';
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
 import { Trophy, Megaphone } from "lucide-react";
-import { tournaments as allTournaments } from "@/mocks";
+import { tournaments, Tournament } from "@/mocks";
 import Link from "next/link";
 import { Progress } from "@/shared/ui/progress";
 import { Badge } from "@/shared/ui/badge";
@@ -38,7 +39,7 @@ export function DashboardAside() {
   const { user } = useUserStore();
 
   const activeTournaments = useMemo(() => {
-    return allTournaments.filter(t => {
+    return tournaments.filter((t: Tournament) => {
       const isActiveStatus = t.status === 'ИДЕТ' || t.status === 'РЕГИСТРАЦИЯ';
       if (!isActiveStatus) return false;
 

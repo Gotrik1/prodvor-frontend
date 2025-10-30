@@ -1,6 +1,6 @@
 
-import { users, teams } from '@/mocks';
-import type { User } from '@/mocks';
+
+import { users, teams, User } from '@/mocks';
 
 export interface Chat {
     id: string;

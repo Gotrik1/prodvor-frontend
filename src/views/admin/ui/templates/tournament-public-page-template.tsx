@@ -1,8 +1,10 @@
+
+
 import { TournamentPublicPage } from "@/views/tournaments/public-page";
-import { allTournaments } from "@/mocks";
+import { tournaments, Tournament } from "@/mocks";
 
 // Select a mock tournament to display in the template
-const mockTournament = allTournaments.find(t => t.id === 'tourney1');
+const mockTournament = tournaments.find((t: Tournament) => t.id === 'tourney1');
 
 export function TournamentPublicPageTemplate() {
     return (

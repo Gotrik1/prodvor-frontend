@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import React, { useState } from 'react';
@@ -73,6 +74,10 @@ const PositionMarker = ({ position, assignedPlayer, onDrop, onDragOver }: { posi
     </div>
 );
 
+interface TacticalBoardProps {
+  teamMembers: User[];
+}
+
 export function TacticalBoard({ teamMembers }: TacticalBoardProps) {
     const [selectedFormation, setSelectedFormation] = useState('4-3-3');
     const [assignments, setAssignments] = useState<Record<string, string | null>>({}); // { role: playerId }
@@ -119,7 +124,7 @@ export function TacticalBoard({ teamMembers }: TacticalBoardProps) {
                     <div className="md:col-span-1 space-y-4">
                         <h3 className="font-semibold">Доступные игроки ({availablePlayers.length})</h3>
                         <div className="space-y-2 max-h-96 overflow-y-auto p-2 border rounded-lg bg-muted/30">
-                            {availablePlayers.map(player => (
+                            {availablePlayers.map((player: User) => (
                                 <PlayerChip key={player.id} player={player} onDragStart={handleDragStart} />
                             ))}
                         </div>
@@ -143,7 +148,7 @@ export function TacticalBoard({ teamMembers }: TacticalBoardProps) {
                         <div className="relative aspect-[4/2.5] w-full rounded-lg bg-cover bg-center border" style={{ backgroundImage: `url(${soccerFieldImage})` }}>
                             {formations[selectedFormation].map(pos => {
                                 const assignedPlayerId = assignments[pos.role];
-                                const assignedPlayer = assignedPlayerId ? teamMembers.find(p => p.id === assignedPlayerId) : null;
+                                const assignedPlayer = assignedPlayerId ? teamMembers.find((p: User) => p.id === assignedPlayerId) : null;
                                 return (
                                     <PositionMarker 
                                         key={pos.role}

@@ -2,8 +2,7 @@
 
 'use client';
 
-import { allTournaments } from '@/mocks';
-import { users, teams } from '@/mocks';
+import { users, teams, Tournament } from '@/mocks';
 import Link from 'next/link';
 import { Button } from '@/shared/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
@@ -20,7 +19,7 @@ import { AlertTriangle } from 'lucide-react';
 import { useState, useMemo, useEffect } from 'react';
 import { RequirementsChecklist } from './requirements-checklist';
 
-function TournamentRegistrationGuard({ tournament }: { tournament: (typeof allTournaments)[0] }) {
+function TournamentRegistrationGuard({ tournament }: { tournament: Tournament }) {
     const { user: currentUser } = useUserStore();
 
     const userTeams = useMemo(() => {
@@ -58,7 +57,7 @@ function TournamentRegistrationGuard({ tournament }: { tournament: (typeof allTo
 }
 
 
-function TournamentRegisterForm({ tournament, userTeams }: { tournament: (typeof allTournaments)[0], userTeams: typeof teams }) {
+function TournamentRegisterForm({ tournament, userTeams }: { tournament: Tournament, userTeams: typeof teams }) {
     const { user: currentUser } = useUserStore();
     const { toast } = useToast();
     const router = useRouter();
@@ -160,7 +159,7 @@ function TournamentRegisterForm({ tournament, userTeams }: { tournament: (typeof
 }
 
 
-export function TournamentRegisterPage({ tournament }: { tournament: (typeof allTournaments)[0] | undefined }) {
+export function TournamentRegisterPage({ tournament }: { tournament: Tournament | undefined }) {
     if (!tournament) {
         return (
             <div className="flex flex-col min-h-screen items-center justify-center p-4">

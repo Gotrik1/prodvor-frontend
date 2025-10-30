@@ -7,11 +7,10 @@ import Link from 'next/link';
 import { siteMapData } from '../lib/sitemap-data';
 import type { SitemapCategory, SitemapItem } from '../lib/sitemap-data';
 import * as LucideIcons from 'lucide-react';
-import { Map } from 'lucide-react';
+import { Map, File as FileIcon, Folder } from 'lucide-react';
 
 const SitemapNode: React.FC<{ item: SitemapItem; isLast: boolean }> = ({ item, isLast }) => {
-  // @ts-expect-error - Icon name from mock might not exist in LucideIcons, we handle this.
-  const Icon = LucideIcons[item.icon] || LucideIcons.File;
+  const Icon = LucideIcons[item.icon as keyof typeof LucideIcons] || FileIcon;
   const hasChildren = item.children && item.children.length > 0;
 
   return (
@@ -48,8 +47,7 @@ const SitemapNode: React.FC<{ item: SitemapItem; isLast: boolean }> = ({ item, i
 
 
 const SitemapCategoryTree: React.FC<{ category: SitemapCategory }> = ({ category }) => {
-   // @ts-expect-error - Icon name from mock might not exist in LucideIcons, we handle this.
-  const Icon = LucideIcons[category.icon] || LucideIcons.Folder;
+  const Icon = LucideIcons[category.icon as keyof typeof LucideIcons] || Folder;
 
   return (
     <div className="space-y-4">

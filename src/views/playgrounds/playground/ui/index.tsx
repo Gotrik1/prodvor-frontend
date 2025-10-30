@@ -2,12 +2,11 @@
 
 'use client';
 
-import type { Playground, User, ServiceCategory } from "@/mocks";
+import type { Playground, User } from "@/mocks";
 import { teams, users } from "@/mocks";
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
-import { ArrowLeft, CheckCircle, Home, MapPin, Star, Users, Rss, Info, MessageSquare, Newspaper, Calendar, ThumbsUp, Upload } from "lucide-react";
-import * as LucideIcons from "lucide-react";
+import { ArrowLeft, CheckCircle, Home, MapPin, Star, Users as UsersIcon, Rss, Info, MessageSquare, Newspaper, Calendar, ThumbsUp, Upload } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
@@ -236,7 +235,7 @@ export function PlaygroundPage({ playground }: { playground: Playground | undefi
                                <Card>
                                     <CardHeader>
                                         <CardTitle className="flex items-center gap-2">
-                                            <Users />
+                                            <UsersIcon />
                                             Резиденты ({residentTeams.length})
                                         </CardTitle>
                                     </CardHeader>
