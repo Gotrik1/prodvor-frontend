@@ -18,6 +18,7 @@ import { useState, useEffect } from "react";
 import { useToast } from "@/shared/hooks/use-toast";
 import { Alert, AlertDescription, AlertTitle } from "@/shared/ui/alert";
 import { useUserStore } from "@/widgets/dashboard-header/model/user-store";
+import { GameplayEvent, awardProgressPoints } from "@/shared/lib/gamification";
 
 const features = [
     { id: "lighting", label: "Освещение" },
@@ -64,6 +65,7 @@ const ServiceCard = ({ service }: { service: ServiceCategory['services'][0] }) =
 const PhotoContest = () => {
     const [userUploads, setUserUploads] = useState(0);
     const { toast } = useToast();
+    const { user: currentUser } = useUserStore();
 
     const handleUpload = () => {
         if (userUploads >= 5) {
@@ -74,6 +76,11 @@ const PhotoContest = () => {
             });
             return;
         }
+        
+        if (currentUser) {
+            awardProgressPoints(GameplayEvent.PLAYGROUND_PHOTO_UPLOADED, { userId: currentUser.id });
+        }
+        
         // Mock upload
         setUserUploads(prev => prev + 1);
         toast({

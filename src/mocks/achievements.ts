@@ -1,4 +1,4 @@
-import { Medal, Star, Shield, Dribbble, Target, TrendingUp, Zap, Wind, Crown, Sun, Dumbbell, Flame, Trophy, Repeat, GaugeCircle, Sigma, Moon, Users, TrendingDown, Clock4 } from 'lucide-react';
+import { Medal, Star, Shield, Dribbble, Target, TrendingUp, Zap, Wind, Crown, Sun, Dumbbell, Flame, Trophy, Repeat, GaugeCircle, Sigma, Moon, Users, TrendingDown, Clock4, MapPin, Camera } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 
 export interface Achievement {
@@ -9,6 +9,10 @@ export interface Achievement {
 }
 
 export const achievementsBySport: Record<string, Achievement[]> = {
+    'platform': [ // Достижения, связанные с платформой
+        { id: 'ach-pl-1', name: 'Картограф', description: 'Добавить свою первую площадку на карту ProDvor.', icon: MapPin },
+        { id: 'ach-pl-2', name: 'Фотокорреспондент', description: 'Загрузить первую фотографию для любой площадки.', icon: Camera },
+    ],
     'sport-1': [ // Футбол
         { id: 'ach-fb-1', name: 'Первый гол', description: 'Забить свой первый гол в официальном матче ProDvor.', icon: Star },
         { id: 'ach-fb-2', name: 'Хет-трик', description: 'Забить 3 гола в одном матче.', icon: Target },

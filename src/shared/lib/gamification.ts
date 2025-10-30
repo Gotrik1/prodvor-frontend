@@ -1,3 +1,4 @@
+
 /**
  * @fileoverview
  * Централизованный сервис для управления геймификацией на платформе.
@@ -28,6 +29,7 @@ export const GameplayEvent = {
 
     // Вклад в платформу
     PLAYGROUND_ADDED: 'playground_added', // после модерации
+    PLAYGROUND_PHOTO_UPLOADED: 'playground_photo_uploaded',
     TEAM_CREATED: 'team_created',
 } as const;
 
@@ -51,6 +53,7 @@ const eventPointValues: Record<GameplayEventType, number> = {
     [GameplayEvent.ACHIEVEMENT_UNLOCKED]: 200,
     
     [GameplayEvent.PLAYGROUND_ADDED]: 300,
+    [GameplayEvent.PLAYGROUND_PHOTO_UPLOADED]: 25,
     [GameplayEvent.TEAM_CREATED]: 100,
 };
 
