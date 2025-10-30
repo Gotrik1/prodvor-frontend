@@ -48,23 +48,21 @@ function MainLayoutContent({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <SidebarProvider>
-        <div className="min-h-screen md:flex">
-          <DashboardSidebar />
-          <div className="flex-1 flex flex-col min-w-0">
-            <DashboardHeader />
-            <div className="flex flex-col flex-1">
-                <main className="flex-1 bg-background">
-                    {children}
-                </main>
-                <div className={cn("hidden", !isAdminRoute && "md:block")}>
-                  <DashboardFooter />
-                </div>
+    <div className="min-h-screen md:flex">
+      <DashboardSidebar />
+      <div className="flex-1 flex flex-col min-w-0">
+        <DashboardHeader />
+        <div className="flex flex-col flex-1">
+            <main className="flex-1 bg-background">
+                {children}
+            </main>
+            <div className={cn("hidden", !isAdminRoute && "md:block")}>
+              <DashboardFooter />
             </div>
-          </div>
         </div>
-        <MobileBottomNav />
-    </SidebarProvider>
+      </div>
+      <MobileBottomNav />
+    </div>
   );
 }
 
