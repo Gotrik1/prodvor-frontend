@@ -1,7 +1,6 @@
 
 'use client';
 
-import type {Metadata} from 'next';
 import './globals.css';
 import { Toaster } from "@/shared/ui/toaster";
 import { Inter } from 'next/font/google';
