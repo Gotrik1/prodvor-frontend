@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { mockMyTournaments } from "@/views/tournaments/public-page/ui/mock-data";
@@ -25,7 +26,7 @@ export function OrganizerPageTemplate({ user }: { user?: User }) {
     const organizer = user || defaultOrganizer;
 
     return (
-        <div className="border rounded-lg p-4 md:p-6 space-y-6 bg-muted/20">
+        <div className="space-y-6">
             <header className="flex flex-col md:flex-row items-center gap-6">
                 <Avatar className="h-24 w-24 border-4 border-primary">
                     <AvatarImage src={organizer.avatarUrl} alt={`${organizer.firstName} ${organizer.lastName}`} />

@@ -2,7 +2,7 @@
 
 'use client';
 
-import { users, teams, tournaments, posts } from "@/mocks";
+import { users, teams, posts, Achievement } from "@/mocks";
 import type { User } from "@/mocks/users";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { Badge } from "@/shared/ui/badge";
@@ -21,8 +21,8 @@ import { AchievementsTab } from "../../ui/templates/player-page-achievements-tab
 
 const defaultFan: User | undefined = users.find(u => u.role === 'Болельщик');
 const upcomingMatches = [
-    { team1: teams[0], team2: teams[1], tournament: tournaments.find(t => t.id === 'mytourney1')! },
-    { team1: teams[2], team2: teams[3], tournament: tournaments.find(t => t.id === 'mytourney1')! },
+    { team1: teams[0], team2: teams[1], tournament: { name: 'Летний Кубок ProDvor' } },
+    { team1: teams[2], team2: teams[3], tournament: { name: 'Летний Кубок ProDvor' } },
 ];
 const mockMedia = [
     { type: 'image', src: 'https://placehold.co/600x400.png', title: 'Фото с последней игры', dataAiHint: 'soccer game' },
@@ -60,7 +60,7 @@ export function FanPageTemplate({ user }: { user?: User }) {
     }
 
     return (
-        <div className="border rounded-lg p-4 md:p-6 space-y-6 bg-muted/20">
+        <div className="space-y-6">
             <header className="flex flex-col md:flex-row items-center gap-6">
                 <Avatar className="h-24 w-24 border-4 border-primary">
                     <AvatarImage src={fanUser.avatarUrl} alt={fanUser.nickname} />
