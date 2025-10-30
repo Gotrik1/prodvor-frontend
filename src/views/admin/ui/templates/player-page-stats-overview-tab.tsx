@@ -63,7 +63,7 @@ export const PlayerStatsOverviewTab = () => {
             <CardContent>
                 <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
                     <div>
-                        <h3 className="text-base font-semibold mb-2">Навыки и прогресс ELO</h3>
+                        <h3 className="text-base font-semibold mb-2 hidden md:block">Навыки и прогресс ELO</h3>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
                             <ChartContainer config={{}} className="w-full h-40">
                                 <RadarChart data={skillData} cy="50%" cx="50%">

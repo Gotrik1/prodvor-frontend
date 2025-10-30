@@ -178,13 +178,13 @@ export function PublicationsTab({ player, isOwnProfile }: { player: User; isOwnP
             <Card className="md:shadow-main-sm shadow-none md:bg-card bg-transparent">
                 <CardHeader>
                     <div className="flex justify-between items-center">
-                        <CardTitle className="flex items-center gap-2"><Grid3x3 />Публикации</CardTitle>
+                        <CardTitle className="flex items-center gap-2 hidden md:flex"><Grid3x3 />Публикации</CardTitle>
                         {isOwnProfile && (
                              <Dialog>
                                 <DialogTrigger asChild>
-                                <Button size="sm" variant="outline" className="md:w-auto w-10 p-0 md:px-4 md:py-2">
-                                    <PlusCircle className="h-4 w-4 md:mr-2"/>
-                                    <span className="hidden md:inline">Новый пост</span>
+                                <Button size="sm" variant="outline" className="md:w-auto w-full">
+                                    <PlusCircle className="mr-2 h-4 w-4"/>
+                                    Новый пост
                                 </Button>
                                 </DialogTrigger>
                                 <DialogContent>
