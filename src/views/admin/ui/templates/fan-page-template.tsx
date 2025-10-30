@@ -16,6 +16,8 @@ import { getUserDisciplines } from "@/entities/user/lib";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 import { Dialog, DialogTrigger } from "@/shared/ui/dialog";
 import { MediaPostDialogContent } from "@/views/admin/ui/templates/player-page-publications-tab";
+import { AchievementsTab } from "../../ui/templates/player-page-achievements-tab";
+
 
 const defaultFan: User | undefined = users.find(u => u.role === 'Болельщик');
 const upcomingMatches = [
@@ -74,8 +76,8 @@ export function FanPageTemplate({ user }: { user?: User }) {
             </header>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                 <Link href="/teams">
-                    <Card className="hover:border-primary transition-transform duration-150 active:scale-95">
+                 <Link href="/teams" className="transition-transform duration-150 active:scale-95 block">
+                    <Card className="hover:border-primary h-full">
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                             <CardTitle className="text-sm font-medium">Любимые команды</CardTitle>
                             <Heart className="h-4 w-4 text-muted-foreground" />
@@ -85,8 +87,8 @@ export function FanPageTemplate({ user }: { user?: User }) {
                         </CardContent>
                     </Card>
                 </Link>
-                <Link href="/competitions">
-                    <Card className="hover:border-primary transition-transform duration-150 active:scale-95">
+                <Link href="/competitions" className="transition-transform duration-150 active:scale-95 block">
+                    <Card className="hover:border-primary h-full">
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                             <CardTitle className="text-sm font-medium">Просмотрено матчей</CardTitle>
                             <Ticket className="h-4 w-4 text-muted-foreground" />
@@ -96,8 +98,8 @@ export function FanPageTemplate({ user }: { user?: User }) {
                         </CardContent>
                     </Card>
                 </Link>
-                 <Link href="/competitions">
-                    <Card className="hover:border-primary transition-transform duration-150 active:scale-95">
+                 <Link href="/competitions" className="transition-transform duration-150 active:scale-95 block">
+                    <Card className="hover:border-primary h-full">
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                             <CardTitle className="text-sm font-medium">Стрик посещений</CardTitle>
                             <Flame className="h-4 w-4 text-muted-foreground" />
@@ -107,14 +109,14 @@ export function FanPageTemplate({ user }: { user?: User }) {
                         </CardContent>
                     </Card>
                 </Link>
-                <Link href={`/users/${fanUser.id}`}>
-                    <Card className="hover:border-primary transition-transform duration-150 active:scale-95">
+                <Link href={`/users/${fanUser.id}`} className="transition-transform duration-150 active:scale-95 block">
+                    <Card className="hover:border-primary h-full">
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                             <CardTitle className="text-sm font-medium">Достижения</CardTitle>
                             <Star className="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
-                            <div className="text-2xl font-bold">15</div>
+                            <div className="text-2xl font-bold">{fanUser.unlockedAchievements.length}</div>
                         </CardContent>
                     </Card>
                 </Link>
@@ -186,27 +188,7 @@ export function FanPageTemplate({ user }: { user?: User }) {
                             </div>
                         </CardContent>
                     </Card>
-                    <Card>
-                        <CardHeader>
-                            <CardTitle className="flex items-center gap-2">
-                                <Heart className="h-5 w-5" />
-                                Мои команды
-                            </CardTitle>
-                        </CardHeader>
-                        <CardContent className="space-y-3">
-                            {favoriteTeams.map(team => (
-                                <Link href={`/teams/${team.id}`} key={team.id} className="flex items-center justify-between p-2 rounded-md hover:bg-muted/50 transition-colors group">
-                                    <div className="flex items-center gap-3">
-                                        <Image src={team.logoUrl} alt={team.name} width={32} height={32} className="rounded-sm" data-ai-hint="team logo" />
-                                        <span className="font-medium group-hover:text-primary">{team.name}</span>
-                                    </div>
-                                    <Button variant="ghost" size="icon" className="h-8 w-8 opacity-50 group-hover:opacity-100">
-                                        <Bell className="h-4 w-4"/>
-                                    </Button>
-                                </Link>
-                            ))}
-                        </CardContent>
-                    </Card>
+                    <AchievementsTab player={fanUser} />
                     <Card>
                         <CardHeader>
                              <CardTitle className="flex items-center gap-2">
