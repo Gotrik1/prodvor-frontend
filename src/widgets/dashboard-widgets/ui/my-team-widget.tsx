@@ -34,25 +34,7 @@ export function MyTeamWidget({ user }: { user: User }) {
                 <div className="flex items-center gap-3"><Skeleton className="h-10 w-10 rounded-md" /><div className="space-y-2"><Skeleton className="h-4 w-20" /><Skeleton className="h-3 w-12" /></div></div>
             </div>
         ) : myTeams.length > 0 ? (
-            <>
-            <div className="md:hidden">
-                <ScrollArea>
-                    <div className="flex space-x-4 pb-4">
-                        {myTeams.map(team => (
-                            <Link href={`/teams/${team.id}`} key={team.id} className="block group w-32 flex-shrink-0">
-                                <div className="flex flex-col items-center text-center gap-2">
-                                    <Image src={team.logoUrl} alt={team.name} width={64} height={64} className="rounded-md border w-16 h-16 object-cover" data-ai-hint="team logo" />
-                                    <div>
-                                        <p className="font-semibold text-xs leading-tight group-hover:text-primary transition-colors truncate">{team.name}</p>
-                                    </div>
-                                </div>
-                            </Link>
-                        ))}
-                    </div>
-                    <ScrollBar orientation="horizontal" />
-                </ScrollArea>
-            </div>
-            <div className="hidden md:block space-y-3">
+            <div className="space-y-3">
                 {myTeams.map(team => (
                     <Link href={`/teams/${team.id}`} key={team.id} className="block group">
                          <div className="flex items-center justify-between gap-3 p-2 rounded-md hover:bg-muted/50 transition-colors">
@@ -71,7 +53,6 @@ export function MyTeamWidget({ user }: { user: User }) {
                     </Link>
                 ))}
             </div>
-            </>
         ) : (
              <div className="text-center">
                 <p className="text-sm text-muted-foreground mb-4">Вы еще не состоите в команде.</p>
