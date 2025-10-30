@@ -1,28 +1,22 @@
 
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
-import { CheckCircle, Gem, Puzzle, Swords, MessageSquare, Dumbbell, Repeat, Trophy, Users, CalendarCheck, MapPin } from "lucide-react";
-import { mockDailyQuests, mockWeeklyQuests, mockEventQuests, Quest } from '../lib/mock-data';
+import { CheckCircle, Gem, Puzzle, Swords, MessageSquare, Dumbbell, Repeat, Trophy, Users, CalendarCheck, MapPin, Ticket, Heart, Tv, Gavel, BookOpen, GraduationCap, ClipboardPlus, Bot, CalendarPlus, UserPlus } from "lucide-react";
+import { questsByRole, eventQuests, Quest } from '../lib/mock-data';
 import { Progress } from '@/shared/ui/progress';
 import { Button } from '@/shared/ui/button';
 import { useToast } from '@/shared/hooks/use-toast';
 import { cn } from '@/shared/lib/utils';
 import type { LucideProps } from 'lucide-react';
 import React from 'react';
+import { useUserStore } from '@/widgets/dashboard-header/model/user-store';
 
 const iconMap: Record<string, React.FC<LucideProps>> = {
-  Swords,
-  MessageSquare,
-  Dumbbell,
-  Repeat,
-  Trophy,
-  Users,
-  CalendarCheck,
-  MapPin,
-  Puzzle,
+  Swords, MessageSquare, Dumbbell, Repeat, Trophy, Users, CalendarCheck, MapPin, Puzzle,
+  Ticket, Heart, Tv, Gavel, BookOpen, GraduationCap, ClipboardPlus, Bot, CalendarPlus, UserPlus
 };
 
 const QuestIcon = ({ name, ...props }: { name: string } & LucideProps) => {
@@ -85,7 +79,7 @@ const QuestCard = ({ quest: initialQuest, onClaim }: { quest: Quest; onClaim: (q
     );
 };
 
-const QuestTabContent = ({ quests }: { quests: Quest[] }) => {
+const QuestTabContent = ({ quests, type }: { quests: Quest[]; type: 'daily' | 'weekly' | 'event' }) => {
     const { toast } = useToast();
     const [questState, setQuestState] = useState(quests);
 
@@ -112,6 +106,17 @@ const QuestTabContent = ({ quests }: { quests: Quest[] }) => {
 }
 
 export function QuestsPage() {
+    const { user } = useUserStore();
+
+    const userQuests = useMemo(() => {
+        if (!user || !user.role) {
+            // Default to player quests if user is not defined
+            return questsByRole['Игрок'] || { daily: [], weekly: [] };
+        }
+        return questsByRole[user.role] || questsByRole['Игрок'] || { daily: [], weekly: [] };
+    }, [user]);
+
+
     return (
         <div className="p-4 md:p-6 lg:p-8 space-y-8">
             <div>
@@ -131,13 +136,13 @@ export function QuestsPage() {
                     <TabsTrigger value="event">Событийные</TabsTrigger>
                 </TabsList>
                 <TabsContent value="daily" className="mt-6">
-                    <QuestTabContent quests={mockDailyQuests} />
+                    <QuestTabContent quests={userQuests.daily} type="daily" />
                 </TabsContent>
                 <TabsContent value="weekly" className="mt-6">
-                    <QuestTabContent quests={mockWeeklyQuests} />
+                    <QuestTabContent quests={userQuests.weekly} type="weekly" />
                 </TabsContent>
                 <TabsContent value="event" className="mt-6">
-                    <QuestTabContent quests={mockEventQuests} />
+                    <QuestTabContent quests={eventQuests} type="event" />
                 </TabsContent>
             </Tabs>
         </div>
