@@ -14,7 +14,7 @@ import { PlayerStatsOverviewTab } from "@/views/admin/ui/templates/player-page-s
 import { PublicationsTab } from "@/views/admin/ui/templates/player-page-publications-tab";
 import Image from "next/image";
 import { SocialTab } from "@/views/admin/ui/templates/player-page-social-tab";
-import React, { useMemo } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import { MyTeamWidget } from "@/widgets/dashboard-widgets/ui/my-team-widget";
 import { Card, CardBody } from "@/shared/ui/card";
 import { Badge } from "@/shared/ui/badge";
@@ -31,10 +31,16 @@ export function PlayerPage({ user: profileUser }: { user: User }) {
     const isOwnProfile = currentUser?.id === profileUser.id;
     
     const userDisciplines = useMemo(() => getUserDisciplines(profileUser), [profileUser]);
+    const [isClient, setIsClient] = useState(false);
+
+    useEffect(() => {
+        setIsClient(true);
+    }, []);
+
 
     return (
         <Card>
-            <CardBody className="p-0 md:p-6 md:pb-6 pb-0">
+            <CardBody className="md:p-6 md:pb-6 p-0 pb-0">
                 {/* --- HEADER --- */}
                 <div className="mb-8 overflow-hidden">
                     <div className="relative h-48 md:h-64 w-full bg-muted">
@@ -69,7 +75,7 @@ export function PlayerPage({ user: profileUser }: { user: User }) {
                                     {userDisciplines.slice(0, 3).map(discipline => (
                                         <Badge key={discipline} variant="secondary">{discipline}</Badge>
                                     ))}
-                                    {userDisciplines.length > 3 && (
+                                    {isClient && userDisciplines.length > 3 && (
                                         <Popover>
                                             <PopoverTrigger asChild>
                                                 <Badge variant="outline" className="cursor-pointer hover:bg-muted">
