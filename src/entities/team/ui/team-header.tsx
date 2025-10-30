@@ -6,7 +6,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import type { Team, Playground } from '@/mocks';
 import { Button } from '@/shared/ui/button';
-import { Home, Settings, Rss, Swords, UserPlus } from 'lucide-react';
+import { Home, Settings, Rss, Swords, UserPlus, Users } from 'lucide-react';
 import { useUserStore } from '@/widgets/dashboard-header/model/user-store';
 import { useState } from 'react';
 import { useToast } from '@/shared/hooks/use-toast';
