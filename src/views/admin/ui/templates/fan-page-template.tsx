@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { users, teams, tournaments } from "@/mocks";
@@ -7,12 +8,12 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { Badge } from "@/shared/ui/badge";
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
-import { Bell, Calendar, Flame, Heart, Rss, Star, Ticket, Gamepad2 } from "lucide-react";
+import { Bell, Calendar, Flame, Heart, Rss, Star, Ticket, Gamepad2, Tv, Camera } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { CreatePost } from "@/widgets/dashboard-feed/ui/create-post";
 import React, { useMemo } from "react";
 import { getUserDisciplines } from "@/entities/user/lib";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 
 const defaultFan: User | undefined = users.find(u => u.role === 'Болельщик');
 const favoriteTeams = teams.slice(0, 4);
@@ -20,6 +21,13 @@ const upcomingMatches = [
     { team1: teams[0], team2: teams[1], tournament: tournaments.find(t => t.id === 'mytourney1')! },
     { team1: teams[2], team2: teams[3], tournament: tournaments.find(t => t.id === 'mytourney1')! },
 ];
+const mockMedia = [
+    { type: 'image', src: 'https://placehold.co/600x400.png', title: 'Фото с последней игры', dataAiHint: 'soccer game' },
+    { type: 'image', src: 'https://placehold.co/600x400.png', title: 'Командное фото', dataAiHint: 'team photo' },
+    { type: 'image', src: 'https://placehold.co/600x400.png', title: 'Тренировка', dataAiHint: 'sports training' },
+    { type: 'image', src: 'https://placehold.co/600x400.png', title: 'Награждение', dataAiHint: 'award ceremony' },
+];
+
 
 export function FanPageTemplate({ user }: { user?: User }) {
     const fanUser = user || defaultFan;
@@ -99,22 +107,45 @@ export function FanPageTemplate({ user }: { user?: User }) {
             
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <div className="lg:col-span-2 space-y-6">
-                    <CreatePost user={fanUser} />
                     <Card>
-                        <CardHeader>
-                            <CardTitle className="flex items-center gap-2">
-                                <Rss className="h-5 w-5" />
-                                Лента новостей
-                            </CardTitle>
-                            <CardDescription>
-                                Последние события от команд и игроков, на которых вы подписаны.
-                            </CardDescription>
-                        </CardHeader>
-                        <CardContent>
-                            <div className="text-center text-muted-foreground py-8">
-                                <p>Лента новостей в разработке.</p>
-                            </div>
-                        </CardContent>
+                        <Tabs defaultValue="media">
+                             <CardHeader>
+                                 <TabsList className="grid w-full grid-cols-2">
+                                    <TabsTrigger value="media"><Camera className="mr-2 h-4 w-4"/>Медиа</TabsTrigger>
+                                    <TabsTrigger value="broadcasts"><Tv className="mr-2 h-4 w-4"/>Трансляции</TabsTrigger>
+                                </TabsList>
+                            </CardHeader>
+                             <CardContent>
+                                <TabsContent value="media">
+                                    <div className="grid grid-cols-2 gap-4">
+                                        {mockMedia.map((item, index) => (
+                                            <div key={index} className="relative aspect-video rounded-lg overflow-hidden group">
+                                                 <Image 
+                                                    src={item.src} 
+                                                    alt={item.title} 
+                                                    fill 
+                                                    className="object-cover group-hover:scale-105 transition-transform"
+                                                    data-ai-hint={item.dataAiHint}
+                                                />
+                                                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                                                <p className="absolute bottom-2 left-3 text-white font-semibold text-sm">{item.title}</p>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </TabsContent>
+                                <TabsContent value="broadcasts">
+                                     <div className="aspect-video bg-muted rounded-md overflow-hidden border">
+                                        <iframe
+                                            className="w-full h-full"
+                                            src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+                                            title="YouTube video player"
+                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                            allowFullScreen
+                                        ></iframe>
+                                    </div>
+                                </TabsContent>
+                            </CardContent>
+                        </Tabs>
                     </Card>
                 </div>
                 <div className="space-y-6">
