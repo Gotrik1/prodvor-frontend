@@ -26,6 +26,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 import Link from "next/link";
 import { Separator } from "@/shared/ui/separator";
 import { Input } from "@/shared/ui/input";
+import { Carousel, CarouselContent, CarouselItem } from "@/shared/ui/carousel";
 
 const mockMedia = [
     { type: 'image', src: 'https://placehold.co/600x400.png', title: 'Фото с последней игры', dataAiHint: 'soccer game' },
@@ -178,7 +179,7 @@ export function PublicationsTab({ player, isOwnProfile }: { player: User; isOwnP
             <Card className="md:shadow-main-sm shadow-none md:bg-card bg-transparent">
                 <CardHeader>
                     <div className="flex justify-between items-center">
-                        <CardTitle className="flex items-center gap-2 hidden md:flex"><Grid3x3 />Публикации</CardTitle>
+                        <CardTitle className="hidden md:flex items-center gap-2"><Grid3x3 />Публикации</CardTitle>
                         {isOwnProfile && (
                              <Dialog>
                                 <DialogTrigger asChild>
@@ -208,9 +209,10 @@ export function PublicationsTab({ player, isOwnProfile }: { player: User; isOwnP
                         </TabsList>
                         <TabsContent value="photos" className="mt-4">
                              {mediaFeed.length > 0 ? (
-                                <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                                <>
+                                <div className="hidden md:grid grid-cols-2 md:grid-cols-3 gap-2">
                                     {mediaFeed.map((item, index) => (
-                                        <Dialog key={`media-${index}`}>
+                                        <Dialog key={`media-desktop-${index}`}>
                                             <DialogTrigger asChild>
                                                 <div className="group relative aspect-square w-full overflow-hidden rounded-lg cursor-pointer">
                                                     <Image 
@@ -227,6 +229,32 @@ export function PublicationsTab({ player, isOwnProfile }: { player: User; isOwnP
                                         </Dialog>
                                     ))}
                                 </div>
+                                <div className="md:hidden -mx-4">
+                                     <Carousel opts={{ align: "start" }}>
+                                        <CarouselContent>
+                                            {mediaFeed.map((item, index) => (
+                                                <CarouselItem key={`media-mobile-${index}`} className="basis-1/2 xs:basis-1/3">
+                                                    <Dialog>
+                                                        <DialogTrigger asChild>
+                                                            <div className="group relative aspect-square w-full overflow-hidden rounded-lg cursor-pointer">
+                                                                <Image 
+                                                                    src={item.src} 
+                                                                    alt={item.title} 
+                                                                    fill
+                                                                    sizes="(max-width: 768px) 50vw, 33vw"
+                                                                    className="object-cover"
+                                                                    data-ai-hint={item.dataAiHint}
+                                                                />
+                                                            </div>
+                                                        </DialogTrigger>
+                                                        <MediaPostDialogContent media={item} author={player} />
+                                                    </Dialog>
+                                                </CarouselItem>
+                                            ))}
+                                        </CarouselContent>
+                                    </Carousel>
+                                </div>
+                                </>
                             ) : (
                                 <EmptyTab icon={Grid3x3} title="Фотографий пока нет" description="У игрока еще нет фотографий."/>
                             )}
