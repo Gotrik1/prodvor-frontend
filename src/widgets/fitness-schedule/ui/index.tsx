@@ -1,14 +1,14 @@
 
+
 'use client';
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Badge } from '@/shared/ui/badge';
 import { Button } from '@/shared/ui/button';
 import { Clock, Trash2, Trophy, Dumbbell } from 'lucide-react';
 import { useScheduleStore } from '@/entities/training/model/use-schedule-store';
 import type { ScheduledActivity, Activity } from '@/views/fitness-plan/ui/types';
 import { ActivityLibraryDialog } from '@/views/fitness-plan/ui/activity-library';
-import { registeredTeams } from '@/views/tournaments/public-page/ui/mock-data';
 import { cn } from '@/shared/lib/utils';
 import { Calendar } from '@/shared/ui/calendar';
 import { publicHolidays2025 } from '@/shared/lib/holidays';
@@ -53,45 +53,27 @@ const EventCard = ({ event, onRemove }: { event: ScheduledActivity; onRemove: (i
 
 
 export function FitnessSchedule({ showHeader = false }: { showHeader?: boolean }) {
-    const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
+    const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date('2025-10-01'));
     
     const { personalSchedule, removeScheduledActivity, addScheduledActivity } = useScheduleStore();
 
-    const getDayOfWeekString = (date: Date): string => {
-        return date.toLocaleDateString('ru-RU', { weekday: 'long' });
-    };
-
-    const upcomingMatch: ScheduledActivity = {
-        id: 'match-upcoming-1',
-        name: `${registeredTeams[0].name} vs ${registeredTeams[1].name}`,
-        type: 'match',
-        startDate: new Date().toISOString(),
-        time: '19:00',
-        repeat: 'none',
-        customInterval: 0,
-    };
-
     const allEventsByDate = useMemo(() => {
         const eventsMap = new Map<string, ScheduledActivity[]>();
-        Object.entries(personalSchedule).forEach(([day, activities]) => {
-            // This is a simplified logic. A real implementation would map day names to actual dates.
-            // For now, we'll just use this to find which dates have *any* events.
-             if (activities.length > 0) {
-                 // Mocking event dates for demonstration
-                 const mockDate = new Date();
-                 mockDate.setDate(mockDate.getDate() + (Object.keys(personalSchedule).indexOf(day) % 5));
-                 eventsMap.set(mockDate.toDateString(), activities);
-             }
+        Object.values(personalSchedule).flat().forEach(activity => {
+            const dateKey = new Date(activity.startDate).toDateString();
+            if (!eventsMap.has(dateKey)) {
+                eventsMap.set(dateKey, []);
+            }
+            eventsMap.get(dateKey)!.push(activity);
         });
-        // Add the mock match for today
-        eventsMap.set(new Date().toDateString(), [upcomingMatch]);
         return eventsMap;
-    }, [personalSchedule, upcomingMatch]);
+    }, [personalSchedule]);
 
     const eventsForSelectedDay = React.useMemo(() => {
         if (!selectedDate) return [];
         const dateKey = selectedDate.toDateString();
-        return allEventsByDate.get(dateKey) || [];
+        const events = allEventsByDate.get(dateKey) || [];
+        return events.sort((a,b) => a.time.localeCompare(b.time));
     }, [selectedDate, allEventsByDate]);
 
     const handleSelectActivity = (activity: Activity) => {
@@ -117,6 +99,7 @@ export function FitnessSchedule({ showHeader = false }: { showHeader?: boolean }
                     selected={selectedDate}
                     onSelect={setSelectedDate}
                     className="rounded-md border shadow-main-sm"
+                    month={new Date('2025-10-01')}
                     modifiers={{ 
                         weekend: { dayOfWeek: [0, 6] },
                         holiday: publicHolidays2025,
