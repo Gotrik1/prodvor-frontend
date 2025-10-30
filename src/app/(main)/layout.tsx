@@ -10,11 +10,10 @@ import { HomeHeader } from '@/widgets/home-header';
 import { HomeFooter } from '@/widgets/home-footer';
 import { MobileBottomNav } from '@/widgets/mobile-bottom-nav';
 import { cn } from '@/shared/lib/utils';
-import { useIsMobile } from '@/shared/hooks/use-mobile';
 
 const publicRoutesWithHeader = ['/about', '/auth', '/auth/register'];
 
-export default function MainLayout({ children }: { children: React.ReactNode }) {
+function MainLayoutContent({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   
   if (!pathname) {
@@ -65,6 +64,14 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
           </div>
         </div>
         <MobileBottomNav />
+    </SidebarProvider>
+  );
+}
+
+export default function MainLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <SidebarProvider>
+      <MainLayoutContent>{children}</MainLayoutContent>
     </SidebarProvider>
   );
 }
