@@ -39,7 +39,7 @@ export function PlayerPage({ user: profileUser }: { user: User }) {
 
 
     return (
-        <Card>
+        <Card className="md:shadow-main-sm shadow-none">
             <CardBody className="md:p-6 md:pb-6 p-0 pb-0">
                 {/* --- HEADER --- */}
                 <div className="mb-8 overflow-hidden">
@@ -104,7 +104,7 @@ export function PlayerPage({ user: profileUser }: { user: User }) {
                 </div>
 
                 {/* --- MAIN CONTENT GRID --- */}
-                <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 px-4 md:px-0 md:shadow-none pb-6 md:pb-0">
+                <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 px-4 md:px-0 pb-6 md:pb-0">
                     {/* Left side (2 columns wide) */}
                     <div className="xl:col-span-2 space-y-6">
                         <PlayerStatsOverviewTab />
