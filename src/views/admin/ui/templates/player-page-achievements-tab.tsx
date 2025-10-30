@@ -9,6 +9,7 @@ import { Award, Gem } from "lucide-react";
 import { Progress } from "@/shared/ui/progress";
 import type { User } from "@/mocks";
 import React, { useMemo } from "react";
+import { cn } from "@/shared/lib/utils";
 
 const StatCard = ({ title, value, icon: Icon }: { title: string, value: string | number, icon: React.ElementType }) => (
     <Card className="bg-muted/50 text-center">
@@ -55,7 +56,7 @@ export function AchievementsTab({ player }: { player: User }) {
     const levelProgress = ((progressPoints - pointsForCurrentLevel) / (pointsToNextLevel - pointsForCurrentLevel)) * 100;
 
     return (
-        <Card>
+        <Card className="md:shadow-main-sm shadow-none md:bg-card bg-transparent">
             <CardHeader>
                 <CardTitle className="flex items-center gap-2"><Award />Достижения</CardTitle>
                 <CardDescription>Список всех полученных достижений.</CardDescription>

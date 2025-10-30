@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/sha
 import { Activity, Dumbbell } from "lucide-react";
 import { playgrounds } from "@/mocks";
 import Link from "next/link";
+import { cn } from "@/shared/lib/utils";
 
 export const PlayerTrainingStats = () => (
      <Card>
@@ -42,7 +43,7 @@ export const PlayerTrainingStats = () => (
 )
 
 export const TrainingTab = () => (
-    <Card>
+    <Card className="md:shadow-main-sm shadow-none md:bg-card bg-transparent">
         <CardHeader>
             <CardTitle className="flex items-center gap-2"><Activity /> Тренировочный процесс</CardTitle>
             <CardDescription>Информация о тренировочной активности и предпочтениях игрока.</CardDescription>

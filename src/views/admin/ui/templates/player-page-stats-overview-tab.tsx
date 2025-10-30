@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
@@ -54,7 +55,7 @@ export const PlayerStatsOverviewTab = () => {
     const last5Form: ('W' | 'L' | 'D')[] = ['W', 'L', 'W', 'W', 'W'];
 
     return (
-        <Card>
+        <Card className="md:shadow-main-sm shadow-none md:bg-card bg-transparent">
             <CardHeader>
                 <CardTitle className="flex items-center gap-2"><BarChart3 className="h-5 w-5" />Статистика</CardTitle>
                 <CardDescription>Обзор ключевых показателей и карьерной статистики игрока.</CardDescription>

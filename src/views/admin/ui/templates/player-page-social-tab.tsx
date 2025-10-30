@@ -100,7 +100,7 @@ export function SocialTab({ user, isOwnProfile }: { user: User, isOwnProfile: bo
     }
 
     return (
-        <Card>
+        <Card className="md:shadow-main-sm shadow-none md:bg-card bg-transparent">
             <CardHeader>
                 <CardTitle>Социальные связи</CardTitle>
                 <CardDescription>Друзья, подписчики и подписки пользователя.</CardDescription>

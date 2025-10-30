@@ -175,7 +175,7 @@ export function PublicationsTab({ player, isOwnProfile }: { player: User; isOwnP
     }, []);
 
     return (
-            <Card>
+            <Card className="md:shadow-main-sm shadow-none md:bg-card bg-transparent">
                 <CardHeader>
                     <div className="flex justify-between items-center">
                         <CardTitle className="flex items-center gap-2"><Grid3x3 />Публикации</CardTitle>
