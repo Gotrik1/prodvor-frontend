@@ -2,7 +2,7 @@
 
 'use client';
 
-import { users, teams, tournaments } from "@/mocks";
+import { users, teams, tournaments, posts } from "@/mocks";
 import type { User } from "@/mocks/users";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { Badge } from "@/shared/ui/badge";
@@ -14,6 +14,8 @@ import Link from "next/link";
 import React, { useMemo } from "react";
 import { getUserDisciplines } from "@/entities/user/lib";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
+import { Dialog, DialogTrigger } from "@/shared/ui/dialog";
+import { MediaPostDialogContent } from "@/views/admin/ui/templates/player-page-publications-tab";
 
 const defaultFan: User | undefined = users.find(u => u.role === 'Болельщик');
 const favoriteTeams = teams.slice(0, 4);
@@ -118,18 +120,23 @@ export function FanPageTemplate({ user }: { user?: User }) {
                              <CardContent>
                                 <TabsContent value="media">
                                     <div className="grid grid-cols-2 gap-4">
-                                        {mockMedia.map((item, index) => (
-                                            <div key={index} className="relative aspect-video rounded-lg overflow-hidden group">
-                                                 <Image 
-                                                    src={item.src} 
-                                                    alt={item.title} 
-                                                    fill 
-                                                    className="object-cover group-hover:scale-105 transition-transform"
-                                                    data-ai-hint={item.dataAiHint}
-                                                />
-                                                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                                                <p className="absolute bottom-2 left-3 text-white font-semibold text-sm">{item.title}</p>
-                                            </div>
+                                        {posts.slice(0, 4).map((post, index) => (
+                                            <Dialog key={post.id}>
+                                                <DialogTrigger asChild>
+                                                    <div className="relative aspect-video rounded-lg overflow-hidden group cursor-pointer">
+                                                        <Image 
+                                                            src={mockMedia[index % mockMedia.length].src} 
+                                                            alt={post.content} 
+                                                            fill 
+                                                            className="object-cover group-hover:scale-105 transition-transform"
+                                                            data-ai-hint={mockMedia[index % mockMedia.length].dataAiHint}
+                                                        />
+                                                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                                                        <p className="absolute bottom-2 left-3 text-white font-semibold text-sm">{post.content}</p>
+                                                    </div>
+                                                </DialogTrigger>
+                                                <MediaPostDialogContent post={post} />
+                                            </Dialog>
                                         ))}
                                     </div>
                                 </TabsContent>
