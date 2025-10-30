@@ -6,13 +6,18 @@ import { persist, createJSONStorage } from 'zustand/middleware';
 import type { WorkoutPlan, ScheduledActivity } from '@/views/fitness-plan/ui/types';
 import { produce } from 'immer';
 
+// Helper function to create a date in October 2025
+const createOct2025Date = (day: number) => {
+    return new Date(2025, 9, day).toISOString(); // Month is 0-indexed, so 9 is October
+}
+
 const initialPersonalSchedule: Record<string, ScheduledActivity[]> = {
     'Понедельник': [
         {
             id: 'mock-team-training-1',
             name: 'Тренировка команды "Ночные Снайперы"',
             type: 'group',
-            startDate: new Date().toISOString(),
+            startDate: createOct2025Date(6), // A Monday in Oct 2025
             time: '19:00',
             repeat: 'weekly',
             customInterval: 0,
@@ -23,7 +28,7 @@ const initialPersonalSchedule: Record<string, ScheduledActivity[]> = {
             id: 'mock-personal-training-2',
             name: 'Персональная тренировка: Клиент "Valkyrie"',
             type: 'template',
-            startDate: new Date().toISOString(),
+            startDate: createOct2025Date(14), // A Tuesday in Oct 2025
             time: '18:00',
             repeat: 'weekly',
             customInterval: 0,
@@ -34,9 +39,18 @@ const initialPersonalSchedule: Record<string, ScheduledActivity[]> = {
             id: 'mock-personal-training-1',
             name: 'Силовая программа (День 1)',
             type: 'template',
-            startDate: new Date().toISOString(),
+            startDate: createOct2025Date(1), // A Wednesday in Oct 2025
             time: '20:00',
             repeat: 'weekly',
+            customInterval: 0,
+        },
+        {
+            id: 'mock-recovery-1',
+            name: 'Восстановление: Массаж',
+            type: 'recovery',
+            startDate: createOct2025Date(22), // A Wednesday in Oct 2025
+            time: '15:00',
+            repeat: 'none',
             customInterval: 0,
         }
     ], 
@@ -45,7 +59,7 @@ const initialPersonalSchedule: Record<string, ScheduledActivity[]> = {
             id: 'mock-team-training-2',
             name: 'Тренировка команды "Стальные Ястребы"',
             type: 'group',
-            startDate: new Date().toISOString(),
+            startDate: createOct2025Date(9), // A Thursday in Oct 2025
             time: '19:30',
             repeat: 'weekly',
             customInterval: 0,
@@ -56,9 +70,18 @@ const initialPersonalSchedule: Record<string, ScheduledActivity[]> = {
             id: 'mock-personal-training-3',
             name: 'Силовая программа (День 2)',
             type: 'template',
-            startDate: new Date().toISOString(),
+            startDate: createOct2025Date(3), // A Friday in Oct 2025
             time: '20:00',
             repeat: 'weekly',
+            customInterval: 0,
+        },
+        {
+            id: 'mock-match-1',
+            name: 'Матч: Ночные Снайперы vs Стальные Ястребы',
+            type: 'match',
+            startDate: createOct2025Date(17), // A Friday in Oct 2025
+            time: '20:00',
+            repeat: 'none',
             customInterval: 0,
         }
     ], 
