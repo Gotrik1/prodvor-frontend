@@ -10,6 +10,7 @@ export interface Post {
   timestamp: string;
   likes: number;
   comments: number;
+  shares: number;
 }
 
 export const posts: Post[] = [
@@ -19,24 +20,27 @@ export const posts: Post[] = [
     team: teams.find(t => t.name.startsWith('Ночные Снайперы')),
     content: 'Отличная игра сегодня! Всех с победой над "Стальными Ястребами"! Готовимся к следующему вызову.',
     timestamp: '2025-08-15T10:00:00.000Z',
-    likes: 25,
-    comments: 4,
+    likes: 125,
+    comments: 14,
+    shares: 5,
   },
   {
     id: 'post2',
     author: users.find(u => u.nickname === 'Valkyrie')!,
     content: 'Ищем вратаря в команду на постоянку. Пишите в ЛС.',
     timestamp: '2025-08-14T11:30:00.000Z',
-    likes: 12,
+    likes: 42,
     comments: 8,
+    shares: 2,
   },
    {
     id: 'post3',
     author: users.find(u => u.nickname === 'Destroyer')!,
     content: 'Кто-нибудь знает, где можно купить хорошие футбольные бутсы?',
     timestamp: '2025-08-13T14:00:00.000Z',
-    likes: 5,
-    comments: 1,
+    likes: 15,
+    comments: 3,
+    shares: 0,
   },
   {
     id: 'post4',
@@ -44,8 +48,9 @@ export const posts: Post[] = [
     team: teams.find(t => t.name.startsWith('Ночные Снайперы')),
     content: 'Тренировка завтра в 19:00 на нашей домашней площадке. Не опаздывать!',
     timestamp: '2025-08-13T09:00:00.000Z',
-    likes: 18,
+    likes: 31,
     comments: 2,
+    shares: 1,
   },
   {
     id: 'post5',
@@ -53,8 +58,9 @@ export const posts: Post[] = [
     team: teams.find(t => t.name.startsWith('Стальные Ястребы')),
     content: 'Провели отличную тренировку по тактике. "Ночные Снайперы", ждите нас!',
     timestamp: '2025-08-12T18:45:00.000Z',
-    likes: 31,
+    likes: 58,
     comments: 6,
+    shares: 3,
   },
   {
     id: 'post6',
@@ -63,5 +69,6 @@ export const posts: Post[] = [
     timestamp: '2025-08-11T20:00:00.000Z',
     likes: 7,
     comments: 3,
+    shares: 0,
   },
 ].filter(p => p.author); // Ensure no posts with undefined authors are included

@@ -7,7 +7,7 @@ import { users } from "@/mocks";
 import { CreatePost } from "@/widgets/dashboard-feed/ui/create-post";
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
 import { Button } from "@/shared/ui/button";
-import { Grid3x3, Heart, MessageSquare, PlusCircle, Send, Video, Bookmark, Tag, Image as ImageIcon } from "lucide-react";
+import { Grid3x3, Heart, MessageSquare, PlusCircle, Send, Video, Bookmark, Tag, Image as ImageIcon, Share2 } from "lucide-react";
 import Image from "next/image";
 import {
   Dialog,
@@ -27,6 +27,7 @@ import Link from "next/link";
 import { Separator } from "@/shared/ui/separator";
 import { Input } from "@/shared/ui/input";
 import { Carousel, CarouselContent, CarouselItem } from "@/shared/ui/carousel";
+import { useToast } from "@/shared/hooks/use-toast";
 
 const mockMedia = [
     { type: 'image', src: 'https://placehold.co/600x400.png', title: 'Фото с последней игры', dataAiHint: 'soccer game' },
@@ -67,6 +68,7 @@ const MediaPostDialogContent = ({ media, author }: { media: typeof mockMedia[0],
     const [isLiked, setIsLiked] = useState(false);
     const [newComment, setNewComment] = useState("");
     const currentUser = users[0];
+    const { toast } = useToast();
 
     useEffect(() => {
         setLikes(Math.floor(Math.random() * 500));
@@ -87,6 +89,14 @@ const MediaPostDialogContent = ({ media, author }: { media: typeof mockMedia[0],
         };
         setComments(prev => [newCommentObject, ...prev]);
         setNewComment("");
+    }
+
+    const handleShare = () => {
+        navigator.clipboard.writeText(window.location.href);
+        toast({
+            title: "Ссылка скопирована!",
+            description: "Вы можете поделиться этой публикацией.",
+        });
     }
     
     return (
@@ -124,15 +134,20 @@ const MediaPostDialogContent = ({ media, author }: { media: typeof mockMedia[0],
                     </div>
                     
                     <div className="p-4 border-t space-y-3 bg-muted/50">
-                        <div className="flex items-center gap-4 text-muted-foreground">
-                            <button className="flex items-center gap-1.5 group" onClick={handleLike}>
-                                <Heart className={cn("h-6 w-6 transition-all group-hover:scale-110", isLiked && "fill-red-500 text-red-500")} />
-                                <span className="font-semibold text-sm">{likes}</span>
-                            </button>
-                             <div className="flex items-center gap-1.5">
-                                <MessageSquare className="h-6 w-6"/>
-                                <span className="font-semibold text-sm">{comments.length}</span>
-                            </div>
+                        <div className="flex items-center justify-between text-muted-foreground">
+                             <div className="flex items-center gap-4">
+                                <button className="flex items-center gap-1.5 group" onClick={handleLike}>
+                                    <Heart className={cn("h-6 w-6 transition-all group-hover:scale-110", isLiked && "fill-red-500 text-red-500")} />
+                                    <span className="font-semibold text-sm">{likes}</span>
+                                </button>
+                                <div className="flex items-center gap-1.5">
+                                    <MessageSquare className="h-6 w-6"/>
+                                    <span className="font-semibold text-sm">{comments.length}</span>
+                                </div>
+                             </div>
+                              <Button variant="ghost" size="icon" onClick={handleShare}>
+                                <Share2 className="h-6 w-6" />
+                            </Button>
                         </div>
                          <Separator />
                          <form onSubmit={handleAddComment} className="w-full flex items-center gap-2">
