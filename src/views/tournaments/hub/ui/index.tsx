@@ -1,11 +1,10 @@
 
 
-
 import Link from "next/link";
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
 import { ArrowLeft, Users, Trophy } from "lucide-react";
-import { allTournaments, registeredTeams } from '@/views/tournaments/public-page/ui/mock-data';
+import { allTournaments, registeredTeams } from "@/mocks";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { TournamentBracket } from "@/views/tournaments/public-page/ui/tournament-bracket";
 import { TournamentSchedule } from "@/views/tournaments/public-page/ui/tournament-schedule";

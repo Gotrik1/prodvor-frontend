@@ -1,8 +1,7 @@
 
-import { users, teams, posts } from '@/mocks';
-import type { User, Team } from '@/mocks';
-import { allTournaments as tournaments } from '@/views/tournaments/public-page/ui/mock-data';
-import type { Tournament } from '@/views/tournaments/public-page/ui/mock-data';
+
+import { users, teams, posts, allTournaments as tournaments } from '@/mocks';
+import type { User, Team, Tournament } from '@/mocks';
 
 /**
  * Mock function to get a list of teams.

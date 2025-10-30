@@ -1,9 +1,10 @@
 
+
 'use client';
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/shared/ui/card';
-import { allTournaments as tournaments } from '@/views/tournaments/public-page/ui/mock-data';
-import type { Tournament } from '@/views/tournaments/public-page/ui/mock-data';
+import { allTournaments } from '@/mocks';
+import type { Tournament } from '@/mocks';
 import { Badge } from '@/shared/ui/badge';
 import { Progress } from '@/shared/ui/progress';
 import { DataTable } from './data-table';
@@ -27,7 +28,7 @@ export function TournamentsTab() {
     <Card>
         <CardHeader className="flex flex-row items-center justify-between">
             <div>
-                <CardTitle>Список турниров ({tournaments.length})</CardTitle>
+                <CardTitle>Список турниров ({allTournaments.length})</CardTitle>
                 <CardDescription>Полный список всех турниров на платформе.</CardDescription>
             </div>
             <Button asChild>
@@ -40,7 +41,7 @@ export function TournamentsTab() {
         <CardContent>
             <DataTable
                 headers={['ID', 'Название', 'Дисциплина', 'Участники', 'Статус', '']}
-                data={tournaments}
+                data={allTournaments}
                 renderRow={(t: Tournament) => (
                     <TableRow key={t.id}>
                         <TableCell className="font-mono text-xs">{t.id}</TableCell>

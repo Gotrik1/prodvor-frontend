@@ -1,11 +1,12 @@
 
+
 import { TournamentRegisterPage } from '@/views/tournaments/register';
 import type { Metadata } from 'next';
-import { allTournaments as mockTournaments } from '@/views/tournaments/public-page/ui/mock-data';
+import { allTournaments } from '@/mocks';
 
 
 export async function generateMetadata({ params }: { params: { tournamentId: string } }): Promise<Metadata> {
-  const tournament = mockTournaments.find(t => t.id === params.tournamentId);
+  const tournament = allTournaments.find(t => t.id === params.tournamentId);
   const title = tournament ? `Регистрация на ${tournament.name} | ProDvor` : 'Турнир не найден | ProDvor';
   const description = tournament ? `Подача заявки на участие в турнире ${tournament.name} по ${tournament.game}.` : 'Запрошенный турнир не найден.';
 
@@ -17,7 +18,7 @@ export async function generateMetadata({ params }: { params: { tournamentId: str
 
 
 export default function RegisterForTournamentPage({ params }: { params: { tournamentId: string } }) {
-  const tournament = mockTournaments.find(t => t.id === params.tournamentId);
+  const tournament = allTournaments.find(t => t.id === params.tournamentId);
   
   return <TournamentRegisterPage tournament={tournament} />;
 }

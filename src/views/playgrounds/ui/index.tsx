@@ -4,7 +4,7 @@
 
 import { useState, useMemo } from 'react';
 import { Button } from "@/shared/ui/button";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
 import { PlusCircle, Star, MapPin, List, Search } from "lucide-react";
 import Image from 'next/image';
 import Link from 'next/link';

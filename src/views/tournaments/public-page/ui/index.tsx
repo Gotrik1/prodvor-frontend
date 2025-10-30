@@ -1,11 +1,12 @@
 
+
 'use client';
 
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/shared/ui/button";import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
 import { Award, Calendar, GanttChartIcon, Users, ArrowRight } from "lucide-react";
-import { allTournaments, sponsors } from './mock-data';
+import { allTournaments, sponsors } from "@/mocks";
 import { Badge } from "@/shared/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { useState, useEffect } from 'react';

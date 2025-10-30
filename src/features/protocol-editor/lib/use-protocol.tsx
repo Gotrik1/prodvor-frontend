@@ -1,9 +1,28 @@
 
+
 'use client';
 
 import { create } from 'zustand';
-import { matchEvents as initialMatchEvents, MatchEvent } from '@/features/match-protocol/ui/match-timeline';
-import type { BracketMatch } from '@/views/tournaments/public-page/ui/mock-data';
+import type { BracketMatch, MatchEvent } from '@/mocks';
+
+export const eventTypes = {
+  GOAL: 'goal',
+  YELLOW_CARD: 'yellow_card',
+  RED_CARD: 'red_card',
+  SUBSTITUTION: 'substitution',
+} as const;
+
+export const matchEvents: MatchEvent[] = [
+  { id: 1, minute: 9, type: eventTypes.GOAL, team: 'team1', player: 'Денис Черышев' },
+  { id: 2, minute: 22, type: eventTypes.GOAL, team: 'team1', player: 'Артем Дзюба', assist: 'Александр Головин' },
+  { id: 3, minute: 38, type: eventTypes.RED_CARD, team: 'team2', player: 'Костакис Артиматас' },
+  { id: 4, minute: 55, type: eventTypes.SUBSTITUTION, team: 'team2', player: '', playerIn: 'Матия Шполярич', playerOut: 'Фотис Папулис' },
+  { id: 5, minute: 61, type: eventTypes.SUBSTITUTION, team: 'team1', player: '', playerIn: 'Федор Кудряшов', playerOut: 'Сергей Петров' },
+  { id: 6, minute: 68, type: eventTypes.YELLOW_CARD, team: 'team2', player: 'Иоаннис Коусулос' },
+  { id: 7, minute: 79, type: eventTypes.GOAL, team: 'team1', player: 'Александр Головин' },
+  { id: 8, minute: 89, type: eventTypes.GOAL, team: 'team1', player: 'Денис Черышев' },
+  { id: 10, minute: 91, type: eventTypes.GOAL, team: 'team1', player: 'Денис Черышев' },
+];
 
 const DEMO_MATCH_ID = 'rd1-match0';
 
@@ -31,7 +50,7 @@ export const useProtocol = create<ProtocolState>((set) => ({
             return { activeMatch: match };
         }
         // For demonstration, load mock events for the first match, otherwise start fresh
-        const events = match?.id === DEMO_MATCH_ID ? initialMatchEvents.sort((a, b) => a.minute - b.minute) : [];
+        const events = match?.id === DEMO_MATCH_ID ? matchEvents.sort((a, b) => a.minute - b.minute) : [];
         return { activeMatch: match, events };
     }),
     resetEvents: () => set({ events: [] }),

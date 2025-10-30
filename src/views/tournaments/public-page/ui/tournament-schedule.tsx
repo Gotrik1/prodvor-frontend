@@ -1,12 +1,12 @@
 
+
 'use client';
 
-import { registeredTeams } from './mock-data';
+import { registeredTeams, allTournaments } from '@/mocks';
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { Calendar, MapPin } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { allTournaments } from './mock-data';
 import type { Playground } from '@/mocks';
 import Link from 'next/link';
 

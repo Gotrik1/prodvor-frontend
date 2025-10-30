@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { Button } from "@/shared/ui/button";
@@ -14,8 +15,8 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/shared/ui/popover";
 import { cn } from "@/shared/lib/utils";
 import { Calendar as CalendarIcon } from 'lucide-react';
 import { Calendar as CalendarComponent } from "@/shared/ui/calendar";
-import { requirements as initialRequirements } from '@/views/tournaments/public-page/ui/mock-data';
-import type { Tournament } from '@/views/tournaments/public-page/ui/mock-data';
+import { requirements } from '@/mocks';
+import type { Tournament } from '@/mocks';
 import { useToast } from "@/shared/hooks/use-toast";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/select";
 import { useTournamentCrmContext } from "../../lib/TournamentCrmContext";
@@ -183,7 +184,7 @@ export function SettingsTab() {
                             <Popover>
                                 <PopoverTrigger asChild>
                                 <Button variant={"outline"} className={cn("w-full justify-start text-left font-normal", !regEndDate && "text-muted-foreground")}>
-                                    <CalendarIcon className="mr-2 h-4 w-4" />
+                                    <CalendarIcon className="mr-2 h-4 w-4" /> 
                                     {regEndDate ? regEndDate.toLocaleDateString() : <span>Конец регистрации</span>}
                                 </Button>
                                 </PopoverTrigger>

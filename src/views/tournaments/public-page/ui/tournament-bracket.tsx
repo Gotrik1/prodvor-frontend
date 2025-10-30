@@ -1,21 +1,17 @@
 
+
 'use client';
 
-import { registeredTeams } from './mock-data';
+import { registeredTeams } from '@/mocks';
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { Trophy } from 'lucide-react';
 import React, { useMemo } from 'react';
 import Link from 'next/link';
 import { Skeleton } from '@/shared/ui/skeleton';
+import type { BracketMatch, Match } from '@/mocks';
 
-interface Match {
-    id: string;
-    team1: (typeof registeredTeams)[0];
-    team2: (typeof registeredTeams)[0];
-    score1: number;
-    score2: number;
-}
+
 
 const generateInitialMatches = (): Match[] => {
     const createSeededRandom = (seed: number) => () => {

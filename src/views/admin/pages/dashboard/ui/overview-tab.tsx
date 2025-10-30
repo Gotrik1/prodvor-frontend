@@ -7,8 +7,7 @@ import { Button } from '@/shared/ui/button';
 import { Eye } from 'lucide-react';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/shared/ui/chart";
 import { Bar as RechartsBar, BarChart as RechartsBarChart, XAxis, YAxis } from "recharts";
-import { users, teams, allSports } from '@/mocks';
-import { allTournaments as tournaments } from '@/views/tournaments/public-page/ui/mock-data';
+import { users, teams, allSports, allTournaments } from '@/mocks';
 import Link from 'next/link';
 import { TeamStatCard } from '@/entities/team/ui/stat-card';
 
@@ -48,7 +47,7 @@ export function OverviewTab() {
             />
              <TeamStatCard 
                 title="Текущие турниры" 
-                value={tournaments.filter(t => t.status === 'ИДЕТ').length.toString()}
+                value={allTournaments.filter(t => t.status === 'ИДЕТ').length.toString()}
                 description="+2 новых на этой неделе"
             />
         </div>

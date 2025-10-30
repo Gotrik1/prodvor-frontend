@@ -2,7 +2,7 @@
 
 'use client';
 
-import { allTournaments } from '@/views/tournaments/public-page/ui/mock-data';
+import { allTournaments } from '@/mocks';
 import { users, teams } from '@/mocks';
 import Link from 'next/link';
 import { Button } from '@/shared/ui/button';

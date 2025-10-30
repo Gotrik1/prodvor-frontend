@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { Button } from "@/shared/ui/button";
@@ -7,7 +8,7 @@ import { Bot, PlayCircle, StopCircle, Ban, RefreshCw, ExternalLink } from "lucid
 import Image from "next/image";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/select";
 import React from "react";
-import type { Tournament } from '@/views/tournaments/public-page/ui/mock-data';
+import type { Tournament } from '@/mocks';
 import Link from "next/link";
 import { useTournamentCrmContext } from "../../lib/TournamentCrmContext";
 

@@ -1,10 +1,11 @@
 
+
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/shared/ui/card";
 import { GanttChart, Bell, CheckSquare } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
-import { allTournaments, Tournament } from "../public-page/ui/mock-data";
+import { allTournaments, Tournament } from "@/mocks";
 import { Badge } from "@/shared/ui/badge";
 import { Progress } from "@/shared/ui/progress";
 import { MyTournamentsEmptyState } from "./my-tournaments-empty-state";

@@ -5,8 +5,6 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs';
 import { BarChart, Heart, User as UserIcon, Users2, MapPin, Trophy, BarChart3 } from 'lucide-react';
 import { OverviewTab } from './overview-tab';
-
-
 import { UsersTab } from './users-tab';
 import { TeamsTab } from './teams-tab';
 import { SponsorsTab } from './sponsors-tab';
