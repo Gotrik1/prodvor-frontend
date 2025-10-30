@@ -109,13 +109,17 @@ export function PlayerPage({ user: profileUser }: { user: User }) {
                     <div className="xl:col-span-2 space-y-6">
                         <PlayerStatsOverviewTab />
                         <PublicationsTab player={profileUser} isOwnProfile={isOwnProfile} />
-                        <TrainingTab />
+                        <div className="hidden md:block">
+                            <TrainingTab />
+                        </div>
                     </div>
 
                     {/* Right side (1 column wide) */}
                     <div className="space-y-6">
                         <AchievementsTab player={profileUser} />
-                        <MyTeamWidget user={profileUser} />
+                        <div className="hidden md:block">
+                            <MyTeamWidget user={profileUser} />
+                        </div>
                         <SocialTab user={profileUser} isOwnProfile={isOwnProfile} />
                     </div>
                 </div>
