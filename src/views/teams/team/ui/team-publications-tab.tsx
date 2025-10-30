@@ -2,7 +2,7 @@
 
 'use client';
 
-import type { Post, Team, User } from "@/mocks";
+import type { Team, User } from "@/mocks";
 import { users } from "@/mocks";
 import { CreatePost } from "@/widgets/dashboard-feed/ui/create-post";
 import { Card } from "@/shared/ui/card";
@@ -19,7 +19,7 @@ import {
 } from "@/shared/ui/dialog";
 import { useEffect, useState } from "react";
 import { usePostStore } from "@/widgets/dashboard-feed/model/post-store";
-import { MediaPostDialogContent } from "@/views/admin/ui/templates/player-page-publications-tab";
+import { MediaPostDialog } from "@/widgets/media-post-dialog";
 
 // Mock the current user for CreatePost component
 const currentUser = users[0];
@@ -78,7 +78,7 @@ export function TeamPublicationsTab({ team }: { team: Team }) {
                                     />
                                 </div>
                             </DialogTrigger>
-                            <MediaPostDialogContent post={post} />
+                            <MediaPostDialog post={post} />
                         </Dialog>
                     ))}
                 </div>

@@ -1,0 +1,1 @@
+export { PublicationsFeed } from './ui';

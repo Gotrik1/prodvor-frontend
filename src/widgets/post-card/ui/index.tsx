@@ -13,9 +13,9 @@ import type { Post } from '@/mocks/posts';
 import { Button } from "@/shared/ui/button";
 import { Heart, MessageSquare, Share2 } from "lucide-react";
 import { cn } from "@/shared/lib/utils";
-import { usePostStore } from "../model/post-store";
+import { usePostStore } from "@/widgets/dashboard-feed/model/post-store";
 import { Dialog, DialogContent, DialogTrigger } from "@/shared/ui/dialog";
-import { MediaPostDialogContent } from "@/views/admin/ui/templates/player-page-publications-tab";
+import { MediaPostDialog } from "@/widgets/media-post-dialog";
 
 export function PostCard({ post }: { post: Post }) {
   const [timeAgo, setTimeAgo] = useState('');
@@ -77,7 +77,7 @@ export function PostCard({ post }: { post: Post }) {
                         <span>{post.comments.length}</span>
                     </Button>
                 </DialogTrigger>
-                <MediaPostDialogContent post={post} />
+                <MediaPostDialog post={post} />
             </Dialog>
             <Button variant="ghost" size="sm" className="flex items-center gap-2">
                 <Share2 className="h-5 w-5"/>

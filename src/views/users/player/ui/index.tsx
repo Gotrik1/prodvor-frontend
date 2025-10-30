@@ -11,17 +11,17 @@ import { useUserStore } from "@/widgets/dashboard-header/model/user-store";
 import { TrainingTab } from "@/views/admin/ui/templates/player-page-training-tab";
 import { AchievementsTab } from "@/views/admin/ui/templates/player-page-achievements-tab";
 import { PlayerStatsOverviewTab } from "@/views/admin/ui/templates/player-page-stats-overview-tab";
-import { PublicationsTab } from "@/views/admin/ui/templates/player-page-publications-tab";
 import Image from "next/image";
 import { SocialTab } from "@/views/admin/ui/templates/player-page-social-tab";
 import React, { useMemo, useState, useEffect } from "react";
 import { MyTeamWidget } from "@/widgets/dashboard-widgets/ui/my-team-widget";
-import { Card, CardBody, CardHeader, CardTitle, CardDescription, CardContent } from "@/shared/ui/card";
+import { Card, CardBody } from "@/shared/ui/card";
 import { Badge } from "@/shared/ui/badge";
 import { getUserDisciplines } from "@/entities/user/lib";
 import { Popover, PopoverContent, PopoverTrigger } from "@/shared/ui/popover";
 import { useIsMobile } from "@/shared/hooks/use-mobile";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/shared/ui/sheet";
+import { PublicationsFeed } from "@/widgets/publications-feed";
 
 const getRankForElo = (elo: number) => {
     return ranks.find(rank => elo >= rank.eloMin && elo <= rank.eloMax);
@@ -147,7 +147,7 @@ export function PlayerPage({ user: profileUser }: { user: User }) {
                         <div className="xl:hidden">
                             <SocialTab user={profileUser} isOwnProfile={isOwnProfile} />
                         </div>
-                        <PublicationsTab player={profileUser} isOwnProfile={isOwnProfile} />
+                        <PublicationsFeed player={profileUser} isOwnProfile={isOwnProfile} />
                          <div className="hidden md:block">
                              <TrainingTab />
                         </div>

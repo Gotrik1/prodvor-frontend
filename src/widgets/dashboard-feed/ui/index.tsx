@@ -4,8 +4,8 @@
 
 import { useUserStore } from "@/widgets/dashboard-header/model/user-store";
 import { CreatePost } from './create-post';
-import { PostCard } from './post-card';
 import { usePostStore } from "../model/post-store";
+import { PostCard } from "@/widgets/post-card";
 
 export function DashboardFeed() {
   const { user: currentUser } = useUserStore();
