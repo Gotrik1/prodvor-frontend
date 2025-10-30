@@ -11,7 +11,7 @@ import { Button } from "@/shared/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/shared/ui/table";
 import { useMemo, useState } from "react";
 import { getUserDisciplines } from "@/entities/user/lib";
-import { StatCard } from "@/entities/team/ui/stat-card";
+import { StatCard } from "@/shared/ui/stat-card";
 import Link from "next/link";
 import Image from "next/image";
 import { CreatePlanDialog } from "@/features/fitness-plan/ui/create-plan-dialog";

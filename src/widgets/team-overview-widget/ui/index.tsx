@@ -1,10 +1,11 @@
 
+
 'use client';
 
 import type { Team, User } from "@/mocks";
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
 import { Crown, Shield, Star, Trophy, TrendingUp } from "lucide-react";
-import { StatCard } from "@/entities/team/ui/stat-card";
+import { StatCard } from "@/shared/ui/stat-card";
 
 const FormBadge = ({ result }: { result: 'W' | 'L' | 'D' }) => {
     const baseClasses = "flex items-center justify-center w-8 h-8 rounded-md font-bold";
