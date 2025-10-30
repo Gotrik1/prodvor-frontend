@@ -110,7 +110,7 @@ export function FitnessSchedule({ showHeader = false }: { showHeader?: boolean }
                     mode="single"
                     selected={selectedDate}
                     onSelect={setSelectedDate}
-                    className="rounded-md border"
+                    className="rounded-md border shadow-main-sm"
                 />
             </div>
             <div className="space-y-3 min-h-[350px]">
