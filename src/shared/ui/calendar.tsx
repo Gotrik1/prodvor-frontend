@@ -49,7 +49,7 @@ function Calendar({
                 <SelectValue>{selected?.props?.children}</SelectValue>
               </SelectTrigger>
               <SelectContent position="popper">
-                <div className="max-h-60 overflow-y-auto">
+                <div className="max-h-60 overflow-y-auto custom-scrollbar">
                     {options.map((option, id: number) => (
                     <SelectItem
                         key={`${option.props.value}-${id}`}

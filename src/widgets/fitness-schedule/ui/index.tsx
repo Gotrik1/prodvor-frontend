@@ -4,7 +4,7 @@
 import React, { useState, useEffect } from 'react';
 import { Badge } from '@/shared/ui/badge';
 import { Button } from '@/shared/ui/button';
-import { Clock, Trash2, Calendar, Trophy, Dumbbell } from 'lucide-react';
+import { Clock, Trash2, Calendar as CalendarIcon, Trophy, Dumbbell } from 'lucide-react';
 import { useScheduleStore } from '@/entities/training/model/use-schedule-store';
 import type { ScheduledActivity, Activity } from '@/views/fitness-plan/ui/types';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
@@ -12,6 +12,7 @@ import { ActivityLibraryDialog } from '@/views/fitness-plan/ui/activity-library'
 import { registeredTeams } from '@/views/tournaments/public-page/ui/mock-data';
 import { cn } from '@/shared/lib/utils';
 import { Skeleton } from '@/shared/ui/skeleton';
+import { Calendar } from '@/shared/ui/calendar';
 
 const personalActivityColors: Record<Activity['type'] | 'match', string> = {
     'template': 'bg-amber-500/10 text-amber-300 border-amber-500/20',
@@ -53,18 +54,13 @@ const EventCard = ({ event, onRemove }: { event: ScheduledActivity; onRemove: (i
 
 
 export function FitnessSchedule({ showHeader = false }: { showHeader?: boolean }) {
-    const daysOfWeek = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота', 'Воскресенье'];
-    const shortDays = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
-    
-    const [selectedDay, setSelectedDay] = useState<string | null>(null);
+    const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
     
     const { personalSchedule, removeScheduledActivity, addScheduledActivity } = useScheduleStore();
 
-    useEffect(() => {
-        // This effect runs only on the client, after initial render, preventing hydration mismatch.
-        const todayIndex = (new Date().getDay() + 6) % 7;
-        setSelectedDay(daysOfWeek[todayIndex]);
-    }, []); // Empty dependency array ensures this runs only once on mount
+    const getDayOfWeekString = (date: Date): string => {
+        return date.toLocaleDateString('ru-RU', { weekday: 'long' });
+    };
 
     const upcomingMatch: ScheduledActivity = {
         id: 'match-upcoming-1',
@@ -76,14 +72,24 @@ export function FitnessSchedule({ showHeader = false }: { showHeader?: boolean }
         customInterval: 0,
     };
 
-    const eventsForSelectedDay = selectedDay ? personalSchedule[selectedDay] || [] : [];
-    
-    if (selectedDay === daysOfWeek[(new Date().getDay() + 6) % 7]) {
-        if (!eventsForSelectedDay.find(e => e.id === 'match-upcoming-1')) {
-            eventsForSelectedDay.push(upcomingMatch);
+    const eventsForSelectedDay = React.useMemo(() => {
+        if (!selectedDate) return [];
+        const dayString = getDayOfWeekString(selectedDate);
+        const dayKey = dayString.charAt(0).toUpperCase() + dayString.slice(1);
+        const events = personalSchedule[dayKey] || [];
+        
+        // Add mock match for today for demonstration
+        const today = new Date();
+        if (selectedDate.getDate() === today.getDate() && 
+            selectedDate.getMonth() === today.getMonth() && 
+            selectedDate.getFullYear() === today.getFullYear()) {
+            if (!events.find(e => e.id === upcomingMatch.id)) {
+                 return [...events, upcomingMatch].sort((a,b) => a.time.localeCompare(b.time));
+            }
         }
-    }
-    eventsForSelectedDay.sort((a,b) => a.time.localeCompare(b.time));
+        
+        return events.sort((a,b) => a.time.localeCompare(b.time));
+    }, [selectedDate, personalSchedule, upcomingMatch]);
 
     const handleSelectActivity = (activity: Activity) => {
         const newActivity: ScheduledActivity = {
@@ -101,36 +107,33 @@ export function FitnessSchedule({ showHeader = false }: { showHeader?: boolean }
         <Card>
             {showHeader && (
                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2"><Calendar /> Мой календарь</CardTitle>
+                    <CardTitle className="flex items-center gap-2"><CalendarIcon /> Мой календарь</CardTitle>
                     <CardDescription>Ваши запланированные активности.</CardDescription>
                 </CardHeader>
             )}
-            <CardContent className={showHeader ? "" : "pt-6"}>
-                <div className="grid grid-cols-7 gap-1 mb-4">
-                    {shortDays.map((day, index) => (
-                        <Button
-                            key={day}
-                            variant={selectedDay === daysOfWeek[index] ? 'default' : 'ghost'}
-                            size="sm"
-                            onClick={() => setSelectedDay(daysOfWeek[index])}
-                            disabled={!selectedDay}
-                        >
-                            {day}
-                        </Button>
-                    ))}
+            <CardContent className={cn("grid grid-cols-1 md:grid-cols-2 gap-6", showHeader ? "" : "pt-6")}>
+                 <div className="flex justify-center">
+                    <Calendar
+                        mode="single"
+                        selected={selectedDate}
+                        onSelect={setSelectedDate}
+                        className="rounded-md border"
+                    />
                 </div>
-                <div className="space-y-3 min-h-[150px]">
-                    {!selectedDay ? (
-                        <>
-                            <Skeleton className="h-24 w-full" />
-                            <Skeleton className="h-12 w-full" />
-                        </>
-                    ) : eventsForSelectedDay.length > 0 ? (
-                        eventsForSelectedDay.map(event => <EventCard key={event.id} event={event} onRemove={removeScheduledActivity} />)
+                <div className="space-y-3 min-h-[350px]">
+                    <h3 className="text-lg font-semibold text-center md:text-left">
+                        {selectedDate ? selectedDate.toLocaleDateString('ru-RU', { weekday: 'long', day: 'numeric', month: 'long' }) : 'Выберите дату'}
+                    </h3>
+                    {selectedDate ? (
+                        eventsForSelectedDay.length > 0 ? (
+                            eventsForSelectedDay.map(event => <EventCard key={event.id} event={event} onRemove={removeScheduledActivity} />)
+                        ) : (
+                             <div className="text-center text-muted-foreground pt-10">
+                                <p className="text-sm">На этот день активностей нет.</p>
+                            </div>
+                        )
                     ) : (
-                         <div className="text-center text-muted-foreground pt-10">
-                            <p className="text-sm">На этот день активностей нет.</p>
-                        </div>
+                        <Skeleton className="h-48 w-full" />
                     )}
                     {!showHeader && <ActivityLibraryDialog onSelectActivity={handleSelectActivity}/>}
                 </div>
