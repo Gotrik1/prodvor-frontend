@@ -15,7 +15,7 @@ export function TrainingPage() {
                      <CardDescription>Календарь ваших личных и групповых тренировок, а также предстоящих матчей.</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <FitnessSchedule />
+                    <FitnessSchedule showHeader={true} />
                 </CardContent>
             </Card>
 
