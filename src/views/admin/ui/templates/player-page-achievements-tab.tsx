@@ -61,7 +61,7 @@ export function AchievementsTab({ player }: { player: User }) {
                 <CardTitle className="flex items-center gap-2"><Award />Достижения</CardTitle>
                 <CardDescription>Список всех полученных достижений.</CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="md:p-6">
                 <div className="space-y-4 mb-4">
                     <div className="grid grid-cols-2 gap-4">
                        <Card className="bg-muted/50 text-center">

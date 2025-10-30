@@ -105,7 +105,7 @@ export function SocialTab({ user, isOwnProfile }: { user: User, isOwnProfile: bo
                 <CardTitle>Социальные связи</CardTitle>
                 <CardDescription>Друзья, подписчики и подписки пользователя.</CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="md:p-6">
                 <Tabs defaultValue="friends" className="w-full">
                     <TabsList className={cn("grid w-full mb-4", isOwnProfile ? "grid-cols-4" : "grid-cols-3")}>
                         {tabs.map(tab => (

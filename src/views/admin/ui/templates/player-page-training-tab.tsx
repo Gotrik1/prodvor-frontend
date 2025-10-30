@@ -48,7 +48,7 @@ export const TrainingTab = () => (
             <CardTitle className="flex items-center gap-2"><Activity /> Тренировочный процесс</CardTitle>
             <CardDescription>Информация о тренировочной активности и предпочтениях игрока.</CardDescription>
         </CardHeader>
-        <CardContent className="space-y-6">
+        <CardContent className="md:p-6 space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <Card className="bg-muted/50">
                     <CardHeader>

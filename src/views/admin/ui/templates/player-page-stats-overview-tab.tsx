@@ -60,7 +60,7 @@ export const PlayerStatsOverviewTab = () => {
                 <CardTitle className="flex items-center gap-2"><BarChart3 className="h-5 w-5" />Статистика</CardTitle>
                 <CardDescription>Обзор ключевых показателей и карьерной статистики игрока.</CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="md:p-6">
                 <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
                     <div>
                         <h3 className="text-base font-semibold mb-2 hidden md:block">Навыки и прогресс ELO</h3>

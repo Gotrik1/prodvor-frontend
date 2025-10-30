@@ -39,8 +39,8 @@ export function PlayerPage({ user: profileUser }: { user: User }) {
 
 
     return (
-        <Card className="md:shadow-main-sm shadow-none">
-            <CardBody className="md:p-6 md:pb-6 p-0 pb-0">
+        <Card className="shadow-none md:shadow-main-sm">
+            <CardBody className="p-0 pb-0 md:p-6 md:pb-6">
                 {/* --- HEADER --- */}
                 <div className="mb-8 overflow-hidden">
                     <div className="relative h-48 md:h-64 w-full bg-muted">
