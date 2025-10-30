@@ -1,0 +1,1 @@
+export { TrainingInfoWidget } from './ui';

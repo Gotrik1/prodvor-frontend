@@ -8,18 +8,18 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { MapPin, Cake, User as UserIcon, MessageSquare, UserPlus, Gamepad2 } from "lucide-react";
 import { Button } from "@/shared/ui/button";
 import { useUserStore } from "@/widgets/dashboard-header/model/user-store";
-import { TrainingTab } from "@/views/admin/ui/templates/player-page-training-tab";
-import { AchievementsTab } from "@/views/admin/ui/templates/player-page-achievements-tab";
-import { PlayerStatsOverviewTab } from "@/views/admin/ui/templates/player-page-stats-overview-tab";
+import { TrainingInfoWidget } from "@/widgets/training-info-widget";
+import { AchievementsWidget } from "@/widgets/achievements-widget";
+import { PlayerStatsOverviewWidget } from "@/widgets/player-stats-overview-widget";
 import Image from "next/image";
-import { SocialTab } from "@/views/admin/ui/templates/player-page-social-tab";
+import { SocialConnectionsWidget } from "@/widgets/social-connections-widget";
 import React, { useMemo, useState, useEffect } from "react";
 import { MyTeamWidget } from "@/widgets/dashboard-widgets/ui/my-team-widget";
 import { Card, CardBody } from "@/shared/ui/card";
 import { Badge } from "@/shared/ui/badge";
 import { getUserDisciplines } from "@/entities/user/lib";
 import { Popover, PopoverContent, PopoverTrigger } from "@/shared/ui/popover";
-import { useIsMobile } from "@/shared/hooks/use-mobile";
+import { useIsMobile } from "@/shared/hooks/use-is-mobile";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/shared/ui/sheet";
 import { PublicationsFeed } from "@/widgets/publications-feed";
 
@@ -143,13 +143,13 @@ export function PlayerPage({ user: profileUser }: { user: User }) {
                 <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 md:px-0 pb-6 md:pb-0">
                     {/* Left side (2 columns wide) */}
                     <div className="xl:col-span-2 space-y-6">
-                        <PlayerStatsOverviewTab />
+                        <PlayerStatsOverviewWidget />
                         <div className="xl:hidden">
-                            <SocialTab user={profileUser} isOwnProfile={isOwnProfile} />
+                            <SocialConnectionsWidget user={profileUser} isOwnProfile={isOwnProfile} />
                         </div>
                         <PublicationsFeed player={profileUser} isOwnProfile={isOwnProfile} />
                          <div className="hidden md:block">
-                             <TrainingTab />
+                             <TrainingInfoWidget />
                         </div>
                         <div className="hidden md:block">
                             <MyTeamWidget user={profileUser} />
@@ -159,16 +159,16 @@ export function PlayerPage({ user: profileUser }: { user: User }) {
                     {/* Right side (1 column wide) */}
                     <div className="space-y-6">
                         <div className="hidden md:block">
-                            <AchievementsTab player={profileUser} />
+                            <AchievementsWidget player={profileUser} />
                         </div>
                          <div className="md:hidden">
-                             <TrainingTab />
+                             <TrainingInfoWidget />
                         </div>
                         <div className="md:hidden">
                              <MyTeamWidget user={profileUser} />
                         </div>
                          <div className="hidden xl:block">
-                            <SocialTab user={profileUser} isOwnProfile={isOwnProfile} />
+                            <SocialConnectionsWidget user={profileUser} isOwnProfile={isOwnProfile} />
                         </div>
                     </div>
                 </div>

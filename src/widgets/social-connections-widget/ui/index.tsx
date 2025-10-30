@@ -5,7 +5,7 @@
 import { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
-import type { User, Team } from '@/mocks';
+import type { User } from '@/mocks';
 import { users, teams } from '@/mocks';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import Link from 'next/link';
@@ -117,7 +117,7 @@ const FriendRequests = () => {
     );
 }
 
-export function SocialTab({ user, isOwnProfile }: { user: User, isOwnProfile: boolean }) {
+export function SocialConnectionsWidget({ user, isOwnProfile }: { user: User, isOwnProfile: boolean }) {
     
     const tabs = [
         { value: 'friends', icon: UsersIcon, label: `Друзья (${user.friends.length})` },

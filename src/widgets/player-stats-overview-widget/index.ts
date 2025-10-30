@@ -1,0 +1,1 @@
+export { PlayerStatsOverviewWidget } from './ui';

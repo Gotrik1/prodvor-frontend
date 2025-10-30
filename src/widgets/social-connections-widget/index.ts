@@ -1,0 +1,1 @@
+export { SocialConnectionsWidget } from './ui';
