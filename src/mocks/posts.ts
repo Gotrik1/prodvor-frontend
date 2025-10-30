@@ -28,16 +28,22 @@ export const posts: Post[] = [
     content: 'Отличная игра сегодня! Всех с победой над "Стальными Ястребами"! Готовимся к следующему вызову.',
     timestamp: '2025-08-15T10:00:00.000Z',
     likes: 125,
-    comments: [],
+    comments: [
+      { id: 'c1-1', author: users.find(u => u.nickname === 'Wolf')!, text: 'Спасибо за игру! Был достойный матч.' },
+      { id: 'c1-2', author: users.find(u => u.nickname === 'Valkyrie')!, text: 'Дааа! Мы лучшие!' },
+    ],
     shares: 5,
   },
   {
     id: 'post2',
     author: users.find(u => u.nickname === 'Valkyrie')!,
+    team: teams.find(t => t.name.startsWith('Ночные Снайперы')),
     content: 'Ищем вратаря в команду на постоянку. Пишите в ЛС.',
     timestamp: '2025-08-14T11:30:00.000Z',
     likes: 42,
-    comments: [],
+    comments: [
+        { id: 'c2-1', author: users.find(u => u.nickname === 'Bunny')!, text: 'Я могу попробовать, если возьмете)' },
+    ],
     shares: 2,
   },
    {

@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import type { Post, Team, User } from "@/mocks";
