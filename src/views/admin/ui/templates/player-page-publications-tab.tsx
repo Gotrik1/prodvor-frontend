@@ -183,7 +183,7 @@ export function PublicationsTab({ player, isOwnProfile }: { player: User; isOwnP
                         {isOwnProfile && (
                              <Dialog>
                                 <DialogTrigger asChild>
-                                <Button size="sm" variant="outline" className="md:w-auto w-full">
+                                <Button size="sm" variant="outline" className="md:w-auto w-full hidden md:flex">
                                     <PlusCircle className="mr-2 h-4 w-4"/>
                                     Новый пост
                                 </Button>
@@ -199,9 +199,9 @@ export function PublicationsTab({ player, isOwnProfile }: { player: User; isOwnP
                         )}
                     </div>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="md:p-6 p-0">
                      <Tabs defaultValue="photos" className="w-full">
-                        <TabsList className="grid w-full grid-cols-4">
+                        <TabsList className="grid w-full grid-cols-4 px-4 md:px-0">
                             <TabsTrigger value="photos"><ImageIcon className="md:mr-2 h-4 w-4"/><span className="hidden md:inline">Фото</span></TabsTrigger>
                             <TabsTrigger value="videos"><Video className="md:mr-2 h-4 w-4"/><span className="hidden md:inline">Видео</span></TabsTrigger>
                             <TabsTrigger value="saved"><Bookmark className="md:mr-2 h-4 w-4"/><span className="hidden md:inline">Сохраненное</span></TabsTrigger>
@@ -229,9 +229,9 @@ export function PublicationsTab({ player, isOwnProfile }: { player: User; isOwnP
                                         </Dialog>
                                     ))}
                                 </div>
-                                <div className="md:hidden -mx-4">
+                                <div className="md:hidden -mx-0">
                                      <Carousel opts={{ align: "start", loop: true }}>
-                                        <CarouselContent className="-ml-1">
+                                        <CarouselContent className="-ml-1 pl-4">
                                             {mediaFeed.map((item, index) => (
                                                 <CarouselItem key={`media-mobile-${index}`} className="pl-1 basis-1/3">
                                                     <Dialog>
