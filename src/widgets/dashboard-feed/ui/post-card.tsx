@@ -12,11 +12,14 @@ import type { Post } from '@/mocks/posts';
 import { Button } from "@/shared/ui/button";
 import { Heart, MessageSquare, Share2 } from "lucide-react";
 import { cn } from "@/shared/lib/utils";
+import { usePostStore } from "../model/post-store";
 
 export function PostCard({ post }: { post: Post }) {
   const [timeAgo, setTimeAgo] = useState('');
+  const { likePost } = usePostStore();
+
+  // Local state for UI responsiveness, actual count comes from the post prop
   const [isLiked, setIsLiked] = useState(false);
-  const [likeCount, setLikeCount] = useState(post.likes);
 
   useEffect(() => {
     const postDate = new Date(post.timestamp);
@@ -24,8 +27,9 @@ export function PostCard({ post }: { post: Post }) {
   }, [post.timestamp]);
 
   const handleLike = () => {
-    setIsLiked(!isLiked);
-    setLikeCount(prev => isLiked ? prev - 1 : prev + 1);
+    const newIsLiked = !isLiked;
+    setIsLiked(newIsLiked);
+    likePost(post.id, newIsLiked);
   };
 
   return (
@@ -61,7 +65,7 @@ export function PostCard({ post }: { post: Post }) {
        <CardFooter className="flex justify-between items-center text-muted-foreground pt-4 border-t">
             <Button variant="ghost" size="sm" className="flex items-center gap-2" onClick={handleLike}>
                 <Heart className={cn("h-5 w-5", isLiked && "fill-red-500 text-red-500")} />
-                <span>{likeCount}</span>
+                <span>{post.likes}</span>
             </Button>
             <Button variant="ghost" size="sm" className="flex items-center gap-2">
                 <MessageSquare className="h-5 w-5"/>
