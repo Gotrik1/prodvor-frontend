@@ -176,7 +176,7 @@ export function PublicationsTab({ player, isOwnProfile }: { player: User; isOwnP
     }, []);
 
     return (
-            <Card className="md:shadow-main-sm shadow-none md:bg-card bg-transparent">
+            <Card className="shadow-none md:shadow-main-sm md:bg-card bg-transparent">
                 <CardHeader className="hidden md:flex">
                     <div className="flex justify-between items-center">
                         <CardTitle className="hidden md:flex items-center gap-2"><Grid3x3 />Публикации</CardTitle>
@@ -231,9 +231,9 @@ export function PublicationsTab({ player, isOwnProfile }: { player: User; isOwnP
                                 </div>
                                 <div className="md:hidden">
                                      <Carousel opts={{ align: "start", loop: true }}>
-                                        <CarouselContent className="pl-4">
+                                        <CarouselContent>
                                             {mediaFeed.map((item, index) => (
-                                                <CarouselItem key={`media-mobile-${index}`} className="pl-1 basis-1/3">
+                                                <CarouselItem key={`media-mobile-${index}`} className="pl-4 basis-1/3">
                                                     <Dialog>
                                                         <DialogTrigger asChild>
                                                             <div className="group relative aspect-square w-full overflow-hidden rounded-lg cursor-pointer">
