@@ -18,7 +18,17 @@ const initialPersonalSchedule: Record<string, ScheduledActivity[]> = {
             customInterval: 0,
         }
     ], 
-    'Вторник': [], 
+    'Вторник': [
+        {
+            id: 'mock-personal-training-2',
+            name: 'Персональная тренировка: Клиент "Valkyrie"',
+            type: 'template',
+            startDate: new Date().toISOString(),
+            time: '18:00',
+            repeat: 'weekly',
+            customInterval: 0,
+        }
+    ], 
     'Среда': [
          {
             id: 'mock-personal-training-1',
@@ -30,8 +40,28 @@ const initialPersonalSchedule: Record<string, ScheduledActivity[]> = {
             customInterval: 0,
         }
     ], 
-    'Четверг': [], 
-    'Пятница': [], 
+    'Четверг': [
+        {
+            id: 'mock-team-training-2',
+            name: 'Тренировка команды "Стальные Ястребы"',
+            type: 'group',
+            startDate: new Date().toISOString(),
+            time: '19:30',
+            repeat: 'weekly',
+            customInterval: 0,
+        }
+    ], 
+    'Пятница': [
+        {
+            id: 'mock-personal-training-3',
+            name: 'Силовая программа (День 2)',
+            type: 'template',
+            startDate: new Date().toISOString(),
+            time: '20:00',
+            repeat: 'weekly',
+            customInterval: 0,
+        }
+    ], 
     'Суббота': [], 
     'Воскресенье': []
 };
