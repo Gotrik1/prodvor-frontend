@@ -23,7 +23,7 @@ export const PlayerTrainingStats = () => (
                 </Card>
             </div>
              <div>
-                <h3 className="text-sm font-semibold mb-2">Предпочитаемые места</h3>
+                <h3 className="text-sm font-semibold mb-2">Площадки</h3>
                  <div className="space-y-2">
                     {playgrounds.slice(0, 1).map(p => (
                         <Link href={`/playgrounds/${p.id}`} key={p.id} className="block p-2 rounded-md border bg-card hover:border-primary transition-colors">
@@ -70,7 +70,7 @@ export const TrainingTab = () => (
                 </Card>
             </div>
              <div>
-                <h3 className="text-lg font-semibold mb-2">Предпочитаемые места</h3>
+                <h3 className="text-lg font-semibold mb-2">Площадки</h3>
                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {playgrounds.slice(0, 2).map(p => (
                         <Link href={`/playgrounds/${p.id}`} key={p.id} className="block p-3 rounded-md border bg-card hover:border-primary transition-colors">
