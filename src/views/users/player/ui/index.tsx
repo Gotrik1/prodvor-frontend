@@ -16,14 +16,63 @@ import Image from "next/image";
 import { SocialTab } from "@/views/admin/ui/templates/player-page-social-tab";
 import React, { useMemo, useState, useEffect } from "react";
 import { MyTeamWidget } from "@/widgets/dashboard-widgets/ui/my-team-widget";
-import { Card, CardBody } from "@/shared/ui/card";
+import { Card, CardBody, CardHeader, CardTitle, CardDescription, CardContent } from "@/shared/ui/card";
 import { Badge } from "@/shared/ui/badge";
 import { getUserDisciplines } from "@/entities/user/lib";
 import { Popover, PopoverContent, PopoverTrigger } from "@/shared/ui/popover";
+import { useIsMobile } from "@/shared/hooks/use-mobile";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/shared/ui/sheet";
 
 const getRankForElo = (elo: number) => {
     return ranks.find(rank => elo >= rank.eloMin && elo <= rank.eloMax);
 };
+
+const MoreDisciplines = ({ disciplines }: { disciplines: string[] }) => {
+    const isMobile = useIsMobile();
+    const [isClient, setIsClient] = useState(false);
+
+    useEffect(() => {
+        setIsClient(true);
+    }, []);
+
+    if (!isClient || disciplines.length === 0) return null;
+
+    const trigger = (
+        <Badge variant="outline" className="cursor-pointer hover:bg-muted">
+            +{disciplines.length}
+        </Badge>
+    );
+
+    const content = (
+        <div className="flex flex-wrap gap-1">
+            {disciplines.map(discipline => (
+                <Badge key={discipline} variant="secondary">{discipline}</Badge>
+            ))}
+        </div>
+    );
+
+    if (isMobile) {
+        return (
+            <Sheet>
+                <SheetTrigger asChild>{trigger}</SheetTrigger>
+                <SheetContent side="bottom" className="rounded-t-lg">
+                    <SheetHeader>
+                        <SheetTitle>Дополнительные дисциплины</SheetTitle>
+                    </SheetHeader>
+                    <div className="p-4">{content}</div>
+                </SheetContent>
+            </Sheet>
+        );
+    }
+
+    return (
+        <Popover>
+            <PopoverTrigger asChild>{trigger}</PopoverTrigger>
+            <PopoverContent className="w-auto p-2">{content}</PopoverContent>
+        </Popover>
+    );
+};
+
 
 export function PlayerPage({ user: profileUser }: { user: User }) {
     const { user: currentUser } = useUserStore();
@@ -56,7 +105,7 @@ export function PlayerPage({ user: profileUser }: { user: User }) {
                     </div>
                     <div className="bg-card px-0 md:px-6 pb-4">
                         <div className="flex flex-col sm:flex-row sm:items-end gap-4">
-                            <div className="-mt-16 sm:-mt-20 shrink-0 w-full flex justify-center sm:w-auto sm:justify-start">
+                             <div className="w-full flex justify-center sm:w-auto sm:justify-start -mt-16 sm:-mt-20 shrink-0">
                                 <Avatar className="h-32 w-32 border-4 border-card">
                                     <AvatarImage src={profileUser.avatarUrl} alt={profileUser.nickname} />
                                     <AvatarFallback>{profileUser.firstName.charAt(0)}{profileUser.lastName.charAt(0)}</AvatarFallback>
@@ -75,21 +124,8 @@ export function PlayerPage({ user: profileUser }: { user: User }) {
                                     {userDisciplines.slice(0, 3).map(discipline => (
                                         <Badge key={discipline} variant="secondary">{discipline}</Badge>
                                     ))}
-                                    {isClient && userDisciplines.length > 3 && (
-                                        <Popover>
-                                            <PopoverTrigger asChild>
-                                                <Badge variant="outline" className="cursor-pointer hover:bg-muted">
-                                                    +{userDisciplines.length - 3}
-                                                </Badge>
-                                            </PopoverTrigger>
-                                            <PopoverContent className="w-auto p-2">
-                                                <div className="flex flex-wrap gap-1">
-                                                    {userDisciplines.slice(3).map(discipline => (
-                                                        <Badge key={discipline} variant="secondary">{discipline}</Badge>
-                                                    ))}
-                                                </div>
-                                            </PopoverContent>
-                                        </Popover>
+                                    {userDisciplines.length > 3 && (
+                                        <MoreDisciplines disciplines={userDisciplines.slice(3)} />
                                     )}
                                 </div>
                             </div>
@@ -112,14 +148,11 @@ export function PlayerPage({ user: profileUser }: { user: User }) {
                             <SocialTab user={profileUser} isOwnProfile={isOwnProfile} />
                         </div>
                         <PublicationsTab player={profileUser} isOwnProfile={isOwnProfile} />
-                        <div className="md:hidden">
-                            <AchievementsTab player={profileUser} />
-                        </div>
                          <div className="hidden md:block">
                              <TrainingTab />
                         </div>
-                         <div className="hidden md:block">
-                             <MyTeamWidget user={profileUser} />
+                        <div className="hidden md:block">
+                            <MyTeamWidget user={profileUser} />
                         </div>
                     </div>
 
@@ -128,11 +161,11 @@ export function PlayerPage({ user: profileUser }: { user: User }) {
                         <div className="hidden md:block">
                             <AchievementsTab player={profileUser} />
                         </div>
-                         <div className="hidden md:block">
+                         <div className="md:hidden">
                              <TrainingTab />
                         </div>
-                        <div className="hidden md:block">
-                            <MyTeamWidget user={profileUser} />
+                        <div className="md:hidden">
+                             <MyTeamWidget user={profileUser} />
                         </div>
                          <div className="hidden xl:block">
                             <SocialTab user={profileUser} isOwnProfile={isOwnProfile} />
