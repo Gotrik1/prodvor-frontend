@@ -6,7 +6,7 @@ import { users, teams, User } from "@/mocks";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { Badge } from "@/shared/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
-import { Briefcase, Users as UsersIcon, Dumbbell, Shield, Trophy, Gamepad2, UserPlus } from "lucide-react";
+import { Briefcase, Users as UsersIcon, Dumbbell, Shield, Trophy, Gamepad2, UserPlus, Calendar } from "lucide-react";
 import { Button } from "@/shared/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/shared/ui/table";
 import { useMemo, useState } from "react";
@@ -15,6 +15,7 @@ import { StatCard } from "@/entities/team/ui/stat-card";
 import Link from "next/link";
 import Image from "next/image";
 import { CreatePlanDialog } from "@/features/fitness-plan/ui/create-plan-dialog";
+import { FitnessSchedule } from "@/widgets/fitness-schedule";
 
 const defaultCoach = users.find(u => u.id === 'staff2');
 
@@ -94,6 +95,16 @@ export function CoachPageTemplate({ user }: { user?: User }) {
                 <StatCard title="Всего побед (сезон)" value={<span className="text-green-400">78</span>} icon={Trophy} />
                 <StatCard title="Лицензия" value={coach.coachProfile.licenseId} icon={Shield} />
             </div>
+
+            <Card>
+                <CardHeader>
+                    <CardTitle className="flex items-center gap-2"><Calendar />Календарь тренировок</CardTitle>
+                    <CardDescription>Расписание занятий для всех ваших клиентов и команд.</CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <FitnessSchedule />
+                </CardContent>
+            </Card>
             
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                  <Card>
