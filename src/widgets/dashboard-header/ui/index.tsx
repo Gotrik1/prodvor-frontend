@@ -12,6 +12,7 @@ import {
   LogOut,
   Gem,
   Warehouse,
+  ArrowLeft
 } from 'lucide-react';
 import { Button } from '@/shared/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
@@ -78,7 +79,14 @@ export function DashboardHeader() {
           <GlobalSearch open={open} setOpen={setOpen} />
         </div>
         
-        {!isAdminPage && (
+        {isAdminPage ? (
+             <Button asChild variant="outline">
+                <Link href="/dashboard">
+                    <ArrowLeft className="mr-2 h-4 w-4" />
+                    Вернуться на платформу
+                </Link>
+            </Button>
+        ) : (
           <React.Fragment>
             <TooltipProvider>
               <Tooltip>
