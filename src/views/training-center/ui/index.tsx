@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 import { Calendar, Dumbbell } from "lucide-react";
 import { TrainingPage } from "@/views/training";
-import { FitnessPlanPage } from "@/views/fitness-plan";
+import { FitnessPlanPage } from "@/features/fitness-plan/ui/fitness-plan-page";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shared/ui/select';
 import { useIsMobile } from '@/hooks/use-mobile';
 
