@@ -1,9 +1,10 @@
 
+
 'use client';
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
 import { ArrowRight } from "lucide-react";
-import type { PlanType } from './types'; // Unused imports User and Users
+import type { PlanType } from '@/views/fitness-plan/ui/types'; // Unused imports User and Users
 
 const planTypes: PlanType[] = [
     { value: 'full-body', label: 'Фулл-бади', days: 1, description: 'Проработка всех групп мышц за одну тренировку.' },

@@ -8,7 +8,7 @@ import { Input } from '@/shared/ui/input';
 import { Label } from '@/shared/ui/label';
 import { PlusCircle, Trash2, Save, ArrowLeft } from 'lucide-react';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/shared/ui/accordion';
-import type { WorkoutPlan, PlanType, Exercise, PlanDay } from './types';
+import type { WorkoutPlan, PlanType, Exercise, PlanDay } from '@/views/fitness-plan/ui/types';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shared/ui/select';
 import { splitDayTemplates } from './split-template-selector';
 

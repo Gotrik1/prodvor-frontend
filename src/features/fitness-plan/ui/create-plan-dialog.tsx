@@ -1,11 +1,12 @@
 
+
 'use client';
 
 import { useState } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/shared/ui/dialog';
-import { PlanTypeSelector } from '@/views/fitness-plan/ui/plan-type-selector';
-import { SplitTemplateSelector } from '@/views/fitness-plan/ui/split-template-selector';
-import { NewPlanForm } from '@/views/fitness-plan/ui/new-plan-form';
+import { PlanTypeSelector } from './plan-type-selector';
+import { SplitTemplateSelector } from './split-template-selector';
+import { NewPlanForm } from './new-plan-form';
 import type { PlanType, WorkoutPlan, Exercise } from '@/views/fitness-plan/ui/types';
 import type { User } from '@/mocks';
 import { useToast } from '@/shared/hooks/use-toast';
@@ -121,4 +122,3 @@ export function CreatePlanDialog({ isOpen, setIsOpen, client, coach }: CreatePla
         </Dialog>
     );
 }
-

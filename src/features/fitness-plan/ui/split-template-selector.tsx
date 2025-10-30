@@ -1,8 +1,9 @@
 
+
 'use client';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
-import type { PlanType, Exercise } from './types';
+import type { PlanType, Exercise } from '@/views/fitness-plan/ui/types';
 import { Button } from '@/shared/ui/button';
 
 export const splitDayTemplates: Record<string, {label: string, value: string}[]> = {

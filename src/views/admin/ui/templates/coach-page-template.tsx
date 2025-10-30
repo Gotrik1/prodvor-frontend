@@ -14,7 +14,7 @@ import { getUserDisciplines } from "@/entities/user/lib";
 import { StatCard } from "@/entities/team/ui/stat-card";
 import Link from "next/link";
 import Image from "next/image";
-import { CreatePlanDialog } from "./create-plan-dialog";
+import { CreatePlanDialog } from "@/features/fitness-plan/ui/create-plan-dialog";
 
 const defaultCoach = users.find(u => u.id === 'staff2');
 

@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import React, { useState } from 'react';
@@ -7,13 +8,13 @@ import { PlusCircle, Calendar as CalendarIcon, PlayCircle } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/shared/ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/shared/ui/dialog';
 import { useToast } from '@/shared/hooks/use-toast';
-import { PlanTypeSelector } from './plan-type-selector';
-import { NewPlanForm } from './new-plan-form';
-import type { WorkoutPlan, PlanType, Exercise } from './types';
+import { PlanTypeSelector } from '@/features/fitness-plan/ui/plan-type-selector';
+import { NewPlanForm } from '@/features/fitness-plan/ui/new-plan-form';
+import type { WorkoutPlan, PlanType, Exercise } from '../ui/types';
 import { usePlanStore } from '@/entities/training/model/use-plan-store';
 import { useScheduleStore } from '@/entities/training/model/use-schedule-store';
 import { useRouter } from 'next/navigation';
-import { SplitTemplateSelector } from './split-template-selector';
+import { SplitTemplateSelector } from '@/features/fitness-plan/ui/split-template-selector';
 import { ScheduleActivityDialog } from './schedule-activity-dialog';
 import { useSessionStore } from '@/entities/training/model/use-session-store';
 import { useUserStore } from '@/widgets/dashboard-header/model/user-store';
