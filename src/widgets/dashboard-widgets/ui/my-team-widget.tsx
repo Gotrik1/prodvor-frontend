@@ -7,10 +7,19 @@ import { Users, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { teams } from '@/mocks';
-import type { User } from "@/mocks";
+import type { User, Team } from "@/mocks";
+import React, { useState, useEffect } from "react";
+import { Skeleton } from "@/shared/ui/skeleton";
 
 export function MyTeamWidget({ user }: { user: User }) {
-  const myTeams = teams.filter(team => team.members.includes(user.id));
+  const [myTeams, setMyTeams] = useState<Team[]>([]);
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+    const userTeams = teams.filter(team => team.members.includes(user.id));
+    setMyTeams(userTeams);
+  }, [user]);
 
   return (
     <Card className="bg-card">
@@ -18,7 +27,12 @@ export function MyTeamWidget({ user }: { user: User }) {
         <CardTitle className="flex items-center gap-2"><Users /> Мои команды</CardTitle>
       </CardHeader>
       <CardContent>
-        {myTeams.length > 0 ? (
+        {!isClient ? (
+             <div className="space-y-3">
+                <div className="flex items-center gap-3"><Skeleton className="h-10 w-10 rounded-md" /><div className="space-y-2"><Skeleton className="h-4 w-24" /><Skeleton className="h-3 w-16" /></div></div>
+                <div className="flex items-center gap-3"><Skeleton className="h-10 w-10 rounded-md" /><div className="space-y-2"><Skeleton className="h-4 w-20" /><Skeleton className="h-3 w-12" /></div></div>
+            </div>
+        ) : myTeams.length > 0 ? (
             <div className="space-y-3">
                 {myTeams.map(team => (
                     <Link href={`/teams/${team.id}`} key={team.id} className="block group">
