@@ -108,7 +108,13 @@ export function PlayerPage({ user: profileUser }: { user: User }) {
                     {/* Left side (2 columns wide) */}
                     <div className="xl:col-span-2 space-y-6">
                         <PlayerStatsOverviewTab />
+                         <div className="xl:hidden">
+                            <SocialTab user={profileUser} isOwnProfile={isOwnProfile} />
+                        </div>
                         <PublicationsTab player={profileUser} isOwnProfile={isOwnProfile} />
+                        <div className="md:hidden">
+                            <AchievementsTab player={profileUser} />
+                        </div>
                         <div className="hidden md:block">
                             <TrainingTab />
                         </div>
@@ -116,11 +122,15 @@ export function PlayerPage({ user: profileUser }: { user: User }) {
 
                     {/* Right side (1 column wide) */}
                     <div className="space-y-6">
-                        <AchievementsTab player={profileUser} />
+                        <div className="hidden md:block">
+                            <AchievementsTab player={profileUser} />
+                        </div>
                         <div className="hidden md:block">
                             <MyTeamWidget user={profileUser} />
                         </div>
-                        <SocialTab user={profileUser} isOwnProfile={isOwnProfile} />
+                         <div className="hidden xl:block">
+                            <SocialTab user={profileUser} isOwnProfile={isOwnProfile} />
+                        </div>
                     </div>
                 </div>
             </CardBody>
