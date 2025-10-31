@@ -33,7 +33,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/shared/ui/tooltip';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { GlobalSearch } from './global-search';
 import { Logo } from '@/views/auth/ui';
 import { usePathname } from 'next/navigation';
@@ -43,6 +43,12 @@ export function DashboardHeader() {
   const { user, isHydrated } = useUserStore();
   const [open, setOpen] = React.useState(false);
   const pathname = usePathname();
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
 
   React.useEffect(() => {
     const down = (e: KeyboardEvent) => {
@@ -56,6 +62,149 @@ export function DashboardHeader() {
   }, []);
 
   const isAdminPage = pathname?.startsWith('/admin');
+
+  const renderUserSpecificContent = () => {
+    if (!isClient || !isHydrated) {
+      return (
+        <>
+          <Skeleton className="h-10 w-20 hidden sm:flex" />
+          <Skeleton className="h-10 w-10" />
+          <Skeleton className="h-10 w-10" />
+        </>
+      )
+    }
+
+    if (user) {
+        return (
+            <React.Fragment>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant="outline"
+                      className="hidden sm:flex items-center gap-2"
+                      asChild
+                    >
+                      <Link href="/store">
+                        <Gem className="h-4 w-4 text-primary" />
+                        <span className="font-bold">0</span>
+                      </Link>
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Ваш баланс PD Coins</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            
+            <Button variant="ghost" size="icon" asChild>
+              <Link href="/store">
+                <ShoppingCart />
+              </Link>
+            </Button>
+            <div className="relative">
+                <Button variant="ghost" size="icon" className="relative">
+                    <Bell className="animate-ringing" />
+                </Button>
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1/2 h-1/2 pointer-events-none">
+                    {/* Left arcs */}
+                    <span className="absolute block w-full h-full rounded-full border-2 border-transparent border-l-destructive opacity-50 animate-wave-out" style={{ animationDelay: '0s' }}></span>
+                    <span className="absolute block w-full h-full rounded-full border-2 border-transparent border-l-destructive opacity-50 animate-wave-out" style={{ animationDelay: '0.2s' }}></span>
+                    <span className="absolute block w-full h-full rounded-full border-2 border-transparent border-l-destructive opacity-50 animate-wave-out" style={{ animationDelay: '0.4s' }}></span>
+                    {/* Right arcs */}
+                    <span className="absolute block w-full h-full rounded-full border-2 border-transparent border-r-destructive opacity-50 animate-wave-out" style={{ animationDelay: '0s' }}></span>
+                    <span className="absolute block w-full h-full rounded-full border-2 border-transparent border-r-destructive opacity-50 animate-wave-out" style={{ animationDelay: '0.2s' }}></span>
+                    <span className="absolute block w-full h-full rounded-full border-2 border-transparent border-r-destructive opacity-50 animate-wave-out" style={{ animationDelay: '0.4s' }}></span>
+                </div>
+            </div>
+            </React.Fragment>
+        );
+    }
+
+    return null; // Don't render anything if not hydrated and no user
+  };
+
+  const renderProfileMenu = () => {
+    if (!isClient || !isHydrated) {
+       return (
+            <Skeleton className="h-10 w-10 rounded-full" />
+       );
+    }
+    
+    const profileLink = user ? `/users/${user.id}` : '/dashboard';
+
+    return (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant="ghost"
+              className="relative h-10 w-10 rounded-full"
+            >
+              <Avatar>
+                {user ? (
+                  <>
+                    <AvatarImage src={user.avatarUrl} />
+                    <AvatarFallback>{user.nickname?.charAt(0) || '?'}</AvatarFallback>
+                  </>
+                ) : (
+                  <User/>
+                )}
+              </Avatar>
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="w-56" align="end" forceMount>
+            <DropdownMenuLabel className="font-normal">
+              <div className="flex flex-col space-y-1">
+                {user ? (
+                  <>
+                    <p className="text-sm font-medium leading-none">{user.nickname}</p>
+                    <p className="text-xs leading-none text-muted-foreground">{user.email}</p>
+                  </>
+                ) : (
+                  <p className="text-sm font-medium leading-none">Гость</p>
+                )}
+              </div>
+            </DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem asChild disabled={!user}>
+              <Link href={profileLink}>
+                <User className="mr-2 h-4 w-4" />
+                <span>Профиль</span>
+              </Link>
+            </DropdownMenuItem>
+             <DropdownMenuItem asChild>
+              <Link href="/inventory">
+                <Warehouse className="mr-2 h-4 w-4" />
+                <span>Инвентарь</span>
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link href="/settings">
+                <Settings className="mr-2 h-4 w-4" />
+                <span>Настройки</span>
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem disabled={!user}>
+              <Share2 className="mr-2 h-4 w-4" />
+              <span>Поделиться профилем</span>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link href="/support">
+                <LifeBuoy className="mr-2 h-4 w-4" />
+                <span>Помощь</span>
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem asChild>
+              <Link href="/auth">
+                <LogOut className="mr-2 h-4 w-4" />
+                <span>{user ? 'Выход' : 'Вход'}</span>
+              </Link>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+    );
+  }
 
   return (
     <header className="sticky top-0 z-40 flex h-16 items-center justify-between border-b border-layout-border bg-card p-4">
@@ -87,126 +236,10 @@ export function DashboardHeader() {
                     Вернуться на платформу
                 </Link>
             </Button>
-        ) : (
-          <React.Fragment>
-            {isHydrated && user ? (
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button
-                      variant="outline"
-                      className="hidden sm:flex items-center gap-2"
-                      asChild
-                    >
-                      <Link href="/store">
-                        <Gem className="h-4 w-4 text-primary" />
-                        <span className="font-bold">0</span>
-                      </Link>
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>Ваш баланс PD Coins</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-            ) : <Skeleton className="h-10 w-20 hidden sm:flex" />}
-
-            <Button variant="ghost" size="icon" asChild>
-              <Link href="/store">
-                <ShoppingCart />
-              </Link>
-            </Button>
-            <div className="relative">
-                <Button variant="ghost" size="icon" className="relative">
-                    <Bell className="animate-ringing" />
-                </Button>
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1/2 h-1/2 pointer-events-none">
-                    {/* Left arcs */}
-                    <span className="absolute block w-full h-full rounded-full border-2 border-transparent border-l-destructive opacity-50 animate-wave-out" style={{ animationDelay: '0s' }}></span>
-                    <span className="absolute block w-full h-full rounded-full border-2 border-transparent border-l-destructive opacity-50 animate-wave-out" style={{ animationDelay: '0.2s' }}></span>
-                    <span className="absolute block w-full h-full rounded-full border-2 border-transparent border-l-destructive opacity-50 animate-wave-out" style={{ animationDelay: '0.4s' }}></span>
-                    {/* Right arcs */}
-                    <span className="absolute block w-full h-full rounded-full border-2 border-transparent border-r-destructive opacity-50 animate-wave-out" style={{ animationDelay: '0s' }}></span>
-                    <span className="absolute block w-full h-full rounded-full border-2 border-transparent border-r-destructive opacity-50 animate-wave-out" style={{ animationDelay: '0.2s' }}></span>
-                    <span className="absolute block w-full h-full rounded-full border-2 border-transparent border-r-destructive opacity-50 animate-wave-out" style={{ animationDelay: '0.4s' }}></span>
-                </div>
-            </div>
-          </React.Fragment>
-        )}
+        ) : renderUserSpecificContent()}
 
         <ThemeToggle />
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              variant="ghost"
-              className="relative h-10 w-10 rounded-full"
-            >
-              <Avatar>
-                {isHydrated && user ? (
-                  <>
-                    <AvatarImage src={user.avatarUrl} />
-                    <AvatarFallback>{user.nickname?.charAt(0) || '?'}</AvatarFallback>
-                  </>
-                ) : (
-                  <Skeleton className="h-full w-full rounded-full" />
-                )}
-              </Avatar>
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent className="w-56" align="end" forceMount>
-            <DropdownMenuLabel className="font-normal">
-              <div className="flex flex-col space-y-1">
-                {isHydrated && user ? (
-                  <>
-                    <p className="text-sm font-medium leading-none">{user.nickname}</p>
-                    <p className="text-xs leading-none text-muted-foreground">{user.email}</p>
-                  </>
-                ) : (
-                  <>
-                    <Skeleton className="h-4 w-24 mb-1" />
-                    <Skeleton className="h-3 w-32" />
-                  </>
-                )}
-              </div>
-            </DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem asChild disabled={!isHydrated || !user}>
-              <Link href={isHydrated && user ? `/users/${user.id}` : '#'}>
-                <User className="mr-2 h-4 w-4" />
-                <span>Профиль</span>
-              </Link>
-            </DropdownMenuItem>
-             <DropdownMenuItem asChild>
-              <Link href="/inventory">
-                <Warehouse className="mr-2 h-4 w-4" />
-                <span>Инвентарь</span>
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-              <Link href="/settings">
-                <Settings className="mr-2 h-4 w-4" />
-                <span>Настройки</span>
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem disabled={!isHydrated || !user}>
-              <Share2 className="mr-2 h-4 w-4" />
-              <span>Поделиться профилем</span>
-            </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-              <Link href="/support">
-                <LifeBuoy className="mr-2 h-4 w-4" />
-                <span>Помощь</span>
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem asChild>
-              <Link href="/auth">
-                <LogOut className="mr-2 h-4 w-4" />
-                <span>Выход</span>
-              </Link>
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        {renderProfileMenu()}
       </div>
     </header>
   );
