@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import { useState } from 'react';
@@ -14,9 +13,6 @@ import { Check, UserPlus, X, Users as UsersIcon, Rss, Heart } from 'lucide-react
 import { Badge } from '@/shared/ui/badge';
 import { cn } from '@/shared/lib/utils';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/shared/ui/tooltip';
-
-// Mock friend requests for the current user
-const mockFriendRequests = users.slice(10, 13);
 
 const UserList = ({ userIds, emptyText }: { userIds: string[], emptyText: string }) => {
     const userList = users.filter(u => userIds.includes(u.id));
@@ -155,7 +151,7 @@ export function SocialConnectionsWidget({ user, isOwnProfile }: { user: User, is
                             <TabsTrigger key={tab.value} value={tab.value}>
                                 <div className="relative">
                                     <tab.icon className="h-5 w-5" />
-                                    {tab.value === 'requests' && isOwnProfile && mockFriendRequests.length > 0 && (
+                                    {tab.value === 'requests' && isOwnProfile && 0 > 0 && (
                                         <Badge variant="destructive" className="absolute -top-2 -right-2 h-4 w-4 p-0 justify-center text-xs">
                                             {0}
                                         </Badge>

@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import { User } from "@/mocks";
@@ -12,7 +11,7 @@ import { AchievementsWidget } from "@/widgets/achievements-widget";
 import { PlayerStatsOverviewWidget } from "@/widgets/player-stats-overview-widget";
 import { SocialConnectionsWidget } from "@/widgets/social-connections-widget";
 import React, { useMemo } from "react";
-import { MyTeamWidget } from "@/widgets/dashboard-widgets/ui/my-team-widget";
+import { MyTeamWidget } from "@/widgets/my-team-widget";
 import { Card, CardBody } from "@/shared/ui/card";
 import { Badge } from "@/shared/ui/badge";
 import { getUserDisciplines } from "@/entities/user/lib";
