@@ -15,9 +15,13 @@ import { PlayerPageTemplate } from '@/views/admin/ui/templates/player-page-templ
 
 
 async function getUser(userId: string): Promise<User | undefined> {
+    const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+    if (!API_BASE_URL) {
+        console.error("[ Server ] NEXT_PUBLIC_API_BASE_URL is not defined.");
+        return undefined;
+    }
     try {
-        // The base URL is now handled by the proxy, so we use a relative path.
-        const response = await fetch(`/api/v1/users/${userId}`);
+        const response = await fetch(`${API_BASE_URL}/api/v1/users/${userId}`);
         if (!response.ok) {
             console.error(`[ Server ] Failed to fetch user: ${response.status}`);
             return undefined;

@@ -5,8 +5,13 @@ import MainLayout from '@/app/(main)/layout';
 import type { Team } from '@/mocks';
 
 async function getTeam(teamId: string): Promise<Team | undefined> {
+    const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+    if (!API_BASE_URL) {
+        console.error("[ Server ] NEXT_PUBLIC_API_BASE_URL is not defined.");
+        return undefined;
+    }
     try {
-        const response = await fetch(`/api/v1/teams/${teamId}`);
+        const response = await fetch(`${API_BASE_URL}/api/v1/teams/${teamId}`);
         if (!response.ok) return undefined;
         return await response.json();
     } catch (error) {

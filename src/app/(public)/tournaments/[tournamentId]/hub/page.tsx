@@ -4,8 +4,10 @@ import type { Metadata } from 'next';
 import type { Tournament } from '@/mocks';
 
 async function getTournament(tournamentId: string): Promise<Tournament | undefined> {
+    const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+    if (!API_BASE_URL) return undefined;
     try {
-        const response = await fetch(`/api/v1/tournaments/${tournamentId}`);
+        const response = await fetch(`${API_BASE_URL}/api/v1/tournaments/${tournamentId}`);
         if (!response.ok) return undefined;
         return await response.json();
     } catch (error) {

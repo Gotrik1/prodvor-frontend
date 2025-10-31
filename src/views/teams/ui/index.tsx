@@ -2,7 +2,7 @@
 'use client';
 
 import { Suspense, useState, useEffect, useMemo } from 'react';
-import { teams as mockTeams, type Team } from '@/mocks';
+import { type Team } from '@/mocks';
 import { TopTeamsWidget, TopTeamsWidgetSkeleton } from '@/widgets/top-teams-widget';
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/shared/ui/card";
@@ -63,14 +63,12 @@ export function TeamsPage() {
     useEffect(() => {
         async function fetchTeams() {
             try {
-                // Using the proxied URL now
-                const response = await axios.get(`/api/v1/teams`);
+                const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/teams`);
                 setAllTeams(response.data);
                 setConnectionStatus('success');
             } catch (error) {
                 console.error("Failed to fetch teams:", error);
                 setConnectionStatus('failed');
-                setAllTeams(mockTeams); // Fallback to mocks
                 toast({
                     variant: "destructive",
                     title: "Ошибка загрузки команд",
@@ -82,7 +80,7 @@ export function TeamsPage() {
     }, [toast]);
 
     const handlePing = async () => {
-        const backendUrl = '/api/ping'; // Use a simple, non-existent endpoint for the check
+        const backendUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
         
         toast({
             title: "Проверка связи...",
@@ -90,31 +88,20 @@ export function TeamsPage() {
         });
 
         try {
-            // We expect a 404, but not a network error if proxy works
-            await axios.get(backendUrl); 
-            // If it resolves without a network error (even with 404), proxy is working
+            await axios.get(backendUrl + '/api/ping');
             setConnectionStatus('success');
             toast({
                 title: "Связь с бэкендом установлена!",
                 description: "Сервер успешно ответил на запрос.",
             });
         } catch (error) {
-            if (axios.isAxiosError(error) && error.response) {
-                // We got a response, so connection is ok
-                 setConnectionStatus('success');
-                 toast({
-                    title: "Связь с бэкендом установлена!",
-                    description: `Сервер ответил со статусом ${error.response.status}.`,
-                });
-            } else {
-                 setConnectionStatus('failed');
-                console.error("Ping failed with error:", error);
-                toast({
-                    variant: "destructive",
-                    title: "Ошибка соединения",
-                    description: "Не удалось подключиться к бэкенду. Проверьте CORS на сервере или настройки прокси.",
-                });
-            }
+            setConnectionStatus('failed');
+            console.error("Ping failed with error:", error);
+            toast({
+                variant: "destructive",
+                title: "Ошибка соединения",
+                description: "Не удалось подключиться к бэкенду. Проверьте CORS на сервере.",
+            });
         }
     };
     

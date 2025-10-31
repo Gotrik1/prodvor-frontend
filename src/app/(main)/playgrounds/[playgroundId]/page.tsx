@@ -4,9 +4,13 @@ import type { Playground } from '@/mocks';
 import type { Metadata } from 'next';
 
 async function getPlayground(playgroundId: string): Promise<Playground | undefined> {
+    const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+    if (!API_BASE_URL) {
+        console.error("[ Server ] NEXT_PUBLIC_API_BASE_URL is not defined.");
+        return undefined;
+    }
     try {
-        // Assuming an endpoint `/api/v1/playgrounds/:id` exists
-        const response = await fetch(`/api/v1/playgrounds/${playgroundId}`);
+        const response = await fetch(`${API_BASE_URL}/api/v1/playgrounds/${playgroundId}`);
         if (!response.ok) return undefined;
         return await response.json();
     } catch (error) {
