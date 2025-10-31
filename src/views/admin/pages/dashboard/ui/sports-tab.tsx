@@ -15,7 +15,7 @@ export function SportsTab() {
   useEffect(() => {
     async function fetchSports() {
       try {
-        const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/sports`);
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/sports/`);
         setAllSports(response.data);
       } catch (error) {
         console.error("Failed to fetch sports:", error);

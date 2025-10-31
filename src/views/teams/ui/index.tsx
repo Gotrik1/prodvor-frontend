@@ -63,7 +63,7 @@ export function TeamsPage() {
     useEffect(() => {
         async function fetchTeams() {
             try {
-                const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/teams`);
+                const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/teams/`);
                 setAllTeams(response.data);
                 setConnectionStatus('success');
             } catch (error) {
