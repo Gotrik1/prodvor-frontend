@@ -2,7 +2,7 @@
 
 'use client';
 
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { SidebarProvider } from "@/shared/ui/sidebar";
 import { DashboardHeader } from "@/widgets/dashboard-header";
 import { DashboardSidebar } from "@/widgets/dashboard-sidebar";
@@ -11,25 +11,12 @@ import { HomeHeader } from '@/widgets/home-header';
 import { HomeFooter } from '@/widgets/home-footer';
 import { MobileBottomNav } from '@/widgets/mobile-bottom-nav';
 import { cn } from '@/shared/lib/utils';
-import React, { useEffect, useState } from 'react';
-import { useUserStore } from '@/widgets/dashboard-header/model/user-store';
+import React from 'react';
 
 const publicRoutesWithHeader = ['/about', '/auth'];
 
 function MainLayoutContent({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const router = useRouter();
-  const { user: currentUser } = useUserStore();
-
-  useEffect(() => {
-    if (currentUser && (!currentUser.firstName || currentUser.firstName.trim() === '' || currentUser.city === 'Не указан')) {
-      const isAdminRoute = pathname?.startsWith('/admin');
-      const isCompleteProfileRoute = pathname === '/auth/complete-profile';
-      if (pathname && !publicRoutesWithHeader.some(route => pathname.startsWith(route)) && !isAdminRoute && !isCompleteProfileRoute) {
-        router.push('/auth/complete-profile');
-      }
-    }
-  }, [currentUser, pathname, router]);
 
   if (!pathname) {
     return null; // or a loading spinner
