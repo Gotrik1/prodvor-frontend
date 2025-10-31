@@ -186,10 +186,7 @@ export function TeamsPage() {
                 </section>
             )}
             
-            <TopTeamsWidget 
-                userCity={currentUser?.city} 
-                selectedDiscipline={disciplineFilter} 
-            />
+            <TopTeamsWidget />
 
             <div>
                 <h2 className="text-2xl font-bold mb-4">Все команды</h2>

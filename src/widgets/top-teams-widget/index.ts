@@ -1,1 +1,1 @@
-export { TopTeamsWidget } from './ui';
+export { TopTeamsWidget, TopTeamsWidgetSkeleton } from './ui';

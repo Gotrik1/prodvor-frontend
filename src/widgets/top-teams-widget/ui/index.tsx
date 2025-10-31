@@ -2,13 +2,15 @@
 
 'use client';
 
-import { useMemo } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
 import { teams as allTeams } from "@/mocks";
 import { BarChart, ChevronsRight, Globe, MapPin } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '@/shared/ui/button';
+import { useUserStore } from '@/widgets/dashboard-header/model/user-store';
+import { Skeleton } from '@/shared/ui/skeleton';
 
 const TopTeamRow = ({ team, rank }: { team: typeof allTeams[0], rank: number }) => (
     <Link href={`/teams/${team.id}`} className="flex items-center gap-3 p-2 rounded-md hover:bg-muted/50 group transition-colors">
@@ -44,19 +46,73 @@ const TopTeamsList = ({ title, teams, icon: Icon }: { title: string, teams: type
 };
 
 
-export function TopTeamsWidget({ userCity, selectedDiscipline }: { userCity?: string, selectedDiscipline: string }) {
+export function TopTeamsWidgetSkeleton() {
+    return (
+         <div>
+            <div className="flex justify-between items-center mb-4">
+                <Skeleton className="h-8 w-48" />
+                <Skeleton className="h-8 w-24" />
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <Card>
+                    <CardHeader><Skeleton className="h-6 w-3/4" /></CardHeader>
+                    <CardContent className="space-y-2">
+                        {[...Array(5)].map((_, i) => (
+                            <div key={i} className="flex items-center gap-3 p-2">
+                                <Skeleton className="h-8 w-6" />
+                                <Skeleton className="h-8 w-8 rounded-md" />
+                                <div className="flex-grow space-y-2">
+                                    <Skeleton className="h-4 w-4/5" />
+                                    <Skeleton className="h-3 w-1/2" />
+                                </div>
+                                <Skeleton className="h-4 w-12" />
+                            </div>
+                        ))}
+                    </CardContent>
+                </Card>
+                 <Card>
+                    <CardHeader><Skeleton className="h-6 w-3/4" /></CardHeader>
+                    <CardContent className="space-y-2">
+                        {[...Array(5)].map((_, i) => (
+                            <div key={i} className="flex items-center gap-3 p-2">
+                                <Skeleton className="h-8 w-6" />
+                                <Skeleton className="h-8 w-8 rounded-md" />
+                                <div className="flex-grow space-y-2">
+                                    <Skeleton className="h-4 w-4/5" />
+                                    <Skeleton className="h-3 w-1/2" />
+                                </div>
+                                <Skeleton className="h-4 w-12" />
+                            </div>
+                        ))}
+                    </CardContent>
+                </Card>
+            </div>
+        </div>
+    )
+}
+
+export function TopTeamsWidget() {
+    const { user: currentUser } = useUserStore();
+    const [isClient, setIsClient] = useState(false);
     
+    // This effect runs only on the client, after the initial render.
+    useEffect(() => {
+        setIsClient(true);
+    }, []);
+
     const { topCityTeams, topCountryTeams } = useMemo(() => {
-        const filteredTeams = allTeams
-            .filter(team => selectedDiscipline === 'all' || team.game === selectedDiscipline)
-            .sort((a, b) => b.rank - a.rank);
+        const filteredTeams = allTeams.sort((a, b) => b.rank - a.rank);
         
         const topCountryTeams = filteredTeams;
-        const topCityTeams = userCity ? topCountryTeams.filter(team => team.city === userCity) : [];
+        const topCityTeams = currentUser?.city ? topCountryTeams.filter(team => team.city === currentUser.city) : [];
 
         return { topCityTeams, topCountryTeams };
-    }, [userCity, selectedDiscipline]);
+    }, [currentUser]);
 
+    // On the server and during initial client render, show a skeleton.
+    if (!isClient) {
+        return <TopTeamsWidgetSkeleton />;
+    }
 
     return (
         <div>
@@ -70,7 +126,7 @@ export function TopTeamsWidget({ userCity, selectedDiscipline }: { userCity?: st
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <TopTeamsList 
-                    title={userCity ? `Топ г. ${userCity}` : "Топ вашего города"} 
+                    title={currentUser?.city ? `Топ г. ${currentUser.city}` : "Топ вашего города"} 
                     teams={topCityTeams} 
                     icon={MapPin}
                 />
