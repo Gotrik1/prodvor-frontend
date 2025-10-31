@@ -11,7 +11,7 @@ import type { Team } from "@/mocks";
 import { Badge } from "@/shared/ui/badge";
 import Link from "next/link";
 import { useUserStore } from "@/widgets/dashboard-header/model/user-store";
-import { TopTeamsWidget } from "@/widgets/top-teams-widget";
+import { TopTeamsWidget, TopTeamsWidgetSkeleton } from "@/widgets/top-teams-widget";
 import { Separator } from "@/shared/ui/separator";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
@@ -61,6 +61,11 @@ export function TeamsPage() {
     const [disciplineFilter] = useState('all');
     const [allTeams, setAllTeams] = useState<Team[]>([]);
     const [pingStatus, setPingStatus] = useState<'idle' | 'success' | 'error'>('idle');
+    const [isClient, setIsClient] = useState(false);
+
+    useEffect(() => {
+      setIsClient(true);
+    }, []);
 
     const handlePing = async () => {
         // Step 1: Test external connectivity
@@ -107,6 +112,7 @@ export function TeamsPage() {
         async function fetchTeams() {
             if (!API_BASE_URL) {
                 console.error("Fetch teams failed: NEXT_PUBLIC_API_BASE_URL is not set.");
+                setPingStatus('error');
                 return;
             }
             try {
@@ -186,7 +192,7 @@ export function TeamsPage() {
                 </section>
             )}
             
-            <TopTeamsWidget />
+            {isClient ? <TopTeamsWidget /> : <TopTeamsWidgetSkeleton />}
 
             <div>
                 <h2 className="text-2xl font-bold mb-4">Все команды</h2>

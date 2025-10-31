@@ -32,9 +32,18 @@ export function UsersTab() {
        return userTeamsMap.get(userId) || [];
     };
 
-    const copyToClipboard = (text: string, entity: string) => {
-        navigator.clipboard.writeText(text);
-        toast({ title: `Скопировано!`, description: `${entity} ID ${text} скопирован в буфер обмена.` });
+    const copyToClipboard = async (text: string, entity: string) => {
+        try {
+            await navigator.clipboard.writeText(text);
+            toast({ title: `Скопировано!`, description: `${entity} ID ${text} скопирован в буфер обмена.` });
+        } catch (err) {
+            console.error('Failed to copy: ', err);
+            toast({
+                variant: 'destructive',
+                title: 'Ошибка',
+                description: 'Не удалось скопировать в буфер обмена. Возможно, у страницы нет на это прав.',
+            });
+        }
     };
     
     const getUserSponsors = (sponsorIds?: string[]) => {
