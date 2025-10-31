@@ -57,6 +57,7 @@ const profileFormSchema = z.object({
 const AvatarUploadDialog = () => {
     const { user, setUser } = useUserStore();
     const { toast } = useToast();
+    const [file, setFile] = useState<File | null>(null);
     const [filePreview, setFilePreview] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
@@ -64,7 +65,7 @@ const AvatarUploadDialog = () => {
     const handleFileChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
         const selectedFile = event.target.files?.[0];
         if (!selectedFile) return;
-
+        setFile(selectedFile);
         const reader = new FileReader();
         reader.readAsDataURL(selectedFile);
         reader.onloadend = () => {
@@ -73,12 +74,17 @@ const AvatarUploadDialog = () => {
     }, []);
 
     const handleSaveAvatar = async () => {
-        if (!filePreview || !user) return;
+        if (!file || !user) return;
         setIsLoading(true);
 
+        const formData = new FormData();
+        formData.append('avatar', file);
+
         try {
-            const response = await axios.put(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/users/${user.id}`, {
-                avatarUrl: filePreview,
+            const response = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/users/${user.id}/avatar`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
             });
 
             if (response.status === 200) {
@@ -89,6 +95,7 @@ const AvatarUploadDialog = () => {
                 });
                 setIsOpen(false);
                 setFilePreview(null);
+                setFile(null);
             }
         } catch (error) {
              toast({
@@ -117,7 +124,7 @@ const AvatarUploadDialog = () => {
                             <div className="relative w-48 h-48 mx-auto">
                                 <Image src={filePreview} alt="Превью аватара" layout="fill" className="object-cover rounded-full" />
                             </div>
-                            <Button variant="outline" className="w-full" onClick={() => setFilePreview(null)}>Выбрать другой файл</Button>
+                            <Button variant="outline" className="w-full" onClick={() => { setFilePreview(null); setFile(null); }}>Выбрать другой файл</Button>
                         </div>
                     ) : (
                          <div className="flex items-center justify-center w-full">
@@ -367,6 +374,7 @@ export function ProfileTab() {
 }
 
     
+
 
 
 
