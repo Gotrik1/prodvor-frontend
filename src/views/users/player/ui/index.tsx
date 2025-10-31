@@ -1,7 +1,8 @@
 
+
 'use client';
 
-import { User } from "@/mocks";
+import { User, Sport } from "@/mocks";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { MapPin, Cake, User as UserIcon, MessageSquare, UserPlus, Gamepad2 } from "lucide-react";
 import { Button } from "@/shared/ui/button";
@@ -10,7 +11,7 @@ import { TrainingInfoWidget } from "@/widgets/training-info-widget";
 import { AchievementsWidget } from "@/widgets/achievements-widget";
 import { PlayerStatsOverviewWidget } from "@/widgets/player-stats-overview-widget";
 import { SocialConnectionsWidget } from "@/widgets/social-connections-widget";
-import React, { useMemo } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import { MyTeamWidget } from "@/widgets/my-team-widget";
 import { Card, CardBody } from "@/shared/ui/card";
 import { Badge } from "@/shared/ui/badge";
@@ -21,6 +22,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/sh
 import { PublicationsFeed } from "@/widgets/publications-feed";
 import Image from "next/image";
 import { Skeleton } from "@/shared/ui/skeleton";
+import axios from 'axios';
 
 function getAgeDeclension(age: number): string {
     if (age % 10 === 1 && age % 100 !== 11) {
@@ -75,11 +77,11 @@ const MoreDisciplines = ({ disciplines }: { disciplines: string[] }) => {
 };
 
 
-export function PlayerPage({ user: profileUser }: { user: User }) {
+export function PlayerPage({ user: profileUser, allSports }: { user: User, allSports: Sport[] }) {
     const { user: currentUser } = useUserStore();
     
     const isOwnProfile = useMemo(() => currentUser?.id === profileUser?.id, [currentUser, profileUser]);
-    const userDisciplines = useMemo(() => profileUser ? getUserDisciplines(profileUser) : [], [profileUser]);
+    const userDisciplines = useMemo(() => profileUser ? getUserDisciplines(profileUser, allSports) : [], [profileUser, allSports]);
 
     if (!profileUser) {
         return (

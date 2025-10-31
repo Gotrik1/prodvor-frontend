@@ -1,13 +1,32 @@
 
+
 'use client';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
-import { allSports } from '@/mocks';
 import type { Sport, Subdiscipline } from '@/mocks';
 import { DataTable } from './data-table';
 import { TableCell, TableRow } from '@/shared/ui/table';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 
 export function SportsTab() {
+  const [allSports, setAllSports] = useState<Sport[]>([]);
+
+  useEffect(() => {
+    async function fetchSports() {
+      try {
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/sports`);
+        setAllSports(response.data);
+      } catch (error) {
+        console.error("Failed to fetch sports:", error);
+      }
+    }
+    fetchSports();
+  }, []);
+
+  const teamSports = allSports.filter((s) => s.isTeamSport);
+  const individualSports = allSports.filter((s) => !s.isTeamSport);
+
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
       <Card>
@@ -17,7 +36,7 @@ export function SportsTab() {
         <CardContent>
           <DataTable
             headers={['ID', 'Название', 'Поддисциплины']}
-            data={allSports.filter((s) => s.isTeamSport)}
+            data={teamSports}
             renderRow={(sport: Sport) => (
               <TableRow key={sport.id}>
                 <TableCell className="font-mono text-xs">
@@ -39,7 +58,7 @@ export function SportsTab() {
         <CardContent>
           <DataTable
             headers={['ID', 'Название', 'Поддисциплины']}
-            data={allSports.filter((s) => !s.isTeamSport)}
+            data={individualSports}
             renderRow={(sport: Sport) => (
               <TableRow key={sport.id}>
                 <TableCell className="font-mono text-xs">

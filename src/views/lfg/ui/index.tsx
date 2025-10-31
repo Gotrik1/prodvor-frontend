@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/shared/ui/card";
@@ -6,20 +7,23 @@ import { PlusCircle, UserPlus, UserCheck } from "lucide-react";
 import { Button } from '@/shared/ui/button';
 import { Input } from "@/shared/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/select";
-import { allSports, users, teams } from "@/mocks";
+import { users, teams } from "@/mocks";
+import type { Sport } from "@/mocks";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { Badge } from "@/shared/ui/badge";
 import Link from "next/link";
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/shared/ui/dialog";
 import { Textarea } from "@/shared/ui/textarea";
+import { useState, useEffect } from "react";
+import axios from "axios";
 
 // Mock data for LFG posts
 const playersLookingForTeam = users.slice(5, 11).map(u => ({ ...u, lookingFor: ['Нападающий', 'Защитник', 'Универсал'][Math.floor(Math.random() * 3)] }));
 const teamsLookingForPlayers = teams.slice(3, 8).map(t => ({ ...t, lookingFor: ['Вратарь', 'Защитник', 'Полузащитник'][Math.floor(Math.random() * 3)]}));
 
 
-const PlayerCard = ({ player }: { player: typeof playersLookingForTeam[0] }) => (
+const PlayerCard = ({ player, allSports }: { player: typeof playersLookingForTeam[0], allSports: Sport[] }) => (
     <Card>
         <CardHeader className="flex-row items-center gap-4">
              <Avatar className="h-12 w-12">
@@ -68,6 +72,20 @@ const TeamCard = ({ team }: { team: typeof teamsLookingForPlayers[0] }) => (
 
 
 export function LfgPage() {
+    const [allSports, setAllSports] = useState<Sport[]>([]);
+
+    useEffect(() => {
+        async function fetchSports() {
+            try {
+                const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/sports`);
+                setAllSports(response.data);
+            } catch (error) {
+                console.error("Failed to fetch sports:", error);
+            }
+        }
+        fetchSports();
+    }, []);
+
     return (
         <div className="p-4 md:p-6 lg:p-8 space-y-8">
              <div>
@@ -140,7 +158,7 @@ export function LfgPage() {
                                 </Select>
                             </div>
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                                {playersLookingForTeam.map(player => <PlayerCard key={player.id} player={player} />)}
+                                {playersLookingForTeam.map(player => <PlayerCard key={player.id} player={player} allSports={allSports} />)}
                             </div>
                         </CardContent>
                     </Card>

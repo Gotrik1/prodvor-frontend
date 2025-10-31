@@ -9,13 +9,16 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/sha
 import { Users as UsersIcon, Dumbbell, Shield, Trophy, Gamepad2, UserPlus, Calendar } from "lucide-react";
 import { Button } from "@/shared/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/shared/ui/table";
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { getUserDisciplines } from "@/entities/user/lib";
 import { StatCard } from "@/shared/ui/stat-card";
 import Link from "next/link";
 import Image from "next/image";
 import { CreatePlanDialog } from "@/features/fitness-plan/ui/create-plan-dialog";
 import { FitnessSchedule } from "@/widgets/fitness-schedule";
+import axios from "axios";
+import type { Sport } from "@/mocks";
+
 
 const defaultCoach = users.find(u => u.id === 'staff2');
 
@@ -23,6 +26,19 @@ export function CoachPageTemplate({ user }: { user?: User }) {
     const coach = user || defaultCoach;
     const [dialogOpen, setDialogOpen] = useState(false);
     const [selectedClient, setSelectedClient] = useState<User | null>(null);
+    const [allSports, setAllSports] = useState<Sport[]>([]);
+
+    useEffect(() => {
+        async function fetchSports() {
+            try {
+                const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/sports`);
+                setAllSports(response.data);
+            } catch (error) {
+                console.error("Failed to fetch sports:", error);
+            }
+        }
+        fetchSports();
+    }, []);
 
     const managedTeams = useMemo(() => {
         if (!coach?.coachProfile?.managedTeams) return [];
@@ -37,8 +53,8 @@ export function CoachPageTemplate({ user }: { user?: User }) {
 
     const coachDisciplines = useMemo(() => {
         if (!coach) return [];
-        return getUserDisciplines(coach);
-    }, [coach]);
+        return getUserDisciplines(coach, allSports);
+    }, [coach, allSports]);
 
     if (!coach || !coach.coachProfile) {
          return (

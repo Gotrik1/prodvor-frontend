@@ -1,10 +1,8 @@
-import type { User } from "@/mocks/users";
-import { allSports } from "@/mocks";
+import type { User, Sport } from "@/mocks/users";
 
 // Centralized function to get all disciplines for a user
-export const getUserDisciplines = (user: User): string[] => {
-    // The user.disciplines array now holds all sport IDs, both personal and from teams.
-    // This logic is now handled during mock data initialization.
+export const getUserDisciplines = (user: User, allSports: Sport[]): string[] => {
+    // The user.disciplines array now holds all sport IDs.
     if (!user || !user.disciplines) {
         return [];
     }

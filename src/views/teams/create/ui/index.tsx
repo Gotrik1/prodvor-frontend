@@ -1,13 +1,15 @@
 
+
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/shared/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Input } from '@/shared/ui/input';
 import { Label } from '@/shared/ui/label';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/shared/ui/select';
-import { teamSports, users } from "@/mocks";
+import { users } from "@/mocks";
+import type { Sport } from "@/mocks";
 import { Bot, Trash2, UploadCloud, Users } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar'; // Keeping Avatar import
 import { useToast } from '@/shared/hooks/use-toast';
@@ -15,6 +17,7 @@ import { useRouter } from 'next/navigation';
 import { useUserStore } from '@/widgets/dashboard-header/model/user-store';
 import { GameplayEvent, awardProgressPoints } from '@/shared/lib/gamification';
 import { LogoGeneratorWidget } from '@/features/logo-generator';
+import axios from 'axios';
 
 export function CreateTeamPage() {
     const { toast } = useToast();
@@ -24,6 +27,19 @@ export function CreateTeamPage() {
     const [discipline, setDiscipline] = useState('');
     const [invitedMembers, setInvitedMembers] = useState<string[]>([]);
     const [showLogoGenerator, setShowLogoGenerator] = useState(false);
+    const [teamSports, setTeamSports] = useState<Sport[]>([]);
+
+    useEffect(() => {
+        async function fetchSports() {
+            try {
+                const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/sports`);
+                setTeamSports(response.data.filter((s: Sport) => s.isTeamSport));
+            } catch (error) {
+                console.error("Failed to fetch sports:", error);
+            }
+        }
+        fetchSports();
+    }, []);
 
     const handleInviteMember = (userId: string) => {
         if (!invitedMembers.includes(userId)) {

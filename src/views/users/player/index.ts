@@ -1,2 +1,3 @@
 
-export { PlayerPage } from './ui';
+
+export { PlayerPage } from './ui/index';
