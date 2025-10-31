@@ -1,0 +1,2 @@
+
+export { MyTeamWidget } from './ui';
