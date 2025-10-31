@@ -21,6 +21,7 @@ import { useIsMobile } from "@/shared/hooks/use-mobile";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/shared/ui/sheet";
 import { PublicationsFeed } from "@/widgets/publications-feed";
 import Image from "next/image";
+import { Skeleton } from "@/shared/ui/skeleton";
 
 const MoreDisciplines = ({ disciplines }: { disciplines: string[] }) => {
     const isMobile = useIsMobile();
@@ -66,10 +67,34 @@ const MoreDisciplines = ({ disciplines }: { disciplines: string[] }) => {
 
 export function PlayerPage({ user: profileUser }: { user: User }) {
     const { user: currentUser } = useUserStore();
-    const isOwnProfile = currentUser?.id === profileUser.id;
     
+    // Defensive check for profileUser before calculating derived state
+    const isOwnProfile = useMemo(() => currentUser?.id === profileUser?.id, [currentUser, profileUser]);
     const userDisciplines = useMemo(() => getUserDisciplines(profileUser), [profileUser]);
 
+    if (!profileUser) {
+        return (
+            <Card className="shadow-none md:shadow-main-sm">
+                <CardBody className="p-0 md:p-6 md:pb-6">
+                    <div className="relative h-48 md:h-64 w-full bg-muted">
+                        <Skeleton className="w-full h-full" />
+                    </div>
+                     <div className="bg-card px-0 md:px-6 pb-4">
+                        <div className="flex flex-col sm:flex-row sm:items-end gap-4">
+                             <div className="w-full flex justify-center sm:w-auto sm:justify-start -mt-16 sm:-mt-20 shrink-0">
+                                <Skeleton className="h-32 w-32 rounded-full border-4 border-card" />
+                            </div>
+                            <div className="flex-grow text-center sm:text-left pt-2 space-y-2">
+                                <Skeleton className="h-8 w-3/4 mx-auto sm:mx-0" />
+                                <Skeleton className="h-4 w-full max-w-md mx-auto sm:mx-0" />
+                                <Skeleton className="h-4 w-1/2 mx-auto sm:mx-0" />
+                            </div>
+                        </div>
+                    </div>
+                </CardBody>
+            </Card>
+        )
+    }
 
     return (
         <Card className="shadow-none md:shadow-main-sm">
@@ -92,7 +117,7 @@ export function PlayerPage({ user: profileUser }: { user: User }) {
                              <div className="w-full flex justify-center sm:w-auto sm:justify-start -mt-16 sm:-mt-20 shrink-0">
                                 <Avatar className="h-32 w-32 border-4 border-card">
                                     <AvatarImage src={profileUser.avatarUrl} alt={profileUser.nickname} />
-                                    <AvatarFallback>{profileUser.firstName.charAt(0)}{profileUser.lastName.charAt(0)}</AvatarFallback>
+                                    <AvatarFallback>{profileUser.firstName?.charAt(0) || ''}{profileUser.lastName?.charAt(0) || ''}</AvatarFallback>
                                 </Avatar>
                             </div>
                             <div className="flex-grow text-center sm:text-left pt-2">
