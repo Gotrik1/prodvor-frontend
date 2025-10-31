@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { usePathname } from 'next/navigation';
@@ -10,12 +11,52 @@ import { HomeHeader } from '@/widgets/home-header';
 import { HomeFooter } from '@/widgets/home-footer';
 import { MobileBottomNav } from '@/widgets/mobile-bottom-nav';
 import { cn } from '@/shared/lib/utils';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useUserStore } from '@/widgets/dashboard-header/model/user-store';
+import { ProfileSetupDialog } from '@/views/auth/ui/profile-setup-dialog';
+import { useToast } from '@/shared/hooks/use-toast';
+import type { User } from '@/mocks';
 
 const publicRoutesWithHeader = ['/about', '/auth', '/auth/register'];
 
 function MainLayoutContent({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const { user: currentUser, setUser } = useUserStore();
+  const { toast } = useToast();
+  const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
+
+  useEffect(() => {
+    if (currentUser && (!currentUser.firstName || currentUser.firstName.trim() === '')) {
+      // Don't open the modal on public or auth pages
+      const isAdminRoute = pathname?.startsWith('/admin');
+      if (pathname && !publicRoutesWithHeader.some(route => pathname.startsWith(route)) && !isAdminRoute) {
+        setIsProfileModalOpen(true);
+      }
+    } else {
+      setIsProfileModalOpen(false);
+    }
+  }, [currentUser, pathname]);
+
+  const handleProfileUpdate = async (profileData: any) => {
+    if (!currentUser) return;
+
+    const updatedUser: User = {
+        ...currentUser,
+        ...profileData,
+        age: new Date().getFullYear() - profileData.birthDate.getFullYear(),
+    };
+
+    // In a real app, this would be a PUT/PATCH request to update the user
+    console.log("Updating user:", currentUser.id, "with data:", updatedUser);
+    setUser(updatedUser);
+    
+    toast({
+        title: "Профиль обновлен!",
+        description: "Ваши данные успешно сохранены.",
+    });
+
+    setIsProfileModalOpen(false);
+  };
   
   if (!pathname) {
     return null; // or a loading spinner
@@ -63,6 +104,12 @@ function MainLayoutContent({ children }: { children: React.ReactNode }) {
         </div>
       </div>
       <MobileBottomNav />
+      <ProfileSetupDialog 
+        open={isProfileModalOpen}
+        onOpenChange={setIsProfileModalOpen}
+        onSave={handleProfileUpdate}
+        isClosable={false}
+      />
     </div>
   );
 }
