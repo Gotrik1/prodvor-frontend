@@ -50,6 +50,14 @@ class User(db.Model):
     city = db.Column(db.String(100))
     elo = db.Column(db.Integer, default=1200)
 
+    # Extended user data
+    firstName = db.Column(db.String(80), nullable=True)
+    lastName = db.Column(db.String(80), nullable=True)
+    gender = db.Column(db.String(10), nullable=True)
+    age = db.Column(db.Integer, nullable=True)
+    phone = db.Column(db.String(20), nullable=True)
+    bio = db.Column(db.Text, nullable=True)
+
     # Relationships
     player_profile = db.relationship('PlayerProfile', backref='user', uselist=False, cascade="all, delete-orphan")
     referee_profile = db.relationship('RefereeProfile', backref='user', uselist=False, cascade="all, delete-orphan")
@@ -67,7 +75,13 @@ class User(db.Model):
             'avatarUrl': self.avatarUrl,
             'role': self.role,
             'city': self.city,
-            'elo': self.elo
+            'elo': self.elo,
+            'firstName': self.firstName,
+            'lastName': self.lastName,
+            'gender': self.gender,
+            'age': self.age,
+            'phone': self.phone,
+            'bio': self.bio
         }
 
 
@@ -291,7 +305,8 @@ def get_user(user_id):
 @app.route('/api/v1/users', methods=['POST'])
 def create_user():
     data = request.get_json()
-    if not data or not all(k in data for k in ('nickname', 'email', 'role', 'city')):
+    required_fields = ['nickname', 'email', 'role', 'city', 'firstName', 'lastName']
+    if not data or not all(k in data for k in required_fields):
         return jsonify({'error': 'Missing data'}), 400
 
     if User.query.filter_by(nickname=data['nickname']).first():
@@ -304,15 +319,19 @@ def create_user():
         nickname=data['nickname'],
         email=data['email'],
         role=data['role'],
-        city=data['city']
+        city=data['city'],
+        firstName=data['firstName'],
+        lastName=data['lastName'],
+        age=data.get('age'),
+        gender=data.get('gender')
     )
 
     role = data.get('role')
-    if role == 'player':
+    if role == 'Игрок' or role == 'Капитан':
         new_user.player_profile = PlayerProfile()
-    elif role == 'referee':
+    elif role == 'Судья':
         new_user.referee_profile = RefereeProfile()
-    elif role == 'coach':
+    elif role == 'Тренер':
         new_user.coach_profile = CoachProfile()
 
     db.session.add(new_user)
@@ -513,4 +532,5 @@ if __name__ == '__main__':
         db.create_all()
     app.run(debug=True, host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))
 
+    
     
