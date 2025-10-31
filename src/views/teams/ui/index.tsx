@@ -15,6 +15,8 @@ import { TopTeamsWidget } from "@/widgets/top-teams-widget";
 import { Separator } from "@/shared/ui/separator";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+const PUBLIC_TEST_API = 'https://jsonplaceholder.typicode.com/posts/1';
+
 
 const TeamCard = ({ team, isMember }: { team: Team, isMember: boolean }) => (
     <Card key={team.id} className="flex flex-col">
@@ -61,6 +63,24 @@ export function TeamsPage() {
     const [pingStatus, setPingStatus] = useState<'idle' | 'success' | 'error'>('idle');
 
     const handlePing = async () => {
+        // Step 1: Test external connectivity
+        console.log(`[DIAGNOSTIC] Pinging public API at: ${PUBLIC_TEST_API}`);
+        try {
+            const publicResponse = await fetch(PUBLIC_TEST_API);
+            if (publicResponse.ok) {
+                console.log('[DIAGNOSTIC] Public API ping successful! Frontend can make outbound requests.');
+            } else {
+                console.error('[DIAGNOSTIC] Public API ping FAILED. Frontend might have network issues.');
+                setPingStatus('error');
+                return;
+            }
+        } catch (error) {
+            console.error('[DIAGNOSTIC] Public API ping FAILED with an error. Frontend has network issues.', error);
+            setPingStatus('error');
+            return;
+        }
+
+        // Step 2: Test backend connectivity
         if (!API_BASE_URL) {
             console.error("Ping failed: NEXT_PUBLIC_API_BASE_URL is not set.");
             setPingStatus('error');
@@ -70,14 +90,14 @@ export function TeamsPage() {
         try {
             const response = await fetch(`${API_BASE_URL}/api/v1/teams`);
             if (response.ok) {
-                console.log("Ping successful! Status:", response.status);
+                console.log("Backend Ping successful! Status:", response.status);
                 setPingStatus('success');
             } else {
-                console.error("Ping failed with status:", response.status, response.statusText);
+                console.error("Backend Ping failed with status:", response.status, response.statusText);
                 setPingStatus('error');
             }
         } catch (error) {
-            console.error("Ping failed with error:", error);
+            console.error("Backend Ping failed with error:", error);
             setPingStatus('error');
         }
     };
