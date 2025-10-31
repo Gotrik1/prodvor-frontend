@@ -1,6 +1,12 @@
 
 'use client';
 
+import React from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import axios from 'axios';
+import { useRouter } from 'next/navigation';
 import { Button } from "@/shared/ui/button";
 import {
   Card,
@@ -14,16 +20,77 @@ import { Label } from "@/shared/ui/label";
 import Link from "next/link";
 import { Logo } from "@/views/auth/ui";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/select";
-import { Popover, PopoverContent, PopoverTrigger } from "@/shared/ui/popover";
-import { CalendarIcon } from "lucide-react";
-import { Calendar } from "@/shared/ui/calendar";
-import { cn } from "@/shared/lib/utils";
-import React from 'react';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/shared/ui/form';
+import { useToast } from '@/shared/hooks/use-toast';
+import { Loader2 } from 'lucide-react';
 
+const registerFormSchema = z.object({
+  nickname: z.string().min(3, { message: "Никнейм должен быть не менее 3 символов." }),
+  email: z.string().email({ message: "Неверный формат email." }),
+  password: z.string().min(8, { message: "Пароль должен быть не менее 8 символов." }),
+  confirmPassword: z.string(),
+  role: z.string({ required_error: "Пожалуйста, выберите роль." }),
+  city: z.string().min(2, { message: "Название города обязательно." }),
+}).refine(data => data.password === data.confirmPassword, {
+    message: "Пароли не совпадают.",
+    path: ["confirmPassword"],
+});
 
 export function RegisterPage() {
-    const [date, setDate] = React.useState<Date>();
-    
+  const { toast } = useToast();
+  const router = useRouter();
+  const [isLoading, setIsLoading] = React.useState(false);
+
+  const form = useForm<z.infer<typeof registerFormSchema>>({
+    resolver: zodResolver(registerFormSchema),
+    defaultValues: {
+      nickname: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+      city: "Москва", // Default city
+    },
+  });
+
+  const onSubmit = async (values: z.infer<typeof registerFormSchema>) => {
+    setIsLoading(true);
+    try {
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/users`, {
+        nickname: values.nickname,
+        email: values.email,
+        // In a real app, we would hash the password on the client or, preferably, server-side.
+        // For this prototype, we're sending it as is. The backend doesn't store it anyway.
+        role: values.role,
+        city: values.city,
+      });
+
+      if (response.status === 201) {
+        toast({
+          title: "Регистрация успешна!",
+          description: "Теперь вы можете войти в свой аккаунт.",
+        });
+        router.push("/auth");
+      }
+    } catch (error) {
+      console.error("Registration failed:", error);
+       if (axios.isAxiosError(error) && error.response) {
+            toast({
+                variant: "destructive",
+                title: "Ошибка регистрации",
+                description: error.response.data?.error || "Произошла неизвестная ошибка.",
+            });
+        } else {
+            toast({
+                variant: "destructive",
+                title: "Ошибка регистрации",
+                description: "Не удалось подключиться к серверу.",
+            });
+        }
+    } finally {
+        setIsLoading(false);
+    }
+  };
+
   return (
     <div className="flex items-center justify-center min-h-screen bg-background p-4">
       <Card className="w-full max-w-md mx-auto shadow-xl border-border/60 bg-card">
@@ -40,92 +107,110 @@ export function RegisterPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="first-name">Имя</Label>
-                  <Input id="first-name" placeholder="Иван" required />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="last-name">Фамилия</Label>
-                  <Input id="last-name" placeholder="Иванов" required />
-                </div>
-            </div>
-             <div className="space-y-2">
-              <Label htmlFor="nickname">Никнейм</Label>
-              <Input id="nickname" placeholder="Player1" required />
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                    <Label htmlFor="role">Роль</Label>
-                    <Select>
-                        <SelectTrigger id="role">
-                            <SelectValue placeholder="Выберите роль" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectItem value="player">Игрок</SelectItem>
-                            <SelectItem value="referee">Судья</SelectItem>
-                            <SelectItem value="fan">Болельщик</SelectItem>
-                            <SelectItem value="coach">Тренер</SelectItem>
-                            <SelectItem value="manager">Менеджер</SelectItem>
-                            <SelectItem value="organizer">Организатор</SelectItem>
-                        </SelectContent>
-                    </Select>
-                </div>
-                 <div className="space-y-2">
-                    <Label htmlFor="birthdate">Дата рождения</Label>
-                    <Popover>
-                        <PopoverTrigger asChild>
-                        <Button
-                            variant={"outline"}
-                            className={cn(
-                            "w-full justify-start text-left font-normal",
-                            !date && "text-muted-foreground"
-                            )}
-                        >
-                            <CalendarIcon className="mr-2 h-4 w-4" />
-                            {date ? date.toLocaleDateString() : <span>Выберите дату</span>}
-                        </Button>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-auto p-0">
-                        <Calendar
-                            mode="single"
-                            selected={date}
-                            onSelect={setDate}
-                            initialFocus
-                        />
-                        </PopoverContent>
-                    </Popover>
-                </div>
-            </div>
-             <div className="space-y-2">
-              <Label htmlFor="phone">Номер телефона</Label>
-              <Input id="phone" type="tel" placeholder="+7 (___) ___-__-__" required />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="admin@example.com"
-                required
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+              <FormField
+                control={form.control}
+                name="nickname"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Никнейм</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Player1" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="password">Пароль</Label>
-              <Input id="password" type="password" required />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="confirm-password">Подтвердите пароль</Label>
-              <Input id="confirm-password" type="password" required />
-            </div>
-            <Button type="submit" className="w-full">
-              Зарегистрироваться
-            </Button>
-            <Button variant="outline" className="w-full" asChild>
-              <Link href="/">Вернуться на главную</Link>
-            </Button>
-          </div>
+
+               <FormField
+                control={form.control}
+                name="city"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Город</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Например, Москва" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+               <FormField
+                  control={form.control}
+                  name="role"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Основная роль</FormLabel>
+                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Выберите вашу основную роль" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value="player">Игрок</SelectItem>
+                          <SelectItem value="referee">Судья</SelectItem>
+                          <SelectItem value="coach">Тренер</SelectItem>
+                        </SelectContent>
+                      </Select>
+                       <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Email</FormLabel>
+                    <FormControl>
+                      <Input type="email" placeholder="player@example.com" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Пароль</FormLabel>
+                    <FormControl>
+                      <Input type="password" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="confirmPassword"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Подтвердите пароль</FormLabel>
+                    <FormControl>
+                      <Input type="password" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <Button type="submit" className="w-full" disabled={isLoading}>
+                 {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                {isLoading ? "Регистрация..." : "Зарегистрироваться"}
+              </Button>
+            </form>
+          </Form>
+          <Button variant="outline" className="w-full mt-4" asChild>
+            <Link href="/">Вернуться на главную</Link>
+          </Button>
         </CardContent>
       </Card>
     </div>
