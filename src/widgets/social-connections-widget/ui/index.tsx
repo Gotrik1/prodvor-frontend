@@ -119,10 +119,23 @@ const FriendRequests = () => {
 
 export function SocialConnectionsWidget({ user, isOwnProfile }: { user: User, isOwnProfile: boolean }) {
     
+    if (!user) {
+        return (
+            <Card className="md:shadow-main-sm shadow-none md:bg-card bg-transparent">
+                <CardHeader className="hidden md:flex">
+                    <CardTitle>Социальные связи</CardTitle>
+                </CardHeader>
+                <CardContent className="md:p-6">
+                    <p className="text-sm text-muted-foreground text-center">Загрузка...</p>
+                </CardContent>
+            </Card>
+        )
+    }
+
     const tabs = [
-        { value: 'friends', icon: UsersIcon, label: `Друзья (${user.friends.length})` },
-        { value: 'followers', icon: Rss, label: `Подписчики (${user.followers.length})` },
-        { value: 'following', icon: Heart, label: `Подписки (${user.followingUsers.length + user.following.length})` },
+        { value: 'friends', icon: UsersIcon, label: `Друзья (${user.friends?.length || 0})` },
+        { value: 'followers', icon: Rss, label: `Подписчики (${user.followers?.length || 0})` },
+        { value: 'following', icon: Heart, label: `Подписки (${(user.followingUsers?.length || 0) + (user.following?.length || 0)})` },
     ];
     
     if (isOwnProfile) {
@@ -152,10 +165,10 @@ export function SocialConnectionsWidget({ user, isOwnProfile }: { user: User, is
                         ))}
                     </TabsList>
                     <TabsContent value="friends">
-                        <UserList userIds={user.friends} emptyText="У этого пользователя пока нет друзей." />
+                        <UserList userIds={user.friends || []} emptyText="У этого пользователя пока нет друзей." />
                     </TabsContent>
                     <TabsContent value="followers">
-                        <UserList userIds={user.followers} emptyText="На этого пользователя пока никто не подписан." />
+                        <UserList userIds={user.followers || []} emptyText="На этого пользователя пока никто не подписан." />
                     </TabsContent>
                     {isOwnProfile && (
                         <TabsContent value="requests">
@@ -164,12 +177,12 @@ export function SocialConnectionsWidget({ user, isOwnProfile }: { user: User, is
                     )}
                     <TabsContent value="following" className="space-y-4">
                         <div>
-                             <h3 className="text-sm font-semibold text-muted-foreground mb-2">Команды ({user.following.length})</h3>
-                             <TeamList teamIds={user.following} emptyText="Не подписан на команды." />
+                             <h3 className="text-sm font-semibold text-muted-foreground mb-2">Команды ({user.following?.length || 0})</h3>
+                             <TeamList teamIds={user.following || []} emptyText="Не подписан на команды." />
                         </div>
                         <div>
-                            <h3 className="text-sm font-semibold text-muted-foreground mb-2">Игроки ({user.followingUsers.length})</h3>
-                            <UserList userIds={user.followingUsers} emptyText="Не подписан на игроков." />
+                            <h3 className="text-sm font-semibold text-muted-foreground mb-2">Игроки ({user.followingUsers?.length || 0})</h3>
+                            <UserList userIds={user.followingUsers || []} emptyText="Не подписан на игроков." />
                         </div>
                     </TabsContent>
                 </Tabs>

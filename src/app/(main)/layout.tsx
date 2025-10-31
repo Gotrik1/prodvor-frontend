@@ -2,7 +2,7 @@
 
 'use client';
 
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { SidebarProvider } from "@/shared/ui/sidebar";
 import { DashboardHeader } from "@/widgets/dashboard-header";
 import { DashboardSidebar } from "@/widgets/dashboard-sidebar";
@@ -13,51 +13,24 @@ import { MobileBottomNav } from '@/widgets/mobile-bottom-nav';
 import { cn } from '@/shared/lib/utils';
 import React, { useEffect, useState } from 'react';
 import { useUserStore } from '@/widgets/dashboard-header/model/user-store';
-import { ProfileSetupDialog } from '@/views/auth/ui/profile-setup-dialog';
-import { useToast } from '@/shared/hooks/use-toast';
-import type { User } from '@/mocks';
 
-const publicRoutesWithHeader = ['/about', '/auth', '/auth/register'];
+const publicRoutesWithHeader = ['/about', '/auth'];
 
 function MainLayoutContent({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const { user: currentUser, setUser } = useUserStore();
-  const { toast } = useToast();
-  const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
+  const router = useRouter();
+  const { user: currentUser } = useUserStore();
 
   useEffect(() => {
-    if (currentUser && (!currentUser.firstName || currentUser.firstName.trim() === '')) {
-      // Don't open the modal on public or auth pages
+    if (currentUser && (!currentUser.firstName || currentUser.firstName.trim() === '' || currentUser.city === 'Не указан')) {
       const isAdminRoute = pathname?.startsWith('/admin');
-      if (pathname && !publicRoutesWithHeader.some(route => pathname.startsWith(route)) && !isAdminRoute) {
-        setIsProfileModalOpen(true);
+      const isCompleteProfileRoute = pathname === '/auth/complete-profile';
+      if (pathname && !publicRoutesWithHeader.some(route => pathname.startsWith(route)) && !isAdminRoute && !isCompleteProfileRoute) {
+        router.push('/auth/complete-profile');
       }
-    } else {
-      setIsProfileModalOpen(false);
     }
-  }, [currentUser, pathname]);
+  }, [currentUser, pathname, router]);
 
-  const handleProfileUpdate = async (profileData: any) => {
-    if (!currentUser) return;
-
-    const updatedUser: User = {
-        ...currentUser,
-        ...profileData,
-        age: new Date().getFullYear() - profileData.birthDate.getFullYear(),
-    };
-
-    // In a real app, this would be a PUT/PATCH request to update the user
-    console.log("Updating user:", currentUser.id, "with data:", updatedUser);
-    setUser(updatedUser);
-    
-    toast({
-        title: "Профиль обновлен!",
-        description: "Ваши данные успешно сохранены.",
-    });
-
-    setIsProfileModalOpen(false);
-  };
-  
   if (!pathname) {
     return null; // or a loading spinner
   }
@@ -104,12 +77,6 @@ function MainLayoutContent({ children }: { children: React.ReactNode }) {
         </div>
       </div>
       <MobileBottomNav />
-      <ProfileSetupDialog 
-        open={isProfileModalOpen}
-        onOpenChange={setIsProfileModalOpen}
-        onSave={handleProfileUpdate}
-        isClosable={false}
-      />
     </div>
   );
 }

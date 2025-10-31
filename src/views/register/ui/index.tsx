@@ -22,8 +22,7 @@ import { Logo } from "@/views/auth/ui";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/shared/ui/form';
 import { useToast } from '@/shared/hooks/use-toast';
 import { Loader2 } from 'lucide-react';
-import type { User } from '@/mocks';
-import { ProfileSetupDialog } from '@/views/auth/ui/profile-setup-dialog';
+import { useUserStore } from '@/widgets/dashboard-header/model/user-store';
 
 const registerFormSchema = z.object({
   nickname: z.string().min(3, { message: "Никнейм должен быть не менее 3 символов." }),
@@ -40,8 +39,7 @@ export function RegisterPage() {
   const { toast } = useToast();
   const router = useRouter();
   const [isLoading, setIsLoading] = React.useState(false);
-  const [showProfileDialog, setShowProfileDialog] = useState(false);
-  const [createdUser, setCreatedUser] = useState<User | null>(null);
+  const { setUser } = useUserStore();
 
   const form = useForm<z.infer<typeof registerFormSchema>>({
     resolver: zodResolver(registerFormSchema),
@@ -59,14 +57,18 @@ export function RegisterPage() {
       const response = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/users`, {
         nickname: values.nickname,
         email: values.email,
-        password: values.password, // In a real app, this should be handled securely
-        role: "Игрок", // Default role, user will confirm in next step
-        city: "Не указан", // Default city
+        password: values.password,
+        role: "Игрок",
+        city: "Не указан",
       });
 
       if (response.status === 201) {
-        setCreatedUser(response.data);
-        setShowProfileDialog(true);
+        setUser(response.data);
+        toast({
+            title: "Аккаунт создан!",
+            description: "Теперь, пожалуйста, завершите настройку своего профиля.",
+        });
+        router.push('/auth/complete-profile');
       }
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
@@ -85,21 +87,6 @@ export function RegisterPage() {
     } finally {
         setIsLoading(false);
     }
-  };
-
-  const onProfileSave = async (profileData: any) => {
-    if (!createdUser) return;
-    
-    // In a real app, this would be a PUT/PATCH request to update the user
-    console.log("Updating user:", createdUser.id, "with data:", profileData);
-    
-    toast({
-        title: "Профиль обновлен!",
-        description: "Ваш аккаунт полностью готов. Теперь вы можете войти.",
-    });
-    
-    setShowProfileDialog(false);
-    router.push("/auth");
   };
 
   return (
@@ -183,13 +170,6 @@ export function RegisterPage() {
           </Button>
         </CardContent>
       </Card>
-      
-      <ProfileSetupDialog 
-        open={showProfileDialog}
-        onOpenChange={setShowProfileDialog}
-        onSave={onProfileSave}
-        isClosable={false}
-      />
     </div>
   );
 }

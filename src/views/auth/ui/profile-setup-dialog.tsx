@@ -24,9 +24,9 @@ import { cn } from '@/shared/lib/utils';
 import { useUserStore } from '@/widgets/dashboard-header/model/user-store';
 
 const profileFormSchema = z.object({
-    firstName: z.string().min(2, "Имя обязательно."),
-    lastName: z.string().min(2, "Фамилия обязательна."),
-    city: z.string().min(2, "Город обязателен."),
+    firstName: z.string().min(2, "Имя обязательно.").refine(s => s.trim().length > 0, "Имя не может быть пустым"),
+    lastName: z.string().min(2, "Фамилия обязательна.").refine(s => s.trim().length > 0, "Фамилия не может быть пустой"),
+    city: z.string().min(2, "Город обязателен.").refine(s => s.trim().length > 0, "Город не может быть пустым"),
     role: z.string({ required_error: "Пожалуйста, выберите роль." }),
     birthDate: z.date({ required_error: "Укажите дату рождения." }),
 });
