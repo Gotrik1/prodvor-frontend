@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import React from 'react';
@@ -149,7 +150,7 @@ export function AuthPage() {
                 title: "Вход выполнен!",
                 description: `Добро пожаловать, ${response.data.nickname}!`,
             });
-            router.push('/dashboard');
+            router.push(`/users/${response.data.id}`);
         }
     } catch (error) {
         console.error("Login failed:", error);
