@@ -1,4 +1,3 @@
-
 import type { Metadata } from 'next';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Button } from '@/shared/ui/button';
@@ -91,5 +90,3 @@ export default async function UserProfilePage({ params }: { params: { userId: st
     </div>
   )
 }
-
-    
