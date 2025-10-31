@@ -1,3 +1,4 @@
+
 'use client';
 
 import React from 'react';
@@ -188,7 +189,7 @@ export function AuthPage() {
                             <Input id="phone" type="tel" placeholder="+7 (___) ___-__-__" required />
                         </div>
                         <Button type="submit" className="w-full" disabled>
-                            {i18n.auth.continue}
+                            Продолжить
                         </Button>
                     </div>
                 </TabsContent>
@@ -212,8 +213,14 @@ export function AuthPage() {
                             </Link>
                         </div>
                         <Button type="submit" className="w-full" disabled={isLoading}>
-                            {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                            {isLoading ? "Вход..." : i18n.auth.continue}
+                            {isLoading ? (
+                                <>
+                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                    Вход...
+                                </>
+                            ) : (
+                                "Войти"
+                            )}
                         </Button>
                     </form>
                 </TabsContent>
