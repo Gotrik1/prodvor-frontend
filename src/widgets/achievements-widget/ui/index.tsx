@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
@@ -14,8 +13,11 @@ export function AchievementsWidget({ player }: { player: User }) {
     const allAchievementsFlat: Achievement[] = useMemo(() => Object.values(achievementsBySport).flat(), []);
 
     const unlockedAchievements = useMemo(() => {
+        if (!player || !player.unlockedAchievements) {
+            return [];
+        }
         return allAchievementsFlat.filter(ach => player.unlockedAchievements.includes(ach.id));
-    }, [player.unlockedAchievements, allAchievementsFlat]);
+    }, [player, allAchievementsFlat]);
     
     const achievementsBySportGroup = useMemo(() => {
         const grouped: Record<string, Achievement[]> = {};
