@@ -40,15 +40,10 @@ import { usePathname } from 'next/navigation';
 import { Skeleton } from '@/shared/ui/skeleton';
 
 export function DashboardHeader() {
-  const { user } = useUserStore();
+  const { user, isHydrated } = useUserStore();
   const [open, setOpen] = React.useState(false);
   const pathname = usePathname();
-  const [isClient, setIsClient] = React.useState(false);
 
-  React.useEffect(() => {
-    setIsClient(true);
-  }, []);
-  
   React.useEffect(() => {
     const down = (e: KeyboardEvent) => {
       if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
@@ -94,7 +89,7 @@ export function DashboardHeader() {
             </Button>
         ) : (
           <React.Fragment>
-            {isClient && user && (
+            {isHydrated && user ? (
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger asChild>
@@ -105,7 +100,7 @@ export function DashboardHeader() {
                     >
                       <Link href="/store">
                         <Gem className="h-4 w-4 text-primary" />
-                        <span className="font-bold">{user?.id ? '0' : ''}</span>
+                        <span className="font-bold">0</span>
                       </Link>
                     </Button>
                   </TooltipTrigger>
@@ -114,7 +109,7 @@ export function DashboardHeader() {
                   </TooltipContent>
                 </Tooltip>
               </TooltipProvider>
-            )}
+            ) : <Skeleton className="h-10 w-20 hidden sm:flex" />}
 
             <Button variant="ghost" size="icon" asChild>
               <Link href="/store">
@@ -147,7 +142,7 @@ export function DashboardHeader() {
               className="relative h-10 w-10 rounded-full"
             >
               <Avatar>
-                {isClient && user ? (
+                {isHydrated && user ? (
                   <>
                     <AvatarImage src={user.avatarUrl} />
                     <AvatarFallback>{user.nickname?.charAt(0) || '?'}</AvatarFallback>
@@ -161,17 +156,22 @@ export function DashboardHeader() {
           <DropdownMenuContent className="w-56" align="end" forceMount>
             <DropdownMenuLabel className="font-normal">
               <div className="flex flex-col space-y-1">
-                <p className="text-sm font-medium leading-none">
-                  {isClient && user ? user.nickname : "Загрузка..."}
-                </p>
-                <p className="text-xs leading-none text-muted-foreground">
-                  {isClient && user ? user.email : "..."}
-                </p>
+                {isHydrated && user ? (
+                  <>
+                    <p className="text-sm font-medium leading-none">{user.nickname}</p>
+                    <p className="text-xs leading-none text-muted-foreground">{user.email}</p>
+                  </>
+                ) : (
+                  <>
+                    <Skeleton className="h-4 w-24 mb-1" />
+                    <Skeleton className="h-3 w-32" />
+                  </>
+                )}
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem asChild disabled={!isClient || !user}>
-              <Link href={isClient && user ? `/users/${user.id}` : '#'}>
+            <DropdownMenuItem asChild disabled={!isHydrated || !user}>
+              <Link href={isHydrated && user ? `/users/${user.id}` : '#'}>
                 <User className="mr-2 h-4 w-4" />
                 <span>Профиль</span>
               </Link>
@@ -188,7 +188,7 @@ export function DashboardHeader() {
                 <span>Настройки</span>
               </Link>
             </DropdownMenuItem>
-            <DropdownMenuItem>
+            <DropdownMenuItem disabled={!isHydrated || !user}>
               <Share2 className="mr-2 h-4 w-4" />
               <span>Поделиться профилем</span>
             </DropdownMenuItem>
