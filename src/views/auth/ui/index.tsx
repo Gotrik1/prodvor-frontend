@@ -187,7 +187,7 @@ export function AuthPage() {
                             <Label htmlFor="phone">{i18n.auth.phoneLabel}</Label>
                             <Input id="phone" type="tel" placeholder="+7 (___) ___-__-__" required />
                         </div>
-                        <Button type="submit" className="w-full" onClick={() => router.push('/dashboard')}>
+                        <Button type="submit" className="w-full" disabled>
                             {i18n.auth.continue}
                         </Button>
                     </div>
