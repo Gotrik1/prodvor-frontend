@@ -3,15 +3,15 @@
 
 Этот документ содержит пошаговую инструкцию по замене моковых данных в Next.js-приложении на реальные API-вызовы к вашему запущенному Python (Flask) бэкенду.
 
-**Предположение:** Ваш Flask-бэкенд запущен локально по адресу `http://localhost:5000`. Если порт другой, просто измените его в примерах ниже.
+**Важно:** Адрес вашего бэкенда теперь хранится в файле `.env` в переменной `NEXT_PUBLIC_API_BASE_URL`. Все запросы должны использовать эту переменную.
 
 ---
 
 ## Шаг 1: Настройка CORS на бэкенде
 
-Прежде чем начать, убедитесь, что ваш Python-бэкенд разрешает запросы от вашего фронтенда. Фронтенд работает на `http://localhost:9002`.
+Прежде чем начать, убедитесь, что ваш Python-бэкенд разрешает запросы от вашего фронтенда. Адрес фронтенда можно найти в настройках Firebase Studio или в выводе консоли при запуске.
 
-В вашем главном файле `app.py` убедитесь, что CORS настроен правильно. Если вы следовали плану, у вас уже должен быть `Flask-Cors`. Конфигурация должна выглядеть примерно так:
+В вашем главном файле `app.py` убедитесь, что CORS настроен правильно. Если вы следовали плану, у вас уже должен быть `Flask-Cors`. Конфигурация должна разрешать запросы от вашего домена фронтенда.
 
 ```python
 from flask_cors import CORS
@@ -19,8 +19,8 @@ from flask_cors import CORS
 app = Flask(__name__)
 # ... другие настройки ...
 
-# Разрешаем запросы от нашего фронтенда
-CORS(app, resources={r"/api/*": {"origins": "http://localhost:9002"}}) 
+# Замените "YOUR_FRONTEND_URL" на реальный адрес вашего фронтенда
+CORS(app, resources={r"/api/*": {"origins": "YOUR_FRONTEND_URL"}}) 
 ```
 
 ---
@@ -31,7 +31,7 @@ CORS(app, resources={r"/api/*": {"origins": "http://localhost:9002"}})
 
 ### 2.1. Страница всех команд (`src/views/teams/ui/index.tsx`)
 
-Здесь мы заменим статический импорт команд на асинх "у"нкцию, которая будет загружать их с бэкенда.
+Здесь мы заменим статический импорт команд на асинхронную функцию, которая будет загружать их с бэкенда.
 
 **Найдите и замените этот блок:**
 
@@ -60,6 +60,8 @@ import { useState, useEffect, useMemo } from 'react';
 import type { Team } from "@/mocks";
 // ... другой код ...
 
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+
 export function TeamsPage() {
     const { user: currentUser } = useUserStore();
     const [allTeams, setAllTeams] = useState<Team[]>([]);
@@ -67,7 +69,7 @@ export function TeamsPage() {
     useEffect(() => {
         async function fetchTeams() {
             try {
-                const response = await fetch('http://localhost:5000/api/v1/teams');
+                const response = await fetch(`${API_BASE_URL}/api/v1/teams`);
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
@@ -128,9 +130,11 @@ import type { Metadata } from 'next';
 import MainLayout from '@/app/(main)/layout';
 import type { Team } from '@/mocks';
 
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+
 async function getTeam(teamId: string): Promise<Team | undefined> {
     try {
-        const response = await fetch(`http://localhost:5000/api/v1/teams/${teamId}`);
+        const response = await fetch(`${API_BASE_URL}/api/v1/teams/${teamId}`);
         if (!response.ok) return undefined;
         return await response.json();
     } catch (error) {
@@ -188,9 +192,11 @@ import { TournamentPublicPage } from '@/views/tournaments/public-page';
 import type { Metadata } from 'next';
 import type { Tournament } from '@/mocks';
 
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+
 async function getTournament(tournamentId: string): Promise<Tournament | undefined> {
     try {
-        const response = await fetch(`http://localhost:5000/api/v1/tournaments/${tournamentId}`);
+        const response = await fetch(`${API_BASE_URL}/api/v1/tournaments/${tournamentId}`);
         if (!response.ok) return undefined;
         return await response.json();
     } catch (error) {
@@ -254,6 +260,8 @@ import { produce } from 'immer';
 import type { Post, Comment } from '@/mocks/posts';
 import type { User } from '@/mocks';
 
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+
 interface PostState {
   posts: Post[];
   fetchPosts: () => Promise<void>; // Новая функция для загрузки
@@ -268,7 +276,7 @@ export const usePostStore = create<PostState>()(
       posts: [], // Изначально массив пуст
       fetchPosts: async () => {
         try {
-            const response = await fetch('http://localhost:5000/api/v1/posts');
+            const response = await fetch(`${API_BASE_URL}/api/v1/posts`);
             if (!response.ok) throw new Error('Failed to fetch posts');
             const data = await response.json();
             set({ posts: data });
@@ -310,7 +318,7 @@ export function DashboardFeed() {
 Это основа для перехода. По аналогии вы можете пройтись по остальным компонентам:
 
 1.  **Найти**, где импортируются данные из ` '@/mocks'`.
-2.  **Заменить** статический импорт на `useEffect` с `fetch` к вашему API.
+2.  **Заменить** статический импорт на `useEffect` с `fetch` к вашему API, используя переменную `process.env.NEXT_PUBLIC_API_BASE_URL`.
 3.  **Сохранять** полученные данные в состоянии компонента с помощью `useState`.
 
 Этот процесс нужно будет повторить для `tournaments`, `users`, `playgrounds` и других сущностей на соответствующих страницах. Удачи!
