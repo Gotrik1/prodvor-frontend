@@ -13,6 +13,7 @@ import { useUserStore } from "@/widgets/dashboard-header/model/user-store";
 import { Separator } from "@/shared/ui/separator";
 import { useToast } from '@/shared/hooks/use-toast';
 import axios from 'axios';
+import { Skeleton } from '@/shared/ui/skeleton';
 
 const TeamCard = ({ team, isMember }: { team: Team, isMember: boolean }) => (
     <Card key={team.id} className="flex flex-col">
