@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import React from 'react';
@@ -150,9 +151,9 @@ export function RegisterPage() {
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          <SelectItem value="player">Игрок</SelectItem>
-                          <SelectItem value="referee">Судья</SelectItem>
-                          <SelectItem value="coach">Тренер</SelectItem>
+                          <SelectItem value="Игрок">Игрок</SelectItem>
+                          <SelectItem value="Судья">Судья</SelectItem>
+                          <SelectItem value="Тренер">Тренер</SelectItem>
                         </SelectContent>
                       </Select>
                        <FormMessage />
