@@ -69,6 +69,7 @@ export function TeamsPage() {
     useEffect(() => {
         async function fetchTeams() {
             try {
+                if (!API_BASE_URL) return;
                 const response = await fetch(`${API_BASE_URL}/api/v1/teams`);
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
@@ -86,8 +87,9 @@ export function TeamsPage() {
         if (!currentUser) {
             return { myTeams: [], otherTeams: allTeams };
         }
-        const myTeams = allTeams.filter(team => team.members.includes(currentUser.id));
-        const otherTeams = allTeams.filter(team => !team.members.includes(currentUser.id));
+        // В реальном приложении логика определения "моих" команд может быть на бэкенде
+        const myTeams = allTeams.filter(team => team.captainId === currentUser.id);
+        const otherTeams = allTeams.filter(team => team.captainId !== currentUser.id);
         return { myTeams, otherTeams };
     }, [currentUser, allTeams]);
     // ... остальной код ...
@@ -134,6 +136,7 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 async function getTeam(teamId: string): Promise<Team | undefined> {
     try {
+        if (!API_BASE_URL) return undefined;
         const response = await fetch(`${API_BASE_URL}/api/v1/teams/${teamId}`);
         if (!response.ok) return undefined;
         return await response.json();
@@ -196,6 +199,7 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 async function getTournament(tournamentId: string): Promise<Tournament | undefined> {
     try {
+        if (!API_BASE_URL) return undefined;
         const response = await fetch(`${API_BASE_URL}/api/v1/tournaments/${tournamentId}`);
         if (!response.ok) return undefined;
         return await response.json();
@@ -276,6 +280,7 @@ export const usePostStore = create<PostState>()(
       posts: [], // Изначально массив пуст
       fetchPosts: async () => {
         try {
+            if (!API_BASE_URL) return;
             const response = await fetch(`${API_BASE_URL}/api/v1/posts`);
             if (!response.ok) throw new Error('Failed to fetch posts');
             const data = await response.json();
