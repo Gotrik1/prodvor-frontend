@@ -8,36 +8,29 @@ import { Radar, RadarChart, PolarAngleAxis, LineChart, Line, XAxis, YAxis, Carte
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 import { History, BarChart3 } from "lucide-react";
 
-const skillData = [
-  { subject: 'Атака', A: 86, fullMark: 100 },
-  { subject: 'Защита', A: 75, fullMark: 100 },
-  { subject: 'Техника', A: 90, fullMark: 100 },
-  { subject: 'Скорость', A: 80, fullMark: 100 },
-  { subject: 'Пас', A: 82, fullMark: 100 },
+// Initial state for a new player
+const emptySkillData = [
+  { subject: 'Атака', A: 0, fullMark: 100 },
+  { subject: 'Защита', A: 0, fullMark: 100 },
+  { subject: 'Техника', A: 0, fullMark: 100 },
+  { subject: 'Скорость', A: 0, fullMark: 100 },
+  { subject: 'Пас', A: 0, fullMark: 100 },
 ];
 
-const eloData = [
-  { month: 'Янв', elo: 1420 },
-  { month: 'Фев', elo: 1450 },
-  { month: 'Мар', elo: 1430 },
-  { month: 'Апр', elo: 1480 },
-  { month: 'Май', elo: 1510 },
-  { month: 'Июн', elo: 1550 },
-  { month: 'Июл', elo: 1540 },
-  { month: 'Авг', elo: 1590 },
+const initialEloData = [
+  { month: 'N/A', elo: 1200 },
 ];
 
-const FormBadge = ({ result }: { result: 'W' | 'L' | 'D' }) => {
+const emptyCareerStats = {
+    matches: 0, wins: 0, goals: 0, assists: 0, mvp: 0
+};
+
+const FormBadge = ({ result }: { result: 'W' | 'L' | 'D' | 'N/A' }) => {
     const baseClasses = "flex items-center justify-center w-6 h-6 rounded-md font-bold text-xs";
     if (result === 'W') return <div className={`${baseClasses} bg-green-500/20 text-green-300 border border-green-500/30`}>W</div>;
     if (result === 'L') return <div className={`${baseClasses} bg-red-500/20 text-red-300 border border-red-500/30`}>L</div>;
-    return <div className={`${baseClasses} bg-secondary text-secondary-foreground border border-secondary/30`}>D</div>;
-};
-
-const careerStats = {
-    '2025': { matches: 52, wins: 38, goals: 41, assists: 15, mvp: 12 },
-    '2024': { matches: 68, wins: 41, goals: 35, assists: 22, mvp: 18 },
-    'total': { matches: 120, wins: 79, goals: 76, assists: 37, mvp: 30 },
+    if (result === 'D') return <div className={`${baseClasses} bg-secondary text-secondary-foreground border border-secondary/30`}>D</div>;
+    return <div className={`${baseClasses} bg-muted text-muted-foreground border-border`}>-</div>;
 };
 
 const StatRow = ({ label, value }: { label: string, value: string | number }) => (
@@ -49,7 +42,8 @@ const StatRow = ({ label, value }: { label: string, value: string | number }) =>
 
 
 export const PlayerStatsOverviewWidget = () => {
-    const last5Form: ('W' | 'L' | 'D')[] = ['W', 'L', 'W', 'W', 'W'];
+    const last5Form: ('W' | 'L' | 'D' | 'N/A')[] = ['N/A', 'N/A', 'N/A', 'N/A', 'N/A'];
+    const currentSeason = new Date().getFullYear().toString();
 
     return (
         <Card className="md:shadow-main-sm shadow-none md:bg-card bg-transparent">
@@ -63,14 +57,14 @@ export const PlayerStatsOverviewWidget = () => {
                         <h3 className="text-base font-semibold mb-2 hidden md:block">Навыки и прогресс ELO</h3>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
                             <ChartContainer config={{}} className="w-full h-40">
-                                <RadarChart data={skillData} cy="50%" cx="50%">
+                                <RadarChart data={emptySkillData} cy="50%" cx="50%">
                                     <ChartTooltipContent />
                                     <PolarAngleAxis dataKey="subject" tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: '10px' }} className="lg:text-xs" />
                                     <Radar name="Skills" dataKey="A" stroke="hsl(var(--primary))" fill="hsl(var(--primary))" fillOpacity={0.6} />
                                 </RadarChart>
                             </ChartContainer>
                             <ChartContainer config={{elo: {label: 'ELO', color: "hsl(var(--primary))"}}} className="w-full h-40">
-                                <LineChart data={eloData} margin={{ top: 20, right: 10, left: -20, bottom: 0 }}>
+                                <LineChart data={initialEloData} margin={{ top: 20, right: 10, left: -20, bottom: 0 }}>
                                     <CartesianGrid vertical={false} />
                                     <XAxis dataKey="month" tickLine={false} axisLine={false} tickMargin={8} className="text-xs"/>
                                     <YAxis domain={['dataMin - 50', 'dataMax + 50']} hide/>
@@ -86,32 +80,16 @@ export const PlayerStatsOverviewWidget = () => {
                     </div>
                     <div>
                          <h3 className="text-base font-semibold mb-2 flex items-center gap-2"><History className="h-4 w-4" /> Карьера</h3>
-                         <Tabs defaultValue="2025">
-                            <TabsList className="grid grid-cols-3 w-full">
-                                <TabsTrigger value="2025" className="px-2 xl:px-3"><span className="lg:inline">Сезон </span>2025</TabsTrigger>
-                                <TabsTrigger value="2024" className="px-2 xl:px-3"><span className="lg:inline">Сезон </span>2024</TabsTrigger>
-                                <TabsTrigger value="total" className="px-2 xl:px-3">Всего</TabsTrigger>
+                         <Tabs defaultValue={currentSeason}>
+                            <TabsList className="grid grid-cols-1 w-full">
+                                <TabsTrigger value={currentSeason} className="px-2 xl:px-3">Сезон {currentSeason}</TabsTrigger>
                             </TabsList>
-                            <TabsContent value="2025" className="mt-2">
-                                <StatRow label="Матчи" value={careerStats['2025'].matches} />
-                                <StatRow label="Победы" value={`${careerStats['2025'].wins} (${Math.round(careerStats['2025'].wins / careerStats['2025'].matches * 100)}%)`} />
-                                <StatRow label="Голы" value={careerStats['2025'].goals} />
-                                <StatRow label="Ассисты" value={careerStats['2025'].assists} />
-                                <StatRow label="MVP" value={careerStats['2025'].mvp} />
-                            </TabsContent>
-                            <TabsContent value="2024" className="mt-2">
-                                <StatRow label="Матчи" value={careerStats['2024'].matches} />
-                                <StatRow label="Победы" value={`${careerStats['2024'].wins} (${Math.round(careerStats['2024'].wins / careerStats['2024'].matches * 100)}%)`} />
-                                <StatRow label="Голы" value={careerStats['2024'].goals} />
-                                <StatRow label="Ассисты" value={careerStats['2024'].assists} />
-                                <StatRow label="MVP" value={careerStats['2024'].mvp} />
-                            </TabsContent>
-                            <TabsContent value="total" className="mt-2">
-                                <StatRow label="Матчи" value={careerStats['total'].matches} />
-                                <StatRow label="Победы" value={`${careerStats['total'].wins} (${Math.round(careerStats['total'].wins / careerStats['total'].matches * 100)}%)`} />
-                                <StatRow label="Голы" value={careerStats['total'].goals} />
-                                <StatRow label="Ассисты" value={careerStats['total'].assists} />
-                                <StatRow label="MVP" value={careerStats['total'].mvp} />
+                            <TabsContent value={currentSeason} className="mt-2">
+                                <StatRow label="Матчи" value={emptyCareerStats.matches} />
+                                <StatRow label="Победы" value={`${emptyCareerStats.wins} (0%)`} />
+                                <StatRow label="Голы" value={emptyCareerStats.goals} />
+                                <StatRow label="Ассисты" value={emptyCareerStats.assists} />
+                                <StatRow label="MVP" value={emptyCareerStats.mvp} />
                             </TabsContent>
                         </Tabs>
                     </div>

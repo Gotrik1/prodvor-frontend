@@ -41,10 +41,10 @@ export function AchievementsWidget({ player }: { player: User }) {
 
 
     const unlockedCount = unlockedAchievements.length;
-    const progressPoints = unlockedCount * 200 + 1750; // Mock calculation
-    const currentLevel = Math.floor(progressPoints / 1250);
-    const pointsForCurrentLevel = (currentLevel - 1) * 1250;
-    const pointsToNextLevel = currentLevel * 1250;
+    const progressPoints = unlockedCount * 200; // XP only from achievements
+    const currentLevel = Math.floor(progressPoints / 1000) + 1;
+    const pointsForCurrentLevel = (currentLevel - 1) * 1000;
+    const pointsToNextLevel = currentLevel * 1000;
     const levelProgress = ((progressPoints - pointsForCurrentLevel) / (pointsToNextLevel - pointsForCurrentLevel)) * 100;
 
     return (
