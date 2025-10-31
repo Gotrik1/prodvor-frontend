@@ -99,7 +99,7 @@ export function DashboardHeader() {
                   >
                     <Link href="/store">
                       <Gem className="h-4 w-4 text-primary" />
-                      <span className="font-bold">1,250</span>
+                      <span className="font-bold">0</span>
                     </Link>
                   </Button>
                 </TooltipTrigger>

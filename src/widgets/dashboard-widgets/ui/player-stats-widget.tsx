@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
@@ -15,10 +16,10 @@ const getRankForElo = (elo: number) => {
 export function PlayerStatsWidget({ user }: { user: User }) {
   const rank = user.elo ? getRankForElo(user.elo) : null;
   // Mock progress data
-  const progressPoints = 3750;
-  const pointsToNextLevel = 5000;
-  const levelProgress = (progressPoints / pointsToNextLevel) * 100;
-  const currentLevel = 18;
+  const progressPoints = 0;
+  const pointsToNextLevel = 1000;
+  const levelProgress = 0;
+  const currentLevel = 1;
 
   return (
     <Card className="bg-card">
@@ -58,7 +59,7 @@ export function PlayerStatsWidget({ user }: { user: User }) {
                     <p className="text-xs text-muted-foreground">PD Coins</p>
                 </div>
             </div>
-            <p className="text-xl font-bold">1,250</p>
+            <p className="text-xl font-bold">0</p>
         </div>
         
         <Button asChild variant="secondary" size="sm" className="w-full">
