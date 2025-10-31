@@ -9,8 +9,8 @@ from flask_migrate import Migrate
 load_dotenv()
 
 app = Flask(__name__)
-# Standard CORS setup to allow credentials and all origins for development
-CORS(app, supports_credentials=True)
+# Explicitly configure CORS to handle preflight OPTIONS requests for POST
+CORS(app, resources={r"/api/*": {"origins": "*", "methods": ["GET", "POST", "OPTIONS"], "allow_headers": ["Content-Type", "Authorization"]}})
 
 
 # Configure the database connection using the DATABASE_URL from .env
