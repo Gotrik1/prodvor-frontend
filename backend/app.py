@@ -1,3 +1,4 @@
+
 import os
 from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
@@ -9,7 +10,7 @@ from flask_migrate import Migrate
 load_dotenv()
 
 app = Flask(__name__)
-# Explicitly configure CORS to handle preflight OPTIONS requests for POST
+# Explicitly configure CORS to handle preflight OPTIONS requests for POST and PUT
 CORS(app, resources={r"/api/*": {"origins": "*", "methods": ["GET", "POST", "PUT", "OPTIONS"], "allow_headers": ["Content-Type", "Authorization"]}})
 
 
@@ -296,9 +297,21 @@ def get_users():
     users = User.query.all()
     return jsonify([user.to_dict() for user in users])
 
-@app.route('/api/v1/users/<int:user_id>', methods=['GET'])
-def get_user(user_id):
-    user = db.get_or_404(User, user_id)
+@app.route('/api/v1/users/<string:identifier>', methods=['GET'])
+def get_user(identifier):
+    user = None
+    # Try to convert identifier to int to check for ID
+    try:
+        user_id = int(identifier)
+        user = db.session.get(User, user_id)
+    except ValueError:
+        # If conversion fails, it's a string (nickname)
+        pass
+
+    if user is None:
+        # If not found by ID or if identifier was not an int, search by nickname
+        user = User.query.filter_by(nickname=identifier).first_or_404()
+
     return jsonify(user.to_dict())
 
 @app.route('/api/v1/users', methods=['POST'])
@@ -551,3 +564,5 @@ if __name__ == '__main__':
     with app.app_context():
         db.create_all()
     app.run(debug=True, host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))
+
+    
