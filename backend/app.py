@@ -10,7 +10,7 @@ load_dotenv()
 
 app = Flask(__name__)
 # Explicitly configure CORS to handle preflight OPTIONS requests for POST
-CORS(app, resources={r"/api/*": {"origins": "*", "methods": ["GET", "POST", "OPTIONS"], "allow_headers": ["Content-Type", "Authorization"]}})
+CORS(app, resources={r"/api/*": {"origins": "*", "methods": ["GET", "POST", "PUT", "OPTIONS"], "allow_headers": ["Content-Type", "Authorization"]}})
 
 
 # Configure the database connection using the DATABASE_URL from .env
@@ -337,6 +337,27 @@ def create_user():
     db.session.commit()
 
     return jsonify(new_user.to_dict()), 201
+    
+@app.route('/api/v1/users/<int:user_id>', methods=['PUT'])
+def update_user(user_id):
+    user = db.get_or_404(User, user_id)
+    data = request.get_json()
+
+    if not data:
+        return jsonify({'error': 'No data provided'}), 400
+
+    # Update fields from the request data
+    user.firstName = data.get('firstName', user.firstName)
+    user.lastName = data.get('lastName', user.lastName)
+    user.nickname = data.get('nickname', user.nickname)
+    user.gender = data.get('gender', user.gender)
+    user.bio = data.get('bio', user.bio)
+    user.city = data.get('city', user.city)
+    user.age = data.get('age', user.age)
+    # email and password change should be handled separately for security
+    
+    db.session.commit()
+    return jsonify(user.to_dict()), 200
 
 @app.route('/api/v1/teams', methods=['GET'])
 def get_teams():

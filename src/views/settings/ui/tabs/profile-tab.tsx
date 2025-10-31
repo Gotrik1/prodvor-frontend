@@ -1,5 +1,3 @@
-
-
 'use client';
 
 import { useForm } from 'react-hook-form';
@@ -39,6 +37,8 @@ import { MultiSelect } from '@/shared/ui/multi-select';
 import React, { useState, useCallback, useEffect } from 'react';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/shared/ui/dialog';
 import Image from 'next/image';
+import axios from 'axios';
+import type { User } from '@/mocks';
 
 const profileFormSchema = z.object({
   firstName: z.string().min(2, 'Имя должно содержать не менее 2 символов.'),
@@ -144,7 +144,7 @@ const AvatarUploadDialog = () => {
 
 export function ProfileTab() {
     const { toast } = useToast();
-    const { user: currentUser } = useUserStore();
+    const { user: currentUser, setUser } = useUserStore();
     
     const profileForm = useForm<z.infer<typeof profileFormSchema>>({
         resolver: zodResolver(profileFormSchema),
@@ -174,8 +174,26 @@ export function ProfileTab() {
         }
     }, [currentUser, profileForm]);
 
-    function onProfileSubmit() {
-        toast({ title: "Профиль обновлен", description: "Ваши данные успешно сохранены." });
+    async function onProfileSubmit(values: z.infer<typeof profileFormSchema>) {
+        if (!currentUser) return;
+
+        const updatedData = {
+            ...currentUser,
+            ...values,
+            age: new Date().getFullYear() - values.birthDate.getFullYear(),
+        };
+        
+        try {
+            const response = await axios.put(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/users/${currentUser.id}`, updatedData);
+            setUser(response.data as User);
+            toast({ title: "Профиль обновлен", description: "Ваши данные успешно сохранены." });
+        } catch (error) {
+             toast({
+                variant: 'destructive',
+                title: "Ошибка",
+                description: "Не удалось сохранить изменения. Попробуйте позже.",
+            });
+        }
     }
 
     return (
@@ -296,7 +314,13 @@ export function ProfileTab() {
                         )}/>
                     </CardContent>
                     <CardFooter className="border-t px-6 py-4">
-                        <Button type="submit"><Save className="mr-2 h-4 w-4" />Сохранить</Button>
+                        <Button type="submit" disabled={profileForm.formState.isSubmitting}>
+                             {profileForm.formState.isSubmitting ? (
+                                <><Loader2 className="mr-2 h-4 w-4 animate-spin"/> Сохранение...</>
+                             ) : (
+                                <><Save className="mr-2 h-4 w-4" />Сохранить</>
+                             )}
+                        </Button>
                     </CardFooter>
                 </Card>
             </form>
