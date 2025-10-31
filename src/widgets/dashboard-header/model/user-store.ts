@@ -8,6 +8,7 @@ import { persist, createJSONStorage } from 'zustand/middleware';
 interface UserState {
   user: User | null;
   setUser: (user: User | null) => void;
+  signOut: () => void;
 }
 
 export const useUserStore = create<UserState>()(
@@ -15,6 +16,7 @@ export const useUserStore = create<UserState>()(
     (set) => ({
       user: null, // Start with no user selected
       setUser: (user) => set({ user }),
+      signOut: () => set({ user: null }),
     }),
     {
       name: 'prodvor-user-simulation-storage', 

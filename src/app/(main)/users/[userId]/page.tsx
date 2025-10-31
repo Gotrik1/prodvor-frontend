@@ -21,7 +21,7 @@ async function getUser(userId: string): Promise<User | undefined> {
         return undefined;
     }
     try {
-        const response = await fetch(`${API_BASE_URL}/api/v1/users/${userId}`, { cache: 'no-store' });
+        const response = await fetch(`${API_BASE_URL}/api/v1/users/${userId}`);
         if (!response.ok) {
             console.error(`Failed to fetch user: ${response.status}`);
             return undefined;

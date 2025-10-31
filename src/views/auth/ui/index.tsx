@@ -1,8 +1,7 @@
 
-
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -128,9 +127,14 @@ const SocialButton = ({ className, children }: { className?: string, children: R
 
 export function AuthPage() {
   const { toast } = useToast();
-  const { setUser } = useUserStore();
+  const { setUser, signOut } = useUserStore();
   const router = useRouter();
   const [isLoading, setIsLoading] = React.useState(false);
+
+  useEffect(() => {
+    // Clear any previous user simulation when visiting the auth page
+    signOut();
+  }, [signOut]);
 
   const form = useForm<z.infer<typeof loginFormSchema>>({
     resolver: zodResolver(loginFormSchema),
