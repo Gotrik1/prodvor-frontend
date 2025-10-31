@@ -19,7 +19,7 @@ export function PlayerStatsWidget({ user }: { user: User }) {
   const progressPoints = 0;
   const pointsToNextLevel = 1000;
   const levelProgress = 0;
-  const currentLevel = 1;
+  const currentLevel = 0;
 
   return (
     <Card className="bg-card">

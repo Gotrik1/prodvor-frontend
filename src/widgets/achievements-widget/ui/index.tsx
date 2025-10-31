@@ -42,10 +42,10 @@ export function AchievementsWidget({ player }: { player: User }) {
 
     const unlockedCount = unlockedAchievements.length;
     const progressPoints = unlockedCount * 200; // XP only from achievements
-    const currentLevel = Math.floor(progressPoints / 1000) + 1;
-    const pointsForCurrentLevel = (currentLevel - 1) * 1000;
-    const pointsToNextLevel = currentLevel * 1000;
-    const levelProgress = ((progressPoints - pointsForCurrentLevel) / (pointsToNextLevel - pointsForCurrentLevel)) * 100;
+    const currentLevel = progressPoints > 0 ? Math.floor(progressPoints / 1000) + 1 : 0;
+    const pointsForCurrentLevel = (currentLevel > 0 ? currentLevel - 1 : 0) * 1000;
+    const pointsToNextLevel = (currentLevel > 0 ? currentLevel : 1) * 1000;
+    const levelProgress = pointsToNextLevel > pointsForCurrentLevel ? ((progressPoints - pointsForCurrentLevel) / (pointsToNextLevel - pointsForCurrentLevel)) * 100 : 0;
 
     return (
         <Card className="md:shadow-main-sm shadow-none md:bg-card bg-transparent">
