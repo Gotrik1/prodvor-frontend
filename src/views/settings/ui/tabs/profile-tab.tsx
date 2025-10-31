@@ -33,13 +33,12 @@ import Link from 'next/link';
 import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/popover';
 import { Calendar } from '@/shared/ui/calendar';
 import { cn } from '@/shared/lib/utils';
-import { allSports } from '@/mocks';
-import { MultiSelect } from '@/shared/ui/multi-select';
+import { MultiSelect, type OptionType } from '@/shared/ui/multi-select';
 import React, { useState, useCallback, useEffect } from 'react';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/shared/ui/dialog';
 import Image from 'next/image';
 import axios from 'axios';
-import type { User } from '@/mocks';
+import type { User, Sport } from '@/mocks';
 
 const profileFormSchema = z.object({
   firstName: z.string().min(2, 'Имя должно содержать не менее 2 символов.'),
@@ -53,12 +52,6 @@ const profileFormSchema = z.object({
   city: z.string().min(2, "Название города должно содержать не менее 2 символов."),
   disciplines: z.array(z.string()).min(1, "Выберите хотя бы одну дисциплину.").max(5, "Можно выбрать не более 5 дисциплин."),
 });
-
-const sportOptions = allSports.map(sport => ({
-    value: sport.id,
-    label: sport.name,
-    group: sport.isTeamSport ? 'Командные' : 'Индивидуальные',
-}));
 
 const AvatarUploadDialog = () => {
     const { user, setUser } = useUserStore();
@@ -146,7 +139,34 @@ const AvatarUploadDialog = () => {
 export function ProfileTab() {
     const { toast } = useToast();
     const { user: currentUser, setUser } = useUserStore();
+    const [sportOptions, setSportOptions] = useState<OptionType[]>([]);
     
+    const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+
+    useEffect(() => {
+        async function fetchSports() {
+            if (!API_BASE_URL) return;
+            try {
+                const response = await axios.get(`${API_BASE_URL}/api/v1/sports`);
+                const sports: Sport[] = response.data;
+                const options = sports.map(sport => ({
+                    value: String(sport.id),
+                    label: sport.name,
+                    group: sport.is_team_sport ? 'Командные' : 'Индивидуальные',
+                }));
+                setSportOptions(options);
+            } catch (error) {
+                console.error("Failed to fetch sports:", error);
+                toast({
+                    variant: 'destructive',
+                    title: 'Ошибка загрузки',
+                    description: 'Не удалось загрузить список дисциплин.'
+                });
+            }
+        }
+        fetchSports();
+    }, [API_BASE_URL, toast]);
+
     const profileForm = useForm<z.infer<typeof profileFormSchema>>({
         resolver: zodResolver(profileFormSchema),
         defaultValues: {
@@ -169,7 +189,7 @@ export function ProfileTab() {
                 gender: currentUser.gender || 'мужской',
                 bio: currentUser.bio || "Страстный игрок в дворовый футбол и CS2. Ищу команду для серьезных игр.",
                 city: currentUser.city || '',
-                disciplines: currentUser.disciplines || [],
+                disciplines: currentUser.disciplines.map(String) || [],
                 birthDate: currentUser.age ? new Date(new Date().setFullYear(new Date().getFullYear() - currentUser.age)) : undefined,
             });
         }
@@ -189,7 +209,7 @@ export function ProfileTab() {
         };
 
         try {
-            const response = await axios.put(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/users/${currentUser.id}`, dataToUpdate);
+            const response = await axios.put(`${API_BASE_URL}/api/v1/users/${currentUser.id}`, dataToUpdate);
             
             setUser(response.data as User);
 
@@ -337,3 +357,5 @@ export function ProfileTab() {
         </Form>
     );
 }
+
+    

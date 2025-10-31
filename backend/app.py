@@ -268,6 +268,32 @@ class Sponsor(db.Model):
             'logoUrl': self.logoUrl,
             'contribution': self.contribution
         }
+        
+class Subdiscipline(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(150), nullable=False)
+    sport_id = db.Column(db.Integer, db.ForeignKey('sport.id'), nullable=False)
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'sport_id': self.sport_id
+        }
+
+class Sport(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(150), nullable=False, unique=True)
+    is_team_sport = db.Column(db.Boolean, default=True, nullable=False)
+    subdisciplines = db.relationship('Subdiscipline', backref='sport', lazy=True, cascade="all, delete-orphan")
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'is_team_sport': self.is_team_sport,
+            'subdisciplines': [sub.to_dict() for sub in self.subdisciplines]
+        }
 
 
 
@@ -560,9 +586,53 @@ def get_coach_profiles():
     profiles = CoachProfile.query.all()
     return jsonify([p.to_dict() for p in profiles])
 
+@app.route('/api/v1/sports', methods=['GET'])
+def get_sports():
+    sports = Sport.query.all()
+    return jsonify([s.to_dict() for s in sports])
+
+@app.route('/api/v1/sports', methods=['POST'])
+def create_sport():
+    data = request.get_json()
+    if not data or 'name' not in data or 'is_team_sport' not in data:
+        return jsonify({'error': 'Missing data'}), 400
+
+    new_sport = Sport(
+        name=data['name'],
+        is_team_sport=data['is_team_sport']
+    )
+
+    db.session.add(new_sport)
+    db.session.commit()
+    return jsonify(new_sport.to_dict()), 201
+
+@app.route('/api/v1/subdisciplines', methods=['GET'])
+def get_subdisciplines():
+    subdisciplines = Subdiscipline.query.all()
+    return jsonify([s.to_dict() for s in subdisciplines])
+
+@app.route('/api/v1/sports/<int:sport_id>/subdisciplines', methods=['POST'])
+def create_subdiscipline(sport_id):
+    sport = db.get_or_404(Sport, sport_id)
+    data = request.get_json()
+    if not data or 'name' not in data:
+        return jsonify({'error': 'Missing name for subdiscipline'}), 400
+
+    new_subdiscipline = Subdiscipline(
+        name=data['name'],
+        sport_id=sport.id
+    )
+
+    db.session.add(new_subdiscipline)
+    db.session.commit()
+
+    return jsonify(new_subdiscipline.to_dict()), 201
+
+
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
     app.run(debug=True, host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))
 
+    
     
