@@ -51,7 +51,7 @@ const profileFormSchema = z.object({
     required_error: "Пожалуйста, выберите дату рождения.",
   }),
   city: z.string().min(2, "Название города должно содержать не менее 2 символов."),
-  disciplines: z.array(z.string()).min(1, "Выберите хотя бы одну дисциплину."),
+  disciplines: z.array(z.string()).min(1, "Выберите хотя бы одну дисциплину.").max(5, "Можно выбрать не более 5 дисциплин."),
 });
 
 const sportOptions = allSports.map(sport => ({
@@ -314,7 +314,7 @@ export function ProfileTab() {
                                             className="w-full"
                                         />
                                     </FormControl>
-                                    <FormDescription>Выберите виды спорта, в которых вы участвуете.</FormDescription>
+                                    <FormDescription>Выберите до 5 видов спорта, в которых вы участвуете.</FormDescription>
                                     <FormMessage />
                                 </FormItem>
                             )}
