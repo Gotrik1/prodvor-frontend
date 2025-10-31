@@ -4,7 +4,6 @@ import type { Metadata } from 'next';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Button } from '@/shared/ui/button';
 import Link from 'next/link';
-import { PlayerPage } from '@/views/users/player';
 import { CoachPageTemplate } from '@/views/admin/ui/templates/coach-page-template';
 import { FanPageTemplate } from '@/views/admin/ui/templates/fan-page-template';
 import { ManagerPageTemplate } from '@/views/admin/ui/templates/manager-page-template';
@@ -70,14 +69,17 @@ export default async function UserProfilePage({ params }: { params: { userId: st
   const renderContent = () => {
     switch (user.role) {
       case 'Судья':
+      case 'referee':
           return <RefereePageTemplate user={user} />;
       case 'Тренер':
+      case 'coach':
           return <CoachPageTemplate user={user} />;
       case 'Менеджер':
           return <ManagerPageTemplate user={user} />;
       case 'Организатор':
           return <OrganizerPageTemplate user={user} />;
       case 'Игрок':
+      case 'player':
       case 'Капитан':
           return <PlayerPageTemplate user={user} />;
       case 'Болельщик':

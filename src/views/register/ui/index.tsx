@@ -151,9 +151,9 @@ export function RegisterPage() {
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          <SelectItem value="Игрок">Игрок</SelectItem>
-                          <SelectItem value="Судья">Судья</SelectItem>
-                          <SelectItem value="Тренер">Тренер</SelectItem>
+                          <SelectItem value="player">Игрок</SelectItem>
+                          <SelectItem value="referee">Судья</SelectItem>
+                          <SelectItem value="coach">Тренер</SelectItem>
                         </SelectContent>
                       </Select>
                        <FormMessage />
