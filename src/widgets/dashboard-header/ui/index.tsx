@@ -42,6 +42,11 @@ export function DashboardHeader() {
   const { user } = useUserStore();
   const [open, setOpen] = React.useState(false);
   const pathname = usePathname();
+  const [isClient, setIsClient] = React.useState(false);
+
+  React.useEffect(() => {
+    setIsClient(true);
+  }, []);
   
   React.useEffect(() => {
     const down = (e: KeyboardEvent) => {
@@ -56,8 +61,7 @@ export function DashboardHeader() {
 
   const isAdminPage = pathname?.startsWith('/admin');
 
-  // Define profile link safely
-  const profileHref = user?.id ? `/users/${user.id}` : '/dashboard';
+  const profileHref = isClient && user?.id ? `/users/${user.id}` : '/dashboard';
 
   return (
     <header className="sticky top-0 z-40 flex h-16 items-center justify-between border-b border-layout-border bg-card p-4">
@@ -91,25 +95,27 @@ export function DashboardHeader() {
             </Button>
         ) : (
           <React.Fragment>
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button
-                    variant="outline"
-                    className="hidden sm:flex items-center gap-2"
-                    asChild
-                  >
-                    <Link href="/store">
-                      <Gem className="h-4 w-4 text-primary" />
-                      <span className="font-bold">0</span>
-                    </Link>
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>Ваш баланс PD Coins</p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
+            {isClient && user && (
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant="outline"
+                      className="hidden sm:flex items-center gap-2"
+                      asChild
+                    >
+                      <Link href="/store">
+                        <Gem className="h-4 w-4 text-primary" />
+                        <span className="font-bold">0</span>
+                      </Link>
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Ваш баланс PD Coins</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            )}
 
             <Button variant="ghost" size="icon" asChild>
               <Link href="/store">
@@ -142,8 +148,14 @@ export function DashboardHeader() {
               className="relative h-10 w-10 rounded-full"
             >
               <Avatar>
-                <AvatarImage src={user?.avatarUrl} />
-                <AvatarFallback>{user?.nickname?.charAt(0) || '?'}</AvatarFallback>
+                {isClient && user ? (
+                  <>
+                    <AvatarImage src={user.avatarUrl} />
+                    <AvatarFallback>{user.nickname?.charAt(0) || '?'}</AvatarFallback>
+                  </>
+                ) : (
+                  <AvatarFallback>?</AvatarFallback>
+                )}
               </Avatar>
             </Button>
           </DropdownMenuTrigger>
@@ -151,10 +163,10 @@ export function DashboardHeader() {
             <DropdownMenuLabel className="font-normal">
               <div className="flex flex-col space-y-1">
                 <p className="text-sm font-medium leading-none">
-                  {user?.nickname || "Загрузка..."}
+                  {isClient && user ? user.nickname : "Загрузка..."}
                 </p>
                 <p className="text-xs leading-none text-muted-foreground">
-                  {user?.email || "..."}
+                  {isClient && user ? user.email : "..."}
                 </p>
               </div>
             </DropdownMenuLabel>
