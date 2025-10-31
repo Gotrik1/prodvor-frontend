@@ -10,8 +10,8 @@ from flask_migrate import Migrate
 load_dotenv()
 
 app = Flask(__name__)
-# TEMPORARY DEBUGGING STEP: Allow all origins to isolate the CORS issue.
-CORS(app, resources={r"/api/*": {"origins": "*"}})
+# Уточненная конфигурация CORS для явного разрешения GET-запросов
+CORS(app, resources={r"/api/*": {"origins": "*"}}, methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"])
 
 
 # Configure the database connection using the DATABASE_URL from .env
