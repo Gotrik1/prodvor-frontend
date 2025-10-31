@@ -3,12 +3,9 @@ import { TournamentRegisterPage } from '@/views/tournaments/register';
 import type { Metadata } from 'next';
 import type { Tournament } from '@/mocks';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
-
 async function getTournament(tournamentId: string): Promise<Tournament | undefined> {
     try {
-        if (!API_BASE_URL) return undefined;
-        const response = await fetch(`${API_BASE_URL}/api/v1/tournaments/${tournamentId}`);
+        const response = await fetch(`/api/v1/tournaments/${tournamentId}`);
         if (!response.ok) return undefined;
         return await response.json();
     } catch (error) {

@@ -6,8 +6,6 @@ import { produce } from 'immer';
 import type { Post, Comment } from '@/mocks/posts';
 import type { User } from '@/mocks';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
-
 interface PostState {
   posts: Post[];
   fetchPosts: () => Promise<void>;
@@ -22,8 +20,7 @@ export const usePostStore = create<PostState>()(
       posts: [], // Изначально массив пуст
       fetchPosts: async () => {
         try {
-            if (!API_BASE_URL) return;
-            const response = await fetch(`${API_BASE_URL}/api/v1/posts`);
+            const response = await fetch(`/api/v1/posts`);
             if (!response.ok) throw new Error('Failed to fetch posts');
             const data = await response.json();
             set({ posts: data });

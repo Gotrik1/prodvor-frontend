@@ -13,23 +13,18 @@ import { PlaceholderTemplate } from '@/views/admin/ui/templates/placeholder-temp
 import type { User } from '@/mocks';
 import { PlayerPageTemplate } from '@/views/admin/ui/templates/player-page-template';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 async function getUser(userId: string): Promise<User | undefined> {
-    if (!API_BASE_URL) {
-        console.error("API_BASE_URL is not defined");
-        return undefined;
-    }
     try {
-        const response = await fetch(`${API_BASE_URL}/api/v1/users/${userId}`);
+        // The base URL is now handled by the proxy, so we use a relative path.
+        const response = await fetch(`/api/v1/users/${userId}`);
         if (!response.ok) {
-            // This will now handle 404s gracefully
-            console.error(`Failed to fetch user: ${response.status}`);
+            console.error(`[ Server ] Failed to fetch user: ${response.status}`);
             return undefined;
         }
         return await response.json();
     } catch (error) {
-        console.error("Failed to fetch user:", error);
+        console.error(`[ Server ] Failed to fetch user:`, error);
         return undefined;
     }
 }

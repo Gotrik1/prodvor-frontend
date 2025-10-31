@@ -4,12 +4,9 @@ import type { Metadata } from 'next';
 import MainLayout from '@/app/(main)/layout';
 import type { Team } from '@/mocks';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
-
 async function getTeam(teamId: string): Promise<Team | undefined> {
     try {
-        if (!API_BASE_URL) return undefined;
-        const response = await fetch(`${API_BASE_URL}/api/v1/teams/${teamId}`);
+        const response = await fetch(`/api/v1/teams/${teamId}`);
         if (!response.ok) return undefined;
         return await response.json();
     } catch (error) {

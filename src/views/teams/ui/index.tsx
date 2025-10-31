@@ -60,16 +60,8 @@ export function TeamsPage() {
     const [allTeams, setAllTeams] = useState<Team[]>([]);
     const [connectionStatus, setConnectionStatus] = useState<'unknown' | 'success' | 'failed'>('unknown');
     
-    const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
-
     useEffect(() => {
         async function fetchTeams() {
-            if (!API_BASE_URL) {
-                console.error("API_BASE_URL is not set.");
-                setConnectionStatus('failed');
-                setAllTeams(mockTeams); // Fallback to mocks
-                return;
-            }
             try {
                 // Using the proxied URL now
                 const response = await axios.get(`/api/v1/teams`);
@@ -79,13 +71,18 @@ export function TeamsPage() {
                 console.error("Failed to fetch teams:", error);
                 setConnectionStatus('failed');
                 setAllTeams(mockTeams); // Fallback to mocks
+                toast({
+                    variant: "destructive",
+                    title: "Ошибка загрузки команд",
+                    description: "Не удалось получить данные с бэкенда. Отображаются моковые данные.",
+                });
             }
         }
         fetchTeams();
-    }, [API_BASE_URL]);
+    }, [toast]);
 
     const handlePing = async () => {
-        const backendUrl = '/api'; // Use the proxied URL
+        const backendUrl = '/api/ping'; // Use a simple, non-existent endpoint for the check
         
         toast({
             title: "Проверка связи...",
@@ -93,25 +90,31 @@ export function TeamsPage() {
         });
 
         try {
-            // We expect this might not be a valid endpoint, but we check if we get a response other than Network Error
+            // We expect a 404, but not a network error if proxy works
             await axios.get(backendUrl); 
+            // If it resolves without a network error (even with 404), proxy is working
             setConnectionStatus('success');
             toast({
                 title: "Связь с бэкендом установлена!",
                 description: "Сервер успешно ответил на запрос.",
             });
-             // Refetch teams after successful ping
-            const response = await axios.get(`/api/v1/teams`);
-            setAllTeams(response.data);
-
         } catch (error) {
-            setConnectionStatus('failed');
-            console.error("Ping failed with error:", error);
-            toast({
-                variant: "destructive",
-                title: "Ошибка соединения",
-                description: "Не удалось подключиться к бэкенду. Проверьте CORS на сервере или настройки прокси.",
-            });
+            if (axios.isAxiosError(error) && error.response) {
+                // We got a response, so connection is ok
+                 setConnectionStatus('success');
+                 toast({
+                    title: "Связь с бэкендом установлена!",
+                    description: `Сервер ответил со статусом ${error.response.status}.`,
+                });
+            } else {
+                 setConnectionStatus('failed');
+                console.error("Ping failed with error:", error);
+                toast({
+                    variant: "destructive",
+                    title: "Ошибка соединения",
+                    description: "Не удалось подключиться к бэкенду. Проверьте CORS на сервере или настройки прокси.",
+                });
+            }
         }
     };
     
@@ -162,21 +165,8 @@ export function TeamsPage() {
 
             <div>
                 <h2 className="text-2xl font-bold mb-4">Все команды</h2>
-                 {connectionStatus === 'success' && allTeams.length > 0 ? (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                        {otherTeams.map(team => (
-                            <TeamCard key={team.id} team={team} isMember={false} />
-                        ))}
-                    </div>
-                ) : connectionStatus !== 'unknown' ? (
-                     <Card className="text-center min-h-[200px] flex flex-col justify-center items-center">
-                        <CardHeader>
-                            <CardTitle>Не удалось загрузить команды</CardTitle>
-                            <CardDescription>Попробуйте проверить связь с бэкендом или обновите страницу.</CardDescription>
-                        </CardHeader>
-                    </Card>
-                ) : (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                 {connectionStatus === 'unknown' ? (
+                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                         {[...Array(4)].map((_, i) => (
                              <Card key={i}>
                                  <CardHeader><Skeleton className="h-16 w-full" /></CardHeader>
@@ -185,6 +175,19 @@ export function TeamsPage() {
                             </Card>
                         ))}
                     </div>
+                ) : allTeams.length > 0 ? (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                        {otherTeams.map(team => (
+                            <TeamCard key={team.id} team={team} isMember={false} />
+                        ))}
+                    </div>
+                ) : (
+                     <Card className="text-center min-h-[200px] flex flex-col justify-center items-center">
+                        <CardHeader>
+                            <CardTitle>Не удалось загрузить команды</CardTitle>
+                            <CardDescription>Попробуйте проверить связь с бэкендом или обновите страницу.</CardDescription>
+                        </CardHeader>
+                    </Card>
                 )}
             </div>
         </div>
