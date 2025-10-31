@@ -37,6 +37,7 @@ import React from 'react';
 import { GlobalSearch } from './global-search';
 import { Logo } from '@/views/auth/ui';
 import { usePathname } from 'next/navigation';
+import { Skeleton } from '@/shared/ui/skeleton';
 
 export function DashboardHeader() {
   const { user } = useUserStore();
@@ -60,8 +61,6 @@ export function DashboardHeader() {
   }, []);
 
   const isAdminPage = pathname?.startsWith('/admin');
-
-  const profileHref = isClient && user?.id ? `/users/${user.id}` : '/dashboard';
 
   return (
     <header className="sticky top-0 z-40 flex h-16 items-center justify-between border-b border-layout-border bg-card p-4">
@@ -106,7 +105,7 @@ export function DashboardHeader() {
                     >
                       <Link href="/store">
                         <Gem className="h-4 w-4 text-primary" />
-                        <span className="font-bold">0</span>
+                        <span className="font-bold">{user?.id ? '0' : ''}</span>
                       </Link>
                     </Button>
                   </TooltipTrigger>
@@ -154,7 +153,7 @@ export function DashboardHeader() {
                     <AvatarFallback>{user.nickname?.charAt(0) || '?'}</AvatarFallback>
                   </>
                 ) : (
-                  <AvatarFallback>?</AvatarFallback>
+                  <Skeleton className="h-full w-full rounded-full" />
                 )}
               </Avatar>
             </Button>
@@ -171,8 +170,8 @@ export function DashboardHeader() {
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem asChild>
-              <Link href={profileHref}>
+            <DropdownMenuItem asChild disabled={!isClient || !user}>
+              <Link href={isClient && user ? `/users/${user.id}` : '#'}>
                 <User className="mr-2 h-4 w-4" />
                 <span>Профиль</span>
               </Link>
