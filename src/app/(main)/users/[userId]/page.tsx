@@ -1,3 +1,4 @@
+
 import type { Metadata } from 'next';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Button } from '@/shared/ui/button';
@@ -10,6 +11,7 @@ import { OrganizerPageTemplate } from '@/views/admin/ui/templates/organizer-page
 import { RefereePageTemplate } from '@/views/admin/ui/templates/referee-page-template';
 import { PlaceholderTemplate } from '@/views/admin/ui/templates/placeholder-template';
 import type { User } from '@/mocks';
+import { PlayerPageTemplate } from '@/views/admin/ui/templates/player-page-template';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -76,7 +78,7 @@ export default async function UserProfilePage({ params }: { params: { userId: st
           return <OrganizerPageTemplate user={user} />;
       case 'Игрок':
       case 'Капитан':
-          return <PlayerPage user={user} />;
+          return <PlayerPageTemplate user={user} />;
       case 'Болельщик':
           return <FanPageTemplate user={user} />;
       default:
