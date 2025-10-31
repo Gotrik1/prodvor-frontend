@@ -72,21 +72,33 @@ const AvatarUploadDialog = () => {
         };
     }, []);
 
-    const handleSaveAvatar = () => {
+    const handleSaveAvatar = async () => {
         if (!filePreview || !user) return;
         setIsLoading(true);
 
-        // Simulate backend upload
-        setTimeout(() => {
-            setUser({ ...user, avatarUrl: filePreview });
-            setIsLoading(false);
-            setIsOpen(false);
-            setFilePreview(null);
-            toast({
-                title: "Аватар обновлен!",
-                description: "Ваш новый аватар успешно сохранен.",
+        try {
+            const response = await axios.put(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/users/${user.id}`, {
+                avatarUrl: filePreview,
             });
-        }, 1500);
+
+            if (response.status === 200) {
+                setUser(response.data as User);
+                toast({
+                    title: "Аватар обновлен!",
+                    description: "Ваш новый аватар успешно сохранен.",
+                });
+                setIsOpen(false);
+                setFilePreview(null);
+            }
+        } catch (error) {
+             toast({
+                variant: "destructive",
+                title: "Ошибка",
+                description: "Не удалось сохранить аватар. Попробуйте позже.",
+            });
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     return (
@@ -355,6 +367,7 @@ export function ProfileTab() {
 }
 
     
+
 
 
 
