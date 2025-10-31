@@ -85,16 +85,21 @@ export function TeamsPage() {
 
     useEffect(() => {
         async function fetchTeams() {
+            if (!API_BASE_URL) {
+                console.error("Fetch teams failed: NEXT_PUBLIC_API_BASE_URL is not set.");
+                return;
+            }
             try {
-                if (!API_BASE_URL) return;
                 const response = await fetch(`${API_BASE_URL}/api/v1/teams`);
                 if (!response.ok) {
-                    throw new Error('Network response was not ok');
+                    throw new Error(`Network response was not ok. Status: ${response.status}`);
                 }
                 const data = await response.json();
                 setAllTeams(data);
+                 setPingStatus('success');
             } catch (error) {
                 console.error("Failed to fetch teams:", error);
+                setPingStatus('error');
             }
         }
         fetchTeams();
