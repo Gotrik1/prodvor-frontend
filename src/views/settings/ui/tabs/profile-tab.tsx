@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { useForm } from 'react-hook-form';
@@ -152,7 +153,7 @@ export function ProfileTab() {
                 const options = sports.map(sport => ({
                     value: String(sport.id),
                     label: sport.name,
-                    group: sport.is_team_sport ? 'Командные' : 'Индивидуальные',
+                    group: sport.isTeamSport ? 'Командные' : 'Индивидуальные',
                 }));
                 setSportOptions(options);
             } catch (error) {
@@ -189,7 +190,7 @@ export function ProfileTab() {
                 gender: currentUser.gender || 'мужской',
                 bio: currentUser.bio || "Страстный игрок в дворовый футбол и CS2. Ищу команду для серьезных игр.",
                 city: currentUser.city || '',
-                disciplines: currentUser.disciplines.map(String) || [],
+                disciplines: (currentUser.disciplines || []).map(String),
                 birthDate: currentUser.age ? new Date(new Date().setFullYear(new Date().getFullYear() - currentUser.age)) : undefined,
             });
         }
