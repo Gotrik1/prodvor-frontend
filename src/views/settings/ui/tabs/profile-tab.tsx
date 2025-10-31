@@ -148,7 +148,7 @@ export function ProfileTab() {
         async function fetchSports() {
             if (!API_BASE_URL) return;
             try {
-                const response = await axios.get(`${API_BASE_URL}/api/v1/sports`);
+                const response = await axios.get(`${API_BASE_URL}/api/sports`);
                 const sports: Sport[] = response.data;
                 const options = sports.map(sport => ({
                     value: String(sport.id),
@@ -200,12 +200,7 @@ export function ProfileTab() {
         if (!currentUser) return;
         
         const dataToUpdate = {
-            firstName: values.firstName,
-            lastName: values.lastName,
-            nickname: values.nickname,
-            gender: values.gender,
-            bio: values.bio,
-            city: values.city,
+            ...values,
             age: new Date().getFullYear() - values.birthDate.getFullYear(),
         };
 
@@ -360,3 +355,4 @@ export function ProfileTab() {
 }
 
     
+
