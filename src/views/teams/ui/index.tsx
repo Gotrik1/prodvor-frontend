@@ -67,22 +67,25 @@ export function TeamsPage() {
             if (!API_BASE_URL) {
                 console.error("API_BASE_URL is not set.");
                 setConnectionStatus('failed');
+                setAllTeams(mockTeams); // Fallback to mocks
                 return;
             }
             try {
-                const response = await axios.get(`${API_BASE_URL}/api/v1/teams`);
+                // Using the proxied URL now
+                const response = await axios.get(`/api/v1/teams`);
                 setAllTeams(response.data);
                 setConnectionStatus('success');
             } catch (error) {
                 console.error("Failed to fetch teams:", error);
                 setConnectionStatus('failed');
+                setAllTeams(mockTeams); // Fallback to mocks
             }
         }
         fetchTeams();
     }, [API_BASE_URL]);
 
     const handlePing = async () => {
-        const backendUrl = 'https://8080-firebase-prodvor-backend-1761850902881.cluster-ombtxv25tbd6yrjpp3lukp6zhc.cloudworkstations.dev/';
+        const backendUrl = '/api'; // Use the proxied URL
         
         toast({
             title: "Проверка связи...",
@@ -90,17 +93,16 @@ export function TeamsPage() {
         });
 
         try {
-            await axios.get(backendUrl);
+            // We expect this might not be a valid endpoint, but we check if we get a response other than Network Error
+            await axios.get(backendUrl); 
             setConnectionStatus('success');
             toast({
                 title: "Связь с бэкендом установлена!",
                 description: "Сервер успешно ответил на запрос.",
             });
              // Refetch teams after successful ping
-            if (API_BASE_URL) {
-                const response = await axios.get(`${API_BASE_URL}/api/v1/teams`);
-                setAllTeams(response.data);
-            }
+            const response = await axios.get(`/api/v1/teams`);
+            setAllTeams(response.data);
 
         } catch (error) {
             setConnectionStatus('failed');
@@ -108,7 +110,7 @@ export function TeamsPage() {
             toast({
                 variant: "destructive",
                 title: "Ошибка соединения",
-                description: "Не удалось подключиться к бэкенду. Проверьте адрес и настройки CORS.",
+                description: "Не удалось подключиться к бэкенду. Проверьте CORS на сервере или настройки прокси.",
             });
         }
     };
