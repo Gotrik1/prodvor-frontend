@@ -263,6 +263,21 @@ class Sponsor(db.Model):
 def index():
     return jsonify({'message': 'Welcome to the API!'})
 
+@app.route('/api/v1/login', methods=['POST'])
+def login():
+    data = request.get_json()
+    if not data or not all(k in data for k in ('email', 'password')):
+        return jsonify({'error': 'Missing email or password'}), 400
+
+    user = User.query.filter_by(email=data['email']).first()
+
+    # For this prototype, we're not checking the password
+    if user:
+        return jsonify(user.to_dict()), 200
+    else:
+        return jsonify({'error': 'Invalid credentials'}), 401
+
+
 @app.route('/api/v1/users', methods=['GET'])
 def get_users():
     users = User.query.all()

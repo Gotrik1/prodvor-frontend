@@ -1,4 +1,13 @@
 
+'use client';
+
+import React from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import axios from 'axios';
+import { useRouter } from 'next/navigation';
+
 import { Button } from "@/shared/ui/button";
 import {
   Card,
@@ -15,6 +24,16 @@ import Image from 'next/image';
 import { cn } from '@/shared/lib/utils';
 import Link from 'next/link';
 import { i18n } from '@/shared/lib/i18n';
+import { useToast } from '@/shared/hooks/use-toast';
+import { useUserStore } from '@/widgets/dashboard-header/model/user-store';
+import { Loader2 } from 'lucide-react';
+import type { User } from '@/mocks';
+
+// ------------------ Схемы валидации ------------------
+const loginFormSchema = z.object({
+  email: z.string().email({ message: "Неверный формат email." }),
+  password: z.string().min(1, { message: "Пароль не может быть пустым." }),
+});
 
 // ------------------ Логотип ------------------
 export function Logo() {
@@ -25,7 +44,7 @@ export function Logo() {
   );
 }
 
-// ------------------ Yandex ------------------
+// ------------------ Иконки соцсетей ------------------
 export function YandexIcon(props: React.SVGProps<SVGSVGElement>) {
     return (
         <svg
@@ -43,7 +62,6 @@ export function YandexIcon(props: React.SVGProps<SVGSVGElement>) {
     );
 }
 
-// ------------------ VK ------------------
 export function VkIcon(props: React.SVGProps<SVGSVGElement>) {
     return (
         <svg
@@ -61,7 +79,6 @@ export function VkIcon(props: React.SVGProps<SVGSVGElement>) {
     );
 }
 
-// ------------------ Telegram ------------------
 export function TelegramIcon(props: React.SVGProps<SVGSVGElement>) {
     return (
         <svg
@@ -85,7 +102,6 @@ export function TelegramIcon(props: React.SVGProps<SVGSVGElement>) {
     );
 }
 
-// ------------------ Госуслуги ------------------
 export function GosuslugiIcon(props: React.SVGProps<SVGSVGElement>) {
     return (
         <svg
@@ -110,6 +126,44 @@ const SocialButton = ({ className, children }: { className?: string, children: R
 )
 
 export function AuthPage() {
+  const { toast } = useToast();
+  const { setUser } = useUserStore();
+  const router = useRouter();
+  const [isLoading, setIsLoading] = React.useState(false);
+
+  const form = useForm<z.infer<typeof loginFormSchema>>({
+    resolver: zodResolver(loginFormSchema),
+    defaultValues: {
+      email: "user1@example.com",
+      password: "password", // Default for easy login in prototype
+    },
+  });
+
+  const onSubmit = async (values: z.infer<typeof loginFormSchema>) => {
+    setIsLoading(true);
+    try {
+        const response = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/login`, values);
+        if (response.status === 200 && response.data) {
+            setUser(response.data as User);
+            toast({
+                title: "Вход выполнен!",
+                description: `Добро пожаловать, ${response.data.nickname}!`,
+            });
+            router.push('/dashboard');
+        }
+    } catch (error) {
+        console.error("Login failed:", error);
+        toast({
+            variant: "destructive",
+            title: "Ошибка входа",
+            description: "Неверный email или пароль. Попробуйте снова.",
+        });
+    } finally {
+        setIsLoading(false);
+    }
+  };
+
+
   return (
     <div className="flex items-center justify-center min-h-screen bg-background p-4">
       <Card className="w-full max-w-sm mx-auto shadow-xl border-border/60 bg-card">
@@ -134,20 +188,20 @@ export function AuthPage() {
                             <Label htmlFor="phone">{i18n.auth.phoneLabel}</Label>
                             <Input id="phone" type="tel" placeholder="+7 (___) ___-__-__" required />
                         </div>
-                        <Button asChild type="submit" className="w-full">
-                            <Link href="/dashboard">{i18n.auth.continue}</Link>
+                        <Button type="submit" className="w-full" onClick={() => router.push('/dashboard')}>
+                            {i18n.auth.continue}
                         </Button>
                     </div>
                 </TabsContent>
                 <TabsContent value="email" className="pt-4">
-                    <div className="space-y-4">
+                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
                         <div className="space-y-2">
                             <Label htmlFor="email">{i18n.auth.emailLabel}</Label>
-                            <Input id="email" type="email" placeholder="admin@example.com" required />
+                            <Input id="email" type="email" placeholder="admin@example.com" required {...form.register("email")} />
                         </div>
                         <div className="space-y-2">
                             <Label htmlFor="password">{i18n.auth.passwordLabel}</Label>
-                            <Input id="password" type="password" required />
+                            <Input id="password" type="password" required {...form.register("password")} />
                         </div>
                         <div className="flex items-center justify-between">
                             <div className="flex items-center space-x-2">
@@ -158,10 +212,11 @@ export function AuthPage() {
                                 {i18n.auth.forgotPassword}
                             </Link>
                         </div>
-                        <Button asChild type="submit" className="w-full">
-                           <Link href="/dashboard">{i18n.auth.continue}</Link>
+                        <Button type="submit" className="w-full" disabled={isLoading}>
+                            {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                            {isLoading ? "Вход..." : i18n.auth.continue}
                         </Button>
-                    </div>
+                    </form>
                 </TabsContent>
             </Tabs>
             
@@ -212,3 +267,5 @@ export function AuthPage() {
     </div>
   );
 }
+
+    

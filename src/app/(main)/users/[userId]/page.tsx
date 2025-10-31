@@ -1,21 +1,42 @@
 
-import { users } from '@/mocks';
-import { PlayerPage } from '@/views/users/player';
 import type { Metadata } from 'next';
+import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
+import { Button } from '@/shared/ui/button';
+import Link from 'next/link';
+import { PlayerPage } from '@/views/users/player';
 import { CoachPageTemplate } from '@/views/admin/ui/templates/coach-page-template';
 import { FanPageTemplate } from '@/views/admin/ui/templates/fan-page-template';
 import { ManagerPageTemplate } from '@/views/admin/ui/templates/manager-page-template';
 import { OrganizerPageTemplate } from '@/views/admin/ui/templates/organizer-page-template';
 import { RefereePageTemplate } from '@/views/admin/ui/templates/referee-page-template';
 import { PlaceholderTemplate } from '@/views/admin/ui/templates/placeholder-template';
-import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
-import { Button } from '@/shared/ui/button';
-import Link from 'next/link';
+import type { User } from '@/mocks';
+
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+
+async function getUser(userId: string): Promise<User | undefined> {
+    if (!API_BASE_URL) {
+        console.error("API_BASE_URL is not defined");
+        return undefined;
+    }
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/v1/users/${userId}`, { cache: 'no-store' });
+        if (!response.ok) {
+            console.error(`Failed to fetch user: ${response.status}`);
+            return undefined;
+        }
+        return await response.json();
+    } catch (error) {
+        console.error("Failed to fetch user:", error);
+        return undefined;
+    }
+}
+
 
 export async function generateMetadata({ params }: { params: { userId: string } }): Promise<Metadata> {
-  const user = users.find(u => u.id === params.userId);
+  const user = await getUser(params.userId);
   const title = user ? `Профиль ${user.nickname} | ProDvor` : 'Пользователь не найден | ProDvor';
-  const description = user ? `Публичный профиль пользователя ${user.firstName} ${user.lastName} (${user.nickname}).` : 'Запрошенный пользователь не найден.';
+  const description = user ? `Публичный профиль пользователя ${user.nickname}.` : 'Запрошенный пользователь не найден.';
 
   return {
     title,
@@ -23,8 +44,8 @@ export async function generateMetadata({ params }: { params: { userId: string } 
   };
 }
 
-export default function UserProfilePage({ params }: { params: { userId: string } }) {
-   const user = users.find(s => s.id === params.userId);
+export default async function UserProfilePage({ params }: { params: { userId: string } }) {
+   const user = await getUser(params.userId);
 
    if (!user) {
     return (
@@ -70,3 +91,5 @@ export default function UserProfilePage({ params }: { params: { userId: string }
     </div>
   )
 }
+
+    
