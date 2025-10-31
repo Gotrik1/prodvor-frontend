@@ -148,7 +148,7 @@ export function ProfileTab() {
         async function fetchSports() {
             if (!API_BASE_URL) return;
             try {
-                const response = await axios.get(`${API_BASE_URL}/api/sports`);
+                const response = await axios.get(`${API_BASE_URL}/api/v1/sports`);
                 const sports: Sport[] = response.data;
                 const options = sports.map(sport => ({
                     value: String(sport.id),
@@ -355,4 +355,5 @@ export function ProfileTab() {
 }
 
     
+
 
