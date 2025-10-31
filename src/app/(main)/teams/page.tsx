@@ -1,59 +1,21 @@
 
-import { TeamsPage } from '@/views/teams';
-import type { Metadata } from 'next';
-import { teams } from '@/mocks';
-import { Suspense } from 'react';
-import { TopTeamsWidgetSkeleton } from '@/widgets/top-teams-widget';
-
-export const metadata: Metadata = {
-    title: 'Команды | ProDvor',
-    description: 'Находите команды, вступайте в них или создайте свою собственную.',
-};
-
-// This function will now run on the server
-async function getTeamsData() {
-    const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
-    if (!API_BASE_URL) {
-        console.error("API_BASE_URL is not defined. Falling back to mock data.");
-        return teams;
-    }
-    try {
-        const response = await fetch(`${API_BASE_URL}/api/v1/teams`, { cache: 'no-store' });
-        if (!response.ok) {
-            console.error(`Failed to fetch teams: ${response.statusText}. Falling back to mock data.`);
-            return teams;
-        }
-        return await response.json();
-    } catch (error) {
-        console.error("Error fetching teams:", error);
-        return teams; // Fallback to mock data on error
-    }
-}
-
-
-export default async function Teams() {
-  const teamsData = await getTeamsData();
-  return (
-    <Suspense fallback={<TopTeamsWidgetSkeleton />}>
-        <TeamsPage serverTeams={teamsData} />
-    </Suspense>
-  );
-}
-
-// Re-add the TeamsPage component here to pass server data
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
+import { Suspense, useState, useEffect, useMemo } from 'react';
+import type { Metadata } from 'next';
+import { teams as mockTeams, type Team } from '@/mocks';
+import { TopTeamsWidget, TopTeamsWidgetSkeleton } from '@/widgets/top-teams-widget';
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/shared/ui/card";
 import { PlusCircle, UserCheck, Users, BarChart, Wifi, WifiOff } from "lucide-react";
 import Image from "next/image";
-import type { Team } from "@/mocks";
 import { Badge } from "@/shared/ui/badge";
 import Link from "next/link";
 import { useUserStore } from "@/widgets/dashboard-header/model/user-store";
-import { TopTeamsWidget } from "@/widgets/top-teams-widget";
 import { Separator } from "@/shared/ui/separator";
+
+// Server-side logic remains separate and isn't directly exported,
+// but its data is passed to the page component.
 
 const TeamCard = ({ team, isMember }: { team: Team, isMember: boolean }) => (
     <Card key={team.id} className="flex flex-col">
@@ -101,11 +63,11 @@ function TeamsPageComponent({ serverTeams }: { serverTeams: Team[] }) {
         if (!currentUser) {
             return { myTeams: [], otherTeams: allTeams };
         }
+        // This logic is now safe because it runs on the client after initial data load
         const myTeams = allTeams.filter(team => team.members.includes(currentUser.id));
         const otherTeams = allTeams.filter(team => !team.members.includes(currentUser.id));
         return { myTeams, otherTeams };
     }, [currentUser, allTeams]);
-
 
     return (
         <div className="p-4 md:p-6 lg:p-8 space-y-8">
@@ -134,7 +96,9 @@ function TeamsPageComponent({ serverTeams }: { serverTeams: Team[] }) {
                 </section>
             )}
             
-            <TopTeamsWidget />
+            <Suspense fallback={<TopTeamsWidgetSkeleton />}>
+                 <TopTeamsWidget />
+            </Suspense>
 
             <div>
                 <h2 className="text-2xl font-bold mb-4">Все команды</h2>
@@ -148,7 +112,7 @@ function TeamsPageComponent({ serverTeams }: { serverTeams: Team[] }) {
     );
 }
 
-// We need to redefine the component that is exported to accept the server-side props
-const TeamsPage = ({ serverTeams }: { serverTeams: Team[] }) => {
+// We wrap the client component to receive server-side props
+export function TeamsPage({ serverTeams }: { serverTeams: Team[] }) {
   return <TeamsPageComponent serverTeams={serverTeams} />;
-};
+}
