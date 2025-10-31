@@ -20,7 +20,7 @@ export const useUserStore = create<UserState>()(
     }),
     {
       name: 'prodvor-user-simulation-storage', 
-      storage: createJSONStorage(() => sessionStorage), // Use sessionStorage to reset on browser close
+      storage: createJSONStorage(() => localStorage), // Use localStorage for better persistence
     }
   )
 );
