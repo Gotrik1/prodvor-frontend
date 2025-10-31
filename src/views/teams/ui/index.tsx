@@ -1,3 +1,4 @@
+
 'use client';
 
 import { Suspense, useState, useEffect, useMemo } from 'react';
@@ -81,30 +82,25 @@ export function TeamsPage() {
     }, [API_BASE_URL]);
 
     const handlePing = async () => {
-        if (!API_BASE_URL) {
-            toast({
-                variant: "destructive",
-                title: "Ошибка конфигурации",
-                description: "URL бэкенда не установлен. Проверьте файл .env.",
-            });
-            return;
-        }
-
+        const backendUrl = 'https://8080-firebase-prodvor-backend-1761850902881.cluster-ombtxv25tbd6yrjpp3lukp6zhc.cloudworkstations.dev/';
+        
         toast({
             title: "Проверка связи...",
-            description: `Отправляю запрос к ${API_BASE_URL}`,
+            description: `Отправляю запрос к ${backendUrl}`,
         });
 
         try {
-            await axios.get(`${API_BASE_URL}/`);
+            await axios.get(backendUrl);
             setConnectionStatus('success');
             toast({
                 title: "Связь с бэкендом установлена!",
-                description: "Соединение успешно. Теперь данные должны загружаться.",
+                description: "Сервер успешно ответил на запрос.",
             });
              // Refetch teams after successful ping
-            const response = await axios.get(`${API_BASE_URL}/api/v1/teams`);
-            setAllTeams(response.data);
+            if (API_BASE_URL) {
+                const response = await axios.get(`${API_BASE_URL}/api/v1/teams`);
+                setAllTeams(response.data);
+            }
 
         } catch (error) {
             setConnectionStatus('failed');
@@ -112,7 +108,7 @@ export function TeamsPage() {
             toast({
                 variant: "destructive",
                 title: "Ошибка соединения",
-                description: "Не удалось подключиться к бэкенду. Проверьте настройки CORS и доступность сервера.",
+                description: "Не удалось подключиться к бэкенду. Проверьте адрес и настройки CORS.",
             });
         }
     };
