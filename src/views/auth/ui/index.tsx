@@ -140,8 +140,8 @@ export function AuthPage() {
   const form = useForm<z.infer<typeof loginFormSchema>>({
     resolver: zodResolver(loginFormSchema),
     defaultValues: {
-      email: "user1@example.com",
-      password: "password", // Default for easy login in prototype
+      email: "",
+      password: "",
     },
   });
 
@@ -203,11 +203,11 @@ export function AuthPage() {
                     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
                         <div className="space-y-2">
                             <Label htmlFor="email">{i18n.auth.emailLabel}</Label>
-                            <Input id="email" type="email" placeholder="admin@example.com" required {...form.register("email")} />
+                            <Input id="email" type="email" placeholder="Введите email" required {...form.register("email")} />
                         </div>
                         <div className="space-y-2">
                             <Label htmlFor="password">{i18n.auth.passwordLabel}</Label>
-                            <Input id="password" type="password" required {...form.register("password")} />
+                            <Input id="password" type="password" required {...form.register("password")} placeholder="Введите пароль"/>
                         </div>
                         <div className="flex items-center justify-between">
                             <div className="flex items-center space-x-2">
