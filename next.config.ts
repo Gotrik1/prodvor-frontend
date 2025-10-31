@@ -20,13 +20,25 @@ const nextConfig = {
         {
             protocol: 'https',
             hostname: 'picsum.photos',
+        },
+        {
+            protocol: 'https',
+            hostname: 'ppzkctfvrxqlcrpwtuuu.supabase.co',
         }
     ],
   },
   env: {
     NEXT_PUBLIC_YANDEX_API_KEY: process.env.YANDEX_API_KEY,
     NEXT_PUBLIC_API_BASE_URL: process.env.NEXT_PUBLIC_API_BASE_URL,
-  }
+  },
+  async rewrites() {
+    return [
+      {
+        source: '/api/:path*',
+        destination: `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/:path*`,
+      },
+    ];
+  },
 };
 
 export default nextConfig;
