@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useForm } from 'react-hook-form';
@@ -176,7 +177,7 @@ export function ProfileTab() {
 
     async function onProfileSubmit(values: z.infer<typeof profileFormSchema>) {
         if (!currentUser) return;
-
+        
         const dataToUpdate = {
             firstName: values.firstName,
             lastName: values.lastName,
@@ -185,13 +186,17 @@ export function ProfileTab() {
             bio: values.bio,
             city: values.city,
             age: new Date().getFullYear() - values.birthDate.getFullYear(),
-            // disciplines: values.disciplines, // Assuming disciplines can't be updated here yet
         };
-        
+
         try {
             const response = await axios.put(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/users/${currentUser.id}`, dataToUpdate);
+            
             setUser(response.data as User);
-            toast({ title: "Профиль обновлен", description: "Ваши данные успешно сохранены." });
+
+            toast({
+                title: "Профиль обновлен",
+                description: "Ваши данные успешно сохранены.",
+            });
         } catch (error) {
              toast({
                 variant: 'destructive',
