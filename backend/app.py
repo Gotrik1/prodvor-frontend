@@ -1,4 +1,3 @@
-
 import os
 from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
@@ -10,8 +9,8 @@ from flask_migrate import Migrate
 load_dotenv()
 
 app = Flask(__name__)
-# Уточненная конфигурация CORS для явного разрешения GET-запросов
-CORS(app, resources={r"/api/*": {"origins": "*"}}, methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"])
+# Standard CORS setup to allow credentials and all origins for development
+CORS(app, supports_credentials=True)
 
 
 # Configure the database connection using the DATABASE_URL from .env
