@@ -2,17 +2,19 @@
 
 'use client';
 
+import { useState, useEffect, useMemo } from 'react';
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/shared/ui/card";
 import { PlusCircle, UserCheck, Users, BarChart } from "lucide-react";
 import Image from "next/image";
-import { teams, Team } from "@/mocks";
+import { teams as mockTeams, Team } from "@/mocks";
 import { Badge } from "@/shared/ui/badge";
 import Link from "next/link";
 import { useUserStore } from "@/widgets/dashboard-header/model/user-store";
-import { useMemo, useState } from "react";
 import { TopTeamsWidget } from "@/widgets/top-teams-widget";
 import { Separator } from "@/shared/ui/separator";
+
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 const TeamCard = ({ team, isMember }: { team: Team, isMember: boolean }) => (
     <Card key={team.id} className="flex flex-col">
@@ -55,15 +57,36 @@ const TeamCard = ({ team, isMember }: { team: Team, isMember: boolean }) => (
 export function TeamsPage() {
     const { user: currentUser } = useUserStore();
     const [disciplineFilter] = useState('all');
+    const [allTeams, setAllTeams] = useState<Team[]>([]);
+
+    useEffect(() => {
+        async function fetchTeams() {
+            try {
+                if (!API_BASE_URL) return;
+                const response = await fetch(`${API_BASE_URL}/api/v1/teams`);
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const data = await response.json();
+                setAllTeams(data);
+            } catch (error) {
+                console.error("Failed to fetch teams:", error);
+                // Fallback to mock data on error
+                setAllTeams(mockTeams);
+            }
+        }
+        fetchTeams();
+    }, []);
+
 
     const { myTeams, otherTeams } = useMemo(() => {
-        if (!currentUser) {
-            return { myTeams: [], otherTeams: teams };
+        if (!currentUser || !allTeams) {
+            return { myTeams: [], otherTeams: allTeams || [] };
         }
-        const myTeams = teams.filter(team => team.members.includes(currentUser.id));
-        const otherTeams = teams.filter(team => !team.members.includes(currentUser.id));
+        const myTeams = allTeams.filter(team => team.members.includes(currentUser.id));
+        const otherTeams = allTeams.filter(team => !team.members.includes(currentUser.id));
         return { myTeams, otherTeams };
-    }, [currentUser]);
+    }, [currentUser, allTeams]);
 
     const filteredOtherTeams = useMemo(() => {
         if (disciplineFilter === 'all') return otherTeams;

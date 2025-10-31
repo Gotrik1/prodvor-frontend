@@ -3,19 +3,14 @@
 
 import { create } from 'zustand';
 import { produce } from 'immer';
-import { posts as initialPosts } from '@/mocks/posts';
-import type { Post } from '@/mocks/posts';
+import type { Post, Comment } from '@/mocks/posts';
 import type { User } from '@/mocks';
 
-// In a real app this would be a user object.
-type Comment = {
-    id: string;
-    author: User;
-    text: string;
-}
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 interface PostState {
   posts: Post[];
+  fetchPosts: () => Promise<void>;
   getPostsForTeam: (teamId: string) => Post[];
   getPostsForUser: (userId: string) => Post[];
   likePost: (postId: string, like: boolean) => void;
@@ -24,7 +19,18 @@ interface PostState {
 
 export const usePostStore = create<PostState>()(
     (set, get) => ({
-      posts: initialPosts,
+      posts: [], // Изначально массив пуст
+      fetchPosts: async () => {
+        try {
+            if (!API_BASE_URL) return;
+            const response = await fetch(`${API_BASE_URL}/api/v1/posts`);
+            if (!response.ok) throw new Error('Failed to fetch posts');
+            const data = await response.json();
+            set({ posts: data });
+        } catch (error) {
+            console.error(error);
+        }
+      },
       getPostsForTeam: (teamId: string) => {
         return get().posts.filter(p => p.team?.id === teamId);
       },

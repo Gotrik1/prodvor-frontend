@@ -1,11 +1,25 @@
 
 import { TeamPublicPage } from '@/views/teams/team';
-import { teams as mockTeams } from '@/mocks';
 import type { Metadata } from 'next';
 import MainLayout from '@/app/(main)/layout';
+import type { Team } from '@/mocks';
+
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+
+async function getTeam(teamId: string): Promise<Team | undefined> {
+    try {
+        if (!API_BASE_URL) return undefined;
+        const response = await fetch(`${API_BASE_URL}/api/v1/teams/${teamId}`);
+        if (!response.ok) return undefined;
+        return await response.json();
+    } catch (error) {
+        console.error("Failed to fetch team:", error);
+        return undefined;
+    }
+}
 
 export async function generateMetadata({ params }: { params: { teamId: string } }): Promise<Metadata> {
-  const team = mockTeams.find(t => t.id === params.teamId);
+  const team = await getTeam(params.teamId);
   const title = team ? `${team.name} | ProDvor` : 'Команда не найдена | ProDvor';
   const description = team ? `Публичная страница команды ${team.name}. Состав, матчи и статистика.` : 'Запрошенная команда не найдена.';
 
@@ -15,8 +29,8 @@ export async function generateMetadata({ params }: { params: { teamId: string } 
   };
 }
 
-export default function TeamPage({ params }: { params: { teamId: string } }) {
-  const team = mockTeams.find(t => t.id === params.teamId);
+export default async function TeamPage({ params }: { params: { teamId: string } }) {
+  const team = await getTeam(params.teamId);
   
   return (
     <MainLayout>
