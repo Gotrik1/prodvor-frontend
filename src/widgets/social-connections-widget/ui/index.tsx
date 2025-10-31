@@ -79,7 +79,7 @@ const TeamList = ({ teamIds, emptyText }: { teamIds: string[], emptyText: string
 }
 
 const FriendRequests = () => {
-    const [requests, setRequests] = useState(mockFriendRequests);
+    const [requests, setRequests] = useState<User[]>([]);
     
     const handleRequest = (userId: string) => {
         setRequests(prev => prev.filter(u => u.id !== userId));
@@ -157,7 +157,7 @@ export function SocialConnectionsWidget({ user, isOwnProfile }: { user: User, is
                                     <tab.icon className="h-5 w-5" />
                                     {tab.value === 'requests' && isOwnProfile && mockFriendRequests.length > 0 && (
                                         <Badge variant="destructive" className="absolute -top-2 -right-2 h-4 w-4 p-0 justify-center text-xs">
-                                            {mockFriendRequests.length}
+                                            {0}
                                         </Badge>
                                     )}
                                 </div>
