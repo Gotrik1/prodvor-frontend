@@ -17,13 +17,12 @@ import { Input } from '@/shared/ui/input';
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from '@/shared/ui/form';
-import { CalendarIcon, Save, Warehouse, UploadCloud, Loader2 } from 'lucide-react';
+import { CalendarIcon, Save, Warehouse, UploadCloud, Loader2, BookCopy } from 'lucide-react';
 import { useUserStore } from '@/widgets/dashboard-header/model/user-store';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import { Textarea } from '@/shared/ui/textarea';
@@ -50,7 +49,6 @@ const profileFormSchema = z.object({
     required_error: "Пожалуйста, выберите дату рождения.",
   }),
   city: z.string().min(2, "Название города должно содержать не менее 2 символов."),
-  sports: z.array(z.string()).min(1, "Выберите хотя бы одну дисциплину.").max(5, "Можно выбрать не более 5 дисциплин."),
 });
 
 const AvatarUploadDialog = () => {
@@ -154,19 +152,22 @@ const AvatarUploadDialog = () => {
     );
 };
 
-
-export function ProfileTab() {
+const DisciplinesCard = () => {
     const { toast } = useToast();
     const { user: currentUser, setUser } = useUserStore();
     const [sportOptions, setSportOptions] = useState<OptionType[]>([]);
-    
+    const [selectedSports, setSelectedSports] = useState<string[]>([]);
+    const [isLoading, setIsLoading] = useState(false);
+    const [isSaving, setIsSaving] = useState(false);
+
     useEffect(() => {
         async function fetchSports() {
+            setIsLoading(true);
             try {
                 const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/sports/`);
                 const sports: Sport[] = response.data;
                 const options = sports.map(sport => ({
-                    value: String(sport.id),
+                    value: sport.id,
                     label: sport.name,
                     group: sport.isTeamSport ? 'Командные' : 'Индивидуальные',
                 }));
@@ -178,10 +179,82 @@ export function ProfileTab() {
                     title: 'Ошибка загрузки',
                     description: 'Не удалось загрузить список дисциплин.'
                 });
+            } finally {
+                setIsLoading(false);
             }
         }
         fetchSports();
     }, [toast]);
+    
+    useEffect(() => {
+        if (currentUser?.sports) {
+            setSelectedSports(currentUser.sports.map(s => s.id));
+        }
+    }, [currentUser]);
+
+    const handleSaveDisciplines = async () => {
+        if (!currentUser) return;
+        setIsSaving(true);
+        try {
+            const response = await axios.put(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/users/${currentUser.id}`, {
+                sports: selectedSports
+            });
+            const updatedUser = response.data as User;
+            setUser(updatedUser);
+            toast({
+                title: "Дисциплины обновлены",
+                description: "Ваш список видов спорта успешно сохранен.",
+            });
+        } catch (error) {
+             toast({
+                variant: 'destructive',
+                title: "Ошибка",
+                description: "Не удалось сохранить дисциплины. Попробуйте позже.",
+            });
+        } finally {
+            setIsSaving(false);
+        }
+    }
+    
+    return (
+        <Card>
+            <CardHeader>
+                <CardTitle className="flex items-center gap-2"><BookCopy /> Мои дисциплины</CardTitle>
+                <CardDescription>Выберите до 5 видов спорта, в которых вы участвуете.</CardDescription>
+            </CardHeader>
+            <CardContent>
+                {isLoading ? (
+                    <div className="space-y-2">
+                        <Skeleton className="h-10 w-full" />
+                        <Skeleton className="h-4 w-3/4" />
+                    </div>
+                ) : (
+                    <MultiSelect
+                        options={sportOptions}
+                        selected={selectedSports}
+                        onChange={setSelectedSports}
+                        placeholder="Выберите ваши виды спорта..."
+                        className="w-full"
+                    />
+                )}
+            </CardContent>
+            <CardFooter className="border-t px-6 py-4">
+                <Button onClick={handleSaveDisciplines} disabled={isSaving || selectedSports.length === 0 || selectedSports.length > 5}>
+                     {isSaving ? (
+                        <><Loader2 className="mr-2 h-4 w-4 animate-spin"/> Сохранение...</>
+                     ) : (
+                        <><Save className="mr-2 h-4 w-4" />Сохранить дисциплины</>
+                     )}
+                </Button>
+            </CardFooter>
+        </Card>
+    );
+};
+
+
+export function ProfileTab() {
+    const { toast } = useToast();
+    const { user: currentUser, setUser } = useUserStore();
 
     const profileForm = useForm<z.infer<typeof profileFormSchema>>({
         resolver: zodResolver(profileFormSchema),
@@ -192,7 +265,6 @@ export function ProfileTab() {
             gender: 'мужской',
             bio: "Страстный игрок в дворовый футбол и CS2. Ищу команду для серьезных игр.",
             city: '',
-            sports: [],
         }
     });
 
@@ -205,7 +277,6 @@ export function ProfileTab() {
                 gender: currentUser.gender || 'мужской',
                 bio: currentUser.bio || "Страстный игрок в дворовый футбол и CS2. Ищу команду для серьезных игр.",
                 city: currentUser.city || '',
-                sports: (currentUser.sports || []).map((s: UserDiscipline) => String(s.id)),
                 birthDate: currentUser.age ? new Date(new Date().setFullYear(new Date().getFullYear() - currentUser.age)) : undefined,
             });
         }
@@ -217,21 +288,11 @@ export function ProfileTab() {
         const dataToUpdate = {
             ...values,
             age: new Date().getFullYear() - values.birthDate.getFullYear(),
-            sports: values.sports.map(sportId => ({ id: sportId }))
         };
 
         try {
             const response = await axios.put(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/users/${currentUser.id}`, dataToUpdate);
-            const updatedUser = response.data as User;
-
-            setUser(updatedUser);
-
-            // Re-sync form with the data from the server, ensuring sports are mapped to IDs
-            profileForm.reset({
-                ...values,
-                sports: (updatedUser.sports || []).map((s: UserDiscipline) => String(s.id)),
-            });
-
+            setUser(response.data as User);
             toast({
                 title: "Профиль обновлен",
                 description: "Ваши данные успешно сохранены.",
@@ -246,133 +307,117 @@ export function ProfileTab() {
     }
 
     return (
-        <Form {...profileForm}>
-            <form onSubmit={profileForm.handleSubmit(onProfileSubmit)}>
-                <Card>
-                    <CardHeader>
-                        <CardTitle>Публичный профиль</CardTitle>
-                        <CardDescription>Эта информация будет видна другим пользователям.</CardDescription>
-                    </CardHeader>
-                    <CardContent className="space-y-6">
-                        <div className="flex items-center gap-4">
-                            <Avatar className="h-20 w-20">
-                                <AvatarImage src={currentUser?.avatarUrl} />
-                                <AvatarFallback>{currentUser?.nickname?.charAt(0)}</AvatarFallback>
-                            </Avatar>
-                            <div className="flex flex-col gap-2">
-                                <AvatarUploadDialog />
-                                <Button asChild type="button" variant="secondary">
-                                    <Link href="/inventory"><Warehouse className="mr-2 h-4 w-4"/>Настроить рамку</Link>
-                                </Button>
+        <div className="space-y-6">
+            <Form {...profileForm}>
+                <form onSubmit={profileForm.handleSubmit(onProfileSubmit)}>
+                    <Card>
+                        <CardHeader>
+                            <CardTitle>Публичный профиль</CardTitle>
+                            <CardDescription>Эта информация будет видна другим пользователям.</CardDescription>
+                        </CardHeader>
+                        <CardContent className="space-y-6">
+                            <div className="flex items-center gap-4">
+                                <Avatar className="h-20 w-20">
+                                    <AvatarImage src={currentUser?.avatarUrl} />
+                                    <AvatarFallback>{currentUser?.nickname?.charAt(0)}</AvatarFallback>
+                                </Avatar>
+                                <div className="flex flex-col gap-2">
+                                    <AvatarUploadDialog />
+                                    <Button asChild type="button" variant="secondary">
+                                        <Link href="/inventory"><Warehouse className="mr-2 h-4 w-4"/>Настроить рамку</Link>
+                                    </Button>
+                                </div>
                             </div>
-                        </div>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <FormField control={profileForm.control} name="firstName" render={({ field }) => (
-                                <FormItem><FormLabel>Имя</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <FormField control={profileForm.control} name="firstName" render={({ field }) => (
+                                    <FormItem><FormLabel>Имя</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+                                )}/>
+                                <FormField control={profileForm.control} name="lastName" render={({ field }) => (
+                                    <FormItem><FormLabel>Фамилия</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+                                )}/>
+                            </div>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <FormField control={profileForm.control} name="nickname" render={({ field }) => (
+                                    <FormItem><FormLabel>Никнейм</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+                                )}/>
+                                <FormField control={profileForm.control} name="gender" render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Пол</FormLabel>
+                                        <Select onValueChange={field.onChange} value={field.value}>
+                                            <FormControl>
+                                                <SelectTrigger>
+                                                    <SelectValue placeholder="Выберите пол" />
+                                                </SelectTrigger>
+                                            </FormControl>
+                                            <SelectContent>
+                                                <SelectItem value="мужской">Мужской</SelectItem>
+                                                <SelectItem value="женский">Женский</SelectItem>
+                                            </SelectContent>
+                                        </Select>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}/>
+                            </div>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <FormField control={profileForm.control} name="city" render={({ field }) => (
+                                    <FormItem><FormLabel>Город</FormLabel><FormControl><Input {...field} placeholder="Например, Москва" /></FormControl><FormMessage /></FormItem>
+                                )}/>
+                                <FormField control={profileForm.control} name="birthDate" render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Дата рождения</FormLabel>
+                                        <Popover>
+                                            <PopoverTrigger asChild>
+                                            <FormControl>
+                                                <Button
+                                                variant={"outline"}
+                                                className={cn(
+                                                    "w-full pl-3 text-left font-normal",
+                                                    !field.value && "text-muted-foreground"
+                                                )}
+                                                >
+                                                {field.value ? (
+                                                    field.value.toLocaleDateString()
+                                                ) : (
+                                                    <span>Выберите дату</span>
+                                                )}
+                                                <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                                                </Button>
+                                            </FormControl>
+                                            </PopoverTrigger>
+                                            <PopoverContent className="w-auto p-0" align="start">
+                                            <Calendar
+                                                mode="single"
+                                                selected={field.value}
+                                                onSelect={field.onChange}
+                                                disabled={(date) =>
+                                                    date > new Date() || date < new Date("1900-01-01")
+                                                }
+                                                initialFocus
+                                            />
+                                            </PopoverContent>
+                                        </Popover>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}/>
+                            </div>
+                            <FormField control={profileForm.control} name="bio" render={({ field }) => (
+                                <FormItem><FormLabel>О себе</FormLabel><FormControl><Textarea {...field} /></FormControl><FormDescription>Краткая информация о вас.</FormDescription><FormMessage /></FormItem>
                             )}/>
-                             <FormField control={profileForm.control} name="lastName" render={({ field }) => (
-                                <FormItem><FormLabel>Фамилия</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
-                            )}/>
-                        </div>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <FormField control={profileForm.control} name="nickname" render={({ field }) => (
-                                <FormItem><FormLabel>Никнейм</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
-                            )}/>
-                            <FormField control={profileForm.control} name="gender" render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Пол</FormLabel>
-                                    <Select onValueChange={field.onChange} value={field.value}>
-                                        <FormControl>
-                                            <SelectTrigger>
-                                                <SelectValue placeholder="Выберите пол" />
-                                            </SelectTrigger>
-                                        </FormControl>
-                                        <SelectContent>
-                                            <SelectItem value="мужской">Мужской</SelectItem>
-                                            <SelectItem value="женский">Женский</SelectItem>
-                                        </SelectContent>
-                                    </Select>
-                                    <FormMessage />
-                                </FormItem>
-                            )}/>
-                        </div>
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <FormField control={profileForm.control} name="city" render={({ field }) => (
-                                <FormItem><FormLabel>Город</FormLabel><FormControl><Input {...field} placeholder="Например, Москва" /></FormControl><FormMessage /></FormItem>
-                            )}/>
-                            <FormField control={profileForm.control} name="birthDate" render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Дата рождения</FormLabel>
-                                    <Popover>
-                                        <PopoverTrigger asChild>
-                                        <FormControl>
-                                            <Button
-                                            variant={"outline"}
-                                            className={cn(
-                                                "w-full pl-3 text-left font-normal",
-                                                !field.value && "text-muted-foreground"
-                                            )}
-                                            >
-                                            {field.value ? (
-                                                field.value.toLocaleDateString()
-                                            ) : (
-                                                <span>Выберите дату</span>
-                                            )}
-                                            <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                                            </Button>
-                                        </FormControl>
-                                        </PopoverTrigger>
-                                        <PopoverContent className="w-auto p-0" align="start">
-                                        <Calendar
-                                            mode="single"
-                                            selected={field.value}
-                                            onSelect={field.onChange}
-                                            disabled={(date) =>
-                                                date > new Date() || date < new Date("1900-01-01")
-                                            }
-                                            initialFocus
-                                        />
-                                        </PopoverContent>
-                                    </Popover>
-                                    <FormMessage />
-                                </FormItem>
-                            )}/>
-                        </div>
-                        <FormField
-                            control={profileForm.control}
-                            name="sports"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Мои дисциплины</FormLabel>
-                                    <FormControl>
-                                        <MultiSelect
-                                            options={sportOptions}
-                                            selected={field.value}
-                                            onChange={field.onChange}
-                                            placeholder="Выберите ваши виды спорта..."
-                                            className="w-full"
-                                        />
-                                    </FormControl>
-                                    <FormDescription>Выберите до 5 видов спорта, в которых вы участвуете.</FormDescription>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                         <FormField control={profileForm.control} name="bio" render={({ field }) => (
-                            <FormItem><FormLabel>О себе</FormLabel><FormControl><Textarea {...field} /></FormControl><FormDescription>Краткая информация о вас.</FormDescription><FormMessage /></FormItem>
-                        )}/>
-                    </CardContent>
-                    <CardFooter className="border-t px-6 py-4">
-                        <Button type="submit" disabled={profileForm.formState.isSubmitting}>
-                             {profileForm.formState.isSubmitting ? (
-                                <><Loader2 className="mr-2 h-4 w-4 animate-spin"/> Сохранение...</>
-                             ) : (
-                                <><Save className="mr-2 h-4 w-4" />Сохранить</>
-                             )}
-                        </Button>
-                    </CardFooter>
-                </Card>
-            </form>
-        </Form>
+                        </CardContent>
+                        <CardFooter className="border-t px-6 py-4">
+                            <Button type="submit" disabled={profileForm.formState.isSubmitting}>
+                                {profileForm.formState.isSubmitting ? (
+                                    <><Loader2 className="mr-2 h-4 w-4 animate-spin"/> Сохранение...</>
+                                ) : (
+                                    <><Save className="mr-2 h-4 w-4" />Сохранить</>
+                                )}
+                            </Button>
+                        </CardFooter>
+                    </Card>
+                </form>
+            </Form>
+
+            <DisciplinesCard />
+        </div>
     );
 }
