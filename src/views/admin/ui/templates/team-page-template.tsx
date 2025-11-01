@@ -38,7 +38,7 @@ export function TeamPageTemplate({ team }: { team?: Team }) {
         )
     }
 
-    const teamMembers = users.filter(u => team.members.includes(u.id));
+    const teamMembers = users.filter(u => team.members?.includes(u.id));
     const homePlaygrounds = team.homePlaygroundIds?.map((id: string) => playgrounds.find(p => p.id === id)).filter(Boolean);
 
     return (
