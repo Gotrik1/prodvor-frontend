@@ -31,7 +31,7 @@ export interface User {
   city: string;
   phone: string;
   bio?: string;
-  disciplines: UserDiscipline[];
+  sports: UserDiscipline[];
   friends: string[]; // Array of user IDs
   followers: string[]; // Array of user IDs
   followingUsers: string[]; // Array of user IDs
@@ -41,7 +41,7 @@ export interface User {
   coachProfile?: CoachProfile;
 }
 
-const baseUsers: Omit<User, 'disciplines' | 'friends' | 'followers' | 'followingUsers' | 'sponsorIds' | 'following' | 'unlockedAchievements'>[] = [
+const baseUsers: Omit<User, 'sports' | 'friends' | 'followers' | 'followingUsers' | 'sponsorIds' | 'following' | 'unlockedAchievements'>[] = [
   // --- Игроки (будут распределены по командам) ---
   { id: 'user1', firstName: 'Иван', lastName: 'Петров', nickname: 'Terminator', avatarUrl: 'https://i.pravatar.cc/150?u=user1', coverImageUrl: 'https://placehold.co/1920x1080.png', email: 'user1@example.com', role: 'Игрок', gender: 'мужской', age: 28, city: 'Москва', phone: '+7 (916) 123-45-67', bio: 'Опытный нападающий, играю в футбол с детства.', elo: 2650 },
   { id: 'user2', firstName: 'Мария', lastName: 'Сидорова', nickname: 'Valkyrie', avatarUrl: 'https://i.pravatar.cc/150?u=user2', coverImageUrl: 'https://placehold.co/1920x1080.png', email: 'user2@example.com', role: 'Игрок', gender: 'женский', age: 25, city: 'Москва', phone: '+7 (916) 123-45-68', bio: 'Люблю командный дух и красивые победы. Играю в защите.', elo: 1800 },
@@ -93,7 +93,7 @@ for (let i = 0; i < additionalPlayersCount; i++) {
 // --- Initialize full user objects ---
 export const users: User[] = baseUsers.map(u => ({
   ...u,
-  disciplines: [],
+  sports: [],
   friends: [],
   followers: [],
   followingUsers: [],

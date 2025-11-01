@@ -34,10 +34,10 @@ export function CreateTeamPage() {
     }, [currentUserFromStore]);
 
     const userTeamSports = useMemo(() => {
-        if (!currentUser || !currentUser.disciplines) {
+        if (!currentUser || !currentUser.sports) {
             return [];
         }
-        return currentUser.disciplines.filter(d => {
+        return currentUser.sports.filter(d => {
             const sport = allSports.find(s => s.id === d.id);
             return sport?.isTeamSport;
         });

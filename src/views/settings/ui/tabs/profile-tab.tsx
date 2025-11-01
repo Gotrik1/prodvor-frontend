@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { useForm } from 'react-hook-form';
@@ -50,7 +51,7 @@ const profileFormSchema = z.object({
     required_error: "Пожалуйста, выберите дату рождения.",
   }),
   city: z.string().min(2, "Название города должно содержать не менее 2 символов."),
-  disciplines: z.array(z.string()).min(1, "Выберите хотя бы одну дисциплину.").max(5, "Можно выбрать не более 5 дисциплин."),
+  sports: z.array(z.string()).min(1, "Выберите хотя бы одну дисциплину.").max(5, "Можно выбрать не более 5 дисциплин."),
 });
 
 const AvatarUploadDialog = () => {
@@ -192,7 +193,7 @@ export function ProfileTab() {
             gender: 'мужской',
             bio: "Страстный игрок в дворовый футбол и CS2. Ищу команду для серьезных игр.",
             city: '',
-            disciplines: [],
+            sports: [],
         }
     });
 
@@ -205,7 +206,7 @@ export function ProfileTab() {
                 gender: currentUser.gender || 'мужской',
                 bio: currentUser.bio || "Страстный игрок в дворовый футбол и CS2. Ищу команду для серьезных игр.",
                 city: currentUser.city || '',
-                disciplines: (currentUser.disciplines || []).map(String),
+                sports: (currentUser.sports || []).map(s => String(s.id)),
                 birthDate: currentUser.age ? new Date(new Date().setFullYear(new Date().getFullYear() - currentUser.age)) : undefined,
             });
         }
@@ -332,7 +333,7 @@ export function ProfileTab() {
                         </div>
                         <FormField
                             control={profileForm.control}
-                            name="disciplines"
+                            name="sports"
                             render={({ field }) => (
                                 <FormItem>
                                     <FormLabel>Мои дисциплины</FormLabel>

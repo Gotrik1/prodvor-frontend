@@ -64,16 +64,18 @@ export function initializeMockData(data: MockData): MockData {
 
 
 function assignInitialDisciplines(allUsers: User[], allSportsList: Sport[]) {
-    const allSportIds = allSportsList.map(s => s.id);
     allUsers.forEach((user, index) => {
-        const userDisciplines = new Set<string>();
-        if (allSportIds.length > 0) {
-            userDisciplines.add(allSportIds[index % allSportIds.length]);
-            if (index % 3 === 0 && userDisciplines.size < 6) {
-                 userDisciplines.add(allSportIds[(index * 7) % allSportIds.length]);
+        const userSports = new Map<string, { id: string; name: string }>();
+        if (allSportsList.length > 0) {
+            const sport1 = allSportsList[index % allSportsList.length];
+            userSports.set(sport1.id, { id: sport1.id, name: sport1.name });
+            
+            if (index % 3 === 0 && userSports.size < 6) {
+                const sport2 = allSportsList[(index * 7) % allSportsList.length];
+                userSports.set(sport2.id, { id: sport2.id, name: sport2.name });
             }
         }
-        user.disciplines = Array.from(userDisciplines);
+        user.sports = Array.from(userSports.values());
     });
 }
 
@@ -166,18 +168,23 @@ function assignPlaygroundFollowers(allUsers: User[], allPlaygrounds: Playground[
 
 function assignDisciplinesFromTeams(allUsers: User[], allTeams: Team[]) {
     allUsers.forEach(user => {
-        const userDisciplines = new Set(user.disciplines);
+        const userSports = new Map<string, { id: string; name: string }>();
+        user.sports.forEach(sport => userSports.set(sport.id, sport));
+        
         const userTeams = allTeams.filter(t => t.members.includes(user.id));
         userTeams.forEach(team => {
-            if (userDisciplines.size < 6) {
-                userDisciplines.add(team.sportId);
+            if (userSports.size < 6) {
+                const teamSport = allSports.find(s => s.id === team.sportId);
+                if(teamSport) {
+                    userSports.set(teamSport.id, { id: teamSport.id, name: teamSport.name });
+                }
             }
             // Also, users who are members of this team should follow it
             if (!user.following.includes(team.id)) {
                 user.following.push(team.id);
             }
         });
-        user.disciplines = Array.from(userDisciplines);
+        user.sports = Array.from(userSports.values());
     });
 }
 
@@ -201,10 +208,10 @@ function assignClientsToCoaches(allUsers: User[], allTeams: Team[]) {
     coaches.forEach((coach) => {
         if (coach.coachProfile) {
             // Find teams related to the coach's primary discipline AND city for realism
-            const coachDiscipline = coach.disciplines[0];
+            const coachDisciplineId = coach.sports[0]?.id;
 
             const relevantTeams = allTeams.filter(t => {
-                return t.sportId === coachDiscipline && 
+                return t.sportId === coachDisciplineId && 
                        t.city === coach.city &&
                        !coaches.some(c => c.coachProfile?.managedTeams.includes(t.id));
             });
@@ -222,7 +229,7 @@ function assignClientsToCoaches(allUsers: User[], allTeams: Team[]) {
                 
                 // Add a few extra random players from the same city and discipline
                  const extraPlayers = players
-                    .filter(p => p.disciplines.includes(coachDiscipline) && p.city === coach.city && !clientIds.has(p.id))
+                    .filter(p => p.sports.some(s => s.id === coachDisciplineId) && p.city === coach.city && !clientIds.has(p.id))
                     .slice(0, 3);
                 extraPlayers.forEach(p => clientIds.add(p.id));
                 

@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { User } from "@/mocks";
@@ -20,6 +21,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/sh
 import { PublicationsFeed } from "@/widgets/publications-feed";
 import Image from "next/image";
 import { Skeleton } from "@/shared/ui/skeleton";
+import { getUserDisciplines } from "@/entities/user/lib";
 
 function getAgeDeclension(age: number): string {
     if (age % 10 === 1 && age % 100 !== 11) {
@@ -79,8 +81,8 @@ export function PlayerPage({ user: profileUser }: { user: User }) {
     
     const isOwnProfile = useMemo(() => currentUser?.id === profileUser?.id, [currentUser, profileUser]);
     const userDisciplines = useMemo(() => {
-        if (!profileUser || !profileUser.disciplines) return [];
-        return profileUser.disciplines.map(d => d.name);
+        if (!profileUser) return [];
+        return getUserDisciplines(profileUser);
     }, [profileUser]);
 
     if (!profileUser) {
