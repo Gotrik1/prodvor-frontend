@@ -40,7 +40,7 @@ export function TeamPublicationsTab({ team }: TeamPublicationsTabProps) {
     const { getPostsForTeam } = usePostStore();
     const teamPosts = getPostsForTeam(team.id);
 
-    const isTeamMember = team.members.includes(currentUser.id);
+    const isTeamMember = team.members?.includes(currentUser.id);
     const [mediaFeed, setMediaFeed] = useState<(typeof mockMedia[0])[]>(mockMedia);
 
     useEffect(() => {
