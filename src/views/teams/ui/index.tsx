@@ -1,9 +1,8 @@
 
 'use client';
 
-import { Suspense, useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { type Team } from '@/mocks';
-import { TopTeamsWidget, TopTeamsWidgetSkeleton } from '@/widgets/top-teams-widget';
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/shared/ui/card";
 import { PlusCircle, UserCheck, Users, BarChart, Wifi, WifiOff } from "lucide-react";
@@ -65,7 +64,7 @@ export function TeamsPage() {
         async function fetchTeams() {
             setIsLoading(true);
             try {
-                const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/teams`);
+                const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/teams/`);
                 setAllTeams(response.data);
                 setConnectionStatus('success');
             } catch (error) {
@@ -149,10 +148,6 @@ export function TeamsPage() {
                      <Separator className="my-8"/>
                 </section>
             )}
-            
-            <Suspense fallback={<TopTeamsWidgetSkeleton />}>
-                 <TopTeamsWidget />
-            </Suspense>
 
             <div>
                 <h2 className="text-2xl font-bold mb-4">Все команды</h2>
