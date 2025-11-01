@@ -4,15 +4,17 @@
 
 import { useMemo, useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
-import { teams as allTeams } from "@/mocks";
 import { BarChart, ChevronsRight, Globe, MapPin } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '@/shared/ui/button';
 import { useUserStore } from '@/widgets/dashboard-header/model/user-store';
 import { Skeleton } from '@/shared/ui/skeleton';
+import type { Team } from '@/mocks';
+import axios from 'axios';
+import { useToast } from '@/shared/hooks/use-toast';
 
-const TopTeamRow = ({ team, rank }: { team: typeof allTeams[0], rank: number }) => (
+const TopTeamRow = ({ team, rank }: { team: Team, rank: number }) => (
     <Link href={`/teams/${team.id}`} className="flex items-center gap-3 p-2 rounded-md hover:bg-muted/50 group transition-colors">
         <span className="font-bold text-lg w-6 text-center text-muted-foreground">{rank}</span>
         <Image src={team.logoUrl} alt={team.name} width={32} height={32} className="rounded-md" data-ai-hint="team logo" />
@@ -24,14 +26,28 @@ const TopTeamRow = ({ team, rank }: { team: typeof allTeams[0], rank: number }) 
     </Link>
 );
 
-const TopTeamsList = ({ title, teams, icon: Icon }: { title: string, teams: typeof allTeams, icon: React.ElementType }) => {
+const TopTeamsList = ({ title, teams, icon: Icon, isLoading }: { title: string, teams: Team[], icon: React.ElementType, isLoading: boolean }) => {
     return (
         <Card>
             <CardHeader>
                 <CardTitle className="flex items-center gap-2"><Icon className="h-5 w-5 text-primary"/>{title}</CardTitle>
             </CardHeader>
             <CardContent>
-                {teams.length > 0 ? (
+                {isLoading ? (
+                    <div className="space-y-2">
+                        {[...Array(5)].map((_, i) => (
+                             <div key={i} className="flex items-center gap-3 p-2">
+                                <Skeleton className="h-8 w-6" />
+                                <Skeleton className="h-8 w-8 rounded-md" />
+                                <div className="flex-grow space-y-2">
+                                    <Skeleton className="h-4 w-4/5" />
+                                    <Skeleton className="h-3 w-1/2" />
+                                </div>
+                                <Skeleton className="h-4 w-12" />
+                            </div>
+                        ))}
+                    </div>
+                ) : teams.length > 0 ? (
                     <div className="space-y-2">
                         {teams.slice(0, 5).map((team, index) => (
                             <TopTeamRow key={team.id} team={team} rank={index + 1} />
@@ -93,24 +109,39 @@ export function TopTeamsWidgetSkeleton() {
 
 export function TopTeamsWidget() {
     const { user: currentUser } = useUserStore();
-    const [isClient, setIsClient] = useState(false);
-    
-    // This effect runs only on the client, after the initial render.
-    useEffect(() => {
-        setIsClient(true);
-    }, []);
+    const { toast } = useToast();
+    const [allTeams, setAllTeams] = useState<Team[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
 
+    useEffect(() => {
+        const fetchTeams = async () => {
+            setIsLoading(true);
+            try {
+                const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/teams`);
+                setAllTeams(response.data);
+            } catch (error) {
+                 toast({
+                    variant: "destructive",
+                    title: "Ошибка загрузки",
+                    description: "Не удалось получить список топ-команд.",
+                });
+            } finally {
+                setIsLoading(false);
+            }
+        };
+        fetchTeams();
+    }, [toast]);
+    
     const { topCityTeams, topCountryTeams } = useMemo(() => {
-        const filteredTeams = allTeams.sort((a, b) => b.rank - a.rank);
+        const sortedTeams = [...allTeams].sort((a, b) => b.rank - a.rank);
         
-        const topCountryTeams = filteredTeams;
-        const topCityTeams = currentUser?.city ? topCountryTeams.filter(team => team.city === currentUser.city) : [];
+        const topCountryTeams = sortedTeams;
+        const topCityTeams = currentUser?.city ? sortedTeams.filter(team => team.city === currentUser.city) : [];
 
         return { topCityTeams, topCountryTeams };
-    }, [currentUser]);
-
-    // On the server and during initial client render, show a skeleton.
-    if (!isClient) {
+    }, [currentUser, allTeams]);
+    
+    if (isLoading) {
         return <TopTeamsWidgetSkeleton />;
     }
 
@@ -129,11 +160,13 @@ export function TopTeamsWidget() {
                     title={currentUser?.city ? `Топ г. ${currentUser.city}` : "Топ вашего города"} 
                     teams={topCityTeams} 
                     icon={MapPin}
+                    isLoading={isLoading}
                 />
                 <TopTeamsList 
                     title="Топ России" 
                     teams={topCountryTeams}
                     icon={Globe}
+                    isLoading={isLoading}
                 />
             </div>
         </div>
