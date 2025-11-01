@@ -18,20 +18,23 @@ import { TeamStatsWidget } from "@/widgets/team-stats-widget";
 import axios from 'axios';
 import { Skeleton } from '@/shared/ui/skeleton';
 
-export function TeamPageTemplate({ team: initialTeam }: { team?: Team }) {
+export function TeamPageTemplate({ team: initialTeam, isLoading: initialIsLoading }: { team?: Team, isLoading?: boolean }) {
     const [team, setTeam] = React.useState<Team | undefined>(initialTeam);
     const [playgrounds, setPlaygrounds] = React.useState<Playground[]>([]);
     const [teamMembers, setTeamMembers] = React.useState<User[]>([]);
-    const [isLoading, setIsLoading] = React.useState(true);
+    const [isLoading, setIsLoading] = React.useState(initialIsLoading || true);
 
     React.useEffect(() => {
-        if (!initialTeam) {
-            setIsLoading(false);
+        setTeam(initialTeam);
+        setIsLoading(initialIsLoading ?? !initialTeam);
+    }, [initialTeam, initialIsLoading]);
+
+    React.useEffect(() => {
+        if (!team) {
             return;
         }
 
         const fetchData = async () => {
-            setIsLoading(true);
             try {
                 const [usersRes, playgroundsRes] = await Promise.all([
                     axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/users`),
@@ -41,25 +44,21 @@ export function TeamPageTemplate({ team: initialTeam }: { team?: Team }) {
                 const allUsers: User[] = usersRes.data;
                 const allPlaygrounds: Playground[] = playgroundsRes.data;
 
-                const memberIds = new Set(initialTeam.members || []);
-                memberIds.add(initialTeam.captainId);
+                const memberIds = new Set(team.members || []);
+                memberIds.add(team.captainId);
                 const members = allUsers.filter(u => memberIds.has(u.id));
                 setTeamMembers(members);
 
-                const homePgs = allPlaygrounds.filter(p => initialTeam.homePlaygroundIds?.includes(p.id));
+                const homePgs = allPlaygrounds.filter(p => team.homePlaygroundIds?.includes(p.id));
                 setPlaygrounds(homePgs);
-
-                setTeam(initialTeam);
 
             } catch (error) {
                 console.error("Failed to fetch related team data:", error);
-            } finally {
-                setIsLoading(false);
             }
         };
 
         fetchData();
-    }, [initialTeam]);
+    }, [team]);
 
     if (isLoading) {
         return (
@@ -117,7 +116,7 @@ export function TeamPageTemplate({ team: initialTeam }: { team?: Team }) {
                     <TeamChallengesWidget teamId={team.id} />
                 </TabsContent>
                  <TabsContent value="stats" className="mt-6">
-                    <TeamStatsWidget />
+                    <TeamStatsWidget team={team}/>
                 </TabsContent>
                 <TabsContent value="publications" className="mt-6">
                    <TeamPublicationsTab team={team} />
