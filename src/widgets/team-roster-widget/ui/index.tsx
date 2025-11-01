@@ -11,6 +11,7 @@ import { Badge } from "@/shared/ui/badge";
 import { Button } from "@/shared/ui/button";
 import { useToast } from "@/shared/hooks/use-toast";
 import { users } from "@/mocks";
+import { useMemo } from "react";
 
 const TeamRoster = ({ teamMembers, captainId }: { teamMembers: User[], captainId: string }) => (
     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
@@ -41,7 +42,13 @@ const TeamRoster = ({ teamMembers, captainId }: { teamMembers: User[], captainId
 export const TeamRosterWidget = ({ team }: { team: Team }) => {
     const { toast } = useToast();
 
-    const teamMembers = users.filter(user => team.members?.includes(user.id));
+    const teamMembers = useMemo(() => {
+        // Ensure captain is always included, even if members array is empty/missing
+        const memberIds = new Set(team.members || []);
+        memberIds.add(team.captainId);
+        return users.filter(user => memberIds.has(user.id));
+    }, [team]);
+
 
     const handleApply = () => {
         toast({
