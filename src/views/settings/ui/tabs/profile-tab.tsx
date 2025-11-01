@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import { useForm } from 'react-hook-form';
@@ -81,7 +80,7 @@ const AvatarUploadDialog = () => {
         formData.append('avatar', file);
 
         try {
-            const response = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/users/${user.id}/avatar`, formData, {
+            const response = await axios.post(`https://8080-firebase-prodvor-backend-1761850902881.cluster-ombtxv25tbd6yrjpp3lukp6zhc.cloudworkstations.dev/api/v1/users/${user.id}/avatar`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
@@ -161,13 +160,10 @@ export function ProfileTab() {
     const { user: currentUser, setUser } = useUserStore();
     const [sportOptions, setSportOptions] = useState<OptionType[]>([]);
     
-    const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
-
     useEffect(() => {
         async function fetchSports() {
-            if (!API_BASE_URL) return;
             try {
-                const response = await axios.get(`${API_BASE_URL}/api/sports`);
+                const response = await axios.get(`https://8080-firebase-prodvor-backend-1761850902881.cluster-ombtxv25tbd6yrjpp3lukp6zhc.cloudworkstations.dev/api/sports`);
                 const sports: Sport[] = response.data;
                 const options = sports.map(sport => ({
                     value: String(sport.id),
@@ -185,7 +181,7 @@ export function ProfileTab() {
             }
         }
         fetchSports();
-    }, [API_BASE_URL, toast]);
+    }, [toast]);
 
     const profileForm = useForm<z.infer<typeof profileFormSchema>>({
         resolver: zodResolver(profileFormSchema),
@@ -224,7 +220,7 @@ export function ProfileTab() {
         };
 
         try {
-            const response = await axios.put(`${API_BASE_URL}/api/v1/users/${currentUser.id}`, dataToUpdate);
+            const response = await axios.put(`https://8080-firebase-prodvor-backend-1761850902881.cluster-ombtxv25tbd6yrjpp3lukp6zhc.cloudworkstations.dev/api/v1/users/${currentUser.id}`, dataToUpdate);
             
             setUser(response.data as User);
 
@@ -372,10 +368,3 @@ export function ProfileTab() {
         </Form>
     );
 }
-
-    
-
-
-
-
-

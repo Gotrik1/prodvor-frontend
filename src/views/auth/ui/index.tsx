@@ -127,13 +127,9 @@ const SocialButton = ({ className, children }: { className?: string, children: R
 
 export function AuthPage() {
   const { toast } = useToast();
-  const { setTokens, setUser, signOut } = useUserStore();
+  const { setTokens, fetchUser } = useUserStore();
   const router = useRouter();
   const [isLoading, setIsLoading] = React.useState(false);
-
-  useEffect(() => {
-    signOut();
-  }, [signOut]);
 
   const form = useForm<z.infer<typeof loginFormSchema>>({
     resolver: zodResolver(loginFormSchema),
@@ -146,23 +142,34 @@ export function AuthPage() {
   const onSubmit = async (values: z.infer<typeof loginFormSchema>) => {
     setIsLoading(true);
     try {
-        const response = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/login`, values);
-        if (response.status === 200 && response.data) {
-            const { user, accessToken, refreshToken } = response.data;
-            setUser(user as User);
+        const response = await axios.post(`https://8080-firebase-prodvor-backend-1761850902881.cluster-ombtxv25tbd6yrjpp3lukp6zhc.cloudworkstations.dev/api/v1/login`, values);
+        
+        const accessToken = response.data.accessToken || response.data.access_token;
+        const refreshToken = response.data.refreshToken || response.data.refresh_token;
+
+        if (accessToken) {
             setTokens(accessToken, refreshToken);
-            toast({
-                title: "Вход выполнен!",
-                description: `Добро пожаловать, ${user.nickname}!`,
-            });
-            router.push(`/dashboard`);
+            const user = await fetchUser(); // Fetch user data after setting token
+            if (user) {
+                toast({
+                    title: "Вход выполнен!",
+                    description: `Добро пожаловать, ${user.nickname}!`,
+                });
+                router.push(`/dashboard`);
+            } else {
+                 throw new Error("Не удалось получить данные пользователя.");
+            }
+        } else {
+            throw new Error("Ответ сервера не содержит токен.");
         }
     } catch (error) {
         console.error("Login failed:", error);
         toast({
             variant: "destructive",
             title: "Ошибка входа",
-            description: "Неверный email или пароль. Попробуйте снова.",
+            description: axios.isAxiosError(error) && error.code === 'ERR_NETWORK' 
+                ? "Сетевая ошибка. Проверьте соединение или CORS на бэкенде."
+                : "Неверный email или пароль. Попробуйте снова.",
         });
     } finally {
         setIsLoading(false);

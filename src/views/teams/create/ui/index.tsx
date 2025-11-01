@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
@@ -26,6 +25,7 @@ export function CreateTeamPage() {
     const [discipline, setDiscipline] = useState('');
     const [city, setCity] = useState(currentUserFromStore?.city || '');
     const [isLoading, setIsLoading] = useState(false);
+    const [teamSports, setTeamSports] = useState<Sport[]>([]);
     
     // Получаем полные данные о пользователе, включая его дисциплины
     const currentUser = useMemo(() => {
@@ -33,14 +33,26 @@ export function CreateTeamPage() {
         return users.find(u => u.id === currentUserFromStore.id) || currentUserFromStore;
     }, [currentUserFromStore]);
 
+    useEffect(() => {
+        async function fetchSports() {
+            try {
+                const response = await axios.get(`https://8080-firebase-prodvor-backend-1761850902881.cluster-ombtxv25tbd6yrjpp3lukp6zhc.cloudworkstations.dev/api/sports`);
+                setTeamSports(response.data.filter((s: Sport) => s.isTeamSport));
+            } catch (error) {
+                console.error("Failed to fetch sports:", error);
+            }
+        }
+        fetchSports();
+    }, []);
+
     const userTeamSports = useMemo(() => {
-        if (!currentUser || !allSports.length) {
+        if (!currentUser || !teamSports.length) {
             return [];
         }
-        return allSports.filter(sport => 
-            sport.isTeamSport && currentUser.disciplines.includes(sport.id)
+        return teamSports.filter(sport => 
+            currentUser.disciplines.includes(String(sport.id))
         );
-    }, [currentUser, allSports]);
+    }, [currentUser, teamSports]);
 
     useEffect(() => {
         if (currentUser) {
@@ -70,7 +82,7 @@ export function CreateTeamPage() {
         setIsLoading(true);
 
         try {
-            const response = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/teams`, {
+            const response = await axios.post(`https://8080-firebase-prodvor-backend-1761850902881.cluster-ombtxv25tbd6yrjpp3lukp6zhc.cloudworkstations.dev/api/v1/teams`, {
                 name: teamName,
                 game: discipline,
                 city: city,

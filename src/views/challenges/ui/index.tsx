@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import { useState, useMemo, useEffect } from 'react';
@@ -76,7 +75,7 @@ export function ChallengesPage() {
     useEffect(() => {
         async function fetchSports() {
             try {
-                const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/sports`);
+                const response = await axios.get(`https://8080-firebase-prodvor-backend-1761850902881.cluster-ombtxv25tbd6yrjpp3lukp6zhc.cloudworkstations.dev/api/sports`);
                 setTeamSports(response.data.filter((s: Sport) => s.isTeamSport));
             } catch (error) {
                 console.error("Failed to fetch sports:", error);
@@ -95,7 +94,7 @@ export function ChallengesPage() {
     
     // --- Matchmaking Logic ---
     const [eloRange, setEloRange] = useState([-250, 250]);
-    const [disciplineFilter, setDisciplineFilter] = useState(myTeam?.game || teamSports[0]?.name || '');
+    const [disciplineFilter, setDisciplineFilter] = useState(myTeam?.game || (teamSports.length > 0 ? teamSports[0].name : ''));
 
     const recommendedOpponents = useMemo(() => {
         if (!myTeam) return [];
