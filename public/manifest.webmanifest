@@ -1,10 +1,10 @@
 {
-  "name": "Prodvor",
-  "short_name": "Prodvor",
+  "name": "ProDvor",
+  "short_name": "ProDvor",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#111827",
-  "theme_color": "#1989f2",
+  "background_color": "#0d0e12",
+  "theme_color": "#1f80e9",
   "icons": [
     { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
     { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png" }
