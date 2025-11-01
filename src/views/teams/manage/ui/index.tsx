@@ -7,7 +7,6 @@ import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
-import { LogoGeneratorWidget } from "@/widgets/logo-generator";
 import { TacticalBoard } from "./tactical-board";
 import { RosterManagement } from "./roster-management";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
@@ -15,6 +14,7 @@ import { TransfersTab } from "./transfers-tab";
 import { users } from "@/mocks";
 import { AnnouncementsTab } from "./tabs/announcements-tab";
 import { SettingsTab } from "./tabs/settings-tab";
+import { BrandingTab } from "./tabs/branding-tab";
 
 export function TeamManagementPage({ team }: { team: Team | undefined }) {
 
@@ -38,7 +38,7 @@ export function TeamManagementPage({ team }: { team: Team | undefined }) {
         )
     }
 
-    const teamMembers = users.filter(u => team.members.includes(u.id));
+    const teamMembers = users.filter(u => team.members.includes(u.id) || u.id === team.captainId);
 
     return (
         <div className="p-4 md:p-6 lg:p-8">
@@ -69,7 +69,7 @@ export function TeamManagementPage({ team }: { team: Team | undefined }) {
                     <TacticalBoard teamMembers={teamMembers} />
                 </TabsContent>
                 <TabsContent value="branding" className="mt-6">
-                    <LogoGeneratorWidget />
+                    <BrandingTab team={team}/>
                 </TabsContent>
                 <TabsContent value="transfers" className="mt-6">
                    <TransfersTab team={team} />
