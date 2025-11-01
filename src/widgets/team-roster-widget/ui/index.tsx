@@ -43,9 +43,11 @@ export const TeamRosterWidget = ({ team }: { team: Team }) => {
     const { toast } = useToast();
 
     const teamMembers = useMemo(() => {
-        // Ensure captain is always included, even if members array is empty/missing
+        // Ensure captain is always included.
         const memberIds = new Set(team.members || []);
-        memberIds.add(team.captainId);
+        if (team.captainId) {
+            memberIds.add(team.captainId);
+        }
         return users.filter(user => memberIds.has(user.id));
     }, [team]);
 
