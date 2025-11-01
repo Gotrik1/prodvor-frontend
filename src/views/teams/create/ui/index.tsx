@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
@@ -15,31 +14,26 @@ import { useUserStore } from '@/widgets/dashboard-header/model/user-store';
 import { GameplayEvent, awardProgressPoints } from '@/shared/lib/gamification';
 import axios from 'axios';
 import Link from 'next/link';
-import { users, allSports, type Sport } from '@/mocks';
+import { allSports, type Sport } from '@/mocks';
 
 
 export function CreateTeamPage() {
     const { toast } = useToast();
     const router = useRouter();
-    const { user: currentUserFromStore } = useUserStore();
+    const { user: currentUser } = useUserStore();
     const [teamName, setTeamName] = useState('');
     const [discipline, setDiscipline] = useState('');
-    const [city, setCity] = useState(currentUserFromStore?.city || '');
+    const [city, setCity] = useState(currentUser?.city || '');
     const [isLoading, setIsLoading] = useState(false);
-    
-    // Получаем полные данные о пользователе, включая его дисциплины
-    const currentUser = useMemo(() => {
-        if (!currentUserFromStore) return null;
-        return users.find(u => u.id === currentUserFromStore.id) || currentUserFromStore;
-    }, [currentUserFromStore]);
 
     const userTeamSports = useMemo(() => {
         if (!currentUser || !currentUser.sports) {
             return [];
         }
-        return currentUser.sports.filter(d => {
-            const sport = allSports.find(s => s.id === d.id);
-            return sport?.isTeamSport;
+        // Filter the user's sports to include only team sports
+        return currentUser.sports.filter(userSport => {
+            const sportDetails = allSports.find(s => s.id === userSport.id);
+            return sportDetails && sportDetails.isTeamSport;
         });
     }, [currentUser]);
 
