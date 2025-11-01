@@ -33,6 +33,8 @@ export const TeamHeader = ({ team, homePlaygrounds }: TeamHeaderProps) => {
     }
 
     const isCaptain = currentUser?.id === team.captainId;
+    const isMember = team.members?.includes(currentUser?.id || '') || isCaptain;
+
 
     return (
         <header className="flex flex-col md:flex-row items-center gap-6 p-4 rounded-lg bg-card border">
@@ -71,10 +73,12 @@ export const TeamHeader = ({ team, homePlaygrounds }: TeamHeaderProps) => {
                         <Swords className="mr-2 h-4 w-4" /> Бросить вызов
                     </Button>
                 )}
-                <Button variant={isFollowing ? 'secondary' : 'outline'} className="w-full" onClick={handleFollow}>
-                    <UserPlus className={cn("mr-2 h-4 w-4", isFollowing && "text-primary")} />
-                    {isFollowing ? 'Вы подписаны' : 'Подписаться'}
-                </Button>
+                {!isMember && (
+                    <Button variant={isFollowing ? 'secondary' : 'outline'} className="w-full" onClick={handleFollow}>
+                        <UserPlus className={cn("mr-2 h-4 w-4", isFollowing && "text-primary")} />
+                        {isFollowing ? 'Вы подписаны' : 'Подписаться'}
+                    </Button>
+                )}
             </div>
         </header>
     );

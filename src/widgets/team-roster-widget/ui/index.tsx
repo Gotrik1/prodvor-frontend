@@ -12,6 +12,7 @@ import { Button } from "@/shared/ui/button";
 import { useToast } from "@/shared/hooks/use-toast";
 import { users } from "@/mocks";
 import { useMemo } from "react";
+import { useUserStore } from "@/widgets/dashboard-header/model/user-store";
 
 const TeamRoster = ({ teamMembers, captainId }: { teamMembers: User[], captainId: string }) => (
     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
@@ -41,15 +42,17 @@ const TeamRoster = ({ teamMembers, captainId }: { teamMembers: User[], captainId
 
 export const TeamRosterWidget = ({ team }: { team: Team }) => {
     const { toast } = useToast();
+    const { user: currentUser } = useUserStore();
 
     const teamMembers = useMemo(() => {
-        // Ensure captain is always included.
         const memberIds = new Set(team.members || []);
         if (team.captainId) {
             memberIds.add(team.captainId);
         }
         return users.filter(user => memberIds.has(user.id));
     }, [team]);
+
+    const isMember = teamMembers.some(member => member.id === currentUser?.id);
 
 
     const handleApply = () => {
@@ -68,9 +71,11 @@ export const TeamRosterWidget = ({ team }: { team: Team }) => {
                         Игроки, представляющие команду в текущем сезоне.
                     </CardDescription>
                 </div>
-                <Button variant="outline" size="sm" className="mt-4 md:mt-0" onClick={handleApply}>
-                    <UserPlus className="mr-2 h-4 w-4" /> Подать заявку
-                </Button>
+                {!isMember && (
+                    <Button variant="outline" size="sm" className="mt-4 md:mt-0" onClick={handleApply}>
+                        <UserPlus className="mr-2 h-4 w-4" /> Подать заявку
+                    </Button>
+                )}
             </CardHeader>
             <CardContent>
                 <TeamRoster teamMembers={teamMembers} captainId={team.captainId} />
