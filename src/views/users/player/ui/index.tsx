@@ -1,8 +1,7 @@
 
-
 'use client';
 
-import { User, Sport } from "@/mocks";
+import { User } from "@/mocks";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { MapPin, Cake, User as UserIcon, MessageSquare, UserPlus, Gamepad2 } from "lucide-react";
 import { Button } from "@/shared/ui/button";
@@ -22,7 +21,6 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/sh
 import { PublicationsFeed } from "@/widgets/publications-feed";
 import Image from "next/image";
 import { Skeleton } from "@/shared/ui/skeleton";
-import axios from 'axios';
 
 function getAgeDeclension(age: number): string {
     if (age % 10 === 1 && age % 100 !== 11) {

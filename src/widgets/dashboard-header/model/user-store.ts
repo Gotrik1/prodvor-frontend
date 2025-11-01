@@ -16,7 +16,7 @@ interface UserState {
   fetchUser: () => Promise<User | null>;
 }
 
-const API_BASE_URL = "https://8080-firebase-prodvor-backend-1761850902881.cluster-ombtxv25tbd6yrjpp3lukp6zhc.cloudworkstations.dev";
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 export const useUserStore = create<UserState>()(
   persist(
@@ -71,5 +71,3 @@ export const useUserStore = create<UserState>()(
     }
   )
 );
-
-    
