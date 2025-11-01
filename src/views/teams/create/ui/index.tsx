@@ -14,7 +14,7 @@ import { useUserStore } from '@/widgets/dashboard-header/model/user-store';
 import { GameplayEvent, awardProgressPoints } from '@/shared/lib/gamification';
 import axios from 'axios';
 import Link from 'next/link';
-import { allSports, type Sport } from '@/mocks';
+import type { Sport } from '@/mocks';
 
 
 export function CreateTeamPage() {
@@ -25,6 +25,24 @@ export function CreateTeamPage() {
     const [discipline, setDiscipline] = useState('');
     const [city, setCity] = useState(currentUser?.city || '');
     const [isLoading, setIsLoading] = useState(false);
+    const [allSports, setAllSports] = useState<Sport[]>([]);
+
+    useEffect(() => {
+        async function fetchSports() {
+            try {
+                const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/sports/`);
+                setAllSports(response.data);
+            } catch (error) {
+                console.error("Failed to fetch sports:", error);
+                 toast({
+                    variant: "destructive",
+                    title: "Ошибка",
+                    description: "Не удалось загрузить список видов спорта.",
+                });
+            }
+        }
+        fetchSports();
+    }, [toast]);
 
     const userTeamSports = useMemo(() => {
         if (!currentUser || !currentUser.sports) {
@@ -35,7 +53,7 @@ export function CreateTeamPage() {
             const sportDetails = allSports.find(s => s.id === userSport.id);
             return sportDetails && sportDetails.isTeamSport;
         });
-    }, [currentUser]);
+    }, [currentUser, allSports]);
 
     useEffect(() => {
         if (currentUser) {
