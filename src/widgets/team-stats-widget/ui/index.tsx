@@ -1,44 +1,105 @@
 
 'use client';
 
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
+import { Skeleton } from '@/shared/ui/skeleton';
+import axios from 'axios';
+import type { Team } from '@/mocks';
 
-const careerStats = {
-    '2025': { rank: '3-е', elo: 1520, wins: 45, losses: 12 },
-    '2024': { rank: '8-е', elo: 1410, wins: 38, losses: 21 },
-};
+interface SeasonStat {
+    season: number;
+    leagueRank: string;
+    finalElo: number;
+    wins: number;
+    losses: number;
+}
 
 const StatRow = ({ label, value }: { label: string, value: string | number }) => (
-    <div className="flex justify-between items-center py-2 border-b border-border/50">
+    <div className="flex justify-between items-center py-2 border-b border-border/50 last:border-b-0">
         <span className="text-muted-foreground">{label}</span>
         <span className="font-bold">{value}</span>
     </div>
 );
 
-export const TeamStatsWidget = () => (
-    <Card>
-        <CardHeader>
-            <CardTitle>Статистика по сезонам</CardTitle>
-            <CardDescription>История выступлений команды в различных сезонах.</CardDescription>
-        </CardHeader>
-        <CardContent>
-            <Tabs defaultValue="2025" className="w-full" orientation="vertical">
-                <TabsList>
-                    <TabsTrigger value="2025">Сезон 2025</TabsTrigger>
-                    <TabsTrigger value="2024">Сезон 2024</TabsTrigger>
-                </TabsList>
-                <TabsContent value="2025" className="ml-4 pl-4 border-l">
-                    <StatRow label="Место в лиге" value={careerStats['2025'].rank} />
-                    <StatRow label="ELO на конец сезона" value={careerStats['2025'].elo} />
-                    <StatRow label="Побед / Поражений" value={`${careerStats['2025'].wins} / ${careerStats['2025'].losses}`} />
-                </TabsContent>
-                <TabsContent value="2024" className="ml-4 pl-4 border-l">
-                    <StatRow label="Место в лиге" value={careerStats['2024'].rank} />
-                    <StatRow label="ELO на конец сезона" value={careerStats['2024'].elo} />
-                    <StatRow label="Побед / Поражений" value={`${careerStats['2024'].wins} / ${careerStats['2024'].losses}`} />
-                </TabsContent>
-            </Tabs>
-        </CardContent>
-    </Card>
-);
+export const TeamStatsWidget = ({ team }: { team: Team }) => {
+    const [stats, setStats] = useState<SeasonStat[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchStats = async () => {
+            if (!team.id) return;
+            setIsLoading(true);
+            try {
+                const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/teams/${team.id}/stats`);
+                
+                const teamCreationYear = new Date(team.createdAt).getFullYear();
+                const filteredStats = response.data.filter((stat: SeasonStat) => stat.season >= teamCreationYear);
+                
+                setStats(filteredStats.sort((a,b) => b.season - a.season));
+
+            } catch (error) {
+                console.error("Failed to fetch team stats:", error);
+                // No toast here to avoid spamming, can be handled by a global error handler
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchStats();
+    }, [team.id, team.createdAt]);
+
+    if (isLoading) {
+        return (
+            <Card>
+                <CardHeader>
+                    <Skeleton className="h-6 w-1/2" />
+                    <Skeleton className="h-4 w-3/4" />
+                </CardHeader>
+                <CardContent>
+                    <Skeleton className="h-40 w-full" />
+                </CardContent>
+            </Card>
+        );
+    }
+    
+    if (stats.length === 0) {
+        return (
+            <Card>
+                <CardHeader>
+                    <CardTitle>Статистика по сезонам</CardTitle>
+                    <CardDescription>История выступлений команды в различных сезонах.</CardDescription>
+                </CardHeader>
+                <CardContent className="text-center text-muted-foreground py-10">
+                    <p>Статистика по сезонам еще не доступна.</p>
+                </CardContent>
+            </Card>
+        );
+    }
+
+    return (
+        <Card>
+            <CardHeader>
+                <CardTitle>Статистика по сезонам</CardTitle>
+                <CardDescription>История выступлений команды в различных сезонах.</CardDescription>
+            </CardHeader>
+            <CardContent>
+                <Tabs defaultValue={stats[0].season.toString()} className="w-full" orientation="vertical">
+                    <TabsList>
+                        {stats.map(stat => (
+                             <TabsTrigger key={stat.season} value={stat.season.toString()}>Сезон {stat.season}</TabsTrigger>
+                        ))}
+                    </TabsList>
+                    {stats.map(stat => (
+                        <TabsContent key={stat.season} value={stat.season.toString()} className="ml-4 pl-4 border-l">
+                            <StatRow label="Место в лиге" value={stat.leagueRank} />
+                            <StatRow label="ELO на конец сезона" value={stat.finalElo} />
+                            <StatRow label="Побед / Поражений" value={`${stat.wins} / ${stat.losses}`} />
+                        </TabsContent>
+                    ))}
+                </Tabs>
+            </CardContent>
+        </Card>
+    );
+};

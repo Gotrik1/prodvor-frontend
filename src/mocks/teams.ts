@@ -1,5 +1,4 @@
 
-
 export interface Team {
   id: string;
   name: string;
@@ -20,15 +19,14 @@ export interface Team {
   wins?: number;
   losses?: number;
   leagueRank?: string;
-  currentStreak?: {
-    type: 'W' | 'L';
-    count: number;
-  };
+  currentStreakType?: 'W' | 'L';
+  currentStreakCount?: number;
   form?: ('W' | 'L' | 'D')[];
   mvpPlayerId?: string | null;
   topScorerPlayerId?: string | null;
   cleanSheets?: number;
   avgRating?: number;
+  createdAt: string; // ISO 8601 date string
 }
 
 // Base teams array is now empty. It will be populated by data from the backend.
