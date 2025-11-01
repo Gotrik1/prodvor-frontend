@@ -14,6 +14,7 @@ import { Separator } from "@/shared/ui/separator";
 import { useToast } from '@/shared/hooks/use-toast';
 import axios from 'axios';
 import { Skeleton } from '@/shared/ui/skeleton';
+import { TopTeamsWidget } from '@/widgets/top-teams-widget';
 
 const TeamCard = ({ team, isMember }: { team: Team, isMember: boolean }) => (
     <Card key={team.id} className="flex flex-col">
@@ -138,6 +139,12 @@ export function TeamsPage() {
                     </Button>
                 </div>
             </div>
+
+            <div className="container mx-auto px-4 md:px-0">
+                <TopTeamsWidget />
+            </div>
+
+            <Separator />
             
             {myTeams.length > 0 && (
                 <section>
