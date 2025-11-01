@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { useState, useMemo, useEffect } from 'react';
@@ -7,7 +8,7 @@ import { Button } from "@/shared/ui/button";
 import { Check, X, Send, Swords, Sparkles } from "lucide-react";
 import Image from "next/image"; 
 import { challenges, TeamChallenge } from '@/mocks/challenges';
-import { teams } from '@/mocks';
+import { teams, allSports } from '@/mocks';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/select";
 import { Input } from "@/shared/ui/input";
 import { Label } from "@/shared/ui/label";
@@ -15,7 +16,6 @@ import { Separator } from "@/shared/ui/separator";
 import { Slider } from '@/shared/ui/slider';
 import Link from 'next/link';
 import { useUserStore } from '@/widgets/dashboard-header/model/user-store';
-import axios from 'axios';
 import type { Sport } from '@/mocks';
 
 const ChallengeCard = ({ challenge, type }: { challenge: TeamChallenge, type: 'incoming' | 'outgoing' }) => {
@@ -70,19 +70,7 @@ const RecommendedOpponentCard = ({ team }: { team: typeof teams[0] }) => (
 
 export function ChallengesPage() {
     const { user: currentUser } = useUserStore();
-    const [teamSports, setTeamSports] = useState<Sport[]>([]);
-
-    useEffect(() => {
-        async function fetchSports() {
-            try {
-                const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/sports`);
-                setTeamSports(response.data.filter((s: Sport) => s.isTeamSport));
-            } catch (error) {
-                console.error("Failed to fetch sports:", error);
-            }
-        }
-        fetchSports();
-    }, []);
+    const teamSports = allSports.filter((s: Sport) => s.isTeamSport);
 
     // Find the first team the user is a captain of
     const myTeam = useMemo(() => teams.find(t => t.captainId === currentUser?.id), [currentUser]);

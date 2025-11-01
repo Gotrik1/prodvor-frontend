@@ -77,11 +77,11 @@ const MoreDisciplines = ({ disciplines }: { disciplines: string[] }) => {
 };
 
 
-export function PlayerPage({ user: profileUser, allSports }: { user: User, allSports: Sport[] }) {
+export function PlayerPage({ user: profileUser }: { user: User, allSports?: Sport[] }) {
     const { user: currentUser } = useUserStore();
     
     const isOwnProfile = useMemo(() => currentUser?.id === profileUser?.id, [currentUser, profileUser]);
-    const userDisciplines = useMemo(() => profileUser ? getUserDisciplines(profileUser, allSports) : [], [profileUser, allSports]);
+    const userDisciplines = useMemo(() => profileUser ? getUserDisciplines(profileUser) : [], [profileUser]);
 
     if (!profileUser) {
         return (

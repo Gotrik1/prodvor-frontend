@@ -16,9 +16,6 @@ import Link from "next/link";
 import Image from "next/image";
 import { CreatePlanDialog } from "@/features/fitness-plan/ui/create-plan-dialog";
 import { FitnessSchedule } from "@/widgets/fitness-schedule";
-import axios from "axios";
-import type { Sport } from "@/mocks";
-
 
 const defaultCoach = users.find(u => u.id === 'staff2');
 
@@ -26,19 +23,6 @@ export function CoachPageTemplate({ user }: { user?: User }) {
     const coach = user || defaultCoach;
     const [dialogOpen, setDialogOpen] = useState(false);
     const [selectedClient, setSelectedClient] = useState<User | null>(null);
-    const [allSports, setAllSports] = useState<Sport[]>([]);
-
-    useEffect(() => {
-        async function fetchSports() {
-            try {
-                const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/sports`);
-                setAllSports(response.data);
-            } catch (error) {
-                console.error("Failed to fetch sports:", error);
-            }
-        }
-        fetchSports();
-    }, []);
 
     const managedTeams = useMemo(() => {
         if (!coach?.coachProfile?.managedTeams) return [];
@@ -52,9 +36,9 @@ export function CoachPageTemplate({ user }: { user?: User }) {
     }, [coach, managedTeams]);
 
     const coachDisciplines = useMemo(() => {
-        if (!coach || !allSports.length) return [];
-        return getUserDisciplines(coach, allSports);
-    }, [coach, allSports]);
+        if (!coach) return [];
+        return getUserDisciplines(coach);
+    }, [coach]);
 
     if (!coach || !coach.coachProfile) {
          return (

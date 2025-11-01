@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
@@ -25,7 +26,6 @@ export function CreateTeamPage() {
     const [discipline, setDiscipline] = useState('');
     const [city, setCity] = useState(currentUserFromStore?.city || '');
     const [isLoading, setIsLoading] = useState(false);
-    const [teamSports, setTeamSports] = useState<Sport[]>([]);
     
     // Получаем полные данные о пользователе, включая его дисциплины
     const currentUser = useMemo(() => {
@@ -33,26 +33,15 @@ export function CreateTeamPage() {
         return users.find(u => u.id === currentUserFromStore.id) || currentUserFromStore;
     }, [currentUserFromStore]);
 
-    useEffect(() => {
-        async function fetchSports() {
-            try {
-                const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/sports`);
-                setTeamSports(response.data.filter((s: Sport) => s.isTeamSport));
-            } catch (error) {
-                console.error("Failed to fetch sports:", error);
-            }
-        }
-        fetchSports();
-    }, []);
-
     const userTeamSports = useMemo(() => {
-        if (!currentUser || !teamSports.length) {
+        if (!currentUser || !currentUser.disciplines) {
             return [];
         }
-        return teamSports.filter(sport => 
-            currentUser.disciplines.includes(String(sport.id))
-        );
-    }, [currentUser, teamSports]);
+        return currentUser.disciplines.filter(d => {
+            const sport = allSports.find(s => s.id === d.id);
+            return sport?.isTeamSport;
+        });
+    }, [currentUser]);
 
     useEffect(() => {
         if (currentUser) {
@@ -84,10 +73,10 @@ export function CreateTeamPage() {
         try {
             const response = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/teams`, {
                 name: teamName,
-                game: discipline,
+                game: allSports.find(s => s.id === discipline)?.name,
                 city: city,
                 captainId: currentUser.id,
-                sportId: allSports.find(s => s.name === discipline)?.id
+                sportId: discipline
             });
 
             if (response.status === 201) {
@@ -137,7 +126,7 @@ export function CreateTeamPage() {
                                     <SelectGroup>
                                         <SelectLabel>Ваши командные дисциплины</SelectLabel>
                                         {userTeamSports.map(sport => (
-                                            <SelectItem key={sport.id} value={sport.name}>{sport.name}</SelectItem>
+                                            <SelectItem key={sport.id} value={sport.id}>{sport.name}</SelectItem>
                                         ))}
                                     </SelectGroup>
                                 </SelectContent>

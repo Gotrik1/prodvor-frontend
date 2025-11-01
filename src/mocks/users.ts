@@ -11,6 +11,11 @@ export interface CoachProfile {
     managedTeams: string[]; // Array of team IDs
 }
 
+export interface UserDiscipline {
+    id: string;
+    name: string;
+}
+
 export interface User {
   id: string;
   firstName: string;
@@ -26,7 +31,7 @@ export interface User {
   city: string;
   phone: string;
   bio?: string;
-  disciplines: string[]; // Array of sport IDs
+  disciplines: UserDiscipline[];
   friends: string[]; // Array of user IDs
   followers: string[]; // Array of user IDs
   followingUsers: string[]; // Array of user IDs
