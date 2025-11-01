@@ -58,12 +58,14 @@ export function TeamsPage() {
     const { user: currentUser } = useUserStore();
     const { toast } = useToast();
     const [allTeams, setAllTeams] = useState<Team[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
     const [connectionStatus, setConnectionStatus] = useState<'unknown' | 'success' | 'failed'>('unknown');
     
     useEffect(() => {
         async function fetchTeams() {
+            setIsLoading(true);
             try {
-                const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/teams/`);
+                const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/teams`);
                 setAllTeams(response.data);
                 setConnectionStatus('success');
             } catch (error) {
@@ -72,8 +74,10 @@ export function TeamsPage() {
                 toast({
                     variant: "destructive",
                     title: "Ошибка загрузки команд",
-                    description: "Не удалось получить данные с бэкенда. Отображаются моковые данные.",
+                    description: "Не удалось получить данные с бэкенда. Проверьте эндпоинт и CORS.",
                 });
+            } finally {
+                setIsLoading(false);
             }
         }
         fetchTeams();
@@ -106,8 +110,8 @@ export function TeamsPage() {
     };
     
     const { myTeams, otherTeams } = useMemo(() => {
-        if (!currentUser) {
-            return { myTeams: [], otherTeams: allTeams };
+        if (!currentUser || !allTeams) {
+            return { myTeams: [], otherTeams: allTeams || [] };
         }
         const myTeams = allTeams.filter(team => team.members.includes(currentUser.id));
         const otherTeams = allTeams.filter(team => !team.members.includes(currentUser.id));
@@ -152,7 +156,7 @@ export function TeamsPage() {
 
             <div>
                 <h2 className="text-2xl font-bold mb-4">Все команды</h2>
-                 {connectionStatus === 'unknown' ? (
+                 {isLoading ? (
                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                         {[...Array(4)].map((_, i) => (
                              <Card key={i}>
