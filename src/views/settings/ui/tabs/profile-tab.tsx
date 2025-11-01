@@ -38,7 +38,7 @@ import React, { useState, useCallback, useEffect } from 'react';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/shared/ui/dialog';
 import Image from 'next/image';
 import axios from 'axios';
-import type { User, Sport, UserDiscipline } from '@/mocks';
+import type { User, Sport } from '@/mocks';
 
 const profileFormSchema = z.object({
   firstName: z.string().min(2, 'Имя должно содержать не менее 2 символов.'),
@@ -53,7 +53,7 @@ const profileFormSchema = z.object({
 });
 
 const AvatarUploadDialog = () => {
-    const { user, setUser } = useUserStore();
+    const { user, setUser, accessToken } = useUserStore();
     const { toast } = useToast();
     const [file, setFile] = useState<File | null>(null);
     const [filePreview, setFilePreview] = useState<string | null>(null);
@@ -72,7 +72,14 @@ const AvatarUploadDialog = () => {
     }, []);
 
     const handleSaveAvatar = async () => {
-        if (!file || !user) return;
+        if (!file || !user || !accessToken) {
+            toast({
+                variant: "destructive",
+                title: "Ошибка",
+                description: "Файл не выбран или вы не авторизованы.",
+            });
+            return;
+        }
         setIsLoading(true);
 
         const formData = new FormData();
@@ -82,6 +89,7 @@ const AvatarUploadDialog = () => {
             const response = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/users/${user.id}/avatar`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
+                    'Authorization': `Bearer ${accessToken}`
                 },
             });
 
@@ -155,7 +163,7 @@ const AvatarUploadDialog = () => {
 
 const DisciplinesCard = () => {
     const { toast } = useToast();
-    const { user: currentUser, setUser } = useUserStore();
+    const { user: currentUser, setUser, accessToken } = useUserStore();
     const [sportOptions, setSportOptions] = useState<OptionType[]>([]);
     const [selectedSports, setSelectedSports] = useState<string[]>([]);
     const [isLoading, setIsLoading] = useState(false);
@@ -194,11 +202,15 @@ const DisciplinesCard = () => {
     }, [currentUser]);
 
     const handleSaveDisciplines = async () => {
-        if (!currentUser) return;
+        if (!currentUser || !accessToken) return;
         setIsSaving(true);
         try {
             const response = await axios.put(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/users/${currentUser.id}`, {
                 sports: selectedSports
+            }, {
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`
+                }
             });
             const updatedUser = response.data as User;
             setUser(updatedUser);
@@ -256,7 +268,7 @@ const DisciplinesCard = () => {
 
 export function ProfileTab() {
     const { toast } = useToast();
-    const { user: currentUser, setUser } = useUserStore();
+    const { user: currentUser, setUser, accessToken } = useUserStore();
 
     const profileForm = useForm<z.infer<typeof profileFormSchema>>({
         resolver: zodResolver(profileFormSchema),
@@ -285,7 +297,7 @@ export function ProfileTab() {
     }, [currentUser, profileForm]);
 
     async function onProfileSubmit(values: z.infer<typeof profileFormSchema>) {
-        if (!currentUser) return;
+        if (!currentUser || !accessToken) return;
         
         const dataToUpdate = {
             ...values,
@@ -293,7 +305,11 @@ export function ProfileTab() {
         };
 
         try {
-            const response = await axios.put(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/users/${currentUser.id}`, dataToUpdate);
+            const response = await axios.put(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/users/${currentUser.id}`, dataToUpdate, {
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`
+                }
+            });
             setUser(response.data as User);
             toast({
                 title: "Профиль обновлен",

@@ -6,7 +6,6 @@ import type { Team } from '@/mocks';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/shared/ui/dialog';
 import { Button } from '@/shared/ui/button';
-import { Label } from '@/shared/ui/label';
 import { UploadCloud, Image as ImageIcon, Loader2 } from 'lucide-react';
 import Image from 'next/image';
 import { useToast } from '@/shared/hooks/use-toast';
@@ -16,6 +15,7 @@ import { useUserStore } from '@/widgets/dashboard-header/model/user-store';
 
 const LogoUploadDialog = ({ team, onUploadSuccess }: { team: Team, onUploadSuccess: (newLogoUrl: string) => void }) => {
     const { toast } = useToast();
+    const { accessToken } = useUserStore();
     const [file, setFile] = useState<File | null>(null);
     const [filePreview, setFilePreview] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
@@ -33,7 +33,14 @@ const LogoUploadDialog = ({ team, onUploadSuccess }: { team: Team, onUploadSucce
     };
 
     const handleSaveLogo = async () => {
-        if (!file || !team) return;
+        if (!file || !team || !accessToken) {
+             toast({
+                variant: "destructive",
+                title: "Ошибка",
+                description: "Файл не выбран или вы не авторизованы.",
+            });
+            return;
+        };
         setIsLoading(true);
 
         const formData = new FormData();
@@ -41,7 +48,10 @@ const LogoUploadDialog = ({ team, onUploadSuccess }: { team: Team, onUploadSucce
 
         try {
             const response = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/teams/${team.id}/logo`, formData, {
-                headers: { 'Content-Type': 'multipart/form-data' },
+                headers: { 
+                    'Content-Type': 'multipart/form-data',
+                    'Authorization': `Bearer ${accessToken}`
+                },
             });
 
             if (response.status === 200 && response.data.logoUrl) {
@@ -58,7 +68,7 @@ const LogoUploadDialog = ({ team, onUploadSuccess }: { team: Team, onUploadSucce
             toast({
                 variant: "destructive",
                 title: "Ошибка загрузки",
-                description: "Не удалось сохранить логотип. Попробуйте позже.",
+                description: "Не удалось сохранить логотип. Проверьте права доступа и попробуйте позже.",
             });
         } finally {
             setIsLoading(false);
