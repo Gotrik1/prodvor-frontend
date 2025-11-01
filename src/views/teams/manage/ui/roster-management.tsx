@@ -1,21 +1,34 @@
 
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import type { User } from '@/mocks';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import { Button } from '@/shared/ui/button';
 import { ArrowDown, ArrowUp, Crown } from 'lucide-react';
+import axios from 'axios';
+import { Skeleton } from '@/shared/ui/skeleton';
 
 interface RosterManagementProps {
     allTeamMembers: User[];
 }
 
-export function RosterManagement({ allTeamMembers }: RosterManagementProps) {
-    // Mock initial state: first 5 players are main, rest are substitutes
-    const [mainRoster, setMainRoster] = useState(() => allTeamMembers.slice(0, 5));
-    const [substitutes, setSubstitutes] = useState(() => allTeamMembers.slice(5));
+export function RosterManagement({ allTeamMembers: initialTeamMembers }: RosterManagementProps) {
+    const [mainRoster, setMainRoster] = useState<User[]>([]);
+    const [substitutes, setSubstitutes] = useState<User[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        // Since allTeamMembers is passed as a prop, we can directly use it.
+        // The main roster is the first 5, the rest are substitutes.
+        // This is still a mock logic, but it uses the members passed from the parent.
+        const firstFive = initialTeamMembers.slice(0, 5);
+        const rest = initialTeamMembers.slice(5);
+        setMainRoster(firstFive);
+        setSubstitutes(rest);
+        setIsLoading(false);
+    }, [initialTeamMembers]);
 
     const moveToSubstitutes = (player: User) => {
         setMainRoster(prev => prev.filter(p => p.id !== player.id));
@@ -49,6 +62,31 @@ export function RosterManagement({ allTeamMembers }: RosterManagementProps) {
             </div>
         );
     };
+    
+    if (isLoading) {
+        return (
+            <Card>
+                <CardHeader>
+                    <Skeleton className="h-6 w-1/2" />
+                    <Skeleton className="h-4 w-3/4" />
+                </CardHeader>
+                <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <Skeleton className="h-5 w-1/3 mb-2" />
+                        <div className="space-y-2 p-2 border rounded-lg">
+                            {[...Array(3)].map((_, i) => <Skeleton key={i} className="h-12 w-full" />)}
+                        </div>
+                    </div>
+                    <div>
+                        <Skeleton className="h-5 w-1/3 mb-2" />
+                        <div className="space-y-2 p-2 border rounded-lg">
+                             <Skeleton className="h-12 w-full" />
+                        </div>
+                    </div>
+                </CardContent>
+            </Card>
+        )
+    }
 
     return (
         <Card>
@@ -59,7 +97,7 @@ export function RosterManagement({ allTeamMembers }: RosterManagementProps) {
             <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                     <h3 className="font-semibold mb-2">Основной состав ({mainRoster.length})</h3>
-                    <div className="space-y-2 p-2 rounded-lg border bg-muted/30">
+                    <div className="space-y-2 p-2 rounded-lg border bg-muted/30 min-h-[100px]">
                         {mainRoster.length > 0 ? (
                             mainRoster.map(player => <PlayerRow key={player.id} player={player} action={moveToSubstitutes} />)
                         ) : (
@@ -69,7 +107,7 @@ export function RosterManagement({ allTeamMembers }: RosterManagementProps) {
                 </div>
                  <div>
                     <h3 className="font-semibold mb-2">Запасные ({substitutes.length})</h3>
-                    <div className="space-y-2 p-2 rounded-lg border bg-muted/30">
+                    <div className="space-y-2 p-2 rounded-lg border bg-muted/30 min-h-[100px]">
                         {substitutes.length > 0 ? (
                             substitutes.map(player => <PlayerRow key={player.id} player={player} action={moveToMainRoster} />)
                         ) : (

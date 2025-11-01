@@ -1,10 +1,10 @@
 
-
 'use client';
 
-import { users, playgrounds, posts, Team, Post } from "@/mocks";
+import React from 'react';
+import type { User, Playground, Post, Team } from "@/mocks";
 import { Button } from "@/shared/ui/button";
-import { Card, CardHeader, CardContent, CardTitle } from "@/shared/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
 import { History, Grid3x3 } from "lucide-react";
 import Link from 'next/link';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
@@ -15,16 +15,69 @@ import { TeamRosterWidget } from "@/widgets/team-roster-widget";
 import { TeamMatchesWidget } from "@/widgets/team-matches-widget";
 import { TeamChallengesWidget } from "@/widgets/team-challenges-widget";
 import { TeamStatsWidget } from "@/widgets/team-stats-widget";
+import axios from 'axios';
+import { Skeleton } from '@/shared/ui/skeleton';
 
-export function TeamPageTemplate({ team }: { team?: Team }) {
-    
+export function TeamPageTemplate({ team: initialTeam }: { team?: Team }) {
+    const [team, setTeam] = React.useState<Team | undefined>(initialTeam);
+    const [playgrounds, setPlaygrounds] = React.useState<Playground[]>([]);
+    const [teamMembers, setTeamMembers] = React.useState<User[]>([]);
+    const [isLoading, setIsLoading] = React.useState(true);
+
+    React.useEffect(() => {
+        if (!initialTeam) {
+            setIsLoading(false);
+            return;
+        }
+
+        const fetchData = async () => {
+            setIsLoading(true);
+            try {
+                const [usersRes, playgroundsRes] = await Promise.all([
+                    axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/users`),
+                    axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/playgrounds`),
+                ]);
+
+                const allUsers: User[] = usersRes.data;
+                const allPlaygrounds: Playground[] = playgroundsRes.data;
+
+                const memberIds = new Set(initialTeam.members || []);
+                memberIds.add(initialTeam.captainId);
+                const members = allUsers.filter(u => memberIds.has(u.id));
+                setTeamMembers(members);
+
+                const homePgs = allPlaygrounds.filter(p => initialTeam.homePlaygroundIds?.includes(p.id));
+                setPlaygrounds(homePgs);
+
+                setTeam(initialTeam);
+
+            } catch (error) {
+                console.error("Failed to fetch related team data:", error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchData();
+    }, [initialTeam]);
+
+    if (isLoading) {
+        return (
+             <div className="p-4 md:p-6 lg:p-8 space-y-6">
+                <Skeleton className="h-32 w-full" />
+                <Skeleton className="h-10 w-full" />
+                <Skeleton className="h-64 w-full" />
+            </div>
+        )
+    }
+
     if (!team) {
        return (
             <div className="flex flex-col min-h-[80vh] items-center justify-center p-4">
                 <Card className="text-center max-w-md w-full">
                     <CardHeader>
                         <CardTitle>Ошибка 404</CardTitle>
-                    </CardHeader> 
+                    </CardHeader>
                     <CardContent>
                         <p className="text-muted-foreground">
                             Команда не найдена.
@@ -38,12 +91,9 @@ export function TeamPageTemplate({ team }: { team?: Team }) {
         )
     }
 
-    const teamMembers = users.filter(u => team.members?.includes(u.id));
-    const homePlaygrounds = team.homePlaygroundIds?.map((id: string) => playgrounds.find(p => p.id === id)).filter(Boolean);
-
     return (
         <div className="p-4 md:p-6 lg:p-8 space-y-6">
-            <TeamHeader team={team} homePlaygrounds={homePlaygrounds} />
+            <TeamHeader team={team} homePlaygrounds={playgrounds} />
 
             <Tabs defaultValue="overview" className="w-full">
                 <TabsList className="grid w-full grid-cols-4 md:grid-cols-6">
@@ -58,7 +108,7 @@ export function TeamPageTemplate({ team }: { team?: Team }) {
                     <TeamOverviewWidget team={team} />
                 </TabsContent>
                 <TabsContent value="roster" className="mt-6">
-                    <TeamRosterWidget team={team} />
+                    <TeamRosterWidget team={team} teamMembers={teamMembers} />
                 </TabsContent>
                 <TabsContent value="matches" className="mt-6">
                     <TeamMatchesWidget />
