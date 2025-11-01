@@ -127,7 +127,7 @@ const SocialButton = ({ className, children }: { className?: string, children: R
 
 export function AuthPage() {
   const { toast } = useToast();
-  const { setTokens, fetchUser } = useUserStore();
+  const { setTokens, setUser } = useUserStore();
   const router = useRouter();
   const [isLoading, setIsLoading] = React.useState(false);
   const API_BASE_URL = "https://8080-firebase-prodvor-backend-1761850902881.cluster-ombtxv25tbd6yrjpp3lukp6zhc.cloudworkstations.dev";
@@ -149,28 +149,25 @@ export function AuthPage() {
 
         const accessToken = response.data.accessToken || response.data.access_token;
         const refreshToken = response.data.refreshToken || response.data.refresh_token;
+        const user = response.data.user as User;
 
-        if (accessToken) {
+        if (accessToken && user) {
             setTokens(accessToken, refreshToken);
-            const user = await fetchUser(); // Fetch user data after setting token
-            if (user) {
-                toast({
-                    title: "Вход выполнен!",
-                    description: `Добро пожаловать, ${user.nickname}!`,
-                });
-                router.push(`/dashboard`);
-            } else {
-                 throw new Error("Не удалось получить данные пользователя.");
-            }
+            setUser(user);
+            toast({
+                title: "Вход выполнен!",
+                description: `Добро пожаловать, ${user.nickname}!`,
+            });
+            router.push(`/dashboard`);
         } else {
-            throw new Error("Ответ сервера не содержит токен.");
+             throw new Error("Ответ сервера не содержит токен или данные пользователя.");
         }
     } catch (error) {
         console.error("Login failed:", error);
         toast({
             variant: "destructive",
             title: "Ошибка входа",
-            description: axios.isAxiosError(error) && error.code === 'ERR_NETWORK' 
+            description: axios.isAxiosError(error) && error.response?.status !== 401
                 ? "Сетевая ошибка. Проверьте соединение или CORS на бэкенде."
                 : "Неверный email или пароль. Попробуйте снова.",
         });
@@ -289,3 +286,5 @@ export function AuthPage() {
     </div>
   );
 }
+
+    

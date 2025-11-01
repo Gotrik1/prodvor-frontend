@@ -11,7 +11,7 @@ interface UserState {
   accessToken: string | null;
   isHydrated: boolean;
   setUser: (user: User | null) => void;
-  setTokens: (accessToken: string, refreshToken: string) => void;
+  setTokens: (accessToken: string, refreshToken: string | null) => void;
   signOut: () => void;
   fetchUser: () => Promise<User | null>;
 }
@@ -27,7 +27,7 @@ export const useUserStore = create<UserState>()(
       setUser: (user) => set({ user }),
       setTokens: (accessToken, refreshToken) => {
         set({ accessToken });
-        if (typeof window !== 'undefined') {
+        if (typeof window !== 'undefined' && refreshToken) {
           localStorage.setItem('refreshToken', refreshToken);
         }
         axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
@@ -43,6 +43,7 @@ export const useUserStore = create<UserState>()(
           const token = get().accessToken;
           if (!token) return null;
           try {
+              console.log("Fetching user with token...");
               const response = await axios.get(`${API_BASE_URL}/api/v1/users/me`);
               console.log("Response from /users/me:", response.data);
               const user = response.data as User;
@@ -70,3 +71,5 @@ export const useUserStore = create<UserState>()(
     }
   )
 );
+
+    
