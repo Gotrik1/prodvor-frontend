@@ -30,7 +30,7 @@ const TeamCard = ({ team, isMember }: { team: Team, isMember: boolean }) => (
         <CardContent className="flex-grow space-y-2">
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
                 <Users className="h-4 w-4" />
-                <span>{team.members.length} игроков</span>
+                <span>{team.members?.length || 0} игроков</span>
             </div>
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
                 <BarChart className="h-4 w-4" />
@@ -113,8 +113,8 @@ export function TeamsPage() {
         if (!currentUser || !allTeams) {
             return { myTeams: [], otherTeams: allTeams || [] };
         }
-        const myTeams = allTeams.filter(team => team.members.includes(currentUser.id));
-        const otherTeams = allTeams.filter(team => !team.members.includes(currentUser.id));
+        const myTeams = allTeams.filter(team => Array.isArray(team.members) && team.members.includes(currentUser.id));
+        const otherTeams = allTeams.filter(team => !Array.isArray(team.members) || !team.members.includes(currentUser.id));
         return { myTeams, otherTeams };
     }, [currentUser, allTeams]);
 
