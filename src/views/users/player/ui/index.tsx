@@ -48,8 +48,8 @@ const MoreDisciplines = ({ disciplines }: { disciplines: string[] }) => {
 
     const content = (
         <div className="flex flex-wrap gap-1">
-            {disciplines.map(discipline => (
-                <Badge key={discipline} variant="secondary">{discipline}</Badge>
+            {disciplines.map((discipline, index) => (
+                <Badge key={`more-disc-${discipline}-${index}`} variant="secondary">{discipline}</Badge>
             ))}
         </div>
     );
@@ -141,8 +141,8 @@ export function PlayerPage({ user: profileUser }: { user: User, allSports?: Spor
                                 </div>
                                 <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 mt-3">
                                     <Gamepad2 className="h-4 w-4 text-muted-foreground" />
-                                    {userDisciplines.slice(0, 3).map(discipline => (
-                                        <Badge key={discipline} variant="secondary">{discipline}</Badge>
+                                    {userDisciplines.slice(0, 3).map((discipline, index) => (
+                                        <Badge key={`discipline-${discipline}-${index}`} variant="secondary">{discipline}</Badge>
                                     ))}
                                     {userDisciplines.length > 3 && (
                                         <MoreDisciplines disciplines={userDisciplines.slice(3)} />
