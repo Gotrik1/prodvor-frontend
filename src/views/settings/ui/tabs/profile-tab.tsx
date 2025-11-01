@@ -17,6 +17,7 @@ import { Input } from '@/shared/ui/input';
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -225,8 +226,9 @@ const DisciplinesCard = () => {
             <CardContent>
                 {isLoading ? (
                     <div className="space-y-2">
-                        <Skeleton className="h-10 w-full" />
-                        <Skeleton className="h-4 w-3/4" />
+                        <div className="h-10 w-full rounded-md border flex items-center p-2 justify-between">
+                             <span className="text-sm text-muted-foreground">Выберите ваши виды спорта...</span>
+                        </div>
                     </div>
                 ) : (
                     <MultiSelect
