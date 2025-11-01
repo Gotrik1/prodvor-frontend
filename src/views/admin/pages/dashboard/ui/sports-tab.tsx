@@ -1,15 +1,28 @@
 
-
 'use client';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
-import { allSports } from '@/mocks';
 import type { Sport, Subdiscipline } from '@/mocks';
 import { DataTable } from './data-table';
 import { TableCell, TableRow } from '@/shared/ui/table';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 
 export function SportsTab() {
-  // Data is now imported directly from mocks as a placeholder
+  const [allSports, setAllSports] = useState<Sport[]>([]);
+
+  useEffect(() => {
+    async function fetchSports() {
+      try {
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/sports/`);
+        setAllSports(response.data);
+      } catch (error) {
+        console.error("Failed to fetch sports:", error);
+      }
+    }
+    fetchSports();
+  }, []);
+
   const teamSports = allSports.filter((s) => s.isTeamSport);
   const individualSports = allSports.filter((s) => !s.isTeamSport);
 

@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/shared/ui/card";
@@ -16,7 +15,7 @@ import Link from "next/link";
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/shared/ui/dialog";
 import { Textarea } from "@/shared/ui/textarea";
 import { useState, useEffect } from "react";
-import axios from "axios";
+import axios from 'axios';
 
 // Mock data for LFG posts
 const playersLookingForTeam = users.slice(5, 11).map(u => ({ ...u, lookingFor: ['Нападающий', 'Защитник', 'Универсал'][Math.floor(Math.random() * 3)] }));
