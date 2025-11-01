@@ -20,7 +20,7 @@ const TeamCard = ({ team, isMember }: { team: Team, isMember: boolean }) => (
     <Card key={team.id} className="flex flex-col">
         <CardHeader>
             <Link href={`/teams/${team.id}`} className="flex items-center gap-4 group">
-                <Image src={team.logoUrl} alt={`${team.name} logo`} width={64} height={64} className="rounded-lg border" data-ai-hint={team.dataAiHint} />
+                <Image src={team.logoUrl || 'https://placehold.co/512x512.png'} alt={`${team.name} logo`} width={64} height={64} className="rounded-lg border" data-ai-hint={team.dataAiHint} />
                 <div>
                     <CardTitle className="text-xl group-hover:text-primary transition-colors">{team.name}</CardTitle>
                     <CardDescription>{team.game}</CardDescription>
@@ -113,7 +113,6 @@ export function TeamsPage() {
         if (!currentUser || !allTeams) {
             return { myTeams: [], otherTeams: allTeams || [] };
         }
-        // A user's team is one where they are the captain.
         const myTeams = allTeams.filter(team => team.captainId === currentUser.id);
         const otherTeams = allTeams.filter(team => team.captainId !== currentUser.id);
         return { myTeams, otherTeams };

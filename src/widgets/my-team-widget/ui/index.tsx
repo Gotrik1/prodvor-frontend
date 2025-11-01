@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
@@ -43,7 +42,7 @@ export function MyTeamWidget({ user }: { user: User }) {
                         <Link href={`/teams/${team.id}`} key={team.id} className="block group">
                              <div className="flex items-center justify-between gap-3 p-2 rounded-md hover:bg-muted/50 transition-colors">
                                 <div className="flex items-center gap-3">
-                                    <Image src={team.logoUrl} alt={team.name} width={40} height={40} className="rounded-md border" data-ai-hint="team logo" />
+                                    <Image src={team.logoUrl || 'https://placehold.co/512x512.png'} alt={team.name} width={40} height={40} className="rounded-md border" data-ai-hint="team logo" />
                                     <div>
                                         <p className="font-semibold leading-tight group-hover:text-primary transition-colors">{team.name}</p>
                                         <p className="text-xs text-muted-foreground">{team.game}</p>

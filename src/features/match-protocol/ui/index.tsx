@@ -32,7 +32,7 @@ export function MatchProtocol({ tournament, match }: { tournament: Tournament, m
             <CardHeader>
                 <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
                     <Link href={`/teams/${team1.id}`} className="flex items-center gap-4 group">
-                        <Image src={team1.logoUrl} alt={team1.name} width={64} height={64} className="rounded-lg group-hover:scale-105 transition-transform" data-ai-hint="team logo" />
+                        <Image src={team1.logoUrl || 'https://placehold.co/512x512.png'} alt={team1.name} width={64} height={64} className="rounded-lg group-hover:scale-105 transition-transform" data-ai-hint="team logo" />
                         <h2 className="text-2xl font-bold group-hover:text-primary transition-colors">{team1.name}</h2>
                     </Link>
                     <div className="text-center">
@@ -41,7 +41,7 @@ export function MatchProtocol({ tournament, match }: { tournament: Tournament, m
                     </div>
                      <Link href={`/teams/${team2.id}`} className="flex items-center gap-4 group">
                         <h2 className="text-2xl font-bold text-right group-hover:text-primary transition-colors">{team2.name}</h2>
-                        <Image src={team2.logoUrl} alt={team2.name} width={64} height={64} className="rounded-lg group-hover:scale-105 transition-transform" data-ai-hint="team logo" />
+                        <Image src={team2.logoUrl || 'https://placehold.co/512x512.png'} alt={team2.name} width={64} height={64} className="rounded-lg group-hover:scale-105 transition-transform" data-ai-hint="team logo" />
                     </Link>
                 </div>
                  <CardDescription className="text-center pt-4">

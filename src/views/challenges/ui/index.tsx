@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import { useState, useMemo, useEffect } from 'react';
@@ -24,7 +23,7 @@ const ChallengeCard = ({ challenge, type }: { challenge: TeamChallenge, type: 'i
         <Card className="bg-muted/50">
             <CardContent className="p-4 flex flex-col sm:flex-row items-center justify-between gap-4">
                 <div className="flex items-center gap-4">
-                    <Image src={opponent.logoUrl} alt={opponent.name} width={48} height={48} className="rounded-md border" data-ai-hint={opponent.dataAiHint} />
+                    <Image src={opponent.logoUrl || 'https://placehold.co/512x512.png'} alt={opponent.name} width={48} height={48} className="rounded-md border" data-ai-hint={opponent.dataAiHint} />
                     <div>
                         <p className="font-semibold">{opponent.name}</p>
                         <p className="text-xs text-muted-foreground">{challenge.discipline}</p>
@@ -57,7 +56,7 @@ const RecommendedOpponentCard = ({ team }: { team: typeof teams[0] }) => (
     <Card className="bg-background/50">
         <CardContent className="p-3 flex items-center justify-between">
             <div className="flex items-center gap-3">
-                 <Image src={team.logoUrl} alt={team.name} width={40} height={40} className="rounded-md" data-ai-hint={team.dataAiHint} />
+                 <Image src={team.logoUrl || 'https://placehold.co/512x512.png'} alt={team.name} width={40} height={40} className="rounded-md" data-ai-hint={team.dataAiHint} />
                  <div>
                     <Link href={`/teams/${team.id}`} className="font-semibold hover:text-primary transition-colors">{team.name}</Link>
                     <p className="text-xs text-muted-foreground">ELO: {team.rank}</p>
@@ -134,7 +133,7 @@ export function ChallengesPage() {
                                         {teams.filter(t => t.id !== myTeam.id && t.game === myTeam.game).map(team => (
                                             <SelectItem key={team.id} value={team.id}>
                                                 <div className="flex items-center gap-2">
-                                                    <Image src={team.logoUrl} alt={team.name} width={20} height={20} className="rounded-sm" data-ai-hint={team.dataAiHint}/>
+                                                    <Image src={team.logoUrl || 'https://placehold.co/512x512.png'} alt={team.name} width={20} height={20} className="rounded-sm" data-ai-hint={team.dataAiHint}/>
                                                     {team.name}
                                                 </div>
                                             </SelectItem>

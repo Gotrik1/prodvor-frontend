@@ -15,6 +15,7 @@ import { GameplayEvent, awardProgressPoints } from '@/shared/lib/gamification';
 import axios from 'axios';
 import Link from 'next/link';
 import type { Sport } from '@/mocks';
+import Image from 'next/image';
 
 
 export function CreateTeamPage() {
