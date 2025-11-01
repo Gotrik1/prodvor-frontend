@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import React, { useEffect } from 'react';
@@ -128,12 +127,11 @@ const SocialButton = ({ className, children }: { className?: string, children: R
 
 export function AuthPage() {
   const { toast } = useToast();
-  const { setUser, signOut } = useUserStore();
+  const { setTokens, setUser, signOut } = useUserStore();
   const router = useRouter();
   const [isLoading, setIsLoading] = React.useState(false);
 
   useEffect(() => {
-    // Clear any previous user simulation when visiting the auth page
     signOut();
   }, [signOut]);
 
@@ -150,12 +148,14 @@ export function AuthPage() {
     try {
         const response = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/login`, values);
         if (response.status === 200 && response.data) {
-            setUser(response.data as User);
+            const { user, accessToken, refreshToken } = response.data;
+            setUser(user as User);
+            setTokens(accessToken, refreshToken);
             toast({
                 title: "Вход выполнен!",
-                description: `Добро пожаловать, ${response.data.nickname}!`,
+                description: `Добро пожаловать, ${user.nickname}!`,
             });
-            router.push(`/users/${response.data.id}`);
+            router.push(`/dashboard`);
         }
     } catch (error) {
         console.error("Login failed:", error);
