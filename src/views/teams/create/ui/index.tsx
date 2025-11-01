@@ -14,6 +14,7 @@ import { useUserStore } from '@/widgets/dashboard-header/model/user-store';
 import { GameplayEvent, awardProgressPoints } from '@/shared/lib/gamification';
 import axios from 'axios';
 import Link from 'next/link';
+import { users } from '@/mocks';
 
 // Определяем тип локально, чтобы не зависеть от моков
 export interface Sport {
@@ -27,12 +28,19 @@ export interface Sport {
 export function CreateTeamPage() {
     const { toast } = useToast();
     const router = useRouter();
-    const { user: currentUser } = useUserStore();
+    const { user: currentUserFromStore } = useUserStore();
     const [teamName, setTeamName] = useState('');
     const [discipline, setDiscipline] = useState('');
-    const [city, setCity] = useState(currentUser?.city || '');
+    const [city, setCity] = useState(currentUserFromStore?.city || '');
     const [allSports, setAllSports] = useState<Sport[]>([]);
     const [isLoading, setIsLoading] = useState(false);
+    
+    // Получаем полные данные о пользователе, включая его дисциплины
+    const currentUser = useMemo(() => {
+        if (!currentUserFromStore) return null;
+        return users.find(u => u.id === currentUserFromStore.id) || currentUserFromStore;
+    }, [currentUserFromStore]);
+
 
     useEffect(() => {
         async function fetchSports() {
@@ -59,6 +67,12 @@ export function CreateTeamPage() {
             sport.isTeamSport && currentUser.disciplines.includes(sport.id)
         );
     }, [currentUser, allSports]);
+
+    useEffect(() => {
+        if (currentUser) {
+            setCity(currentUser.city || '');
+        }
+    }, [currentUser]);
 
     const handleCreateTeam = async () => {
         if (!teamName || !discipline || !city) {
@@ -87,7 +101,7 @@ export function CreateTeamPage() {
                 game: discipline,
                 city: city,
                 captainId: currentUser.id,
-                sportId: userTeamSports.find(s => s.name === discipline)?.id
+                sportId: allSports.find(s => s.name === discipline)?.id
             });
 
             if (response.status === 201) {
