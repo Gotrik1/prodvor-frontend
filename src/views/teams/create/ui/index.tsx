@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
@@ -8,14 +7,22 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/sha
 import { Input } from '@/shared/ui/input';
 import { Label } from '@/shared/ui/label';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/shared/ui/select';
-import type { Sport } from "@/mocks";
 import { Users, Loader2 } from "lucide-react";
 import { useToast } from '@/shared/hooks/use-toast';
 import { useRouter } from 'next/navigation';
 import { useUserStore } from '@/widgets/dashboard-header/model/user-store';
 import { GameplayEvent, awardProgressPoints } from '@/shared/lib/gamification';
 import axios from 'axios';
-import { allSports as mockAllSports } from '@/mocks/sports';
+import Link from 'next/link';
+
+// Определяем тип локально, чтобы не зависеть от моков
+export interface Sport {
+  id: string;
+  name: string;
+  isTeamSport: boolean;
+  subdisciplines?: { id: string; name: string; parentId: string }[];
+}
+
 
 export function CreateTeamPage() {
     const { toast } = useToast();
@@ -33,12 +40,16 @@ export function CreateTeamPage() {
                 const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/sports/`);
                 setAllSports(response.data);
             } catch (error) {
-                console.error("Failed to fetch sports, using mock data:", error);
-                setAllSports(mockAllSports);
+                console.error("Failed to fetch sports:", error);
+                 toast({
+                    variant: "destructive",
+                    title: "Ошибка загрузки дисциплин",
+                    description: "Не удалось получить список видов спорта с сервера.",
+                });
             }
         }
         fetchSports();
-    }, []);
+    }, [toast]);
 
     const userTeamSports = useMemo(() => {
         if (!currentUser || !allSports.length) {
