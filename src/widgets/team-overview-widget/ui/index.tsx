@@ -4,8 +4,9 @@
 
 import type { Team, User } from "@/mocks";
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
-import { Crown, Shield, Star, Trophy, TrendingUp } from "lucide-react";
+import { Crown, Shield, Star, Trophy, TrendingUp, TrendingDown } from "lucide-react";
 import { StatCard } from "@/shared/ui/stat-card";
+import { users } from "@/mocks";
 
 const FormBadge = ({ result }: { result: 'W' | 'L' | 'D' }) => {
     const baseClasses = "flex items-center justify-center w-8 h-8 rounded-md font-bold";
@@ -16,18 +17,27 @@ const FormBadge = ({ result }: { result: 'W' | 'L' | 'D' }) => {
 
 interface TeamOverviewWidgetProps {
     team: Team;
-    teamMembers: User[];
 }
 
-export const TeamOverviewWidget = ({ team, teamMembers }: TeamOverviewWidgetProps) => {
-    // Mock statistics
-    const wins = 45;
-    const losses = 12;
-    const winrate = Math.round((wins / (wins + losses)) * 100);
-    const currentStreak = { type: 'W', count: 3 };
-    const last5Form: ('W' | 'L' | 'D')[] = ['W', 'L', 'W', 'W', 'W'];
-    const mvp = teamMembers.length > 0 ? teamMembers[0] : null;
-    const topScorer = teamMembers.length > 1 ? teamMembers[1] : null;
+export const TeamOverviewWidget = ({ team }: TeamOverviewWidgetProps) => {
+    const { 
+        wins = 0, 
+        losses = 0, 
+        rank = 0, 
+        leagueRank, 
+        currentStreak, 
+        form = [], 
+        mvpPlayerId, 
+        topScorerPlayerId, 
+        cleanSheets = 0, 
+        avgRating = 0 
+    } = team;
+
+    const totalMatches = wins + losses;
+    const winrate = totalMatches > 0 ? Math.round((wins / totalMatches) * 100) : 0;
+    
+    const mvp = users.find(u => u.id === mvpPlayerId);
+    const topScorer = users.find(u => u.id === topScorerPlayerId);
 
     return (
         <div className="space-y-6">
@@ -46,8 +56,8 @@ export const TeamOverviewWidget = ({ team, teamMembers }: TeamOverviewWidgetProp
                         <CardTitle>Рейтинг ELO</CardTitle>
                     </CardHeader>
                     <CardContent>
-                        <p className="text-3xl font-bold">{team.rank}</p>
-                        <p className="text-sm text-muted-foreground">Место в лиге: <span className="text-primary font-semibold">3-е</span></p>
+                        <p className="text-3xl font-bold">{rank}</p>
+                        <p className="text-sm text-muted-foreground">Место в лиге: <span className="text-primary font-semibold">{leagueRank || 'N/A'}</span></p>
                     </CardContent>
                 </Card>
                 <Card>
@@ -55,10 +65,14 @@ export const TeamOverviewWidget = ({ team, teamMembers }: TeamOverviewWidgetProp
                         <CardTitle>Текущая серия</CardTitle>
                     </CardHeader>
                     <CardContent>
-                        <div className="flex items-center gap-2">
-                            {currentStreak.type === 'W' ? <TrendingUp className="h-8 w-8 text-green-500" /> : <TrendingUp className="h-8 w-8 text-red-500" />}
-                            <p className="text-3xl font-bold">{currentStreak.count} {currentStreak.type === 'W' ? 'W' : 'L'}</p>
-                        </div>
+                        {currentStreak && currentStreak.count > 0 ? (
+                            <div className="flex items-center gap-2">
+                                {currentStreak.type === 'W' ? <TrendingUp className="h-8 w-8 text-green-500" /> : <TrendingDown className="h-8 w-8 text-red-500" />}
+                                <p className="text-3xl font-bold">{currentStreak.count} {currentStreak.type}</p>
+                            </div>
+                        ) : (
+                            <p className="text-3xl font-bold">N/A</p>
+                        )}
                         <p className="text-sm text-muted-foreground">Побед подряд</p>
                     </CardContent>
                 </Card>
@@ -67,7 +81,7 @@ export const TeamOverviewWidget = ({ team, teamMembers }: TeamOverviewWidgetProp
                         <CardTitle>Форма (5 матчей)</CardTitle>
                     </CardHeader>
                     <CardContent className="flex items-center gap-2">
-                        {last5Form.map((result, index) => <FormBadge key={index} result={result} />)}
+                        {form.length > 0 ? form.map((result, index) => <FormBadge key={index} result={result} />) : <p className="text-sm text-muted-foreground">Нет данных</p>}
                     </CardContent>
                 </Card>
             </div>
@@ -78,8 +92,8 @@ export const TeamOverviewWidget = ({ team, teamMembers }: TeamOverviewWidgetProp
                 <CardContent className="grid grid-cols-2 md:grid-cols-4 gap-4">
                     <StatCard title="MVP команды" value={mvp ? mvp.nickname : 'N/A'} icon={Star} />
                     <StatCard title="Лучший бомбардир" value={topScorer ? topScorer.nickname : 'N/A'} icon={Trophy} />
-                    <StatCard title="Сухие матчи" value="12" icon={Shield} />
-                    <StatCard title="Средний рейтинг" value="1520" icon={Crown} />
+                    <StatCard title="Сухие матчи" value={cleanSheets} icon={Shield} />
+                    <StatCard title="Средний рейтинг" value={avgRating} icon={Crown} />
                 </CardContent>
             </Card>
         </div>

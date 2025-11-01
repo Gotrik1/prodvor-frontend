@@ -37,6 +37,16 @@
     -   `game`: `String(100)`
     -   `rank`: `Integer`, по умолчанию `1200`
     -   `city`: `String(100)`
+    -   `wins`: `Integer`, по умолчанию `0`
+    -   `losses`: `Integer`, по умолчанию `0`
+    -   `leagueRank`: `String(50)`
+    -   `currentStreakType`: `String(1)` (W или L)
+    -   `currentStreakCount`: `Integer`
+    -   `form`: `String(5)` (например, 'WWLWD')
+    -   `mvpPlayerId`: `Integer`, внешний ключ к `user.id` (может быть null)
+    -   `topScorerPlayerId`: `Integer`, внешний ключ к `user.id` (может быть null)
+    -   `cleanSheets`: `Integer`, по умолчанию `0`
+    -   `avgRating`: `Integer`, по умолчанию `0`
     -   Отношение к `Post`.
 
 -   **PlayerProfile**:
