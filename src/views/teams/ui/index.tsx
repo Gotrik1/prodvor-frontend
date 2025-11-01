@@ -146,43 +146,46 @@ export function TeamsPage() {
             </div>
 
             <Separator />
-            
-            {myTeams.length > 0 && (
-                <section>
-                    <h2 className="text-2xl font-bold mb-4">Мои команды</h2>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                        {myTeams.map(team => <TeamCard key={team.id} team={team} isMember={true} />)}
-                    </div>
-                     <Separator className="my-8"/>
-                </section>
-            )}
 
-            <div>
-                <h2 className="text-2xl font-bold mb-4">Все команды</h2>
-                 {isLoading ? (
-                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                        {[...Array(4)].map((_, i) => (
-                             <Card key={i}>
-                                 <CardHeader><Skeleton className="h-16 w-full" /></CardHeader>
-                                 <CardContent><Skeleton className="h-8 w-3/4" /></CardContent>
-                                 <CardFooter><Skeleton className="h-10 w-full" /></CardFooter>
-                            </Card>
-                        ))}
-                    </div>
-                ) : allTeams.length > 0 ? (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                        {otherTeams.map(team => (
-                            <TeamCard key={team.id} team={team} isMember={false} />
-                        ))}
-                    </div>
-                ) : (
-                     <Card className="text-center min-h-[200px] flex flex-col justify-center items-center">
-                        <CardHeader>
-                            <CardTitle>Не удалось загрузить команды</CardTitle>
-                            <CardDescription>Попробуйте проверить связь с бэкендом или обновите страницу.</CardDescription>
-                        </CardHeader>
-                    </Card>
+            <div className="container mx-auto px-4 md:px-0 space-y-8">
+                {myTeams.length > 0 && (
+                    <section>
+                        <h2 className="text-2xl font-bold mb-4">Мои команды</h2>
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                            {myTeams.map(team => <TeamCard key={team.id} team={team} isMember={true} />)}
+                        </div>
+                    </section>
                 )}
+
+                {myTeams.length > 0 && <Separator />}
+
+                <div>
+                    <h2 className="text-2xl font-bold mb-4">Все команды</h2>
+                    {isLoading ? (
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                            {[...Array(4)].map((_, i) => (
+                                <Card key={i}>
+                                    <CardHeader><Skeleton className="h-16 w-full" /></CardHeader>
+                                    <CardContent><Skeleton className="h-8 w-3/4" /></CardContent>
+                                    <CardFooter><Skeleton className="h-10 w-full" /></CardFooter>
+                                </Card>
+                            ))}
+                        </div>
+                    ) : allTeams.length > 0 ? (
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                            {otherTeams.map(team => (
+                                <TeamCard key={team.id} team={team} isMember={false} />
+                            ))}
+                        </div>
+                    ) : (
+                        <Card className="text-center min-h-[200px] flex flex-col justify-center items-center">
+                            <CardHeader>
+                                <CardTitle>Не удалось загрузить команды</CardTitle>
+                                <CardDescription>Попробуйте проверить связь с бэкендом или обновите страницу.</CardDescription>
+                            </CardHeader>
+                        </Card>
+                    )}
+                </div>
             </div>
         </div>
     );
