@@ -130,7 +130,7 @@ export function AuthPage() {
   const { setTokens, fetchUser } = useUserStore();
   const router = useRouter();
   const [isLoading, setIsLoading] = React.useState(false);
-  const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+  const API_BASE_URL = "https://8080-firebase-prodvor-backend-1761850902881.cluster-ombtxv25tbd6yrjpp3lukp6zhc.cloudworkstations.dev";
 
   const form = useForm<z.infer<typeof loginFormSchema>>({
     resolver: zodResolver(loginFormSchema),
@@ -145,6 +145,8 @@ export function AuthPage() {
     try {
         const response = await axios.post(`${API_BASE_URL}/api/v1/login`, values);
         
+        console.log("Response from /login:", response.data);
+
         const accessToken = response.data.accessToken || response.data.access_token;
         const refreshToken = response.data.refreshToken || response.data.refresh_token;
 

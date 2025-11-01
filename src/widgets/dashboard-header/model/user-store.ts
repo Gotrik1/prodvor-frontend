@@ -16,7 +16,7 @@ interface UserState {
   fetchUser: () => Promise<User | null>;
 }
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+const API_BASE_URL = "https://8080-firebase-prodvor-backend-1761850902881.cluster-ombtxv25tbd6yrjpp3lukp6zhc.cloudworkstations.dev";
 
 export const useUserStore = create<UserState>()(
   persist(
@@ -44,6 +44,7 @@ export const useUserStore = create<UserState>()(
           if (!token) return null;
           try {
               const response = await axios.get(`${API_BASE_URL}/api/v1/users/me`);
+              console.log("Response from /users/me:", response.data);
               const user = response.data as User;
               set({ user });
               return user;
