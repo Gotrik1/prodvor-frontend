@@ -23,13 +23,16 @@ const StatRow = ({ label, value }: { label: string, value: string | number }) =>
     </div>
 );
 
-export const TeamStatsWidget = ({ team }: { team: Team }) => {
+export const TeamStatsWidget = ({ team }: { team?: Team }) => {
     const [stats, setStats] = useState<SeasonStat[]>([]);
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         const fetchStats = async () => {
-            if (!team.id) return;
+            if (!team?.id) { // Check if team and team.id exist
+                setIsLoading(false);
+                return;
+            }
             setIsLoading(true);
             try {
                 const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/teams/${team.id}/stats`);
@@ -41,14 +44,13 @@ export const TeamStatsWidget = ({ team }: { team: Team }) => {
 
             } catch (error) {
                 console.error("Failed to fetch team stats:", error);
-                // No toast here to avoid spamming, can be handled by a global error handler
             } finally {
                 setIsLoading(false);
             }
         };
 
         fetchStats();
-    }, [team.id, team.createdAt]);
+    }, [team]);
 
     if (isLoading) {
         return (
