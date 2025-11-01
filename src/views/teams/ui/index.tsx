@@ -65,7 +65,7 @@ export function TeamsPage() {
         async function fetchTeams() {
             setIsLoading(true);
             try {
-                const response = await axios.get(`https://8080-firebase-prodvor-backend-1761850902881.cluster-ombtxv25tbd6yrjpp3lukp6zhc.cloudworkstations.dev/api/v1/teams`);
+                const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/teams`);
                 setAllTeams(response.data);
                 setConnectionStatus('success');
             } catch (error) {
@@ -84,7 +84,7 @@ export function TeamsPage() {
     }, [toast]);
 
     const handlePing = async () => {
-        const backendUrl = "https://8080-firebase-prodvor-backend-1761850902881.cluster-ombtxv25tbd6yrjpp3lukp6zhc.cloudworkstations.dev/";
+        const backendUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
         
         toast({
             title: "Проверка связи...",
@@ -92,7 +92,7 @@ export function TeamsPage() {
         });
 
         try {
-            await axios.get(backendUrl + 'api/ping');
+            await axios.get(backendUrl + '/api/ping');
             setConnectionStatus('success');
             toast({
                 title: "Связь с бэкендом установлена!",

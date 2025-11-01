@@ -36,7 +36,7 @@ export function CreateTeamPage() {
     useEffect(() => {
         async function fetchSports() {
             try {
-                const response = await axios.get(`https://8080-firebase-prodvor-backend-1761850902881.cluster-ombtxv25tbd6yrjpp3lukp6zhc.cloudworkstations.dev/api/sports`);
+                const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/sports`);
                 setTeamSports(response.data.filter((s: Sport) => s.isTeamSport));
             } catch (error) {
                 console.error("Failed to fetch sports:", error);
@@ -82,7 +82,7 @@ export function CreateTeamPage() {
         setIsLoading(true);
 
         try {
-            const response = await axios.post(`https://8080-firebase-prodvor-backend-1761850902881.cluster-ombtxv25tbd6yrjpp3lukp6zhc.cloudworkstations.dev/api/v1/teams`, {
+            const response = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/teams`, {
                 name: teamName,
                 game: discipline,
                 city: city,

@@ -52,7 +52,7 @@ export function CoachPageTemplate({ user }: { user?: User }) {
     }, [coach, managedTeams]);
 
     const coachDisciplines = useMemo(() => {
-        if (!coach) return [];
+        if (!coach || !allSports.length) return [];
         return getUserDisciplines(coach, allSports);
     }, [coach, allSports]);
 

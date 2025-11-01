@@ -20,7 +20,7 @@ export const usePostStore = create<PostState>()(
       posts: [], // Изначально массив пуст
       fetchPosts: async () => {
         try {
-            const response = await fetch(`https://8080-firebase-prodvor-backend-1761850902881.cluster-ombtxv25tbd6yrjpp3lukp6zhc.cloudworkstations.dev/api/v1/posts`);
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/posts`);
             if (!response.ok) throw new Error('Failed to fetch posts');
             const data = await response.json();
             set({ posts: data });

@@ -130,7 +130,7 @@ export function AuthPage() {
   const { setTokens, setUser } = useUserStore();
   const router = useRouter();
   const [isLoading, setIsLoading] = React.useState(false);
-  const API_BASE_URL = "https://8080-firebase-prodvor-backend-1761850902881.cluster-ombtxv25tbd6yrjpp3lukp6zhc.cloudworkstations.dev";
+  const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
   const form = useForm<z.infer<typeof loginFormSchema>>({
     resolver: zodResolver(loginFormSchema),
