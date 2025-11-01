@@ -1,4 +1,3 @@
-
 'use client';
 
 import './globals.css';
@@ -29,6 +28,7 @@ export default function RootLayout({
   return (
     <html lang="ru" className={`${inter.variable}`} suppressHydrationWarning>
       <head>
+        <meta name="mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <meta name="apple-mobile-web-app-title" content="ProDvor" />

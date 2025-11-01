@@ -1,23 +1,12 @@
-
 {
-  "name": "ProDvor",
-  "short_name": "ProDvor",
+  "name": "Prodvor",
+  "short_name": "Prodvor",
   "start_url": "/",
-  "scope": "/",
   "display": "standalone",
-  "background_color": "#17181C",
-  "theme_color": "#29ABE2",
-  "description": "Социальная платформа для дворового спорта и киберспорта.",
+  "background_color": "#111827",
+  "theme_color": "#1989f2",
   "icons": [
-    {
-      "src": "/icons/icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png"
-    },
-    {
-      "src": "/icons/icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png"
-    }
+    { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png" }
   ]
 }
