@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
@@ -14,15 +15,7 @@ import { useUserStore } from '@/widgets/dashboard-header/model/user-store';
 import { GameplayEvent, awardProgressPoints } from '@/shared/lib/gamification';
 import axios from 'axios';
 import Link from 'next/link';
-import { users } from '@/mocks';
-
-// Определяем тип локально, чтобы не зависеть от моков
-export interface Sport {
-  id: string;
-  name: string;
-  isTeamSport: boolean;
-  subdisciplines?: { id: string; name: string; parentId: string }[];
-}
+import { users, allSports, type Sport } from '@/mocks';
 
 
 export function CreateTeamPage() {
@@ -32,7 +25,6 @@ export function CreateTeamPage() {
     const [teamName, setTeamName] = useState('');
     const [discipline, setDiscipline] = useState('');
     const [city, setCity] = useState(currentUserFromStore?.city || '');
-    const [allSports, setAllSports] = useState<Sport[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     
     // Получаем полные данные о пользователе, включая его дисциплины
@@ -40,24 +32,6 @@ export function CreateTeamPage() {
         if (!currentUserFromStore) return null;
         return users.find(u => u.id === currentUserFromStore.id) || currentUserFromStore;
     }, [currentUserFromStore]);
-
-
-    useEffect(() => {
-        async function fetchSports() {
-            try {
-                const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/sports/`);
-                setAllSports(response.data);
-            } catch (error) {
-                console.error("Failed to fetch sports:", error);
-                 toast({
-                    variant: "destructive",
-                    title: "Ошибка загрузки дисциплин",
-                    description: "Не удалось получить список видов спорта с сервера.",
-                });
-            }
-        }
-        fetchSports();
-    }, [toast]);
 
     const userTeamSports = useMemo(() => {
         if (!currentUser || !allSports.length) {
