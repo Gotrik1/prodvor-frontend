@@ -88,7 +88,6 @@ const AvatarUploadDialog = () => {
         try {
             const response = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/users/${user.id}/avatar`, formData, {
                 headers: {
-                    'Content-Type': 'multipart/form-data',
                     'Authorization': `Bearer ${accessToken}`
                 },
             });
