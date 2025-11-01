@@ -17,20 +17,8 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/shared/ui/dialog";
-import { useState, useEffect } from "react";
 import { usePostStore } from "@/widgets/dashboard-feed/model/post-store";
 import { MediaPostDialog } from "@/widgets/media-post-dialog";
-
-// Mock the current user for CreatePost component
-const currentUser = users[0];
-
-// Mock media data for the team
-const mockMedia = [
-    { type: 'image', src: 'https://placehold.co/600x400.png', title: 'Фото с последней игры', dataAiHint: 'soccer game' },
-    { type: 'image', src: 'https://placehold.co/600x400.png', title: 'Командное фото', dataAiHint: 'team photo' },
-    { type: 'image', src: 'https://placehold.co/600x400.png', title: 'Тренировка', dataAiHint: 'sports training' },
-    { type: 'image', src: 'https://placehold.co/600x400.png', title: 'Награждение', dataAiHint: 'award ceremony' },
-];
 
 interface TeamPublicationsTabProps {
     team: Team;
@@ -40,14 +28,8 @@ export function TeamPublicationsTab({ team }: TeamPublicationsTabProps) {
     const { getPostsForTeam } = usePostStore();
     const teamPosts = getPostsForTeam(team.id);
 
-    const isTeamMember = team.members?.includes(currentUser.id);
-    const [mediaFeed, setMediaFeed] = useState<(typeof mockMedia[0])[]>(mockMedia);
-
-    useEffect(() => {
-        // Randomize feed only on the client side after initial render
-        setMediaFeed(prevFeed => [...prevFeed].sort(() => 0.5 - Math.random()));
-    }, []);
-
+    const isTeamMember = team.members ? team.members.includes(users[0]?.id) : false;
+    
     return (
         <div className="space-y-6">
             {isTeamMember && (
@@ -61,19 +43,19 @@ export function TeamPublicationsTab({ team }: TeamPublicationsTabProps) {
                                 <DialogTitle>Новая публикация</DialogTitle>
                                 <DialogDescription>Поделитесь новостями с вашими подписчиками.</DialogDescription>
                             </DialogHeader>
-                            <CreatePost user={currentUser} />
+                            <CreatePost user={users[0]} />
                         </DialogContent>
                     </Dialog>
                 </div>
             )}
             {teamPosts.length > 0 ? (
                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-1 md:gap-4">
-                    {teamPosts.map((post: Post, index: number) => (
+                    {teamPosts.map((post: Post) => (
                         <Dialog key={post.id}>
                             <DialogTrigger asChild>
                                 <div className="group relative aspect-square w-full overflow-hidden rounded-lg cursor-pointer">
                                     <Image
-                                        src={mediaFeed[index % mediaFeed.length].src}
+                                        src={`https://picsum.photos/seed/${post.id}/600/600`}
                                         alt={post.content}
                                         fill
                                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"

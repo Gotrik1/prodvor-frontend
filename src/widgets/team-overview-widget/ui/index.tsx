@@ -2,7 +2,7 @@
 
 'use client';
 
-import type { Team, User } from "@/mocks";
+import type { Team } from "@/mocks";
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
 import { Crown, Shield, Star, Trophy, TrendingUp, TrendingDown } from "lucide-react";
 import { StatCard } from "@/shared/ui/stat-card";
@@ -25,7 +25,8 @@ export const TeamOverviewWidget = ({ team }: TeamOverviewWidgetProps) => {
         losses = 0, 
         rank = 0, 
         leagueRank, 
-        currentStreak, 
+        currentStreakType,
+        currentStreakCount, 
         form = [], 
         mvpPlayerId, 
         topScorerPlayerId, 
@@ -38,6 +39,8 @@ export const TeamOverviewWidget = ({ team }: TeamOverviewWidgetProps) => {
     
     const mvp = users.find(u => u.id === mvpPlayerId);
     const topScorer = users.find(u => u.id === topScorerPlayerId);
+    const currentStreak = currentStreakType && currentStreakCount ? { type: currentStreakType, count: currentStreakCount } : null;
+    const teamForm = typeof form === 'string' ? form.split('') as ('W' | 'L' | 'D')[] : [];
 
     return (
         <div className="space-y-6">
@@ -81,7 +84,7 @@ export const TeamOverviewWidget = ({ team }: TeamOverviewWidgetProps) => {
                         <CardTitle>Форма (5 матчей)</CardTitle>
                     </CardHeader>
                     <CardContent className="flex items-center gap-2">
-                        {form.length > 0 ? form.map((result, index) => <FormBadge key={index} result={result} />) : <p className="text-sm text-muted-foreground">Нет данных</p>}
+                        {teamForm.length > 0 ? teamForm.map((result, index) => <FormBadge key={index} result={result} />) : <p className="text-sm text-muted-foreground">Нет данных</p>}
                     </CardContent>
                 </Card>
             </div>

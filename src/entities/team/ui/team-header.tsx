@@ -42,7 +42,7 @@ export const TeamHeader = ({ team, homePlaygrounds }: TeamHeaderProps) => {
                 <p className="text-muted-foreground text-lg">Дисциплина: {team.game}</p>
                  <div className="mt-2 flex items-center justify-center md:justify-start gap-4 text-sm text-muted-foreground">
                     <div className="flex items-center gap-1">
-                        <Users className="h-4 w-4" /> {team.members?.length || 0} игроков
+                        <Users className="h-4 w-4" /> {team.members?.length || 1} игроков
                     </div>
                      <div className="flex items-center gap-1">
                         <Rss className="h-4 w-4" /> {team.followers?.length || 0} подписчиков

@@ -55,10 +55,10 @@ export function TeamPageTemplate({ team }: { team?: Team }) {
                     <TabsTrigger value="publications"><Grid3x3 className="md:mr-2 h-4 w-4" /><span className="hidden md:inline">Публикации</span></TabsTrigger>
                 </TabsList>
                 <TabsContent value="overview" className="mt-6">
-                    <TeamOverviewWidget team={team} teamMembers={teamMembers} />
+                    <TeamOverviewWidget team={team} />
                 </TabsContent>
                 <TabsContent value="roster" className="mt-6">
-                    <TeamRosterWidget teamMembers={teamMembers} captainId={team.captainId} />
+                    <TeamRosterWidget team={team} />
                 </TabsContent>
                 <TabsContent value="matches" className="mt-6">
                     <TeamMatchesWidget />

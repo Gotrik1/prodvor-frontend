@@ -4,12 +4,13 @@
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
 import { UserPlus, Crown } from "lucide-react";
-import type { User } from "@/mocks";
+import type { User, Team } from "@/mocks";
 import Link from 'next/link';
 import { Avatar, AvatarImage, AvatarFallback } from "@/shared/ui/avatar";
 import { Badge } from "@/shared/ui/badge";
 import { Button } from "@/shared/ui/button";
 import { useToast } from "@/shared/hooks/use-toast";
+import { users } from "@/mocks";
 
 const TeamRoster = ({ teamMembers, captainId }: { teamMembers: User[], captainId: string }) => (
     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
@@ -37,8 +38,10 @@ const TeamRoster = ({ teamMembers, captainId }: { teamMembers: User[], captainId
 );
 
 
-export const TeamRosterWidget = ({ teamMembers, captainId }: { teamMembers: User[], captainId: string }) => {
+export const TeamRosterWidget = ({ team }: { team: Team }) => {
     const { toast } = useToast();
+
+    const teamMembers = users.filter(user => team.members?.includes(user.id));
 
     const handleApply = () => {
         toast({
@@ -61,7 +64,7 @@ export const TeamRosterWidget = ({ teamMembers, captainId }: { teamMembers: User
                 </Button>
             </CardHeader>
             <CardContent>
-                <TeamRoster teamMembers={teamMembers} captainId={captainId} />
+                <TeamRoster teamMembers={teamMembers} captainId={team.captainId} />
             </CardContent>
         </Card>
     );
