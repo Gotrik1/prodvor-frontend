@@ -77,7 +77,7 @@ const MoreDisciplines = ({ disciplines }: { disciplines: string[] }) => {
 };
 
 
-export function PlayerPage({ user: profileUser }: { user: User, allSports?: Sport[] }) {
+export function PlayerPage({ user: profileUser }: { user: User }) {
     const { user: currentUser } = useUserStore();
     
     const isOwnProfile = useMemo(() => currentUser?.id === profileUser?.id, [currentUser, profileUser]);
