@@ -92,7 +92,7 @@ export function CoachPageTemplate({ user }: { user?: User }) {
                 </Card>
                 <StatCard title="Команд в управлении" value={managedTeams.length} icon={UsersIcon} />
                 <StatCard title="Индивидуальных клиентов" value={individualClients.length} icon={UserPlus} />
-                <StatCard title="Всего побед (сезон)" value={<span className="text-green-400">78</span>} icon={Trophy} />
+                <StatCard title="Всего побед (сезон)" value={<span className="text-green-400">0</span>} icon={Trophy} />
                 <StatCard title="Лицензия" value={coach.coachProfile.licenseId} icon={Shield} />
             </div>
 
@@ -120,7 +120,7 @@ export function CoachPageTemplate({ user }: { user?: User }) {
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
-                                {managedTeams.map(team => (
+                                {managedTeams.length > 0 ? managedTeams.map(team => (
                                     <TableRow key={team.id}>
                                         <TableCell>
                                             <Link href={`/teams/${team.id}`} className="flex items-center gap-3 group">
@@ -130,7 +130,9 @@ export function CoachPageTemplate({ user }: { user?: User }) {
                                         </TableCell>
                                         <TableCell className="font-mono">{team.rank}</TableCell>
                                     </TableRow>
-                                ))}
+                                )) : (
+                                    <TableRow><TableCell colSpan={2} className="text-center text-muted-foreground">Нет управляемых команд.</TableCell></TableRow>
+                                )}
                             </TableBody>
                         </Table>
                     </CardContent>
@@ -148,7 +150,7 @@ export function CoachPageTemplate({ user }: { user?: User }) {
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
-                                {individualClients.map(client => (
+                                {individualClients.length > 0 ? individualClients.map(client => (
                                     <TableRow key={client.id}>
                                         <TableCell>
                                             <Link href={`/users/${client.id}`} className="flex items-center gap-3 group">
@@ -166,7 +168,9 @@ export function CoachPageTemplate({ user }: { user?: User }) {
                                             </Button>
                                         </TableCell>
                                     </TableRow>
-                                ))}
+                                )) : (
+                                    <TableRow><TableCell colSpan={2} className="text-center text-muted-foreground">Нет индивидуальных клиентов.</TableCell></TableRow>
+                                )}
                             </TableBody>
                         </Table>
                     </CardContent>

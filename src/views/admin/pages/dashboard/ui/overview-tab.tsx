@@ -12,19 +12,9 @@ import Link from 'next/link';
 import { TeamStatCard } from '@/entities/team/ui/stat-card';
 
 
-const userRegistrationData = [
-  { month: "Янв", registrations: 186 },
-  { month: "Фев", registrations: 305 },
-  { month: "Мар", registrations: 237 },
-  { month: "Апр", registrations: 173 },
-  { month: "Май", registrations: 209 },
-  { month: "Июн", registrations: 250 },
-];
+const userRegistrationData: any[] = [];
 
-const topSportsData = allSports.filter(s => s.isTeamSport).slice(0, 5).map(s => ({
-    sport: s.name,
-    teams: teams.filter(t => t.game === s.name).length
-}));
+const topSportsData: any[] = [];
 
 const chartConfig = {
     registrations: { label: "Регистрации", color: "hsl(var(--primary))" },
@@ -38,17 +28,17 @@ export function OverviewTab() {
             <TeamStatCard 
                 title="Всего пользователей" 
                 value={users.length.toString()} 
-                description="+20.1% с прошлого месяца" 
+                description="+0 с прошлого месяца" 
             />
             <TeamStatCard 
                 title="Активных команд" 
                 value={teams.length.toString()}
-                description="+18.3% с прошлого месяца"
+                description="+0 с прошлого месяца"
             />
              <TeamStatCard 
                 title="Текущие турниры" 
                 value={tournaments.filter((t: Tournament) => t.status === 'ИДЕТ').length.toString()}
-                description="+2 новых на этой неделе"
+                description="+0 новых на этой неделе"
             />
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
