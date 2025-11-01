@@ -139,8 +139,8 @@ export function PlayerPage({ user: profileUser }: { user: User }) {
                                 </div>
                                 <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 mt-3">
                                     <Gamepad2 className="h-4 w-4 text-muted-foreground" />
-                                    {userDisciplines.slice(0, 3).map((discipline, index) => (
-                                        <Badge key={`discipline-${discipline}-${index}`} variant="secondary">{discipline}</Badge>
+                                    {userDisciplines.slice(0, 3).map((discipline) => (
+                                        <Badge key={`discipline-${discipline}`} variant="secondary">{discipline}</Badge>
                                     ))}
                                     {userDisciplines.length > 3 && (
                                         <MoreDisciplines disciplines={userDisciplines.slice(3)} />
