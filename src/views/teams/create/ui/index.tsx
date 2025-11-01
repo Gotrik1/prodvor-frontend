@@ -2,7 +2,7 @@
 
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { Button } from '@/shared/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Input } from '@/shared/ui/input';
@@ -15,6 +15,7 @@ import { useRouter } from 'next/navigation';
 import { useUserStore } from '@/widgets/dashboard-header/model/user-store';
 import { GameplayEvent, awardProgressPoints } from '@/shared/lib/gamification';
 import axios from 'axios';
+import { allSports as mockAllSports } from '@/mocks/sports';
 
 export function CreateTeamPage() {
     const { toast } = useToast();
@@ -23,20 +24,30 @@ export function CreateTeamPage() {
     const [teamName, setTeamName] = useState('');
     const [discipline, setDiscipline] = useState('');
     const [city, setCity] = useState(currentUser?.city || '');
-    const [teamSports, setTeamSports] = useState<Sport[]>([]);
+    const [allSports, setAllSports] = useState<Sport[]>([]);
     const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         async function fetchSports() {
             try {
                 const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/sports/`);
-                setTeamSports(response.data.filter((s: Sport) => s.isTeamSport));
+                setAllSports(response.data);
             } catch (error) {
-                console.error("Failed to fetch sports:", error);
+                console.error("Failed to fetch sports, using mock data:", error);
+                setAllSports(mockAllSports);
             }
         }
         fetchSports();
     }, []);
+
+    const userTeamSports = useMemo(() => {
+        if (!currentUser || !allSports.length) {
+            return [];
+        }
+        return allSports.filter(sport => 
+            sport.isTeamSport && currentUser.disciplines.includes(sport.id)
+        );
+    }, [currentUser, allSports]);
 
     const handleCreateTeam = async () => {
         if (!teamName || !discipline || !city) {
@@ -65,6 +76,7 @@ export function CreateTeamPage() {
                 game: discipline,
                 city: city,
                 captainId: currentUser.id,
+                sportId: userTeamSports.find(s => s.name === discipline)?.id
             });
 
             if (response.status === 201) {
@@ -106,19 +118,24 @@ export function CreateTeamPage() {
                         </div>
                         <div className="space-y-2">
                             <Label htmlFor="discipline">Дисциплина</Label>
-                            <Select onValueChange={setDiscipline}>
+                            <Select onValueChange={setDiscipline} disabled={userTeamSports.length === 0}>
                                 <SelectTrigger id="discipline">
-                                    <SelectValue placeholder="Выберите вид спорта" />
+                                    <SelectValue placeholder={userTeamSports.length > 0 ? "Выберите вид спорта" : "У вас нет командных дисциплин"} />
                                 </SelectTrigger>
                                 <SelectContent>
                                     <SelectGroup>
-                                        <SelectLabel>Командные виды спорта</SelectLabel>
-                                        {teamSports.map(sport => (
+                                        <SelectLabel>Ваши командные дисциплины</SelectLabel>
+                                        {userTeamSports.map(sport => (
                                             <SelectItem key={sport.id} value={sport.name}>{sport.name}</SelectItem>
                                         ))}
                                     </SelectGroup>
                                 </SelectContent>
                             </Select>
+                             {userTeamSports.length === 0 && (
+                                <p className="text-xs text-muted-foreground">
+                                    Добавьте командные виды спорта в <Link href="/settings" className="text-primary underline">настройках профиля</Link>, чтобы создать команду.
+                                </p>
+                            )}
                         </div>
                          <div className="space-y-2">
                             <Label htmlFor="city">Город</Label>
@@ -128,7 +145,7 @@ export function CreateTeamPage() {
                 </Card>
 
                  <div className="flex justify-end">
-                    <Button size="lg" onClick={handleCreateTeam} disabled={isLoading}>
+                    <Button size="lg" onClick={handleCreateTeam} disabled={isLoading || !teamName || !discipline || !city}>
                          {isLoading ? (
                             <><Loader2 className="mr-2 h-5 w-5 animate-spin" />Создание...</>
                         ) : (
@@ -140,4 +157,3 @@ export function CreateTeamPage() {
         </div>
     )
 }
-
