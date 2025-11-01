@@ -1,9 +1,10 @@
 
+
 // This file is to avoid circular dependencies that can happen
 // when importing from @/mocks in a page file that also generates metadata.
 import type { Playground } from '@/mocks/playgrounds';
 import { playgrounds } from '@/mocks/playgrounds';
-import { teams as allMockTeams, registeredTeams as baseRegisteredTeams } from '@/mocks/teams';
+import { registeredTeams as baseRegisteredTeams } from '@/mocks/teams';
 import { sponsors as allMockSponsors } from '@/mocks/personnel';
 import { requirements as allMockRequirements } from '@/mocks/requirements';
 
@@ -148,7 +149,7 @@ export const mockMyTournaments: Tournament[] = [
     },
 ];
 
-export const teams: Team[] = allMockTeams;
+export const teams: Team[] = []; // Empty mock teams
 export const registeredTeams: Team[] = baseRegisteredTeams;
 export const sponsors = allMockSponsors;
 export const requirements = allMockRequirements;

@@ -42,7 +42,6 @@ export function initializeMockData(data: MockData): MockData {
     };
     
     assignInitialDisciplines(processedData.users, processedData.allSports);
-    generateTeams(processedData.users, processedData.playgrounds, processedData.allSports, processedData.teams);
     generateUserSocialGraph(processedData.users);
     generateTeamFollowing(processedData.teams, processedData.users);
     assignSponsors(processedData.users, processedData.teams, processedData.sponsors);
@@ -63,74 +62,6 @@ export function initializeMockData(data: MockData): MockData {
     return initializedData;
 }
 
-
-function generateTeams(
-    allUsers: User[],
-    allPlaygrounds: Playground[],
-    allSportsList: Sport[],
-    teamsOutput: Team[] // This array will be populated
-) {
-    const players = allUsers.filter(u => u.role === 'Игрок');
-    const teamSports = allSportsList.filter(s => s.isTeamSport);
-    const cities = [...new Set(players.map(p => p.city))];
-    let teamIdCounter = 1;
-
-    cities.forEach(city => {
-        const cityPlayers = players.filter(p => p.city === city);
-        const cityPlaygrounds = allPlaygrounds.filter(p => p.address.includes(city));
-
-        teamSports.forEach(sport => {
-            const cityPlaygroundsForSport = cityPlaygrounds.filter(p => p.sportIds.includes(sport.id));
-            // Only create a team if there are enough players and at least one playground in the city for that sport
-            if (cityPlayers.length >= 5 && cityPlaygroundsForSport.length > 0) {
-                // Create 1-2 teams per sport per city for variety
-                const teamCount = (sport.id.charCodeAt(sport.id.length - 1) % 2) + 1;
-                
-                for (let i = 0; i < teamCount; i++) {
-                    if (cityPlayers.length < 5 * (i + 1)) break; // Ensure enough unique players for multiple teams
-
-                    const potentialMembers = cityPlayers.filter(p => {
-                        // A simple way to avoid a player being in too many teams of the same sport in the same city
-                        const teamsOfSameSport = teamsOutput.filter(t => t.sportId === sport.id && t.members.includes(p.id));
-                        return teamsOfSameSport.length === 0;
-                    });
-                    
-                    if (potentialMembers.length < 5) continue;
-
-                    const sortedMembers = [...potentialMembers].sort((a, b) => a.id.localeCompare(b.id));
-                    const teamMembers = sortedMembers.slice(0, 5 + (i % 3)); // Team size 5 to 7
-                    
-                    if (teamMembers.length < 5) continue;
-                    
-                    const captain = teamMembers[0];
-                    const memberIds = teamMembers.map(m => m.id);
-
-                    const baseTeamNames = ['Ночные Снайперы', 'Короли Асфальта', 'Стальные Ястребы', 'Бетонные Тигры', 'Разрушители', 'Фортуна', 'Красная Фурия', 'Легион', 'Авангард', 'Молот', 'Звезда', 'Циклон'];
-                    const teamName = `${baseTeamNames[teamIdCounter % baseTeamNames.length]} (${city})`;
-                    
-                    const newTeam: Team = {
-                        id: `team${teamIdCounter++}`,
-                        name: teamName,
-                        logoUrl: `https://placehold.co/100x100.png`,
-                        dataAiHint: 'sports emblem',
-                        game: sport.name,
-                        sportId: sport.id,
-                        captainId: captain.id,
-                        members: memberIds,
-                        rank: 1200 + Math.floor(Math.random() * 800 - 400),
-                        homePlaygroundIds: [cityPlaygroundsForSport[i % cityPlaygroundsForSport.length].id],
-                        followers: [],
-                        following: [],
-                        sponsorIds: [],
-                        city: city, // Add city to team data
-                    };
-
-                    teamsOutput.push(newTeam);
-                }
-            }
-        });
-    });
-}
 
 function assignInitialDisciplines(allUsers: User[], allSportsList: Sport[]) {
     const allSportIds = allSportsList.map(s => s.id);

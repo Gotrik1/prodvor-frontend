@@ -17,8 +17,8 @@ export interface Team {
   city: string; // Added city to the team interface
 }
 
-// Base teams array, to be populated by the initializer.
+// Base teams array is now empty. It will be populated by data from the backend.
 export const teams: Team[] = [];
 
-// This will also be populated by the initializer, but we export it for use in mocks.
+// This will also be populated by data from the backend.
 export const registeredTeams: Team[] = [];
