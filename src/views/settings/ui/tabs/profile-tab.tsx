@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import { useForm } from 'react-hook-form';
@@ -39,7 +38,7 @@ import React, { useState, useCallback, useEffect } from 'react';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/shared/ui/dialog';
 import Image from 'next/image';
 import axios from 'axios';
-import type { User, Sport } from '@/mocks';
+import type { User, Sport, UserDiscipline } from '@/mocks';
 
 const profileFormSchema = z.object({
   firstName: z.string().min(2, 'Имя должно содержать не менее 2 символов.'),
@@ -206,7 +205,7 @@ export function ProfileTab() {
                 gender: currentUser.gender || 'мужской',
                 bio: currentUser.bio || "Страстный игрок в дворовый футбол и CS2. Ищу команду для серьезных игр.",
                 city: currentUser.city || '',
-                sports: (currentUser.sports || []).map(s => String(s.id)),
+                sports: (currentUser.sports || []).map((s: UserDiscipline) => String(s.id)),
                 birthDate: currentUser.age ? new Date(new Date().setFullYear(new Date().getFullYear() - currentUser.age)) : undefined,
             });
         }
@@ -218,12 +217,20 @@ export function ProfileTab() {
         const dataToUpdate = {
             ...values,
             age: new Date().getFullYear() - values.birthDate.getFullYear(),
+            sports: values.sports.map(sportId => ({ id: sportId }))
         };
 
         try {
             const response = await axios.put(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/users/${currentUser.id}`, dataToUpdate);
-            
-            setUser(response.data as User);
+            const updatedUser = response.data as User;
+
+            setUser(updatedUser);
+
+            // Re-sync form with the data from the server, ensuring sports are mapped to IDs
+            profileForm.reset({
+                ...values,
+                sports: (updatedUser.sports || []).map((s: UserDiscipline) => String(s.id)),
+            });
 
             toast({
                 title: "Профиль обновлен",
