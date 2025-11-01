@@ -164,7 +164,7 @@ export function ProfileTab() {
     useEffect(() => {
         async function fetchSports() {
             try {
-                const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/sports`);
+                const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/sports/`);
                 const sports: Sport[] = response.data;
                 const options = sports.map(sport => ({
                     value: String(sport.id),
