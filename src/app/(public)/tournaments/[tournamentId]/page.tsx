@@ -5,7 +5,7 @@ import type { Metadata } from 'next';
 import type { Tournament } from '@/mocks';
 
 async function getTournament(tournamentId: string): Promise<Tournament | undefined> {
-    const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+    const API_BASE_URL = 'https://8080-firebase-prodvor-backend-1761850902881.cluster-ombtxv25tbd6yrjpp3lukp6zhc.cloudworkstations.dev/';
     if (!API_BASE_URL) return undefined;
     try {
         const response = await fetch(`${API_BASE_URL}/api/v1/tournaments/${tournamentId}`);

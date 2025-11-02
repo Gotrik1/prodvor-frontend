@@ -7,7 +7,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/sha
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import { Button } from '@/shared/ui/button';
 import { ArrowDown, ArrowUp, Crown } from 'lucide-react';
-import axios from 'axios';
 import { Skeleton } from '@/shared/ui/skeleton';
 
 interface RosterManagementProps {

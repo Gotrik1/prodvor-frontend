@@ -6,7 +6,7 @@ import type { Sport, Subdiscipline } from '@/mocks';
 import { DataTable } from './data-table';
 import { TableCell, TableRow } from '@/shared/ui/table';
 import { useEffect, useState } from 'react';
-import axios from 'axios';
+import api from '@/shared/api/axios-instance';
 
 export function SportsTab() {
   const [allSports, setAllSports] = useState<Sport[]>([]);
@@ -14,7 +14,7 @@ export function SportsTab() {
   useEffect(() => {
     async function fetchSports() {
       try {
-        const response = await axios.get(`https://8080-firebase-prodvor-backend-1761850902881.cluster-ombtxv25tbd6yrjpp3lukp6zhc.cloudworkstations.dev/api/sports/`);
+        const response = await api.get(`/api/v1/sports/`);
         setAllSports(response.data);
       } catch (error) {
         console.error("Failed to fetch sports:", error);

@@ -15,8 +15,8 @@ import { TeamRosterWidget } from "@/widgets/team-roster-widget";
 import { TeamMatchesWidget } from "@/widgets/team-matches-widget";
 import { TeamChallengesWidget } from "@/widgets/team-challenges-widget";
 import { TeamStatsWidget } from "@/widgets/team-stats-widget";
-import axios from 'axios';
 import { Skeleton } from '@/shared/ui/skeleton';
+import api from '@/shared/api/axios-instance';
 
 export function TeamPageTemplate({ team: initialTeam, isLoading: initialIsLoading }: { team?: Team, isLoading?: boolean }) {
     const [team, setTeam] = React.useState<Team | undefined>(initialTeam);
@@ -37,8 +37,8 @@ export function TeamPageTemplate({ team: initialTeam, isLoading: initialIsLoadin
         const fetchData = async () => {
             try {
                 const [usersRes, playgroundsRes] = await Promise.all([
-                    axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/users`),
-                    axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/playgrounds`),
+                    api.get(`/api/v1/users`),
+                    api.get(`/api/v1/playgrounds`),
                 ]);
 
                 const allUsers: User[] = usersRes.data;

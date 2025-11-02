@@ -5,7 +5,6 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import axios from 'axios';
 import { useRouter } from 'next/navigation';
 
 import { Button } from "@/shared/ui/button";
@@ -88,19 +87,12 @@ export function RegisterPage() {
         router.push(`/auth`);
       }
     } catch (error: any) {
-      if (axios.isAxiosError(error) && error.response) {
-            toast({
-                variant: "destructive",
-                title: "Ошибка регистрации",
-                description: error.response.data?.message || "Произошла неизвестная ошибка.",
-            });
-        } else {
-            toast({
-                variant: "destructive",
-                title: "Ошибка регистрации",
-                description: "Не удалось подключиться к серверу.",
-            });
-        }
+        const errorMessage = error.response?.data?.message || "Произошла неизвестная ошибка.";
+        toast({
+            variant: "destructive",
+            title: "Ошибка регистрации",
+            description: errorMessage,
+        });
     } finally {
         setIsLoading(false);
     }

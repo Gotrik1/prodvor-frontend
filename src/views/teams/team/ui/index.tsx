@@ -40,5 +40,3 @@ export function TeamPublicPage({ teamId }: { teamId: string }) {
         </div>
     );
 }
-
-    

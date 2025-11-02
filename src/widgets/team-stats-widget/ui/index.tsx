@@ -5,8 +5,8 @@ import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 import { Skeleton } from '@/shared/ui/skeleton';
-import axios from 'axios';
 import type { Team } from '@/mocks';
+import api from '@/shared/api/axios-instance';
 
 interface SeasonStat {
     season: number;
@@ -35,7 +35,7 @@ export const TeamStatsWidget = ({ team }: { team?: Team }) => {
             }
             setIsLoading(true);
             try {
-                const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/teams/${team.id}/stats`);
+                const response = await api.get(`/api/v1/teams/${team.id}/stats`);
                 
                 const teamCreationYear = new Date(team.createdAt).getFullYear();
                 const filteredStats = response.data.filter((stat: SeasonStat) => stat.season >= teamCreationYear);

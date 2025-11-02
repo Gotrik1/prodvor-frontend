@@ -5,7 +5,7 @@ import axios from 'axios';
 import { useUserStore } from '@/widgets/dashboard-header/model/user-store';
 
 const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
+  baseURL: 'https://8080-firebase-prodvor-backend-1761850902881.cluster-ombtxv25tbd6yrjpp3lukp6zhc.cloudworkstations.dev',
 });
 
 api.interceptors.request.use(
@@ -37,7 +37,7 @@ api.interceptors.response.use(
 
             try {
                 // Use a separate axios instance for refresh to avoid circular interceptor calls
-                const refreshResponse = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/auth/refresh`, {}, {
+                const refreshResponse = await axios.post(`https://8080-firebase-prodvor-backend-1761850902881.cluster-ombtxv25tbd6yrjpp3lukp6zhc.cloudworkstations.dev/api/v1/auth/refresh`, {}, {
                     headers: {
                         Authorization: `Bearer ${refreshToken}`
                     }
