@@ -5,7 +5,7 @@ import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 import { Button } from "@/shared/ui/button";
 import {
@@ -127,16 +127,18 @@ const SocialButton = ({ className, children }: { className?: string, children: R
 
 export function AuthPage() {
   const { toast } = useToast();
-  const { setTokens, setUser, isHydrated } = useUserStore();
+  const { setTokens, setUser, isHydrated, user: currentUser } = useUserStore();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [isLoading, setIsLoading] = React.useState(false);
 
   useEffect(() => {
     // This effect ensures we don't try to redirect on the server.
-    if (isHydrated && useUserStore.getState().user) {
+    const hasLoggedOut = searchParams.get('loggedOut') === 'true';
+    if (isHydrated && currentUser && !hasLoggedOut) {
         router.push('/dashboard');
     }
-  }, [isHydrated, router]);
+  }, [isHydrated, currentUser, router, searchParams]);
 
   const form = useForm<z.infer<typeof loginFormSchema>>({
     resolver: zodResolver(loginFormSchema),

@@ -64,8 +64,7 @@ export function DashboardHeader() {
   
   const handleSignOut = () => {
     signOut();
-    // Force a full reload to ensure all state is cleared
-    window.location.href = '/auth';
+    router.push('/auth?loggedOut=true');
   };
 
   const isAdminPage = pathname?.startsWith('/admin');
