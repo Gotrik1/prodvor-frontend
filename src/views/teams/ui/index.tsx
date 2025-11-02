@@ -15,35 +15,7 @@ import { Skeleton } from '@/shared/ui/skeleton';
 import { TopTeamsWidget } from '@/widgets/top-teams-widget';
 import api from '@/shared/api/axios-instance';
 
-const TeamCard = ({ team, isMember }: { team: Team, isMember: boolean }) => {
-    const { user: currentUser } = useUserStore();
-    const { toast } = useToast();
-
-    const handleApply = async () => {
-        if (!currentUser) {
-             toast({
-                variant: 'destructive',
-                title: 'Ошибка',
-                description: 'Для подачи заявки необходимо авторизоваться.',
-            });
-            return;
-        }
-        
-        try {
-            await api.post(`/api/v1/teams/${team.id}/apply`, {});
-            toast({
-                title: "Заявка отправлена!",
-                description: `Ваша заявка в команду "${team.name}" отправлена на рассмотрение капитану.`,
-            });
-        } catch (error: any) {
-             toast({
-                variant: 'destructive',
-                title: 'Ошибка',
-                description: error.response?.data?.message || 'Не удалось отправить заявку.',
-            });
-        }
-    };
-
+const TeamCard = ({ team, isMember, onApply, isApplicationSent }: { team: Team, isMember: boolean, onApply: (teamId: string) => Promise<void>, isApplicationSent: boolean }) => {
     return (
     <Card key={team.id} className="flex flex-col">
         <CardHeader>
@@ -74,8 +46,9 @@ const TeamCard = ({ team, isMember }: { team: Team, isMember: boolean }) => {
                      <Link href={`/teams/${team.id}`}>Перейти в профиль</Link>
                 </Button>
             ) : (
-                <Button className="w-full" onClick={handleApply}>
-                    <UserCheck className="mr-2 h-4 w-4" /> Подать заявку
+                <Button className="w-full" onClick={() => onApply(team.id)} disabled={isApplicationSent}>
+                    <UserCheck className="mr-2 h-4 w-4" /> 
+                    {isApplicationSent ? 'Заявка отправлена' : 'Подать заявку'}
                 </Button>
             )}
         </CardFooter>
@@ -88,6 +61,35 @@ export function TeamsPage() {
     const { user: currentUser } = useUserStore();
     const [allTeams, setAllTeams] = useState<Team[]>([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [sentApplications, setSentApplications] = useState<string[]>([]);
+    const { toast } = useToast();
+
+    const handleApply = async (teamId: string) => {
+        if (!currentUser) {
+             toast({
+                variant: 'destructive',
+                title: 'Ошибка',
+                description: 'Для подачи заявки необходимо авторизоваться.',
+            });
+            return;
+        }
+        
+        try {
+            await api.post(`/api/v1/teams/${teamId}/apply`, {});
+            toast({
+                title: "Заявка отправлена!",
+                description: `Ваша заявка в команду отправлена на рассмотрение капитану.`,
+            });
+            setSentApplications(prev => [...prev, teamId]);
+        } catch (error: any) {
+             toast({
+                variant: 'destructive',
+                title: 'Ошибка',
+                description: error.response?.data?.message || 'Не удалось отправить заявку.',
+            });
+        }
+    };
+
 
     useEffect(() => {
         async function fetchTeams() {
@@ -146,7 +148,7 @@ export function TeamsPage() {
                     <section>
                         <h2 className="text-2xl font-bold mb-4">Мои команды</h2>
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                            {myTeams.map(team => <TeamCard key={team.id} team={team} isMember={true} />)}
+                            {myTeams.map(team => <TeamCard key={team.id} team={team} isMember={true} onApply={handleApply} isApplicationSent={false} />)}
                         </div>
                     </section>
                 )}
@@ -168,7 +170,13 @@ export function TeamsPage() {
                     ) : otherTeams.length > 0 ? (
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                             {otherTeams.map(team => (
-                                <TeamCard key={team.id} team={team} isMember={false} />
+                                <TeamCard 
+                                    key={team.id} 
+                                    team={team} 
+                                    isMember={false} 
+                                    onApply={handleApply}
+                                    isApplicationSent={sentApplications.includes(team.id)}
+                                />
                             ))}
                         </div>
                     ) : (
