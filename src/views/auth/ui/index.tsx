@@ -164,17 +164,25 @@ export function AuthPage() {
         }
     } catch (error) {
         console.error("Login failed:", error);
-        if (axios.isAxiosError(error) && error.message === 'Network Error') {
-            toast({
-                variant: "destructive",
-                title: "Сервер недоступен",
-                description: "Не удалось подключиться к бэкенду. Пожалуйста, убедитесь, что сервер запущен.",
-            });
+        if (axios.isAxiosError(error)) {
+            if (error.response?.status === 401) {
+                 toast({
+                    variant: "destructive",
+                    title: "Ошибка входа",
+                    description: "Неверный email или пароль. Попробуйте снова.",
+                });
+            } else if (error.message === 'Network Error') {
+                 toast({
+                    variant: "destructive",
+                    title: "Сервер недоступен",
+                    description: "Не удалось подключиться к бэкенду. Пожалуйста, убедитесь, что сервер запущен.",
+                });
+            }
         } else {
             toast({
                 variant: "destructive",
                 title: "Ошибка входа",
-                description: "Неверный email или пароль. Попробуйте снова.",
+                description: "Произошла непредвиденная ошибка.",
             });
         }
     } finally {
