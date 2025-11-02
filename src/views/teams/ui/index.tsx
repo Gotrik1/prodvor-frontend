@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
@@ -20,7 +21,7 @@ const TeamCard = ({ team, isMember }: { team: Team, isMember: boolean }) => (
         <CardHeader>
             <Link href={`/teams/${team.id}`} className="flex items-center gap-4 group">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={team.logoUrl || 'https://placehold.co/512x512.png'} alt={`${team.name} logo`} width={64} height={64} className="rounded-lg border" />
+                <img src={team.logoUrl || 'https://placehold.co/512x512.png'} alt={`${team.name} logo`} width={64} height={64} className="rounded-lg border object-cover aspect-square" />
                 <div>
                     <CardTitle className="text-xl group-hover:text-primary transition-colors">{team.name}</CardTitle>
                     <CardDescription>{team.game}</CardDescription>

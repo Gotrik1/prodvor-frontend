@@ -39,7 +39,7 @@ export const TeamHeader = ({ team, homePlaygrounds }: TeamHeaderProps) => {
     return (
         <header className="flex flex-col md:flex-row items-center gap-6 p-4 rounded-lg bg-card border">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={team.logoUrl || 'https://placehold.co/512x512.png'} alt={team.name} width={96} height={96} className="rounded-lg border-4 border-primary" data-ai-hint="team logo" />
+            <img src={team.logoUrl || 'https://placehold.co/512x512.png'} alt={team.name} width={96} height={96} className="rounded-lg border-4 border-primary object-cover aspect-square" data-ai-hint="team logo" />
             <div className="text-center md:text-left flex-grow">
                 <h1 className="text-3xl font-bold font-headline">{team.name}</h1>
                 <p className="text-muted-foreground text-lg">Дисциплина: {team.game}</p>

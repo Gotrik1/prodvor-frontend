@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { useState } from 'react';
@@ -139,7 +140,7 @@ export function BrandingTab({ team: initialTeam }: { team: Team }) {
                             alt={`Логотип ${team.name}`}
                             width={192}
                             height={192}
-                            className="rounded-lg border-2 border-primary"
+                            className="rounded-lg border-2 border-primary object-cover aspect-square"
                         />
                     </div>
                 </CardContent>
