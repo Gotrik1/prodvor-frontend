@@ -20,7 +20,14 @@ const TeamCard = ({ team, isMember }: { team: Team, isMember: boolean }) => {
     const { toast } = useToast();
 
     const handleApply = async () => {
-        if (!currentUser) return;
+        if (!currentUser) {
+             toast({
+                variant: 'destructive',
+                title: 'Ошибка',
+                description: 'Для подачи заявки необходимо авторизоваться.',
+            });
+            return;
+        }
         
         try {
             await api.post(`/api/v1/teams/${team.id}/apply`);
@@ -125,10 +132,8 @@ export function TeamsPage() {
                     </Button>
                 </div>
             </div>
-
-            <div className="container mx-auto px-4 md:px-0">
-                <TopTeamsWidget />
-            </div>
+            
+            {currentUser && <TopTeamsWidget />}
 
             <Separator />
 

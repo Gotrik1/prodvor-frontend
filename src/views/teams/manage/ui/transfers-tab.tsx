@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/shared/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/shared/ui/card';
 import { CheckCircle, Mail, UserPlus, XCircle, ArrowRightLeft, Search } from 'lucide-react';
@@ -13,14 +13,34 @@ import { Label } from '@/shared/ui/label';
 import type { User, Team } from '@/mocks';
 import { users } from '@/mocks';
 import api from '@/shared/api/axios-instance';
-
-const mockApplications = users.slice(2, 4).map(u => ({ ...u, status: 'pending' }));
+import { Skeleton } from '@/shared/ui/skeleton';
 
 export function TransfersTab({ team }: { team: Team }) {
     const { toast } = useToast();
-    const [applications, setApplications] = useState(mockApplications);
+    const [applications, setApplications] = useState<User[]>([]);
+    const [isLoadingApps, setIsLoadingApps] = useState(true);
     const [searchQuery, setSearchQuery] = useState('');
     const [searchResults, setSearchResults] = useState<User[]>([]);
+
+    useEffect(() => {
+        const fetchApplications = async () => {
+            try {
+                const response = await api.get(`/api/v1/teams/${team.id}/applications`);
+                setApplications(response.data);
+            } catch (error) {
+                console.error("Failed to fetch applications:", error);
+                 toast({
+                    variant: 'destructive',
+                    title: 'Ошибка',
+                    description: 'Не удалось загрузить список заявок.',
+                });
+            } finally {
+                setIsLoadingApps(false);
+            }
+        };
+        fetchApplications();
+    }, [team.id, toast]);
+
 
     const handleApplication = async (applicantId: string, accepted: boolean) => {
         try {
@@ -71,7 +91,12 @@ export function TransfersTab({ team }: { team: Team }) {
                     <CardDescription>Рассмотрите заявки от игроков, желающих присоединиться к вашей команде.</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    {applications.length > 0 ? (
+                    {isLoadingApps ? (
+                        <div className="space-y-3">
+                            <Skeleton className="h-12 w-full" />
+                            <Skeleton className="h-12 w-full" />
+                        </div>
+                    ) : applications.length > 0 ? (
                         <ul className="space-y-3">
                             {applications.map(applicant => (
                                 <li key={applicant.id} className="flex items-center justify-between p-2 rounded-md bg-muted/30">
