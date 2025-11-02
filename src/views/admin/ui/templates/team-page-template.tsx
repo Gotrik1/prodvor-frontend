@@ -1,7 +1,7 @@
 
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import type { User, Playground, Team } from "@/mocks";
 import { users } from '@/mocks'; // Import all users
 import { Button } from "@/shared/ui/button";
@@ -19,18 +19,17 @@ import { TeamStatsWidget } from "@/widgets/team-stats-widget";
 import { Skeleton } from '@/shared/ui/skeleton';
 import api from '@/shared/api/axios-instance';
 
-export function TeamPageTemplate({ team: initialTeam, isLoading: initialIsLoading, onDataFetched }: { team?: Team, isLoading?: boolean, onDataFetched?: (data: { team: Team, members: User[], playgrounds: Playground[] }) => void }) {
+export function TeamPageTemplate({ team: initialTeam, isLoading: initialIsLoading }: { team?: Team, isLoading?: boolean }) {
     const [team, setTeam] = React.useState<Team | undefined>(initialTeam);
     const [playgrounds, setPlaygrounds] = React.useState<Playground[]>([]);
     const [teamMembers, setTeamMembers] = React.useState<User[]>([]);
-    const [isLoading, setIsLoading] = React.useState(initialIsLoading || true);
+    const [isLoading, setIsLoading] = React.useState(initialIsLoading || !initialTeam);
 
-    React.useEffect(() => {
+    useEffect(() => {
         setTeam(initialTeam);
         setIsLoading(initialIsLoading ?? !initialTeam);
-        
+
         if (initialTeam) {
-            // Correctly combine captain and members
             const captain = users.find(u => u.id === initialTeam.captainId);
             const otherMembers = initialTeam.members || [];
             
@@ -38,7 +37,7 @@ export function TeamPageTemplate({ team: initialTeam, isLoading: initialIsLoadin
             if (captain) {
                 fullRoster.push(captain);
             }
-            // Add other members, ensuring no duplicates if captain is also in members array
+            
             otherMembers.forEach(member => {
                 if (!fullRoster.some(p => p.id === member.id)) {
                     fullRoster.push(member);
@@ -49,32 +48,25 @@ export function TeamPageTemplate({ team: initialTeam, isLoading: initialIsLoadin
         }
 
     }, [initialTeam, initialIsLoading]);
-
+    
     React.useEffect(() => {
-        if (!team) {
-            return;
-        }
-
-        const fetchData = async () => {
-            let homePgs: Playground[] = [];
-            if (team.homePlaygroundIds && team.homePlaygroundIds.length > 0) {
-                try {
-                    const playgroundsRes = await api.get(`/api/v1/playgrounds`);
-                    const allPlaygrounds: Playground[] = playgroundsRes.data;
-                    homePgs = allPlaygrounds.filter(p => team.homePlaygroundIds?.includes(p.id));
-                    setPlaygrounds(homePgs);
-                } catch (error) {
-                    console.error("Failed to fetch playgrounds:", error);
-                }
+        if (!team) return;
+    
+        const fetchPlaygrounds = async () => {
+          if (team.homePlaygroundIds && team.homePlaygroundIds.length > 0) {
+            try {
+              const playgroundsRes = await api.get(`/api/v1/playgrounds`);
+              const allPlaygrounds: Playground[] = playgroundsRes.data;
+              const homePgs = allPlaygrounds.filter(p => team.homePlaygroundIds?.includes(p.id));
+              setPlaygrounds(homePgs);
+            } catch (error) {
+              console.error("Failed to fetch playgrounds:", error);
             }
-
-            if (onDataFetched) {
-                onDataFetched({ team, members: team.members || [], playgrounds: homePgs });
-            }
+          }
         };
-
-        fetchData();
-    }, [team, onDataFetched]);
+    
+        fetchPlaygrounds();
+      }, [team]);
 
 
     if (isLoading) {
