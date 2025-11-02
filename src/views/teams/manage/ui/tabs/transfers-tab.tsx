@@ -16,7 +16,12 @@ import api from '@/shared/api/axios-instance';
 import { Skeleton } from '@/shared/ui/skeleton';
 import axios from 'axios';
 
-export function TransfersTab({ team }: { team: Team }) {
+interface TransfersTabProps {
+    team: Team;
+    onApplicationProcessed: () => void;
+}
+
+export function TransfersTab({ team, onApplicationProcessed }: TransfersTabProps) {
     const { toast } = useToast();
     const [applications, setApplications] = useState<User[]>([]);
     const [isLoadingApps, setIsLoadingApps] = useState(true);
@@ -31,7 +36,8 @@ export function TransfersTab({ team }: { team: Team }) {
             };
             setIsLoadingApps(true);
             try {
-                const response = await api.get(`/api/v1/teams/${team.id}/applications`);
+                // Explicitly setting headers to an empty object for GET request
+                const response = await api.get(`/api/v1/teams/${team.id}/applications`, { data: undefined });
                 setApplications(response.data);
             } catch (err) {
                  if (axios.isAxiosError(err)) {
@@ -70,6 +76,9 @@ export function TransfersTab({ team }: { team: Team }) {
                 title: `Заявка ${accepted ? 'принята' : 'отклонена'}`,
                 description: `Заявка от игрока ${applicant?.nickname} была ${accepted ? 'принята' : 'отклонена'}.`,
             });
+            if (accepted) {
+                onApplicationProcessed(); // Re-fetch team data
+            }
         } catch (error) {
             toast({
                 variant: 'destructive',

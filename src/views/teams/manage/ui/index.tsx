@@ -1,16 +1,16 @@
 
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import type { Team } from "@/mocks";
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
 import Link from "next/link";
-import { ArrowLeft, Loader2 } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { TacticalBoard } from "./tactical-board";
 import { RosterManagement } from "./roster-management";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
-import { TransfersTab } from "./transfers-tab";
+import { TransfersTab } from "./tabs/transfers-tab";
 import { users } from "@/mocks";
 import { AnnouncementsTab } from "./tabs/announcements-tab";
 import { SettingsTab } from "./tabs/settings-tab";
@@ -25,25 +25,27 @@ export function TeamManagementPage({ teamId }: { teamId: string }) {
     const [loading, setLoading] = useState(true);
     const [isCaptain, setIsCaptain] = useState(false);
 
-    useEffect(() => {
+    const fetchTeamData = useCallback(async () => {
         if (!teamId) return;
-
-        async function fetchData() {
-            try {
-                const response = await api.get(`/api/v1/teams/${teamId}`);
-                const teamData = response.data;
-                setTeam(teamData);
-                if (teamData && currentUser) {
-                    setIsCaptain(currentUser.id === teamData.captainId);
-                }
-            } catch (error) {
-                console.error("Failed to fetch team:", error);
-            } finally {
-                setLoading(false);
+        setLoading(true);
+        try {
+            const response = await api.get(`/api/v1/teams/${teamId}`);
+            const teamData = response.data;
+            setTeam(teamData);
+            if (teamData && currentUser) {
+                setIsCaptain(currentUser.id === teamData.captainId);
             }
+        } catch (error) {
+            console.error("Failed to fetch team:", error);
+        } finally {
+            setLoading(false);
         }
-        fetchData();
     }, [teamId, currentUser]);
+
+
+    useEffect(() => {
+        fetchTeamData();
+    }, [fetchTeamData]);
 
 
     if (loading) {
@@ -125,7 +127,7 @@ export function TeamManagementPage({ teamId }: { teamId: string }) {
                     <BrandingTab team={team}/>
                 </TabsContent>
                 <TabsContent value="transfers" className="mt-6">
-                   <TransfersTab team={team} />
+                   <TransfersTab team={team} onApplicationProcessed={fetchTeamData} />
                 </TabsContent>
                 <TabsContent value="announcements" className="mt-6">
                    <AnnouncementsTab />
