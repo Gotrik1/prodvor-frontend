@@ -22,14 +22,12 @@ export function TransfersTab({ team }: { team: Team }) {
     const [isLoadingApps, setIsLoadingApps] = useState(true);
     const [searchQuery, setSearchQuery] = useState('');
     const [searchResults, setSearchResults] = useState<User[]>([]);
-    const [sentApplications, setSentApplications] = useState<string[]>([]);
 
     useEffect(() => {
         const fetchApplications = async () => {
             if (!team.id) return;
             setIsLoadingApps(true);
             try {
-                // Correct way to make a GET request without a body
                 const response = await api.get(`/api/v1/teams/${team.id}/applications`);
                 setApplications(response.data);
             } catch (err) {
