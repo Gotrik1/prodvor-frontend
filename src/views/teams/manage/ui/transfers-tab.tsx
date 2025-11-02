@@ -2,18 +2,19 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Button } from '@/shared/ui/button';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/shared/ui/card';
-import { CheckCircle, Mail, UserPlus, XCircle, ArrowRightLeft, Search } from 'lucide-react';
-import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
-import { Input } from '@/shared/ui/input';
-import { Separator } from '@/shared/ui/separator';
-import { useToast } from '@/shared/hooks/use-toast';
+import { Button } from "@/shared/ui/button";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
+import { CheckCircle, Mail, UserPlus, XCircle, ArrowRightLeft, Search } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
+import { Input } from "@/shared/ui/input";
+import { Separator } from "@/shared/ui/separator";
+import { useToast } from "@/shared/hooks/use-toast";
 import { Label } from '@/shared/ui/label';
 import type { User, Team } from '@/mocks';
 import { users } from '@/mocks';
 import api from '@/shared/api/axios-instance';
 import { Skeleton } from '@/shared/ui/skeleton';
+import axios from 'axios';
 
 export function TransfersTab({ team }: { team: Team }) {
     const { toast } = useToast();
@@ -29,10 +30,21 @@ export function TransfersTab({ team }: { team: Team }) {
             setIsLoadingApps(true);
             try {
                 // Correct way to make a GET request without a body
-                const response = await api.get(`/api/v1/teams/${team.id}/applications`, { data: undefined });
+                const response = await api.get(`/api/v1/teams/${team.id}/applications`);
                 setApplications(response.data);
-            } catch (error) {
-                console.error("Failed to fetch applications:", error);
+            } catch (err) {
+                 if (axios.isAxiosError(err)) {
+                  console.group('fetchApplications 422 debug');
+                  console.log('URL:', err.config?.url);
+                  console.log('Method:', err.config?.method);
+                  console.log('Params:', err.config?.params);
+                  console.log('Data:', err.config?.data);
+                  console.log('Status:', err.response?.status);
+                  console.log('Response data:', err.response?.data);
+                  console.groupEnd();
+                } else {
+                  console.error("Failed to fetch applications:", err);
+                }
                  toast({
                     variant: 'destructive',
                     title: 'Ошибка',
