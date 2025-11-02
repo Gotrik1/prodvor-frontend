@@ -28,12 +28,11 @@ const useUserStore = create<UserState>()(
         }
       },
       signOut: () => {
-        set({ user: null, accessToken: null });
         if (typeof window !== 'undefined') {
-          localStorage.removeItem('refreshToken');
-          // Force remove the entire persisted state to ensure logout
-          localStorage.removeItem('prodvor-user-storage');
+            // This now happens *before* the state is set to null.
+            localStorage.removeItem('prodvor-user-storage');
         }
+        set({ user: null, accessToken: null });
       },
     }),
     {
