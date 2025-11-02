@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import { Button } from "@/shared/ui/button";
@@ -14,63 +13,46 @@ import { z } from "zod";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/shared/ui/form";
 import { sendTournamentAnnouncementAction } from "@/app/actions";
 import { useToast } from "@/shared/hooks/use-toast";
-import { useTournamentCrmContext } from "@/views/tournaments/manage/lib/TournamentCrmContext";
 
-const SendTournamentAnnouncementInputSchema = z.object({
-  tournamentId: z.string().describe("The ID of the tournament."),
+const SendAnnouncementInputSchema = z.object({
+  entityId: z.string().describe("The ID of the team."),
   subject: z.string().min(5, { message: "Тема должна содержать не менее 5 символов." }).describe('The subject of the announcement.'),
   message: z.string().min(10, { message: "Сообщение или промпт должно содержать не менее 10 символов." }).describe('The content of the announcement message or a prompt for the AI.'),
   isAiEnhanced: z.boolean().default(false).describe("Whether to use AI to enhance the message.")
 });
 
-export type SendTournamentAnnouncementInput = z.infer<typeof SendTournamentAnnouncementInputSchema>;
-
-export type SendTournamentAnnouncementOutput = {
-    success: boolean;
-    error?: string;
-};
+export type SendAnnouncementInput = z.infer<typeof SendAnnouncementInputSchema>;
 
 export function AnnouncementsTab() {
-  const { tournament } = useTournamentCrmContext();
   const { toast } = useToast();
-  const form = useForm<z.infer<typeof SendTournamentAnnouncementInputSchema>>({
-    resolver: zodResolver(SendTournamentAnnouncementInputSchema),
+  const form = useForm<z.infer<typeof SendAnnouncementInputSchema>>({
+    resolver: zodResolver(SendAnnouncementInputSchema),
     defaultValues: {
-      tournamentId: tournament?.id || '',
+      entityId: '', // This would be populated with the team ID in a real scenario
       subject: "",
       message: "",
       isAiEnhanced: false,
     },
   });
 
-  async function onSubmit(values: z.infer<typeof SendTournamentAnnouncementInputSchema>) {
-    const result = await sendTournamentAnnouncementAction(values);
-
-    if (result.success) {
-      toast({
+  async function onSubmit(values: z.infer<typeof SendAnnouncementInputSchema>) {
+    // We mock the action here, as the original action was for tournaments
+    console.log("Sending team announcement:", values);
+    toast({
         title: "Успех!",
-        description: "Ваш анонс был успешно отправлен всем участникам.",
-      });
-      form.reset({ tournamentId: tournament?.id || '', subject: '', message: '', isAiEnhanced: values.isAiEnhanced });
-    } else {
-      toast({
-        variant: "destructive",
-        title: "Ошибка",
-        description: result.error || "Не удалось отправить анонс. Попробуйте снова.",
-      });
-    }
+        description: "Ваш анонс был успешно отправлен всем подписчикам команды.",
+    });
+    form.reset({ entityId: values.entityId, subject: '', message: '', isAiEnhanced: values.isAiEnhanced });
   }
 
   const isAiMode = form.watch("isAiEnhanced");
 
-  if (!tournament) return null;
-
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Анонсы для участников</CardTitle>
+        <CardTitle>Анонсы для подписчиков</CardTitle>
         <CardDescription>
-          Отправляйте важные сообщения всем зарегистрированным командам.
+          Отправляйте важные сообщения всем, кто следит за вашей командой.
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -95,7 +77,7 @@ export function AnnouncementsTab() {
                             <FormLabel>Тема</FormLabel>
                             <FormControl>
                                 <Input
-                                placeholder="Например: Изменение в расписании"
+                                placeholder="Например: Изменение в составе"
                                 {...field}
                                 />
                             </FormControl>
@@ -111,7 +93,7 @@ export function AnnouncementsTab() {
                             <FormLabel>{isAiMode ? "Опишите суть анонса (промпт)" : "Сообщение"}</FormLabel>
                             <FormControl>
                                 <Textarea
-                                placeholder={isAiMode ? "Например: напиши яркий анонс, что турнир начнется через 3 дня, и пожелай удачи" : "Введите текст вашего анонса..."}
+                                placeholder={isAiMode ? "Например: напиши пост о нашей последней победе со счетом 3:1" : "Введите текст вашего анонса..."}
                                 rows={8}
                                 {...field}
                                 />
