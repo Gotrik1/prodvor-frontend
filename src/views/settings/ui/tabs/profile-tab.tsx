@@ -39,6 +39,7 @@ import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogT
 import Image from 'next/image';
 import axios from 'axios';
 import type { User, Sport } from '@/mocks';
+import api from '@/shared/api/axios-instance';
 
 const profileFormSchema = z.object({
   firstName: z.string().min(2, 'Имя должно содержать не менее 2 символов.'),
@@ -86,11 +87,7 @@ const AvatarUploadDialog = () => {
         formData.append('avatar', file);
 
         try {
-            const response = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/users/${user.id}/avatar`, formData, {
-                headers: {
-                    'Authorization': `Bearer ${accessToken}`
-                },
-            });
+            const response = await api.post(`/api/v1/users/${user.id}/avatar`, formData);
 
             if (response.status === 200) {
                 setUser(response.data as User);
@@ -172,7 +169,7 @@ const DisciplinesCard = () => {
         async function fetchSports() {
             setIsLoading(true);
             try {
-                const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/sports/`);
+                const response = await api.get(`/api/v1/sports/`);
                 const sports: Sport[] = response.data;
                 const options = sports.map(sport => ({
                     value: sport.id,
@@ -204,12 +201,8 @@ const DisciplinesCard = () => {
         if (!currentUser || !accessToken) return;
         setIsSaving(true);
         try {
-            const response = await axios.put(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/users/${currentUser.id}`, {
+            const response = await api.put(`/api/v1/users/${currentUser.id}`, {
                 sports: selectedSports
-            }, {
-                headers: {
-                    'Authorization': `Bearer ${accessToken}`
-                }
             });
             const updatedUser = response.data as User;
             setUser(updatedUser);
@@ -304,11 +297,7 @@ export function ProfileTab() {
         };
 
         try {
-            const response = await axios.put(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/users/${currentUser.id}`, dataToUpdate, {
-                headers: {
-                    'Authorization': `Bearer ${accessToken}`
-                }
-            });
+            const response = await api.put(`/api/v1/users/${currentUser.id}`, dataToUpdate);
             setUser(response.data as User);
             toast({
                 title: "Профиль обновлен",
@@ -438,3 +427,5 @@ export function ProfileTab() {
         </div>
     );
 }
+
+    

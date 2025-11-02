@@ -3,7 +3,7 @@
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/shared/ui/card";
 import { PlusCircle, UserPlus, UserCheck } from "lucide-react";
-import { Button } from '@/shared/ui/button';
+import { Button } from "@/shared/ui/button";
 import { Input } from "@/shared/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/select";
 import { users, teams } from "@/mocks";
@@ -15,7 +15,7 @@ import Link from "next/link";
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/shared/ui/dialog";
 import { Textarea } from "@/shared/ui/textarea";
 import { useState, useEffect } from "react";
-import axios from 'axios';
+import api from '@/shared/api/axios-instance';
 
 // Mock data for LFG posts
 const playersLookingForTeam = users.slice(5, 11).map(u => ({ ...u, lookingFor: ['Нападающий', 'Защитник', 'Универсал'][Math.floor(Math.random() * 3)] }));
@@ -76,7 +76,7 @@ export function LfgPage() {
     useEffect(() => {
         async function fetchSports() {
             try {
-                const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/sports/`);
+                const response = await api.get(`/api/v1/sports/`);
                 setAllSports(response.data);
             } catch (error) {
                 console.error("Failed to fetch sports:", error);
@@ -198,3 +198,5 @@ export function LfgPage() {
         </div>
     );
 }
+
+    

@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import { useState } from 'react';
@@ -13,6 +12,7 @@ import { useToast } from '@/shared/hooks/use-toast';
 import axios from 'axios';
 import { LogoGeneratorWidget } from '@/widgets/logo-generator';
 import { useUserStore } from '@/widgets/dashboard-header/model/user-store';
+import api from '@/shared/api/axios-instance';
 
 const LogoUploadDialog = ({ team, onUploadSuccess }: { team: Team, onUploadSuccess: (newLogoUrl: string) => void }) => {
     const { toast } = useToast();
@@ -48,11 +48,7 @@ const LogoUploadDialog = ({ team, onUploadSuccess }: { team: Team, onUploadSucce
         formData.append('logo', file);
 
         try {
-            const response = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/teams/${team.id}/logo`, formData, {
-                headers: { 
-                    'Authorization': `Bearer ${accessToken}`
-                },
-            });
+            const response = await api.post(`/api/v1/teams/${team.id}/logo`, formData);
 
             if (response.status === 200 && response.data.logoUrl) {
                 onUploadSuccess(response.data.logoUrl);
@@ -154,3 +150,5 @@ export function BrandingTab({ team: initialTeam }: { team: Team }) {
         </div>
     );
 }
+
+    

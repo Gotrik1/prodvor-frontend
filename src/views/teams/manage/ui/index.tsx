@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import React, { useEffect, useState } from 'react';
@@ -13,12 +12,13 @@ import { RosterManagement } from "./roster-management";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 import { TransfersTab } from "./transfers-tab";
 import { users } from "@/mocks";
-import { AnnouncementsTab } from "./tabs/announcements-tab";
-import { SettingsTab } from "./tabs/settings-tab";
+import { AnnouncementsTab } from "../../tournaments/manage/ui/tabs/announcements-tab";
+import { SettingsTab } from "./settings-tab";
 import { BrandingTab } from "./tabs/branding-tab";
 import { useUserStore } from '@/widgets/dashboard-header/model/user-store';
 import axios from 'axios';
 import { Skeleton } from '@/shared/ui/skeleton';
+import api from '@/shared/api/axios-instance';
 
 export function TeamManagementPage({ teamId }: { teamId: string }) {
     const { user: currentUser } = useUserStore();
@@ -31,7 +31,7 @@ export function TeamManagementPage({ teamId }: { teamId: string }) {
 
         async function fetchData() {
             try {
-                const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/teams/${teamId}`);
+                const response = await api.get(`/api/v1/teams/${teamId}`);
                 const teamData = response.data;
                 setTeam(teamData);
                 if (teamData && currentUser) {
@@ -138,3 +138,5 @@ export function TeamManagementPage({ teamId }: { teamId: string }) {
         </div>
     );
 }
+
+    

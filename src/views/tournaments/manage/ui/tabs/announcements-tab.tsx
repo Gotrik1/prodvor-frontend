@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import { Button } from "@/shared/ui/button";
@@ -14,7 +13,7 @@ import { z } from "zod";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/shared/ui/form";
 import { sendTournamentAnnouncementAction } from "@/app/actions";
 import { useToast } from "@/shared/hooks/use-toast";
-import { useTournamentCrmContext } from "../../lib/TournamentCrmContext";
+import { useTournamentCrmContext } from "@/views/tournaments/manage/lib/TournamentCrmContext";
 
 const SendTournamentAnnouncementInputSchema = z.object({
   tournamentId: z.string().describe("The ID of the tournament."),
@@ -144,3 +143,5 @@ export function AnnouncementsTab() {
     </Card>
   );
 }
+
+    

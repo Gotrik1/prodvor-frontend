@@ -4,6 +4,7 @@
 import React from 'react';
 import { TeamPageTemplate } from "@/views/admin/ui/templates/team-page-template";
 import type { Team } from "@/mocks";
+import api from '@/shared/api/axios-instance';
 
 export function TeamPublicPage({ teamId }: { teamId: string }) {
     const [team, setTeam] = React.useState<Team | undefined>(undefined);
@@ -14,17 +15,11 @@ export function TeamPublicPage({ teamId }: { teamId: string }) {
 
         async function getTeam() {
             try {
-                const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
-                if (!API_BASE_URL) {
-                    console.error("[Client] NEXT_PUBLIC_API_BASE_URL is not defined.");
-                    setLoading(false);
-                    return;
-                }
-                const response = await fetch(`${API_BASE_URL}/api/v1/teams/${teamId}`);
-                if (!response.ok) {
+                const response = await api.get(`/api/v1/teams/${teamId}`);
+                if (!response.data) {
                     setTeam(undefined);
                 } else {
-                    const data = await response.json();
+                    const data = response.data;
                     setTeam(data);
                 }
             } catch (error) {
@@ -45,3 +40,5 @@ export function TeamPublicPage({ teamId }: { teamId: string }) {
         </div>
     );
 }
+
+    

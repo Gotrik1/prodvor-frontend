@@ -6,7 +6,7 @@ import type { Sport, Subdiscipline } from '@/mocks';
 import { DataTable } from './data-table';
 import { TableCell, TableRow } from '@/shared/ui/table';
 import { useEffect, useState } from 'react';
-import axios from 'axios';
+import api from '@/shared/api/axios-instance';
 
 export function SportsTab() {
   const [allSports, setAllSports] = useState<Sport[]>([]);
@@ -14,7 +14,7 @@ export function SportsTab() {
   useEffect(() => {
     async function fetchSports() {
       try {
-        const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/sports/`);
+        const response = await api.get(`/api/v1/sports/`);
         setAllSports(response.data);
       } catch (error) {
         console.error("Failed to fetch sports:", error);
@@ -75,3 +75,5 @@ export function SportsTab() {
     </div>
   );
 }
+
+    

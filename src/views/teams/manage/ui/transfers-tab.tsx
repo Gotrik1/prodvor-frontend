@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import { useState } from 'react';
@@ -13,6 +12,7 @@ import { useToast } from '@/shared/hooks/use-toast';
 import { Label } from '@/shared/ui/label';
 import type { User, Team } from '@/mocks';
 import { users } from '@/mocks';
+import api from '@/shared/api/axios-instance';
 
 const mockApplications = users.slice(2, 4).map(u => ({ ...u, status: 'pending' }));
 
@@ -22,13 +22,24 @@ export function TransfersTab({ team }: { team: Team }) {
     const [searchQuery, setSearchQuery] = useState('');
     const [searchResults, setSearchResults] = useState<User[]>([]);
 
-    const handleApplication = (applicantId: string, accepted: boolean) => {
-        setApplications(prev => prev.filter(app => app.id !== applicantId));
-        const applicant = users.find(u => u.id === applicantId);
-        toast({
-            title: `Заявка ${accepted ? 'принята' : 'отклонена'}`,
-            description: `Заявка от игрока ${applicant?.nickname} была ${accepted ? 'принята' : 'отклонена'}.`,
-        });
+    const handleApplication = async (applicantId: string, accepted: boolean) => {
+        try {
+            await api.post(`/api/v1/teams/${team.id}/applications/${applicantId}/respond`, {
+                action: accepted ? 'accept' : 'decline',
+            });
+            setApplications(prev => prev.filter(app => app.id !== applicantId));
+            const applicant = users.find(u => u.id === applicantId);
+            toast({
+                title: `Заявка ${accepted ? 'принята' : 'отклонена'}`,
+                description: `Заявка от игрока ${applicant?.nickname} была ${accepted ? 'принята' : 'отклонена'}.`,
+            });
+        } catch (error) {
+            toast({
+                variant: 'destructive',
+                title: 'Ошибка',
+                description: 'Не удалось обработать заявку.',
+            });
+        }
     };
     
     const handleSearch = () => {
@@ -140,3 +151,5 @@ export function TransfersTab({ team }: { team: Team }) {
         </div>
     );
 }
+
+    

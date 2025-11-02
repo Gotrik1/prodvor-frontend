@@ -16,6 +16,7 @@ import axios from 'axios';
 import Link from 'next/link';
 import type { Sport } from '@/mocks';
 import Image from 'next/image';
+import api from '@/shared/api/axios-instance';
 
 
 export function CreateTeamPage() {
@@ -31,7 +32,7 @@ export function CreateTeamPage() {
     useEffect(() => {
         async function fetchSports() {
             try {
-                const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/sports/`);
+                const response = await api.get(`/api/v1/sports/`);
                 setAllSports(response.data);
             } catch (error) {
                 console.error("Failed to fetch sports:", error);
@@ -84,7 +85,7 @@ export function CreateTeamPage() {
         setIsLoading(true);
 
         try {
-            const response = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/teams`, {
+            const response = await api.post(`/api/v1/teams`, {
                 name: teamName,
                 game: allSports.find(s => s.id === discipline)?.name,
                 city: city,
@@ -170,3 +171,5 @@ export function CreateTeamPage() {
         </div>
     )
 }
+
+    

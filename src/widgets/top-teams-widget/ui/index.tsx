@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import { useMemo, useState, useEffect } from 'react';
@@ -12,6 +11,7 @@ import { Skeleton } from '@/shared/ui/skeleton';
 import type { Team } from '@/mocks';
 import axios from 'axios';
 import { useToast } from '@/shared/hooks/use-toast';
+import api from '@/shared/api/axios-instance';
 
 const TopTeamRow = ({ team, rank }: { team: Team, rank: number }) => (
     <Link href={`/teams/${team.id}`} className="flex items-center gap-3 p-2 rounded-md hover:bg-muted/50 group transition-colors">
@@ -117,7 +117,7 @@ export function TopTeamsWidget() {
         const fetchTeams = async () => {
             setIsLoading(true);
             try {
-                const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/teams`);
+                const response = await api.get(`/api/v1/teams`);
                 setAllTeams(response.data);
             } catch (error) {
                  toast({
@@ -172,3 +172,5 @@ export function TopTeamsWidget() {
         </div>
     )
 }
+
+    
