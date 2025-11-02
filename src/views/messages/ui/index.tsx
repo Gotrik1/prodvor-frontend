@@ -165,11 +165,9 @@ export function MessagesPage() {
 
         return mockChats.filter(chat => {
             if (chat.type === 'personal') {
-                // Personal chats are always visible to everyone in this mock
                 return true;
             }
             if (chat.type === 'team') {
-                // Show team chat only if the current user is a member of that team
                 const team = teams.find(t => t.id === chat.entityId);
                 if (!team) return false;
                 
