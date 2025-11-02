@@ -28,8 +28,8 @@ export function TransfersTab({ team }: { team: Team }) {
             if (!team.id) return;
             setIsLoadingApps(true);
             try {
-                // Explicitly setting headers to an empty object for GET request
-                const response = await api.get(`/api/v1/teams/${team.id}/applications`, { headers: {} });
+                // Correct way to make a GET request without a body
+                const response = await api.get(`/api/v1/teams/${team.id}/applications`, { data: undefined });
                 setApplications(response.data);
             } catch (error) {
                 console.error("Failed to fetch applications:", error);
