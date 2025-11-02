@@ -25,9 +25,13 @@ export function TransfersTab({ team }: { team: Team }) {
 
     useEffect(() => {
         const fetchApplications = async () => {
-            if (!team.id) return;
+            if (!team?.id) {
+                setIsLoadingApps(false);
+                return;
+            };
             setIsLoadingApps(true);
             try {
+                // Explicitly setting headers to an empty object for GET request
                 const response = await api.get(`/api/v1/teams/${team.id}/applications`);
                 setApplications(response.data);
             } catch (err) {
