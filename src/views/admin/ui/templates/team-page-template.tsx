@@ -27,7 +27,7 @@ export function TeamPageTemplate({ team: initialTeam, isLoading: initialIsLoadin
     const updateTeamData = useCallback((teamData: Team) => {
         setTeam(teamData);
         if (teamData) {
-            const captain = users.find(u => u.id === String(teamData.captainId)); // Ensure ID matching is correct
+            const captain = users.find(u => u.id === String(teamData.captainId));
             const otherMembers = teamData.members || [];
             
             const fullRoster: User[] = [];
@@ -37,7 +37,7 @@ export function TeamPageTemplate({ team: initialTeam, isLoading: initialIsLoadin
             }
             
             otherMembers.forEach(member => {
-                if (!fullRoster.some(p => p.id === String(member.id))) {
+                if (!fullRoster.some(p => p.id === member.id)) {
                     fullRoster.push(member);
                 }
             });

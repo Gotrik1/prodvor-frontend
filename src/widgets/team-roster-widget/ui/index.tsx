@@ -27,7 +27,7 @@ const TeamRoster = ({ teamMembers, captainId }: { teamMembers: User[], captainId
                 <div className="flex flex-col items-center text-center gap-2 p-2 rounded-lg hover:bg-muted/50 transition-colors">
                     <Avatar className="h-16 w-16 group-hover:scale-105 transition-transform">
                         <AvatarImage src={member.avatarUrl} alt={member.nickname} />
-                        <AvatarFallback>{member.firstName.charAt(0)}</AvatarFallback>
+                        <AvatarFallback>{member.firstName?.charAt(0)}</AvatarFallback>
                     </Avatar>
                     <div>
                         <p className="font-semibold group-hover:text-primary transition-colors">{member.nickname}</p>
