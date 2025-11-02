@@ -1,4 +1,3 @@
-
 'use client';
 
 import React, { useEffect, useState, useCallback } from 'react';
@@ -19,25 +18,26 @@ import { TeamStatsWidget } from "@/widgets/team-stats-widget";
 import { Skeleton } from '@/shared/ui/skeleton';
 import api from '@/shared/api/axios-instance';
 
-export function TeamPageTemplate({ team: initialTeam, isLoading: initialIsLoading }: { team?: Team, isLoading?: boolean }) {
+export function TeamPageTemplate({ team: initialTeam, isLoading: initialIsLoading, onDataFetched }: { team?: Team, isLoading?: boolean, onDataFetched?: (data: { members: User[] }) => void }) {
     const [team, setTeam] = React.useState<Team | undefined>(initialTeam);
     const [playgrounds, setPlaygrounds] = React.useState<Playground[]>([]);
     const [teamMembers, setTeamMembers] = React.useState<User[]>([]);
     const [isLoading, setIsLoading] = React.useState(initialIsLoading || !initialTeam);
 
-    useEffect(() => {
-        setTeam(initialTeam);
-        setIsLoading(initialIsLoading ?? !initialTeam);
-
-        if (initialTeam) {
-            const captain = users.find(u => u.id === initialTeam.captainId);
-            const otherMembers = initialTeam.members || [];
+    const updateTeamData = useCallback((teamData: Team) => {
+        setTeam(teamData);
+        if (teamData) {
+            const captain = users.find(u => u.id === teamData.captainId);
+            const otherMembers = teamData.members || [];
             
             const fullRoster: User[] = [];
+            
+            // Add captain to the roster
             if (captain) {
                 fullRoster.push(captain);
             }
             
+            // Add other members, ensuring no duplicates
             otherMembers.forEach(member => {
                 if (!fullRoster.some(p => p.id === member.id)) {
                     fullRoster.push(member);
@@ -45,10 +45,19 @@ export function TeamPageTemplate({ team: initialTeam, isLoading: initialIsLoadin
             });
 
             setTeamMembers(fullRoster);
+            if(onDataFetched) {
+                onDataFetched({ members: fullRoster });
+            }
         }
+    }, [onDataFetched]);
 
-    }, [initialTeam, initialIsLoading]);
-    
+    useEffect(() => {
+        if (initialTeam) {
+            updateTeamData(initialTeam);
+        }
+        setIsLoading(initialIsLoading ?? !initialTeam);
+    }, [initialTeam, initialIsLoading, updateTeamData]);
+
     React.useEffect(() => {
         if (!team) return;
     
