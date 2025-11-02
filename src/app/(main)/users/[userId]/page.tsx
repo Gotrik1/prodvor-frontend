@@ -15,7 +15,7 @@ import { PlayerPageTemplate } from '@/views/admin/ui/templates/player-page-templ
 
 
 async function getUser(userId: string): Promise<User | undefined> {
-    const API_BASE_URL = 'https://8080-firebase-prodvor-backend-1761850902881.cluster-ombtxv25tbd6yrjpp3lukp6zhc.cloudworkstations.dev/';
+    const API_BASE_URL = 'https://8080-firebase-prodvor-backend-1761850902881.cluster-ombtxv25tbd6yrjpp3lukp6zhc.cloudworkstations.dev';
     if (!API_BASE_URL) {
         console.error("[ Server ] API_BASE_URL is not defined.");
         return undefined;
