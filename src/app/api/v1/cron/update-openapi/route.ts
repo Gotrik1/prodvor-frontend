@@ -5,7 +5,7 @@ import path from 'path';
 
 // This is the endpoint on your backend that serves the openapi.json
 // IMPORTANT: This must be the internal or direct URL to the backend service.
-const BACKEND_OPENAPI_URL = 'https://8080-firebase-prodvor-backend-1761850902881.cluster-ombtxv25tbd6yrjpp3lukp6zhc.cloudworkstations.dev/openapi.json';
+const BACKEND_OPENAPI_URL = process.env.BACKEND_OPENAPI_URL;
 
 // The path where the openapi.json file will be stored in this frontend project.
 const LOCAL_OPENAPI_PATH = path.join(process.cwd(), 'src/docs/openapi.json');
@@ -20,6 +20,14 @@ const LOCAL_OPENAPI_PATH = path.join(process.cwd(), 'src/docs/openapi.json');
  */
 export async function GET() {
   console.log('Cron job triggered: Fetching latest openapi.json...');
+
+  if (!BACKEND_OPENAPI_URL) {
+      console.error('Error: BACKEND_OPENAPI_URL is not defined in .env file.');
+      return new NextResponse(
+        JSON.stringify({ message: 'Server configuration error: Backend URL is not set.' }), 
+        { status: 500 }
+      );
+  }
 
   try {
     const response = await fetch(BACKEND_OPENAPI_URL);
