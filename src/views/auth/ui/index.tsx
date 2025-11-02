@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import React, { useEffect } from 'react';
@@ -147,6 +148,7 @@ export function AuthPage() {
         
         console.log("Response from /login:", response.data);
 
+        // Handle both camelCase and snake_case for flexibility
         const accessToken = response.data.accessToken || response.data.access_token;
         const refreshToken = response.data.refreshToken || response.data.refresh_token;
         const user = response.data.user as User;
@@ -300,5 +302,7 @@ export function AuthPage() {
     </div>
   );
 }
+
+    
 
     
