@@ -31,9 +31,9 @@ export const TeamHeader = ({ team, homePlaygrounds }: TeamHeaderProps) => {
         });
     }
 
-    const isCaptain = String(currentUser?.id) === String(team.captainId);
-    const isMember = team.members?.some(member => String(member.id) === String(currentUser?.id)) || isCaptain;
-    const memberCount = (team.members?.length || 0) + (team.captainId ? 1 : 0);
+    const isCaptain = currentUser ? String(currentUser.id) === String(team.captainId) : false;
+    const isMember = isCaptain || (team.members?.some(member => String(member.id) === String(currentUser?.id)) ?? false);
+    const memberCount = (team.members?.length || 0);
 
     return (
         <header className="flex flex-col md:flex-row items-center gap-6 p-4 rounded-lg bg-card border">
