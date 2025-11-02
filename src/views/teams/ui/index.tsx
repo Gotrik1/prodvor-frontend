@@ -11,30 +11,28 @@ import Link from "next/link";
 import { useUserStore } from "@/widgets/dashboard-header/model/user-store";
 import { Separator } from "@/shared/ui/separator";
 import { useToast } from '@/shared/hooks/use-toast';
-import axios from 'axios';
 import { Skeleton } from '@/shared/ui/skeleton';
 import { TopTeamsWidget } from '@/widgets/top-teams-widget';
+import api from '@/shared/api/axios-instance';
 
 const TeamCard = ({ team, isMember }: { team: Team, isMember: boolean }) => {
     const { user: currentUser } = useUserStore();
     const { toast } = useToast();
 
-    const handleApply = () => {
+    const handleApply = async () => {
         if (!currentUser) return;
         
-        const userHasDiscipline = currentUser.sports.some(sport => sport.id === team.sportId);
-        
-        if (userHasDiscipline) {
-            // In a real app, this would be a POST request to `/api/v1/teams/${team.id}/apply`
+        try {
+            await api.post(`/api/v1/teams/${team.id}/apply`);
             toast({
                 title: "Заявка отправлена!",
                 description: `Ваша заявка в команду "${team.name}" отправлена на рассмотрение капитану.`,
             });
-        } else {
+        } catch (error: any) {
              toast({
                 variant: 'destructive',
-                title: 'Неверная дисциплина',
-                description: `Вы не можете подать заявку, так как не занимаетесь дисциплиной "${team.game}".`,
+                title: 'Ошибка',
+                description: error.response?.data?.message || 'Не удалось отправить заявку.',
             });
         }
     };
@@ -78,7 +76,6 @@ const TeamCard = ({ team, isMember }: { team: Team, isMember: boolean }) => {
     )
 };
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 export function TeamsPage() {
     const { user: currentUser } = useUserStore();
@@ -88,13 +85,8 @@ export function TeamsPage() {
     useEffect(() => {
         async function fetchTeams() {
             try {
-                if (!API_BASE_URL) return;
-                const response = await fetch(`${API_BASE_URL}/api/v1/teams`);
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                const data = await response.json();
-                setAllTeams(data);
+                const response = await api.get('/api/v1/teams');
+                setAllTeams(response.data);
             } catch (error) {
                 console.error("Failed to fetch teams:", error);
             }
@@ -109,9 +101,8 @@ export function TeamsPage() {
         if (!currentUser) {
             return { myTeams: [], otherTeams: allTeams };
         }
-        // В реальном приложении логика определения "моих" команд может быть на бэкенде
-        const myTeams = allTeams.filter(team => team.captainId === currentUser.id);
-        const otherTeams = allTeams.filter(team => team.captainId !== currentUser.id);
+        const myTeams = allTeams.filter(team => team.captainId === currentUser.id || team.members.includes(currentUser.id));
+        const otherTeams = allTeams.filter(team => !myTeams.some(mt => mt.id === team.id));
         return { myTeams, otherTeams };
     }, [currentUser, allTeams]);
 

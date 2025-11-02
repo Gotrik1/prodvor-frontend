@@ -13,14 +13,11 @@ interface UserState {
   setUser: (user: User | null) => void;
   setTokens: (accessToken: string, refreshToken: string | null) => void;
   signOut: () => void;
-  fetchUser: () => Promise<User | null>;
 }
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
-
-export const useUserStore = create<UserState>()(
+const useUserStore = create<UserState>()(
   persist(
-    (set, get) => ({
+    (set) => ({
       user: null,
       accessToken: null,
       isHydrated: false,
@@ -39,22 +36,6 @@ export const useUserStore = create<UserState>()(
         }
         delete axios.defaults.headers.common['Authorization'];
       },
-      fetchUser: async () => {
-          const token = get().accessToken;
-          if (!token) return null;
-          try {
-              console.log("Fetching user with token...");
-              const response = await axios.get(`${API_BASE_URL}/api/v1/users/me`);
-              console.log("Response from /users/me:", response.data);
-              const user = response.data as User;
-              set({ user });
-              return user;
-          } catch (error) {
-              console.error("Failed to fetch user:", error);
-              get().signOut(); // Sign out if token is invalid
-              return null;
-          }
-      }
     }),
     {
       name: 'prodvor-user-storage',
@@ -71,3 +52,20 @@ export const useUserStore = create<UserState>()(
     }
   )
 );
+
+// Subscribe to user changes to update axios default header
+useUserStore.subscribe(
+  (state, prevState) => {
+    if (state.accessToken !== prevState.accessToken) {
+      if (state.accessToken) {
+        axios.defaults.headers.common['Authorization'] = `Bearer ${state.accessToken}`;
+      } else {
+        delete axios.defaults.headers.common['Authorization'];
+      }
+    }
+  }
+);
+
+
+export { useUserStore };
+

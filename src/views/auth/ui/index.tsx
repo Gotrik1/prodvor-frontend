@@ -5,7 +5,6 @@ import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import axios from 'axios';
 import { useRouter } from 'next/navigation';
 
 import { Button } from "@/shared/ui/button";
@@ -28,6 +27,7 @@ import { useToast } from '@/shared/hooks/use-toast';
 import { useUserStore } from '@/widgets/dashboard-header/model/user-store';
 import { Loader2 } from 'lucide-react';
 import type { User } from '@/mocks';
+import api from '@/shared/api/axios-instance';
 
 // ------------------ Схемы валидации ------------------
 const loginFormSchema = z.object({
@@ -130,7 +130,6 @@ export function AuthPage() {
   const { setTokens, setUser } = useUserStore();
   const router = useRouter();
   const [isLoading, setIsLoading] = React.useState(false);
-  const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
   const form = useForm<z.infer<typeof loginFormSchema>>({
     resolver: zodResolver(loginFormSchema),
@@ -143,7 +142,7 @@ export function AuthPage() {
   const onSubmit = async (values: z.infer<typeof loginFormSchema>) => {
     setIsLoading(true);
     try {
-        const response = await axios.post(`${API_BASE_URL}/api/v1/auth/login`, values);
+        const response = await api.post(`/api/v1/auth/login`, values);
         
         const accessToken = response.data.accessToken;
         const refreshToken = response.data.refreshToken;
@@ -160,29 +159,13 @@ export function AuthPage() {
         } else {
              throw new Error("Ответ сервера не содержит токен или данные пользователя.");
         }
-    } catch (error) {
+    } catch (error: any) {
         console.error("Login failed:", error);
-        if (axios.isAxiosError(error)) {
-            if (error.response?.status === 401) {
-                 toast({
-                    variant: "destructive",
-                    title: "Ошибка входа",
-                    description: "Неверный email или пароль. Попробуйте снова.",
-                });
-            } else if (error.message === 'Network Error' || error.response?.status === 0) {
-                 toast({
-                    variant: "destructive",
-                    title: "Сервер недоступен",
-                    description: "Не удалось подключиться к бэкенду. Пожалуйста, убедитесь, что сервер запущен.",
-                });
-            }
-        } else {
-            toast({
-                variant: "destructive",
-                title: "Ошибка входа",
-                description: "Произошла непредвиденная ошибка.",
-            });
-        }
+        toast({
+            variant: "destructive",
+            title: "Ошибка входа",
+            description: error.response?.data?.message || "Неверный email или пароль. Попробуйте снова.",
+        });
     } finally {
         setIsLoading(false);
     }
