@@ -1,4 +1,3 @@
-
 'use client';
 
 import { Button } from "@/shared/ui/button";
@@ -11,38 +10,39 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/shared/ui/form";
-import { sendTournamentAnnouncementAction } from "@/app/actions";
 import { useToast } from "@/shared/hooks/use-toast";
+import { useTournamentCrmContext } from "@/views/tournaments/manage/lib/TournamentCrmContext";
 
-const SendAnnouncementInputSchema = z.object({
-  entityId: z.string().describe("The ID of the team."),
+const SendTeamAnnouncementInputSchema = z.object({
+  teamId: z.string().describe("The ID of the team."),
   subject: z.string().min(5, { message: "Тема должна содержать не менее 5 символов." }).describe('The subject of the announcement.'),
   message: z.string().min(10, { message: "Сообщение или промпт должно содержать не менее 10 символов." }).describe('The content of the announcement message or a prompt for the AI.'),
   isAiEnhanced: z.boolean().default(false).describe("Whether to use AI to enhance the message.")
 });
 
-export type SendAnnouncementInput = z.infer<typeof SendAnnouncementInputSchema>;
-
 export function AnnouncementsTab() {
   const { toast } = useToast();
-  const form = useForm<z.infer<typeof SendAnnouncementInputSchema>>({
-    resolver: zodResolver(SendAnnouncementInputSchema),
+  // In a real app, we would get the team from a context or props
+  const teamId = "team1"; 
+
+  const form = useForm<z.infer<typeof SendTeamAnnouncementInputSchema>>({
+    resolver: zodResolver(SendTeamAnnouncementInputSchema),
     defaultValues: {
-      entityId: '', // This would be populated with the team ID in a real scenario
+      teamId: teamId,
       subject: "",
       message: "",
       isAiEnhanced: false,
     },
   });
 
-  async function onSubmit(values: z.infer<typeof SendAnnouncementInputSchema>) {
-    // We mock the action here, as the original action was for tournaments
+  async function onSubmit(values: z.infer<typeof SendTeamAnnouncementInputSchema>) {
+    // We mock the action here
     console.log("Sending team announcement:", values);
     toast({
         title: "Успех!",
         description: "Ваш анонс был успешно отправлен всем подписчикам команды.",
     });
-    form.reset({ entityId: values.entityId, subject: '', message: '', isAiEnhanced: values.isAiEnhanced });
+    form.reset({ teamId: values.teamId, subject: '', message: '', isAiEnhanced: values.isAiEnhanced });
   }
 
   const isAiMode = form.watch("isAiEnhanced");

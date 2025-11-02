@@ -10,11 +10,16 @@ const api = axios.create({
 
 api.interceptors.request.use(
   (config) => {
-    // This function now correctly runs on the client side before each request.
     const token = useUserStore.getState().accessToken;
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
+    
+    // For GET requests, ensure Content-Type is not set
+    if (config.method === 'get') {
+        config.headers['Content-Type'] = undefined;
+    }
+
     return config;
   },
   (error) => {
@@ -28,7 +33,6 @@ api.interceptors.response.use(
   },
   async (error) => {
     const originalRequest = error.config;
-    // This interceptor will now only run on the client side, preventing server-side errors.
     if (typeof window !== 'undefined') {
         const refreshToken = localStorage.getItem('refreshToken');
 
@@ -36,7 +40,6 @@ api.interceptors.response.use(
             originalRequest._retry = true;
 
             try {
-                // Use a separate axios instance for refresh to avoid circular interceptor calls
                 const refreshResponse = await axios.post(`https://8080-firebase-prodvor-backend-1761850902881.cluster-ombtxv25tbd6yrjpp3lukp6zhc.cloudworkstations.dev/api/v1/auth/refresh`, {}, {
                     headers: {
                         Authorization: `Bearer ${refreshToken}`
@@ -60,6 +63,5 @@ api.interceptors.response.use(
     return Promise.reject(error);
   }
 );
-
 
 export default api;
