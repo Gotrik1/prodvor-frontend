@@ -1,7 +1,9 @@
+
 'use client';
 
 import React from 'react';
 import type { User, Playground, Team } from "@/mocks";
+import { users } from '@/mocks'; // Import all users
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
 import { History, Grid3x3 } from "lucide-react";
@@ -28,10 +30,22 @@ export function TeamPageTemplate({ team: initialTeam, isLoading: initialIsLoadin
         setIsLoading(initialIsLoading ?? !initialTeam);
         
         if (initialTeam) {
-            // Backend returns full member objects in the 'members' array.
-            // This now correctly uses the provided data.
-            const members = initialTeam.members || [];
-            setTeamMembers(members);
+            // Correctly combine captain and members
+            const captain = users.find(u => u.id === initialTeam.captainId);
+            const otherMembers = initialTeam.members || [];
+            
+            const fullRoster: User[] = [];
+            if (captain) {
+                fullRoster.push(captain);
+            }
+            // Add other members, ensuring no duplicates if captain is also in members array
+            otherMembers.forEach(member => {
+                if (!fullRoster.some(p => p.id === member.id)) {
+                    fullRoster.push(member);
+                }
+            });
+
+            setTeamMembers(fullRoster);
         }
 
     }, [initialTeam, initialIsLoading]);
