@@ -6,6 +6,9 @@ import { useUserStore } from '@/widgets/dashboard-header/model/user-store';
 
 const api = axios.create({
   baseURL: 'https://8080-firebase-prodvor-backend-1761850902881.cluster-ombtxv25tbd6yrjpp3lukp6zhc.cloudworkstations.dev',
+  headers: {
+    'Content-Type': 'application/json', // Ensure all requests default to JSON
+  },
 });
 
 api.interceptors.request.use(

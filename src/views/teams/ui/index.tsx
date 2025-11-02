@@ -30,7 +30,6 @@ const TeamCard = ({ team, isMember }: { team: Team, isMember: boolean }) => {
         }
         
         try {
-            // Отправляем пустой JSON-объект, чтобы тело запроса было валидным
             await api.post(`/api/v1/teams/${team.id}/apply`, {});
             toast({
                 title: "Заявка отправлена!",
@@ -118,8 +117,8 @@ export function TeamsPage() {
         return { myTeams, otherTeams };
     }, [currentUser, allTeams]);
     
-    // Logic to only show "My Teams" if the user is a player/captain and has teams.
-    const showMyTeams = currentUser && ['Игрок', 'Капитан'].includes(currentUser.role) && myTeams.length > 0;
+    // Logic to only show "My Teams" if the user has teams.
+    const showMyTeams = currentUser && myTeams.length > 0;
 
     return (
         <div className="p-4 md:p-6 lg:p-8 space-y-8">
