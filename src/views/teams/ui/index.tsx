@@ -30,6 +30,7 @@ const TeamCard = ({ team, isMember }: { team: Team, isMember: boolean }) => {
         }
         
         try {
+            // Отправляем пустой JSON-объект, чтобы тело запроса было валидным
             await api.post(`/api/v1/teams/${team.id}/apply`, {});
             toast({
                 title: "Заявка отправлена!",
@@ -116,6 +117,9 @@ export function TeamsPage() {
         const otherTeams = allTeams.filter(team => !myTeams.some(mt => mt.id === team.id));
         return { myTeams, otherTeams };
     }, [currentUser, allTeams]);
+    
+    // Logic to only show "My Teams" if the user is a player/captain and has teams.
+    const showMyTeams = currentUser && ['Игрок', 'Капитан'].includes(currentUser.role) && myTeams.length > 0;
 
     return (
         <div className="p-4 md:p-6 lg:p-8 space-y-8">
@@ -134,12 +138,12 @@ export function TeamsPage() {
                 </div>
             </div>
             
-            {currentUser && <TopTeamsWidget />}
+            <TopTeamsWidget />
 
-            {myTeams.length > 0 && <Separator />}
+            {showMyTeams && <Separator />}
 
             <div className="container mx-auto px-4 md:px-0 space-y-8">
-                {myTeams.length > 0 && (
+                {showMyTeams && (
                     <section>
                         <h2 className="text-2xl font-bold mb-4">Мои команды</h2>
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
@@ -148,7 +152,7 @@ export function TeamsPage() {
                     </section>
                 )}
 
-                {myTeams.length > 0 && <Separator />}
+                {showMyTeams && <Separator />}
 
                 <div>
                     <h2 className="text-2xl font-bold mb-4">Все команды</h2>
