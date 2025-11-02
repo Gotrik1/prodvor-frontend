@@ -27,15 +27,20 @@ export function TeamPageTemplate({ team: initialTeam, isLoading: initialIsLoadin
     const updateTeamData = useCallback((teamData: Team) => {
         setTeam(teamData);
         if (teamData) {
+            // Find captain object from all users by captainId
             const captain = users.find(u => u.id === String(teamData.captainId));
+            
+            // Get other members from the members array
             const otherMembers = teamData.members || [];
             
             const fullRoster: User[] = [];
             
+            // Add captain to the roster if found
             if (captain) {
                 fullRoster.push(captain);
             }
             
+            // Add other members, ensuring no duplicates if captain is also in members array
             otherMembers.forEach(member => {
                 if (!fullRoster.some(p => p.id === member.id)) {
                     fullRoster.push(member);

@@ -32,7 +32,7 @@ const TeamRoster = ({ teamMembers, captainId }: { teamMembers: User[], captainId
                     <div>
                         <p className="font-semibold group-hover:text-primary transition-colors">{member.nickname}</p>
                         <p className="text-xs text-muted-foreground">{member.firstName} {member.lastName}</p>
-                        {member.id === captainId && (
+                        {String(member.id) === String(captainId) && (
                             <Badge variant="default" className="mt-1">
                                 <Crown className="h-3 w-3 mr-1" />
                                 Капитан
@@ -79,7 +79,7 @@ export const TeamRosterWidget = ({ team, teamMembers }: { team: Team, teamMember
                 )}
             </CardHeader>
             <CardContent>
-                <TeamRoster teamMembers={teamMembers} captainId={team.captainId} />
+                <TeamRoster teamMembers={teamMembers} captainId={String(team.captainId)} />
             </CardContent>
         </Card>
     );
