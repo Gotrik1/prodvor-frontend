@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import React, { useEffect } from 'react';
@@ -144,13 +143,10 @@ export function AuthPage() {
   const onSubmit = async (values: z.infer<typeof loginFormSchema>) => {
     setIsLoading(true);
     try {
-        const response = await axios.post(`${API_BASE_URL}/api/v1/login`, values);
+        const response = await axios.post(`${API_BASE_URL}/api/v1/auth/login`, values);
         
-        console.log("Response from /login:", response.data);
-
-        // Handle both camelCase and snake_case for flexibility
-        const accessToken = response.data.accessToken || response.data.access_token;
-        const refreshToken = response.data.refreshToken || response.data.refresh_token;
+        const accessToken = response.data.accessToken;
+        const refreshToken = response.data.refreshToken;
         const user = response.data.user as User;
 
         if (accessToken && user) {
@@ -173,7 +169,7 @@ export function AuthPage() {
                     title: "Ошибка входа",
                     description: "Неверный email или пароль. Попробуйте снова.",
                 });
-            } else if (error.message === 'Network Error') {
+            } else if (error.message === 'Network Error' || error.response?.status === 0) {
                  toast({
                     variant: "destructive",
                     title: "Сервер недоступен",
@@ -302,7 +298,3 @@ export function AuthPage() {
     </div>
   );
 }
-
-    
-
-    
