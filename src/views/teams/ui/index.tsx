@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
@@ -79,65 +78,38 @@ const TeamCard = ({ team, isMember }: { team: Team, isMember: boolean }) => {
     )
 };
 
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+
 export function TeamsPage() {
     const { user: currentUser } = useUserStore();
-    const { toast } = useToast();
     const [allTeams, setAllTeams] = useState<Team[]>([]);
     const [isLoading, setIsLoading] = useState(true);
-    const [connectionStatus, setConnectionStatus] = useState<'unknown' | 'success' | 'failed'>('unknown');
-    
+
     useEffect(() => {
         async function fetchTeams() {
-            setIsLoading(true);
             try {
-                const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/teams`);
-                setAllTeams(response.data);
-                setConnectionStatus('success');
+                if (!API_BASE_URL) return;
+                const response = await fetch(`${API_BASE_URL}/api/v1/teams`);
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const data = await response.json();
+                setAllTeams(data);
             } catch (error) {
                 console.error("Failed to fetch teams:", error);
-                setConnectionStatus('failed');
-                toast({
-                    variant: "destructive",
-                    title: "Ошибка загрузки команд",
-                    description: "Не удалось получить данные с бэкенда. Проверьте эндпоинт и CORS.",
-                });
-            } finally {
+            }
+            finally {
                 setIsLoading(false);
             }
         }
         fetchTeams();
-    }, [toast]);
+    }, []);
 
-    const handlePing = async () => {
-        const backendUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
-        
-        toast({
-            title: "Проверка связи...",
-            description: `Отправляю запрос к ${backendUrl}`,
-        });
-
-        try {
-            await axios.get(backendUrl + '/api/v1/teams');
-            setConnectionStatus('success');
-            toast({
-                title: "Связь с бэкендом установлена!",
-                description: "Сервер успешно ответил на запрос.",
-            });
-        } catch (error) {
-            setConnectionStatus('failed');
-            console.error("Ping failed with error:", error);
-            toast({
-                variant: "destructive",
-                title: "Ошибка соединения",
-                description: "Не удалось подключиться к бэкенду. Проверьте CORS на сервере.",
-            });
-        }
-    };
-    
     const { myTeams, otherTeams } = useMemo(() => {
-        if (!currentUser || !allTeams) {
-            return { myTeams: [], otherTeams: allTeams || [] };
+        if (!currentUser) {
+            return { myTeams: [], otherTeams: allTeams };
         }
+        // В реальном приложении логика определения "моих" команд может быть на бэкенде
         const myTeams = allTeams.filter(team => team.captainId === currentUser.id);
         const otherTeams = allTeams.filter(team => team.captainId !== currentUser.id);
         return { myTeams, otherTeams };
@@ -151,11 +123,6 @@ export function TeamsPage() {
                     <p className="text-muted-foreground mt-1">Найдите команду, присоединитесь к ней или создайте свою.</p>
                 </div>
                  <div className="flex items-center gap-2">
-                    <Button variant="outline" onClick={handlePing}>
-                        {connectionStatus === 'success' && <Wifi className="mr-2 h-4 w-4 text-green-500" />}
-                        {connectionStatus === 'failed' && <WifiOff className="mr-2 h-4 w-4 text-red-500" />}
-                        Проверить связь
-                    </Button>
                     <Button asChild size="lg">
                         <Link href="/teams/create">
                             <PlusCircle className="mr-2 h-5 w-5" />
