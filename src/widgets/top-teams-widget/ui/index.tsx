@@ -9,14 +9,12 @@ import { Button } from '@/shared/ui/button';
 import { useUserStore } from '@/widgets/dashboard-header/model/user-store';
 import { Skeleton } from '@/shared/ui/skeleton';
 import type { Team } from '@/mocks';
-import axios from 'axios';
 import { useToast } from '@/shared/hooks/use-toast';
 import api from '@/shared/api/axios-instance';
 
 const TopTeamRow = ({ team, rank }: { team: Team, rank: number }) => (
     <Link href={`/teams/${team.id}`} className="flex items-center gap-3 p-2 rounded-md hover:bg-muted/50 group transition-colors">
         <span className="font-bold text-lg w-6 text-center text-muted-foreground">{rank}</span>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={team.logoUrl || 'https://placehold.co/32x32.png'} alt={team.name} width={32} height={32} className="rounded-md object-cover aspect-square" />
         <div className="flex-grow">
             <p className="font-semibold group-hover:text-primary transition-colors">{team.name}</p>
@@ -133,7 +131,8 @@ export function TopTeamsWidget() {
     }, [toast]);
     
     const { topCityTeams, topCountryTeams } = useMemo(() => {
-        const sortedTeams = [...allTeams].sort((a, b) => b.rank - a.rank);
+        if (!allTeams) return { topCityTeams: [], topCountryTeams: [] };
+        const sortedTeams = [...allTeams].sort((a, b) => (b.rank || 0) - (a.rank || 0));
         
         const topCountryTeams = sortedTeams;
         const topCityTeams = currentUser?.city ? sortedTeams.filter(team => team.city === currentUser.city) : [];
@@ -172,5 +171,3 @@ export function TopTeamsWidget() {
         </div>
     )
 }
-
-    

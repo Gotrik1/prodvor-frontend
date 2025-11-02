@@ -55,7 +55,7 @@ const TeamCard = ({ team, isMember }: { team: Team, isMember: boolean }) => {
             </div>
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
                 <BarChart className="h-4 w-4" />
-                <span>{team.rank} ELO</span>
+                <span>{team.rank || 1200} ELO</span>
             </div>
             <div>
                 <Badge variant="secondary">Ищет игроков</Badge>
@@ -98,6 +98,9 @@ export function TeamsPage() {
     }, []);
 
     const { myTeams, otherTeams } = useMemo(() => {
+        if (!allTeams || allTeams.length === 0) {
+            return { myTeams: [], otherTeams: [] };
+        }
         if (!currentUser) {
             return { myTeams: [], otherTeams: allTeams };
         }
@@ -130,7 +133,7 @@ export function TeamsPage() {
             <Separator />
 
             <div className="container mx-auto px-4 md:px-0 space-y-8">
-                {myTeams.length > 0 && (
+                {currentUser && myTeams.length > 0 && (
                     <section>
                         <h2 className="text-2xl font-bold mb-4">Мои команды</h2>
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
@@ -139,7 +142,7 @@ export function TeamsPage() {
                     </section>
                 )}
 
-                {myTeams.length > 0 && <Separator />}
+                {currentUser && myTeams.length > 0 && <Separator />}
 
                 <div>
                     <h2 className="text-2xl font-bold mb-4">Все команды</h2>
@@ -153,7 +156,7 @@ export function TeamsPage() {
                                 </Card>
                             ))}
                         </div>
-                    ) : allTeams.length > 0 ? (
+                    ) : otherTeams.length > 0 ? (
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                             {otherTeams.map(team => (
                                 <TeamCard key={team.id} team={team} isMember={false} />
