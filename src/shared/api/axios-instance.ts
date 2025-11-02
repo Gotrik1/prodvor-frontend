@@ -1,4 +1,3 @@
-
 'use client';
 
 import axios from 'axios';
@@ -17,7 +16,7 @@ api.interceptors.request.use(
     
     // For GET requests, ensure Content-Type is not set
     if (config.method === 'get') {
-        config.headers['Content-Type'] = undefined;
+        delete config.headers['Content-Type'];
     }
 
     return config;
