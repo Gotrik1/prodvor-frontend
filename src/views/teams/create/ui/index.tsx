@@ -171,5 +171,3 @@ export function CreateTeamPage() {
         </div>
     )
 }
-
-    

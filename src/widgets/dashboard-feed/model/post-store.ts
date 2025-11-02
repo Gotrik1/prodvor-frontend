@@ -3,6 +3,7 @@
 
 import { create } from 'zustand';
 import { produce } from 'immer';
+import api from '@/shared/api/axios-instance';
 import type { Post, Comment } from '@/mocks/posts';
 import type { User } from '@/mocks';
 
@@ -20,10 +21,8 @@ export const usePostStore = create<PostState>()(
       posts: [], // Изначально массив пуст
       fetchPosts: async () => {
         try {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/posts`);
-            if (!response.ok) throw new Error('Failed to fetch posts');
-            const data = await response.json();
-            set({ posts: data });
+            const response = await api.get('/api/v1/posts');
+            set({ posts: response.data });
         } catch (error) {
             console.error(error);
         }

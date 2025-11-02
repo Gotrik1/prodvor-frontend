@@ -16,7 +16,6 @@ import { AnnouncementsTab } from "../../tournaments/manage/ui/tabs/announcements
 import { SettingsTab } from "./settings-tab";
 import { BrandingTab } from "./tabs/branding-tab";
 import { useUserStore } from '@/widgets/dashboard-header/model/user-store';
-import axios from 'axios';
 import { Skeleton } from '@/shared/ui/skeleton';
 import api from '@/shared/api/axios-instance';
 
@@ -138,5 +137,3 @@ export function TeamManagementPage({ teamId }: { teamId: string }) {
         </div>
     );
 }
-
-    

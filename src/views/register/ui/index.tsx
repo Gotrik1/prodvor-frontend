@@ -50,7 +50,7 @@ export function RegisterPage() {
   const { toast } = useToast();
   const router = useRouter();
   const [isLoading, setIsLoading] = React.useState(false);
-  const { setUser } = useUserStore();
+  const { setUser, setTokens } = useUserStore();
 
   const form = useForm<z.infer<typeof registerFormSchema>>({
     resolver: zodResolver(registerFormSchema),
@@ -77,22 +77,22 @@ export function RegisterPage() {
         firstName: values.firstName,
         lastName: values.lastName,
         age: new Date().getFullYear() - values.birthDate.getFullYear(),
+        gender: "мужской" // Mocking gender for now
       });
 
       if (response.status === 201) {
-        setUser(response.data as User);
         toast({
-            title: "Аккаунт создан!",
+            title: "Аккаунт создан! Теперь войдите.",
             description: `Добро пожаловать, ${response.data.nickname}!`,
         });
-        router.push(`/users/${response.data.id}`);
+        router.push(`/auth`);
       }
-    } catch (error) {
+    } catch (error: any) {
       if (axios.isAxiosError(error) && error.response) {
             toast({
                 variant: "destructive",
                 title: "Ошибка регистрации",
-                description: error.response.data?.error || "Произошла неизвестная ошибка.",
+                description: error.response.data?.message || "Произошла неизвестная ошибка.",
             });
         } else {
             toast({
@@ -198,5 +198,3 @@ export function RegisterPage() {
     </div>
   );
 }
-
-    

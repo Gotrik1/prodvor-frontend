@@ -4,21 +4,15 @@
 import axios from 'axios';
 import { useUserStore } from '@/widgets/dashboard-header/model/user-store';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
-
 const api = axios.create({
-  baseURL: API_BASE_URL,
+  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
 });
 
-// Request interceptor to add the auth token
 api.interceptors.request.use(
   (config) => {
-    // Only add the token if the request is not for login or register
-    if (!config.url?.endsWith('/login') && !config.url?.endsWith('/register')) {
-        const token = useUserStore.getState().accessToken;
-        if (token) {
-          config.headers.Authorization = `Bearer ${token}`;
-        }
+    const token = useUserStore.getState().accessToken;
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
   },
@@ -27,7 +21,6 @@ api.interceptors.request.use(
   }
 );
 
-// Response interceptor to handle token refresh
 api.interceptors.response.use(
   (response) => {
     return response;
@@ -35,38 +28,36 @@ api.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
     // Ensure this runs only on the client side
-    const refreshToken = typeof window !== 'undefined' ? localStorage.getItem('refreshToken') : null;
+    if (typeof window !== 'undefined') {
+        const refreshToken = localStorage.getItem('refreshToken');
 
-    // If the error is 401 and we haven't tried to refresh yet
-    if (error.response?.status === 401 && refreshToken && !originalRequest._retry) {
-      originalRequest._retry = true;
+        if (error.response?.status === 401 && refreshToken && !originalRequest._retry) {
+            originalRequest._retry = true;
 
-      try {
-        const refreshResponse = await axios.post(`${API_BASE_URL}/api/v1/auth/refresh`, {}, {
-            headers: {
-                Authorization: `Bearer ${refreshToken}`
+            try {
+                const refreshResponse = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/auth/refresh`, {}, {
+                    headers: {
+                        Authorization: `Bearer ${refreshToken}`
+                    }
+                });
+                
+                const { accessToken: newAccessToken } = refreshResponse.data;
+                useUserStore.getState().setTokens(newAccessToken, refreshToken);
+                
+                originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+                return api(originalRequest);
+
+            } catch (refreshError) {
+                console.error("Token refresh failed:", refreshError);
+                useUserStore.getState().signOut();
+                window.location.href = '/auth';
+                return Promise.reject(refreshError);
             }
-        });
-        
-        const { accessToken: newAccessToken } = refreshResponse.data;
-        useUserStore.getState().setTokens(newAccessToken, refreshToken);
-        
-        originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
-        return api(originalRequest);
-
-      } catch (refreshError) {
-        console.error("Token refresh failed:", refreshError);
-        useUserStore.getState().signOut();
-        // Redirect to login page
-        if (typeof window !== 'undefined') {
-            window.location.href = '/auth';
         }
-        return Promise.reject(refreshError);
-      }
     }
-
     return Promise.reject(error);
   }
 );
+
 
 export default api;

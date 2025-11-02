@@ -37,7 +37,6 @@ import { MultiSelect, type OptionType } from '@/shared/ui/multi-select';
 import React, { useState, useCallback, useEffect } from 'react';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/shared/ui/dialog';
 import Image from 'next/image';
-import axios from 'axios';
 import type { User, Sport } from '@/mocks';
 import api from '@/shared/api/axios-instance';
 
@@ -427,5 +426,3 @@ export function ProfileTab() {
         </div>
     );
 }
-
-    

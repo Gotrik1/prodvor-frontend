@@ -127,9 +127,16 @@ const SocialButton = ({ className, children }: { className?: string, children: R
 
 export function AuthPage() {
   const { toast } = useToast();
-  const { setTokens, setUser } = useUserStore();
+  const { setTokens, setUser, isHydrated } = useUserStore();
   const router = useRouter();
   const [isLoading, setIsLoading] = React.useState(false);
+
+  useEffect(() => {
+    // This effect ensures we don't try to redirect on the server.
+    if (isHydrated && useUserStore.getState().user) {
+        router.push('/dashboard');
+    }
+  }, [isHydrated, router]);
 
   const form = useForm<z.infer<typeof loginFormSchema>>({
     resolver: zodResolver(loginFormSchema),
@@ -281,5 +288,3 @@ export function AuthPage() {
     </div>
   );
 }
-
-    

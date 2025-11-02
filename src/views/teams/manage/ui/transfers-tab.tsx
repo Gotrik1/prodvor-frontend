@@ -151,5 +151,3 @@ export function TransfersTab({ team }: { team: Team }) {
         </div>
     );
 }
-
-    

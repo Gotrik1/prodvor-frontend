@@ -5,7 +5,7 @@ import { useState, useEffect, useMemo } from 'react';
 import { type Team } from '@/mocks';
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/shared/ui/card";
-import { PlusCircle, UserCheck, Users, BarChart, Wifi, WifiOff } from "lucide-react";
+import { PlusCircle, UserCheck, Users, BarChart } from "lucide-react";
 import { Badge } from "@/shared/ui/badge";
 import Link from "next/link";
 import { useUserStore } from "@/widgets/dashboard-header/model/user-store";
@@ -172,5 +172,3 @@ export function TeamsPage() {
         </div>
     );
 }
-
-    
