@@ -36,13 +36,14 @@ import {
 import React, { useState, useEffect } from 'react';
 import { GlobalSearch } from './global-search';
 import { Logo } from '@/views/auth/ui';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { Skeleton } from '@/shared/ui/skeleton';
 
 export function DashboardHeader() {
-  const { user, isHydrated } = useUserStore();
+  const { user, signOut, isHydrated } = useUserStore();
   const [open, setOpen] = React.useState(false);
   const pathname = usePathname();
+  const router = useRouter();
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
@@ -60,6 +61,11 @@ export function DashboardHeader() {
     document.addEventListener('keydown', down);
     return () => document.removeEventListener('keydown', down);
   }, []);
+  
+  const handleSignOut = () => {
+    signOut();
+    router.push('/auth');
+  };
 
   const isAdminPage = pathname?.startsWith('/admin');
 
@@ -195,12 +201,19 @@ export function DashboardHeader() {
               </Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem asChild>
-              <Link href="/auth">
-                <LogOut className="mr-2 h-4 w-4" />
-                <span>{user ? 'Выход' : 'Вход'}</span>
-              </Link>
-            </DropdownMenuItem>
+            {user ? (
+                 <DropdownMenuItem onClick={handleSignOut}>
+                    <LogOut className="mr-2 h-4 w-4" />
+                    <span>Выход</span>
+                </DropdownMenuItem>
+            ) : (
+                <DropdownMenuItem asChild>
+                  <Link href="/auth">
+                    <LogOut className="mr-2 h-4 w-4" />
+                    <span>Вход</span>
+                  </Link>
+                </DropdownMenuItem>
+            )}
           </DropdownMenuContent>
         </DropdownMenu>
     );
