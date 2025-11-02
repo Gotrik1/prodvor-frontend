@@ -31,6 +31,8 @@ const useUserStore = create<UserState>()(
         set({ user: null, accessToken: null });
         if (typeof window !== 'undefined') {
           localStorage.removeItem('refreshToken');
+          // Force remove the entire persisted state to ensure logout
+          localStorage.removeItem('prodvor-user-storage');
         }
       },
     }),
