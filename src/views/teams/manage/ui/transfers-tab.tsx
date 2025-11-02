@@ -24,6 +24,8 @@ export function TransfersTab({ team }: { team: Team }) {
 
     useEffect(() => {
         const fetchApplications = async () => {
+            if (!team.id) return;
+            setIsLoadingApps(true);
             try {
                 const response = await api.get(`/api/v1/teams/${team.id}/applications`);
                 setApplications(response.data);
