@@ -36,28 +36,18 @@ export function TeamPageTemplate({ team: initialTeam, isLoading: initialIsLoadin
 
         const fetchData = async () => {
             try {
-                // Parallel fetch for all required data
-                const [usersRes, playgroundsRes] = await Promise.all([
-                    api.get(`/api/v1/users`),
-                    api.get(`/api/v1/playgrounds`),
-                ]);
-
-                const allUsers: User[] = usersRes.data;
-                const allPlaygrounds: Playground[] = playgroundsRes.data;
-                
-                // CRITICAL FIX: Combine captainId and members array to get all member IDs
-                const memberIds = new Set(team.members || []);
-                if (team.captainId) {
-                  memberIds.add(team.captainId);
-                }
-
-                // Filter users to get full member objects
-                const members = allUsers.filter(u => memberIds.has(u.id));
+                // The backend response for a single team already includes the full member objects.
+                const members = team.members || [];
                 setTeamMembers(members);
 
-                // Filter playgrounds
-                const homePgs = team.homePlaygroundIds ? allPlaygrounds.filter(p => team.homePlaygroundIds?.includes(p.id)) : [];
-                setPlaygrounds(homePgs);
+                // We still need to fetch playgrounds separately if their IDs are present.
+                let homePgs: Playground[] = [];
+                if (team.homePlaygroundIds && team.homePlaygroundIds.length > 0) {
+                    const playgroundsRes = await api.get(`/api/v1/playgrounds`);
+                    const allPlaygrounds: Playground[] = playgroundsRes.data;
+                    homePgs = allPlaygrounds.filter(p => team.homePlaygroundIds?.includes(p.id));
+                    setPlaygrounds(homePgs);
+                }
 
                 if (onDataFetched) {
                     onDataFetched({ team, members, playgrounds: homePgs });
@@ -70,6 +60,7 @@ export function TeamPageTemplate({ team: initialTeam, isLoading: initialIsLoadin
 
         fetchData();
     }, [team, onDataFetched]);
+
 
     if (isLoading) {
         return (
