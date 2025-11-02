@@ -3,7 +3,8 @@
 
 Этот документ содержит пошаговую инструкцию по замене моковых данных в Next.js-приложении на реальные API-вызовы к вашему запущенному Python (Flask) бэкенду.
 
-**Важно:** Адрес вашего бэкенда теперь хранится в файле `.env` в переменной `NEXT_PUBLIC_API_BASE_URL`. Все запросы должны использовать эту переменную.
+**Важно:** Адрес вашего бэкенда теперь хранится в файле `.env` в переменной `NEXT_PUBLIC_API_BASE_URL`. Все запросы должны использовать эту переменную. Убедитесь, что в файле `.env` прописана строка:
+`NEXT_PUBLIC_API_BASE_URL=http://127.0.0.1:8080` (или другой адрес, если ваш сервер запущен на другом порту).
 
 ---
 
@@ -169,7 +170,7 @@ export default async function TeamPage({ params }: { params: { teamId: string } 
   
   return (
     <MainLayout>
-        <TeamPublicPage team={team} />
+        <TeamPublicPage teamId={teamId} />
     </MainLayout>
   );
 }
