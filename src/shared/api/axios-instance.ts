@@ -14,7 +14,7 @@ api.interceptors.request.use(
       config.headers.Authorization = `Bearer ${token}`;
     }
     
-    // For GET requests, ensure Content-Type is not set
+    // For GET requests, ensure Content-Type is not set to avoid 422 error
     if (config.method === 'get') {
         delete config.headers['Content-Type'];
     }
