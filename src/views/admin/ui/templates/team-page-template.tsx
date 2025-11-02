@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useEffect, useState, useCallback } from 'react';
@@ -27,12 +28,13 @@ export function TeamPageTemplate({ team: initialTeam, isLoading: initialIsLoadin
     const updateTeamData = useCallback((teamData: Team) => {
         setTeam(teamData);
         if (teamData) {
+            // Find captain from the global users list
             const captain = users.find(u => u.id === teamData.captainId);
             const otherMembers = teamData.members || [];
             
             const fullRoster: User[] = [];
             
-            // Add captain to the roster
+            // Add captain to the roster if found
             if (captain) {
                 fullRoster.push(captain);
             }
