@@ -164,13 +164,19 @@ export function AuthPage() {
         }
     } catch (error) {
         console.error("Login failed:", error);
-        toast({
-            variant: "destructive",
-            title: "Ошибка входа",
-            description: axios.isAxiosError(error) && error.response?.status !== 401
-                ? "Сетевая ошибка. Проверьте соединение или CORS на бэкенде."
-                : "Неверный email или пароль. Попробуйте снова.",
-        });
+        if (axios.isAxiosError(error) && error.message === 'Network Error') {
+            toast({
+                variant: "destructive",
+                title: "Сервер недоступен",
+                description: "Не удалось подключиться к бэкенду. Пожалуйста, убедитесь, что сервер запущен.",
+            });
+        } else {
+            toast({
+                variant: "destructive",
+                title: "Ошибка входа",
+                description: "Неверный email или пароль. Попробуйте снова.",
+            });
+        }
     } finally {
         setIsLoading(false);
     }
