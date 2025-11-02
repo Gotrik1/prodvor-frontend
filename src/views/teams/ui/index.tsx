@@ -16,7 +16,31 @@ import axios from 'axios';
 import { Skeleton } from '@/shared/ui/skeleton';
 import { TopTeamsWidget } from '@/widgets/top-teams-widget';
 
-const TeamCard = ({ team, isMember }: { team: Team, isMember: boolean }) => (
+const TeamCard = ({ team, isMember }: { team: Team, isMember: boolean }) => {
+    const { user: currentUser } = useUserStore();
+    const { toast } = useToast();
+
+    const handleApply = () => {
+        if (!currentUser) return;
+        
+        const userHasDiscipline = currentUser.sports.some(sport => sport.name === team.game);
+        
+        if (userHasDiscipline) {
+            // In a real app, this would be a POST request to `/api/v1/teams/${team.id}/apply`
+            toast({
+                title: "Заявка отправлена!",
+                description: `Ваша заявка в команду "${team.name}" отправлена на рассмотрение капитану.`,
+            });
+        } else {
+             toast({
+                variant: 'destructive',
+                title: 'Неверная дисциплина',
+                description: `Вы не можете подать заявку, так как не занимаетесь дисциплиной "${team.game}".`,
+            });
+        }
+    };
+
+    return (
     <Card key={team.id} className="flex flex-col">
         <CardHeader>
             <Link href={`/teams/${team.id}`} className="flex items-center gap-4 group">
@@ -47,13 +71,14 @@ const TeamCard = ({ team, isMember }: { team: Team, isMember: boolean }) => (
                      <Link href={`/teams/${team.id}`}>Перейти в профиль</Link>
                 </Button>
             ) : (
-                <Button className="w-full">
+                <Button className="w-full" onClick={handleApply}>
                     <UserCheck className="mr-2 h-4 w-4" /> Подать заявку
                 </Button>
             )}
         </CardFooter>
     </Card>
-);
+    )
+};
 
 export function TeamsPage() {
     const { user: currentUser } = useUserStore();

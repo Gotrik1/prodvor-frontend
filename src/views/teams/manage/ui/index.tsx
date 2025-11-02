@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import React, { useEffect, useState } from 'react';
@@ -110,7 +111,7 @@ export function TeamManagementPage({ teamId }: { teamId: string }) {
                 </Button>
             </div>
             <Tabs defaultValue="roster" className="w-full">
-                <TabsList className="grid w-full grid-cols-5">
+                <TabsList className="grid w-full grid-cols-2 md:grid-cols-5">
                     <TabsTrigger value="roster">Состав и Тактика</TabsTrigger>
                     <TabsTrigger value="branding">Брендинг</TabsTrigger>
                     <TabsTrigger value="transfers">Трансферы</TabsTrigger>
