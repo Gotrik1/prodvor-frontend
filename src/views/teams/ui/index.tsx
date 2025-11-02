@@ -30,8 +30,6 @@ const TeamCard = ({ team, isMember }: { team: Team, isMember: boolean }) => {
         }
         
         try {
-            // Отправляем запрос без тела и с явным указанием Content-Type: undefined,
-            // чтобы axios не добавлял его автоматически.
             await api.post(`/api/v1/teams/${team.id}/apply`, null, {
                 headers: {
                     'Content-Type': undefined
