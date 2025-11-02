@@ -34,6 +34,7 @@ api.interceptors.response.use(
   },
   async (error) => {
     const originalRequest = error.config;
+    // Ensure this runs only on the client side
     const refreshToken = typeof window !== 'undefined' ? localStorage.getItem('refreshToken') : null;
 
     // If the error is 401 and we haven't tried to refresh yet
