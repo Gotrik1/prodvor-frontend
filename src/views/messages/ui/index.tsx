@@ -163,20 +163,17 @@ export function MessagesPage() {
     const availableChats = useMemo(() => {
         if (!currentUser) return [];
 
-        const isPlayerOrCoach = currentUser.role === 'Игрок' || currentUser.role === 'Тренер' || currentUser.role === 'Капитан';
-
         return mockChats.filter(chat => {
             if (chat.type === 'personal') {
-                return true; // Personal chats are always visible
+                // Personal chats are always visible to everyone in this mock
+                return true;
             }
             if (chat.type === 'team') {
-                if (!isPlayerOrCoach) return false;
-                
+                // Show team chat only if the current user is a member of that team
                 const team = teams.find(t => t.id === chat.entityId);
                 if (!team) return false;
-
-                // Check if user is a member or the coach of the team
-                return team.members.includes(currentUser.id);
+                
+                return team.members.includes(currentUser.id) || team.captainId === currentUser.id;
             }
             return false;
         });
