@@ -101,7 +101,7 @@ export function TeamsPage() {
         if (!currentUser) {
             return { myTeams: [], otherTeams: allTeams };
         }
-        const myTeams = allTeams.filter(team => team.captainId === currentUser.id || team.members.includes(currentUser.id));
+        const myTeams = allTeams.filter(team => team.captainId === currentUser.id || (team.members && team.members.includes(currentUser.id)));
         const otherTeams = allTeams.filter(team => !myTeams.some(mt => mt.id === team.id));
         return { myTeams, otherTeams };
     }, [currentUser, allTeams]);
