@@ -30,11 +30,7 @@ const TeamCard = ({ team, isMember }: { team: Team, isMember: boolean }) => {
         }
         
         try {
-            await api.post(`/api/v1/teams/${team.id}/apply`, null, {
-                headers: {
-                    'Content-Type': undefined
-                }
-            });
+            await api.post(`/api/v1/teams/${team.id}/apply`, {});
             toast({
                 title: "Заявка отправлена!",
                 description: `Ваша заявка в команду "${team.name}" отправлена на рассмотрение капитану.`,
@@ -115,7 +111,7 @@ export function TeamsPage() {
         if (!currentUser) {
             return { myTeams: [], otherTeams: allTeams };
         }
-        // Убедимся, что team.members существует перед вызовом .includes()
+        
         const myTeams = allTeams.filter(team => team.captainId === currentUser.id || (team.members && team.members.includes(currentUser.id)));
         const otherTeams = allTeams.filter(team => !myTeams.some(mt => mt.id === team.id));
         return { myTeams, otherTeams };
@@ -140,10 +136,10 @@ export function TeamsPage() {
             
             {currentUser && <TopTeamsWidget />}
 
-            <Separator />
+            {myTeams.length > 0 && <Separator />}
 
             <div className="container mx-auto px-4 md:px-0 space-y-8">
-                {currentUser && myTeams.length > 0 && (
+                {myTeams.length > 0 && (
                     <section>
                         <h2 className="text-2xl font-bold mb-4">Мои команды</h2>
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
@@ -152,7 +148,7 @@ export function TeamsPage() {
                     </section>
                 )}
 
-                {currentUser && myTeams.length > 0 && <Separator />}
+                {myTeams.length > 0 && <Separator />}
 
                 <div>
                     <h2 className="text-2xl font-bold mb-4">Все команды</h2>
