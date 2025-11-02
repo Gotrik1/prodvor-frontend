@@ -1,4 +1,3 @@
-
 'use client';
 
 import React from 'react';
@@ -27,6 +26,10 @@ export function TeamPageTemplate({ team: initialTeam, isLoading: initialIsLoadin
     React.useEffect(() => {
         setTeam(initialTeam);
         setIsLoading(initialIsLoading ?? !initialTeam);
+
+        if (initialTeam?.members) {
+            setTeamMembers(initialTeam.members);
+        }
     }, [initialTeam, initialIsLoading]);
 
     React.useEffect(() => {
@@ -35,26 +38,25 @@ export function TeamPageTemplate({ team: initialTeam, isLoading: initialIsLoadin
         }
 
         const fetchData = async () => {
-            try {
-                // The backend response for a single team already includes the full member objects.
-                const members = team.members || [];
-                setTeamMembers(members);
+            // The backend response for a single team already includes the full member objects.
+            const members = team.members || [];
+            setTeamMembers(members);
 
-                // We still need to fetch playgrounds separately if their IDs are present.
-                let homePgs: Playground[] = [];
-                if (team.homePlaygroundIds && team.homePlaygroundIds.length > 0) {
+            // We still need to fetch playgrounds separately if their IDs are present.
+            let homePgs: Playground[] = [];
+            if (team.homePlaygroundIds && team.homePlaygroundIds.length > 0) {
+                try {
                     const playgroundsRes = await api.get(`/api/v1/playgrounds`);
                     const allPlaygrounds: Playground[] = playgroundsRes.data;
                     homePgs = allPlaygrounds.filter(p => team.homePlaygroundIds?.includes(p.id));
                     setPlaygrounds(homePgs);
+                } catch (error) {
+                    console.error("Failed to fetch playgrounds:", error);
                 }
+            }
 
-                if (onDataFetched) {
-                    onDataFetched({ team, members, playgrounds: homePgs });
-                }
-
-            } catch (error) {
-                console.error("Failed to fetch related team data:", error);
+            if (onDataFetched) {
+                onDataFetched({ team, members, playgrounds: homePgs });
             }
         };
 
