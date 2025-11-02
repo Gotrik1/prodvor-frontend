@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useEffect, useState, useCallback } from 'react';
@@ -28,7 +29,7 @@ export function TeamPageTemplate({ team: initialTeam, isLoading: initialIsLoadin
         setTeam(teamData);
         if (teamData) {
             // Find captain object from all users by captainId
-            const captain = users.find(u => u.id === String(teamData.captainId));
+            const captain = users.find(u => String(u.id) === String(teamData.captainId));
             
             // Get other members from the members array
             const otherMembers = teamData.members || [];

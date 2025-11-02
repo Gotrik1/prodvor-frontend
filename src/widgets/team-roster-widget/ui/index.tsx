@@ -1,3 +1,4 @@
+
 'use client';
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
@@ -52,8 +53,8 @@ export const TeamRosterWidget = ({ team, teamMembers }: { team: Team, teamMember
     const { user: currentUser } = useUserStore();
 
     const isMember = useMemo(() => {
-        if (!currentUser) return false;
-        return teamMembers.some(member => member.id === currentUser.id);
+        if (!currentUser || !teamMembers) return false;
+        return teamMembers.some(member => String(member.id) === String(currentUser.id));
     }, [teamMembers, currentUser]);
 
     const handleApply = () => {

@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import Image from 'next/image';
@@ -32,9 +31,9 @@ export const TeamHeader = ({ team, homePlaygrounds }: TeamHeaderProps) => {
         });
     }
 
-    const isCaptain = currentUser?.id === team.captainId;
-    const isMember = team.members?.includes(currentUser?.id || '') || isCaptain;
-
+    const isCaptain = String(currentUser?.id) === String(team.captainId);
+    const isMember = team.members?.some(member => String(member.id) === String(currentUser?.id)) || isCaptain;
+    const memberCount = (team.members?.length || 0) + (team.captainId ? 1 : 0);
 
     return (
         <header className="flex flex-col md:flex-row items-center gap-6 p-4 rounded-lg bg-card border">
@@ -45,7 +44,7 @@ export const TeamHeader = ({ team, homePlaygrounds }: TeamHeaderProps) => {
                 <p className="text-muted-foreground text-lg">Дисциплина: {team.game}</p>
                  <div className="mt-2 flex items-center justify-center md:justify-start gap-4 text-sm text-muted-foreground">
                     <div className="flex items-center gap-1">
-                        <Users className="h-4 w-4" /> {team.members?.length || 1} игроков
+                        <Users className="h-4 w-4" /> {memberCount} игроков
                     </div>
                      <div className="flex items-center gap-1">
                         <Rss className="h-4 w-4" /> {team.followers?.length || 0} подписчиков
