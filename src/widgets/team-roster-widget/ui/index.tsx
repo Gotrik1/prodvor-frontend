@@ -1,4 +1,3 @@
-
 'use client';
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
@@ -13,10 +12,10 @@ import { useMemo } from "react";
 import { useUserStore } from "@/widgets/dashboard-header/model/user-store";
 
 const TeamRoster = ({ teamMembers, captainId }: { teamMembers: User[], captainId: string }) => {
-    if (teamMembers.length === 0) {
+    if (!teamMembers || teamMembers.length === 0) {
         return (
             <div className="text-center text-muted-foreground py-8">
-                <p>В команде пока нет участников, кроме капитана.</p>
+                <p>В команде пока нет участников.</p>
             </div>
         )
     }
@@ -53,7 +52,8 @@ export const TeamRosterWidget = ({ team, teamMembers }: { team: Team, teamMember
     const { user: currentUser } = useUserStore();
 
     const isMember = useMemo(() => {
-        return teamMembers.some(member => member.id === currentUser?.id);
+        if (!currentUser) return false;
+        return teamMembers.some(member => member.id === currentUser.id);
     }, [teamMembers, currentUser]);
 
     const handleApply = () => {

@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import type { User, Playground, Post, Team } from "@/mocks";
+import type { User, Playground, Team } from "@/mocks";
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
 import { History, Grid3x3 } from "lucide-react";
@@ -26,10 +26,14 @@ export function TeamPageTemplate({ team: initialTeam, isLoading: initialIsLoadin
     React.useEffect(() => {
         setTeam(initialTeam);
         setIsLoading(initialIsLoading ?? !initialTeam);
-
-        if (initialTeam?.members) {
-            setTeamMembers(initialTeam.members);
+        
+        if (initialTeam) {
+            // Backend returns full member objects in the 'members' array.
+            // This now correctly uses the provided data.
+            const members = initialTeam.members || [];
+            setTeamMembers(members);
         }
+
     }, [initialTeam, initialIsLoading]);
 
     React.useEffect(() => {
@@ -38,11 +42,6 @@ export function TeamPageTemplate({ team: initialTeam, isLoading: initialIsLoadin
         }
 
         const fetchData = async () => {
-            // The backend response for a single team already includes the full member objects.
-            const members = team.members || [];
-            setTeamMembers(members);
-
-            // We still need to fetch playgrounds separately if their IDs are present.
             let homePgs: Playground[] = [];
             if (team.homePlaygroundIds && team.homePlaygroundIds.length > 0) {
                 try {
@@ -56,7 +55,7 @@ export function TeamPageTemplate({ team: initialTeam, isLoading: initialIsLoadin
             }
 
             if (onDataFetched) {
-                onDataFetched({ team, members, playgrounds: homePgs });
+                onDataFetched({ team, members: team.members || [], playgrounds: homePgs });
             }
         };
 
