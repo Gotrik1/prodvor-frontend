@@ -117,7 +117,7 @@ export function TeamsPage() {
         });
 
         try {
-            await axios.get(backendUrl + '/api/ping');
+            await axios.get(backendUrl + '/api/v1/teams');
             setConnectionStatus('success');
             toast({
                 title: "Связь с бэкендом установлена!",
