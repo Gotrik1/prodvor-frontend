@@ -1,3 +1,4 @@
+
 'use client';
 
 import React from 'react';
@@ -17,7 +18,7 @@ import { TeamStatsWidget } from "@/widgets/team-stats-widget";
 import { Skeleton } from '@/shared/ui/skeleton';
 import api from '@/shared/api/axios-instance';
 
-export function TeamPageTemplate({ team: initialTeam, isLoading: initialIsLoading }: { team?: Team, isLoading?: boolean }) {
+export function TeamPageTemplate({ team: initialTeam, isLoading: initialIsLoading, onDataFetched }: { team?: Team, isLoading?: boolean, onDataFetched?: (data: { team: Team, members: User[], playgrounds: Playground[] }) => void }) {
     const [team, setTeam] = React.useState<Team | undefined>(initialTeam);
     const [playgrounds, setPlaygrounds] = React.useState<Playground[]>([]);
     const [teamMembers, setTeamMembers] = React.useState<User[]>([]);
@@ -35,6 +36,7 @@ export function TeamPageTemplate({ team: initialTeam, isLoading: initialIsLoadin
 
         const fetchData = async () => {
             try {
+                // Parallel fetch for all required data
                 const [usersRes, playgroundsRes] = await Promise.all([
                     api.get(`/api/v1/users`),
                     api.get(`/api/v1/playgrounds`),
@@ -42,14 +44,24 @@ export function TeamPageTemplate({ team: initialTeam, isLoading: initialIsLoadin
 
                 const allUsers: User[] = usersRes.data;
                 const allPlaygrounds: Playground[] = playgroundsRes.data;
-
+                
+                // CRITICAL FIX: Combine captainId and members array to get all member IDs
                 const memberIds = new Set(team.members || []);
-                memberIds.add(team.captainId);
+                if (team.captainId) {
+                  memberIds.add(team.captainId);
+                }
+
+                // Filter users to get full member objects
                 const members = allUsers.filter(u => memberIds.has(u.id));
                 setTeamMembers(members);
 
-                const homePgs = allPlaygrounds.filter(p => team.homePlaygroundIds?.includes(p.id));
+                // Filter playgrounds
+                const homePgs = team.homePlaygroundIds ? allPlaygrounds.filter(p => team.homePlaygroundIds?.includes(p.id)) : [];
                 setPlaygrounds(homePgs);
+
+                if (onDataFetched) {
+                    onDataFetched({ team, members, playgrounds: homePgs });
+                }
 
             } catch (error) {
                 console.error("Failed to fetch related team data:", error);
@@ -57,7 +69,7 @@ export function TeamPageTemplate({ team: initialTeam, isLoading: initialIsLoadin
         };
 
         fetchData();
-    }, [team]);
+    }, [team, onDataFetched]);
 
     if (isLoading) {
         return (

@@ -2,7 +2,7 @@
 'use client';
 
 import React, { useEffect, useState, useCallback } from 'react';
-import type { Team } from "@/mocks";
+import type { Team, User, Playground } from "@/mocks";
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
 import Link from "next/link";
@@ -11,22 +11,26 @@ import { TacticalBoard } from "./tactical-board";
 import { RosterManagement } from "./roster-management";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 import { TransfersTab } from "./tabs/transfers-tab";
-import { users } from "@/mocks";
 import { AnnouncementsTab } from "./tabs/announcements-tab";
 import { SettingsTab } from "./tabs/settings-tab";
 import { BrandingTab } from "./tabs/branding-tab";
 import { useUserStore } from '@/widgets/dashboard-header/model/user-store';
 import { Skeleton } from '@/shared/ui/skeleton';
 import api from '@/shared/api/axios-instance';
+import { TeamPageTemplate } from '@/views/admin/ui/templates/team-page-template';
 
 export function TeamManagementPage({ teamId }: { teamId: string }) {
     const { user: currentUser } = useUserStore();
     const [team, setTeam] = useState<Team | undefined>(undefined);
     const [loading, setLoading] = useState(true);
     const [isCaptain, setIsCaptain] = useState(false);
+    const [teamMembers, setTeamMembers] = useState<User[]>([]);
 
     const fetchTeamData = useCallback(async () => {
-        if (!teamId) return;
+        if (!teamId) {
+            setLoading(false);
+            return;
+        };
         setLoading(true);
         try {
             const response = await api.get(`/api/v1/teams/${teamId}`);
@@ -46,6 +50,10 @@ export function TeamManagementPage({ teamId }: { teamId: string }) {
     useEffect(() => {
         fetchTeamData();
     }, [fetchTeamData]);
+
+    const handleDataFetched = useCallback((data: { members: User[] }) => {
+        setTeamMembers(data.members);
+    }, []);
 
 
     if (loading) {
@@ -93,10 +101,9 @@ export function TeamManagementPage({ teamId }: { teamId: string }) {
         );
     }
 
-    const teamMembers = users.filter(u => team.members.includes(u.id) || u.id === team.captainId);
-
     return (
         <div className="p-4 md:p-6 lg:p-8">
+            <TeamPageTemplate team={team} onDataFetched={handleDataFetched} />
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
                  <div>
                     <h1 className="text-3xl font-bold font-headline">Управление командой</h1>
