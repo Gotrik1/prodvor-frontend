@@ -30,7 +30,13 @@ const TeamCard = ({ team, isMember }: { team: Team, isMember: boolean }) => {
         }
         
         try {
-            await api.post(`/api/v1/teams/${team.id}/apply`);
+            // Отправляем запрос без тела и с явным указанием Content-Type: undefined,
+            // чтобы axios не добавлял его автоматически.
+            await api.post(`/api/v1/teams/${team.id}/apply`, null, {
+                headers: {
+                    'Content-Type': undefined
+                }
+            });
             toast({
                 title: "Заявка отправлена!",
                 description: `Ваша заявка в команду "${team.name}" отправлена на рассмотрение капитану.`,
@@ -111,6 +117,7 @@ export function TeamsPage() {
         if (!currentUser) {
             return { myTeams: [], otherTeams: allTeams };
         }
+        // Убедимся, что team.members существует перед вызовом .includes()
         const myTeams = allTeams.filter(team => team.captainId === currentUser.id || (team.members && team.members.includes(currentUser.id)));
         const otherTeams = allTeams.filter(team => !myTeams.some(mt => mt.id === team.id));
         return { myTeams, otherTeams };

@@ -450,9 +450,14 @@
           }
         ],
         "requestBody": {
+          "description": "Тело запроса не используется, но может присутствовать, чтобы избежать ошибок валидации.",
+          "required": false,
           "content": {
             "application/json": {
-              "schema": {}
+              "schema": {
+                "type": "object",
+                "nullable": true
+              }
             }
           }
         },
