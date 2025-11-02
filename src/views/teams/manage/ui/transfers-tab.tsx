@@ -21,13 +21,15 @@ export function TransfersTab({ team }: { team: Team }) {
     const [isLoadingApps, setIsLoadingApps] = useState(true);
     const [searchQuery, setSearchQuery] = useState('');
     const [searchResults, setSearchResults] = useState<User[]>([]);
+    const [sentApplications, setSentApplications] = useState<string[]>([]);
 
     useEffect(() => {
         const fetchApplications = async () => {
             if (!team.id) return;
             setIsLoadingApps(true);
             try {
-                const response = await api.get(`/api/v1/teams/${team.id}/applications`);
+                // Explicitly setting headers to an empty object for GET request
+                const response = await api.get(`/api/v1/teams/${team.id}/applications`, { headers: {} });
                 setApplications(response.data);
             } catch (error) {
                 console.error("Failed to fetch applications:", error);
