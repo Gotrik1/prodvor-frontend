@@ -23,7 +23,7 @@ const TeamCard = ({ team, isMember }: { team: Team, isMember: boolean }) => {
     const handleApply = () => {
         if (!currentUser) return;
         
-        const userHasDiscipline = currentUser.sports.some(sport => sport.name === team.game);
+        const userHasDiscipline = currentUser.sports.some(sport => sport.id === team.sportId);
         
         if (userHasDiscipline) {
             // In a real app, this would be a POST request to `/api/v1/teams/${team.id}/apply`
@@ -44,7 +44,6 @@ const TeamCard = ({ team, isMember }: { team: Team, isMember: boolean }) => {
     <Card key={team.id} className="flex flex-col">
         <CardHeader>
             <Link href={`/teams/${team.id}`} className="flex items-center gap-4 group">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={team.logoUrl || 'https://placehold.co/512x512.png'} alt={`${team.name} logo`} width={64} height={64} className="rounded-lg border object-cover aspect-square" />
                 <div>
                     <CardTitle className="text-xl group-hover:text-primary transition-colors">{team.name}</CardTitle>
