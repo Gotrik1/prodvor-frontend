@@ -100,11 +100,11 @@ export function TeamsPage() {
                 const teamsResponse = await api.get('/api/v1/teams');
                 setAllTeams(teamsResponse.data);
 
-                // If a user is logged in, fetch their specific teams
+                // If a user is logged in, fetch their specific teams to know which ones are "my" teams
                 if (currentUser) {
                     const userDetailsResponse = await api.get(`/api/v1/users/me?include_teams=true`);
                     const userWithTeams: User & { teams?: Team[] } = userDetailsResponse.data;
-                    const userTeamIds = new Set(userWithTeams.teams?.map(t => t.id) || []);
+                    const userTeamIds = new Set(userWithTeams.teams?.map(t => String(t.id)) || []);
                     setMyTeamIds(userTeamIds);
                 }
             } catch (error) {
@@ -130,8 +130,8 @@ export function TeamsPage() {
             return { myTeams: [], otherTeams: allTeams };
         }
         
-        const myTeamsList = allTeams.filter(team => myTeamIds.has(team.id));
-        const otherTeamsList = allTeams.filter(team => !myTeamIds.has(team.id));
+        const myTeamsList = allTeams.filter(team => myTeamIds.has(String(team.id)));
+        const otherTeamsList = allTeams.filter(team => !myTeamIds.has(String(team.id)));
         
         return { myTeams: myTeamsList, otherTeams: otherTeamsList };
     }, [currentUser, allTeams, myTeamIds]);
