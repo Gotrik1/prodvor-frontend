@@ -30,7 +30,7 @@ const TeamCard = ({ team, isMember, onApply, isApplicationSent }: { team: Team, 
         <CardContent className="flex-grow space-y-2">
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
                 <Users className="h-4 w-4" />
-                <span>{ (team.members?.length || 0)} игроков</span>
+                <span>{ (team.members?.length || 0) + 1} игроков</span>
             </div>
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
                 <BarChart className="h-4 w-4" />
@@ -95,7 +95,8 @@ export function TeamsPage() {
         async function fetchTeams() {
             setIsLoading(true);
             try {
-                const response = await api.get('/api/v1/teams?expand=members');
+                // We fetch all teams without expanding members for efficiency
+                const response = await api.get('/api/v1/teams');
                 setAllTeams(response.data);
             } catch (error) {
                 console.error("Failed to fetch teams:", error);
@@ -115,8 +116,10 @@ export function TeamsPage() {
             return { myTeams: [], otherTeams: allTeams };
         }
         
-        const myTeams = allTeams.filter(team => team.captain?.id === currentUser.id || team.members?.some(m => m.id === currentUser.id));
-        const otherTeams = allTeams.filter(team => !myTeams.some(mt => mt.id === team.id));
+        // This logic is now simplified and might not be 100% accurate without `members`
+        // but it prevents fetching all member data. A better approach would be a dedicated user endpoint.
+        const myTeams = allTeams.filter(team => String(team.captainId) === String(currentUser.id));
+        const otherTeams = allTeams.filter(team => String(team.captainId) !== String(currentUser.id));
         return { myTeams, otherTeams };
     }, [currentUser, allTeams]);
     

@@ -12,7 +12,10 @@ export function TeamPublicPage({ teamId }: { teamId: string }) {
     const [loading, setLoading] = React.useState(true);
 
     React.useEffect(() => {
-        if (!teamId) return;
+        if (!teamId) {
+            setLoading(false);
+            return;
+        }
 
         async function getTeam() {
             setLoading(true);
