@@ -29,7 +29,7 @@ export type TeamData = BaseTeamData | ExpandedTeamData;
 
 // 2. Создаем кастомный хук useTeam
 
-export function useTeam(teamId: number, expand: boolean = false) {
+export function useTeam(userId: number, expand: boolean = false) {
   const [team, setTeam] = useState<TeamData | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -39,8 +39,8 @@ export function useTeam(teamId: number, expand: boolean = false) {
     setError(null);
     try {
       const url = expand
-        ? `/api/v1/teams/${teamId}?expand=members`
-        : `/api/v1/teams/${teamId}`;
+        ? `/api/v1/users/${userId}?expand=members`
+        : `/api/v1/users/${userId}`;
       const response = await api.get(url);
       setTeam(response.data);
     } catch (err) {
@@ -49,13 +49,13 @@ export function useTeam(teamId: number, expand: boolean = false) {
     } finally {
       setIsLoading(false);
     }
-  }, [teamId, expand]);
+  }, [userId, expand]);
 
   useEffect(() => {
-    if (teamId) {
+    if (userId) {
       fetchTeam();
     }
-  }, [teamId, fetchTeam]);
+  }, [userId, fetchTeam]);
 
   // Вычисляем количество участников на основе доступных данных
   const count = team?.memberIds?.length ?? 0;
