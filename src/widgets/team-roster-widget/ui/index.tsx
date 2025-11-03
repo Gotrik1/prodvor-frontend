@@ -1,3 +1,4 @@
+
 'use client';
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
@@ -83,11 +84,13 @@ export const TeamRosterWidget = ({ team, teamMembers }: { team: Team, teamMember
         }
     };
 
+    const members = teamMembers || [];
+
     return (
         <Card>
             <CardHeader className="flex flex-col md:flex-row md:items-center md:justify-between">
                 <div>
-                    <CardTitle>Состав команды ({teamMembers.length})</CardTitle>
+                    <CardTitle>Состав команды ({members.length})</CardTitle>
                     <CardDescription>
                         Игроки, представляющие команду в текущем сезоне.
                     </CardDescription>
@@ -99,7 +102,7 @@ export const TeamRosterWidget = ({ team, teamMembers }: { team: Team, teamMember
                 )}
             </CardHeader>
             <CardContent>
-                <TeamRoster teamMembers={teamMembers} />
+                <TeamRoster teamMembers={members} />
             </CardContent>
         </Card>
     );
