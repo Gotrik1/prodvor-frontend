@@ -11,6 +11,7 @@ import { Button } from "@/shared/ui/button";
 import { useToast } from "@/shared/hooks/use-toast";
 import { useMemo } from "react";
 import { useUserStore } from "@/widgets/dashboard-header/model/user-store";
+import api from "@/shared/api/axios-instance";
 
 const TeamRoster = ({ teamMembers, captainId }: { teamMembers: User[], captainId: string }) => {
     if (!teamMembers || teamMembers.length === 0) {
@@ -53,15 +54,38 @@ export const TeamRosterWidget = ({ team, teamMembers }: { team: Team, teamMember
     const { user: currentUser } = useUserStore();
 
     const isMember = useMemo(() => {
-        if (!currentUser || !teamMembers) return false;
-        return teamMembers.some(member => String(member.id) === String(currentUser.id));
-    }, [teamMembers, currentUser]);
+        if (!currentUser || !team) return false;
+        // The captain is always a member
+        if (String(currentUser.id) === String(team.captainId)) return true;
+        // Check if the user is in the members array
+        if (!team.members) return false;
+        return team.members.some(member => String(member.id) === String(currentUser.id));
+    }, [team, currentUser]);
 
-    const handleApply = () => {
-        toast({
-            title: "Заявка отправлена!",
-            description: "Капитан команды рассмотрит вашу заявку в ближайшее время.",
-        });
+
+    const handleApply = async () => {
+         if (!currentUser) {
+             toast({
+                variant: 'destructive',
+                title: 'Ошибка',
+                description: 'Для подачи заявки необходимо авторизоваться.',
+            });
+            return;
+        }
+        
+        try {
+            await api.post(`/api/v1/teams/${team.id}/apply`);
+            toast({
+                title: "Заявка отправлена!",
+                description: `Ваша заявка в команду "${team.name}" отправлена на рассмотрение капитану.`,
+            });
+        } catch (error: any) {
+             toast({
+                variant: 'destructive',
+                title: 'Ошибка',
+                description: error.response?.data?.message || 'Не удалось отправить заявку.',
+            });
+        }
     };
 
     return (
