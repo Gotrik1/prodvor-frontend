@@ -70,7 +70,7 @@ export const TeamRosterWidget = ({ team, teamMembers }: { team: Team, teamMember
         }
         
         try {
-            await api.post(`/api/v1/teams/${team.id}/apply`);
+            await api.post(`/api/v1/teams/${team.id}/apply`, {});
             toast({
                 title: "Заявка отправлена!",
                 description: `Ваша заявка в команду "${team.name}" отправлена на рассмотрение капитану.`,

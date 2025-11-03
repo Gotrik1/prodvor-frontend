@@ -16,8 +16,8 @@ import { TopTeamsWidget } from '@/widgets/top-teams-widget';
 import api from '@/shared/api/axios-instance';
 
 const TeamCard = ({ team, isMember, onApply, isApplicationSent }: { team: Team, isMember: boolean, onApply: (teamId: string) => Promise<void>, isApplicationSent: boolean }) => {
-    // Correctly calculate member count: members array + 1 for the captain.
-    const memberCount = (team.members?.length || 0) + 1;
+    // The members array now includes the captain from the backend.
+    const memberCount = team.members?.length || 0;
     return (
     <Card key={team.id} className="flex flex-col">
         <CardHeader>

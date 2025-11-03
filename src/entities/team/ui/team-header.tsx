@@ -41,7 +41,8 @@ export const TeamHeader = ({ team, homePlaygrounds }: TeamHeaderProps) => {
         return team.members.some(member => String(member.id) === String(currentUser.id));
     }, [currentUser, team.members, isCaptain]);
 
-    const memberCount = (team.members?.length || 0) + 1;
+    // The members array now includes the captain.
+    const memberCount = team.members?.length || 0;
 
     return (
         <header className="flex flex-col md:flex-row items-center gap-6 p-4 rounded-lg bg-card border">
