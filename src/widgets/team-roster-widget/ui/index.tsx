@@ -13,7 +13,7 @@ import { useMemo } from "react";
 import { useUserStore } from "@/widgets/dashboard-header/model/user-store";
 import api from "@/shared/api/axios-instance";
 
-const TeamRoster = ({ teamMembers }: { teamMembers: User[] }) => {
+const TeamRoster = ({ teamMembers, captain }: { teamMembers: User[], captain?: User }) => {
     if (!teamMembers || teamMembers.length === 0) {
         return (
             <div className="text-center text-muted-foreground py-8">
@@ -24,26 +24,29 @@ const TeamRoster = ({ teamMembers }: { teamMembers: User[] }) => {
     
     return (
     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-        {teamMembers.map(member => (
-            <Link href={`/users/${member.id}`} key={member.id} className="group">
-                <div className="flex flex-col items-center text-center gap-2 p-2 rounded-lg hover:bg-muted/50 transition-colors">
-                    <Avatar className="h-16 w-16 group-hover:scale-105 transition-transform">
-                        <AvatarImage src={member.avatarUrl} alt={member.nickname} />
-                        <AvatarFallback>{member.firstName?.charAt(0)}</AvatarFallback>
-                    </Avatar>
-                    <div>
-                        <p className="font-semibold group-hover:text-primary transition-colors">{member.nickname}</p>
-                        <p className="text-xs text-muted-foreground">{member.firstName} {member.lastName}</p>
-                        {member.id === (member as any).captainId && (
-                            <Badge variant="default" className="mt-1">
-                                <Crown className="h-3 w-3 mr-1" />
-                                Капитан
-                            </Badge>
-                        )}
+        {teamMembers.map(member => {
+            const isCaptain = member.id === captain?.id;
+            return (
+                <Link href={`/users/${member.id}`} key={member.id} className="group">
+                    <div className="flex flex-col items-center text-center gap-2 p-2 rounded-lg hover:bg-muted/50 transition-colors">
+                        <Avatar className="h-16 w-16 group-hover:scale-105 transition-transform">
+                            <AvatarImage src={member.avatarUrl} alt={member.nickname} />
+                            <AvatarFallback>{member.firstName?.charAt(0)}</AvatarFallback>
+                        </Avatar>
+                        <div>
+                            <p className="font-semibold group-hover:text-primary transition-colors">{member.nickname}</p>
+                            <p className="text-xs text-muted-foreground">{member.firstName} {member.lastName}</p>
+                            {isCaptain && (
+                                <Badge variant="default" className="mt-1">
+                                    <Crown className="h-3 w-3 mr-1" />
+                                    Капитан
+                                </Badge>
+                            )}
+                        </div>
                     </div>
-                </div>
-            </Link>
-        ))}
+                </Link>
+            )
+        })}
     </div>
     )
 };
@@ -102,7 +105,7 @@ export const TeamRosterWidget = ({ team, teamMembers }: { team: Team, teamMember
                 )}
             </CardHeader>
             <CardContent>
-                <TeamRoster teamMembers={members} />
+                <TeamRoster teamMembers={members} captain={team.captain} />
             </CardContent>
         </Card>
     );

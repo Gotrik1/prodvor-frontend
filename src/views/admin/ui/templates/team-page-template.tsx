@@ -1,7 +1,8 @@
+
 'use client';
 
-import React from 'react';
-import type { Team, User, Playground } from "@/mocks";
+import React, { useEffect, useState, useCallback, useMemo } from 'react';
+import type { User, Playground, Team } from "@/mocks";
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
 import { History, Grid3x3 } from "lucide-react";
@@ -18,13 +19,49 @@ import { Skeleton } from '@/shared/ui/skeleton';
 import api from '@/shared/api/axios-instance';
 
 interface TeamPageTemplateProps {
-  team: Team;
+  team?: Team;
+  teamMembers?: User[];
+  isLoading?: boolean;
 }
 
 export function TeamPageTemplate({
   team,
+  teamMembers,
+  isLoading,
 }: TeamPageTemplateProps) {
+  const [playgrounds, setPlaygrounds] = React.useState<Playground[]>([]);
   
+  React.useEffect(() => {
+    if (!team) return;
+
+    const fetchPlaygrounds = async () => {
+      if (team.homePlaygroundIds && team.homePlaygroundIds.length > 0) {
+        try {
+          const playgroundsRes = await api.get(`/api/v1/playgrounds`);
+          const allPlaygrounds: Playground[] = playgroundsRes.data;
+          const homePgs = allPlaygrounds.filter((p) =>
+            team.homePlaygroundIds?.includes(p.id)
+          );
+          setPlaygrounds(homePgs);
+        } catch (error) {
+          console.error("Failed to fetch playgrounds:", error);
+        }
+      }
+    };
+
+    fetchPlaygrounds();
+  }, [team]);
+
+  if (isLoading) {
+    return (
+      <div className="p-4 md:p-6 lg:p-8 space-y-6">
+        <Skeleton className="h-32 w-full" />
+        <Skeleton className="h-10 w-full" />
+        <Skeleton className="h-64 w-full" />
+      </div>
+    );
+  }
+
   if (!team) {
     return (
       <div className="flex flex-col min-h-[80vh] items-center justify-center p-4">
@@ -43,12 +80,12 @@ export function TeamPageTemplate({
     );
   }
 
-  const allTeamMembers = team.members;
-  const homePlaygrounds = []; // This data is not available in the mock team object anymore
+  // The members array now includes the captain from the backend
+  const allTeamMembers = team.members || [];
 
   return (
     <div className="p-4 md:p-6 lg:p-8 space-y-6">
-      <TeamHeader team={team} homePlaygrounds={homePlaygrounds} />
+      <TeamHeader team={team} homePlaygrounds={playgrounds} />
 
       <Tabs defaultValue="overview" className="w-full">
         <TabsList className="grid w-full grid-cols-4 md:grid-cols-6">

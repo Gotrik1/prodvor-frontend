@@ -12,10 +12,8 @@ import { useToast } from '@/shared/hooks/use-toast';
 import { useRouter } from 'next/navigation';
 import { useUserStore } from '@/widgets/dashboard-header/model/user-store';
 import { GameplayEvent, awardProgressPoints } from '@/shared/lib/gamification';
-import axios from 'axios';
 import Link from 'next/link';
 import type { Sport } from '@/mocks';
-import Image from 'next/image';
 import api from '@/shared/api/axios-instance';
 
 
@@ -87,10 +85,8 @@ export function CreateTeamPage() {
         try {
             const response = await api.post(`/api/v1/teams`, {
                 name: teamName,
-                game: allSports.find(s => s.id === discipline)?.name,
+                sport_id: discipline, // Changed from sportId
                 city: city,
-                captainId: currentUser.id,
-                sportId: discipline
             });
 
             if (response.status === 201) {
