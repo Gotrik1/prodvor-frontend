@@ -54,7 +54,7 @@ export const TeamRosterWidget = ({ team, teamMembers }: { team: Team, teamMember
     const { user: currentUser } = useUserStore();
 
     const isMember = useMemo(() => {
-        if (!currentUser || !teamMembers) return false;
+        if (!currentUser || !teamMembers || teamMembers.length === 0) return false;
         return teamMembers.some(member => String(member.id) === String(currentUser.id));
     }, [teamMembers, currentUser]);
 
