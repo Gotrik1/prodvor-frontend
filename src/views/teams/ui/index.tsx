@@ -16,9 +16,7 @@ import { TopTeamsWidget } from '@/widgets/top-teams-widget';
 import api from '@/shared/api/axios-instance';
 
 const TeamCard = ({ team, isMember, onApply, isApplicationSent }: { team: Team, isMember: boolean, onApply: (teamId: string) => Promise<void>, isApplicationSent: boolean }) => {
-    // If members array doesn't exist, it means we only have the captain, so count is 1.
-    // Otherwise, the length of members already includes the captain.
-    const memberCount = team.members?.length || 1;
+    const memberCount = team.members?.length || 0;
     
     return (
     <Card key={team.id} className="flex flex-col">
@@ -124,7 +122,7 @@ export function TeamsPage() {
         return { myTeams, otherTeams };
     }, [currentUser, allTeams]);
     
-    const showMyTeams = currentUser && myTeams.length > 0;
+    const showMyTeams = !!currentUser;
 
     return (
         <div className="p-4 md:p-6 lg:p-8 space-y-8">
@@ -151,9 +149,18 @@ export function TeamsPage() {
                 {showMyTeams && (
                     <section>
                         <h2 className="text-2xl font-bold mb-4">Мои команды</h2>
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                            {myTeams.map(team => <TeamCard key={team.id} team={team} isMember={true} onApply={handleApply} isApplicationSent={false} />)}
-                        </div>
+                        {myTeams.length > 0 ? (
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                                {myTeams.map(team => <TeamCard key={team.id} team={team} isMember={true} onApply={handleApply} isApplicationSent={false} />)}
+                            </div>
+                        ) : (
+                             <Card className="text-center min-h-[200px] flex flex-col justify-center items-center">
+                                <CardHeader>
+                                    <CardTitle>Вы не состоите в командах</CardTitle>
+                                    <CardDescription>Создайте свою или подайте заявку в существующую.</CardDescription>
+                                </CardHeader>
+                            </Card>
+                        )}
                     </section>
                 )}
 
