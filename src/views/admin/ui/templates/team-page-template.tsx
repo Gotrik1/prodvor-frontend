@@ -27,22 +27,15 @@ export function TeamPageTemplate({ team: initialTeam, isLoading: initialIsLoadin
 
     const fullRoster = useMemo(() => {
         if (!team) return [];
-        
-        // 1. Find the captain object from the global users list
         const captain = users.find(u => String(u.id) === String(team.captainId));
-        
-        // 2. Get the members array from the team data
-        const otherMembers = team.members || [];
-        
+        const members = team.members || [];
         const roster: User[] = [];
-        
-        // 3. Add captain to the roster if found
+
         if (captain) {
             roster.push(captain);
         }
         
-        // 4. Add other members, ensuring no duplicates if the captain is somehow also in the members array
-        otherMembers.forEach(member => {
+        members.forEach(member => {
             if (!roster.some(p => p.id === member.id)) {
                 roster.push(member);
             }
