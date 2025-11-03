@@ -16,7 +16,8 @@ import { TopTeamsWidget } from '@/widgets/top-teams-widget';
 import api from '@/shared/api/axios-instance';
 
 const TeamCard = ({ team, isMember, onApply, isApplicationSent }: { team: Team, isMember: boolean, onApply: (teamId: string) => Promise<void>, isApplicationSent: boolean }) => {
-    // Correctly display member count from the backend, which now includes the captain.
+    // If members array doesn't exist, it means we only have the captain, so count is 1.
+    // Otherwise, the length of members already includes the captain.
     const memberCount = team.members?.length || 1;
     
     return (
