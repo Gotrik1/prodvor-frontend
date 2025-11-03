@@ -5,7 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import type { Team, Playground, User } from '@/mocks';
 import { Button } from '@/shared/ui/button';
-import { Home, Settings, Rss, Swords, UserPlus, Users } from 'lucide-react';
+import { Home, Settings, Rss, Swords, UserPlus, Users, UserCheck } from 'lucide-react';
 import { useUserStore } from '@/widgets/dashboard-header/model/user-store';
 import { useState, useMemo, useEffect } from 'react';
 import { useToast } from '@/shared/hooks/use-toast';
@@ -21,11 +21,15 @@ export const TeamHeader = ({ team, homePlaygrounds }: TeamHeaderProps) => {
     const { user: currentUser } = useUserStore();
     const { toast } = useToast();
     
+    // This state will now genuinely track the follow status
     const [isFollowing, setIsFollowing] = useState(false); 
     const [captainedTeams, setCaptainedTeams] = useState<Team[]>([]);
 
     useEffect(() => {
         if (!currentUser) return;
+
+        // Check initial follow status
+        setIsFollowing(team.followers?.includes(currentUser.id) || false);
 
         const fetchCaptainedTeams = async () => {
             try {
@@ -42,7 +46,7 @@ export const TeamHeader = ({ team, homePlaygrounds }: TeamHeaderProps) => {
         };
 
         fetchCaptainedTeams();
-    }, [currentUser]);
+    }, [currentUser, team.followers]);
 
 
     const handleFollow = () => {
@@ -60,9 +64,8 @@ export const TeamHeader = ({ team, homePlaygrounds }: TeamHeaderProps) => {
 
     const isMember = useMemo(() => {
         if (!currentUser || !team.members) return false;
-        if (isCaptainOfThisTeam) return true; // Капитан всегда участник
         return team.members.some(member => String(member.id) === String(currentUser.id));
-    }, [currentUser, team.members, isCaptainOfThisTeam]);
+    }, [currentUser, team.members]);
 
     const canChallenge = useMemo(() => {
         if (isCaptainOfThisTeam || !currentUser) return false; // Can't challenge your own team
@@ -98,7 +101,7 @@ export const TeamHeader = ({ team, homePlaygrounds }: TeamHeaderProps) => {
                     </div>
                 )}
             </div>
-            <div className="md:ml-auto flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
+             <div className="md:ml-auto flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
                 {isCaptainOfThisTeam ? (
                     <Button asChild className="w-full">
                         <Link href={`/teams/${team.id}/manage`}>
@@ -110,11 +113,23 @@ export const TeamHeader = ({ team, homePlaygrounds }: TeamHeaderProps) => {
                         <Swords className="mr-2 h-4 w-4" /> Бросить вызов
                     </Button>
                 ) : null}
-                {!isMember && (
-                    <Button variant={isFollowing ? 'secondary' : 'outline'} className="w-full" onClick={handleFollow}>
-                        <UserPlus className={cn("mr-2 h-4 w-4", isFollowing && "text-primary")} />
-                        {isFollowing ? 'Вы подписаны' : 'Подписаться'}
-                    </Button>
+
+                {!isMember ? (
+                    <>
+                        <Button variant="outline" className="w-full">
+                            <UserCheck className="mr-2 h-4 w-4" /> Подать заявку
+                        </Button>
+                        <Button variant={isFollowing ? 'secondary' : 'outline'} className="w-full" onClick={handleFollow}>
+                            <UserPlus className={cn("mr-2 h-4 w-4", isFollowing && "text-primary")} />
+                            {isFollowing ? 'Вы подписаны' : 'Подписаться'}
+                        </Button>
+                    </>
+                ) : (
+                    !isCaptainOfThisTeam && (
+                        <Button disabled variant="outline" className="w-full">
+                            Вы в команде
+                        </Button>
+                    )
                 )}
             </div>
         </header>
