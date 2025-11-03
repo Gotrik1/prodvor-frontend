@@ -22,14 +22,12 @@ interface TeamPageTemplateProps {
   team?: Team;
   teamMembers?: User[];
   isLoading?: boolean;
-  onDataFetched?: (data: { members: User[] }) => void;
 }
 
 export function TeamPageTemplate({
   team: initialTeam,
   teamMembers: initialTeamMembers,
   isLoading: initialIsLoading,
-  onDataFetched,
 }: TeamPageTemplateProps) {
   const [team, setTeam] = React.useState<Team | undefined>(initialTeam);
   const [playgrounds, setPlaygrounds] = React.useState<Playground[]>([]);
@@ -38,23 +36,9 @@ export function TeamPageTemplate({
   
   useEffect(() => {
     setTeam(initialTeam);
-    if (initialTeam) {
-        const fullRoster: User[] = [];
-        if (initialTeam.captain) {
-            fullRoster.push({ ...initialTeam.captain, role: 'Капитан' });
-        }
-        initialTeam.members?.forEach(member => {
-            if (!fullRoster.some(p => p.id === member.id)) {
-                fullRoster.push(member);
-            }
-        });
-        setTeamMembers(fullRoster);
-        onDataFetched?.({ members: fullRoster });
-    } else {
-        setTeamMembers(initialTeamMembers || []);
-    }
+    setTeamMembers(initialTeamMembers || []);
     setIsLoading(initialIsLoading ?? !initialTeam);
-  }, [initialTeam, initialTeamMembers, initialIsLoading, onDataFetched]);
+  }, [initialTeam, initialTeamMembers, initialIsLoading]);
 
   React.useEffect(() => {
     if (!team) return;
