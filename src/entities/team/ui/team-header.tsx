@@ -5,7 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import type { Team, Playground, User } from '@/mocks';
 import { Button } from '@/shared/ui/button';
-import { Home, Settings, Rss, Swords, UserPlus, Users, UserCheck } from 'lucide-react';
+import { Home, Settings, Rss, Swords, UserPlus, UserCheck, UserX } from 'lucide-react';
 import { useUserStore } from '@/widgets/dashboard-header/model/user-store';
 import { useState, useMemo, useEffect } from 'react';
 import { useToast } from '@/shared/hooks/use-toast';
@@ -121,13 +121,14 @@ export const TeamHeader = ({ team, homePlaygrounds }: TeamHeaderProps) => {
                         </Button>
                         <Button variant={isFollowing ? 'secondary' : 'outline'} className="w-full" onClick={handleFollow}>
                             <UserPlus className={cn("mr-2 h-4 w-4", isFollowing && "text-primary")} />
-                            {isFollowing ? 'Вы подписаны' : 'Подписаться'}
+                            {isFollowing ? 'Отписаться' : 'Подписаться'}
                         </Button>
                     </>
                 ) : (
                     !isCaptainOfThisTeam && (
-                        <Button disabled variant="outline" className="w-full">
-                            Вы в команде
+                        <Button variant="destructive" className="w-full">
+                            <UserX className="mr-2 h-4 w-4" />
+                            Выйти из команды
                         </Button>
                     )
                 )}
