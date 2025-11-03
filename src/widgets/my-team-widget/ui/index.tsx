@@ -1,4 +1,3 @@
-
 'use client';
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
@@ -6,20 +5,20 @@ import { Button } from "@/shared/ui/button";
 import { Users } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
-import { teams, User, Team } from '@/mocks';
+import { User, Team } from '@/mocks';
 import React, { useState, useEffect } from "react";
 import { Skeleton } from "@/shared/ui/skeleton";
 import { ScrollArea } from "@/shared/ui/scroll-area";
 
-export function MyTeamWidget({ user }: { user: User }) {
+export function MyTeamWidget({ user }: { user: User & { teams?: Team[] } }) {
   const [myTeams, setMyTeams] = useState<Team[]>([]);
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
     setIsClient(true);
-    if (user) {
-        const userTeams = teams.filter(team => team.members.includes(user.id));
-        setMyTeams(userTeams);
+    // The user object from the API now contains the teams array directly.
+    if (user && user.teams) {
+        setMyTeams(user.teams);
     } else {
         setMyTeams([]);
     }
@@ -45,7 +44,7 @@ export function MyTeamWidget({ user }: { user: User }) {
                                     <Image src={team.logoUrl || 'https://placehold.co/512x512.png'} alt={team.name} width={40} height={40} className="rounded-md border" data-ai-hint="team logo" />
                                     <div>
                                         <p className="font-semibold leading-tight group-hover:text-primary transition-colors">{team.name}</p>
-                                        <p className="text-xs text-muted-foreground">{team.game}</p>
+                                        <p className="text-xs text-muted-foreground">{team.sport?.name || team.game}</p>
                                     </div>
                                 </div>
                                 <div className="text-right">
@@ -59,7 +58,7 @@ export function MyTeamWidget({ user }: { user: User }) {
             </ScrollArea>
         ) : (
              <div className="text-center">
-                <p className="text-sm text-muted-foreground mb-4">Вы еще не состоите в команде.</p>
+                <p className="text-sm text-muted-foreground mb-4">Этот пользователь не состоит в командах.</p>
                 <Button asChild variant="secondary">
                     <Link href="/teams">Найти или создать команду</Link>
                 </Button>

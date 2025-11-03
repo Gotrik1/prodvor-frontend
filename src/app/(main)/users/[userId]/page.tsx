@@ -10,18 +10,18 @@ import { ManagerPageTemplate } from '@/views/admin/ui/templates/manager-page-tem
 import { OrganizerPageTemplate } from '@/views/admin/ui/templates/organizer-page-template';
 import { RefereePageTemplate } from '@/views/admin/ui/templates/referee-page-template';
 import { PlaceholderTemplate } from '@/views/admin/ui/templates/placeholder-template';
-import type { User } from '@/mocks';
+import type { User, Team } from '@/mocks';
 import { PlayerPageTemplate } from '@/views/admin/ui/templates/player-page-template';
 
 
-async function getUser(userId: string): Promise<User | undefined> {
+async function getUser(userId: string): Promise<(User & { teams?: Team[] }) | undefined> {
     const API_BASE_URL = 'https://8080-firebase-prodvor-backend-1761850902881.cluster-ombtxv25tbd6yrjpp3lukp6zhc.cloudworkstations.dev';
     if (!API_BASE_URL) {
         console.error("[ Server ] API_BASE_URL is not defined.");
         return undefined;
     }
     try {
-        const response = await fetch(`${API_BASE_URL}/api/v1/users/${userId}`);
+        const response = await fetch(`${API_BASE_URL}/api/v1/users/${userId}?include_teams=true`);
         if (!response.ok) {
             console.error(`[ Server ] Failed to fetch user: ${response.status}`);
             return undefined;
