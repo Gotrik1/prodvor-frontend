@@ -30,7 +30,7 @@ const TeamCard = ({ team, isMember, onApply, isApplicationSent }: { team: Team, 
         <CardContent className="flex-grow space-y-2">
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
                 <Users className="h-4 w-4" />
-                <span>{ (team.members?.length || 0) + 1} игроков</span>
+                <span>{ (team.members?.length || 0)} игроков</span>
             </div>
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
                 <BarChart className="h-4 w-4" />
@@ -96,24 +96,31 @@ export function TeamsPage() {
         const fetchAllData = async () => {
             setIsLoading(true);
             try {
-                // Fetch all teams first
-                const teamsResponse = await api.get('/api/v1/teams');
+                const teamsPromise = api.get('/api/v1/teams');
+                
+                const userPromise = currentUser 
+                    ? api.get(`/api/v1/users/me?include_teams=true`)
+                    : Promise.resolve({ data: { teams: [] } });
+
+                const [teamsResponse, userDetailsResponse] = await Promise.all([teamsPromise, userPromise]);
+                
                 setAllTeams(teamsResponse.data);
 
-                // If a user is logged in, fetch their specific teams to know which ones are "my" teams
-                if (currentUser) {
-                    const userDetailsResponse = await api.get(`/api/v1/users/me?include_teams=true`);
+                if (currentUser && userDetailsResponse.data) {
                     const userWithTeams: User & { teams?: Team[] } = userDetailsResponse.data;
                     const userTeamIds = new Set(userWithTeams.teams?.map(t => String(t.id)) || []);
                     setMyTeamIds(userTeamIds);
                 }
-            } catch (error) {
-                console.error("Failed to fetch team data:", error);
-                 toast({
-                    variant: "destructive",
-                    title: "Ошибка",
-                    description: "Не удалось загрузить данные команд.",
-                });
+
+            } catch (error: any) {
+                if (error.response?.status !== 401) {
+                    console.error("Failed to fetch team data:", error);
+                    toast({
+                        variant: "destructive",
+                        title: "Ошибка",
+                        description: "Не удалось загрузить данные команд.",
+                    });
+                }
             } finally {
                 setIsLoading(false);
             }
@@ -157,53 +164,49 @@ export function TeamsPage() {
             
             <TopTeamsWidget />
 
-            {showMyTeams && <Separator />}
-
             <div className="container mx-auto px-4 md:px-0 space-y-8">
                 {showMyTeams && (
-                    <section>
-                        <h2 className="text-2xl font-bold mb-4">Мои команды</h2>
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                            {myTeams.map(team => <TeamCard key={team.id} team={team} isMember={true} onApply={handleApply} isApplicationSent={false} />)}
-                        </div>
-                    </section>
+                    <>
+                        <Separator />
+                        <section>
+                            <h2 className="text-2xl font-bold mb-4">Мои команды</h2>
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                                {myTeams.map(team => <TeamCard key={team.id} team={team} isMember={true} onApply={handleApply} isApplicationSent={false} />)}
+                            </div>
+                        </section>
+                    </>
                 )}
 
-                {showMyTeams && <Separator />}
+                {(showMyTeams || otherTeams.length > 0) && <Separator />}
 
-                <div>
-                    <h2 className="text-2xl font-bold mb-4">Все команды</h2>
-                    {isLoading ? (
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                            {[...Array(4)].map((_, i) => (
-                                <Card key={i}>
-                                    <CardHeader><Skeleton className="h-16 w-full" /></CardHeader>
-                                    <CardContent><Skeleton className="h-8 w-3/4" /></CardContent>
-                                    <CardFooter><Skeleton className="h-10 w-full" /></CardFooter>
-                                </Card>
-                            ))}
-                        </div>
-                    ) : otherTeams.length > 0 ? (
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                            {otherTeams.map(team => (
-                                <TeamCard 
-                                    key={team.id} 
-                                    team={team} 
-                                    isMember={false} 
-                                    onApply={handleApply}
-                                    isApplicationSent={sentApplications.includes(String(team.id))}
-                                />
-                            ))}
-                        </div>
-                    ) : (
-                        <Card className="text-center min-h-[200px] flex flex-col justify-center items-center">
-                            <CardHeader>
-                                <CardTitle>Не удалось загрузить команды</CardTitle>
-                                <CardDescription>Попробуйте проверить связь с бэкендом или обновите страницу.</CardDescription>
-                            </CardHeader>
-                        </Card>
-                    )}
-                </div>
+                {otherTeams.length > 0 && (
+                    <div>
+                        <h2 className="text-2xl font-bold mb-4">Все команды</h2>
+                        {isLoading ? (
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                                {[...Array(4)].map((_, i) => (
+                                    <Card key={i}>
+                                        <CardHeader><Skeleton className="h-16 w-full" /></CardHeader>
+                                        <CardContent><Skeleton className="h-8 w-3/4" /></CardContent>
+                                        <CardFooter><Skeleton className="h-10 w-full" /></CardFooter>
+                                    </Card>
+                                ))}
+                            </div>
+                        ) : (
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                                {otherTeams.map(team => (
+                                    <TeamCard 
+                                        key={team.id} 
+                                        team={team} 
+                                        isMember={false} 
+                                        onApply={handleApply}
+                                        isApplicationSent={sentApplications.includes(String(team.id))}
+                                    />
+                                ))}
+                            </div>
+                        )}
+                    </div>
+                )}
             </div>
         </div>
     );
