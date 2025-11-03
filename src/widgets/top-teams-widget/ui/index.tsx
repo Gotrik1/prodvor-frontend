@@ -115,7 +115,7 @@ export function TopTeamsWidget() {
         const fetchTeams = async () => {
             setIsLoading(true);
             try {
-                const response = await api.get(`/api/v1/teams`);
+                const response = await api.get(`/api/v1/teams?expand=members`);
                 setAllTeams(response.data);
             } catch (error) {
                  toast({
