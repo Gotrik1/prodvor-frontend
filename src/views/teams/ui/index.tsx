@@ -60,6 +60,7 @@ const TeamCard = ({ team, isMember, onApply, isApplicationSent }: { team: Team, 
 export function TeamsPage() {
     const { user: currentUser } = useUserStore();
     const [allTeams, setAllTeams] = useState<Team[]>([]);
+    const [myTeamIds, setMyTeamIds] = useState<Set<string>>(new Set());
     const [isLoading, setIsLoading] = useState(true);
     const [sentApplications, setSentApplications] = useState<string[]>([]);
     const { toast } = useToast();
@@ -92,21 +93,34 @@ export function TeamsPage() {
 
 
     useEffect(() => {
-        async function fetchTeams() {
+        const fetchAllData = async () => {
             setIsLoading(true);
             try {
-                // We fetch all teams without expanding members for efficiency
-                const response = await api.get('/api/v1/teams');
-                setAllTeams(response.data);
+                // Fetch all teams first
+                const teamsResponse = await api.get('/api/v1/teams');
+                setAllTeams(teamsResponse.data);
+
+                // If a user is logged in, fetch their specific teams
+                if (currentUser) {
+                    const userDetailsResponse = await api.get(`/api/v1/users/me?include_teams=true`);
+                    const userWithTeams: User & { teams?: Team[] } = userDetailsResponse.data;
+                    const userTeamIds = new Set(userWithTeams.teams?.map(t => t.id) || []);
+                    setMyTeamIds(userTeamIds);
+                }
             } catch (error) {
-                console.error("Failed to fetch teams:", error);
-            }
-            finally {
+                console.error("Failed to fetch team data:", error);
+                 toast({
+                    variant: "destructive",
+                    title: "Ошибка",
+                    description: "Не удалось загрузить данные команд.",
+                });
+            } finally {
                 setIsLoading(false);
             }
-        }
-        fetchTeams();
-    }, []);
+        };
+
+        fetchAllData();
+    }, [currentUser, toast]);
 
     const { myTeams, otherTeams } = useMemo(() => {
         if (!allTeams || allTeams.length === 0) {
@@ -116,12 +130,11 @@ export function TeamsPage() {
             return { myTeams: [], otherTeams: allTeams };
         }
         
-        // This logic is now simplified and might not be 100% accurate without `members`
-        // but it prevents fetching all member data. A better approach would be a dedicated user endpoint.
-        const myTeams = allTeams.filter(team => String(team.captainId) === String(currentUser.id));
-        const otherTeams = allTeams.filter(team => String(team.captainId) !== String(currentUser.id));
-        return { myTeams, otherTeams };
-    }, [currentUser, allTeams]);
+        const myTeamsList = allTeams.filter(team => myTeamIds.has(team.id));
+        const otherTeamsList = allTeams.filter(team => !myTeamIds.has(team.id));
+        
+        return { myTeams: myTeamsList, otherTeams: otherTeamsList };
+    }, [currentUser, allTeams, myTeamIds]);
     
     const showMyTeams = currentUser && myTeams.length > 0;
 

@@ -18,9 +18,9 @@ const TopTeamRow = ({ team, rank }: { team: Team, rank: number }) => (
         <img src={team.logoUrl || 'https://placehold.co/32x32.png'} alt={team.name} width={32} height={32} className="rounded-md object-cover aspect-square" />
         <div className="flex-grow">
             <p className="font-semibold group-hover:text-primary transition-colors">{team.name}</p>
-            <p className="text-xs text-muted-foreground">{team.game}</p>
+            <p className="text-xs text-muted-foreground">{team.sport?.name || team.game}</p>
         </div>
-        <div className="font-mono text-sm font-semibold">{team.rank} ELO</div>
+        <div className="font-mono text-sm font-semibold">{team.rank || 1200} ELO</div>
     </Link>
 );
 
