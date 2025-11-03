@@ -22,6 +22,7 @@ export const TeamHeader = ({ team, homePlaygrounds }: TeamHeaderProps) => {
     const { toast } = useToast();
     
     const [isFollowing, setIsFollowing] = useState(false);
+    const [isApplicationSent, setIsApplicationSent] = useState(false);
     const [followerCount, setFollowerCount] = useState(team.followers?.length || 0);
     const [captainedTeams, setCaptainedTeams] = useState<Team[]>([]);
     const [isLoadingFollow, setIsLoadingFollow] = useState(false);
@@ -52,6 +53,31 @@ export const TeamHeader = ({ team, homePlaygrounds }: TeamHeaderProps) => {
         fetchCaptainedTeams();
     }, [currentUser, team.followers]);
 
+    const handleApply = async () => {
+        if (!currentUser) {
+             toast({
+                variant: 'destructive',
+                title: 'Ошибка',
+                description: 'Для подачи заявки необходимо авторизоваться.',
+            });
+            return;
+        }
+        
+        try {
+            await api.post(`/api/v1/teams/${team.id}/apply`, {});
+            toast({
+                title: "Заявка отправлена!",
+                description: `Ваша заявка в команду "${team.name}" отправлена на рассмотрение капитану.`,
+            });
+            setIsApplicationSent(true);
+        } catch (error: any) {
+             toast({
+                variant: 'destructive',
+                title: 'Ошибка',
+                description: error.response?.data?.message || 'Не удалось отправить заявку.',
+            });
+        }
+    };
 
     const handleFollow = async () => {
         if (!currentUser) {
@@ -102,7 +128,7 @@ export const TeamHeader = ({ team, homePlaygrounds }: TeamHeaderProps) => {
         return captainedTeams.some(captainedTeam => captainedTeam.sport?.id === team.sport?.id);
     }, [isCaptainOfThisTeam, currentUser, captainedTeams, team.sport]);
 
-    const memberCount = team.members?.length || 0;
+    const memberCount = (team.members?.length || 0) + (team.captain ? 1 : 0);
 
     return (
         <header className="flex flex-col md:flex-row items-center gap-6 p-4 rounded-lg bg-card border">
@@ -144,8 +170,9 @@ export const TeamHeader = ({ team, homePlaygrounds }: TeamHeaderProps) => {
 
                 {!isMember ? (
                     <>
-                        <Button variant="outline" className="w-full">
-                            <UserCheck className="mr-2 h-4 w-4" /> Подать заявку
+                        <Button variant="outline" className="w-full" onClick={handleApply} disabled={isApplicationSent}>
+                            <UserCheck className="mr-2 h-4 w-4" /> 
+                            {isApplicationSent ? 'Заявка отправлена' : 'Подать заявку'}
                         </Button>
                         <Button variant={isFollowing ? 'secondary' : 'outline'} className="w-full" onClick={handleFollow} disabled={isLoadingFollow}>
                             <Rss className={cn("mr-2 h-4 w-4", isFollowing && "text-primary")} />
