@@ -7,9 +7,10 @@ import type { Team, Playground, User } from '@/mocks';
 import { Button } from '@/shared/ui/button';
 import { Home, Settings, Rss, Swords, UserPlus, Users } from 'lucide-react';
 import { useUserStore } from '@/widgets/dashboard-header/model/user-store';
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useToast } from '@/shared/hooks/use-toast';
 import { cn } from '@/shared/lib/utils';
+import api from '@/shared/api/axios-instance';
 
 interface TeamHeaderProps {
     team: Team;
@@ -21,6 +22,28 @@ export const TeamHeader = ({ team, homePlaygrounds }: TeamHeaderProps) => {
     const { toast } = useToast();
     
     const [isFollowing, setIsFollowing] = useState(false); 
+    const [captainedTeams, setCaptainedTeams] = useState<Team[]>([]);
+
+    useEffect(() => {
+        if (!currentUser) return;
+
+        const fetchCaptainedTeams = async () => {
+            try {
+                // We fetch the user's teams to check captain status and disciplines
+                const response = await api.get(`/api/v1/users/${currentUser.id}?include_teams=true`);
+                if (response.data && response.data.teams) {
+                    const userTeams: Team[] = response.data.teams;
+                    const captainOf = userTeams.filter(t => String(t.captainId) === String(currentUser.id));
+                    setCaptainedTeams(captainOf);
+                }
+            } catch (error) {
+                console.error("Failed to fetch user's teams:", error);
+            }
+        };
+
+        fetchCaptainedTeams();
+    }, [currentUser]);
+
 
     const handleFollow = () => {
         setIsFollowing(!isFollowing);
@@ -30,18 +53,23 @@ export const TeamHeader = ({ team, homePlaygrounds }: TeamHeaderProps) => {
         });
     }
 
-    const isCaptain = useMemo(() => {
+    const isCaptainOfThisTeam = useMemo(() => {
         if (!currentUser || !team.captain) return false;
         return String(currentUser.id) === String(team.captain.id);
     }, [currentUser, team.captain]);
 
     const isMember = useMemo(() => {
         if (!currentUser || !team.members) return false;
-        if (isCaptain) return true; // Капитан всегда участник
+        if (isCaptainOfThisTeam) return true; // Капитан всегда участник
         return team.members.some(member => String(member.id) === String(currentUser.id));
-    }, [currentUser, team.members, isCaptain]);
+    }, [currentUser, team.members, isCaptainOfThisTeam]);
 
-    // The members array now includes the captain.
+    const canChallenge = useMemo(() => {
+        if (isCaptainOfThisTeam || !currentUser) return false; // Can't challenge your own team
+        // Check if the current user is a captain of any team with the same sport
+        return captainedTeams.some(captainedTeam => captainedTeam.sport?.id === team.sport?.id);
+    }, [isCaptainOfThisTeam, currentUser, captainedTeams, team.sport]);
+
     const memberCount = team.members?.length || 0;
 
     return (
@@ -71,17 +99,17 @@ export const TeamHeader = ({ team, homePlaygrounds }: TeamHeaderProps) => {
                 )}
             </div>
             <div className="md:ml-auto flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
-                {isCaptain ? (
+                {isCaptainOfThisTeam ? (
                     <Button asChild className="w-full">
                         <Link href={`/teams/${team.id}/manage`}>
                             <Settings className="mr-2 h-4 w-4" /> Управлять
                         </Link>
                     </Button>
-                ) : (
+                ) : canChallenge ? (
                     <Button className="w-full">
                         <Swords className="mr-2 h-4 w-4" /> Бросить вызов
                     </Button>
-                )}
+                ) : null}
                 {!isMember && (
                     <Button variant={isFollowing ? 'secondary' : 'outline'} className="w-full" onClick={handleFollow}>
                         <UserPlus className={cn("mr-2 h-4 w-4", isFollowing && "text-primary")} />
