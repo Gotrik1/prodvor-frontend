@@ -1,5 +1,3 @@
-
-
 'use client';
 
 import type { Team, Post } from "@/mocks";
@@ -19,6 +17,7 @@ import {
 } from "@/shared/ui/dialog";
 import { usePostStore } from "@/widgets/dashboard-feed/model/post-store";
 import { MediaPostDialog } from "@/widgets/media-post-dialog";
+import { useUserStore } from "@/widgets/dashboard-header/model/user-store";
 
 interface TeamPublicationsTabProps {
     team: Team;
@@ -27,8 +26,9 @@ interface TeamPublicationsTabProps {
 export function TeamPublicationsTab({ team }: TeamPublicationsTabProps) {
     const { getPostsForTeam } = usePostStore();
     const teamPosts = getPostsForTeam(team.id);
+    const { user: currentUser } = useUserStore();
 
-    const isTeamMember = team.members ? team.members.includes(users[0]?.id) : false;
+    const isTeamMember = team.members ? team.members.some(m => m.id === currentUser?.id) : false;
     
     return (
         <div className="space-y-6">

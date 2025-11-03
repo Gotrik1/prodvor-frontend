@@ -1,4 +1,3 @@
-
 'use client';
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
@@ -34,7 +33,7 @@ const TeamRoster = ({ teamMembers }: { teamMembers: User[] }) => {
                     <div>
                         <p className="font-semibold group-hover:text-primary transition-colors">{member.nickname}</p>
                         <p className="text-xs text-muted-foreground">{member.firstName} {member.lastName}</p>
-                        {member.role === 'Капитан' && (
+                        {member.id === (member as any).captainId && (
                             <Badge variant="default" className="mt-1">
                                 <Crown className="h-3 w-3 mr-1" />
                                 Капитан

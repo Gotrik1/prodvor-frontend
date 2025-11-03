@@ -1,32 +1,89 @@
 'use client';
 
 import React from 'react';
-import type { Team, User } from "@/mocks";
+import type { Team, User, Playground } from "@/mocks";
+import { Button } from "@/shared/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
+import { History, Grid3x3 } from "lucide-react";
+import Link from 'next/link';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
+import { TeamHeader } from "@/entities/team/ui/team-header";
+import { TeamPublicationsTab } from "@/views/teams/team/ui/team-publications-tab";
+import { TeamOverviewWidget } from "@/widgets/team-overview-widget";
+import { TeamRosterWidget } from "@/widgets/team-roster-widget";
+import { TeamMatchesWidget } from "@/widgets/team-matches-widget";
+import { TeamChallengesWidget } from "@/widgets/team-challenges-widget";
+import { TeamStatsWidget } from "@/widgets/team-stats-widget";
 import { Skeleton } from '@/shared/ui/skeleton';
-import { TeamPublicPage } from '@/views/teams/team/ui';
+import api from '@/shared/api/axios-instance';
 
 interface TeamPageTemplateProps {
-  team?: Team;
-  teamMembers?: User[];
-  isLoading?: boolean;
-  teamId?: string; // Add teamId to fetch data if not provided initially
+  team: Team;
 }
 
 export function TeamPageTemplate({
-  teamId,
+  team,
 }: TeamPageTemplateProps) {
-
-  // If teamId is provided, let the TeamPublicPage handle its own data fetching.
-  if (teamId) {
-    return <TeamPublicPage teamId={teamId} />;
-  }
   
-  // Fallback for when no teamId is provided (e.g., initial admin page state)
-  return (
-      <div className="p-4 md:p-6 lg:p-8 space-y-6">
-        <Skeleton className="h-32 w-full" />
-        <Skeleton className="h-10 w-full" />
-        <Skeleton className="h-64 w-full" />
+  if (!team) {
+    return (
+      <div className="flex flex-col min-h-[80vh] items-center justify-center p-4">
+        <Card className="text-center max-w-md w-full">
+          <CardHeader>
+            <CardTitle>Ошибка 404</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-muted-foreground">Команда не найдена.</p>
+            <Button asChild className="mt-6">
+              <Link href="/teams">К списку команд</Link>
+            </Button>
+          </CardContent>
+        </Card>
       </div>
+    );
+  }
+
+  const allTeamMembers = team.members;
+  const homePlaygrounds = []; // This data is not available in the mock team object anymore
+
+  return (
+    <div className="p-4 md:p-6 lg:p-8 space-y-6">
+      <TeamHeader team={team} homePlaygrounds={homePlaygrounds} />
+
+      <Tabs defaultValue="overview" className="w-full">
+        <TabsList className="grid w-full grid-cols-4 md:grid-cols-6">
+          <TabsTrigger value="overview">Обзор</TabsTrigger>
+          <TabsTrigger value="roster">Состав</TabsTrigger>
+          <TabsTrigger value="matches">Матчи</TabsTrigger>
+          <TabsTrigger value="challenges">Вызовы</TabsTrigger>
+          <TabsTrigger value="stats">
+            <History className="md:mr-2 h-4 w-4" />
+            <span className="hidden md:inline">Статистика</span>
+          </TabsTrigger>
+          <TabsTrigger value="publications">
+            <Grid3x3 className="md:mr-2 h-4 w-4" />
+            <span className="hidden md:inline">Публикации</span>
+          </TabsTrigger>
+        </TabsList>
+        <TabsContent value="overview" className="mt-6">
+          <TeamOverviewWidget team={team} />
+        </TabsContent>
+        <TabsContent value="roster" className="mt-6">
+          <TeamRosterWidget team={team} teamMembers={allTeamMembers} />
+        </TabsContent>
+        <TabsContent value="matches" className="mt-6">
+          <TeamMatchesWidget />
+        </TabsContent>
+        <TabsContent value="challenges" className="mt-6">
+          <TeamChallengesWidget teamId={team.id} />
+        </TabsContent>
+        <TabsContent value="stats" className="mt-6">
+          <TeamStatsWidget team={team} />
+        </TabsContent>
+        <TabsContent value="publications" className="mt-6">
+          <TeamPublicationsTab team={team} />
+        </TabsContent>
+      </Tabs>
+    </div>
   );
 }

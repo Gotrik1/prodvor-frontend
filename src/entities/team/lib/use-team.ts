@@ -20,12 +20,12 @@ interface BaseTeamData {
 }
 
 // Расширенные данные, которые приходят при expand=true
-interface ExpandedTeamData extends BaseTeamData {
+export interface ExpandedTeamData extends BaseTeamData {
   members: User[];
 }
 
 // Тип для состояния, может быть одним из двух
-type TeamData = BaseTeamData | ExpandedTeamData;
+export type TeamData = BaseTeamData | ExpandedTeamData;
 
 // 2. Создаем кастомный хук useTeam
 
@@ -58,7 +58,7 @@ export function useTeam(teamId: number, expand: boolean = false) {
   }, [teamId, fetchTeam]);
 
   // Вычисляем количество участников на основе доступных данных
-  const count = team?.memberIds.length ?? 0;
+  const count = team?.memberIds?.length ?? 0;
 
   return { team, isLoading, error, count, refetch: fetchTeam };
 }
