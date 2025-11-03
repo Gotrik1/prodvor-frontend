@@ -1,83 +1,32 @@
-# SportsApi
+# LegacySponsorsApi
 
 All URIs are relative to *http://localhost*
 
 |Method | HTTP request | Description|
 |------------- | ------------- | -------------|
-|[**apiV1SportsGet**](#apiv1sportsget) | **GET** /api/v1/sports/ | Get all sports|
-|[**apiV1SportsPost**](#apiv1sportspost) | **POST** /api/v1/sports | Create a new sport|
+|[**apiV1SponsorsGet**](#apiv1sponsorsget) | **GET** /api/v1/sponsors | Get all sponsors|
+|[**apiV1SponsorsPost**](#apiv1sponsorspost) | **POST** /api/v1/sponsors | Create a new sponsor|
 
-# **apiV1SportsGet**
-> Array<ApiV1SportsGet200ResponseInner> apiV1SportsGet()
+# **apiV1SponsorsGet**
+> apiV1SponsorsGet()
 
 
 ### Example
 
 ```typescript
 import {
-    SportsApi,
+    LegacySponsorsApi,
     Configuration
 } from './api';
 
 const configuration = new Configuration();
-const apiInstance = new SportsApi(configuration);
+const apiInstance = new LegacySponsorsApi(configuration);
 
-const { status, data } = await apiInstance.apiV1SportsGet();
+const { status, data } = await apiInstance.apiV1SponsorsGet();
 ```
 
 ### Parameters
 This endpoint does not have any parameters.
-
-
-### Return type
-
-**Array<ApiV1SportsGet200ResponseInner>**
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
- - **Content-Type**: Not defined
- - **Accept**: */*
-
-
-### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-|**200** | A list of sports. |  -  |
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
-# **apiV1SportsPost**
-> apiV1SportsPost(body)
-
-
-### Example
-
-```typescript
-import {
-    SportsApi,
-    Configuration,
-    ApiV1SportsPostRequest
-} from './api';
-
-const configuration = new Configuration();
-const apiInstance = new SportsApi(configuration);
-
-let body: ApiV1SportsPostRequest; //
-
-const { status, data } = await apiInstance.apiV1SportsPost(
-    body
-);
-```
-
-### Parameters
-
-|Name | Type | Description  | Notes|
-|------------- | ------------- | ------------- | -------------|
-| **body** | **ApiV1SportsPostRequest**|  | |
 
 
 ### Return type
@@ -97,8 +46,59 @@ No authorization required
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-|**201** | Sport created successfully |  -  |
-|**400** | Missing name or isTeamSport, or sport with this name already exists |  -  |
+|**200** | A list of sponsors |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **apiV1SponsorsPost**
+> apiV1SponsorsPost(body)
+
+
+### Example
+
+```typescript
+import {
+    LegacySponsorsApi,
+    Configuration,
+    ApiV1SponsorsPostRequest
+} from './api';
+
+const configuration = new Configuration();
+const apiInstance = new LegacySponsorsApi(configuration);
+
+let body: ApiV1SponsorsPostRequest; //
+
+const { status, data } = await apiInstance.apiV1SponsorsPost(
+    body
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **body** | **ApiV1SponsorsPostRequest**|  | |
+
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**201** | Sponsor created successfully |  -  |
+|**400** | Missing data |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

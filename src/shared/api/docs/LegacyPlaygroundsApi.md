@@ -1,83 +1,32 @@
-# SportsApi
+# LegacyPlaygroundsApi
 
 All URIs are relative to *http://localhost*
 
 |Method | HTTP request | Description|
 |------------- | ------------- | -------------|
-|[**apiV1SportsGet**](#apiv1sportsget) | **GET** /api/v1/sports/ | Get all sports|
-|[**apiV1SportsPost**](#apiv1sportspost) | **POST** /api/v1/sports | Create a new sport|
+|[**apiV1PlaygroundsGet**](#apiv1playgroundsget) | **GET** /api/v1/playgrounds | Get all playgrounds|
+|[**apiV1PlaygroundsPost**](#apiv1playgroundspost) | **POST** /api/v1/playgrounds | Create a new playground|
 
-# **apiV1SportsGet**
-> Array<ApiV1SportsGet200ResponseInner> apiV1SportsGet()
+# **apiV1PlaygroundsGet**
+> apiV1PlaygroundsGet()
 
 
 ### Example
 
 ```typescript
 import {
-    SportsApi,
+    LegacyPlaygroundsApi,
     Configuration
 } from './api';
 
 const configuration = new Configuration();
-const apiInstance = new SportsApi(configuration);
+const apiInstance = new LegacyPlaygroundsApi(configuration);
 
-const { status, data } = await apiInstance.apiV1SportsGet();
+const { status, data } = await apiInstance.apiV1PlaygroundsGet();
 ```
 
 ### Parameters
 This endpoint does not have any parameters.
-
-
-### Return type
-
-**Array<ApiV1SportsGet200ResponseInner>**
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
- - **Content-Type**: Not defined
- - **Accept**: */*
-
-
-### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-|**200** | A list of sports. |  -  |
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
-# **apiV1SportsPost**
-> apiV1SportsPost(body)
-
-
-### Example
-
-```typescript
-import {
-    SportsApi,
-    Configuration,
-    ApiV1SportsPostRequest
-} from './api';
-
-const configuration = new Configuration();
-const apiInstance = new SportsApi(configuration);
-
-let body: ApiV1SportsPostRequest; //
-
-const { status, data } = await apiInstance.apiV1SportsPost(
-    body
-);
-```
-
-### Parameters
-
-|Name | Type | Description  | Notes|
-|------------- | ------------- | ------------- | -------------|
-| **body** | **ApiV1SportsPostRequest**|  | |
 
 
 ### Return type
@@ -97,8 +46,59 @@ No authorization required
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-|**201** | Sport created successfully |  -  |
-|**400** | Missing name or isTeamSport, or sport with this name already exists |  -  |
+|**200** | A list of playgrounds |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **apiV1PlaygroundsPost**
+> apiV1PlaygroundsPost(body)
+
+
+### Example
+
+```typescript
+import {
+    LegacyPlaygroundsApi,
+    Configuration,
+    ApiV1PlaygroundsPostRequest
+} from './api';
+
+const configuration = new Configuration();
+const apiInstance = new LegacyPlaygroundsApi(configuration);
+
+let body: ApiV1PlaygroundsPostRequest; //
+
+const { status, data } = await apiInstance.apiV1PlaygroundsPost(
+    body
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **body** | **ApiV1PlaygroundsPostRequest**|  | |
+
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**201** | Playground created successfully |  -  |
+|**400** | Missing data |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

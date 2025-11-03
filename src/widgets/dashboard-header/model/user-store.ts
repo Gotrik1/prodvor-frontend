@@ -4,10 +4,10 @@
 import { create } from 'zustand';
 import type { User } from '@/shared/api';
 import { persist, createJSONStorage } from 'zustand/middleware';
-import { AuthApi } from '@/shared/api';
+import { AuthenticationApi } from '@/shared/api';
 import { apiConfig } from '@/shared/api/axios-instance';
 
-const authApi = new AuthApi(apiConfig);
+const authApi = new AuthenticationApi(apiConfig);
 
 interface UserState {
   user: User | null;
@@ -36,7 +36,7 @@ const useUserStore = create<UserState>()(
             const refreshToken = localStorage.getItem('refreshToken');
             if (refreshToken) {
                 try {
-                    await authApi.authLogoutPost({ refreshToken } as any);
+                    await authApi.apiV1AuthLogoutPost({ refreshToken });
                 } catch (error) {
                     console.error("Failed to logout on backend:", error);
                 }

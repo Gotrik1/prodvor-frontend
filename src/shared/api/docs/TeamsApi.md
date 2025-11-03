@@ -1,20 +1,20 @@
 # TeamsApi
 
-All URIs are relative to */api/v1*
+All URIs are relative to *http://localhost*
 
 |Method | HTTP request | Description|
 |------------- | ------------- | -------------|
-|[**teamsGet**](#teamsget) | **GET** /teams | Get all teams|
-|[**teamsPost**](#teamspost) | **POST** /teams | Create a new team|
-|[**teamsTeamIdApplicationsGet**](#teamsteamidapplicationsget) | **GET** /teams/{team_id}/applications | Get team applications (Captain only)|
-|[**teamsTeamIdApplicationsUserIdRespondPost**](#teamsteamidapplicationsuseridrespondpost) | **POST** /teams/{team_id}/applications/{user_id}/respond | Respond to a team application (Captain only)|
-|[**teamsTeamIdApplyPost**](#teamsteamidapplypost) | **POST** /teams/{team_id}/apply | Apply to join a team|
-|[**teamsTeamIdFollowPost**](#teamsteamidfollowpost) | **POST** /teams/{team_id}/follow | Follow or Unfollow a Team|
-|[**teamsTeamIdGet**](#teamsteamidget) | **GET** /teams/{team_id} | Get a team by ID|
-|[**teamsTeamIdMembersUserIdDelete**](#teamsteamidmembersuseriddelete) | **DELETE** /teams/{team_id}/members/{user_id} | Remove a member from a team (Captain only)|
+|[**apiV1TeamsGet**](#apiv1teamsget) | **GET** /api/v1/teams | Get all teams|
+|[**apiV1TeamsPost**](#apiv1teamspost) | **POST** /api/v1/teams | Create a new team|
+|[**apiV1TeamsTeamIdApplicationsGet**](#apiv1teamsteamidapplicationsget) | **GET** /api/v1/teams/{team_id}/applications | Get team applications|
+|[**apiV1TeamsTeamIdApplicationsUserIdRespondPost**](#apiv1teamsteamidapplicationsuseridrespondpost) | **POST** /api/v1/teams/{team_id}/applications/{user_id}/respond | Respond to a team application|
+|[**apiV1TeamsTeamIdApplyPost**](#apiv1teamsteamidapplypost) | **POST** /api/v1/teams/{team_id}/apply | Apply to a team|
+|[**apiV1TeamsTeamIdFollowPost**](#apiv1teamsteamidfollowpost) | **POST** /api/v1/teams/{team_id}/follow | Toggle follow a team|
+|[**apiV1TeamsTeamIdGet**](#apiv1teamsteamidget) | **GET** /api/v1/teams/{team_id} | Get a team by ID|
+|[**apiV1TeamsTeamIdMembersUserIdDelete**](#apiv1teamsteamidmembersuseriddelete) | **DELETE** /api/v1/teams/{team_id}/members/{user_id} | Remove a team member|
 
-# **teamsGet**
-> Array<Team> teamsGet()
+# **apiV1TeamsGet**
+> apiV1TeamsGet()
 
 
 ### Example
@@ -28,9 +28,17 @@ import {
 const configuration = new Configuration();
 const apiInstance = new TeamsApi(configuration);
 
-let expand: 'members'; // (optional) (default to undefined)
+let city: string; //Filter by city (optional) (default to undefined)
+let sortBy: string; //Sort by attribute (name, followers, rank, createdAt) (optional) (default to undefined)
+let order: string; //Sort order (asc, desc) (optional) (default to undefined)
+let limit: number; //Limit number of results (optional) (default to undefined)
+let expand: string; //Expand members (optional) (default to undefined)
 
-const { status, data } = await apiInstance.teamsGet(
+const { status, data } = await apiInstance.apiV1TeamsGet(
+    city,
+    sortBy,
+    order,
+    limit,
     expand
 );
 ```
@@ -39,12 +47,16 @@ const { status, data } = await apiInstance.teamsGet(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **expand** | [**&#39;members&#39;**]**Array<&#39;members&#39;>** |  | (optional) defaults to undefined|
+| **city** | [**string**] | Filter by city | (optional) defaults to undefined|
+| **sortBy** | [**string**] | Sort by attribute (name, followers, rank, createdAt) | (optional) defaults to undefined|
+| **order** | [**string**] | Sort order (asc, desc) | (optional) defaults to undefined|
+| **limit** | [**number**] | Limit number of results | (optional) defaults to undefined|
+| **expand** | [**string**] | Expand members | (optional) defaults to undefined|
 
 
 ### Return type
 
-**Array<Team>**
+void (empty response body)
 
 ### Authorization
 
@@ -53,18 +65,18 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/json
+ - **Accept**: Not defined
 
 
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-|**200** | A list of teams |  -  |
+|**200** | Returns a list of all teams |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **teamsPost**
-> Team teamsPost(newTeam)
+# **apiV1TeamsPost**
+> apiV1TeamsPost(body)
 
 
 ### Example
@@ -73,16 +85,16 @@ No authorization required
 import {
     TeamsApi,
     Configuration,
-    NewTeam
+    ApiV1TeamsPostRequest
 } from './api';
 
 const configuration = new Configuration();
 const apiInstance = new TeamsApi(configuration);
 
-let newTeam: NewTeam; //
+let body: ApiV1TeamsPostRequest; //
 
-const { status, data } = await apiInstance.teamsPost(
-    newTeam
+const { status, data } = await apiInstance.apiV1TeamsPost(
+    body
 );
 ```
 
@@ -90,34 +102,33 @@ const { status, data } = await apiInstance.teamsPost(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **newTeam** | **NewTeam**|  | |
+| **body** | **ApiV1TeamsPostRequest**|  | |
 
 
 ### Return type
 
-**Team**
+void (empty response body)
 
 ### Authorization
 
-[bearerAuth](../README.md#bearerAuth)
+[Bearer](../README.md#Bearer)
 
 ### HTTP request headers
 
- - **Content-Type**: application/json
- - **Accept**: application/json
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
 
 
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-|**201** | Team created |  -  |
-|**400** | Bad Request - The server cannot process the request due to a client error (e.g., malformed request syntax, invalid request message framing, or deceptive request routing). |  -  |
-|**401** | Unauthorized - The client must authenticate itself to get the requested response. |  -  |
+|**201** | Team created successfully |  -  |
+|**400** | Missing data |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **teamsTeamIdApplicationsGet**
-> Array<User> teamsTeamIdApplicationsGet()
+# **apiV1TeamsTeamIdApplicationsGet**
+> apiV1TeamsTeamIdApplicationsGet()
 
 
 ### Example
@@ -133,7 +144,7 @@ const apiInstance = new TeamsApi(configuration);
 
 let teamId: number; // (default to undefined)
 
-const { status, data } = await apiInstance.teamsTeamIdApplicationsGet(
+const { status, data } = await apiInstance.apiV1TeamsTeamIdApplicationsGet(
     teamId
 );
 ```
@@ -147,29 +158,28 @@ const { status, data } = await apiInstance.teamsTeamIdApplicationsGet(
 
 ### Return type
 
-**Array<User>**
+void (empty response body)
 
 ### Authorization
 
-[bearerAuth](../README.md#bearerAuth)
+[Bearer](../README.md#Bearer)
 
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/json
+ - **Accept**: Not defined
 
 
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-|**200** | List of applicants |  -  |
-|**401** | Unauthorized - The client must authenticate itself to get the requested response. |  -  |
-|**403** | Forbidden - The client does not have access rights to the content. |  -  |
+|**200** | Returns a list of applicants |  -  |
+|**403** | Forbidden |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **teamsTeamIdApplicationsUserIdRespondPost**
-> SuccessResponse teamsTeamIdApplicationsUserIdRespondPost()
+# **apiV1TeamsTeamIdApplicationsUserIdRespondPost**
+> apiV1TeamsTeamIdApplicationsUserIdRespondPost(body)
 
 
 ### Example
@@ -178,7 +188,7 @@ const { status, data } = await apiInstance.teamsTeamIdApplicationsGet(
 import {
     TeamsApi,
     Configuration,
-    ApplicationResponse
+    ApiV1TeamsTeamIdApplicationsUserIdRespondPostRequest
 } from './api';
 
 const configuration = new Configuration();
@@ -186,12 +196,12 @@ const apiInstance = new TeamsApi(configuration);
 
 let teamId: number; // (default to undefined)
 let userId: number; // (default to undefined)
-let applicationResponse: ApplicationResponse; // (optional)
+let body: ApiV1TeamsTeamIdApplicationsUserIdRespondPostRequest; //
 
-const { status, data } = await apiInstance.teamsTeamIdApplicationsUserIdRespondPost(
+const { status, data } = await apiInstance.apiV1TeamsTeamIdApplicationsUserIdRespondPost(
     teamId,
     userId,
-    applicationResponse
+    body
 );
 ```
 
@@ -199,38 +209,37 @@ const { status, data } = await apiInstance.teamsTeamIdApplicationsUserIdRespondP
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **applicationResponse** | **ApplicationResponse**|  | |
+| **body** | **ApiV1TeamsTeamIdApplicationsUserIdRespondPostRequest**|  | |
 | **teamId** | [**number**] |  | defaults to undefined|
 | **userId** | [**number**] |  | defaults to undefined|
 
 
 ### Return type
 
-**SuccessResponse**
+void (empty response body)
 
 ### Authorization
 
-[bearerAuth](../README.md#bearerAuth)
+[Bearer](../README.md#Bearer)
 
 ### HTTP request headers
 
- - **Content-Type**: application/json
- - **Accept**: application/json
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
 
 
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-|**200** | Success - The request has succeeded. |  -  |
-|**400** | Bad Request - The server cannot process the request due to a client error (e.g., malformed request syntax, invalid request message framing, or deceptive request routing). |  -  |
-|**401** | Unauthorized - The client must authenticate itself to get the requested response. |  -  |
-|**403** | Forbidden - The client does not have access rights to the content. |  -  |
-|**404** | Not Found - The server can not find the requested resource. |  -  |
+|**200** | Response sent successfully |  -  |
+|**400** | Invalid action |  -  |
+|**403** | Forbidden |  -  |
+|**404** | Application not found |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **teamsTeamIdApplyPost**
-> SuccessResponse teamsTeamIdApplyPost()
+# **apiV1TeamsTeamIdApplyPost**
+> apiV1TeamsTeamIdApplyPost()
 
 
 ### Example
@@ -246,7 +255,7 @@ const apiInstance = new TeamsApi(configuration);
 
 let teamId: number; // (default to undefined)
 
-const { status, data } = await apiInstance.teamsTeamIdApplyPost(
+const { status, data } = await apiInstance.apiV1TeamsTeamIdApplyPost(
     teamId
 );
 ```
@@ -260,29 +269,28 @@ const { status, data } = await apiInstance.teamsTeamIdApplyPost(
 
 ### Return type
 
-**SuccessResponse**
+void (empty response body)
 
 ### Authorization
 
-[bearerAuth](../README.md#bearerAuth)
+[Bearer](../README.md#Bearer)
 
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/json
+ - **Accept**: Not defined
 
 
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-|**200** | Success - The request has succeeded. |  -  |
-|**400** | Bad Request - The server cannot process the request due to a client error (e.g., malformed request syntax, invalid request message framing, or deceptive request routing). |  -  |
-|**401** | Unauthorized - The client must authenticate itself to get the requested response. |  -  |
+|**200** | Application sent successfully |  -  |
+|**400** | You have already applied or are a member |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **teamsTeamIdFollowPost**
-> FollowToggleResponse teamsTeamIdFollowPost()
+# **apiV1TeamsTeamIdFollowPost**
+> apiV1TeamsTeamIdFollowPost()
 
 
 ### Example
@@ -298,7 +306,7 @@ const apiInstance = new TeamsApi(configuration);
 
 let teamId: number; // (default to undefined)
 
-const { status, data } = await apiInstance.teamsTeamIdFollowPost(
+const { status, data } = await apiInstance.apiV1TeamsTeamIdFollowPost(
     teamId
 );
 ```
@@ -312,29 +320,28 @@ const { status, data } = await apiInstance.teamsTeamIdFollowPost(
 
 ### Return type
 
-**FollowToggleResponse**
+void (empty response body)
 
 ### Authorization
 
-[bearerAuth](../README.md#bearerAuth)
+[Bearer](../README.md#Bearer)
 
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/json
+ - **Accept**: Not defined
 
 
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 |**200** | Follow status toggled |  -  |
-|**401** | Unauthorized - The client must authenticate itself to get the requested response. |  -  |
-|**404** | Not Found - The server can not find the requested resource. |  -  |
+|**404** | Team or user not found |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **teamsTeamIdGet**
-> Team teamsTeamIdGet()
+# **apiV1TeamsTeamIdGet**
+> apiV1TeamsTeamIdGet()
 
 
 ### Example
@@ -350,7 +357,7 @@ const apiInstance = new TeamsApi(configuration);
 
 let teamId: number; // (default to undefined)
 
-const { status, data } = await apiInstance.teamsTeamIdGet(
+const { status, data } = await apiInstance.apiV1TeamsTeamIdGet(
     teamId
 );
 ```
@@ -364,7 +371,7 @@ const { status, data } = await apiInstance.teamsTeamIdGet(
 
 ### Return type
 
-**Team**
+void (empty response body)
 
 ### Authorization
 
@@ -373,19 +380,19 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/json
+ - **Accept**: Not defined
 
 
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-|**200** | Team data |  -  |
-|**404** | Not Found - The server can not find the requested resource. |  -  |
+|**200** | Returns a single team |  -  |
+|**404** | Team not found |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **teamsTeamIdMembersUserIdDelete**
-> SuccessResponse teamsTeamIdMembersUserIdDelete()
+# **apiV1TeamsTeamIdMembersUserIdDelete**
+> apiV1TeamsTeamIdMembersUserIdDelete()
 
 
 ### Example
@@ -402,7 +409,7 @@ const apiInstance = new TeamsApi(configuration);
 let teamId: number; // (default to undefined)
 let userId: number; // (default to undefined)
 
-const { status, data } = await apiInstance.teamsTeamIdMembersUserIdDelete(
+const { status, data } = await apiInstance.apiV1TeamsTeamIdMembersUserIdDelete(
     teamId,
     userId
 );
@@ -418,25 +425,25 @@ const { status, data } = await apiInstance.teamsTeamIdMembersUserIdDelete(
 
 ### Return type
 
-**SuccessResponse**
+void (empty response body)
 
 ### Authorization
 
-[bearerAuth](../README.md#bearerAuth)
+[Bearer](../README.md#Bearer)
 
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/json
+ - **Accept**: Not defined
 
 
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-|**200** | Success - The request has succeeded. |  -  |
-|**401** | Unauthorized - The client must authenticate itself to get the requested response. |  -  |
-|**403** | Forbidden - The client does not have access rights to the content. |  -  |
-|**404** | Not Found - The server can not find the requested resource. |  -  |
+|**200** | Member removed successfully |  -  |
+|**400** | Captain cannot remove themselves |  -  |
+|**403** | Only the captain can remove members |  -  |
+|**404** | Team or member not found |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

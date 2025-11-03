@@ -1,19 +1,19 @@
 # UsersApi
 
-All URIs are relative to */api/v1*
+All URIs are relative to *http://localhost*
 
 |Method | HTTP request | Description|
 |------------- | ------------- | -------------|
-|[**usersGet**](#usersget) | **GET** /users | Get all users|
-|[**usersMeGet**](#usersmeget) | **GET** /users/me | Get current user\&#39;s profile|
-|[**usersPost**](#userspost) | **POST** /users | Create a new user|
-|[**usersUserIdAvatarPost**](#usersuseridavatarpost) | **POST** /users/{user_id}/avatar | Upload a user avatar|
-|[**usersUserIdCoverPost**](#usersuseridcoverpost) | **POST** /users/{user_id}/cover | Upload a user cover image|
-|[**usersUserIdGet**](#usersuseridget) | **GET** /users/{user_id} | Get a user by ID|
-|[**usersUserIdPut**](#usersuseridput) | **PUT** /users/{user_id} | Update a user\&#39;s profile|
+|[**apiV1UsersGet**](#apiv1usersget) | **GET** /api/v1/users | Get all users|
+|[**apiV1UsersMeGet**](#apiv1usersmeget) | **GET** /api/v1/users/me | Get current user|
+|[**apiV1UsersPost**](#apiv1userspost) | **POST** /api/v1/users | Create a new user|
+|[**apiV1UsersUserIdAvatarPost**](#apiv1usersuseridavatarpost) | **POST** /api/v1/users/{user_id}/avatar | Upload an avatar for a user|
+|[**apiV1UsersUserIdCoverPost**](#apiv1usersuseridcoverpost) | **POST** /api/v1/users/{user_id}/cover | Upload a cover image for a user|
+|[**apiV1UsersUserIdGet**](#apiv1usersuseridget) | **GET** /api/v1/users/{user_id} | Get a user by ID|
+|[**apiV1UsersUserIdPut**](#apiv1usersuseridput) | **PUT** /api/v1/users/{user_id} | Update a user|
 
-# **usersGet**
-> Array<User> usersGet()
+# **apiV1UsersGet**
+> apiV1UsersGet()
 
 
 ### Example
@@ -27,7 +27,7 @@ import {
 const configuration = new Configuration();
 const apiInstance = new UsersApi(configuration);
 
-const { status, data } = await apiInstance.usersGet();
+const { status, data } = await apiInstance.apiV1UsersGet();
 ```
 
 ### Parameters
@@ -36,7 +36,7 @@ This endpoint does not have any parameters.
 
 ### Return type
 
-**Array<User>**
+void (empty response body)
 
 ### Authorization
 
@@ -45,18 +45,18 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/json
+ - **Accept**: Not defined
 
 
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-|**200** | A list of users |  -  |
+|**200** | Returns a list of all users |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **usersMeGet**
-> User usersMeGet()
+# **apiV1UsersMeGet**
+> apiV1UsersMeGet()
 
 
 ### Example
@@ -70,10 +70,12 @@ import {
 const configuration = new Configuration();
 const apiInstance = new UsersApi(configuration);
 
-let includeTeams: boolean; // (optional) (default to undefined)
-let includeFollows: boolean; // (optional) (default to undefined)
+let authorization: string; //The user\'s JWT token. (default to 'Bearer YOUR_JWT_TOKEN')
+let includeTeams: boolean; //Include teams in the response (optional) (default to undefined)
+let includeFollows: boolean; //Include followed teams in the response (optional) (default to undefined)
 
-const { status, data } = await apiInstance.usersMeGet(
+const { status, data } = await apiInstance.apiV1UsersMeGet(
+    authorization,
     includeTeams,
     includeFollows
 );
@@ -83,34 +85,34 @@ const { status, data } = await apiInstance.usersMeGet(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **includeTeams** | [**boolean**] |  | (optional) defaults to undefined|
-| **includeFollows** | [**boolean**] |  | (optional) defaults to undefined|
+| **authorization** | [**string**] | The user\&#39;s JWT token. | defaults to 'Bearer YOUR_JWT_TOKEN'|
+| **includeTeams** | [**boolean**] | Include teams in the response | (optional) defaults to undefined|
+| **includeFollows** | [**boolean**] | Include followed teams in the response | (optional) defaults to undefined|
 
 
 ### Return type
 
-**User**
+void (empty response body)
 
 ### Authorization
 
-[bearerAuth](../README.md#bearerAuth)
+No authorization required
 
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/json
+ - **Accept**: Not defined
 
 
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-|**200** | Current user data |  -  |
-|**401** | Unauthorized - The client must authenticate itself to get the requested response. |  -  |
+|**200** | Returns the current user |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **usersPost**
-> User usersPost(newUser)
+# **apiV1UsersPost**
+> apiV1UsersPost(body)
 
 
 ### Example
@@ -119,16 +121,16 @@ const { status, data } = await apiInstance.usersMeGet(
 import {
     UsersApi,
     Configuration,
-    NewUser
+    ApiV1UsersPostRequest
 } from './api';
 
 const configuration = new Configuration();
 const apiInstance = new UsersApi(configuration);
 
-let newUser: NewUser; //
+let body: ApiV1UsersPostRequest; //
 
-const { status, data } = await apiInstance.usersPost(
-    newUser
+const { status, data } = await apiInstance.apiV1UsersPost(
+    body
 );
 ```
 
@@ -136,12 +138,12 @@ const { status, data } = await apiInstance.usersPost(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **newUser** | **NewUser**|  | |
+| **body** | **ApiV1UsersPostRequest**|  | |
 
 
 ### Return type
 
-**User**
+void (empty response body)
 
 ### Authorization
 
@@ -149,20 +151,20 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: application/json
- - **Accept**: application/json
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
 
 
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-|**201** | User created |  -  |
-|**400** | Bad Request - The server cannot process the request due to a client error (e.g., malformed request syntax, invalid request message framing, or deceptive request routing). |  -  |
+|**201** | User created successfully |  -  |
+|**400** | Missing data or nickname/email already exists |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **usersUserIdAvatarPost**
-> User usersUserIdAvatarPost()
+# **apiV1UsersUserIdAvatarPost**
+> apiV1UsersUserIdAvatarPost()
 
 
 ### Example
@@ -177,9 +179,9 @@ const configuration = new Configuration();
 const apiInstance = new UsersApi(configuration);
 
 let userId: number; // (default to undefined)
-let avatar: File; // (optional) (default to undefined)
+let avatar: File; // (default to undefined)
 
-const { status, data } = await apiInstance.usersUserIdAvatarPost(
+const { status, data } = await apiInstance.apiV1UsersUserIdAvatarPost(
     userId,
     avatar
 );
@@ -190,33 +192,34 @@ const { status, data } = await apiInstance.usersUserIdAvatarPost(
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
 | **userId** | [**number**] |  | defaults to undefined|
-| **avatar** | [**File**] |  | (optional) defaults to undefined|
+| **avatar** | [**File**] |  | defaults to undefined|
 
 
 ### Return type
 
-**User**
+void (empty response body)
 
 ### Authorization
 
-[bearerAuth](../README.md#bearerAuth)
+No authorization required
 
 ### HTTP request headers
 
  - **Content-Type**: multipart/form-data
- - **Accept**: application/json
+ - **Accept**: Not defined
 
 
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-|**200** | Avatar uploaded |  -  |
-|**400** | Bad Request - The server cannot process the request due to a client error (e.g., malformed request syntax, invalid request message framing, or deceptive request routing). |  -  |
+|**200** | Avatar uploaded successfully |  -  |
+|**400** | No avatar file provided |  -  |
+|**500** | An internal error occurred during avatar upload |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **usersUserIdCoverPost**
-> User usersUserIdCoverPost()
+# **apiV1UsersUserIdCoverPost**
+> apiV1UsersUserIdCoverPost()
 
 
 ### Example
@@ -231,9 +234,9 @@ const configuration = new Configuration();
 const apiInstance = new UsersApi(configuration);
 
 let userId: number; // (default to undefined)
-let cover: File; // (optional) (default to undefined)
+let cover: File; // (default to undefined)
 
-const { status, data } = await apiInstance.usersUserIdCoverPost(
+const { status, data } = await apiInstance.apiV1UsersUserIdCoverPost(
     userId,
     cover
 );
@@ -244,33 +247,34 @@ const { status, data } = await apiInstance.usersUserIdCoverPost(
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
 | **userId** | [**number**] |  | defaults to undefined|
-| **cover** | [**File**] |  | (optional) defaults to undefined|
+| **cover** | [**File**] |  | defaults to undefined|
 
 
 ### Return type
 
-**User**
+void (empty response body)
 
 ### Authorization
 
-[bearerAuth](../README.md#bearerAuth)
+No authorization required
 
 ### HTTP request headers
 
  - **Content-Type**: multipart/form-data
- - **Accept**: application/json
+ - **Accept**: Not defined
 
 
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-|**200** | Cover uploaded |  -  |
-|**400** | Bad Request - The server cannot process the request due to a client error (e.g., malformed request syntax, invalid request message framing, or deceptive request routing). |  -  |
+|**200** | Cover image uploaded successfully |  -  |
+|**400** | No cover file provided |  -  |
+|**500** | An internal error occurred during cover upload |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **usersUserIdGet**
-> User usersUserIdGet()
+# **apiV1UsersUserIdGet**
+> apiV1UsersUserIdGet()
 
 
 ### Example
@@ -285,10 +289,10 @@ const configuration = new Configuration();
 const apiInstance = new UsersApi(configuration);
 
 let userId: number; // (default to undefined)
-let includeTeams: boolean; // (optional) (default to undefined)
-let includeFollows: boolean; // (optional) (default to undefined)
+let includeTeams: boolean; //Include teams in the response (optional) (default to undefined)
+let includeFollows: boolean; //Include followed teams in the response (optional) (default to undefined)
 
-const { status, data } = await apiInstance.usersUserIdGet(
+const { status, data } = await apiInstance.apiV1UsersUserIdGet(
     userId,
     includeTeams,
     includeFollows
@@ -300,13 +304,13 @@ const { status, data } = await apiInstance.usersUserIdGet(
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
 | **userId** | [**number**] |  | defaults to undefined|
-| **includeTeams** | [**boolean**] |  | (optional) defaults to undefined|
-| **includeFollows** | [**boolean**] |  | (optional) defaults to undefined|
+| **includeTeams** | [**boolean**] | Include teams in the response | (optional) defaults to undefined|
+| **includeFollows** | [**boolean**] | Include followed teams in the response | (optional) defaults to undefined|
 
 
 ### Return type
 
-**User**
+void (empty response body)
 
 ### Authorization
 
@@ -315,19 +319,19 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/json
+ - **Accept**: Not defined
 
 
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-|**200** | User data |  -  |
-|**404** | Not Found - The server can not find the requested resource. |  -  |
+|**200** | Returns a single user |  -  |
+|**404** | User not found |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **usersUserIdPut**
-> User usersUserIdPut()
+# **apiV1UsersUserIdPut**
+> apiV1UsersUserIdPut(body)
 
 
 ### Example
@@ -336,18 +340,18 @@ No authorization required
 import {
     UsersApi,
     Configuration,
-    UserUpdate
+    ApiV1UsersUserIdPutRequest
 } from './api';
 
 const configuration = new Configuration();
 const apiInstance = new UsersApi(configuration);
 
 let userId: number; // (default to undefined)
-let userUpdate: UserUpdate; //Fields to update (optional)
+let body: ApiV1UsersUserIdPutRequest; //
 
-const { status, data } = await apiInstance.usersUserIdPut(
+const { status, data } = await apiInstance.apiV1UsersUserIdPut(
     userId,
-    userUpdate
+    body
 );
 ```
 
@@ -355,30 +359,30 @@ const { status, data } = await apiInstance.usersUserIdPut(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **userUpdate** | **UserUpdate**| Fields to update | |
+| **body** | **ApiV1UsersUserIdPutRequest**|  | |
 | **userId** | [**number**] |  | defaults to undefined|
 
 
 ### Return type
 
-**User**
+void (empty response body)
 
 ### Authorization
 
-[bearerAuth](../README.md#bearerAuth)
+No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: application/json
- - **Accept**: application/json
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
 
 
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-|**200** | User updated |  -  |
-|**400** | Bad Request - The server cannot process the request due to a client error (e.g., malformed request syntax, invalid request message framing, or deceptive request routing). |  -  |
-|**404** | Not Found - The server can not find the requested resource. |  -  |
+|**200** | User updated successfully |  -  |
+|**400** | No data provided or nickname/email already exists |  -  |
+|**404** | User not found |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
