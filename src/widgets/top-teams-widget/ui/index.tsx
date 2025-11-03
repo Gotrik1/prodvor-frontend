@@ -47,7 +47,7 @@ const TopTeamsList = ({ title, teams, icon: Icon, isLoading }: { title: string, 
                     </div>
                 ) : teams.length > 0 ? (
                     <div className="space-y-2">
-                        {teams.slice(0, 5).map((team, index) => (
+                        {teams.map((team, index) => (
                             <TopTeamRow key={team.id} team={team} rank={index + 1} />
                         ))}
                     </div>
@@ -108,15 +108,28 @@ export function TopTeamsWidgetSkeleton() {
 export function TopTeamsWidget() {
     const { user: currentUser } = useUserStore();
     const { toast } = useToast();
-    const [allTeams, setAllTeams] = useState<Team[]>([]);
+    const [topCityTeams, setTopCityTeams] = useState<Team[]>([]);
+    const [topCountryTeams, setTopCountryTeams] = useState<Team[]>([]);
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        const fetchTeams = async () => {
+        const fetchTopTeams = async () => {
             setIsLoading(true);
             try {
-                const response = await api.get('/api/v1/teams');
-                setAllTeams(response.data);
+                const countryPromise = api.get('/api/v1/teams?sort_by=rank&order=desc&limit=5');
+                
+                let cityPromise;
+                if (currentUser?.city) {
+                    cityPromise = api.get(`/api/v1/teams?city=${currentUser.city}&sort_by=rank&order=desc&limit=5`);
+                } else {
+                    cityPromise = Promise.resolve({ data: [] });
+                }
+
+                const [countryResponse, cityResponse] = await Promise.all([countryPromise, cityPromise]);
+                
+                setTopCountryTeams(countryResponse.data);
+                setTopCityTeams(cityResponse.data);
+
             } catch (error) {
                  toast({
                     variant: "destructive",
@@ -127,20 +140,10 @@ export function TopTeamsWidget() {
                 setIsLoading(false);
             }
         };
-        fetchTeams();
-    }, [toast]);
+        fetchTopTeams();
+    }, [toast, currentUser]);
     
-    const { topCityTeams, topCountryTeams } = useMemo(() => {
-        if (!allTeams) return { topCityTeams: [], topCountryTeams: [] };
-        const sortedTeams = [...allTeams].sort((a, b) => (b.rank || 0) - (a.rank || 0));
-        
-        const topCountryTeams = sortedTeams;
-        const topCityTeams = currentUser?.city ? sortedTeams.filter(team => team.city === currentUser.city) : [];
-
-        return { topCityTeams, topCountryTeams };
-    }, [currentUser, allTeams]);
-    
-    if (isLoading) {
+    if (isLoading && topCityTeams.length === 0 && topCountryTeams.length === 0) {
         return <TopTeamsWidgetSkeleton />;
     }
 
