@@ -85,7 +85,7 @@ export function CreateTeamPage() {
         try {
             const response = await api.post(`/api/v1/teams`, {
                 name: teamName,
-                sport_id: discipline, // Changed from sportId
+                sport_id: discipline,
                 city: city,
             });
 

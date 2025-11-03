@@ -3,7 +3,7 @@
 
 import React from 'react';
 import { TeamPageTemplate } from "@/views/admin/ui/templates/team-page-template";
-import type { User, Playground, Team } from "@/mocks";
+import type { Team, User } from "@/mocks";
 import api from '@/shared/api/axios-instance';
 
 export function TeamPublicPage({ teamId }: { teamId: string }) {
