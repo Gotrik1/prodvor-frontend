@@ -19,44 +19,17 @@ import { TeamStatsWidget } from "@/widgets/team-stats-widget";
 import { Skeleton } from '@/shared/ui/skeleton';
 import api from '@/shared/api/axios-instance';
 
-export function TeamPageTemplate({ team: initialTeam, isLoading: initialIsLoading, onDataFetched }: { team?: Team, isLoading?: boolean, onDataFetched?: (data: { members: User[] }) => void }) {
+export function TeamPageTemplate({ team: initialTeam, teamMembers: initialTeamMembers, isLoading: initialIsLoading }: { team?: Team, teamMembers?: User[], isLoading?: boolean }) {
     const [team, setTeam] = React.useState<Team | undefined>(initialTeam);
     const [playgrounds, setPlaygrounds] = React.useState<Playground[]>([]);
-    const [teamMembers, setTeamMembers] = React.useState<User[]>([]);
-    const [isLoading, setIsLoading] = React.useState(initialIsLoading || !initialTeam);
-
-    const fullRoster = useMemo(() => {
-        if (!team) return [];
-        const captain = users.find(u => String(u.id) === String(team.captainId));
-        const members = team.members || [];
-        const roster: User[] = [];
-
-        if (captain) {
-            roster.push(captain);
-        }
-        
-        members.forEach(member => {
-            if (!roster.some(p => p.id === member.id)) {
-                roster.push(member);
-            }
-        });
-        
-        return roster;
-    }, [team]);
-
-    useEffect(() => {
-        if (initialTeam) {
-            setTeam(initialTeam);
-        }
-        setIsLoading(initialIsLoading ?? !initialTeam);
-    }, [initialTeam, initialIsLoading]);
+    const [teamMembers, setTeamMembers] = React.useState<User[]>(initialTeamMembers || []);
+    const [isLoading, setIsLoading] = React.useState(initialIsLoading ?? true);
     
     useEffect(() => {
-        setTeamMembers(fullRoster);
-        if (onDataFetched) {
-            onDataFetched({ members: fullRoster });
-        }
-    }, [fullRoster, onDataFetched]);
+        setTeam(initialTeam);
+        setTeamMembers(initialTeamMembers || []);
+        setIsLoading(initialIsLoading ?? !initialTeam);
+    }, [initialTeam, initialTeamMembers, initialIsLoading]);
 
 
     React.useEffect(() => {

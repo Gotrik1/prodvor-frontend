@@ -36,13 +36,14 @@ export const TeamHeader = ({ team, homePlaygrounds }: TeamHeaderProps) => {
     const isMember = useMemo(() => {
         if (isCaptain) return true;
         if (!currentUser || !team.members) return false;
+        // The `members` array from backend now contains full user objects
         return team.members.some(member => String((member as any).id) === String(currentUser.id));
     }, [currentUser, team, isCaptain]);
 
     const memberCount = useMemo(() => {
-        const memberIds = new Set(team.members?.map(m => (m as any).id) || []);
-        memberIds.add(String(team.captainId)); // Ensure captain is counted
-        return memberIds.size;
+        // Since the backend now returns members, we can get a more accurate count.
+        // We add 1 for the captain who is not in the members array.
+        return (team.members?.length || 0) + 1;
     }, [team]);
 
     return (

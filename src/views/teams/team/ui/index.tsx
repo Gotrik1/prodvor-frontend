@@ -3,11 +3,13 @@
 
 import React from 'react';
 import { TeamPageTemplate } from "@/views/admin/ui/templates/team-page-template";
-import type { Team } from "@/mocks";
+import type { Team, User } from "@/mocks";
+import { users } from '@/mocks';
 import api from '@/shared/api/axios-instance';
 
 export function TeamPublicPage({ teamId }: { teamId: string }) {
     const [team, setTeam] = React.useState<Team | undefined>(undefined);
+    const [teamMembers, setTeamMembers] = React.useState<User[]>([]);
     const [loading, setLoading] = React.useState(true);
 
     React.useEffect(() => {
@@ -19,8 +21,27 @@ export function TeamPublicPage({ teamId }: { teamId: string }) {
                 if (!response.data) {
                     setTeam(undefined);
                 } else {
-                    const data = response.data;
+                    const data: Team & { members: User[] } = response.data;
                     setTeam(data);
+
+                    // --- CORRECT LOGIC TO BUILD FULL ROSTER ---
+                    const captain = users.find(u => String(u.id) === String(data.captainId));
+                    const members = data.members || [];
+                    const fullRoster: User[] = [];
+
+                    if (captain) {
+                        fullRoster.push(captain);
+                    }
+                    
+                    members.forEach(member => {
+                        if (!fullRoster.some(p => p.id === member.id)) {
+                            fullRoster.push(member);
+                        }
+                    });
+                    
+                    setTeamMembers(fullRoster);
+                    // ------------------------------------------
+
                 }
             } catch (error) {
                 console.error("Failed to fetch team:", error);
@@ -32,11 +53,11 @@ export function TeamPublicPage({ teamId }: { teamId: string }) {
 
         getTeam();
     }, [teamId]);
-
-    // Pass team and loading state to the template
+    
+    // Pass the combined roster to the template
     return (
         <div className="container mx-auto">
-             <TeamPageTemplate team={team} isLoading={loading} />
+             <TeamPageTemplate team={team} teamMembers={teamMembers} isLoading={loading} />
         </div>
     );
 }

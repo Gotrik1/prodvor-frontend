@@ -55,6 +55,7 @@ export const TeamRosterWidget = ({ team, teamMembers }: { team: Team, teamMember
 
     const isMember = useMemo(() => {
         if (!currentUser || !teamMembers || teamMembers.length === 0) return false;
+        // The `teamMembers` prop now contains the full roster, including the captain.
         return teamMembers.some(member => String(member.id) === String(currentUser.id));
     }, [teamMembers, currentUser]);
 
