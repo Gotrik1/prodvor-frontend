@@ -88,7 +88,7 @@ export const TeamRosterWidget = ({ team, teamMembers }: { team: Team, teamMember
         <Card>
             <CardHeader className="flex flex-col md:flex-row md:items-center md:justify-between">
                 <div>
-                    <CardTitle>Состав команды ({teamMembers.length})</CardTitle>
+                    <CardTitle>Состав команды ({(team.members?.length || 0) + (team.captain ? 1 : 0)})</CardTitle>
                     <CardDescription>
                         Игроки, представляющие команду в текущем сезоне.
                     </CardDescription>
