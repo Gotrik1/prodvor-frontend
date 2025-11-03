@@ -35,6 +35,13 @@ export function TeamsTab() {
       .filter(Boolean)
       .join(', ');
   };
+
+  const getCaptainNickname = (captainId?: string | number) => {
+    if (!captainId) return 'N/A';
+    const captain = users.find(u => String(u.id) === String(captainId));
+    return captain?.nickname || 'N/A';
+  }
+
   return (
     <Card>
       <CardHeader>
@@ -82,7 +89,7 @@ export function TeamsTab() {
                 <Badge variant="secondary">{team.game}</Badge>
               </TableCell>
               <TableCell className="text-xs">
-                {users.find((u) => u.id === team.captainId)?.nickname || 'N/A'}
+                {getCaptainNickname(team.captainId)}
               </TableCell>
               <TableCell>{team.members.length}</TableCell>
               <TableCell className="font-mono">{team.rank}</TableCell>
