@@ -26,9 +26,8 @@ export function TeamPublicPage({ teamId }: { teamId: string }) {
 
                     const fullRoster: User[] = [];
 
-                    // Add captain to the roster
+                    // Add captain to the roster, marking them as captain
                     if (data.captain) {
-                        // Mark the user as captain for UI purposes
                         fullRoster.push({ ...data.captain, role: 'Капитан' });
                     }
                     
@@ -52,7 +51,6 @@ export function TeamPublicPage({ teamId }: { teamId: string }) {
         getTeam();
     }, [teamId]);
     
-    // Pass the combined roster to the template
     return (
         <div className="container mx-auto">
              <TeamPageTemplate team={team} teamMembers={teamMembers} isLoading={loading} />

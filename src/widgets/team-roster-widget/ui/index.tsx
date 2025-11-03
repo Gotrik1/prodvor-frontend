@@ -13,7 +13,7 @@ import { useMemo } from "react";
 import { useUserStore } from "@/widgets/dashboard-header/model/user-store";
 import api from "@/shared/api/axios-instance";
 
-const TeamRoster = ({ teamMembers, captainId }: { teamMembers: User[], captainId: string }) => {
+const TeamRoster = ({ teamMembers }: { teamMembers: User[] }) => {
     if (!teamMembers || teamMembers.length === 0) {
         return (
             <div className="text-center text-muted-foreground py-8">
@@ -34,7 +34,7 @@ const TeamRoster = ({ teamMembers, captainId }: { teamMembers: User[], captainId
                     <div>
                         <p className="font-semibold group-hover:text-primary transition-colors">{member.nickname}</p>
                         <p className="text-xs text-muted-foreground">{member.firstName} {member.lastName}</p>
-                        {String(member.id) === String(captainId) && (
+                        {member.role === 'Капитан' && (
                             <Badge variant="default" className="mt-1">
                                 <Crown className="h-3 w-3 mr-1" />
                                 Капитан
@@ -55,7 +55,6 @@ export const TeamRosterWidget = ({ team, teamMembers }: { team: Team, teamMember
 
     const isMember = useMemo(() => {
         if (!currentUser || !teamMembers || teamMembers.length === 0) return false;
-        // The `teamMembers` prop now contains the full roster, including the captain.
         return teamMembers.some(member => String(member.id) === String(currentUser.id));
     }, [teamMembers, currentUser]);
 
@@ -101,7 +100,7 @@ export const TeamRosterWidget = ({ team, teamMembers }: { team: Team, teamMember
                 )}
             </CardHeader>
             <CardContent>
-                <TeamRoster teamMembers={teamMembers} captainId={String(team.captainId)} />
+                <TeamRoster teamMembers={teamMembers} />
             </CardContent>
         </Card>
     );

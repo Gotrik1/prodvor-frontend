@@ -10,7 +10,6 @@ import { useUserStore } from '@/widgets/dashboard-header/model/user-store';
 import { useState, useMemo } from 'react';
 import { useToast } from '@/shared/hooks/use-toast';
 import { cn } from '@/shared/lib/utils';
-import { users } from '@/mocks';
 
 interface TeamHeaderProps {
     team: Team;
@@ -21,7 +20,6 @@ export const TeamHeader = ({ team, homePlaygrounds }: TeamHeaderProps) => {
     const { user: currentUser } = useUserStore();
     const { toast } = useToast();
     
-    // In a real app, this would come from user data
     const [isFollowing, setIsFollowing] = useState(false); 
 
     const handleFollow = () => {
@@ -32,18 +30,21 @@ export const TeamHeader = ({ team, homePlaygrounds }: TeamHeaderProps) => {
         });
     }
 
-    const isCaptain = currentUser ? String(currentUser.id) === String(team.captainId) : false;
+    const isCaptain = useMemo(() => {
+        return currentUser && team.captain && currentUser.id === team.captain.id;
+    }, [currentUser, team]);
+
     const isMember = useMemo(() => {
+        if (!currentUser) return false;
         if (isCaptain) return true;
-        if (!currentUser || !team.members) return false;
-        // The `members` array from backend now contains full user objects
-        return team.members.some(member => String((member as any).id) === String(currentUser.id));
+        return team.members?.some(member => String(member.id) === String(currentUser.id)) || false;
     }, [currentUser, team, isCaptain]);
 
     const memberCount = useMemo(() => {
-        // Since the backend now returns members, we can get a more accurate count.
-        // We add 1 for the captain who is not in the members array.
-        return (team.members?.length || 0) + 1;
+        const uniqueMembers = new Set();
+        if (team.captain) uniqueMembers.add(team.captain.id);
+        team.members?.forEach(member => uniqueMembers.add(member.id));
+        return uniqueMembers.size;
     }, [team]);
 
     return (
