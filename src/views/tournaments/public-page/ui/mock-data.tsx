@@ -4,6 +4,7 @@ import { playgrounds } from '@/mocks/playgrounds';
 import { registeredTeams as baseRegisteredTeams } from '@/mocks/teams';
 import { sponsors as allMockSponsors } from '@/mocks/personnel';
 import { requirements as allMockRequirements } from '@/mocks/requirements';
+import { tournaments as allTournaments } from '@/mocks/tournaments';
 
 export interface Team {
   id: string;
@@ -47,3 +48,4 @@ export interface Tournament {
 export const registeredTeams: Team[] = baseRegisteredTeams;
 export const sponsors = allMockSponsors;
 export const requirements = allMockRequirements;
+export const mockMyTournaments: Tournament[] = allTournaments.slice(0, 2);

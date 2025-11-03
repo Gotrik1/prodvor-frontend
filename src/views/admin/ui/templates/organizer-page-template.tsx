@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import { mockMyTournaments } from "@/views/tournaments/public-page/ui/mock-data";

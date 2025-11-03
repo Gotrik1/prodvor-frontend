@@ -13,6 +13,7 @@ import { MyTournamentsEmptyState } from "./my-tournaments-empty-state";
 import api from "@/shared/api/axios-instance";
 import { useState, useEffect } from "react";
 import { Skeleton } from "@/shared/ui/skeleton";
+import { mockMyTournaments } from "@/views/tournaments/public-page/ui/mock-data";
 
 
 type TournamentStatus = 'АНОНС' | 'ПРЕДРЕГИСТРАЦИЯ' | 'РЕГИСТРАЦИЯ' | 'ИДЕТ' | 'ЗАВЕРШЕН' | 'ПРИОСТАНОВЛЕН' | 'ОТМЕНЕН';
@@ -40,9 +41,6 @@ const TournamentCardActionButton = ({ id, status }: { id: string, status: Tourna
     }
 }
 
-const mockMyTournaments: Tournament[] = [
-    // Empty for demonstration purposes. In a real app, this would be a user's data.
-];
 
 export function TournamentsPage() {
     const [allTournaments, setAllTournaments] = useState<Tournament[]>([]);
