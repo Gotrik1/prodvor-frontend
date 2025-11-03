@@ -36,9 +36,21 @@ export function TeamManagementPage({ teamId }: { teamId: string }) {
             const response = await api.get(`/api/v1/teams/${teamId}`);
             const teamData = response.data;
             setTeam(teamData);
-            if (teamData && currentUser) {
-                setIsCaptain(currentUser.id === teamData.captainId);
+            
+            if (teamData.captain && currentUser) {
+                setIsCaptain(currentUser.id === teamData.captain.id);
             }
+
+            const fullRoster: User[] = [];
+            if (teamData.captain) {
+                fullRoster.push({ ...teamData.captain, role: 'Капитан' });
+            }
+            teamData.members?.forEach((member: User) => {
+                if (!fullRoster.some(p => p.id === member.id)) {
+                    fullRoster.push(member);
+                }
+            });
+            setTeamMembers(fullRoster);
         } catch (error) {
             console.error("Failed to fetch team:", error);
         } finally {
@@ -50,11 +62,6 @@ export function TeamManagementPage({ teamId }: { teamId: string }) {
     useEffect(() => {
         fetchTeamData();
     }, [fetchTeamData]);
-
-    const handleDataFetched = useCallback((data: { members: User[] }) => {
-        setTeamMembers(data.members);
-    }, []);
-
 
     if (loading) {
         return (
@@ -103,7 +110,6 @@ export function TeamManagementPage({ teamId }: { teamId: string }) {
 
     return (
         <div className="p-4 md:p-6 lg:p-8">
-            <TeamPageTemplate team={team} onDataFetched={handleDataFetched} />
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
                  <div>
                     <h1 className="text-3xl font-bold font-headline">Управление командой</h1>
