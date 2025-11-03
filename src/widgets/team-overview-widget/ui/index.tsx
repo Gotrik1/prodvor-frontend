@@ -1,12 +1,15 @@
 
-
 'use client';
 
-import type { Team } from "@/mocks";
+import type { Team, User } from "@/mocks";
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
-import { Crown, Shield, Star, Trophy, TrendingUp, TrendingDown } from "lucide-react";
+import { Crown, Shield, Star, Trophy, TrendingUp, TrendingDown, Rss } from "lucide-react";
 import { StatCard } from "@/shared/ui/stat-card";
 import { users } from "@/mocks";
+import Link from "next/link";
+import { Avatar, AvatarImage, AvatarFallback } from "@/shared/ui/avatar";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/shared/ui/tooltip";
+
 
 const FormBadge = ({ result }: { result: 'W' | 'L' | 'D' }) => {
     const baseClasses = "flex items-center justify-center w-8 h-8 rounded-md font-bold";
@@ -31,7 +34,8 @@ export const TeamOverviewWidget = ({ team }: TeamOverviewWidgetProps) => {
         mvpPlayerId, 
         topScorerPlayerId, 
         cleanSheets = 0, 
-        avgRating = 0 
+        avgRating = 0,
+        followers: followerIds = []
     } = team;
 
     const totalMatches = wins + losses;
@@ -41,6 +45,8 @@ export const TeamOverviewWidget = ({ team }: TeamOverviewWidgetProps) => {
     const topScorer = users.find(u => u.id === topScorerPlayerId);
     const currentStreak = currentStreakType && currentStreakCount ? { type: currentStreakType, count: currentStreakCount } : null;
     const teamForm = typeof form === 'string' ? form.split('') as ('W' | 'L' | 'D')[] : [];
+
+    const followerUsers = users.filter(user => followerIds.includes(user.id));
 
     return (
         <div className="space-y-6">
@@ -97,6 +103,40 @@ export const TeamOverviewWidget = ({ team }: TeamOverviewWidgetProps) => {
                     <StatCard title="Лучший бомбардир" value={topScorer ? topScorer.nickname : 'N/A'} icon={Trophy} />
                     <StatCard title="Сухие матчи" value={cleanSheets} icon={Shield} />
                     <StatCard title="Средний рейтинг" value={avgRating} icon={Crown} />
+                </CardContent>
+            </Card>
+
+             <Card>
+                <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                        <Rss className="h-5 w-5 text-primary" />
+                        Подписчики ({followerUsers.length})
+                    </CardTitle>
+                </CardHeader>
+                <CardContent>
+                    {followerUsers.length > 0 ? (
+                        <div className="flex flex-wrap gap-3">
+                            {followerUsers.map(user => (
+                                <TooltipProvider key={user.id}>
+                                    <Tooltip>
+                                        <TooltipTrigger asChild>
+                                            <Link href={`/users/${user.id}`} className="block">
+                                                <Avatar className="h-14 w-14 border-2 border-transparent hover:border-primary transition-colors">
+                                                    <AvatarImage src={user.avatarUrl} alt={user.nickname} />
+                                                    <AvatarFallback>{user.nickname.charAt(0)}</AvatarFallback>
+                                                </Avatar>
+                                            </Link>
+                                        </TooltipTrigger>
+                                        <TooltipContent>
+                                            <p>{user.nickname}</p>
+                                        </TooltipContent>
+                                    </Tooltip>
+                                </TooltipProvider>
+                            ))}
+                        </div>
+                    ) : (
+                        <p className="text-sm text-muted-foreground text-center py-4">У команды пока нет подписчиков.</p>
+                    )}
                 </CardContent>
             </Card>
         </div>
