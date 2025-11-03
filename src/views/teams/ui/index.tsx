@@ -2,7 +2,7 @@
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
-import { type Team } from '@/mocks';
+import { type Team, type User } from '@/mocks';
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/shared/ui/card";
 import { PlusCircle, UserCheck, Users, BarChart } from "lucide-react";
@@ -23,18 +23,18 @@ const TeamCard = ({ team, isMember, onApply, isApplicationSent }: { team: Team, 
                 <img src={team.logoUrl || 'https://placehold.co/512x512.png'} alt={`${team.name} logo`} width={64} height={64} className="rounded-lg border object-cover aspect-square" />
                 <div>
                     <CardTitle className="text-xl group-hover:text-primary transition-colors">{team.name}</CardTitle>
-                    <CardDescription>{team.game}</CardDescription>
+                    <CardDescription>{team.sport?.name || team.game}</CardDescription>
                 </div>
             </Link>
         </CardHeader>
         <CardContent className="flex-grow space-y-2">
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
                 <Users className="h-4 w-4" />
-                <span>{team.members?.length || 1} игроков</span>
+                <span>{ (team.members?.length || 0) + 1} игроков</span>
             </div>
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
                 <BarChart className="h-4 w-4" />
-                <span>{team.rank || 1200} ELO</span>
+                <span>{team.rank ?? 0} ELO</span>
             </div>
             <div>
                 <Badge variant="secondary">Ищет игроков</Badge>
@@ -46,7 +46,7 @@ const TeamCard = ({ team, isMember, onApply, isApplicationSent }: { team: Team, 
                      <Link href={`/teams/${team.id}`}>Перейти в профиль</Link>
                 </Button>
             ) : (
-                <Button className="w-full" onClick={() => onApply(team.id)} disabled={isApplicationSent}>
+                <Button className="w-full" onClick={() => onApply(String(team.id))} disabled={isApplicationSent}>
                     <UserCheck className="mr-2 h-4 w-4" /> 
                     {isApplicationSent ? 'Заявка отправлена' : 'Подать заявку'}
                 </Button>
@@ -114,12 +114,11 @@ export function TeamsPage() {
             return { myTeams: [], otherTeams: allTeams };
         }
         
-        const myTeams = allTeams.filter(team => team.captainId === currentUser.id || (team.members && team.members.includes(currentUser.id)));
+        const myTeams = allTeams.filter(team => team.captain?.id === currentUser.id || team.members?.some(m => m.id === currentUser.id));
         const otherTeams = allTeams.filter(team => !myTeams.some(mt => mt.id === team.id));
         return { myTeams, otherTeams };
     }, [currentUser, allTeams]);
     
-    // Logic to only show "My Teams" if the user has teams.
     const showMyTeams = currentUser && myTeams.length > 0;
 
     return (
@@ -175,7 +174,7 @@ export function TeamsPage() {
                                     team={team} 
                                     isMember={false} 
                                     onApply={handleApply}
-                                    isApplicationSent={sentApplications.includes(team.id)}
+                                    isApplicationSent={sentApplications.includes(String(team.id))}
                                 />
                             ))}
                         </div>
