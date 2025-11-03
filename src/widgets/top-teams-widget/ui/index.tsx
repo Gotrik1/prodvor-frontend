@@ -106,7 +106,7 @@ export function TopTeamsWidgetSkeleton() {
 }
 
 export function TopTeamsWidget() {
-    const { user: currentUser } = useUserStore();
+    const { user: currentUser, accessToken } = useUserStore();
     const { toast } = useToast();
     const [topCityTeams, setTopCityTeams] = useState<Team[]>([]);
     const [topCountryTeams, setTopCountryTeams] = useState<Team[]>([]);
@@ -120,7 +120,15 @@ export function TopTeamsWidget() {
                 
                 let cityPromise;
                 if (currentUser?.city) {
-                    cityPromise = api.get(`/api/v1/teams?city=${currentUser.city}&sort_by=rank&order=desc&limit=5`);
+                    const url = `/api/v1/teams?city=${encodeURIComponent(currentUser.city)}&sort_by=rank&order=desc&limit=5`;
+                    console.log(`
+--- DEBUG: curl command for City Top Teams ---
+
+curl -X GET "${api.defaults.baseURL}${url}" -H "Authorization: Bearer ${accessToken}"
+
+--------------------------------------------
+                    `);
+                    cityPromise = api.get(url);
                 } else {
                     cityPromise = Promise.resolve({ data: [] });
                 }
@@ -140,8 +148,10 @@ export function TopTeamsWidget() {
                 setIsLoading(false);
             }
         };
-        fetchTopTeams();
-    }, [toast, currentUser]);
+        if (currentUser) {
+            fetchTopTeams();
+        }
+    }, [toast, currentUser, accessToken]);
     
     if (isLoading && topCityTeams.length === 0 && topCountryTeams.length === 0) {
         return <TopTeamsWidgetSkeleton />;
