@@ -2,17 +2,19 @@
 'use client';
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
-import { Button } from "@/shared/ui/button";
 import { Users } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
-import { User, Team } from '@/mocks';
+import type { User, Team } from '@/shared/api';
 import React, { useState, useEffect } from "react";
 import { Skeleton } from "@/shared/ui/skeleton";
 import { ScrollArea } from "@/shared/ui/scroll-area";
 import { MyTeamsEmptyState } from "@/views/teams/ui/my-teams-empty-state";
-import api from "@/shared/api/axios-instance";
+import { UsersApi } from "@/shared/api";
+import { apiConfig } from "@/shared/api/axios-instance";
 import { useToast } from "@/shared/hooks/use-toast";
+
+const usersApi = new UsersApi(apiConfig);
 
 export function MyTeamWidget({ user }: { user: User }) {
   const [myTeams, setMyTeams] = useState<Team[]>([]);
@@ -27,12 +29,11 @@ export function MyTeamWidget({ user }: { user: User }) {
         }
         setIsLoading(true);
         try {
-            const response = await api.get(`/api/v1/users/me?include_teams=true`);
+            const response = await usersApi.usersMeGet(true);
             const userWithTeams: User & { teams?: Team[] } = response.data;
             setMyTeams(userWithTeams.teams || []);
         } catch (error) {
             console.error("Failed to fetch user's teams:", error);
-            // Don't show a toast here to avoid bothering the user if they're just not logged in
         } finally {
             setIsLoading(false);
         }
@@ -80,7 +81,7 @@ export function MyTeamWidget({ user }: { user: User }) {
                     <Link href={`/teams/${team.id}`} key={team.id} className="block group">
                         <div className="flex items-center justify-between gap-3 p-2 rounded-md hover:bg-muted/50 transition-colors">
                             <div className="flex items-center gap-3">
-                                <Image src={team.logoUrl || 'https://placehold.co/512x512.png'} alt={team.name} width={40} height={40} sizes="40px" className="rounded-md border aspect-square object-cover" data-ai-hint="team logo" />
+                                <Image src={team.logoUrl || 'https://placehold.co/512x512.png'} alt={team.name || 'Team Logo'} width={40} height={40} sizes="40px" className="rounded-md border aspect-square object-cover" data-ai-hint="team logo" />
                                 <div>
                                     <p className="font-semibold leading-tight group-hover:text-primary transition-colors">{team.name}</p>
                                     <p className="text-xs text-muted-foreground">{team.sport?.name || team.game}</p>

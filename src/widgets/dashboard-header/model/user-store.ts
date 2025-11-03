@@ -2,9 +2,12 @@
 'use client';
 
 import { create } from 'zustand';
-import type { User } from '@/mocks/users';
+import type { User } from '@/shared/api';
 import { persist, createJSONStorage } from 'zustand/middleware';
-import api from '@/shared/api/axios-instance';
+import { AuthApi } from '@/shared/api';
+import { apiConfig } from '@/shared/api/axios-instance';
+
+const authApi = new AuthApi(apiConfig);
 
 interface UserState {
   user: User | null;
@@ -33,11 +36,9 @@ const useUserStore = create<UserState>()(
             const refreshToken = localStorage.getItem('refreshToken');
             if (refreshToken) {
                 try {
-                    // Inform the backend to invalidate the session
-                    await api.post('/api/v1/auth/logout', { refreshToken });
+                    await authApi.authLogoutPost({ refreshToken } as any);
                 } catch (error) {
                     console.error("Failed to logout on backend:", error);
-                    // Continue with client-side logout even if backend fails
                 }
             }
             localStorage.removeItem('refreshToken');

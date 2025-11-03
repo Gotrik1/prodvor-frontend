@@ -2,18 +2,15 @@
 import { PlaygroundPage } from '@/views/playgrounds/playground';
 import type { Playground } from '@/mocks';
 import type { Metadata } from 'next';
+import { PlaygroundsApi } from '@/shared/api';
+import { apiConfig } from '@/shared/api/axios-instance';
+
+const playgroundsApi = new PlaygroundsApi(apiConfig);
 
 async function getPlayground(playgroundId: string): Promise<Playground | undefined> {
-    // This fetch does not require auth, so it can remain a direct fetch.
-    const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'https://8080-firebase-prodvor-backend-1761850902881.cluster-ombtxv25tbd6yrjpp3lukp6zhc.cloudworkstations.dev';
-    if (!API_BASE_URL) {
-        console.error("[ Server ] API_BASE_URL is not defined.");
-        return undefined;
-    }
     try {
-        const response = await fetch(`${API_BASE_URL}/api/v1/playgrounds/${playgroundId}`);
-        if (!response.ok) return undefined;
-        return await response.json();
+        const response = await playgroundsApi.playgroundsPlaygroundIdGet(parseInt(playgroundId, 10));
+        return response.data as Playground; // Cast to mock type for now
     } catch (error) {
         console.error("Failed to fetch playground:", error);
         return undefined;

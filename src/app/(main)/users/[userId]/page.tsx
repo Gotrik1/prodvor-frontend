@@ -10,25 +10,19 @@ import { ManagerPageTemplate } from '@/views/admin/ui/templates/manager-page-tem
 import { OrganizerPageTemplate } from '@/views/admin/ui/templates/organizer-page-template';
 import { RefereePageTemplate } from '@/views/admin/ui/templates/referee-page-template';
 import { PlaceholderTemplate } from '@/views/admin/ui/templates/placeholder-template';
-import type { User, Team } from '@/mocks';
+import type { User, Team } from '@/shared/api';
 import { PlayerPageTemplate } from '@/views/admin/ui/templates/player-page-template';
+import { UsersApi } from '@/shared/api';
+import { apiConfig } from '@/shared/api/axios-instance';
 
+const usersApi = new UsersApi(apiConfig);
 
 async function getUser(userId: string): Promise<(User & { teams?: Team[] }) | undefined> {
-    const API_BASE_URL = 'https://8080-firebase-prodvor-backend-1761850902881.cluster-ombtxv25tbd6yrjpp3lukp6zhc.cloudworkstations.dev';
-    if (!API_BASE_URL) {
-        console.error("[ Server ] API_BASE_URL is not defined.");
-        return undefined;
-    }
     try {
-        const response = await fetch(`${API_BASE_URL}/api/v1/users/${userId}?include_teams=true`);
-        if (!response.ok) {
-            console.error(`[ Server ] Failed to fetch user: ${response.status}`);
-            return undefined;
-        }
-        return await response.json();
-    } catch (error) {
-        console.error(`[ Server ] Failed to fetch user:`, error);
+        const response = await usersApi.usersUserIdGet(parseInt(userId, 10), true);
+        return response.data;
+    } catch (error: any) {
+        console.error(`[ Server ] Failed to fetch user: ${error.response?.status || error.message}`);
         return undefined;
     }
 }
@@ -85,7 +79,7 @@ export default async function UserProfilePage({ params }: { params: { userId: st
       case 'Болельщик':
           return <FanPageTemplate user={user} />;
       default:
-          return <PlaceholderTemplate roleName={user.role} />;
+          return <PlaceholderTemplate roleName={user.role || 'Неизвестная роль'} />;
     }
   }
 

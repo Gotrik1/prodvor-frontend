@@ -1,15 +1,16 @@
 
 import { TournamentHubPage } from '@/views/tournaments/hub';
 import type { Metadata } from 'next';
-import type { Tournament } from '@/mocks';
+import type { Tournament } from '@/shared/api';
+import { TournamentsApi } from '@/shared/api';
+import { apiConfig } from '@/shared/api/axios-instance';
+
+const tournamentsApi = new TournamentsApi(apiConfig);
 
 async function getTournament(tournamentId: string): Promise<Tournament | undefined> {
-    const API_BASE_URL = 'https://8080-firebase-prodvor-backend-1761850902881.cluster-ombtxv25tbd6yrjpp3lukp6zhc.cloudworkstations.dev';
-    if (!API_BASE_URL) return undefined;
     try {
-        const response = await fetch(`${API_BASE_URL}/api/v1/tournaments/${tournamentId}`);
-        if (!response.ok) return undefined;
-        return await response.json();
+        const response = await tournamentsApi.tournamentsTournamentIdGet(parseInt(tournamentId));
+        return response.data;
     } catch (error) {
         console.error("Failed to fetch tournament:", error);
         return undefined;

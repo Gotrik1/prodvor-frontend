@@ -1,10 +1,12 @@
+
 'use client';
 
 import axios from 'axios';
 import { useUserStore } from '@/widgets/dashboard-header/model/user-store';
+import { Configuration } from './configuration';
 
 const api = axios.create({
-  baseURL: 'https://8080-firebase-prodvor-backend-1761850902881.cluster-ombtxv25tbd6yrjpp3lukp6zhc.cloudworkstations.dev',
+  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL || 'https://8080-firebase-prodvor-backend-1761850902881.cluster-ombtxv25tbd6yrjpp3lukp6zhc.cloudworkstations.dev',
 });
 
 api.interceptors.request.use(
@@ -19,5 +21,10 @@ api.interceptors.request.use(
     return Promise.reject(error);
   }
 );
+
+export const apiConfig = new Configuration({
+    basePath: process.env.NEXT_PUBLIC_API_BASE_URL || 'https://8080-firebase-prodvor-backend-1761850902881.cluster-ombtxv25tbd6yrjpp3lukp6zhc.cloudworkstations.dev',
+    accessToken: () => useUserStore.getState().accessToken || undefined,
+});
 
 export default api;
