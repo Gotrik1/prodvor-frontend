@@ -31,21 +31,17 @@ export const TeamHeader = ({ team, homePlaygrounds }: TeamHeaderProps) => {
     }
 
     const isCaptain = useMemo(() => {
-        return currentUser && team.captain && currentUser.id === team.captain.id;
-    }, [currentUser, team]);
+        if (!currentUser || !team.captain) return false;
+        return String(currentUser.id) === String(team.captain.id);
+    }, [currentUser, team.captain]);
 
     const isMember = useMemo(() => {
-        if (!currentUser) return false;
-        if (isCaptain) return true;
-        return team.members?.some(member => String(member.id) === String(currentUser.id)) || false;
-    }, [currentUser, team, isCaptain]);
+        if (!currentUser || !team.members) return false;
+        if (isCaptain) return true; // Капитан всегда участник
+        return team.members.some(member => String(member.id) === String(currentUser.id));
+    }, [currentUser, team.members, isCaptain]);
 
-    const memberCount = useMemo(() => {
-        const uniqueMembers = new Set();
-        if (team.captain) uniqueMembers.add(team.captain.id);
-        team.members?.forEach(member => uniqueMembers.add(member.id));
-        return uniqueMembers.size;
-    }, [team]);
+    const memberCount = team.members?.length || 0;
 
     return (
         <header className="flex flex-col md:flex-row items-center gap-6 p-4 rounded-lg bg-card border">
