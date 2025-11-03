@@ -1,3 +1,4 @@
+
 'use client';
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
@@ -9,20 +10,63 @@ import { User, Team } from '@/mocks';
 import React, { useState, useEffect } from "react";
 import { Skeleton } from "@/shared/ui/skeleton";
 import { ScrollArea } from "@/shared/ui/scroll-area";
+import { MyTeamsEmptyState } from "@/views/teams/ui/my-teams-empty-state";
+import api from "@/shared/api/axios-instance";
+import { useToast } from "@/shared/hooks/use-toast";
 
-export function MyTeamWidget({ user }: { user: User & { teams?: Team[] } }) {
+export function MyTeamWidget({ user }: { user: User }) {
   const [myTeams, setMyTeams] = useState<Team[]>([]);
-  const [isClient, setIsClient] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const { toast } = useToast();
 
   useEffect(() => {
-    setIsClient(true);
-    // The user object from the API now contains the teams array directly.
-    if (user && user.teams) {
-        setMyTeams(user.teams);
-    } else {
-        setMyTeams([]);
-    }
+    const fetchUserTeams = async () => {
+        if (!user) {
+            setIsLoading(false);
+            return;
+        }
+        setIsLoading(true);
+        try {
+            const response = await api.get(`/api/v1/users/me?include_teams=true`);
+            const userWithTeams: User & { teams?: Team[] } = response.data;
+            setMyTeams(userWithTeams.teams || []);
+        } catch (error) {
+            console.error("Failed to fetch user's teams:", error);
+            // Don't show a toast here to avoid bothering the user if they're just not logged in
+        } finally {
+            setIsLoading(false);
+        }
+    };
+    
+    fetchUserTeams();
   }, [user]);
+
+  if (isLoading) {
+    return (
+        <Card className="bg-card shadow-none md:shadow-main-sm">
+            <CardHeader>
+                <CardTitle className="flex items-center gap-2"><Users /> Мои команды</CardTitle>
+            </CardHeader>
+            <CardContent>
+                <div className="space-y-3">
+                    {[...Array(2)].map((_, i) => (
+                        <div key={i} className="flex items-center gap-3">
+                            <Skeleton className="h-10 w-10 rounded-md" />
+                            <div className="space-y-2 flex-grow">
+                                <Skeleton className="h-4 w-24" />
+                                <Skeleton className="h-3 w-16" />
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </CardContent>
+        </Card>
+    );
+  }
+
+  if (myTeams.length === 0) {
+      return <MyTeamsEmptyState />
+  }
 
   return (
     <Card className="bg-card shadow-none md:shadow-main-sm">
@@ -30,36 +74,23 @@ export function MyTeamWidget({ user }: { user: User & { teams?: Team[] } }) {
         <CardTitle className="flex items-center gap-2"><Users /> Мои команды</CardTitle>
       </CardHeader>
       <CardContent>
-        {!isClient ? (
-             <div className="space-y-3">
-                <div className="flex items-center gap-3"><Skeleton className="h-10 w-10 rounded-md" /><div className="space-y-2"><Skeleton className="h-4 w-24" /><Skeleton className="h-3 w-16" /></div></div>
-            </div>
-        ) : myTeams.length > 0 ? (
-            <ScrollArea className="h-60">
-                <div className="space-y-3 pr-4">
-                    {myTeams.map(team => (
-                        <Link href={`/teams/${team.id}`} key={team.id} className="block group">
-                             <div className="flex items-center justify-between gap-3 p-2 rounded-md hover:bg-muted/50 transition-colors">
-                                <div className="flex items-center gap-3">
-                                    <Image src={team.logoUrl || 'https://placehold.co/512x512.png'} alt={team.name} width={40} height={40} sizes="40px" className="rounded-md border aspect-square object-cover" data-ai-hint="team logo" />
-                                    <div>
-                                        <p className="font-semibold leading-tight group-hover:text-primary transition-colors">{team.name}</p>
-                                        <p className="text-xs text-muted-foreground">{team.sport?.name || team.game}</p>
-                                    </div>
+        <ScrollArea className="h-auto max-h-60">
+            <div className="space-y-3 pr-4">
+                {myTeams.map(team => (
+                    <Link href={`/teams/${team.id}`} key={team.id} className="block group">
+                        <div className="flex items-center justify-between gap-3 p-2 rounded-md hover:bg-muted/50 transition-colors">
+                            <div className="flex items-center gap-3">
+                                <Image src={team.logoUrl || 'https://placehold.co/512x512.png'} alt={team.name} width={40} height={40} sizes="40px" className="rounded-md border aspect-square object-cover" data-ai-hint="team logo" />
+                                <div>
+                                    <p className="font-semibold leading-tight group-hover:text-primary transition-colors">{team.name}</p>
+                                    <p className="text-xs text-muted-foreground">{team.sport?.name || team.game}</p>
                                 </div>
                             </div>
-                        </Link>
-                    ))}
-                </div>
-            </ScrollArea>
-        ) : (
-             <div className="text-center">
-                <p className="text-sm text-muted-foreground mb-4">Этот пользователь не состоит в командах.</p>
-                <Button asChild variant="secondary">
-                    <Link href="/teams">Найти или создать команду</Link>
-                </Button>
+                        </div>
+                    </Link>
+                ))}
             </div>
-        )}
+        </ScrollArea>
       </CardContent>
     </Card>
   );

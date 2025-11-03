@@ -2,21 +2,20 @@
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
-import { type Team, type User } from '@/mocks';
+import { type Team } from '@/mocks';
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/shared/ui/card";
 import { PlusCircle, UserCheck, Users, BarChart } from "lucide-react";
 import { Badge } from "@/shared/ui/badge";
 import Link from "next/link";
 import { useUserStore } from "@/widgets/dashboard-header/model/user-store";
-import { Separator } from "@/shared/ui/separator";
 import { useToast } from '@/shared/hooks/use-toast';
 import { Skeleton } from '@/shared/ui/skeleton';
 import { TopTeamsWidget } from '@/widgets/top-teams-widget';
 import api from '@/shared/api/axios-instance';
-import { MyTeamsEmptyState } from './my-teams-empty-state';
+import { MyTeamWidget } from '@/widgets/my-team-widget';
 
-const TeamCard = ({ team, isMember, onApply, isApplicationSent }: { team: Team, isMember: boolean, onApply: (teamId: string) => Promise<void>, isApplicationSent: boolean }) => {
+const TeamCard = ({ team, onApply, isApplicationSent }: { team: Team, onApply: (teamId: string) => Promise<void>, isApplicationSent: boolean }) => {
     return (
     <Card key={team.id} className="flex flex-col">
         <CardHeader>
@@ -42,16 +41,10 @@ const TeamCard = ({ team, isMember, onApply, isApplicationSent }: { team: Team, 
             </div>
         </CardContent>
         <CardFooter>
-            {isMember ? (
-                <Button asChild className="w-full" variant="secondary">
-                     <Link href={`/teams/${team.id}`}>Перейти в профиль</Link>
-                </Button>
-            ) : (
-                <Button className="w-full" onClick={() => onApply(String(team.id))} disabled={isApplicationSent}>
-                    <UserCheck className="mr-2 h-4 w-4" /> 
-                    {isApplicationSent ? 'Заявка отправлена' : 'Подать заявку'}
-                </Button>
-            )}
+            <Button className="w-full" onClick={() => onApply(String(team.id))} disabled={isApplicationSent}>
+                <UserCheck className="mr-2 h-4 w-4" /> 
+                {isApplicationSent ? 'Заявка отправлена' : 'Подать заявку'}
+            </Button>
         </CardFooter>
     </Card>
     )
@@ -61,7 +54,6 @@ const TeamCard = ({ team, isMember, onApply, isApplicationSent }: { team: Team, 
 export function TeamsPage() {
     const { user: currentUser } = useUserStore();
     const [allTeams, setAllTeams] = useState<Team[]>([]);
-    const [myTeamIds, setMyTeamIds] = useState<Set<string>>(new Set());
     const [isLoading, setIsLoading] = useState(true);
     const [sentApplications, setSentApplications] = useState<string[]>([]);
     const { toast } = useToast();
@@ -94,56 +86,20 @@ export function TeamsPage() {
 
 
     useEffect(() => {
-        const fetchAllData = async () => {
+        async function fetchTeams() {
             setIsLoading(true);
             try {
-                const teamsPromise = api.get('/api/v1/teams');
-                
-                const userPromise = currentUser 
-                    ? api.get(`/api/v1/users/me?include_teams=true`)
-                    : Promise.resolve(null);
-
-                const [teamsResponse, userDetailsResponse] = await Promise.all([teamsPromise, userPromise]);
-                
-                setAllTeams(teamsResponse.data);
-
-                if (currentUser && userDetailsResponse?.data) {
-                    const userWithTeams: User & { teams?: Team[] } = userDetailsResponse.data;
-                    const userTeamIds = new Set(userWithTeams.teams?.map(t => String(t.id)) || []);
-                    setMyTeamIds(userTeamIds);
-                }
-
-            } catch (error: any) {
-                 if (error.response?.status !== 401) {
-                    console.error("Failed to fetch team data:", error);
-                     toast({
-                        variant: "destructive",
-                        title: "Ошибка",
-                        description: "Не удалось загрузить данные команд.",
-                    });
-                }
-            } finally {
+                const response = await api.get('/api/v1/teams');
+                setAllTeams(response.data);
+            } catch (error) {
+                console.error("Failed to fetch teams:", error);
+            }
+            finally {
                 setIsLoading(false);
             }
-        };
-
-        fetchAllData();
-    }, [currentUser, toast]);
-
-    const { myTeams, otherTeams } = useMemo(() => {
-        if (!allTeams || allTeams.length === 0) {
-            return { myTeams: [], otherTeams: [] };
         }
-        if (!currentUser) {
-            return { myTeams: [], otherTeams: allTeams };
-        }
-        
-        const myTeamsList = allTeams.filter(team => myTeamIds.has(String(team.id)));
-        const otherTeamsList = allTeams.filter(team => !myTeamIds.has(String(team.id)));
-        
-        return { myTeams: myTeamsList, otherTeams: otherTeamsList };
-    }, [currentUser, allTeams, myTeamIds]);
-    
+        fetchTeams();
+    }, []);
 
     return (
         <div className="p-4 md:p-6 lg:p-8 space-y-8">
@@ -164,53 +120,39 @@ export function TeamsPage() {
             
             <TopTeamsWidget />
 
-            <Separator />
+            {currentUser && <MyTeamWidget user={currentUser} />}
 
-            <div className="container mx-auto px-4 md:px-0 space-y-8">
-                <section>
-                    <h2 className="text-2xl font-bold mb-4">Мои команды</h2>
-                    {isLoading ? (
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                            {[...Array(4)].map((_, i) => <Skeleton key={i} className="h-64" />)}
-                        </div>
-                    ) : myTeams.length > 0 ? (
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                            {myTeams.map(team => <TeamCard key={team.id} team={team} isMember={true} onApply={handleApply} isApplicationSent={false} />)}
-                        </div>
-                    ) : (
-                        <MyTeamsEmptyState />
-                    )}
-                </section>
-
-                <Separator />
-
-                <section>
-                    <h2 className="text-2xl font-bold mb-4">Все команды</h2>
-                    {isLoading ? (
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                            {[...Array(8)].map((_, i) => <Skeleton key={i} className="h-64" />)}
-                        </div>
-                    ) : otherTeams.length > 0 ? (
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                            {otherTeams.map(team => (
-                                <TeamCard 
-                                    key={team.id} 
-                                    team={team} 
-                                    isMember={false} 
-                                    onApply={handleApply}
-                                    isApplicationSent={sentApplications.includes(String(team.id))}
-                                />
-                            ))}
-                        </div>
-                    ) : (
-                        <Card className="text-center min-h-[200px] flex flex-col justify-center items-center">
-                            <CardHeader>
-                                <CardTitle>Не удалось загрузить команды</CardTitle>
-                                <CardDescription>Попробуйте проверить связь с бэкендом или обновите страницу.</CardDescription>
-                            </CardHeader>
-                        </Card>
-                    )}
-                </section>
+            <div className="container mx-auto px-0">
+                <h2 className="text-2xl font-bold mb-4">Все команды</h2>
+                {isLoading ? (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                        {[...Array(8)].map((_, i) => (
+                            <Card key={i}>
+                                <CardHeader><Skeleton className="h-16 w-full" /></CardHeader>
+                                <CardContent><Skeleton className="h-8 w-3/4" /></CardContent>
+                                <CardFooter><Skeleton className="h-10 w-full" /></CardFooter>
+                            </Card>
+                        ))}
+                    </div>
+                ) : allTeams.length > 0 ? (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                        {allTeams.map(team => (
+                            <TeamCard 
+                                key={team.id} 
+                                team={team} 
+                                onApply={handleApply}
+                                isApplicationSent={sentApplications.includes(String(team.id))}
+                            />
+                        ))}
+                    </div>
+                ) : (
+                    <Card className="text-center min-h-[200px] flex flex-col justify-center items-center">
+                        <CardHeader>
+                            <CardTitle>Не удалось загрузить команды</CardTitle>
+                            <CardDescription>Попробуйте проверить связь с бэкендом или обновите страницу.</CardDescription>
+                        </CardHeader>
+                    </Card>
+                )}
             </div>
         </div>
     );
