@@ -1,7 +1,7 @@
 
 'use client';
 
-import React, { useEffect, useState, useCallback, useMemo } from 'react';
+import React, { useEffect, useState } from 'react';
 import type { User, Playground, Team } from "@/mocks";
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
@@ -20,17 +20,22 @@ import api from '@/shared/api/axios-instance';
 
 interface TeamPageTemplateProps {
   team?: Team;
-  teamMembers?: User[];
   isLoading?: boolean;
 }
 
 export function TeamPageTemplate({
-  team,
-  teamMembers,
-  isLoading,
+  team: initialTeam,
+  isLoading: initialIsLoading,
 }: TeamPageTemplateProps) {
+  const [team, setTeam] = React.useState<Team | undefined>(initialTeam);
   const [playgrounds, setPlaygrounds] = React.useState<Playground[]>([]);
+  const [isLoading, setIsLoading] = React.useState(initialIsLoading ?? true);
   
+  useEffect(() => {
+    setTeam(initialTeam);
+    setIsLoading(initialIsLoading ?? !initialTeam);
+  }, [initialTeam, initialIsLoading]);
+
   React.useEffect(() => {
     if (!team) return;
 
@@ -112,7 +117,7 @@ export function TeamPageTemplate({
           <TeamMatchesWidget />
         </TabsContent>
         <TabsContent value="challenges" className="mt-6">
-          <TeamChallengesWidget teamId={team.id} />
+          <TeamChallengesWidget teamId={String(team.id)} />
         </TabsContent>
         <TabsContent value="stats" className="mt-6">
           <TeamStatsWidget team={team} />

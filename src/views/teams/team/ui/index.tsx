@@ -3,7 +3,7 @@
 
 import React from 'react';
 import { TeamPageTemplate } from "@/views/admin/ui/templates/team-page-template";
-import type { Team, User } from "@/mocks";
+import type { Team } from "@/mocks";
 import api from '@/shared/api/axios-instance';
 
 export function TeamPublicPage({ teamId }: { teamId: string }) {
@@ -32,7 +32,7 @@ export function TeamPublicPage({ teamId }: { teamId: string }) {
     
     return (
         <div className="container mx-auto">
-             <TeamPageTemplate team={team} teamMembers={team?.members} isLoading={loading} />
+             <TeamPageTemplate team={team} isLoading={loading} />
         </div>
     );
 }

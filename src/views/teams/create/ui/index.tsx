@@ -24,6 +24,7 @@ export function CreateTeamPage() {
     const [teamName, setTeamName] = useState('');
     const [discipline, setDiscipline] = useState('');
     const [city, setCity] = useState(currentUser?.city || '');
+    const [logoUrl, setLogoUrl] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [allSports, setAllSports] = useState<Sport[]>([]);
 
@@ -87,6 +88,7 @@ export function CreateTeamPage() {
                 name: teamName,
                 sport_id: discipline,
                 city: city,
+                logoUrl: logoUrl || undefined,
             });
 
             if (response.status === 201) {
@@ -128,7 +130,7 @@ export function CreateTeamPage() {
                         </div>
                         <div className="space-y-2">
                             <Label htmlFor="discipline">Дисциплина</Label>
-                            <Select onValueChange={setDiscipline} disabled={userTeamSports.length === 0}>
+                            <Select onValueChange={setDiscipline} value={discipline}>
                                 <SelectTrigger id="discipline">
                                     <SelectValue placeholder={userTeamSports.length > 0 ? "Выберите вид спорта" : "У вас нет командных дисциплин"} />
                                 </SelectTrigger>
@@ -150,6 +152,10 @@ export function CreateTeamPage() {
                          <div className="space-y-2">
                             <Label htmlFor="city">Город</Label>
                             <Input id="city" placeholder="Например, Москва" value={city} onChange={e => setCity(e.target.value)} />
+                        </div>
+                        <div className="space-y-2">
+                            <Label htmlFor="logoUrl">URL логотипа (необязательно)</Label>
+                            <Input id="logoUrl" placeholder="https://example.com/logo.png" value={logoUrl} onChange={e => setLogoUrl(e.target.value)} />
                         </div>
                     </CardContent>
                 </Card>

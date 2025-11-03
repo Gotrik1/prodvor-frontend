@@ -2,8 +2,8 @@
   "openapi": "3.0.0",
   "info": {
     "title": "Prodvor Backend API",
-    "description": "API for the Prodvor sports-oriented social platform. This documentation is auto-generated based on the current routes.",
-    "version": "1.0.0"
+    "description": "API for the Prodvor sports-oriented social platform. This documentation is auto-generated and reflects the current state of the backend routes.",
+    "version": "1.0.1"
   },
   "servers": [
     {
@@ -22,49 +22,27 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "object",
-                "properties": {
-                  "email": {
-                    "type": "string"
-                  },
-                  "password": {
-                    "type": "string"
-                  },
-                  "nickname": {
-                    "type": "string"
-                  },
-                  "role": {
-                    "type": "string"
-                  },
-                  "city": {
-                    "type": "string"
-                  },
-                  "firstName": {
-                    "type": "string"
-                  },
-                  "lastName": {
-                    "type": "string"
-                  }
-                },
-                "required": [
-                  "email",
-                  "password",
-                  "nickname",
-                  "role"
-                ]
+                "$ref": "#/components/schemas/UserRegistration"
               }
             }
           }
         },
         "responses": {
           "201": {
-            "description": "User created"
+            "description": "User created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
           },
           "400": {
-            "description": "Missing data"
+            "$ref": "#/components/responses/BadRequest"
           },
           "409": {
-            "description": "Email or nickname already exists"
+            "$ref": "#/components/responses/Conflict"
           }
         }
       }
@@ -80,74 +58,24 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "object",
-                "properties": {
-                  "email": {
-                    "type": "string"
-                  },
-                  "password": {
-                    "type": "string"
-                  }
-                },
-                "required": [
-                  "email",
-                  "password"
-                ]
+                "$ref": "#/components/schemas/UserLogin"
               }
             }
           }
         },
         "responses": {
           "200": {
-            "description": "Successful login"
-          },
-          "401": {
-            "description": "Invalid credentials"
-          }
-        }
-      }
-    },
-    "/login": {
-      "post": {
-        "summary": "User Login (Legacy)",
-        "tags": [
-          "Auth"
-        ],
-        "description": "Legacy login endpoint. It is recommended to use `/api/v1/auth/login`.",
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "email": {
-                    "type": "string"
-                  },
-                  "password": {
-                    "type": "string"
-                  }
-                },
-                "required": [
-                  "email",
-                  "password"
-                ]
+            "description": "Successful login",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponse"
+                }
               }
             }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Successful login"
-          },
-          "400": {
-            "description": "Missing email or password"
           },
           "401": {
-            "description": "Invalid credentials"
-          },
-          "500": {
-            "description": "Could not process login"
+            "$ref": "#/components/responses/Unauthorized"
           }
         }
       }
@@ -165,7 +93,17 @@
         ],
         "responses": {
           "200": {
-            "description": "Token refreshed"
+            "description": "Token refreshed successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TokenRefreshResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
           }
         }
       }
@@ -183,7 +121,10 @@
         ],
         "responses": {
           "200": {
-            "description": "Successfully logged out"
+            "$ref": "#/components/responses/SuccessMessage"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
           }
         }
       }
@@ -217,7 +158,17 @@
         ],
         "responses": {
           "200": {
-            "description": "Current user data"
+            "description": "Current user data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
           }
         }
       }
@@ -230,7 +181,17 @@
         ],
         "responses": {
           "200": {
-            "description": "A list of users"
+            "description": "A list of users",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/User"
+                  }
+                }
+              }
+            }
           }
         }
       },
@@ -244,55 +205,24 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "object",
-                "properties": {
-                  "nickname": {
-                    "type": "string"
-                  },
-                  "email": {
-                    "type": "string"
-                  },
-                  "password": {
-                    "type": "string"
-                  },
-                  "role": {
-                    "type": "string"
-                  },
-                  "city": {
-                    "type": "string"
-                  },
-                  "firstName": {
-                    "type": "string"
-                  },
-                  "lastName": {
-                    "type": "string"
-                  },
-                  "age": {
-                    "type": "integer"
-                  },
-                  "gender": {
-                    "type": "string"
-                  }
-                },
-                "required": [
-                  "nickname",
-                  "email",
-                  "role",
-                  "city",
-                  "firstName",
-                  "lastName",
-                  "password"
-                ]
+                "$ref": "#/components/schemas/NewUser"
               }
             }
           }
         },
         "responses": {
           "201": {
-            "description": "User created"
+            "description": "User created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
           },
           "400": {
-            "description": "Missing data or Nickname/Email already exists"
+            "$ref": "#/components/responses/BadRequest"
           }
         }
       }
@@ -329,7 +259,17 @@
         ],
         "responses": {
           "200": {
-            "description": "User data"
+            "description": "User data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
           }
         }
       },
@@ -337,6 +277,11 @@
         "summary": "Update a user's profile",
         "tags": [
           "Users"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
         ],
         "parameters": [
           {
@@ -353,17 +298,27 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/User"
+                "$ref": "#/components/schemas/UserUpdate"
               }
             }
           }
         },
         "responses": {
           "200": {
-            "description": "User updated"
+            "description": "User updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
           },
           "400": {
-            "description": "No data provided or nickname/email exists"
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
           }
         }
       }
@@ -373,6 +328,11 @@
         "summary": "Upload a user avatar",
         "tags": [
           "Users"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
         ],
         "parameters": [
           {
@@ -401,10 +361,17 @@
         },
         "responses": {
           "200": {
-            "description": "Avatar uploaded"
+            "description": "Avatar uploaded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
           },
           "400": {
-            "description": "No file provided"
+            "$ref": "#/components/responses/BadRequest"
           }
         }
       }
@@ -414,6 +381,11 @@
         "summary": "Upload a user cover image",
         "tags": [
           "Users"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
         ],
         "parameters": [
           {
@@ -442,10 +414,17 @@
         },
         "responses": {
           "200": {
-            "description": "Cover uploaded"
+            "description": "Cover uploaded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
           },
           "400": {
-            "description": "No file provided"
+            "$ref": "#/components/responses/BadRequest"
           }
         }
       }
@@ -470,7 +449,17 @@
         ],
         "responses": {
           "200": {
-            "description": "A list of teams"
+            "description": "A list of teams",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Team"
+                  }
+                }
+              }
+            }
           }
         }
       },
@@ -489,36 +478,27 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "object",
-                "properties": {
-                  "name": {
-                    "type": "string"
-                  },
-                  "sport_id": {
-                    "type": "integer"
-                  },
-                  "city": {
-                    "type": "string"
-                  },
-                  "logoUrl": {
-                    "type": "string"
-                  }
-                },
-                "required": [
-                  "name",
-                  "sport_id",
-                  "city"
-                ]
+                "$ref": "#/components/schemas/NewTeam"
               }
             }
           }
         },
         "responses": {
           "201": {
-            "description": "Team created"
+            "description": "Team created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Team"
+                }
+              }
+            }
           },
           "400": {
-            "description": "Missing data"
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
           }
         }
       }
@@ -541,7 +521,17 @@
         ],
         "responses": {
           "200": {
-            "description": "Team data"
+            "description": "Team data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Team"
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
           }
         }
       }
@@ -569,17 +559,27 @@
         ],
         "responses": {
           "200": {
-            "description": "Follow status toggled"
+            "description": "Follow status toggled",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FollowToggleResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
           },
           "404": {
-            "description": "User or Team not found"
+            "$ref": "#/components/responses/NotFound"
           }
         }
       }
     },
     "/teams/{team_id}/members/{user_id}": {
       "delete": {
-        "summary": "Remove a member from a team",
+        "summary": "Remove a member from a team (Captain only)",
         "tags": [
           "Teams"
         ],
@@ -608,13 +608,16 @@
         ],
         "responses": {
           "200": {
-            "description": "Player removed"
+            "$ref": "#/components/responses/SuccessMessage"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
           },
           "403": {
-            "description": "Only the captain can remove members"
+            "$ref": "#/components/responses/Forbidden"
           },
           "404": {
-            "description": "Member not found"
+            "$ref": "#/components/responses/NotFound"
           }
         }
       }
@@ -642,17 +645,20 @@
         ],
         "responses": {
           "200": {
-            "description": "Application sent"
+            "$ref": "#/components/responses/SuccessMessage"
           },
           "400": {
-            "description": "Already applied or already a member"
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
           }
         }
       }
     },
     "/teams/{team_id}/applications": {
       "get": {
-        "summary": "Get team applications",
+        "summary": "Get team applications (Captain only)",
         "tags": [
           "Teams"
         ],
@@ -673,17 +679,30 @@
         ],
         "responses": {
           "200": {
-            "description": "List of applicants"
+            "description": "List of applicants",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/User"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
           },
           "403": {
-            "description": "Forbidden"
+            "$ref": "#/components/responses/Forbidden"
           }
         }
       }
     },
     "/teams/{team_id}/applications/{user_id}/respond": {
       "post": {
-        "summary": "Respond to a team application",
+        "summary": "Respond to a team application (Captain only)",
         "tags": [
           "Teams"
         ],
@@ -714,37 +733,31 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "object",
-                "properties": {
-                  "action": {
-                    "type": "string",
-                    "enum": [
-                      "accept",
-                      "decline"
-                    ]
-                  }
-                }
+                "$ref": "#/components/schemas/ApplicationResponse"
               }
             }
           }
         },
         "responses": {
           "200": {
-            "description": "Response recorded"
+            "$ref": "#/components/responses/SuccessMessage"
           },
           "400": {
-            "description": "Invalid action"
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
           },
           "403": {
-            "description": "Forbidden"
+            "$ref": "#/components/responses/Forbidden"
           },
           "404": {
-            "description": "Application not found"
+            "$ref": "#/components/responses/NotFound"
           }
         }
       }
     },
-    "/sports/": {
+    "/sports": {
       "get": {
         "summary": "Get all sports",
         "tags": [
@@ -752,12 +765,20 @@
         ],
         "responses": {
           "200": {
-            "description": "A list of sports"
+            "description": "A list of sports",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Sport"
+                  }
+                }
+              }
+            }
           }
         }
-      }
-    },
-    "/sports": {
+      },
       "post": {
         "summary": "Create a new sport",
         "tags": [
@@ -768,29 +789,24 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "object",
-                "properties": {
-                  "name": {
-                    "type": "string"
-                  },
-                  "isTeamSport": {
-                    "type": "boolean"
-                  }
-                },
-                "required": [
-                  "name",
-                  "isTeamSport"
-                ]
+                "$ref": "#/components/schemas/NewSport"
               }
             }
           }
         },
         "responses": {
           "201": {
-            "description": "Sport created"
+            "description": "Sport created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Sport"
+                }
+              }
+            }
           },
           "400": {
-            "description": "Missing data or sport exists"
+            "$ref": "#/components/responses/BadRequest"
           }
         }
       }
@@ -826,10 +842,109 @@
             "type": "string"
           },
           "age": {
-            "type": "integer"
+            "type": "integer",
+            "nullable": true
+          },
+          "gender": {
+            "type": "string",
+            "nullable": true
+          },
+          "phone": {
+            "type": "string",
+            "nullable": true
+          },
+          "bio": {
+            "type": "string",
+            "nullable": true
+          },
+          "coverImageUrl": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "UserRegistration": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "user@example.com"
+          },
+          "password": {
+            "type": "string",
+            "example": "strongpassword123"
+          },
+          "nickname": {
+            "type": "string",
+            "example": "best_player"
+          },
+          "role": {
+            "type": "string",
+            "example": "Игрок"
+          },
+          "city": {
+            "type": "string",
+            "example": "Москва"
+          },
+          "firstName": {
+            "type": "string",
+            "example": "Иван"
+          },
+          "lastName": {
+            "type": "string",
+            "example": "Иванов"
+          }
+        },
+        "required": [
+          "email",
+          "password",
+          "nickname",
+          "role",
+          "city",
+          "firstName",
+          "lastName"
+        ]
+      },
+      "UserLogin": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "user@example.com"
+          },
+          "password": {
+            "type": "string",
+            "example": "strongpassword123"
+          }
+        },
+        "required": [
+          "email",
+          "password"
+        ]
+      },
+      "UserUpdate": {
+        "type": "object",
+        "properties": {
+          "nickname": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "city": {
+            "type": "string"
           },
           "gender": {
             "type": "string"
+          },
+          "age": {
+            "type": "integer"
           },
           "phone": {
             "type": "string"
@@ -837,10 +952,33 @@
           "bio": {
             "type": "string"
           },
-          "coverImageUrl": {
-            "type": "string"
+          "sports": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           }
         }
+      },
+      "NewUser": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/UserRegistration"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "age": {
+                "type": "integer",
+                "nullable": true
+              },
+              "gender": {
+                "type": "string",
+                "nullable": true
+              }
+            }
+          }
+        ]
       },
       "Team": {
         "type": "object",
@@ -852,12 +990,51 @@
             "type": "string"
           },
           "logoUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "city": {
             "type": "string"
           },
-          "followersCount": {
+          "captainId": {
             "type": "integer"
+          },
+          "sport_id": {
+            "type": "string"
+          },
+          "members": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/User"
+            }
+          },
+          "captain": {
+            "$ref": "#/components/schemas/User"
           }
         }
+      },
+      "NewTeam": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "sport_id": {
+            "type": "string"
+          },
+          "city": {
+            "type": "string"
+          },
+          "logoUrl": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": [
+          "name",
+          "sport_id",
+          "city"
+        ]
       },
       "Sport": {
         "type": "object",
@@ -870,6 +1047,147 @@
           },
           "isTeamSport": {
             "type": "boolean"
+          }
+        }
+      },
+      "NewSport": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "isTeamSport": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "name",
+          "isTeamSport"
+        ]
+      },
+      "LoginResponse": {
+        "type": "object",
+        "properties": {
+          "accessToken": {
+            "type": "string"
+          },
+          "refreshToken": {
+            "type": "string"
+          },
+          "user": {
+            "$ref": "#/components/schemas/User"
+          }
+        }
+      },
+      "TokenRefreshResponse": {
+        "type": "object",
+        "properties": {
+          "accessToken": {
+            "type": "string"
+          }
+        }
+      },
+      "FollowToggleResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "isFollowing": {
+            "type": "boolean"
+          }
+        }
+      },
+      "ApplicationResponse": {
+        "type": "object",
+        "properties": {
+          "action": {
+            "type": "string",
+            "enum": [
+              "accept",
+              "decline"
+            ]
+          }
+        },
+        "required": [
+          "action"
+        ]
+      },
+      "ApiError": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "string"
+          }
+        }
+      },
+      "SuccessResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "responses": {
+      "BadRequest": {
+        "description": "Bad Request - The server cannot process the request due to a client error (e.g., malformed request syntax, invalid request message framing, or deceptive request routing).",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ApiError"
+            }
+          }
+        }
+      },
+      "Unauthorized": {
+        "description": "Unauthorized - The client must authenticate itself to get the requested response.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ApiError"
+            }
+          }
+        }
+      },
+      "Forbidden": {
+        "description": "Forbidden - The client does not have access rights to the content.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ApiError"
+            }
+          }
+        }
+      },
+      "NotFound": {
+        "description": "Not Found - The server can not find the requested resource.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ApiError"
+            }
+          }
+        }
+      },
+      "Conflict": {
+        "description": "Conflict - This response is sent when a request conflicts with the current state of the server.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ApiError"
+            }
+          }
+        }
+      },
+      "SuccessMessage": {
+        "description": "Success - The request has succeeded.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/SuccessResponse"
+            }
           }
         }
       }
