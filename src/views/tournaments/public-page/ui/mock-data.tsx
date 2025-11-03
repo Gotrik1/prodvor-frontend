@@ -1,5 +1,4 @@
 
-
 import type { Playground } from '@/mocks/playgrounds';
 import { playgrounds } from '@/mocks/playgrounds';
 import { registeredTeams as baseRegisteredTeams } from '@/mocks/teams';
@@ -45,10 +44,6 @@ export interface Tournament {
     location: string;
 }
 
-export const allTournaments: Tournament[] = [];
-export const mockMyTournaments: Tournament[] = [];
-
-export const teams: Team[] = []; // Empty mock teams
 export const registeredTeams: Team[] = baseRegisteredTeams;
 export const sponsors = allMockSponsors;
 export const requirements = allMockRequirements;

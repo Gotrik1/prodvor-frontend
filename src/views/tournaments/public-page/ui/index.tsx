@@ -1,16 +1,17 @@
 
-
 'use client';
 
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/shared/ui/button";import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
 import { Award, Calendar, GanttChartIcon, Users, ArrowRight } from "lucide-react";
-import { sponsors, Tournament } from "@/mocks";
+import type { Sponsor, Tournament } from "@/mocks";
 import { Badge } from "@/shared/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { useState, useEffect } from 'react';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/shared/ui/tooltip";
+import api from "@/shared/api/axios-instance";
+import { Skeleton } from "@/shared/ui/skeleton";
 
 const StatCard = ({ title, value, icon: Icon }: { title: string, value: string | React.ReactNode, icon: React.ElementType }) => (
     <Card className="text-center bg-card/50 backdrop-blur-sm">
@@ -43,20 +44,65 @@ const ParticipateButton = ({ tournament }: { tournament: Tournament }) => {
 
 const LOCAL_STORAGE_BANNER_KEY_PREFIX = 'promo-banner-';
 
-export function TournamentPublicPage({ tournament: initialTournament }: { tournament: Tournament | undefined}) {
-    const [tournament, setTournament] = useState(initialTournament);
+export function TournamentPublicPage({ tournamentId }: { tournamentId: string | undefined}) {
+    const [tournament, setTournament] = useState<Tournament | undefined>(undefined);
+    const [sponsors, setSponsors] = useState<Sponsor[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        if (initialTournament) {
-            const storageKey = `${LOCAL_STORAGE_BANNER_KEY_PREFIX}${initialTournament.id}`;
-            const savedBanner = localStorage.getItem(storageKey);
-            if (savedBanner) {
-                setTournament((prev: Tournament | undefined) => prev ? { ...prev, bannerUrl: savedBanner } : undefined);
-            } else {
-                setTournament(initialTournament);
+        if (!tournamentId) {
+            setIsLoading(false);
+            return;
+        };
+
+        const fetchTournament = async () => {
+            setIsLoading(true);
+            try {
+                const response = await api.get(`/api/v1/tournaments/${tournamentId}`);
+                const tournamentData: Tournament = response.data;
+                const storageKey = `${LOCAL_STORAGE_BANNER_KEY_PREFIX}${tournamentData.id}`;
+                const savedBanner = localStorage.getItem(storageKey);
+                if (savedBanner) {
+                    tournamentData.bannerUrl = savedBanner;
+                }
+                setTournament(tournamentData);
+            } catch (error) {
+                console.error("Failed to fetch tournament:", error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        const fetchSponsors = async () => {
+            try {
+                const response = await api.get('/api/v1/sponsors');
+                setSponsors(response.data);
+            } catch(error) {
+                 console.error("Failed to fetch sponsors:", error);
             }
         }
-    }, [initialTournament]);
+        
+        fetchTournament();
+        fetchSponsors();
+    }, [tournamentId]);
+
+    if (isLoading) {
+        return (
+            <div className="flex flex-col min-h-screen">
+                <Skeleton className="h-[70vh] w-full" />
+                <div className="py-12 md:py-16 bg-muted/30">
+                    <div className="container mx-auto px-4 md:px-6">
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 max-w-5xl mx-auto">
+                            <Skeleton className="h-40 w-full" />
+                            <Skeleton className="h-40 w-full" />
+                            <Skeleton className="h-40 w-full" />
+                            <Skeleton className="h-40 w-full" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        )
+    }
 
     if (!tournament) {
         return (
