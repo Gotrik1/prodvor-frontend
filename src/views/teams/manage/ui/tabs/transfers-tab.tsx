@@ -37,7 +37,7 @@ export function TransfersTab({ team, onApplicationProcessed }: TransfersTabProps
             setIsLoadingApps(true);
             try {
                 // Explicitly setting headers to an empty object for GET request
-                const response = await api.get(`/api/v1/teams/${team.id}/applications`, { data: undefined });
+                const response = await api.get(`/api/v1/teams/${team.id}/applications`);
                 setApplications(response.data);
             } catch (err) {
                  if (axios.isAxiosError(err)) {

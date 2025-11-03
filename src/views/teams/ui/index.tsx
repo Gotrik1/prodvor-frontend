@@ -15,29 +15,25 @@ import { Skeleton } from '@/shared/ui/skeleton';
 import { TopTeamsWidget } from '@/widgets/top-teams-widget';
 import api from '@/shared/api/axios-instance';
 
-const TeamCard = ({ team, isMember, onApply, isApplicationSent }: { team: Team, isMember: boolean, onApply: (teamId: string) => Promise<void>, isApplicationSent: boolean }) => {
-    // Backend now returns members array, so length is reliable. Default to 1 for captain if array is missing.
-    const memberCount = team.members?.length || 1;
-    
-    return (
+const TeamCard = ({ team, isMember, onApply, isApplicationSent }: { team: Team, isMember: boolean, onApply: (teamId: string) => Promise<void>, isApplicationSent: boolean }) => (
     <Card key={team.id} className="flex flex-col">
         <CardHeader>
             <Link href={`/teams/${team.id}`} className="flex items-center gap-4 group">
                 <img src={team.logoUrl || 'https://placehold.co/512x512.png'} alt={`${team.name} logo`} width={64} height={64} className="rounded-lg border object-cover aspect-square" />
                 <div>
                     <CardTitle className="text-xl group-hover:text-primary transition-colors">{team.name}</CardTitle>
-                    <CardDescription>{team.sport?.name || team.game}</CardDescription>
+                    <CardDescription>{team.game}</CardDescription>
                 </div>
             </Link>
         </CardHeader>
         <CardContent className="flex-grow space-y-2">
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
                 <Users className="h-4 w-4" />
-                <span>{memberCount} игроков</span>
+                <span>{team.members.length} игроков</span>
             </div>
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
                 <BarChart className="h-4 w-4" />
-                <span>{team.rank || 1200} ELO</span>
+                <span>{team.rank} ELO</span>
             </div>
             <div>
                 <Badge variant="secondary">Ищет игроков</Badge>
@@ -49,20 +45,19 @@ const TeamCard = ({ team, isMember, onApply, isApplicationSent }: { team: Team, 
                      <Link href={`/teams/${team.id}`}>Перейти в профиль</Link>
                 </Button>
             ) : (
-                <Button className="w-full" onClick={() => onApply(String(team.id))} disabled={isApplicationSent}>
+                <Button className="w-full" onClick={() => onApply(team.id)} disabled={isApplicationSent}>
                     <UserCheck className="mr-2 h-4 w-4" /> 
                     {isApplicationSent ? 'Заявка отправлена' : 'Подать заявку'}
                 </Button>
             )}
         </CardFooter>
     </Card>
-    )
-};
+);
 
 
 export function TeamsPage() {
     const { user: currentUser } = useUserStore();
-    const [allTeams, setAllTeams] = useState<Team[]>([]);
+    const { teams: allTeams } = { teams: [] }; // This will be replaced by API call
     const [myTeams, setMyTeams] = useState<Team[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [sentApplications, setSentApplications] = useState<string[]>([]);
@@ -96,21 +91,8 @@ export function TeamsPage() {
 
 
     useEffect(() => {
-        async function fetchAllTeams() {
-            setIsLoading(true);
-            try {
-                const response = await api.get('/api/v1/teams');
-                setAllTeams(response.data);
-            } catch (error) {
-                console.error("Failed to fetch all teams:", error);
-            }
-        }
-
         async function fetchMyTeams() {
-            if (!currentUser) {
-                setMyTeams([]);
-                return;
-            };
+            if (!currentUser) return;
             try {
                  const response = await api.get(`/api/v1/users/${currentUser.id}?include_teams=true`);
                  if (response.data && response.data.teams) {
@@ -118,14 +100,17 @@ export function TeamsPage() {
                  }
             } catch (error) {
                  console.error("Failed to fetch my teams:", error);
+            } finally {
+                setIsLoading(false);
             }
         }
-
-        Promise.all([fetchAllTeams(), fetchMyTeams()]).finally(() => setIsLoading(false));
-
+        fetchMyTeams();
     }, [currentUser]);
 
     const otherTeams = useMemo(() => {
+        if (!allTeams || allTeams.length === 0) {
+            return [];
+        }
         if (myTeams.length === 0) {
             return allTeams;
         }
@@ -133,7 +118,7 @@ export function TeamsPage() {
         return allTeams.filter(team => !myTeamIds.has(team.id));
     }, [allTeams, myTeams]);
     
-    const showMyTeamsBlock = !!currentUser;
+    const showMyTeamsBlock = !!currentUser && myTeams.length > 0;
 
     return (
         <div className="p-4 md:p-6 lg:p-8 space-y-8">
@@ -207,7 +192,7 @@ export function TeamsPage() {
                                 team={team} 
                                 isMember={false} 
                                 onApply={handleApply}
-                                isApplicationSent={sentApplications.includes(String(team.id))}
+                                isApplicationSent={sentApplications.includes(team.id)}
                             />
                         ))}
                     </div>
