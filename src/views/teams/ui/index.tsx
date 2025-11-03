@@ -2,7 +2,7 @@
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
-import { type Team, type User } from '@/mocks';
+import { type Team } from '@/mocks';
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/shared/ui/card";
 import { PlusCircle, UserCheck, Users, BarChart } from "lucide-react";
@@ -16,7 +16,8 @@ import { TopTeamsWidget } from '@/widgets/top-teams-widget';
 import api from '@/shared/api/axios-instance';
 
 const TeamCard = ({ team, isMember, onApply, isApplicationSent }: { team: Team, isMember: boolean, onApply: (teamId: string) => Promise<void>, isApplicationSent: boolean }) => {
-    const memberCount = (team.members?.length || 0) + 1;
+    // Correctly display member count from the backend, which now includes the captain.
+    const memberCount = team.members?.length || 1;
     
     return (
     <Card key={team.id} className="flex flex-col">
@@ -95,38 +96,12 @@ export function TeamsPage() {
 
     useEffect(() => {
         async function fetchTeams() {
+            setIsLoading(true);
             try {
-                // Corrected endpoint
-                const response = await api.get('/api/v1/users'); 
-                // We assume the users endpoint can return team-like structures for this page, or we need to adjust what we display.
-                // For now, let's see if this resolves the 503. The backend might need adjustment if this isn't right.
-                // This is a temporary fix based on openapi.json.
-                // A better fix might be to get the teams endpoint working on the backend.
-                // Since this is likely a user/team mix, I will filter for captains to simulate teams.
-                const potentialTeams = response.data.filter((u:User) => u.role === 'Капитан' || u.role === 'player');
-                
-                // This is a big assumption, mapping users to a Team structure
-                const mappedTeams: Team[] = potentialTeams.map((u: User, i: number) => ({
-                    id: u.id,
-                    name: `Команда ${u.nickname}`,
-                    logoUrl: `https://placehold.co/512x512.png?text=${u.nickname.charAt(0)}`,
-                    captain: u,
-                    captainId: u.id,
-                    members: [], // This list won't be accurate from the /users endpoint
-                    game: u.sports.length > 0 ? u.sports[0].name : 'Футбол',
-                    sportId: u.sports.length > 0 ? u.sports[0].id : 'sport-1',
-                    rank: u.elo || 1200,
-                    city: u.city,
-                    createdAt: new Date().toISOString(),
-                    dataAiHint: 'team logo',
-                    followers: [],
-                    following: []
-                }));
-
-                setAllTeams(mappedTeams);
-
+                const response = await api.get('/api/v1/teams');
+                setAllTeams(response.data);
             } catch (error) {
-                console.error("Failed to fetch data:", error);
+                console.error("Failed to fetch teams:", error);
             }
             finally {
                 setIsLoading(false);
@@ -171,7 +146,7 @@ export function TeamsPage() {
 
             {showMyTeams && <Separator />}
 
-            <div className="container mx-auto px-4 md:px-0 space-y-8">
+            <div className="space-y-8">
                 {showMyTeams && (
                     <section>
                         <h2 className="text-2xl font-bold mb-4">Мои команды</h2>
