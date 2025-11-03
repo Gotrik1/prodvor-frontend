@@ -3,13 +3,14 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import type { Team, Playground } from '@/mocks';
+import type { Team, Playground, User } from '@/mocks';
 import { Button } from '@/shared/ui/button';
 import { Home, Settings, Rss, Swords, UserPlus, Users } from 'lucide-react';
 import { useUserStore } from '@/widgets/dashboard-header/model/user-store';
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useToast } from '@/shared/hooks/use-toast';
 import { cn } from '@/shared/lib/utils';
+import { users } from '@/mocks';
 
 interface TeamHeaderProps {
     team: Team;
@@ -32,8 +33,17 @@ export const TeamHeader = ({ team, homePlaygrounds }: TeamHeaderProps) => {
     }
 
     const isCaptain = currentUser ? String(currentUser.id) === String(team.captainId) : false;
-    const isMember = isCaptain || (team.members?.some(member => String(member.id) === String(currentUser?.id)) ?? false);
-    const memberCount = (team.members?.length || 0);
+    const isMember = useMemo(() => {
+        if (isCaptain) return true;
+        if (!currentUser || !team.members) return false;
+        return team.members.some(member => String((member as any).id) === String(currentUser.id));
+    }, [currentUser, team, isCaptain]);
+
+    const memberCount = useMemo(() => {
+        const memberIds = new Set(team.members?.map(m => (m as any).id) || []);
+        memberIds.add(String(team.captainId)); // Ensure captain is counted
+        return memberIds.size;
+    }, [team]);
 
     return (
         <header className="flex flex-col md:flex-row items-center gap-6 p-4 rounded-lg bg-card border">
@@ -41,7 +51,7 @@ export const TeamHeader = ({ team, homePlaygrounds }: TeamHeaderProps) => {
             <img src={team.logoUrl || 'https://placehold.co/512x512.png'} alt={team.name} width={96} height={96} className="rounded-lg border-4 border-primary object-cover aspect-square" data-ai-hint="team logo" />
             <div className="text-center md:text-left flex-grow">
                 <h1 className="text-3xl font-bold font-headline">{team.name}</h1>
-                <p className="text-muted-foreground text-lg">Дисциплина: {team.game}</p>
+                <p className="text-muted-foreground text-lg">Дисциплина: {team.sport?.name || team.game}</p>
                  <div className="mt-2 flex items-center justify-center md:justify-start gap-4 text-sm text-muted-foreground">
                     <div className="flex items-center gap-1">
                         <Users className="h-4 w-4" /> {memberCount} игроков

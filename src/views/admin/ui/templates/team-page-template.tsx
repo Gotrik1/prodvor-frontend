@@ -1,7 +1,7 @@
 
 'use client';
 
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import type { User, Playground, Team } from "@/mocks";
 import { users } from '@/mocks'; // Import all users
 import { Button } from "@/shared/ui/button";
@@ -25,42 +25,46 @@ export function TeamPageTemplate({ team: initialTeam, isLoading: initialIsLoadin
     const [teamMembers, setTeamMembers] = React.useState<User[]>([]);
     const [isLoading, setIsLoading] = React.useState(initialIsLoading || !initialTeam);
 
-    const updateTeamData = useCallback((teamData: Team) => {
-        setTeam(teamData);
-        if (teamData) {
-            // Find captain object from all users by captainId
-            const captain = users.find(u => String(u.id) === String(teamData.captainId));
-            
-            // Get other members from the members array
-            const otherMembers = teamData.members || [];
-            
-            const fullRoster: User[] = [];
-            
-            // Add captain to the roster if found
-            if (captain) {
-                fullRoster.push(captain);
-            }
-            
-            // Add other members, ensuring no duplicates if captain is also in members array
-            otherMembers.forEach(member => {
-                if (!fullRoster.some(p => p.id === member.id)) {
-                    fullRoster.push(member);
-                }
-            });
-
-            setTeamMembers(fullRoster);
-            if(onDataFetched) {
-                onDataFetched({ members: fullRoster });
-            }
+    const fullRoster = useMemo(() => {
+        if (!team) return [];
+        
+        // 1. Find the captain object from the global users list
+        const captain = users.find(u => String(u.id) === String(team.captainId));
+        
+        // 2. Get the members array from the team data
+        const otherMembers = team.members || [];
+        
+        const roster: User[] = [];
+        
+        // 3. Add captain to the roster if found
+        if (captain) {
+            roster.push(captain);
         }
-    }, [onDataFetched]);
+        
+        // 4. Add other members, ensuring no duplicates if the captain is somehow also in the members array
+        otherMembers.forEach(member => {
+            if (!roster.some(p => p.id === member.id)) {
+                roster.push(member);
+            }
+        });
+        
+        return roster;
+    }, [team]);
 
     useEffect(() => {
         if (initialTeam) {
-            updateTeamData(initialTeam);
+            setTeam(initialTeam);
         }
         setIsLoading(initialIsLoading ?? !initialTeam);
-    }, [initialTeam, initialIsLoading, updateTeamData]);
+    }, [initialTeam, initialIsLoading]);
+    
+    useEffect(() => {
+        setTeamMembers(fullRoster);
+        if (onDataFetched) {
+            onDataFetched({ members: fullRoster });
+        }
+    }, [fullRoster, onDataFetched]);
+
 
     React.useEffect(() => {
         if (!team) return;

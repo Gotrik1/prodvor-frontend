@@ -54,13 +54,9 @@ export const TeamRosterWidget = ({ team, teamMembers }: { team: Team, teamMember
     const { user: currentUser } = useUserStore();
 
     const isMember = useMemo(() => {
-        if (!currentUser || !team) return false;
-        // The captain is always a member
-        if (String(currentUser.id) === String(team.captainId)) return true;
-        // Check if the user is in the members array
-        if (!team.members) return false;
-        return team.members.some(member => String(member.id) === String(currentUser.id));
-    }, [team, currentUser]);
+        if (!currentUser || !teamMembers) return false;
+        return teamMembers.some(member => String(member.id) === String(currentUser.id));
+    }, [teamMembers, currentUser]);
 
 
     const handleApply = async () => {
