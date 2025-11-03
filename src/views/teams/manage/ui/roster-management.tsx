@@ -6,28 +6,59 @@ import type { User } from '@/mocks';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import { Button } from '@/shared/ui/button';
-import { ArrowDown, ArrowUp, Crown } from 'lucide-react';
+import { ArrowDown, ArrowUp, Crown, UserX } from 'lucide-react';
 import { Skeleton } from '@/shared/ui/skeleton';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/shared/ui/alert-dialog";
+import { useToast } from '@/shared/hooks/use-toast';
+import api from '@/shared/api/axios-instance';
 
 interface RosterManagementProps {
+    teamId: string;
     allTeamMembers: User[];
+    onRosterChange: () => void; // Callback to re-fetch team data
 }
 
-export function RosterManagement({ allTeamMembers: initialTeamMembers }: RosterManagementProps) {
+export function RosterManagement({ teamId, allTeamMembers: initialTeamMembers, onRosterChange }: RosterManagementProps) {
+    const { toast } = useToast();
     const [mainRoster, setMainRoster] = useState<User[]>([]);
     const [substitutes, setSubstitutes] = useState<User[]>([]);
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        // Since allTeamMembers is passed as a prop, we can directly use it.
-        // The main roster is the first 5, the rest are substitutes.
-        // This is still a mock logic, but it uses the members passed from the parent.
         const firstFive = initialTeamMembers.slice(0, 5);
         const rest = initialTeamMembers.slice(5);
         setMainRoster(firstFive);
         setSubstitutes(rest);
         setIsLoading(false);
     }, [initialTeamMembers]);
+
+    const handleRemovePlayer = async (player: User) => {
+        try {
+            await api.delete(`/api/v1/teams/${teamId}/members/${player.id}`);
+            toast({
+                title: "Игрок исключен",
+                description: `${player.nickname} был удален из состава команды.`
+            });
+            onRosterChange(); // Trigger data re-fetch in parent
+        } catch (error) {
+            console.error("Failed to remove player:", error);
+            toast({
+                variant: "destructive",
+                title: "Ошибка",
+                description: "Не удалось исключить игрока. Попробуйте снова."
+            });
+        }
+    };
 
     const moveToSubstitutes = (player: User) => {
         setMainRoster(prev => prev.filter(p => p.id !== player.id));
@@ -54,9 +85,32 @@ export function RosterManagement({ allTeamMembers: initialTeamMembers }: RosterM
                     </div>
                 </div>
                 {!isCaptain && (
-                     <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => action(player)}>
-                        {mainRoster.some(p => p.id === player.id) ? <ArrowDown className="h-4 w-4"/> : <ArrowUp className="h-4 w-4"/>}
-                    </Button>
+                     <div className="flex items-center">
+                        <AlertDialog>
+                          <AlertDialogTrigger asChild>
+                             <Button variant="ghost" size="icon" className="h-8 w-8 text-destructive/70 hover:text-destructive">
+                                <UserX className="h-4 w-4" />
+                            </Button>
+                          </AlertDialogTrigger>
+                          <AlertDialogContent>
+                            <AlertDialogHeader>
+                              <AlertDialogTitle>Исключить игрока?</AlertDialogTitle>
+                              <AlertDialogDescription>
+                                Вы уверены, что хотите исключить игрока <span className="font-bold">{player.nickname}</span> из команды? Это действие нельзя будет отменить.
+                              </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                              <AlertDialogCancel>Отмена</AlertDialogCancel>
+                              <AlertDialogAction onClick={() => handleRemovePlayer(player)} className="bg-destructive hover:bg-destructive/90">
+                                Да, исключить
+                              </AlertDialogAction>
+                            </AlertDialogFooter>
+                          </AlertDialogContent>
+                        </AlertDialog>
+                        <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => action(player)}>
+                            {mainRoster.some(p => p.id === player.id) ? <ArrowDown className="h-4 w-4"/> : <ArrowUp className="h-4 w-4"/>}
+                        </Button>
+                    </div>
                 )}
             </div>
         );

@@ -133,7 +133,7 @@ export function TeamManagementPage({ teamId }: { teamId: string }) {
                     <TabsTrigger value="settings">Настройки</TabsTrigger>
                 </TabsList>
                 <TabsContent value="roster" className="mt-6 space-y-8">
-                    <RosterManagement allTeamMembers={teamMembers} />
+                    <RosterManagement teamId={team.id} allTeamMembers={teamMembers} onRosterChange={fetchTeamData} />
                     <TacticalBoard teamMembers={teamMembers} />
                 </TabsContent>
                 <TabsContent value="branding" className="mt-6">
