@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import { useForm } from 'react-hook-form';
@@ -37,7 +36,8 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/shared/ui/alert-dialog";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import api from '@/shared/api/axios-instance';
 
 const accountFormSchema = z.object({
   email: z.string().email('Неверный формат email.'),
@@ -58,24 +58,56 @@ const accountFormSchema = z.object({
 });
 
 
-// MOCK DATA for sessions
-const mockSessions = [
-    { id: 1, isCurrent: true, userAgent: 'Chrome on Windows', ipAddress: '95.123.45.67', lastActiveAt: new Date().toISOString() },
-    { id: 2, isCurrent: false, userAgent: 'Safari on iPhone', ipAddress: '212.55.78.90', lastActiveAt: new Date(Date.now() - 1000 * 60 * 60 * 2).toISOString() },
-];
+type Session = {
+    id: number;
+    isCurrent: boolean;
+    userAgent: string;
+    ipAddress: string;
+    lastActiveAt: string;
+};
 
 function ActiveSessions() {
-    const [sessions, setSessions] = useState(mockSessions);
+    const [sessions, setSessions] = useState<Session[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
     const { toast } = useToast();
 
-    const handleTerminate = (sessionId: number) => {
-        setSessions(prev => prev.filter(s => s.id !== sessionId));
-        toast({ title: "Сессия завершена", description: "Доступ с этого устройства был прекращен." });
+    const fetchSessions = async () => {
+        setIsLoading(true);
+        try {
+            const response = await api.get('/api/v1/users/me/sessions');
+            // Assuming the backend cannot reliably set `isCurrent`, we might do it on the client
+            // For now, we trust the backend or adjust if needed.
+            setSessions(response.data);
+        } catch (error) {
+            console.error("Failed to fetch sessions:", error);
+            toast({ variant: 'destructive', title: 'Ошибка', description: 'Не удалось загрузить список сессий.' });
+        } finally {
+            setIsLoading(false);
+        }
+    };
+    
+    useEffect(() => {
+        fetchSessions();
+    }, []);
+
+    const handleTerminate = async (sessionId: number) => {
+        try {
+            await api.delete(`/api/v1/users/me/sessions/${sessionId}`);
+            setSessions(prev => prev.filter(s => s.id !== sessionId));
+            toast({ title: "Сессия завершена", description: "Доступ с этого устройства был прекращен." });
+        } catch (error) {
+             toast({ variant: 'destructive', title: 'Ошибка', description: 'Не удалось завершить сессию.' });
+        }
     };
 
-    const handleTerminateAll = () => {
-        setSessions(prev => prev.filter(s => s.isCurrent));
-        toast({ title: "Все сессии завершены", description: "Все сессии, кроме текущей, были завершены." });
+    const handleTerminateAll = async () => {
+         try {
+            await api.delete(`/api/v1/users/me/sessions/all-except-current`);
+            toast({ title: "Все сессии завершены", description: "Все сессии, кроме текущей, были завершены." });
+            fetchSessions(); // Re-fetch to show only the current one
+        } catch (error) {
+             toast({ variant: 'destructive', title: 'Ошибка', description: 'Не удалось завершить другие сессии.' });
+        }
     };
 
     return (
@@ -85,7 +117,7 @@ function ActiveSessions() {
                 <CardDescription>Здесь показаны все устройства, на которых выполнен вход в ваш аккаунт.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-                {sessions.map(session => {
+                {isLoading ? <p>Загрузка...</p> : sessions.map(session => {
                     const isDesktop = session.userAgent.toLowerCase().includes('windows') || session.userAgent.toLowerCase().includes('mac');
                     return (
                         <div key={session.id} className="flex items-center justify-between p-3 rounded-lg border">

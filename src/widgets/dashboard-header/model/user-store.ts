@@ -4,14 +4,15 @@
 import { create } from 'zustand';
 import type { User } from '@/mocks/users';
 import { persist, createJSONStorage } from 'zustand/middleware';
+import api from '@/shared/api/axios-instance';
 
 interface UserState {
   user: User | null;
   accessToken: string | null;
-  isHydrated: boolean; // Add this flag
+  isHydrated: boolean;
   setUser: (user: User | null) => void;
   setTokens: (accessToken: string, refreshToken: string | null) => void;
-  signOut: () => void;
+  signOut: () => Promise<void>;
 }
 
 const useUserStore = create<UserState>()(
@@ -19,7 +20,7 @@ const useUserStore = create<UserState>()(
     (set) => ({
       user: null,
       accessToken: null,
-      isHydrated: false, // Initialize as false
+      isHydrated: false,
       setUser: (user) => set({ user }),
       setTokens: (accessToken, refreshToken) => {
         set({ accessToken });
@@ -27,11 +28,21 @@ const useUserStore = create<UserState>()(
           localStorage.setItem('refreshToken', refreshToken);
         }
       },
-      signOut: () => {
-        set({ user: null, accessToken: null });
+      signOut: async () => {
         if (typeof window !== 'undefined') {
-          localStorage.removeItem('refreshToken');
+            const refreshToken = localStorage.getItem('refreshToken');
+            if (refreshToken) {
+                try {
+                    // Inform the backend to invalidate the session
+                    await api.post('/api/v1/auth/logout', { refreshToken });
+                } catch (error) {
+                    console.error("Failed to logout on backend:", error);
+                    // Continue with client-side logout even if backend fails
+                }
+            }
+            localStorage.removeItem('refreshToken');
         }
+        set({ user: null, accessToken: null });
       },
     }),
     {
