@@ -20,7 +20,7 @@ const TopTeamRow = ({ team, rank }: { team: Team, rank: number }) => (
             <p className="font-semibold group-hover:text-primary transition-colors">{team.name}</p>
             <p className="text-xs text-muted-foreground">{team.sport?.name || team.game}</p>
         </div>
-        <div className="font-mono text-sm font-semibold">{team.rank || 1200} ELO</div>
+        <div className="font-mono text-sm font-semibold">{team.rank ?? 0} ELO</div>
     </Link>
 );
 
