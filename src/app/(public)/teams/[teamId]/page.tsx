@@ -11,7 +11,9 @@ export default function TeamPage() {
   
   return (
     <MainLayout>
-        <TeamPublicPage teamId={teamId} />
+        <div className="container mx-auto">
+            <TeamPublicPage teamId={teamId} />
+        </div>
     </MainLayout>
   );
 }
