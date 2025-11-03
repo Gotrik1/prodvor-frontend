@@ -106,7 +106,7 @@ export function TopTeamsWidgetSkeleton() {
 }
 
 export function TopTeamsWidget() {
-    const { user: currentUser, accessToken } = useUserStore();
+    const { user: currentUser } = useUserStore();
     const { toast } = useToast();
     const [topCityTeams, setTopCityTeams] = useState<Team[]>([]);
     const [topCountryTeams, setTopCountryTeams] = useState<Team[]>([]);
@@ -120,15 +120,7 @@ export function TopTeamsWidget() {
                 
                 let cityPromise;
                 if (currentUser?.city) {
-                    const url = `/api/v1/teams?city=${encodeURIComponent(currentUser.city)}&sort_by=rank&order=desc&limit=5`;
-                    console.log(`
---- DEBUG: curl command for City Top Teams ---
-
-curl -X GET "${api.defaults.baseURL}${url}" -H "Authorization: Bearer ${accessToken}"
-
---------------------------------------------
-                    `);
-                    cityPromise = api.get(url);
+                    cityPromise = api.get(`/api/v1/teams?city=${encodeURIComponent(currentUser.city)}&sort_by=rank&order=desc&limit=5`);
                 } else {
                     cityPromise = Promise.resolve({ data: [] });
                 }
@@ -148,10 +140,8 @@ curl -X GET "${api.defaults.baseURL}${url}" -H "Authorization: Bearer ${accessTo
                 setIsLoading(false);
             }
         };
-        if (currentUser) {
-            fetchTopTeams();
-        }
-    }, [toast, currentUser, accessToken]);
+        fetchTopTeams();
+    }, [toast, currentUser]);
     
     if (isLoading && topCityTeams.length === 0 && topCountryTeams.length === 0) {
         return <TopTeamsWidgetSkeleton />;
