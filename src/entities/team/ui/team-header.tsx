@@ -21,19 +21,23 @@ export const TeamHeader = ({ team, homePlaygrounds }: TeamHeaderProps) => {
     const { user: currentUser } = useUserStore();
     const { toast } = useToast();
     
-    // This state will now genuinely track the follow status
-    const [isFollowing, setIsFollowing] = useState(false); 
+    const [isFollowing, setIsFollowing] = useState(false);
+    const [followerCount, setFollowerCount] = useState(team.followers?.length || 0);
     const [captainedTeams, setCaptainedTeams] = useState<Team[]>([]);
+    const [isLoadingFollow, setIsLoadingFollow] = useState(false);
 
     useEffect(() => {
-        if (!currentUser) return;
+        if (!currentUser) {
+            setIsFollowing(false);
+            setFollowerCount(team.followers?.length || 0);
+            return;
+        };
 
-        // Check initial follow status
         setIsFollowing(team.followers?.includes(currentUser.id) || false);
+        setFollowerCount(team.followers?.length || 0);
 
         const fetchCaptainedTeams = async () => {
             try {
-                // We fetch the user's teams to check captain status and disciplines
                 const response = await api.get(`/api/v1/users/${currentUser.id}?include_teams=true`);
                 if (response.data && response.data.teams) {
                     const userTeams: Team[] = response.data.teams;
@@ -49,12 +53,38 @@ export const TeamHeader = ({ team, homePlaygrounds }: TeamHeaderProps) => {
     }, [currentUser, team.followers]);
 
 
-    const handleFollow = () => {
-        setIsFollowing(!isFollowing);
-        toast({
-            title: isFollowing ? 'Вы отписались' : 'Вы подписались!',
-            description: `Вы ${isFollowing ? 'больше не будете' : 'будете'} следить за новостями команды "${team.name}".`
-        });
+    const handleFollow = async () => {
+        if (!currentUser) {
+            toast({
+                variant: 'destructive',
+                title: 'Ошибка',
+                description: 'Для подписки необходимо авторизоваться.',
+            });
+            return;
+        }
+
+        setIsLoadingFollow(true);
+        try {
+            const response = await api.post(`/api/v1/teams/${team.id}/follow`);
+            const { isFollowing: nowFollowing } = response.data;
+
+            setIsFollowing(nowFollowing);
+            setFollowerCount(prev => nowFollowing ? prev + 1 : prev - 1);
+
+            toast({
+                title: nowFollowing ? 'Вы подписались!' : 'Вы отписались',
+                description: `Вы ${nowFollowing ? 'будете' : 'больше не будете'} следить за новостями команды "${team.name}".`
+            });
+        } catch (error) {
+            console.error("Failed to follow/unfollow team:", error);
+            toast({
+                variant: 'destructive',
+                title: 'Ошибка',
+                description: 'Не удалось выполнить действие. Попробуйте снова.'
+            });
+        } finally {
+            setIsLoadingFollow(false);
+        }
     }
 
     const isCaptainOfThisTeam = useMemo(() => {
@@ -68,8 +98,7 @@ export const TeamHeader = ({ team, homePlaygrounds }: TeamHeaderProps) => {
     }, [currentUser, team.members]);
 
     const canChallenge = useMemo(() => {
-        if (isCaptainOfThisTeam || !currentUser) return false; // Can't challenge your own team
-        // Check if the current user is a captain of any team with the same sport
+        if (isCaptainOfThisTeam || !currentUser) return false;
         return captainedTeams.some(captainedTeam => captainedTeam.sport?.id === team.sport?.id);
     }, [isCaptainOfThisTeam, currentUser, captainedTeams, team.sport]);
 
@@ -77,7 +106,6 @@ export const TeamHeader = ({ team, homePlaygrounds }: TeamHeaderProps) => {
 
     return (
         <header className="flex flex-col md:flex-row items-center gap-6 p-4 rounded-lg bg-card border">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={team.logoUrl || 'https://placehold.co/512x512.png'} alt={team.name} width={96} height={96} className="rounded-lg border-4 border-primary object-cover aspect-square" data-ai-hint="team logo" />
             <div className="text-center md:text-left flex-grow">
                 <h1 className="text-3xl font-bold font-headline">{team.name}</h1>
@@ -87,7 +115,7 @@ export const TeamHeader = ({ team, homePlaygrounds }: TeamHeaderProps) => {
                         <Users className="h-4 w-4" /> {memberCount} игроков
                     </div>
                      <div className="flex items-center gap-1">
-                        <Rss className="h-4 w-4" /> {team.followers?.length || 0} подписчиков
+                        <Rss className="h-4 w-4" /> {followerCount} подписчиков
                     </div>
                 </div>
                 {homePlaygrounds && homePlaygrounds.length > 0 && (
@@ -119,19 +147,17 @@ export const TeamHeader = ({ team, homePlaygrounds }: TeamHeaderProps) => {
                         <Button variant="outline" className="w-full">
                             <UserCheck className="mr-2 h-4 w-4" /> Подать заявку
                         </Button>
-                        <Button variant={isFollowing ? 'secondary' : 'outline'} className="w-full" onClick={handleFollow}>
-                            <UserPlus className={cn("mr-2 h-4 w-4", isFollowing && "text-primary")} />
+                        <Button variant={isFollowing ? 'secondary' : 'outline'} className="w-full" onClick={handleFollow} disabled={isLoadingFollow}>
+                            <Rss className={cn("mr-2 h-4 w-4", isFollowing && "text-primary")} />
                             {isFollowing ? 'Отписаться' : 'Подписаться'}
                         </Button>
                     </>
-                ) : (
-                    !isCaptainOfThisTeam && (
-                        <Button variant="destructive" className="w-full">
-                            <UserX className="mr-2 h-4 w-4" />
-                            Выйти из команды
-                        </Button>
-                    )
-                )}
+                ) : !isCaptainOfThisTeam ? (
+                    <Button variant="destructive" className="w-full">
+                        <UserX className="mr-2 h-4 w-4" />
+                        Выйти из команды
+                    </Button>
+                ) : null}
             </div>
         </header>
     );
