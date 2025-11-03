@@ -41,15 +41,11 @@ export function MyTeamWidget({ user }: { user: User & { teams?: Team[] } }) {
                         <Link href={`/teams/${team.id}`} key={team.id} className="block group">
                              <div className="flex items-center justify-between gap-3 p-2 rounded-md hover:bg-muted/50 transition-colors">
                                 <div className="flex items-center gap-3">
-                                    <Image src={team.logoUrl || 'https://placehold.co/512x512.png'} alt={team.name} width={40} height={40} className="rounded-md border" data-ai-hint="team logo" />
+                                    <Image src={team.logoUrl || 'https://placehold.co/512x512.png'} alt={team.name} width={40} height={40} className="rounded-md border aspect-square object-cover" data-ai-hint="team logo" />
                                     <div>
                                         <p className="font-semibold leading-tight group-hover:text-primary transition-colors">{team.name}</p>
                                         <p className="text-xs text-muted-foreground">{team.sport?.name || team.game}</p>
                                     </div>
-                                </div>
-                                <div className="text-right">
-                                    <p className="font-mono text-sm font-semibold">{team.rank}</p>
-                                    <p className="text-xs text-muted-foreground">ELO</p>
                                 </div>
                             </div>
                         </Link>
