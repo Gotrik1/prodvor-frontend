@@ -1,4 +1,4 @@
-name: Deploy frontend to local PC via Tailscale
+name: Sync backend & frontend to local PC via Tailscale
 
 on:
   push:
@@ -8,26 +8,23 @@ permissions:
   contents: read
 
 jobs:
-  deploy:
+  sync:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Install & Connect to Tailscale (manual)
+      - name: Install & Connect to Tailscale
         run: |
           curl -fsSL https://tailscale.com/install.sh | sh
           sudo tailscale up --authkey="${{ secrets.TAILSCALE_AUTHKEY }}" --accept-routes=true
           tailscale status
-          tailscale ip -4
 
       - name: Trust host key
         run: |
           mkdir -p ~/.ssh
           ssh-keyscan -H "${{ secrets.TAILSCALE_HOST }}" >> ~/.ssh/known_hosts
 
-      - name: Pull & restart frontend on Windows host
+      # ===== FRONTEND (CMD) =====
+      - name: Pull FRONTEND repo (CMD)
         uses: appleboy/ssh-action@v1.0.0
         with:
           host:     ${{ secrets.TAILSCALE_HOST }}
@@ -35,27 +32,13 @@ jobs:
           key:      ${{ secrets.TAILSCALE_SSH_KEY }}
           port:     22
           script: |
-            REM ====== ПУТЬ К ФРОНТУ ======
-            cd /d E:\prodvor\frontend
-
-            REM ====== GIT SYNC ======
-            git fetch --all --prune
-            git reset --hard origin/main
-
-            REM ====== DEPENDENCIES ======
-            if exist pnpm-lock.yaml (
-              pnpm -v >NUL 2>&1 && pnpm install --frozen-lockfile || npm install --no-audit --no-fund
-            ) else (
-              npm install --no-audit --no-fund
-            )
-
-            REM ====== RESTART (выбери один вариант) ======
-            taskkill /im node.exe /f >NUL 2>&1
-            start "" cmd /c "pnpm dev || npm run dev"
-
-            REM PM2:
-            REM npx pm2 startOrReload ecosystem.config.js --only frontend
-
-            REM Docker:
-            REM cd /d E:\prodvor
-            REM docker compose pull && docker compose up -d --build
+            cmd /c ^
+            "cd /d E:\prodvor\frontend ^
+            && echo == FRONTEND == ^
+            && whoami ^
+            && git rev-parse --show-toplevel ^
+            && git remote -v ^
+            && git fetch --all --prune ^
+            && git reset --hard origin/main ^
+            && git log -1 --oneline ^
+            && echo ✅ FRONTEND synced"
