@@ -3,9 +3,10 @@ import { NextResponse } from 'next/server';
 import fs from 'fs/promises';
 import path from 'path';
 
-// This is the endpoint on your backend that serves the openapi.json
-// IMPORTANT: This must be the internal or direct URL to the backend service.
-const BACKEND_OPENAPI_URL = process.env.BACKEND_OPENAPI_URL;
+// Используем базовый URL из переменных окружения
+const BACKEND_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+// Используем путь к файлу спецификации из переменных окружения
+const BACKEND_OPENAPI_PATH = process.env.BACKEND_OPENAPI_PATH;
 
 // The path where the openapi.json file will be stored in this frontend project.
 const LOCAL_OPENAPI_PATH = path.join(process.cwd(), 'src/docs/openapi.json');
@@ -21,16 +22,19 @@ const LOCAL_OPENAPI_PATH = path.join(process.cwd(), 'src/docs/openapi.json');
 export async function GET() {
   console.log('Cron job triggered: Fetching latest openapi.json...');
 
-  if (!BACKEND_OPENAPI_URL) {
-      console.error('Error: BACKEND_OPENAPI_URL is not defined in .env file.');
+  if (!BACKEND_BASE_URL || !BACKEND_OPENAPI_PATH) {
+      console.error('Error: NEXT_PUBLIC_API_BASE_URL or BACKEND_OPENAPI_PATH is not defined in .env file.');
       return new NextResponse(
-        JSON.stringify({ message: 'Server configuration error: Backend URL is not set.' }), 
+        JSON.stringify({ message: 'Server configuration error: Backend URL or OpenAPI path is not set.' }), 
         { status: 500 }
       );
   }
 
+  const fullOpenApiUrl = `${BACKEND_BASE_URL}${BACKEND_OPENAPI_PATH}`;
+
   try {
-    const response = await fetch(BACKEND_OPENAPI_URL);
+    console.log(`Fetching from: ${fullOpenApiUrl}`);
+    const response = await fetch(fullOpenApiUrl);
 
     if (!response.ok) {
       const errorText = await response.text();

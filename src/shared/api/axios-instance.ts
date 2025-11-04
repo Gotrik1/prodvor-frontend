@@ -5,8 +5,10 @@ import axios from 'axios';
 import { useUserStore } from '@/widgets/dashboard-header/model/user-store';
 import { Configuration } from './configuration';
 
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'https://8080-firebase-prodvor-backend-1761850902881.cluster-ombtxv25tbd6yrjpp3lukp6zhc.cloudworkstations.dev';
+
 const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL || 'https://8080-firebase-prodvor-backend-1761850902881.cluster-ombtxv25tbd6yrjpp3lukp6zhc.cloudworkstations.dev',
+  baseURL: API_BASE_URL,
 });
 
 api.interceptors.request.use(
@@ -23,8 +25,8 @@ api.interceptors.request.use(
 );
 
 export const apiConfig = new Configuration({
-    basePath: process.env.NEXT_PUBLIC_API_BASE_URL || 'https://8080-firebase-prodvor-backend-1761850902881.cluster-ombtxv25tbd6yrjpp3lukp6zhc.cloudworkstations.dev',
-    accessToken: (name, scopes) => useUserStore.getState().accessToken || '',
+    basePath: API_BASE_URL,
+    accessToken: (name?: string, scopes?: string[]) => useUserStore.getState().accessToken || '',
 });
 
 export default api;
