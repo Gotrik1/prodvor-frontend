@@ -14,26 +14,22 @@ import type { User, Team } from '@/shared/api';
 import { PlayerPageTemplate } from '@/views/admin/ui/templates/player-page-template';
 import { UsersApi } from '@/shared/api';
 import { apiConfig } from '@/shared/api/axios-instance';
-import { users as mockUsers } from '@/mocks';
 
 const usersApi = new UsersApi(apiConfig);
 
 async function getUser(userId: string): Promise<(User & { teams?: Team[] }) | undefined> {
     const userIdNumber = parseInt(userId, 10);
-
+    // Временная проверка, чтобы избежать NaN ошибок, пока бэкенд не поддерживает строковые ID
     if (isNaN(userIdNumber)) {
-        // Handle non-numeric IDs by looking in mock data
-        console.log(`[Client] Looking for non-numeric user ID in mocks: ${userId}`);
-        // This is a simplified mock lookup. In a real app, you might have a different API for different user types.
-        const mockUser = mockUsers.find(u => u.id === userId);
-        return mockUser as User;
+        console.error(`[Server] Attempted to fetch user with a non-numeric ID: ${userId}. Backend must be updated to support string IDs.`);
+        return undefined;
     }
 
     try {
         const response = await usersApi.apiV1UsersUserIdGet(userIdNumber, true);
         return response.data as User;
     } catch (error: any) {
-        console.error(`[ Server ] Failed to fetch user: ${error.response?.status || error.message}`);
+        console.error(`[Server] Failed to fetch user: ${error.response?.status || error.message}`);
         return undefined;
     }
 }
