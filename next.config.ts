@@ -37,6 +37,9 @@ const nextConfig = {
         }
     ],
   },
+  experimental: {
+    allowedDevOrigins: ['https://prodvor.website', 'https://176.106.247.145'],
+  }
 };
 
 export default nextConfig;
