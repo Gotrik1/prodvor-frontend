@@ -19,8 +19,8 @@ const usersApi = new UsersApi(apiConfig);
 
 async function getUser(userId: string): Promise<(User & { teams?: Team[] }) | undefined> {
     try {
-        const response = await usersApi.usersUserIdGet(parseInt(userId, 10), true);
-        return response.data;
+        const response = await usersApi.apiV1UsersUserIdGet(parseInt(userId, 10), true);
+        return response.data as User;
     } catch (error: any) {
         console.error(`[ Server ] Failed to fetch user: ${error.response?.status || error.message}`);
         return undefined;
