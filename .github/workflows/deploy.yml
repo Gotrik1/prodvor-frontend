@@ -4,7 +4,6 @@ on:
   push:
     branches: [ "main" ]
 
-# права воркфлоу (минимально нужные)
 permissions:
   contents: read
 
@@ -13,57 +12,50 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1) чекаут — нужен хотя бы для метаданных/логов
       - name: Checkout
         uses: actions/checkout@v4
 
-      # 2) подключаем runner к твоему tailnet (как временному клиенту)
-      - name: Connect to Tailscale
-        uses: tailscale/github-action@v2
-        with:
-          authkey: ${{ secrets.TAILSCALE_AUTHKEY }}
-          version: stable
+      - name: Install & Connect to Tailscale (manual)
+        run: |
+          curl -fsSL https://tailscale.com/install.sh | sh
+          sudo tailscale up --authkey="${{ secrets.TAILSCALE_AUTHKEY }}" --accept-routes=true
+          tailscale status
+          tailscale ip -4
 
-      # 3) доверяем host key, чтобы ssh не спрашивал "Are you sure?"
       - name: Trust host key
         run: |
           mkdir -p ~/.ssh
-          ssh-keyscan -H ${{ secrets.TAILSCALE_HOST }} >> ~/.ssh/known_hosts
+          ssh-keyscan -H "${{ secrets.TAILSCALE_HOST }}" >> ~/.ssh/known_hosts
 
-      # 4) основное: зайти по ssh на твой ПК и обновить фронт
       - name: Pull & restart frontend on Windows host
         uses: appleboy/ssh-action@v1.0.0
         with:
-          host: ${{ secrets.TAILSCALE_HOST }}
+          host:     ${{ secrets.TAILSCALE_HOST }}
           username: ${{ secrets.WINDOWS_USER }}
-          key: ${{ secrets.TAILSCALE_SSH_KEY }}
-          port: 22
-          # если у тебя нет pnpm на ПК — оставь как есть: шаг сам упадёт на pnpm и продолжит npm
+          key:      ${{ secrets.TAILSCALE_SSH_KEY }}
+          port:     22
           script: |
-            REM ====== ПУТИ ======
+            REM ====== ПУТЬ К ФРОНТУ ======
             cd /d E:\prodvor\frontend
 
-            REM ====== GIT СИНХ ======
+            REM ====== GIT SYNC ======
             git fetch --all --prune
             git reset --hard origin/main
 
-            REM ====== ЗАВИСИМОСТИ ======
+            REM ====== DEPENDENCIES ======
             if exist pnpm-lock.yaml (
               pnpm -v >NUL 2>&1 && pnpm install --frozen-lockfile || npm install --no-audit --no-fund
             ) else (
               npm install --no-audit --no-fund
             )
 
-            REM ====== ПЕРЕЗАПУСК (ВЫБЕРИ ОДНО) ======
-
-            REM [A] Dev-скрипт (как есть)
+            REM ====== RESTART (выбери один вариант) ======
             taskkill /im node.exe /f >NUL 2>&1
-            start "" cmd /c "pnpm run dev || npm run dev"
+            start "" cmd /c "pnpm dev || npm run dev"
 
-            REM [B] PM2 (раскомментируй и настрой ecosystem.config.js)
+            REM PM2:
             REM npx pm2 startOrReload ecosystem.config.js --only frontend
 
-            REM [C] Docker Compose из корня монорепы
+            REM Docker:
             REM cd /d E:\prodvor
-            REM docker compose pull
-            REM docker compose up -d --build
+            REM docker compose pull && docker compose up -d --build
