@@ -24,7 +24,7 @@ api.interceptors.request.use(
 
 export const apiConfig = new Configuration({
     basePath: process.env.NEXT_PUBLIC_API_BASE_URL,
-    accessToken: () => useUserStore.getState().accessToken || undefined,
+    accessToken: (name, scopes) => useUserStore.getState().accessToken || undefined,
 });
 
 export default api;
