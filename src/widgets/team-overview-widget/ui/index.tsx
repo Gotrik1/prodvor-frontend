@@ -102,8 +102,8 @@ export const TeamOverviewWidget = ({ team }: TeamOverviewWidgetProps) => {
                 <CardContent className="grid grid-cols-2 md:grid-cols-4 gap-4">
                     <StatCard title="MVP команды" value={mvp ? mvp.nickname : 'N/A'} icon={Star} />
                     <StatCard title="Лучший бомбардир" value={topScorer ? topScorer.nickname : 'N/A'} icon={Trophy} />
-                    <StatCard title="Сухие матчи" value={cleanSheets} icon={Shield} />
-                    <StatCard title="Средний рейтинг" value={avgRating} icon={Crown} />
+                    <StatCard title="Сухие матчи" value={String(cleanSheets)} icon={Shield} />
+                    <StatCard title="Средний рейтинг" value={String(avgRating)} icon={Crown} />
                 </CardContent>
             </Card>
 

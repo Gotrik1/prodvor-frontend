@@ -1,6 +1,5 @@
 
-import type { Playground } from '@/mocks/playgrounds';
-import { playgrounds } from '@/mocks/playgrounds';
+
 import { registeredTeams as baseRegisteredTeams, Team } from '@/mocks/teams';
 import { sponsors as allMockSponsors } from '@/mocks/personnel';
 import { requirements as allMockRequirements } from '@/mocks/requirements';
@@ -31,7 +30,6 @@ export interface Tournament {
     startDate: string;
     bannerUrl: string;
     dataAiHint: string;
-    playgrounds: Playground[];
     description: string;
     level: TournamentLevel;
     location: string;

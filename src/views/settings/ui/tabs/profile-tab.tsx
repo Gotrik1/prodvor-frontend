@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { useForm } from 'react-hook-form';
@@ -169,7 +170,7 @@ const DisciplinesCard = () => {
             setIsLoading(true);
             try {
                 const response = await api.get(`/api/v1/sports/`);
-                const sports: Sport[] = response.data;
+                const sports: Sport[] = response.data as unknown as Sport[];
                 const options = sports.map(sport => ({
                     value: sport.id,
                     label: sport.name,

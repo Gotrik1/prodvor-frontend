@@ -1,4 +1,3 @@
-/* eslint-disable */
 /**
  * Sport Matching API
  * A RESTful API for a sports team and player matching platform.

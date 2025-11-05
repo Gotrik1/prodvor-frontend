@@ -22,7 +22,6 @@ import { Logo } from "@/views/auth/ui";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/shared/ui/form';
 import { useToast } from '@/shared/hooks/use-toast';
 import { Loader2, CalendarIcon } from 'lucide-react';
-import { useUserStore } from '@/widgets/dashboard-header/model/user-store';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shared/ui/select';
 import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/popover';
 import { Calendar } from '@/shared/ui/calendar';
@@ -49,7 +48,6 @@ export function RegisterPage() {
   const { toast } = useToast();
   const router = useRouter();
   const [isLoading, setIsLoading] = React.useState(false);
-  const { setUser, setTokens } = useUserStore();
 
   const form = useForm<z.infer<typeof registerFormSchema>>({
     resolver: zodResolver(registerFormSchema),

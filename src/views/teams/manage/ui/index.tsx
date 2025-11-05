@@ -1,8 +1,9 @@
 
+
 'use client';
 
 import React, { useEffect, useState, useCallback } from 'react';
-import type { Team, User, Playground } from "@/mocks";
+import type { Team, User } from "@/mocks";
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
 import Link from "next/link";

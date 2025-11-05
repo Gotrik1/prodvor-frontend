@@ -8,7 +8,7 @@ import { Construction, Swords } from "lucide-react";
 import Link from "next/link";
 
 
-export const TeamChallengesWidget = ({ teamId }: { teamId: string }) => {
+export const TeamChallengesWidget = ({ teamId: _teamId }: { teamId: string }) => {
     return (
         <Card>
             <CardHeader className="flex flex-col md:flex-row md:items-center md:justify-between">

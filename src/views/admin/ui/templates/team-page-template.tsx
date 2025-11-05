@@ -3,7 +3,7 @@
 'use client';
 
 import React, { useEffect } from 'react';
-import type { User, Playground, Team } from "@/mocks";
+import type { User, Team } from "@/mocks";
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
 import { History, Grid3x3 } from "lucide-react";
@@ -17,7 +17,6 @@ import { TeamMatchesWidget } from "@/widgets/team-matches-widget";
 import { TeamChallengesWidget } from "@/widgets/team-challenges-widget";
 import { TeamStatsWidget } from "@/widgets/team-stats-widget";
 import { Skeleton } from '@/shared/ui/skeleton';
-import api from '@/shared/api/axios-instance';
 
 interface TeamPageTemplateProps {
   team?: Team;
@@ -31,7 +30,6 @@ export function TeamPageTemplate({
   isLoading: initialIsLoading,
 }: TeamPageTemplateProps) {
   const [team, setTeam] = React.useState<Team | undefined>(initialTeam);
-  const [playgrounds, setPlaygrounds] = React.useState<Playground[]>([]);
   const [teamMembers, setTeamMembers] = React.useState<User[]>(initialTeamMembers || []);
   const [isLoading, setIsLoading] = React.useState(initialIsLoading ?? true);
   
@@ -42,26 +40,7 @@ export function TeamPageTemplate({
   }, [initialTeam, initialTeamMembers, initialIsLoading]);
 
   React.useEffect(() => {
-    if (!team) return;
-
-    const fetchPlaygrounds = async () => {
-      // homePlaygroundIds is not a property on the new Team type.
-      // This will need to be adjusted once the backend provides this data.
-      // if (team.homePlaygroundIds && team.homePlaygroundIds.length > 0) {
-      //   try {
-      //     const playgroundsRes = await api.get(`/api/v1/playgrounds`);
-      //     const allPlaygrounds: Playground[] = playgroundsRes.data;
-      //     const homePgs = allPlaygrounds.filter((p: any) =>
-      //       team.homePlaygroundIds?.includes(p.id)
-      //     );
-      //     setPlaygrounds(homePgs);
-      //   } catch (error) {
-      //     console.error("Failed to fetch playgrounds:", error);
-      //   }
-      // }
-    };
-
-    fetchPlaygrounds();
+    // Empty useEffect for playgrounds logic that was removed
   }, [team]);
 
   if (isLoading) {
@@ -94,7 +73,7 @@ export function TeamPageTemplate({
 
   return (
     <div className="p-4 md:p-6 lg:p-8 space-y-6">
-      <TeamHeader team={team} homePlaygrounds={playgrounds} />
+      <TeamHeader team={team} homePlaygrounds={[]} />
 
       <Tabs defaultValue="overview" className="w-full">
         <TabsList className="grid w-full grid-cols-4 md:grid-cols-6">

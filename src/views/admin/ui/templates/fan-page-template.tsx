@@ -10,7 +10,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/sha
 import { Calendar, Flame, Heart, Ticket, Gamepad2, Tv, Camera, User as UserIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useMemo, useState } from "react";
+import React, { useMemo } from "react";
 import { getUserDisciplines } from "@/entities/user/lib";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 import { Dialog, DialogContent, DialogTrigger } from "@/shared/ui/dialog";
