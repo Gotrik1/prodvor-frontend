@@ -33,7 +33,7 @@ export function TeamManagementPage({ teamId }: { teamId: string }) {
         setLoading(true);
         try {
             const response = await api.get(`/api/v1/teams/${teamId}`);
-            const teamData: Team & { captain: User, members: User[] } = response.data;
+            const teamData: Team = response.data as unknown as Team;
             setTeam(teamData);
             
             if (teamData.captain && currentUser) {
@@ -42,7 +42,7 @@ export function TeamManagementPage({ teamId }: { teamId: string }) {
 
             const fullRoster: User[] = [];
             if (teamData.captain) {
-                fullRoster.push({ ...teamData.captain, role: 'Капитан' });
+                fullRoster.push({ ...(teamData.captain as User), role: 'Капитан' });
             }
             teamData.members?.forEach((member: User) => {
                 if (!fullRoster.some(p => p.id === member.id)) {
@@ -142,7 +142,7 @@ export function TeamManagementPage({ teamId }: { teamId: string }) {
                    <TransfersTab team={team} onApplicationProcessed={fetchTeamData} />
                 </TabsContent>
                 <TabsContent value="announcements" className="mt-6">
-                   <AnnouncementsTab />
+                   <AnnouncementsTab tournamentId={team.id} />
                 </TabsContent>
                 <TabsContent value="settings" className="mt-6">
                    <SettingsTab />
