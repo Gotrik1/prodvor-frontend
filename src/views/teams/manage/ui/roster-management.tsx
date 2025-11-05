@@ -1,8 +1,9 @@
 
+
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import type { User } from '@/mocks';
+import type { User } from '@/shared/api/models';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import { Button } from '@/shared/ui/button';
@@ -77,7 +78,7 @@ export function RosterManagement({ teamId, allTeamMembers: initialTeamMembers, o
                 <div className="flex items-center gap-3">
                     <Avatar className="h-8 w-8">
                         <AvatarImage src={player.avatarUrl} />
-                        <AvatarFallback>{player.nickname.charAt(0)}</AvatarFallback>
+                        <AvatarFallback>{player.nickname?.charAt(0)}</AvatarFallback>
                     </Avatar>
                     <div className="flex items-center gap-2">
                         <span className="font-medium">{player.nickname}</span>

@@ -2,8 +2,8 @@
 
 'use client';
 
-import React, { useEffect, useState, useMemo } from 'react';
-import type { User, Playground, Team } from "@/shared/api";
+import React, { useEffect, useState, useCallback, useMemo } from 'react';
+import type { User, Playground, Team } from "@/shared/api/models";
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
 import { History, Grid3x3 } from "lucide-react";
@@ -45,18 +45,20 @@ export function TeamPageTemplate({
     if (!team) return;
 
     const fetchPlaygrounds = async () => {
-      if (team.homePlaygroundIds && team.homePlaygroundIds.length > 0) {
-        try {
-          const playgroundsRes = await api.get(`/api/v1/playgrounds`);
-          const allPlaygrounds: Playground[] = playgroundsRes.data;
-          const homePgs = allPlaygrounds.filter((p: any) =>
-            team.homePlaygroundIds?.includes(p.id)
-          );
-          setPlaygrounds(homePgs);
-        } catch (error) {
-          console.error("Failed to fetch playgrounds:", error);
-        }
-      }
+      // homePlaygroundIds is not a property on the new Team type.
+      // This will need to be adjusted once the backend provides this data.
+      // if (team.homePlaygroundIds && team.homePlaygroundIds.length > 0) {
+      //   try {
+      //     const playgroundsRes = await api.get(`/api/v1/playgrounds`);
+      //     const allPlaygrounds: Playground[] = playgroundsRes.data;
+      //     const homePgs = allPlaygrounds.filter((p: any) =>
+      //       team.homePlaygroundIds?.includes(p.id)
+      //     );
+      //     setPlaygrounds(homePgs);
+      //   } catch (error) {
+      //     console.error("Failed to fetch playgrounds:", error);
+      //   }
+      // }
     };
 
     fetchPlaygrounds();

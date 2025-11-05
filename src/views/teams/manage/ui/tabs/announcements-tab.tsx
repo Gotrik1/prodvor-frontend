@@ -1,3 +1,4 @@
+
 'use client';
 
 import { Button } from "@/shared/ui/button";
@@ -11,7 +12,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/shared/ui/form";
 import { useToast } from "@/shared/hooks/use-toast";
-import { useTournamentCrmContext } from "@/views/tournaments/manage/lib/TournamentCrmContext";
+import { sendTournamentAnnouncementAction } from "@/app/actions";
+import type { SendTournamentAnnouncementInput } from '@/views/tournaments/manage/ui/tabs/announcements-tab';
 
 const SendTeamAnnouncementInputSchema = z.object({
   teamId: z.string().describe("The ID of the team."),
@@ -38,10 +40,14 @@ export function AnnouncementsTab() {
   async function onSubmit(values: z.infer<typeof SendTeamAnnouncementInputSchema>) {
     // We mock the action here
     console.log("Sending team announcement:", values);
-    toast({
-        title: "Успех!",
-        description: "Ваш анонс был успешно отправлен всем подписчикам команды.",
-    });
+    const result = await sendTournamentAnnouncementAction(values as unknown as SendTournamentAnnouncementInput)
+    if(result.success){
+        toast({
+            title: "Успех!",
+            description: "Ваш анонс был успешно отправлен всем подписчикам команды.",
+        });
+    }
+
     form.reset({ teamId: values.teamId, subject: '', message: '', isAiEnhanced: values.isAiEnhanced });
   }
 

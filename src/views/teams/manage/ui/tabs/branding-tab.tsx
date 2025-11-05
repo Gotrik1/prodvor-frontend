@@ -3,7 +3,7 @@
 'use client';
 
 import { useState } from 'react';
-import type { Team } from '@/shared/api';
+import type { Team } from '@/shared/api/models';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/shared/ui/dialog';
 import { Button } from '@/shared/ui/button';
@@ -118,7 +118,7 @@ export function BrandingTab({ team: initialTeam }: { team: Team }) {
     const [team, setTeam] = useState(initialTeam);
 
     const handleLogoUpdate = (newLogoUrl: string) => {
-        setTeam(prevTeam => ({ ...prevTeam, logoUrl: newLogoUrl }));
+        setTeam(prevTeam => ({ ...(prevTeam as Team), logoUrl: newLogoUrl }));
     };
 
     return (

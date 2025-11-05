@@ -3,7 +3,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import type { User } from '@/mocks';
+import type { User } from '@/shared/api/models';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Button } from '@/shared/ui/button';
 import { Dices, Save } from 'lucide-react';
@@ -45,7 +45,7 @@ const formations: Record<string, { x: number, y: number, role: string }[]> = {
 const PlayerChip = ({ player, onDragStart }: { player: User, onDragStart: (e: React.DragEvent, playerId: string) => void }) => (
     <div
         draggable
-        onDragStart={(e) => onDragStart(e, player.id)}
+        onDragStart={(e) => onDragStart(e, String(player.id))}
         className="flex items-center gap-2 bg-card p-1.5 rounded-full border shadow cursor-grab active:cursor-grabbing"
     >
         <span className="font-bold text-xs bg-primary text-primary-foreground rounded-full h-6 w-6 flex items-center justify-center">
@@ -64,7 +64,7 @@ const PositionMarker = ({ position, assignedPlayer, onDrop, onDragOver }: { posi
     >
         {assignedPlayer ? (
             <div className="bg-primary text-primary-foreground font-bold rounded-full h-10 w-10 flex items-center justify-center text-sm shadow-lg border-2 border-card">
-                {assignedPlayer.nickname.charAt(0)}
+                {assignedPlayer.nickname?.charAt(0)}
             </div>
         ) : (
             <div className="bg-muted border-2 border-dashed rounded-full h-10 w-10 flex items-center justify-center text-muted-foreground font-mono text-xs">
@@ -82,7 +82,7 @@ export function TacticalBoard({ teamMembers }: TacticalBoardProps) {
     const [selectedFormation, setSelectedFormation] = useState('4-3-3');
     const [assignments, setAssignments] = useState<Record<string, string | null>>({}); // { role: playerId }
     
-    const availablePlayers = teamMembers.filter(p => !Object.values(assignments).includes(p.id));
+    const availablePlayers = teamMembers.filter(p => !Object.values(assignments).includes(String(p.id)));
 
     const handleDragStart = (e: React.DragEvent, playerId: string) => {
         e.dataTransfer.setData("playerId", playerId);
@@ -107,7 +107,7 @@ export function TacticalBoard({ teamMembers }: TacticalBoardProps) {
         
         formation.forEach((pos, index) => {
             if (shuffledPlayers[index]) {
-                newAssignments[pos.role] = shuffledPlayers[index].id;
+                newAssignments[pos.role] = String(shuffledPlayers[index].id);
             }
         });
         setAssignments(newAssignments);
@@ -148,7 +148,7 @@ export function TacticalBoard({ teamMembers }: TacticalBoardProps) {
                         <div className="relative aspect-[4/2.5] w-full rounded-lg bg-cover bg-center border" style={{ backgroundImage: `url(${soccerFieldImage})` }}>
                             {formations[selectedFormation].map(pos => {
                                 const assignedPlayerId = assignments[pos.role];
-                                const assignedPlayer = assignedPlayerId ? teamMembers.find((p: User) => p.id === assignedPlayerId) : null;
+                                const assignedPlayer = assignedPlayerId ? teamMembers.find((p: User) => String(p.id) === assignedPlayerId) : null;
                                 return (
                                     <PositionMarker 
                                         key={pos.role}

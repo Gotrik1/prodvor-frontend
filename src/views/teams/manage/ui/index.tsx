@@ -8,19 +8,16 @@ import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
-// import { TacticalBoard } from "./tactical-board";
-// import { RosterManagement } from "./roster-management";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
+import { useUserStore } from '@/widgets/dashboard-header/model/user-store';
+import { Skeleton } from '@/shared/ui/skeleton';
+import api from '@/shared/api/axios-instance';
+import { RosterManagement } from './roster-management';
+import { TacticalBoard } from './tactical-board';
 import { TransfersTab } from "./tabs/transfers-tab";
 import { AnnouncementsTab } from "./tabs/announcements-tab";
 import { SettingsTab } from "./tabs/settings-tab";
 import { BrandingTab } from "./tabs/branding-tab";
-import { useUserStore } from '@/widgets/dashboard-header/model/user-store';
-import { Skeleton } from '@/shared/ui/skeleton';
-import api from '@/shared/api/axios-instance';
-import { TeamPageTemplate } from '@/views/admin/ui/templates/team-page-template';
-import { RosterManagement } from './roster-management';
-import { TacticalBoard } from './tactical-board';
 
 export function TeamManagementPage({ teamId }: { teamId: string }) {
     const { user: currentUser } = useUserStore();
@@ -37,7 +34,7 @@ export function TeamManagementPage({ teamId }: { teamId: string }) {
         setLoading(true);
         try {
             const response = await api.get(`/api/v1/teams/${teamId}`);
-            const teamData = response.data;
+            const teamData: Team & { captain: User, members: User[] } = response.data;
             setTeam(teamData);
             
             if (teamData.captain && currentUser) {
@@ -46,7 +43,7 @@ export function TeamManagementPage({ teamId }: { teamId: string }) {
 
             const fullRoster: User[] = [];
             if (teamData.captain) {
-                fullRoster.push({ ...teamData.captain, role: 'Капитан' });
+                fullRoster.push({ ...teamData.captain, role: 'Капитан' as any });
             }
             teamData.members?.forEach((member: User) => {
                 if (!fullRoster.some(p => p.id === member.id)) {
