@@ -6,6 +6,7 @@ const nextConfig = {
   output: 'standalone',
   productionBrowserSourceMaps: false,
   compiler: { removeConsole: { exclude: ['error', 'warn'] } },
+  reactStrictMode: true,
   typescript: {
     ignoreBuildErrors: true,
   },
