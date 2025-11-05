@@ -1,4 +1,4 @@
-name: Build backend & frontend on remote (PROD, logs)
+name: Build frontend on remote (PROD)
 
 on:
   push:
@@ -7,19 +7,15 @@ on:
 permissions:
   contents: read
 
-concurrency:
-  group: prod-build-${{ github.ref }}
-  cancel-in-progress: false
-
 jobs:
-  prod-build:
+  build-frontend:
     runs-on: ubuntu-latest
     env:
       NPM_CONFIG_LOGLEVEL: verbose
       CI: "true"
 
     steps:
-      - name: 🛰️ Install & Connect to Tailscale
+      - name: Install & connect Tailscale
         run: |
           set -euxo pipefail
           curl -fsSL https://tailscale.com/install.sh | sh
@@ -28,17 +24,14 @@ jobs:
             --accept-routes=true \
             --ssh=true
           tailscale status || true
-          tailscale ip -4
 
-      - name: 🔑 Trust host key
+      - name: Trust host key
         run: |
           set -euxo pipefail
           mkdir -p ~/.ssh
           ssh-keyscan -H "${{ secrets.TAILSCALE_HOST }}" >> ~/.ssh/known_hosts
-          echo "Known hosts OK"
 
-      # ===== Log dir =====
-      - name: 🗂️ Prepare timestamped log folder (remote, PowerShell)
+      - name: Prepare log folder (remote)
         uses: appleboy/ssh-action@v1.0.0
         with:
           host:     ${{ secrets.TAILSCALE_HOST }}
@@ -46,17 +39,16 @@ jobs:
           key:      ${{ secrets.TAILSCALE_SSH_KEY }}
           port:     22
           script: |
-            $ErrorActionPreference = "Stop"
-            $stamp   = Get-Date -Format "yyyy-MM-dd_HH-mm-ss"
-            $logRoot = "E:\prodvor\logs"
-            $logDir  = Join-Path $logRoot $stamp
-            if (-not (Test-Path $logDir)) { New-Item -ItemType Directory -Path $logDir | Out-Null }
-            Set-Content -Path (Join-Path $logRoot "_latest_dir.txt") -Value $logDir -Encoding ASCII
-            Write-Host "== Log dir: $logDir"
-            Get-Content (Join-Path $logRoot "_latest_dir.txt")
+            powershell -NoProfile -NonInteractive -ExecutionPolicy Bypass -Command ^
+            "$ErrorActionPreference='Stop'; ^
+             $stamp   = Get-Date -Format 'yyyy-MM-dd_HH-mm-ss'; ^
+             $logRoot = 'E:\prodvor\logs'; ^
+             $logDir  = Join-Path $logRoot $stamp; ^
+             if (-not (Test-Path $logDir)) { New-Item -ItemType Directory -Path $logDir | Out-Null }; ^
+             Set-Content -Path (Join-Path $logRoot '_latest_dir.txt') -Value $logDir -Encoding ASCII; ^
+             Write-Host ('Log dir: ' + $logDir)"
 
-      # ===== FRONTEND build only =====
-      - name: 🌐 FRONTEND — production build (no git, verbose)
+      - name: FRONTEND — npm ci & build (remote)
         uses: appleboy/ssh-action@v1.0.0
         with:
           host:     ${{ secrets.TAILSCALE_HOST }}
@@ -64,37 +56,38 @@ jobs:
           key:      ${{ secrets.TAILSCALE_SSH_KEY }}
           port:     22
           script: |
-            $ErrorActionPreference = "Stop"
-            $root   = "E:\prodvor\frontend"
-            $logDir = Get-Content "E:\prodvor\logs\_latest_dir.txt"
-            $envLog   = Join-Path $logDir "frontend-env.log"
-            $npmCiLog = Join-Path $logDir "frontend-npm-ci.log"
-            $buildLog = Join-Path $logDir "frontend-build.log"
+            powershell -NoProfile -NonInteractive -ExecutionPolicy Bypass -Command ^
+            "$ErrorActionPreference='Stop'; ^
+             [Console]::OutputEncoding=[Text.UTF8Encoding]::new(); ^
+             $root    = 'E:\prodvor\frontend'; ^
+             $logDir  = Get-Content 'E:\prodvor\logs\_latest_dir.txt'; ^
+             $envLog  = Join-Path $logDir 'frontend-env.log'; ^
+             $npmLog  = Join-Path $logDir 'frontend-npm-ci.log'; ^
+             $buildLog= Join-Path $logDir 'frontend-build.log'; ^
+             Write-Host '== FRONTEND build =='; ^
+             whoami            | Tee-Object -FilePath $envLog; ^
+             try { node -v     | Tee-Object -FilePath $envLog -Append } catch { 'node not in PATH' | Tee-Object -FilePath $envLog -Append }; ^
+             try { npm  -v     | Tee-Object -FilePath $envLog -Append } catch { 'npm not in PATH'  | Tee-Object -FilePath $envLog -Append }; ^
+             Set-Location $root; ^
+             $env:NODE_OPTIONS='--max-old-space-size=4096'; ^
+             Write-Host 'npm ci'; ^
+             npm ci --verbose 2>&1 | Tee-Object -FilePath $npmLog; ^
+             Write-Host 'npm run build'; ^
+             $env:NEXT_TELEMETRY_DISABLED='1'; ^
+             $env:TURBO_TELEMETRY_DISABLED='1'; ^
+             npm run build --verbose 2>&1 | Tee-Object -FilePath $buildLog; ^
+             Write-Host '✅ FRONTEND done'; ^
+             Write-Host ('Logs:' + [Environment]::NewLine + ' - ' + $envLog + [Environment]::NewLine + ' - ' + $npmLog + [Environment]::NewLine + ' - ' + $buildLog)"
 
-            Write-Host "== FRONTEND build =="
-            whoami | Tee-Object -FilePath $envLog
-            $PSVersionTable | Out-String | Tee-Object -FilePath $envLog -Append
-            try { node -v | Tee-Object -FilePath $envLog -Append } catch { "node not in PATH" | Tee-Object -FilePath $envLog -Append }
-            try { npm -v  | Tee-Object -FilePath $envLog -Append } catch { "npm not in PATH"  | Tee-Object -FilePath $envLog -Append }
-
-            Set-Location $root
-
-            Write-Host "---- npm ci ----"
-            $env:NODE_OPTIONS="--max-old-space-size=4096"
-            npm ci --verbose 2>&1 | Tee-Object -FilePath $npmCiLog
-
-            Write-Host "---- npm run build (prod) ----"
-            $env:NEXT_TELEMETRY_DISABLED="1"
-            $env:TURBO_TELEMETRY_DISABLED="1"
-            npm run build --verbose 2>&1 | Tee-Object -FilePath $buildLog
-
-            Write-Host "✅ FRONTEND: done"
-            Write-Host "Logs:"
-            Write-Host " - $envLog"
-            Write-Host " - $npmCiLog"
-            Write-Host " - $buildLog"
-
-            # OPTIONAL: restart service if needed
-            # pm2 restart prodvor-frontend
-            # nssm restart prodvor-frontend
-            # docker compose -f E:\prodvor\frontend\docker-compose.yml up -d --build
+      - name: Show log directory (remote)
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host:     ${{ secrets.TAILSCALE_HOST }}
+          username: ${{ secrets.WINDOWS_USER }}
+          key:      ${{ secrets.TAILSCALE_SSH_KEY }}
+          port:     22
+          script: |
+            powershell -NoProfile -NonInteractive -ExecutionPolicy Bypass -Command ^
+            "$logDir = Get-Content 'E:\prodvor\logs\_latest_dir.txt'; ^
+             Write-Host ('Latest logs: ' + $logDir); ^
+             Get-ChildItem -Force $logDir | Format-Table -AutoSize Name,Length,CreationTime"
