@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import React, { useState, useEffect } from 'react';
@@ -40,7 +41,7 @@ export const TeamStatsWidget = ({ team }: { team?: Team }) => {
                 const teamCreationYear = new Date(team.createdAt).getFullYear();
                 const filteredStats = response.data.filter((stat: SeasonStat) => stat.season >= teamCreationYear);
                 
-                setStats(filteredStats.sort((a,b) => b.season - a.season));
+                setStats(filteredStats.sort((a: SeasonStat, b: SeasonStat) => b.season - a.season));
 
             } catch (error) {
                 console.error("Failed to fetch team stats:", error);

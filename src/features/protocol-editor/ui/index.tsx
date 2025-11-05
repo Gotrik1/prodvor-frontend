@@ -10,8 +10,7 @@ import { Input } from '@/shared/ui/input';
 import { Label } from '@/shared/ui/label';
 import { Trash2, PlusCircle } from 'lucide-react';
 import { useProtocol } from '../lib/use-protocol';
-import { EventType, users, teams } from '@/mocks';
-import type { BracketMatch, MatchEvent } from '@/mocks';
+import { EventType, users, teams, type BracketMatch, type MatchEvent } from '@/mocks';
 
 const eventLabels: Record<EventType, string> = {
     'goal': 'Гол',
@@ -31,8 +30,8 @@ export function ProtocolEditor({ match }: { match: BracketMatch }) {
 
     const { team1, team2 } = match;
 
-    const team1Members = useMemo(() => team1 ? users.filter(u => team1.members.includes(u.id)) : [], [team1]);
-    const team2Members = useMemo(() => team2 ? users.filter(u => team2.members.includes(u.id)) : [], [team2]);
+    const team1Members = useMemo(() => team1 ? users.filter(u => team1.members.some(m => m.id === u.id)) : [], [team1]);
+    const team2Members = useMemo(() => team2 ? users.filter(u => team2.members.some(m => m.id === u.id)) : [], [team2]);
     const allPlayersInMatch = useMemo(() => [...team1Members, ...team2Members], [team1Members, team2Members]);
 
 

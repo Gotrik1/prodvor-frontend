@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import {
@@ -14,7 +15,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '@/shared/ui/button';
 import { ExternalLink } from 'lucide-react';
-import { DataTable } from '@/app/admin/pages/dashboard/ui/data-table';
+import { DataTable } from './data-table';
 import { TableRow, TableCell } from '@/shared/ui/table';
 
 export function TeamsTab() {
@@ -34,9 +35,7 @@ export function TeamsTab() {
       .join(', ');
   };
 
-  const getCaptainNickname = (captainId?: string | number) => {
-    if (!captainId) return 'N/A';
-    const captain = users.find(u => String(u.id) === String(captainId));
+  const getCaptainNickname = (captain?: User) => {
     return captain?.nickname || 'N/A';
   }
 
@@ -87,7 +86,7 @@ export function TeamsTab() {
                 <Badge variant="secondary">{team.game}</Badge>
               </TableCell>
               <TableCell className="text-xs">
-                {getCaptainNickname(team.captain?.id)}
+                {getCaptainNickname(team.captain)}
               </TableCell>
               <TableCell>{team.members.length}</TableCell>
               <TableCell className="font-mono">{team.rank}</TableCell>

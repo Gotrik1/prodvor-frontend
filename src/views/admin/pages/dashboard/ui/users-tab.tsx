@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
@@ -11,7 +12,7 @@ import { Tooltip, TooltipProvider, TooltipContent, TooltipTrigger } from '@/shar
 import { useToast } from '@/shared/hooks/use-toast';
 import { useMemo } from 'react';
 import Link from 'next/link';
-import { DataTable } from '@/app/admin/pages/dashboard/ui/data-table';
+import { DataTable } from './data-table';
 import { TableCell, TableRow } from '@/shared/ui/table';
 import { getUserDisciplines } from '@/entities/user/lib';
 

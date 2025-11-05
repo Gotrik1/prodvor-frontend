@@ -2,7 +2,7 @@
 
 'use client';
 
-import { users, teams, Tournament } from '@/mocks';
+import { users, teams, Tournament } from "@/mocks";
 import Link from 'next/link';
 import { Button } from '@/shared/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
@@ -24,7 +24,7 @@ function TournamentRegistrationGuard({ tournament }: { tournament: Tournament })
 
     const userTeams = useMemo(() => {
         if (!currentUser) return [];
-        return teams.filter(team => team.captainId === currentUser.id && team.game === tournament.game);
+        return teams.filter(team => team.captain?.id === currentUser.id && team.game === tournament.game);
     }, [currentUser, tournament.game]);
 
     if (!currentUser || userTeams.length === 0) {
@@ -71,7 +71,7 @@ function TournamentRegisterForm({ tournament, userTeams }: { tournament: Tournam
         }
     }, [userTeams]);
 
-    const teamMembers = selectedTeam ? users.filter(user => selectedTeam.members.includes(user.id)) : [];
+    const teamMembers = selectedTeam ? users.filter(user => selectedTeam.members.some(m => m.id === user.id)) : [];
     
     const handleSubmit = () => {
         toast({

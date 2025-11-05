@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import Image from 'next/image';
@@ -34,7 +35,7 @@ export const TeamHeader = ({ team, homePlaygrounds }: TeamHeaderProps) => {
             return;
         };
 
-        setIsFollowing(team.followers?.some(follower => follower.id === currentUser.id) || false);
+        setIsFollowing(team.followers?.some(followerId => followerId === currentUser.id) || false);
         setFollowerCount(team.followers?.length || 0);
 
         const fetchCaptainedTeams = async () => {

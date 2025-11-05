@@ -175,7 +175,7 @@ function assignDisciplinesFromTeams(allUsers: User[], allTeams: Team[]) {
         const userTeams = allTeams.filter(t => t.members.some(m => m.id === user.id));
         userTeams.forEach(team => {
             if (userSports.size < 6) {
-                const teamSport = allSportsData.find(s => s.id === team.sportId);
+                const teamSport = allSportsData.find((s: Sport) => s.id === team.sportId);
                 if(teamSport) {
                     userSports.set(teamSport.id, { id: teamSport.id, name: teamSport.name });
                 }

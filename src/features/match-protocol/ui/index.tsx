@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { Card, CardContent, CardDescription, CardHeader } from "@/shared/ui/card";
@@ -11,6 +12,7 @@ import Link from "next/link";
 import { useProtocol } from "@/features/protocol-editor/lib/use-protocol";
 import type { BracketMatch, Tournament, Team, User } from "@/mocks";
 import { LiveTextFeed } from "./live-text-feed";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 
 export function MatchProtocol({ tournament, match }: { tournament: Tournament, match: BracketMatch }) {
     const { events } = useProtocol();
@@ -23,8 +25,9 @@ export function MatchProtocol({ tournament, match }: { tournament: Tournament, m
         return <p>Команды не определены.</p>;
     }
 
-    const team1Members = users.filter(u => team1.members.some(m => m.id === u.id));
-    const team2Members = users.filter(u => team2.members.some(m => m.id === u.id));
+    const team1Members = users.filter(u => team1.members.some(member => member.id === u.id));
+    const team2Members = users.filter(u => team2.members.some(member => member.id === u.id));
+
 
     return (
         <Card>

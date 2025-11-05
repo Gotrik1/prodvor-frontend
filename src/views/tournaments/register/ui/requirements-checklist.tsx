@@ -49,7 +49,8 @@ export function RequirementsChecklist({ team }: { team: Team | undefined }) {
         );
     }
     
-    const teamMembersData = users.filter(u => team.members.includes(u.id));
+    const teamMembersData = users.filter(u => team.members.some(member => member.id === u.id));
+
 
     // Logic to check requirements
     const checks = {

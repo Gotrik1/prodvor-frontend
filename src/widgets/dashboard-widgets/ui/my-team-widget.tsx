@@ -11,6 +11,7 @@ import { teams, User, Team } from '@/mocks';
 import React, { useState, useEffect } from "react";
 import { Skeleton } from "@/shared/ui/skeleton";
 import { ScrollArea } from "@/shared/ui/scroll-area";
+import { MyTeamsEmptyState } from "@/views/teams/ui/my-teams-empty-state";
 
 export function MyTeamWidget({ user }: { user: User }) {
   const [myTeams, setMyTeams] = useState<Team[]>([]);
@@ -18,7 +19,7 @@ export function MyTeamWidget({ user }: { user: User }) {
 
   useEffect(() => {
     setIsClient(true);
-    const userTeams = teams.filter(team => team.members.includes(user.id));
+    const userTeams = teams.filter(team => team.members.some(m => m.id === user.id));
     setMyTeams(userTeams);
   }, [user]);
 
