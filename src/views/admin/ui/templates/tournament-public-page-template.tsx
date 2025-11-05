@@ -5,7 +5,7 @@ import { tournaments } from "@/mocks";
 import type { Tournament } from "@/mocks";
 
 // Select a mock tournament to display in the template
-const mockTournament: any = tournaments.find((t: any) => t.id === 'tourney1');
+const mockTournament: Tournament | undefined = tournaments.find((t: any) => t.id === 'tourney1');
 
 export function TournamentPublicPageTemplate() {
     return (

@@ -29,8 +29,8 @@ export function MyTeamWidget({ user }: { user: User }) {
         }
         setIsLoading(true);
         try {
-            const response = await usersApi.apiV1UsersMeGet(undefined as any, true);
-            const userWithTeams: User & { teams?: Team[] } = response.data as any;
+            const response = await usersApi.apiV1UsersUserIdGet(parseInt(user.id, 10), true);
+            const userWithTeams: User & { teams?: Team[] } = response.data as unknown as any;
             setMyTeams(userWithTeams.teams || []);
         } catch (error) {
             console.error("Failed to fetch user's teams:", error);

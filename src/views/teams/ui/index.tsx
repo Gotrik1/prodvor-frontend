@@ -2,7 +2,7 @@
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
-import type { Team, User } from '@/mocks';
+import { type Team, type User } from '@/mocks';
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/shared/ui/card";
 import { PlusCircle, UserCheck, Users, BarChart } from "lucide-react";
@@ -102,7 +102,7 @@ export function TeamsPage() {
             setIsLoading(true);
             try {
                 const response = await api.get('/api/v1/teams');
-                setAllTeams(response.data);
+                setAllTeams(response.data as unknown as Team[]);
             } catch (error) {
                 console.error("Failed to fetch teams:", error);
             }

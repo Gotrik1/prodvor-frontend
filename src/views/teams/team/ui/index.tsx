@@ -24,14 +24,14 @@ export function TeamPublicPage({ teamId }: { teamId: string }) {
                  if (!response.data) {
                     setTeam(undefined);
                 } else {
-                    const data: Team & { captain: User; members: User[] } = response.data;
+                    const data: Team = response.data;
                     setTeam(data);
 
                     const fullRoster: User[] = [];
 
                     // Add captain to the roster, marking them as captain
                     if (data.captain) {
-                        fullRoster.push({ ...data.captain, role: 'Капитан' as any });
+                        fullRoster.push({ ...(data.captain as User), role: 'Капитан' as any });
                     }
                     
                     // Add other members, ensuring no duplicates

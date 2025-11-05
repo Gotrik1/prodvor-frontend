@@ -142,7 +142,7 @@ export function TeamManagementPage({ teamId }: { teamId: string }) {
                    <TransfersTab team={team} onApplicationProcessed={fetchTeamData} />
                 </TabsContent>
                 <TabsContent value="announcements" className="mt-6">
-                   <AnnouncementsTab tournamentId={team.id} />
+                   <AnnouncementsTab />
                 </TabsContent>
                 <TabsContent value="settings" className="mt-6">
                    <SettingsTab />

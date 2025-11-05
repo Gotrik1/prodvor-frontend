@@ -93,7 +93,7 @@ export function TeamPageTemplate({
 
   return (
     <div className="p-4 md:p-6 lg:p-8 space-y-6">
-      <TeamHeader team={team as any} homePlaygrounds={playgrounds as any} />
+      <TeamHeader team={team} homePlaygrounds={playgrounds} />
 
       <Tabs defaultValue="overview" className="w-full">
         <TabsList className="grid w-full grid-cols-4 md:grid-cols-6">
@@ -114,7 +114,7 @@ export function TeamPageTemplate({
           <TeamOverviewWidget team={team} />
         </TabsContent>
         <TabsContent value="roster" className="mt-6">
-          <TeamRosterWidget team={team as any} teamMembers={teamMembers} />
+          <TeamRosterWidget team={team} teamMembers={teamMembers} />
         </TabsContent>
         <TabsContent value="matches" className="mt-6">
           <TeamMatchesWidget />
@@ -126,7 +126,7 @@ export function TeamPageTemplate({
           <TeamStatsWidget team={team} />
         </TabsContent>
         <TabsContent value="publications" className="mt-6">
-          <TeamPublicationsTab team={team as any} />
+          <TeamPublicationsTab team={team} />
         </TabsContent>
       </Tabs>
     </div>

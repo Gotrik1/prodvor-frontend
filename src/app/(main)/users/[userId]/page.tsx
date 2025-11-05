@@ -31,7 +31,7 @@ async function getUser(userId: string): Promise<(User & { teams?: Team[] }) | un
 
     try {
         const response = await usersApi.apiV1UsersUserIdGet(idToFetch, true);
-        return response.data as User;
+        return response.data as unknown as User;
     } catch (error: any) {
         console.error(`[Server] Failed to fetch user: ${error.response?.status || error.message}`);
         return undefined;
@@ -74,17 +74,14 @@ export default async function UserProfilePage({ params }: { params: { userId: st
   const renderContent = () => {
     switch (user.role) {
       case 'Судья':
-      case 'referee':
           return <RefereePageTemplate user={user} />;
       case 'Тренер':
-      case 'coach':
           return <CoachPageTemplate user={user} />;
       case 'Менеджер':
           return <ManagerPageTemplate user={user} />;
       case 'Организатор':
           return <OrganizerPageTemplate user={user} />;
       case 'Игрок':
-      case 'player':
       case 'Капитан':
           return <PlayerPageTemplate user={user} />;
       case 'Болельщик':
