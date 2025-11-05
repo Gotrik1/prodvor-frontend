@@ -92,7 +92,7 @@ export function TransfersTab({ team, onApplicationProcessed }: TransfersTabProps
       if (accepted) {
         onApplicationProcessed(); // Re-fetch team data
       }
-    } catch {
+    } catch (_error) {
       toast({
         variant: 'destructive',
         title: 'Ошибка',
