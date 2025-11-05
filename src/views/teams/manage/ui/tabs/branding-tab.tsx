@@ -117,7 +117,7 @@ export function BrandingTab({ team: initialTeam }: { team: Team }) {
     const [team, setTeam] = useState(initialTeam);
 
     const handleLogoUpdate = (newLogoUrl: string) => {
-        setTeam(prevTeam => ({ ...prevTeam, logoUrl: newLogoUrl }));
+        setTeam(prevTeam => ({ ...(prevTeam as Team), logoUrl: newLogoUrl }));
     };
 
     return (

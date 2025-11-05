@@ -13,7 +13,13 @@ import { z } from "zod";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/shared/ui/form";
 import { useToast } from "@/shared/hooks/use-toast";
 import { sendTournamentAnnouncementAction } from "@/app/actions";
-import type { SendTournamentAnnouncementInput } from '@/views/tournaments/manage/ui/tabs/announcements-tab';
+
+export interface SendTournamentAnnouncementInput {
+  tournamentId: string;
+  subject: string;
+  message: string;
+  isAiEnhanced: boolean;
+}
 
 const SendTeamAnnouncementInputSchema = z.object({
   teamId: z.string().describe("The ID of the team."),

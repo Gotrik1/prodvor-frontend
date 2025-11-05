@@ -37,13 +37,13 @@ export function RosterManagement({ teamId, allTeamMembers: initialTeamMembers, o
     const { user: currentUser } = useUserStore();
 
     useEffect(() => {
-        const captain = initialTeamMembers.find(m => m.id === teamId); // This logic might be flawed if teamId != captainId
+        const captain = initialTeamMembers.find(m => m.role === 'Капитан');
         const firstFive = initialTeamMembers.slice(0, 5);
         const rest = initialTeamMembers.slice(5);
         setMainRoster(firstFive);
         setSubstitutes(rest);
         setIsLoading(false);
-    }, [initialTeamMembers, teamId]);
+    }, [initialTeamMembers]);
 
     const handleRemovePlayer = async (player: User) => {
         if (!currentUser) return;

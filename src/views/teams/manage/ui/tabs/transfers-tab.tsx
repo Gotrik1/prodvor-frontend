@@ -10,7 +10,7 @@ import { Input } from "@/shared/ui/input";
 import { Separator } from "@/shared/ui/separator";
 import { useToast } from "@/shared/hooks/use-toast";
 import { Label } from '@/shared/ui/label';
-import type { User, Team } from '@/shared/api';
+import type { User, Team } from '@/mocks';
 import { users } from '@/mocks';
 import api from '@/shared/api/axios-instance';
 import { Skeleton } from '@/shared/ui/skeleton';
@@ -65,7 +65,7 @@ export function TransfersTab({ team, onApplicationProcessed }: TransfersTabProps
     }, [team.id, toast]);
 
 
-    const handleApplication = async (applicantId: number, accepted: boolean) => {
+    const handleApplication = async (applicantId: string, accepted: boolean) => {
         try {
             await api.post(`/api/v1/teams/${team.id}/applications/${applicantId}/respond`, {
                 action: accepted ? 'accept' : 'decline',
@@ -94,11 +94,11 @@ export function TransfersTab({ team, onApplicationProcessed }: TransfersTabProps
             return;
         }
         const results = users.filter(user => 
-            user.nickname && user.nickname.toLowerCase().includes(searchQuery.toLowerCase()) &&
-            !team.members?.some(m => m.id === user.id) &&
+            user.nickname.toLowerCase().includes(searchQuery.toLowerCase()) &&
+            !team.members.some(m => m.id === user.id) &&
             user.role === 'Игрок'
         );
-        setSearchResults(results as User[]);
+        setSearchResults(results);
     };
 
     const handleInvite = (player: User) => {
@@ -180,11 +180,11 @@ export function TransfersTab({ team, onApplicationProcessed }: TransfersTabProps
                                         <div className="flex items-center gap-2">
                                             <Avatar className="h-8 w-8">
                                                 <AvatarImage src={player.avatarUrl} />
-                                                <AvatarFallback>{player.nickname?.charAt(0)}</AvatarFallback>
+                                                <AvatarFallback>{player.nickname.charAt(0)}</AvatarFallback>
                                             </Avatar>
                                             <div>
                                                 <p className="text-sm font-semibold">{player.nickname}</p>
-                                                <p className="text-xs text-muted-foreground">ELO: {player.elo || 1200}</p>
+                                                <p className="text-xs text-muted-foreground">ELO: {player.elo}</p>
                                             </div>
                                         </div>
                                         <Button size="sm" variant="outline" onClick={() => handleInvite(player)}>

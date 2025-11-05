@@ -3,7 +3,7 @@
 'use client';
 
 import React, { useEffect, useState, useCallback } from 'react';
-import type { Team, User, Playground } from "@/shared/api";
+import type { Team, User, Playground } from "@/mocks";
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
 import Link from "next/link";
@@ -38,7 +38,7 @@ export function TeamManagementPage({ teamId }: { teamId: string }) {
             setTeam(teamData);
             
             if (teamData.captain && currentUser) {
-                setIsCaptain(currentUser.id === teamData.captain.id);
+                setIsCaptain(String(currentUser.id) === String(teamData.captain.id));
             }
 
             const fullRoster: User[] = [];
