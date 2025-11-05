@@ -30,18 +30,13 @@ export function TeamPageTemplate({
   isLoading: initialIsLoading,
 }: TeamPageTemplateProps) {
   const [team, setTeam] = React.useState<Team | undefined>(initialTeam);
-  const [teamMembers, setTeamMembers] = React.useState<User[]>(initialTeamMembers || []);
   const [isLoading, setIsLoading] = React.useState(initialIsLoading ?? true);
   
   useEffect(() => {
     setTeam(initialTeam);
-    setTeamMembers(initialTeamMembers || []);
     setIsLoading(initialIsLoading ?? !initialTeam);
-  }, [initialTeam, initialTeamMembers, initialIsLoading]);
+  }, [initialTeam, initialIsLoading]);
 
-  React.useEffect(() => {
-    // Empty useEffect for playgrounds logic that was removed
-  }, [team]);
 
   if (isLoading) {
     return (
@@ -94,13 +89,13 @@ export function TeamPageTemplate({
           <TeamOverviewWidget team={team} />
         </TabsContent>
         <TabsContent value="roster" className="mt-6">
-          <TeamRosterWidget team={team} teamMembers={teamMembers} />
+          <TeamRosterWidget team={team} teamMembers={initialTeamMembers || []} />
         </TabsContent>
         <TabsContent value="matches" className="mt-6">
           <TeamMatchesWidget />
         </TabsContent>
         <TabsContent value="challenges" className="mt-6">
-          <TeamChallengesWidget teamId={String(team.id)} />
+          <TeamChallengesWidget teamId={team.id} />
         </TabsContent>
         <TabsContent value="stats" className="mt-6">
           <TeamStatsWidget team={team} />

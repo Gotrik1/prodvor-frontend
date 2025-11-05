@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import { users, teams, posts } from "@/mocks";
@@ -14,7 +13,6 @@ import React, { useMemo } from "react";
 import { getUserDisciplines } from "@/entities/user/lib";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 import { Dialog, DialogContent, DialogTrigger } from "@/shared/ui/dialog";
-import { AchievementsTab } from "@/views/admin/ui/templates/player-page-achievements-tab";
 import { MediaPostDialog } from "@/widgets/media-post-dialog";
 
 
@@ -35,7 +33,6 @@ const mockMedia = [
 
 export function FanPageTemplate({ user }: { user?: User }) {
     const fanUser = user || defaultFan;
-    const [showTags, _setShowTags] = React.useState(false);
     
     const fanDisciplines = useMemo(() => {
         if (!fanUser) return [];
@@ -194,7 +191,7 @@ export function FanPageTemplate({ user }: { user?: User }) {
                             </div>
                         </CardContent>
                     </Card>
-                    <AchievementsTab player={fanUser} />
+                    <AchievementsWidget player={fanUser} />
                     <Card>
                         <CardHeader>
                              <CardTitle className="flex items-center gap-2">
