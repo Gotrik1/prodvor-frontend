@@ -44,9 +44,9 @@ export const TeamOverviewWidget = ({ team }: TeamOverviewWidgetProps) => {
     const mvp = users.find(u => u.id === mvpPlayerId);
     const topScorer = users.find(u => u.id === topScorerPlayerId);
     const currentStreak = currentStreakType && currentStreakCount ? { type: currentStreakType, count: currentStreakCount } : null;
-    const teamForm = typeof form === 'string' ? form.split('') as ('W' | 'L' | 'D')[] : [];
+    const teamForm = Array.isArray(form) ? form : [];
 
-    const followerUsers = users.filter(user => followerIds.includes(user.id));
+    const followerUsers = users.filter(user => followerIds.some(f => f.id === user.id));
 
     return (
         <div className="space-y-6">

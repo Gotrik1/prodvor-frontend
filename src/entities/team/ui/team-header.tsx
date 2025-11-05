@@ -34,15 +34,16 @@ export const TeamHeader = ({ team, homePlaygrounds }: TeamHeaderProps) => {
             return;
         };
 
-        setIsFollowing(team.followers?.includes(currentUser.id) || false);
+        setIsFollowing(team.followers?.some(follower => follower.id === currentUser.id) || false);
         setFollowerCount(team.followers?.length || 0);
 
         const fetchCaptainedTeams = async () => {
+            if (!currentUser.id) return;
             try {
                 const response = await api.get(`/api/v1/users/${currentUser.id}?include_teams=true`);
                 if (response.data && response.data.teams) {
                     const userTeams: Team[] = response.data.teams;
-                    const captainOf = userTeams.filter(t => String(t.captainId) === String(currentUser.id));
+                    const captainOf = userTeams.filter(t => String(t.captain?.id) === String(currentUser.id));
                     setCaptainedTeams(captainOf);
                 }
             } catch (error) {

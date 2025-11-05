@@ -7,7 +7,7 @@ import { Button } from "@/shared/ui/button";
 import { Check, X, Send, Swords, Sparkles } from "lucide-react";
 import Image from "next/image"; 
 import { challenges, TeamChallenge } from '@/mocks/challenges';
-import { teams, allSports } from '@/mocks';
+import { teams, allSports, Team } from '@/mocks';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/select";
 import { Input } from "@/shared/ui/input";
 import { Label } from "@/shared/ui/label";
@@ -72,7 +72,7 @@ export function ChallengesPage() {
     const teamSports = allSports.filter((s: Sport) => s.isTeamSport);
 
     // Find the first team the user is a captain of
-    const myTeam = useMemo(() => teams.find(t => t.captainId === currentUser?.id), [currentUser]);
+    const myTeam = useMemo(() => teams.find(t => t.captain?.id === currentUser?.id), [currentUser]);
 
     const incomingChallenges = useMemo(() => {
         if (!myTeam) return [];

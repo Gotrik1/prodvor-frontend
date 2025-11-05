@@ -7,7 +7,7 @@ import { Button } from "@/shared/ui/button";
 import { Input } from "@/shared/ui/input";
 import { Label } from "@/shared/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/select";
-import { users, allSports } from '@/mocks';
+import { users, allSports, Sport, User } from '@/mocks';
 import { Filter, Users, DollarSign, Save } from 'lucide-react';
 import { Slider } from '@/shared/ui/slider';
 
@@ -30,7 +30,7 @@ export function AudienceManager() {
     
     const filteredUsers = useMemo(() => {
         return users.filter(user => {
-            const userDisciplines = allSports.filter(s => user.disciplines.includes(s.id)).map(s => s.name);
+            const userDisciplines = allSports.filter(s => user.sports.some(us => us.id === s.id)).map(s => s.name);
             
             const eloMatch = user.elo ? user.elo >= filters.elo[0] && user.elo <= filters.elo[1] : true;
             const ageMatch = user.age ? user.age >= filters.age[0] && user.age <= filters.age[1] : true;

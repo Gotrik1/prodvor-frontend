@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
@@ -12,7 +11,7 @@ import { Tooltip, TooltipProvider, TooltipContent, TooltipTrigger } from '@/shar
 import { useToast } from '@/shared/hooks/use-toast';
 import { useMemo } from 'react';
 import Link from 'next/link';
-import { DataTable } from './data-table';
+import { DataTable } from '@/app/admin/pages/dashboard/ui/data-table';
 import { TableCell, TableRow } from '@/shared/ui/table';
 import { getUserDisciplines } from '@/entities/user/lib';
 
@@ -22,7 +21,7 @@ export function UsersTab() {
     const userTeamsMap = useMemo(() => {
         const map = new Map<string, typeof teams>();
         users.forEach(user => {
-            const userTeams = teams.filter(team => team.members.includes(user.id));
+            const userTeams = teams.filter(team => team.members.some(m => m.id === user.id));
             map.set(user.id, userTeams);
         });
         return map;

@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import {
@@ -9,14 +8,13 @@ import {
   CardHeader,
   CardTitle,
 } from '@/shared/ui/card';
-import { teams, users, sponsors, playgrounds } from '@/mocks';
-import type { Team } from '@/mocks';
+import { teams, users, sponsors, playgrounds, Team } from '@/mocks';
 import { Badge } from '@/shared/ui/badge';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '@/shared/ui/button';
 import { ExternalLink } from 'lucide-react';
-import { DataTable } from './data-table';
+import { DataTable } from '@/app/admin/pages/dashboard/ui/data-table';
 import { TableRow, TableCell } from '@/shared/ui/table';
 
 export function TeamsTab() {
@@ -89,7 +87,7 @@ export function TeamsTab() {
                 <Badge variant="secondary">{team.game}</Badge>
               </TableCell>
               <TableCell className="text-xs">
-                {getCaptainNickname(team.captainId)}
+                {getCaptainNickname(team.captain?.id)}
               </TableCell>
               <TableCell>{team.members.length}</TableCell>
               <TableCell className="font-mono">{team.rank}</TableCell>

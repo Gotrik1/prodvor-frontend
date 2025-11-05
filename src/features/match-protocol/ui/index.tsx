@@ -2,7 +2,6 @@
 'use client';
 
 import { Card, CardContent, CardDescription, CardHeader } from "@/shared/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 import { users } from '@/mocks';
 import Image from "next/image";
 import { MatchTimeline } from "./match-timeline";
@@ -10,11 +9,12 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { Crown } from "lucide-react";
 import Link from "next/link";
 import { useProtocol } from "@/features/protocol-editor/lib/use-protocol";
-import type { BracketMatch, Tournament } from "@/views/tournaments/public-page/ui/mock-data";
+import type { BracketMatch, Tournament, Team, User } from "@/mocks";
 import { LiveTextFeed } from "./live-text-feed";
 
 export function MatchProtocol({ tournament, match }: { tournament: Tournament, match: BracketMatch }) {
-    const { events } = useProtocol();    const { team1, team2 } = match;
+    const { events } = useProtocol();
+    const { team1, team2 } = match;
 
     const score1 = events.filter(e => e.type === 'goal' && e.team === 'team1').length;
     const score2 = events.filter(e => e.type === 'goal' && e.team === 'team2').length;
@@ -23,9 +23,8 @@ export function MatchProtocol({ tournament, match }: { tournament: Tournament, m
         return <p>Команды не определены.</p>;
     }
 
-    const team1Members = users.filter(u => team1.members.includes(u.id));
-    const team2Members = users.filter(u => team2.members.includes(u.id));
-
+    const team1Members = users.filter(u => team1.members.some(m => m.id === u.id));
+    const team2Members = users.filter(u => team2.members.some(m => m.id === u.id));
 
     return (
         <Card>
@@ -70,14 +69,14 @@ export function MatchProtocol({ tournament, match }: { tournament: Tournament, m
                                                <AvatarFallback>{player.nickname.charAt(0)}</AvatarFallback>
                                            </Avatar>
                                            <span className="font-medium">{player.nickname}</span>
-                                           {player.id === team1.captainId && <Crown className="h-4 w-4 text-amber-400" />}
+                                           {player.id === team1.captain?.id && <Crown className="h-4 w-4 text-amber-400" />}
                                        </li>
                                    ))}
                                </ul>
                                <ul className="space-y-3">
                                     {team2Members.map(player => (
                                        <li key={player.id} className="flex items-center gap-3 justify-start md:justify-end">
-                                            {player.id === team2.captainId && <Crown className="h-4 w-4 text-amber-400 order-last md:order-first" />}
+                                            {player.id === team2.captain?.id && <Crown className="h-4 w-4 text-amber-400 order-last md:order-first" />}
                                            <span className="font-medium order-last md:order-first">{player.nickname}</span>
                                            <Avatar className="h-8 w-8 order-first md:order-last">
                                                <AvatarImage src={player.avatarUrl} />

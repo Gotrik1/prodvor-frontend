@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import React, { useState, useMemo } from 'react';
@@ -12,7 +11,7 @@ import { cn } from "@/shared/lib/utils";
 import { mockChats, mockMessages, Chat, Message } from '../lib/mock-data';
 import Link from 'next/link';
 import { useUserStore } from '@/widgets/dashboard-header/model/user-store';
-import type { User } from '@/mocks';
+import type { User, Team } from '@/mocks';
 import { teams } from '@/mocks';
 
 
@@ -171,7 +170,7 @@ export function MessagesPage() {
                 const team = teams.find(t => t.id === chat.entityId);
                 if (!team) return false;
                 
-                return team.members.includes(currentUser.id) || team.captainId === currentUser.id;
+                return team.members.some(m => m.id === currentUser.id) || team.captain?.id === currentUser.id;
             }
             return false;
         });
