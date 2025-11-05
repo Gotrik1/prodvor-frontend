@@ -2,14 +2,14 @@
 import { TournamentRegisterPage } from '@/views/tournaments/register';
 import type { Metadata } from 'next';
 import type { Tournament } from '@/shared/api';
-import { TournamentsApi } from '@/shared/api';
+import { LegacyTournamentsApi } from '@/shared/api';
 import { apiConfig } from '@/shared/api/axios-instance';
 
-const tournamentsApi = new TournamentsApi(apiConfig);
+const tournamentsApi = new LegacyTournamentsApi(apiConfig);
 
 async function getTournament(tournamentId: string): Promise<Tournament | undefined> {
     try {
-        const response = await tournamentsApi.tournamentsTournamentIdGet(parseInt(tournamentId));
+        const response = await tournamentsApi.apiV1TournamentsTournamentIdGet(parseInt(tournamentId));
         return response.data;
     } catch (error) {
         console.error("Failed to fetch tournament:", error);
