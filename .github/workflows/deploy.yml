@@ -1,4 +1,4 @@
-name: Sync & Build (backend + frontend) via Tailscale — PROD
+name: Build backend & frontend on remote (PROD, logs)
 
 on:
   push:
@@ -8,14 +8,13 @@ permissions:
   contents: read
 
 concurrency:
-  group: prod-sync-${{ github.ref }}
+  group: prod-build-${{ github.ref }}
   cancel-in-progress: false
 
 jobs:
-  prod-sync-build:
+  prod-build:
     runs-on: ubuntu-latest
     env:
-      # Включаем максимально подробные логи для npm/Node
       NPM_CONFIG_LOGLEVEL: verbose
       CI: "true"
 
@@ -28,9 +27,7 @@ jobs:
             --authkey="${{ secrets.TAILSCALE_AUTHKEY }}" \
             --accept-routes=true \
             --ssh=true
-          echo "== tailscale status =="
-          tailscale status
-          echo "== my tailscale ip =="
+          tailscale status || true
           tailscale ip -4
 
       - name: 🔑 Trust host key
@@ -38,10 +35,10 @@ jobs:
           set -euxo pipefail
           mkdir -p ~/.ssh
           ssh-keyscan -H "${{ secrets.TAILSCALE_HOST }}" >> ~/.ssh/known_hosts
-          echo "Known hosts:"
-          cat ~/.ssh/known_hosts
+          echo "Known hosts OK"
 
-      - name: 🗂️ Prepare log folder on remote (timestamped)
+      # ===== Log dir =====
+      - name: 🗂️ Prepare timestamped log folder (remote, PowerShell)
         uses: appleboy/ssh-action@v1.0.0
         with:
           host:     ${{ secrets.TAILSCALE_HOST }}
@@ -49,18 +46,17 @@ jobs:
           key:      ${{ secrets.TAILSCALE_SSH_KEY }}
           port:     22
           script: |
-            for /f "tokens=1-5 delims=/ " %%a in ('date /t') do set dt=%%c-%%a-%%b
-            for /f "tokens=1 delims=." %%a in ('echo %time%') do set tm=%%a
-            set tm=%tm::=-%
-            set STAMP=%dt%_%tm%
-            set LOGDIR=E:\prodvor\logs\%STAMP%
-            echo == Creating log dir: %LOGDIR%
-            if not exist "%LOGDIR%" mkdir "%LOGDIR%"
-            echo %LOGDIR%>E:\prodvor\logs\_latest_dir.txt
-            type E:\prodvor\logs\_latest_dir.txt
+            $ErrorActionPreference = "Stop"
+            $stamp   = Get-Date -Format "yyyy-MM-dd_HH-mm-ss"
+            $logRoot = "E:\prodvor\logs"
+            $logDir  = Join-Path $logRoot $stamp
+            if (-not (Test-Path $logDir)) { New-Item -ItemType Directory -Path $logDir | Out-Null }
+            Set-Content -Path (Join-Path $logRoot "_latest_dir.txt") -Value $logDir -Encoding ASCII
+            Write-Host "== Log dir: $logDir"
+            Get-Content (Join-Path $logRoot "_latest_dir.txt")
 
-      # ===================== FRONTEND =====================
-      - name: 🌐 FRONTEND — git sync & build (verbose)
+      # ===== FRONTEND build only =====
+      - name: 🌐 FRONTEND — production build (no git, verbose)
         uses: appleboy/ssh-action@v1.0.0
         with:
           host:     ${{ secrets.TAILSCALE_HOST }}
@@ -68,53 +64,37 @@ jobs:
           key:      ${{ secrets.TAILSCALE_SSH_KEY }}
           port:     22
           script: |
-            setlocal enabledelayedexpansion
-            set ROOT=E:\prodvor\frontend
-            set LATEST_FILE=E:\prodvor\logs\_latest_dir.txt
-            set /p LOGDIR=<%LATEST_FILE%
-            set GITLOG=%LOGDIR%\frontend-git.log
-            set NPMCI_LOG=%LOGDIR%\frontend-npm-ci.log
-            set BUILD_LOG=%LOGDIR%\frontend-build.log
+            $ErrorActionPreference = "Stop"
+            $root   = "E:\prodvor\frontend"
+            $logDir = Get-Content "E:\prodvor\logs\_latest_dir.txt"
+            $envLog   = Join-Path $logDir "frontend-env.log"
+            $npmCiLog = Join-Path $logDir "frontend-npm-ci.log"
+            $buildLog = Join-Path $logDir "frontend-build.log"
 
-            echo == FRONTEND == & echo.
-            echo ## whoami && whoami
-            echo ## ver && ver
-            echo ## node -v && node -v 2>&1
-            echo ## npm -v && npm -v 2>&1
-            echo.
+            Write-Host "== FRONTEND build =="
+            whoami | Tee-Object -FilePath $envLog
+            $PSVersionTable | Out-String | Tee-Object -FilePath $envLog -Append
+            try { node -v | Tee-Object -FilePath $envLog -Append } catch { "node not in PATH" | Tee-Object -FilePath $envLog -Append }
+            try { npm -v  | Tee-Object -FilePath $envLog -Append } catch { "npm not in PATH"  | Tee-Object -FilePath $envLog -Append }
 
-            cd /d %ROOT%
+            Set-Location $root
 
-            echo ---- GIT REMOTE INFO ---- | tee %GITLOG%
-            git rev-parse --show-toplevel 2>&1 | tee -a %GITLOG%
-            git remote -v 2>&1            | tee -a %GITLOG%
-            echo ---- FETCH & RESET ----   | tee -a %GITLOG%
-            git fetch --all --prune 2>&1   | tee -a %GITLOG%
-            git reset --hard origin/main 2>&1 | tee -a %GITLOG%
-            git log -1 --oneline 2>&1      | tee -a %GITLOG%
+            Write-Host "---- npm ci ----"
+            $env:NODE_OPTIONS="--max-old-space-size=4096"
+            npm ci --verbose 2>&1 | Tee-Object -FilePath $npmCiLog
 
-            echo. & echo ---- FOLDER SIZES BEFORE BUILD ----
-            dir /-c
-            echo.
+            Write-Host "---- npm run build (prod) ----"
+            $env:NEXT_TELEMETRY_DISABLED="1"
+            $env:TURBO_TELEMETRY_DISABLED="1"
+            npm run build --verbose 2>&1 | Tee-Object -FilePath $buildLog
 
-            echo ---- NPM CI (verbose) ----
-            set "NODE_OPTIONS=--max-old-space-size=4096"
-            npm ci --verbose 2>&1 | tee %NPMCI_LOG%
+            Write-Host "✅ FRONTEND: done"
+            Write-Host "Logs:"
+            Write-Host " - $envLog"
+            Write-Host " - $npmCiLog"
+            Write-Host " - $buildLog"
 
-            echo ---- BUILD (production) ----
-            set NEXT_TELEMETRY_DISABLED=1
-            set TURBO_TELEMETRY_DISABLED=1
-            npm run build --verbose 2>&1 | tee %BUILD_LOG%
-
-            echo. & echo ---- FOLDER SIZES AFTER BUILD ----
-            dir /-c
-            echo.
-            echo ✅ FRONTEND build finished. Logs:
-            echo  - %GITLOG%
-            echo  - %NPMCI_LOG%
-            echo  - %BUILD_LOG%
-
-            rem === OPTIONAL: restart frontend service ===
-            rem pm2 restart prodvor-frontend
-            rem nssm restart prodvor-frontend
-            rem docker compose -f E:\prodvor\frontend\docker-compose.yml up -d --build
+            # OPTIONAL: restart service if needed
+            # pm2 restart prodvor-frontend
+            # nssm restart prodvor-frontend
+            # docker compose -f E:\prodvor\frontend\docker-compose.yml up -d --build
