@@ -5,7 +5,7 @@ import { users, teams, posts } from "@/mocks";
 import type { User } from "@/mocks/users";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { Badge } from "@/shared/ui/badge";
-import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
 import { Calendar, Flame, Heart, Ticket, Gamepad2, Tv, Camera, User as UserIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -14,6 +14,7 @@ import { getUserDisciplines } from "@/entities/user/lib";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 import { Dialog, DialogContent, DialogTrigger } from "@/shared/ui/dialog";
 import { MediaPostDialog } from "@/widgets/media-post-dialog";
+import { AchievementsWidget } from "@/widgets/achievements-widget";
 
 
 const defaultFan: User | undefined = users.find(u => u.role === 'Болельщик');
@@ -53,7 +54,7 @@ export function FanPageTemplate({ user }: { user?: User }) {
                 <Card className="text-center">
                     <CardHeader>
                         <CardTitle>Ошибка</CardTitle>
-                        <p>Не удалось загрузить данные болельщика.</p>
+                        <CardDescription>Не удалось загрузить данные болельщика.</CardDescription>
                     </CardHeader>
                 </Card>
             </div>

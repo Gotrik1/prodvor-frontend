@@ -5,7 +5,6 @@ import { create } from 'zustand';
 import { produce } from 'immer';
 import api from '@/shared/api/axios-instance';
 import type { Post, Comment } from '@/mocks/posts';
-import type { User } from '@/mocks';
 
 interface PostState {
   posts: Post[];
@@ -22,7 +21,7 @@ export const usePostStore = create<PostState>()(
       fetchPosts: async () => {
         try {
             const response = await api.get('/api/v1/posts');
-            set({ posts: response.data });
+            set({ posts: response.data as Post[] });
         } catch (error) {
             console.error(error);
         }
@@ -47,5 +46,3 @@ export const usePostStore = create<PostState>()(
       })),
     })
 );
-
-    
