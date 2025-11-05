@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -99,7 +98,7 @@ export function TransfersTab({ team, onApplicationProcessed }: TransfersTabProps
             !team.members?.some(m => m.id === user.id) &&
             user.role === 'Игрок'
         );
-        setSearchResults(results);
+        setSearchResults(results as User[]);
     };
 
     const handleInvite = (player: User) => {

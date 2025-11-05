@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
@@ -30,6 +29,8 @@ export function MyTeamWidget({ user }: { user: User }) {
         }
         setIsLoading(true);
         try {
+            // The first argument to apiV1UsersMeGet is the Authorization header.
+            // Axios interceptor will handle this, so we can pass undefined.
             const response = await usersApi.apiV1UsersMeGet(undefined as any, true);
             const userWithTeams: User & { teams?: Team[] } = response.data;
             setMyTeams(userWithTeams.teams || []);

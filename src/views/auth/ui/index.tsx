@@ -26,7 +26,7 @@ import { i18n } from '@/shared/lib/i18n';
 import { useToast } from '@/shared/hooks/use-toast';
 import { useUserStore } from '@/widgets/dashboard-header/model/user-store';
 import { Loader2 } from 'lucide-react';
-import type { User } from '@/mocks';
+import type { User } from '@/shared/api';
 import api from '@/shared/api/axios-instance';
 
 // ------------------ Схемы валидации ------------------
@@ -134,7 +134,7 @@ export function AuthPage() {
 
   useEffect(() => {
     // This effect ensures we don't try to redirect on the server.
-    const hasLoggedOut = searchParams.get('loggedOut') === 'true';
+    const hasLoggedOut = searchParams?.get('loggedOut') === 'true';
     if (isHydrated && currentUser && !hasLoggedOut) {
         router.push('/dashboard');
     }

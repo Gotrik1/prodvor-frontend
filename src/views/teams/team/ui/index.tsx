@@ -1,10 +1,9 @@
 
-
 'use client';
 
 import React from 'react';
 import { TeamPageTemplate } from "@/views/admin/ui/templates/team-page-template";
-import type { Team, User, Playground } from "@/shared/api/models";
+import type { Team, User, Playground } from "@/shared/api";
 import api from '@/shared/api/axios-instance';
 
 export function TeamPublicPage({ teamId }: { teamId: string }) {

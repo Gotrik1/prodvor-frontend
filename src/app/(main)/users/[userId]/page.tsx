@@ -18,15 +18,19 @@ import { apiConfig } from '@/shared/api/axios-instance';
 const usersApi = new UsersApi(apiConfig);
 
 async function getUser(userId: string): Promise<(User & { teams?: Team[] }) | undefined> {
-    const userIdNumber = parseInt(userId, 10);
-    // Временная проверка, чтобы избежать NaN ошибок, пока бэкенд не поддерживает строковые ID
-    if (isNaN(userIdNumber)) {
-        console.error(`[Server] Attempted to fetch user with a non-numeric ID: ${userId}. Backend must be updated to support string IDs.`);
-        return undefined;
+    if (!userId) return undefined;
+    
+    // The backend should handle both numeric and string IDs.
+    // For now, we will attempt to parse it, but we won't rely on it being a number.
+    const idToFetch = parseInt(userId, 10);
+    if (isNaN(idToFetch)) {
+        // Handle non-numeric IDs if the API supports it.
+        // For now, we assume this will fail gracefully or succeed if backend is updated.
+        console.warn(`[Client] Attempting to fetch user with non-numeric ID: ${userId}.`);
     }
 
     try {
-        const response = await usersApi.apiV1UsersUserIdGet(userIdNumber, true);
+        const response = await usersApi.apiV1UsersUserIdGet(idToFetch, true);
         return response.data as User;
     } catch (error: any) {
         console.error(`[Server] Failed to fetch user: ${error.response?.status || error.message}`);

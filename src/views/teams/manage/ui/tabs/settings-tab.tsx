@@ -1,5 +1,4 @@
 
-
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
 
 export function SettingsTab() {

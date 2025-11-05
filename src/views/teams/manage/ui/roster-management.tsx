@@ -1,9 +1,8 @@
 
-
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import type { User } from '@/shared/api/models';
+import type { User } from '@/shared/api';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import { Button } from '@/shared/ui/button';

@@ -1,9 +1,8 @@
 
-
 'use client';
 
 import React, { useState } from 'react';
-import type { User } from '@/shared/api/models';
+import type { User } from '@/shared/api';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Button } from '@/shared/ui/button';
 import { Dices, Save } from 'lucide-react';
@@ -80,9 +79,9 @@ interface TacticalBoardProps {
 
 export function TacticalBoard({ teamMembers }: TacticalBoardProps) {
     const [selectedFormation, setSelectedFormation] = useState('4-3-3');
-    const [assignments, setAssignments] = useState<Record<string, string | null>>({}); // { role: playerId }
+    const [assignments, setAssignments] = useState<Record<string, number | null>>({}); // { role: playerId }
     
-    const availablePlayers = teamMembers.filter(p => !Object.values(assignments).includes(String(p.id)));
+    const availablePlayers = teamMembers.filter(p => !Object.values(assignments).includes(p.id));
 
     const handleDragStart = (e: React.DragEvent, playerId: string) => {
         e.dataTransfer.setData("playerId", playerId);
@@ -92,7 +91,7 @@ export function TacticalBoard({ teamMembers }: TacticalBoardProps) {
         e.preventDefault();
         const playerId = e.dataTransfer.getData("playerId");
         if (playerId) {
-            setAssignments(prev => ({ ...prev, [role]: playerId }));
+            setAssignments(prev => ({ ...prev, [role]: Number(playerId) }));
         }
     };
     
@@ -102,12 +101,12 @@ export function TacticalBoard({ teamMembers }: TacticalBoardProps) {
 
     const handleAutoAssign = () => {
         const formation = formations[selectedFormation];
-        const newAssignments: Record<string, string | null> = {};
+        const newAssignments: Record<string, number | null> = {};
         const shuffledPlayers = [...teamMembers].sort(() => 0.5 - Math.random());
         
         formation.forEach((pos, index) => {
             if (shuffledPlayers[index]) {
-                newAssignments[pos.role] = String(shuffledPlayers[index].id);
+                newAssignments[pos.role] = Number(shuffledPlayers[index].id);
             }
         });
         setAssignments(newAssignments);
@@ -148,7 +147,7 @@ export function TacticalBoard({ teamMembers }: TacticalBoardProps) {
                         <div className="relative aspect-[4/2.5] w-full rounded-lg bg-cover bg-center border" style={{ backgroundImage: `url(${soccerFieldImage})` }}>
                             {formations[selectedFormation].map(pos => {
                                 const assignedPlayerId = assignments[pos.role];
-                                const assignedPlayer = assignedPlayerId ? teamMembers.find((p: User) => String(p.id) === assignedPlayerId) : null;
+                                const assignedPlayer = assignedPlayerId ? teamMembers.find((p: User) => p.id === assignedPlayerId) : null;
                                 return (
                                     <PositionMarker 
                                         key={pos.role}

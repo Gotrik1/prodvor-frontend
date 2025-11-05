@@ -1,9 +1,8 @@
 
-
 'use client';
 
 import { useState } from 'react';
-import type { Team } from '@/shared/api/models';
+import type { Team } from '@/shared/api';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/shared/ui/dialog';
 import { Button } from '@/shared/ui/button';

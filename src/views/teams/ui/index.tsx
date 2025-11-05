@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
@@ -15,9 +14,14 @@ import { useToast } from '@/shared/hooks/use-toast';
 import { Skeleton } from '@/shared/ui/skeleton';
 import { TopTeamsWidget } from '@/widgets/top-teams-widget';
 import api from '@/shared/api/axios-instance';
-import { MyTeamWidget } from '@/widgets/my-team-widget';
 
-const TeamCard = ({ team, isMember, onApply, isApplicationSent }: { team: Team, isMember: boolean, onApply: (teamId: string) => Promise<void>, isApplicationSent: boolean }) => {
+const TeamCard = ({ team, onApply, isApplicationSent }: { team: Team, onApply: (teamId: string) => Promise<void>, isApplicationSent: boolean }) => {
+    const { user } = useUserStore();
+    const isMember = useMemo(() => {
+        if (!user || !team.members) return false;
+        return team.members.some(m => m.id === user.id) || team.captain?.id === user.id;
+    }, [user, team]);
+    
     return (
     <Card key={team.id} className="flex flex-col">
         <CardHeader>
@@ -150,7 +154,7 @@ export function TeamsPage() {
                     <section>
                         <h2 className="text-2xl font-bold mb-4">Мои команды</h2>
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                            {myTeams.map(team => <TeamCard key={team.id} team={team} isMember={true} onApply={handleApply} isApplicationSent={false} />)}
+                            {myTeams.map(team => <TeamCard key={team.id} team={team} onApply={handleApply} isApplicationSent={false} />)}
                         </div>
                     </section>
                 )}
@@ -175,7 +179,6 @@ export function TeamsPage() {
                                 <TeamCard 
                                     key={team.id} 
                                     team={team} 
-                                    isMember={false} 
                                     onApply={handleApply}
                                     isApplicationSent={sentApplications.includes(String(team.id))}
                                 />

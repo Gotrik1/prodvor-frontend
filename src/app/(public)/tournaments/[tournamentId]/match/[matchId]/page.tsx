@@ -1,6 +1,5 @@
 
 
-
 'use client';
 
 import { MatchPage } from '@/views/tournaments/match';
@@ -27,13 +26,7 @@ export default function TournamentMatchPage({ params }: { params: { tournamentId
     }
     
     // Fallback for demo purposes if not found in bracket
-    return {
-        id: params.matchId,
-        team1: teams[0],
-        team2: teams[1],
-        score1: null,
-        score2: null,
-      };
+    return undefined;
   }, [params.matchId, tournament]);
 
   useEffect(() => {

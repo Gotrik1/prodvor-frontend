@@ -2,11 +2,14 @@
 'use client';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
-import type { Sport, Subdiscipline } from '@/mocks';
+import type { Sport } from '@/shared/api';
 import { DataTable } from './data-table';
 import { TableCell, TableRow } from '@/shared/ui/table';
 import { useEffect, useState } from 'react';
-import api from '@/shared/api/axios-instance';
+import { SportsApi } from '@/shared/api';
+import { apiConfig } from '@/shared/api/axios-instance';
+
+const sportsApi = new SportsApi(apiConfig);
 
 export function SportsTab() {
   const [allSports, setAllSports] = useState<Sport[]>([]);
@@ -14,8 +17,8 @@ export function SportsTab() {
   useEffect(() => {
     async function fetchSports() {
       try {
-        const response = await api.get(`/api/v1/sports/`);
-        setAllSports(response.data);
+        const response = await sportsApi.apiV1SportsGet();
+        setAllSports(response.data as Sport[]);
       } catch (error) {
         console.error("Failed to fetch sports:", error);
       }
@@ -34,7 +37,7 @@ export function SportsTab() {
         </CardHeader>
         <CardContent>
           <DataTable
-            headers={['ID', 'Название', 'Поддисциплины']}
+            headers={['ID', 'Название']}
             data={teamSports}
             renderRow={(sport: Sport) => (
               <TableRow key={sport.id}>
@@ -42,9 +45,6 @@ export function SportsTab() {
                   {sport.id}
                 </TableCell>
                 <TableCell className="font-medium">{sport.name}</TableCell>
-                <TableCell className="text-xs">
-                  {sport.subdisciplines?.map((s: Subdiscipline) => s.name).join(', ')}
-                </TableCell>
               </TableRow>
             )}
           />
@@ -56,7 +56,7 @@ export function SportsTab() {
         </CardHeader>
         <CardContent>
           <DataTable
-            headers={['ID', 'Название', 'Поддисциплины']}
+            headers={['ID', 'Название']}
             data={individualSports}
             renderRow={(sport: Sport) => (
               <TableRow key={sport.id}>
@@ -64,9 +64,6 @@ export function SportsTab() {
                   {sport.id}
                 </TableCell>
                 <TableCell className="font-medium">{sport.name}</TableCell>
-                <TableCell className="text-xs">
-                  {sport.subdisciplines?.map((s: Subdiscipline) => s.name).join(', ')}
-                </TableCell>
               </TableRow>
             )}
           />

@@ -34,5 +34,5 @@ export async function generateMetadata({ params }: { params: { tournamentId: str
 export default async function RegisterForTournamentPage({ params }: { params: { tournamentId: string } }) {
   const tournament = await getTournament(params.tournamentId);
   
-  return <TournamentRegisterPage tournament={tournament} />;
+  return <TournamentRegisterPage tournament={tournament as any} />;
 }

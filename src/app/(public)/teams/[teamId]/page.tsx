@@ -7,7 +7,7 @@ import { useParams } from 'next/navigation';
 
 export default function TeamPage() {
   const params = useParams();
-  const teamId = typeof params.teamId === 'string' ? params.teamId : '';
+  const teamId = typeof params?.teamId === 'string' ? params.teamId : '';
   
   return (
     <MainLayout>
