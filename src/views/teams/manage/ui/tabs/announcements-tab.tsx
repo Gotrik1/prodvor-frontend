@@ -11,60 +11,65 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/shared/ui/form";
-import { useToast } from "@/shared/hooks/use-toast";
 import { sendTournamentAnnouncementAction } from "@/app/actions";
+import { useToast } from "@/shared/hooks/use-toast";
+import { useTournamentCrmContext } from "../../lib/TournamentCrmContext";
 
-export interface SendTournamentAnnouncementInput {
-  tournamentId: string;
-  subject: string;
-  message: string;
-  isAiEnhanced: boolean;
-}
-
-const SendTeamAnnouncementInputSchema = z.object({
-  teamId: z.string().describe("The ID of the team."),
+const SendTournamentAnnouncementInputSchema = z.object({
+  tournamentId: z.string().describe("The ID of the tournament."),
   subject: z.string().min(5, { message: "Тема должна содержать не менее 5 символов." }).describe('The subject of the announcement.'),
   message: z.string().min(10, { message: "Сообщение или промпт должно содержать не менее 10 символов." }).describe('The content of the announcement message or a prompt for the AI.'),
   isAiEnhanced: z.boolean().default(false).describe("Whether to use AI to enhance the message.")
 });
 
-export function AnnouncementsTab() {
-  const { toast } = useToast();
-  // In a real app, we would get the team from a context or props
-  const teamId = "team1"; 
+export type SendTournamentAnnouncementInput = z.infer<typeof SendTournamentAnnouncementInputSchema>;
 
-  const form = useForm<z.infer<typeof SendTeamAnnouncementInputSchema>>({
-    resolver: zodResolver(SendTeamAnnouncementInputSchema),
+export type SendTournamentAnnouncementOutput = {
+    success: boolean;
+    error?: string;
+};
+
+export function AnnouncementsTab() {
+  const { tournament } = useTournamentCrmContext();
+  const { toast } = useToast();
+  const form = useForm<z.infer<typeof SendTournamentAnnouncementInputSchema>>({
+    resolver: zodResolver(SendTournamentAnnouncementInputSchema),
     defaultValues: {
-      teamId: teamId,
+      tournamentId: tournament?.id || '',
       subject: "",
       message: "",
       isAiEnhanced: false,
     },
   });
 
-  async function onSubmit(values: z.infer<typeof SendTeamAnnouncementInputSchema>) {
-    // We mock the action here
-    console.log("Sending team announcement:", values);
-    const result = await sendTournamentAnnouncementAction(values as unknown as SendTournamentAnnouncementInput)
-    if(result.success){
-        toast({
-            title: "Успех!",
-            description: "Ваш анонс был успешно отправлен всем подписчикам команды.",
-        });
-    }
+  async function onSubmit(values: z.infer<typeof SendTournamentAnnouncementInputSchema>) {
+    const result = await sendTournamentAnnouncementAction(values);
 
-    form.reset({ teamId: values.teamId, subject: '', message: '', isAiEnhanced: values.isAiEnhanced });
+    if (result.success) {
+      toast({
+        title: "Успех!",
+        description: "Ваш анонс был успешно отправлен всем участникам.",
+      });
+      form.reset({ tournamentId: tournament?.id || '', subject: '', message: '', isAiEnhanced: values.isAiEnhanced });
+    } else {
+      toast({
+        variant: "destructive",
+        title: "Ошибка",
+        description: result.error || "Не удалось отправить анонс. Попробуйте снова.",
+      });
+    }
   }
 
   const isAiMode = form.watch("isAiEnhanced");
 
+  if (!tournament) return null;
+
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Анонсы для подписчиков</CardTitle>
+        <CardTitle>Анонсы для участников</CardTitle>
         <CardDescription>
-          Отправляйте важные сообщения всем, кто следит за вашей командой.
+          Отправляйте важные сообщения всем зарегистрированным командам.
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -89,7 +94,7 @@ export function AnnouncementsTab() {
                             <FormLabel>Тема</FormLabel>
                             <FormControl>
                                 <Input
-                                placeholder="Например: Изменение в составе"
+                                placeholder="Например: Изменение в расписании"
                                 {...field}
                                 />
                             </FormControl>
@@ -105,7 +110,7 @@ export function AnnouncementsTab() {
                             <FormLabel>{isAiMode ? "Опишите суть анонса (промпт)" : "Сообщение"}</FormLabel>
                             <FormControl>
                                 <Textarea
-                                placeholder={isAiMode ? "Например: напиши пост о нашей последней победе со счетом 3:1" : "Введите текст вашего анонса..."}
+                                placeholder={isAiMode ? "Например: напиши яркий анонс, что турнир начнется через 3 дня, и пожелай удачи" : "Введите текст вашего анонса..."}
                                 rows={8}
                                 {...field}
                                 />
