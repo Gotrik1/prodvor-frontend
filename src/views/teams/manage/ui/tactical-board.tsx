@@ -2,7 +2,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import type { User } from '@/shared/api';
+import type { User } from '@/mocks';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Button } from '@/shared/ui/button';
 import { Dices, Save } from 'lucide-react';
@@ -11,7 +11,6 @@ import { Label } from '@/shared/ui/label';
 
 const soccerFieldImage = 'https://placehold.co/1920x1080/34D399/FFFFFF.png';
 
-// Positions for a 4-4-2 formation (as percentages of width/height)
 const formations: Record<string, { x: number, y: number, role: string }[]> = {
     '4-4-2': [
         { x: 50, y: 92, role: 'GK' }, // Goalkeeper
@@ -44,7 +43,7 @@ const formations: Record<string, { x: number, y: number, role: string }[]> = {
 const PlayerChip = ({ player, onDragStart }: { player: User, onDragStart: (e: React.DragEvent, playerId: string) => void }) => (
     <div
         draggable
-        onDragStart={(e) => onDragStart(e, String(player.id))}
+        onDragStart={(e) => onDragStart(e, player.id)}
         className="flex items-center gap-2 bg-card p-1.5 rounded-full border shadow cursor-grab active:cursor-grabbing"
     >
         <span className="font-bold text-xs bg-primary text-primary-foreground rounded-full h-6 w-6 flex items-center justify-center">
@@ -79,34 +78,34 @@ interface TacticalBoardProps {
 
 export function TacticalBoard({ teamMembers }: TacticalBoardProps) {
     const [selectedFormation, setSelectedFormation] = useState('4-3-3');
-    const [assignments, setAssignments] = useState<Record<string, number | null>>({}); // { role: playerId }
-    
+    const [assignments, setAssignments] = useState<Record<string, string | null>>({}); // { role: playerId }
+
     const availablePlayers = teamMembers.filter(p => !Object.values(assignments).includes(p.id));
 
     const handleDragStart = (e: React.DragEvent, playerId: string) => {
         e.dataTransfer.setData("playerId", playerId);
     };
-    
+
     const handleDrop = (e: React.DragEvent, role: string) => {
         e.preventDefault();
         const playerId = e.dataTransfer.getData("playerId");
         if (playerId) {
-            setAssignments(prev => ({ ...prev, [role]: Number(playerId) }));
+            setAssignments(prev => ({ ...prev, [role]: playerId }));
         }
     };
-    
+
     const handleDragOver = (e: React.DragEvent) => {
         e.preventDefault();
     };
 
     const handleAutoAssign = () => {
         const formation = formations[selectedFormation];
-        const newAssignments: Record<string, number | null> = {};
+        const newAssignments: Record<string, string | null> = {};
         const shuffledPlayers = [...teamMembers].sort(() => 0.5 - Math.random());
-        
+
         formation.forEach((pos, index) => {
             if (shuffledPlayers[index]) {
-                newAssignments[pos.role] = Number(shuffledPlayers[index].id);
+                newAssignments[pos.role] = shuffledPlayers[index].id;
             }
         });
         setAssignments(newAssignments);
@@ -149,7 +148,7 @@ export function TacticalBoard({ teamMembers }: TacticalBoardProps) {
                                 const assignedPlayerId = assignments[pos.role];
                                 const assignedPlayer = assignedPlayerId ? teamMembers.find((p: User) => p.id === assignedPlayerId) : null;
                                 return (
-                                    <PositionMarker 
+                                    <PositionMarker
                                         key={pos.role}
                                         position={pos}
                                         assignedPlayer={assignedPlayer || null}

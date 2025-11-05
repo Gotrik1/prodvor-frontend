@@ -2,7 +2,7 @@
 'use client';
 
 import { useState } from 'react';
-import type { Team } from '@/shared/api';
+import type { Team } from '@/mocks';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/shared/ui/dialog';
 import { Button } from '@/shared/ui/button';
@@ -84,7 +84,7 @@ const LogoUploadDialog = ({ team, onUploadSuccess }: { team: Team, onUploadSucce
                     {filePreview ? (
                          <div className="space-y-4">
                             <div className="relative w-48 h-48 mx-auto">
-                                <Image src={filePreview} alt="Превью логотипа" layout="fill" className="object-cover rounded-lg" />
+                                <Image src={filePreview} alt="Превью логотипа" fill className="object-cover rounded-lg" />
                             </div>
                             <Button variant="outline" className="w-full" onClick={() => { setFilePreview(null); setFile(null); }}>Выбрать другой файл</Button>
                         </div>
@@ -117,7 +117,7 @@ export function BrandingTab({ team: initialTeam }: { team: Team }) {
     const [team, setTeam] = useState(initialTeam);
 
     const handleLogoUpdate = (newLogoUrl: string) => {
-        setTeam(prevTeam => ({ ...(prevTeam as Team), logoUrl: newLogoUrl }));
+        setTeam(prevTeam => ({ ...prevTeam, logoUrl: newLogoUrl }));
     };
 
     return (

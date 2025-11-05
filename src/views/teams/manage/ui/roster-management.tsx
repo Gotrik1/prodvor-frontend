@@ -2,7 +2,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import type { User } from '@/shared/api';
+import type { User } from '@/mocks';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import { Button } from '@/shared/ui/button';
@@ -21,6 +21,7 @@ import {
 } from "@/shared/ui/alert-dialog";
 import { useToast } from '@/shared/hooks/use-toast';
 import api from '@/shared/api/axios-instance';
+import { useUserStore } from '@/widgets/dashboard-header/model/user-store';
 
 interface RosterManagementProps {
     teamId: string;
@@ -33,16 +34,19 @@ export function RosterManagement({ teamId, allTeamMembers: initialTeamMembers, o
     const [mainRoster, setMainRoster] = useState<User[]>([]);
     const [substitutes, setSubstitutes] = useState<User[]>([]);
     const [isLoading, setIsLoading] = useState(true);
+    const { user: currentUser } = useUserStore();
 
     useEffect(() => {
+        const captain = initialTeamMembers.find(m => m.id === teamId); // This logic might be flawed if teamId != captainId
         const firstFive = initialTeamMembers.slice(0, 5);
         const rest = initialTeamMembers.slice(5);
         setMainRoster(firstFive);
         setSubstitutes(rest);
         setIsLoading(false);
-    }, [initialTeamMembers]);
+    }, [initialTeamMembers, teamId]);
 
     const handleRemovePlayer = async (player: User) => {
+        if (!currentUser) return;
         try {
             await api.delete(`/api/v1/teams/${teamId}/members/${player.id}`);
             toast({
@@ -115,7 +119,7 @@ export function RosterManagement({ teamId, allTeamMembers: initialTeamMembers, o
             </div>
         );
     };
-    
+
     if (isLoading) {
         return (
             <Card>
