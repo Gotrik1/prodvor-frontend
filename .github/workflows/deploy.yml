@@ -1,4 +1,4 @@
-name: Build frontend on remote (PROD)
+name: Build frontend on remote (console only)
 
 on:
   push:
@@ -31,7 +31,7 @@ jobs:
           mkdir -p ~/.ssh
           ssh-keyscan -H "${{ secrets.TAILSCALE_HOST }}" >> ~/.ssh/known_hosts
 
-      - name: Prepare log folder (remote)
+      - name: FRONTEND — npm ci & build (print to console)
         uses: appleboy/ssh-action@v1.0.0
         with:
           host:     ${{ secrets.TAILSCALE_HOST }}
@@ -39,55 +39,22 @@ jobs:
           key:      ${{ secrets.TAILSCALE_SSH_KEY }}
           port:     22
           script: |
-            powershell -NoProfile -NonInteractive -ExecutionPolicy Bypass -Command ^
-            "$ErrorActionPreference='Stop'; ^
-             $stamp   = Get-Date -Format 'yyyy-MM-dd_HH-mm-ss'; ^
-             $logRoot = 'E:\prodvor\logs'; ^
-             $logDir  = Join-Path $logRoot $stamp; ^
-             if (-not (Test-Path $logDir)) { New-Item -ItemType Directory -Path $logDir | Out-Null }; ^
-             Set-Content -Path (Join-Path $logRoot '_latest_dir.txt') -Value $logDir -Encoding ASCII; ^
-             Write-Host ('Log dir: ' + $logDir)"
-
-      - name: FRONTEND — npm ci & build (remote)
-        uses: appleboy/ssh-action@v1.0.0
-        with:
-          host:     ${{ secrets.TAILSCALE_HOST }}
-          username: ${{ secrets.WINDOWS_USER }}
-          key:      ${{ secrets.TAILSCALE_SSH_KEY }}
-          port:     22
-          script: |
-            powershell -NoProfile -NonInteractive -ExecutionPolicy Bypass -Command ^
-            "$ErrorActionPreference='Stop'; ^
-             [Console]::OutputEncoding=[Text.UTF8Encoding]::new(); ^
-             $root    = 'E:\prodvor\frontend'; ^
-             $logDir  = Get-Content 'E:\prodvor\logs\_latest_dir.txt'; ^
-             $envLog  = Join-Path $logDir 'frontend-env.log'; ^
-             $npmLog  = Join-Path $logDir 'frontend-npm-ci.log'; ^
-             $buildLog= Join-Path $logDir 'frontend-build.log'; ^
-             Write-Host '== FRONTEND build =='; ^
-             whoami            | Tee-Object -FilePath $envLog; ^
-             try { node -v     | Tee-Object -FilePath $envLog -Append } catch { 'node not in PATH' | Tee-Object -FilePath $envLog -Append }; ^
-             try { npm  -v     | Tee-Object -FilePath $envLog -Append } catch { 'npm not in PATH'  | Tee-Object -FilePath $envLog -Append }; ^
-             Set-Location $root; ^
-             $env:NODE_OPTIONS='--max-old-space-size=4096'; ^
-             Write-Host 'npm ci'; ^
-             npm ci --verbose 2>&1 | Tee-Object -FilePath $npmLog; ^
-             Write-Host 'npm run build'; ^
-             $env:NEXT_TELEMETRY_DISABLED='1'; ^
-             $env:TURBO_TELEMETRY_DISABLED='1'; ^
-             npm run build --verbose 2>&1 | Tee-Object -FilePath $buildLog; ^
-             Write-Host '✅ FRONTEND done'; ^
-             Write-Host ('Logs:' + [Environment]::NewLine + ' - ' + $envLog + [Environment]::NewLine + ' - ' + $npmLog + [Environment]::NewLine + ' - ' + $buildLog)"
-
-      - name: Show log directory (remote)
-        uses: appleboy/ssh-action@v1.0.0
-        with:
-          host:     ${{ secrets.TAILSCALE_HOST }}
-          username: ${{ secrets.WINDOWS_USER }}
-          key:      ${{ secrets.TAILSCALE_SSH_KEY }}
-          port:     22
-          script: |
-            powershell -NoProfile -NonInteractive -ExecutionPolicy Bypass -Command ^
-            "$logDir = Get-Content 'E:\prodvor\logs\_latest_dir.txt'; ^
-             Write-Host ('Latest logs: ' + $logDir); ^
-             Get-ChildItem -Force $logDir | Format-Table -AutoSize Name,Length,CreationTime"
+            cmd /c ^
+            "if not exist E:\prodvor\scripts mkdir E:\prodvor\scripts ^&^& ^
+             >E:\prodvor\scripts\frontend_build.ps1 echo $ErrorActionPreference='Stop'; ^
+             >>E:\prodvor\scripts\frontend_build.ps1 echo [Console]::OutputEncoding = [Text.UTF8Encoding]::new(); ^
+             >>E:\prodvor\scripts\frontend_build.ps1 echo $root = 'E:\prodvor\frontend'; ^
+             >>E:\prodvor\scripts\frontend_build.ps1 echo if (-not (Test-Path $root)) { throw 'Path not found: ' ^+ $root }; ^
+             >>E:\prodvor\scripts\frontend_build.ps1 echo Write-Host '== FRONTEND build on ' (hostname); ^
+             >>E:\prodvor\scripts\frontend_build.ps1 echo whoami; ^
+             >>E:\prodvor\scripts\frontend_build.ps1 echo try { node -v } catch { Write-Host 'node not in PATH' }; ^
+             >>E:\prodvor\scripts\frontend_build.ps1 echo try { npm  -v } catch { Write-Host 'npm not in PATH'  }; ^
+             >>E:\prodvor\scripts\frontend_build.ps1 echo Set-Location $root; ^
+             >>E:\prodvor\scripts\frontend_build.ps1 echo $env:NODE_OPTIONS='--max-old-space-size=4096'; ^
+             >>E:\prodvor\scripts\frontend_build.ps1 echo Write-Host '--- npm ci ---'; ^
+             >>E:\prodvor\scripts\frontend_build.ps1 echo npm ci --verbose; ^
+             >>E:\prodvor\scripts\frontend_build.ps1 echo Write-Host '--- npm run build (prod) ---'; ^
+             >>E:\prodvor\scripts\frontend_build.ps1 echo $env:NEXT_TELEMETRY_DISABLED='1'; ^
+             >>E:\prodvor\scripts\frontend_build.ps1 echo $env:TURBO_TELEMETRY_DISABLED='1'; ^
+             >>E:\prodvor\scripts\frontend_build.ps1 echo npm run build --verbose; ^
+             C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -File E:\prodvor\scripts\frontend_build.ps1"
