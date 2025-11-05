@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import axios from 'axios';
@@ -26,7 +27,7 @@ api.interceptors.request.use(
 
 export const apiConfig = new Configuration({
     basePath: API_BASE_URL,
-    accessToken: (name?: string, scopes?: string[]) => useUserStore.getState().accessToken || '',
+    accessToken: () => useUserStore.getState().accessToken || '',
 });
 
 export default api;

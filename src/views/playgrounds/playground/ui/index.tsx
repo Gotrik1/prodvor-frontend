@@ -2,11 +2,11 @@
 
 'use client';
 
-import type { Playground, User } from "@/mocks";
+import type { Playground } from "@/mocks";
 import { teams, users } from "@/mocks";
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
-import { ArrowLeft, CheckCircle, Home, MapPin, Star, Users as UsersIcon, Rss, Info, MessageSquare, Newspaper, Calendar, ThumbsUp, Upload } from "lucide-react";
+import { ArrowLeft, CheckCircle, MapPin, Star, Users as UsersIcon, Rss, Info, MessageSquare, Newspaper, Calendar, ThumbsUp, Upload } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";

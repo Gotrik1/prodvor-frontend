@@ -3,7 +3,6 @@
 'use client';
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
-import { Button } from "@/shared/ui/button";
 import { Users } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
@@ -11,7 +10,6 @@ import { teams, User, Team } from '@/mocks';
 import React, { useState, useEffect } from "react";
 import { Skeleton } from "@/shared/ui/skeleton";
 import { ScrollArea } from "@/shared/ui/scroll-area";
-import { MyTeamsEmptyState } from "@/views/teams/ui/my-teams-empty-state";
 
 export function MyTeamWidget({ user }: { user: User }) {
   const [myTeams, setMyTeams] = useState<Team[]>([]);
@@ -59,9 +57,6 @@ export function MyTeamWidget({ user }: { user: User }) {
         ) : (
              <div className="text-center">
                 <p className="text-sm text-muted-foreground mb-4">Вы еще не состоите в команде.</p>
-                <Button asChild variant="secondary">
-                    <Link href="/teams">Найти или создать команду</Link>
-                </Button>
             </div>
         )}
       </CardContent>

@@ -9,7 +9,7 @@ export const config = {
   ],
 }
 
-export function middleware(req: NextRequest) {
+export function middleware(_req: NextRequest) {
   // Ваша будущая логика проверки сессии/редиректов будет здесь
   return NextResponse.next()
 }

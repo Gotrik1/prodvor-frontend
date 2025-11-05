@@ -7,7 +7,7 @@ import { Button } from '@/shared/ui/button';
 import { Eye } from 'lucide-react';
 import { ChartContainer, ChartTooltipContent } from "@/shared/ui/chart";
 import { Bar as RechartsBar, BarChart as RechartsBarChart, XAxis, YAxis } from "recharts";
-import { users, teams, allSports, tournaments, Tournament } from '@/mocks';
+import { users, teams, tournaments, Tournament } from '@/mocks';
 import Link from 'next/link';
 import { TeamStatCard } from '@/entities/team/ui/stat-card';
 

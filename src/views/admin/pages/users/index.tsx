@@ -9,7 +9,6 @@ import { RefereePageTemplate } from '@/views/admin/ui/templates/referee-page-tem
 import { CoachPageTemplate } from '@/views/admin/ui/templates/coach-page-template';
 import { ManagerPageTemplate } from '@/views/admin/ui/templates/manager-page-template';
 import { OrganizerPageTemplate } from '@/views/admin/ui/templates/organizer-page-template';
-import { PlayerPage } from '@/views/users/player';
 import { FanPageTemplate } from '@/views/admin/ui/templates/fan-page-template';
 import { PlayerPageTemplate } from '@/views/admin/ui/templates/player-page-template';
 

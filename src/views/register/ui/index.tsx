@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import React from 'react';
@@ -22,7 +23,6 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { useToast } from '@/shared/hooks/use-toast';
 import { Loader2, CalendarIcon } from 'lucide-react';
 import { useUserStore } from '@/widgets/dashboard-header/model/user-store';
-import type { User } from '@/mocks';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shared/ui/select';
 import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/popover';
 import { Calendar } from '@/shared/ui/calendar';

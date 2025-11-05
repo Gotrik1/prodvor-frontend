@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { useForm } from 'react-hook-form';
@@ -36,7 +37,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/shared/ui/alert-dialog";
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import api from '@/shared/api/axios-instance';
 
 const accountFormSchema = z.object({
@@ -71,24 +72,24 @@ function ActiveSessions() {
     const [isLoading, setIsLoading] = useState(true);
     const { toast } = useToast();
 
-    const fetchSessions = async () => {
+    const fetchSessions = useCallback(async () => {
         setIsLoading(true);
         try {
             const response = await api.get('/api/v1/users/me/sessions');
             // Assuming the backend cannot reliably set `isCurrent`, we might do it on the client
             // For now, we trust the backend or adjust if needed.
-            setSessions(response.data);
+            setSessions(response.data as Session[]);
         } catch (error) {
             console.error("Failed to fetch sessions:", error);
             toast({ variant: 'destructive', title: 'Ошибка', description: 'Не удалось загрузить список сессий.' });
         } finally {
             setIsLoading(false);
         }
-    };
+    }, [toast]);
     
     useEffect(() => {
         fetchSessions();
-    }, []);
+    }, [fetchSessions]);
 
     const handleTerminate = async (sessionId: number) => {
         try {

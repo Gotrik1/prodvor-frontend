@@ -9,7 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/shared/ui/card';
-import { teams, users, sponsors, playgrounds, Team, User } from '@/mocks';
+import { teams, sponsors, playgrounds, Team, User } from '@/mocks';
 import { Badge } from '@/shared/ui/badge';
 import Image from 'next/image';
 import Link from 'next/link';

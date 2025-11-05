@@ -1,5 +1,6 @@
 
-import { Team, teams } from './teams';
+
+import { Team } from './teams';
 
 export interface TeamChallenge {
   id: string;

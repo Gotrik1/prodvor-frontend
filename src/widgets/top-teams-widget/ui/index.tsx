@@ -1,7 +1,8 @@
 
+
 'use client';
 
-import { useMemo, useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
 import { BarChart, ChevronsRight, Globe, MapPin } from 'lucide-react';
 import Link from 'next/link';
@@ -11,11 +12,12 @@ import { Skeleton } from '@/shared/ui/skeleton';
 import type { Team } from '@/mocks';
 import { useToast } from '@/shared/hooks/use-toast';
 import api from '@/shared/api/axios-instance';
+import Image from 'next/image';
 
 const TopTeamRow = ({ team, rank }: { team: Team, rank: number }) => (
     <Link href={`/teams/${team.id}`} className="flex items-center gap-3 p-2 rounded-md hover:bg-muted/50 group transition-colors">
         <span className="font-bold text-lg w-6 text-center text-muted-foreground">{rank}</span>
-        <img src={team.logoUrl || 'https://placehold.co/32x32.png'} alt={team.name} width={32} height={32} className="rounded-md object-cover aspect-square" />
+        <Image src={team.logoUrl || 'https://placehold.co/32x32.png'} alt={team.name} width={32} height={32} className="rounded-md object-cover aspect-square" />
         <div className="flex-grow">
             <p className="font-semibold group-hover:text-primary transition-colors">{team.name}</p>
             <p className="text-xs text-muted-foreground">{team.sport?.name || team.game}</p>
@@ -127,8 +129,8 @@ export function TopTeamsWidget() {
 
                 const [countryResponse, cityResponse] = await Promise.all([countryPromise, cityPromise]);
                 
-                setTopCountryTeams(countryResponse.data);
-                setTopCityTeams(cityResponse.data);
+                setTopCountryTeams(countryResponse.data as Team[]);
+                setTopCityTeams(cityResponse.data as Team[]);
 
             } catch (error) {
                  toast({

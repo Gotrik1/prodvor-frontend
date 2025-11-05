@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/shared/ui/card";
@@ -22,7 +23,7 @@ const playersLookingForTeam = users.slice(5, 11).map(u => ({ ...u, lookingFor: [
 const teamsLookingForPlayers = teams.slice(3, 8).map(t => ({ ...t, lookingFor: ['Вратарь', 'Защитник', 'Полузащитник'][Math.floor(Math.random() * 3)]}));
 
 
-const PlayerCard = ({ player, allSports }: { player: typeof playersLookingForTeam[0], allSports: Sport[] }) => (
+const PlayerCard = ({ player }: { player: typeof playersLookingForTeam[0] }) => (
     <Card>
         <CardHeader className="flex-row items-center gap-4">
              <Avatar className="h-12 w-12">
@@ -77,7 +78,7 @@ export function LfgPage() {
         async function fetchSports() {
             try {
                 const response = await api.get(`/api/v1/sports/`);
-                setAllSports(response.data);
+                setAllSports(response.data as Sport[]);
             } catch (error) {
                 console.error("Failed to fetch sports:", error);
             }
@@ -157,7 +158,7 @@ export function LfgPage() {
                                 </Select>
                             </div>
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                                {playersLookingForTeam.map(player => <PlayerCard key={player.id} player={player} allSports={allSports} />)}
+                                {playersLookingForTeam.map(player => <PlayerCard key={player.id} player={player} />)}
                             </div>
                         </CardContent>
                     </Card>

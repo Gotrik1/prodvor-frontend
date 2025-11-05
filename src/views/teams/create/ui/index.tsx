@@ -1,9 +1,10 @@
 
+
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
 import { Button } from '@/shared/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Input } from '@/shared/ui/input';
 import { Label } from '@/shared/ui/label';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/shared/ui/select';
@@ -32,7 +33,7 @@ export function CreateTeamPage() {
         async function fetchSports() {
             try {
                 const response = await api.get(`/api/v1/sports/`);
-                setAllSports(response.data);
+                setAllSports(response.data as Sport[]);
             } catch (error) {
                 console.error("Failed to fetch sports:", error);
                  toast({

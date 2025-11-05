@@ -3,7 +3,7 @@
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
-import type { Team, User } from '@/mocks';
+import type { Team } from '@/mocks';
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/shared/ui/card";
 import { PlusCircle, UserCheck, Users, BarChart } from "lucide-react";
@@ -15,33 +15,28 @@ import { useToast } from '@/shared/hooks/use-toast';
 import { Skeleton } from '@/shared/ui/skeleton';
 import { TopTeamsWidget } from '@/widgets/top-teams-widget';
 import api from '@/shared/api/axios-instance';
+import Image from 'next/image';
 
-const TeamCard = ({ team, onApply, isApplicationSent }: { team: Team, onApply: (teamId: string) => Promise<void>, isApplicationSent: boolean }) => {
-    const { user } = useUserStore();
-    const isMember = useMemo(() => {
-        if (!user || !team.members) return false;
-        return team.members.some(m => m.id === user.id) || team.captain?.id === user.id;
-    }, [user, team]);
-    
+const TeamCard = ({ team, isMember, onApply, isApplicationSent }: { team: Team, isMember: boolean, onApply: (teamId: string) => Promise<void>, isApplicationSent: boolean }) => {
     return (
     <Card key={team.id} className="flex flex-col">
         <CardHeader>
             <Link href={`/teams/${team.id}`} className="flex items-center gap-4 group">
-                <img src={team.logoUrl || 'https://placehold.co/512x512.png'} alt={`${team.name} logo`} width={64} height={64} className="rounded-lg border object-cover aspect-square" />
+                <Image src={team.logoUrl || 'https://placehold.co/512x512.png'} alt={`${team.name} logo`} width={64} height={64} className="rounded-lg border object-cover aspect-square" />
                 <div>
                     <CardTitle className="text-xl group-hover:text-primary transition-colors">{team.name}</CardTitle>
-                    <CardDescription>{team.sport?.name || ''}</CardDescription>
+                    <CardDescription>{team.sport?.name || team.game}</CardDescription>
                 </div>
             </Link>
         </CardHeader>
         <CardContent className="flex-grow space-y-2">
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
                 <Users className="h-4 w-4" />
-                <span>{ (team.members?.length || 0)} игроков</span>
+                <span>{ (team.members?.length || 0) + 1} игроков</span>
             </div>
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
                 <BarChart className="h-4 w-4" />
-                <span>{team.rank ?? 0} ELO</span>
+                <span>{team.rank || 1200} ELO</span>
             </div>
             <div>
                 <Badge variant="secondary">Ищет игроков</Badge>
@@ -100,7 +95,6 @@ export function TeamsPage() {
 
     useEffect(() => {
         async function fetchTeams() {
-            setIsLoading(true);
             try {
                 const response = await api.get('/api/v1/teams');
                 setAllTeams(response.data as Team[]);
@@ -155,7 +149,7 @@ export function TeamsPage() {
                     <section>
                         <h2 className="text-2xl font-bold mb-4">Мои команды</h2>
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                            {myTeams.map(team => <TeamCard key={team.id} team={team} onApply={handleApply} isApplicationSent={false} />)}
+                            {myTeams.map(team => <TeamCard key={team.id} team={team} isMember={true} onApply={handleApply} isApplicationSent={false} />)}
                         </div>
                     </section>
                 )}
@@ -180,6 +174,7 @@ export function TeamsPage() {
                                 <TeamCard 
                                     key={team.id} 
                                     team={team} 
+                                    isMember={false} 
                                     onApply={handleApply}
                                     isApplicationSent={sentApplications.includes(String(team.id))}
                                 />

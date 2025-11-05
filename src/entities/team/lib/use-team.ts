@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import type { User, Sport } from '@/mocks';
+import type { User } from '@/mocks';
 import api from '@/shared/api/axios-instance';
 
 // 1. Определяем типы данных

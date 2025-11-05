@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { users, teams, User } from "@/mocks";
@@ -8,7 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/sha
 import { Users as UsersIcon, Dumbbell, Shield, Trophy, Gamepad2, UserPlus, Calendar } from "lucide-react";
 import { Button } from "@/shared/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/shared/ui/table";
-import { useMemo, useState, useEffect } from "react";
+import { useMemo, useState } from "react";
 import { getUserDisciplines } from "@/entities/user/lib";
 import { StatCard } from "@/shared/ui/stat-card";
 import Link from "next/link";

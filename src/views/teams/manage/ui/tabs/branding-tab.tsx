@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { useState } from 'react';
@@ -129,7 +130,7 @@ export function BrandingTab({ team: initialTeam }: { team: Team }) {
                 </CardHeader>
                 <CardContent className="flex flex-col items-center gap-4">
                     <div className="relative w-48 h-48">
-                        <img
+                        <Image
                             src={team.logoUrl || 'https://placehold.co/512x512.png'}
                             alt={`Логотип ${team.name}`}
                             width={192}

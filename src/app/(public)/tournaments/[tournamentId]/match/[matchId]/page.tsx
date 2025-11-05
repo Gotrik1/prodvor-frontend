@@ -3,7 +3,7 @@
 'use client';
 
 import { MatchPage } from '@/views/tournaments/match';
-import { tournaments, Team, BracketMatch, Tournament } from '@/mocks';
+import { tournaments, BracketMatch, Tournament } from '@/mocks';
 import { useProtocol } from '@/features/protocol-editor';
 import { useEffect, useMemo } from 'react';
 
@@ -21,7 +21,7 @@ export default function TournamentMatchPage({ params }: { params: { tournamentId
 
     // A more robust way to find a match in a multi-round bracket
     for (const round of (tournament.bracket || [])) {
-        const found = round.find((m: any) => m.id === params.matchId);
+        const found = round.find((m) => m.id === params.matchId);
         if (found) return found as BracketMatch;
     }
     
@@ -33,12 +33,12 @@ export default function TournamentMatchPage({ params }: { params: { tournamentId
     // When the component mounts, set this match as the active one in our global state.
     // This simulates navigating to a specific match page.
     if (match) {
-        setActiveMatch(match as any);
+        setActiveMatch(match);
     }
   }, [match, setActiveMatch]);
 
   // If the active match is updated (e.g., scores change), reflect it.
   const displayMatch = activeMatch?.id === params.matchId ? activeMatch : match;
   
-  return <MatchPage tournament={tournament} match={displayMatch as any} />;
+  return <MatchPage tournament={tournament} match={displayMatch} />;
 }

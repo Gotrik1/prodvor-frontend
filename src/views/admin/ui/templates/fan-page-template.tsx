@@ -2,11 +2,11 @@
 
 'use client';
 
-import { users, teams, posts, Achievement } from "@/mocks";
+import { users, teams, posts } from "@/mocks";
 import type { User } from "@/mocks/users";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { Badge } from "@/shared/ui/badge";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
 import { Calendar, Flame, Heart, Ticket, Gamepad2, Tv, Camera, User as UserIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
