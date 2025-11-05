@@ -2,7 +2,7 @@
 
 import { TournamentHubPage } from '@/views/tournaments/hub';
 import type { Metadata } from 'next';
-import type { Tournament } from '@/shared/api';
+import type { Tournament } from '@/mocks';
 import { LegacyTournamentsApi } from '@/shared/api';
 import { apiConfig } from '@/shared/api/axios-instance';
 

@@ -2,7 +2,6 @@
 'use client';
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import type { User } from '@/mocks';
 
 export function TacticalBoard({ teamMembers }: { teamMembers: User[] }) {

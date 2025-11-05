@@ -13,7 +13,6 @@ import { z } from "zod";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/shared/ui/form";
 import { sendTournamentAnnouncementAction } from "@/app/actions";
 import { useToast } from "@/shared/hooks/use-toast";
-import { useTournamentCrmContext } from "../../lib/TournamentCrmContext";
 
 const SendTournamentAnnouncementInputSchema = z.object({
   tournamentId: z.string().describe("The ID of the tournament."),
@@ -29,13 +28,12 @@ export type SendTournamentAnnouncementOutput = {
     error?: string;
 };
 
-export function AnnouncementsTab() {
-  const { tournament } = useTournamentCrmContext();
+export function AnnouncementsTab({ tournamentId }: { tournamentId: string }) {
   const { toast } = useToast();
   const form = useForm<z.infer<typeof SendTournamentAnnouncementInputSchema>>({
     resolver: zodResolver(SendTournamentAnnouncementInputSchema),
     defaultValues: {
-      tournamentId: tournament?.id || '',
+      tournamentId: tournamentId || '',
       subject: "",
       message: "",
       isAiEnhanced: false,
@@ -50,7 +48,7 @@ export function AnnouncementsTab() {
         title: "Успех!",
         description: "Ваш анонс был успешно отправлен всем участникам.",
       });
-      form.reset({ tournamentId: tournament?.id || '', subject: '', message: '', isAiEnhanced: values.isAiEnhanced });
+      form.reset({ tournamentId: tournamentId || '', subject: '', message: '', isAiEnhanced: values.isAiEnhanced });
     } else {
       toast({
         variant: "destructive",
@@ -62,7 +60,7 @@ export function AnnouncementsTab() {
 
   const isAiMode = form.watch("isAiEnhanced");
 
-  if (!tournament) return null;
+  if (!tournamentId) return null;
 
   return (
     <Card>
@@ -143,5 +141,3 @@ export function AnnouncementsTab() {
     </Card>
   );
 }
-
-    

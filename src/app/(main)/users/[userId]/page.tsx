@@ -10,7 +10,7 @@ import { ManagerPageTemplate } from '@/views/admin/ui/templates/manager-page-tem
 import { OrganizerPageTemplate } from '@/views/admin/ui/templates/organizer-page-template';
 import { RefereePageTemplate } from '@/views/admin/ui/templates/referee-page-template';
 import { PlaceholderTemplate } from '@/views/admin/ui/templates/placeholder-template';
-import type { User, Team } from '@/shared/api';
+import type { User, Team } from '@/mocks';
 import { PlayerPageTemplate } from '@/views/admin/ui/templates/player-page-template';
 import { UsersApi } from '@/shared/api';
 import { apiConfig } from '@/shared/api/axios-instance';

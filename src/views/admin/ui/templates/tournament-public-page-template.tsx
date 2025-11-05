@@ -2,7 +2,7 @@
 
 import { TournamentPublicPage } from "@/views/tournaments/public-page";
 import { tournaments } from "@/mocks";
-import type { Tournament } from "@/shared/api";
+import type { Tournament } from "@/mocks";
 
 // Select a mock tournament to display in the template
 const mockTournament: any = tournaments.find((t: any) => t.id === 'tourney1');

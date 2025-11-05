@@ -26,7 +26,7 @@ import { i18n } from '@/shared/lib/i18n';
 import { useToast } from '@/shared/hooks/use-toast';
 import { useUserStore } from '@/widgets/dashboard-header/model/user-store';
 import { Loader2 } from 'lucide-react';
-import type { User } from '@/shared/api';
+import type { User } from '@/mocks';
 import api from '@/shared/api/axios-instance';
 
 // ------------------ Схемы валидации ------------------

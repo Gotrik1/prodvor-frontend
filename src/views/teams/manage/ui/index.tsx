@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import React, { useEffect, useState, useCallback } from 'react';
@@ -43,7 +42,7 @@ export function TeamManagementPage({ teamId }: { teamId: string }) {
 
             const fullRoster: User[] = [];
             if (teamData.captain) {
-                fullRoster.push({ ...teamData.captain, role: 'Капитан' as any });
+                fullRoster.push({ ...teamData.captain, role: 'Капитан' });
             }
             teamData.members?.forEach((member: User) => {
                 if (!fullRoster.some(p => p.id === member.id)) {
@@ -143,7 +142,7 @@ export function TeamManagementPage({ teamId }: { teamId: string }) {
                    <TransfersTab team={team} onApplicationProcessed={fetchTeamData} />
                 </TabsContent>
                 <TabsContent value="announcements" className="mt-6">
-                   <AnnouncementsTab />
+                   <AnnouncementsTab tournamentId={team.id} />
                 </TabsContent>
                 <TabsContent value="settings" className="mt-6">
                    <SettingsTab />

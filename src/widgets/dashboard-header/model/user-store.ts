@@ -3,7 +3,7 @@
 'use client';
 
 import { create } from 'zustand';
-import type { User } from '@/shared/api';
+import type { User } from '@/mocks';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { AuthenticationApi } from '@/shared/api';
 import { apiConfig } from '@/shared/api/axios-instance';
