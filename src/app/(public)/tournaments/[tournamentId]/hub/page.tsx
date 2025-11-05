@@ -1,4 +1,5 @@
 
+
 import { TournamentHubPage } from '@/views/tournaments/hub';
 import type { Metadata } from 'next';
 import type { Tournament } from '@/shared/api';
@@ -10,7 +11,7 @@ const tournamentsApi = new LegacyTournamentsApi(apiConfig);
 async function getTournament(tournamentId: string): Promise<Tournament | undefined> {
     try {
         const response = await tournamentsApi.apiV1TournamentsTournamentIdGet(parseInt(tournamentId));
-        return response.data;
+        return response.data as Tournament;
     } catch (error) {
         console.error("Failed to fetch tournament:", error);
         return undefined;

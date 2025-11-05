@@ -1,15 +1,16 @@
 
+
 import { PlaygroundPage } from '@/views/playgrounds/playground';
 import type { Playground } from '@/mocks';
 import type { Metadata } from 'next';
-import { PlaygroundsApi } from '@/shared/api';
+import { LegacyPlaygroundsApi } from '@/shared/api';
 import { apiConfig } from '@/shared/api/axios-instance';
 
-const playgroundsApi = new PlaygroundsApi(apiConfig);
+const playgroundsApi = new LegacyPlaygroundsApi(apiConfig);
 
 async function getPlayground(playgroundId: string): Promise<Playground | undefined> {
     try {
-        const response = await playgroundsApi.playgroundsPlaygroundIdGet(parseInt(playgroundId, 10));
+        const response = await playgroundsApi.apiV1PlaygroundsPlaygroundIdGet(parseInt(playgroundId, 10));
         return response.data as Playground; // Cast to mock type for now
     } catch (error) {
         console.error("Failed to fetch playground:", error);

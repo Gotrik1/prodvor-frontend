@@ -1,8 +1,9 @@
 
+
 'use client';
 
-import React, { useEffect, useState } from 'react';
-import type { User, Playground, Team } from "@/mocks";
+import React, { useEffect, useState, useMemo } from 'react';
+import type { User, Playground, Team } from "@/shared/api";
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
 import { History, Grid3x3 } from "lucide-react";
@@ -20,21 +21,25 @@ import api from '@/shared/api/axios-instance';
 
 interface TeamPageTemplateProps {
   team?: Team;
+  teamMembers?: User[];
   isLoading?: boolean;
 }
 
 export function TeamPageTemplate({
   team: initialTeam,
+  teamMembers: initialTeamMembers,
   isLoading: initialIsLoading,
 }: TeamPageTemplateProps) {
   const [team, setTeam] = React.useState<Team | undefined>(initialTeam);
   const [playgrounds, setPlaygrounds] = React.useState<Playground[]>([]);
+  const [teamMembers, setTeamMembers] = React.useState<User[]>(initialTeamMembers || []);
   const [isLoading, setIsLoading] = React.useState(initialIsLoading ?? true);
   
   useEffect(() => {
     setTeam(initialTeam);
+    setTeamMembers(initialTeamMembers || []);
     setIsLoading(initialIsLoading ?? !initialTeam);
-  }, [initialTeam, initialIsLoading]);
+  }, [initialTeam, initialTeamMembers, initialIsLoading]);
 
   React.useEffect(() => {
     if (!team) return;
@@ -44,7 +49,7 @@ export function TeamPageTemplate({
         try {
           const playgroundsRes = await api.get(`/api/v1/playgrounds`);
           const allPlaygrounds: Playground[] = playgroundsRes.data;
-          const homePgs = allPlaygrounds.filter((p) =>
+          const homePgs = allPlaygrounds.filter((p: any) =>
             team.homePlaygroundIds?.includes(p.id)
           );
           setPlaygrounds(homePgs);
@@ -85,9 +90,6 @@ export function TeamPageTemplate({
     );
   }
 
-  // The members array now includes the captain from the backend
-  const allTeamMembers = team.members || [];
-
   return (
     <div className="p-4 md:p-6 lg:p-8 space-y-6">
       <TeamHeader team={team} homePlaygrounds={playgrounds} />
@@ -111,7 +113,7 @@ export function TeamPageTemplate({
           <TeamOverviewWidget team={team} />
         </TabsContent>
         <TabsContent value="roster" className="mt-6">
-          <TeamRosterWidget team={team} teamMembers={allTeamMembers} />
+          <TeamRosterWidget team={team} teamMembers={teamMembers} />
         </TabsContent>
         <TabsContent value="matches" className="mt-6">
           <TeamMatchesWidget />

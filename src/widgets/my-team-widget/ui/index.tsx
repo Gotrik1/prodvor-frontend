@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
@@ -29,7 +30,7 @@ export function MyTeamWidget({ user }: { user: User }) {
         }
         setIsLoading(true);
         try {
-            const response = await usersApi.usersMeGet(true);
+            const response = await usersApi.apiV1UsersMeGet(undefined as any, true);
             const userWithTeams: User & { teams?: Team[] } = response.data;
             setMyTeams(userWithTeams.teams || []);
         } catch (error) {
@@ -84,7 +85,7 @@ export function MyTeamWidget({ user }: { user: User }) {
                                 <Image src={team.logoUrl || 'https://placehold.co/512x512.png'} alt={team.name || 'Team Logo'} width={40} height={40} sizes="40px" className="rounded-md border aspect-square object-cover" data-ai-hint="team logo" />
                                 <div>
                                     <p className="font-semibold leading-tight group-hover:text-primary transition-colors">{team.name}</p>
-                                    <p className="text-xs text-muted-foreground">{team.sport?.name || team.game}</p>
+                                    <p className="text-xs text-muted-foreground">{team.sport?.name || ''}</p>
                                 </div>
                             </div>
                         </div>

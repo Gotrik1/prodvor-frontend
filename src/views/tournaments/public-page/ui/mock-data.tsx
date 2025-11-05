@@ -1,20 +1,12 @@
 
 import type { Playground } from '@/mocks/playgrounds';
 import { playgrounds } from '@/mocks/playgrounds';
-import { registeredTeams as baseRegisteredTeams } from '@/mocks/teams';
+import { registeredTeams as baseRegisteredTeams, Team } from '@/mocks/teams';
 import { sponsors as allMockSponsors } from '@/mocks/personnel';
 import { requirements as allMockRequirements } from '@/mocks/requirements';
 import { tournaments as allTournaments } from '@/mocks/tournaments';
 
-export interface Team {
-  id: string;
-  name: string;
-  logoUrl: string;
-  captainId: string;
-  members: string[]; // array of user IDs
-  game: string;
-  rank: number;
-}
+export type { Team } from '@/mocks/teams';
 
 export interface BracketMatch {
   id: string;
@@ -45,7 +37,7 @@ export interface Tournament {
     location: string;
 }
 
-export const registeredTeams: Team[] = baseRegisteredTeams;
+export const registeredTeams: Team[] = baseRegisteredTeams as any;
 export const sponsors = allMockSponsors;
 export const requirements = allMockRequirements;
 export const mockMyTournaments: Tournament[] = allTournaments.slice(0, 2);

@@ -1,14 +1,15 @@
 
+
 'use client';
 
 import React, { useEffect, useState, useCallback } from 'react';
-import type { Team, User, Playground } from "@/mocks";
+import type { Team, User, Playground } from "@/shared/api";
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
-import { TacticalBoard } from "./tactical-board";
-import { RosterManagement } from "./roster-management";
+// import { TacticalBoard } from "./tactical-board";
+// import { RosterManagement } from "./roster-management";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 import { TransfersTab } from "./tabs/transfers-tab";
 import { AnnouncementsTab } from "./tabs/announcements-tab";
@@ -18,6 +19,8 @@ import { useUserStore } from '@/widgets/dashboard-header/model/user-store';
 import { Skeleton } from '@/shared/ui/skeleton';
 import api from '@/shared/api/axios-instance';
 import { TeamPageTemplate } from '@/views/admin/ui/templates/team-page-template';
+import { RosterManagement } from './roster-management';
+import { TacticalBoard } from './tactical-board';
 
 export function TeamManagementPage({ teamId }: { teamId: string }) {
     const { user: currentUser } = useUserStore();
@@ -133,7 +136,7 @@ export function TeamManagementPage({ teamId }: { teamId: string }) {
                     <TabsTrigger value="settings">Настройки</TabsTrigger>
                 </TabsList>
                 <TabsContent value="roster" className="mt-6 space-y-8">
-                    <RosterManagement teamId={team.id} allTeamMembers={teamMembers} onRosterChange={fetchTeamData} />
+                    <RosterManagement teamId={String(team.id)} allTeamMembers={teamMembers} onRosterChange={fetchTeamData} />
                     <TacticalBoard teamMembers={teamMembers} />
                 </TabsContent>
                 <TabsContent value="branding" className="mt-6">

@@ -1,8 +1,9 @@
 
+
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
-import { type Team, type User } from '@/mocks';
+import { type Team, type User } from '@/shared/api';
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/shared/ui/card";
 import { PlusCircle, UserCheck, Users, BarChart } from "lucide-react";
@@ -16,7 +17,7 @@ import { TopTeamsWidget } from '@/widgets/top-teams-widget';
 import api from '@/shared/api/axios-instance';
 import { MyTeamWidget } from '@/widgets/my-team-widget';
 
-const TeamCard = ({ team, onApply, isApplicationSent }: { team: Team, onApply: (teamId: string) => Promise<void>, isApplicationSent: boolean }) => {
+const TeamCard = ({ team, isMember, onApply, isApplicationSent }: { team: Team, isMember: boolean, onApply: (teamId: string) => Promise<void>, isApplicationSent: boolean }) => {
     return (
     <Card key={team.id} className="flex flex-col">
         <CardHeader>
@@ -24,7 +25,7 @@ const TeamCard = ({ team, onApply, isApplicationSent }: { team: Team, onApply: (
                 <img src={team.logoUrl || 'https://placehold.co/512x512.png'} alt={`${team.name} logo`} width={64} height={64} className="rounded-lg border object-cover aspect-square" />
                 <div>
                     <CardTitle className="text-xl group-hover:text-primary transition-colors">{team.name}</CardTitle>
-                    <CardDescription>{team.sport?.name || team.game}</CardDescription>
+                    <CardDescription>{team.sport?.name || ''}</CardDescription>
                 </div>
             </Link>
         </CardHeader>
@@ -42,10 +43,16 @@ const TeamCard = ({ team, onApply, isApplicationSent }: { team: Team, onApply: (
             </div>
         </CardContent>
         <CardFooter>
-            <Button className="w-full" onClick={() => onApply(String(team.id))} disabled={isApplicationSent}>
-                <UserCheck className="mr-2 h-4 w-4" /> 
-                {isApplicationSent ? 'Заявка отправлена' : 'Подать заявку'}
-            </Button>
+            {isMember ? (
+                <Button asChild className="w-full" variant="secondary">
+                     <Link href={`/teams/${team.id}`}>Перейти в профиль</Link>
+                </Button>
+            ) : (
+                <Button className="w-full" onClick={() => onApply(String(team.id))} disabled={isApplicationSent}>
+                    <UserCheck className="mr-2 h-4 w-4" /> 
+                    {isApplicationSent ? 'Заявка отправлена' : 'Подать заявку'}
+                </Button>
+            )}
         </CardFooter>
     </Card>
     )
@@ -115,6 +122,8 @@ export function TeamsPage() {
         return { myTeams, otherTeams };
     }, [currentUser, allTeams]);
     
+    const showMyTeams = currentUser && myTeams.length > 0;
+
     return (
         <div className="p-4 md:p-6 lg:p-8 space-y-8">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
@@ -134,24 +143,20 @@ export function TeamsPage() {
             
             <TopTeamsWidget />
 
-            <Separator />
-            
-            <div className="container mx-auto px-0 space-y-8">
-                <section>
-                    <h2 className="text-2xl font-bold mb-4">Мои команды</h2>
-                    {currentUser && myTeams.length > 0 ? (
+            {showMyTeams && <Separator />}
+
+            <div className="container mx-auto px-4 md:px-0 space-y-8">
+                {showMyTeams && (
+                    <section>
+                        <h2 className="text-2xl font-bold mb-4">Мои команды</h2>
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                             {myTeams.map(team => <TeamCard key={team.id} team={team} isMember={true} onApply={handleApply} isApplicationSent={false} />)}
                         </div>
-                    ) : (
-                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                             <MyTeamWidget user={currentUser!} />
-                         </div>
-                    )}
-                </section>
+                    </section>
+                )}
 
-                <Separator />
-                
+                {showMyTeams && <Separator />}
+
                 <div>
                     <h2 className="text-2xl font-bold mb-4">Все команды</h2>
                     {isLoading ? (

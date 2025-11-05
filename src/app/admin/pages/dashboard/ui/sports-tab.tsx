@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
@@ -17,7 +18,7 @@ export function SportsTab() {
   useEffect(() => {
     async function fetchSports() {
       try {
-        const response = await sportsApi.sportsGet();
+        const response = await sportsApi.apiV1SportsGet();
         setAllSports(response.data);
       } catch (error) {
         console.error("Failed to fetch sports:", error);
