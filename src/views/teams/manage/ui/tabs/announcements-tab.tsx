@@ -60,8 +60,6 @@ export function AnnouncementsTab({ tournamentId }: { tournamentId: string }) {
 
   const isAiMode = form.watch("isAiEnhanced");
 
-  if (!tournamentId) return null;
-
   return (
     <Card>
       <CardHeader>

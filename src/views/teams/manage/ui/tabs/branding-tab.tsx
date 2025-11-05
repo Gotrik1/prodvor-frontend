@@ -129,7 +129,6 @@ export function BrandingTab({ team: initialTeam }: { team: Team }) {
                 </CardHeader>
                 <CardContent className="flex flex-col items-center gap-4">
                     <div className="relative w-48 h-48">
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img
                             src={team.logoUrl || 'https://placehold.co/512x512.png'}
                             alt={`Логотип ${team.name}`}
