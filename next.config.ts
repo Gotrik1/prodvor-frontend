@@ -3,6 +3,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   /* config options here */
+  output: 'standalone',
+  productionBrowserSourceMaps: false,
+  compiler: { removeConsole: { exclude: ['error', 'warn'] } },
   typescript: {
     ignoreBuildErrors: true,
   },
