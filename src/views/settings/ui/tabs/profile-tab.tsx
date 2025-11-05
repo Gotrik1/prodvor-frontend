@@ -99,7 +99,7 @@ const AvatarUploadDialog = () => {
                 setFilePreview(null);
                 setFile(null);
             }
-        } catch (error) {
+        } catch (_error) {
              toast({
                 variant: "destructive",
                 title: "Ошибка",
@@ -210,7 +210,7 @@ const DisciplinesCard = () => {
                 title: "Дисциплины обновлены",
                 description: "Ваш список видов спорта успешно сохранен.",
             });
-        } catch (error) {
+        } catch (_error) {
              toast({
                 variant: 'destructive',
                 title: "Ошибка",
@@ -303,7 +303,7 @@ export function ProfileTab() {
                 title: "Профиль обновлен",
                 description: "Ваши данные успешно сохранены.",
             });
-        } catch (error) {
+        } catch (_error) {
              toast({
                 variant: 'destructive',
                 title: "Ошибка",

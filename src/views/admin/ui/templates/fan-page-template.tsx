@@ -6,7 +6,7 @@ import { users, teams, posts } from "@/mocks";
 import type { User } from "@/mocks/users";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { Badge } from "@/shared/ui/badge";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
 import { Calendar, Flame, Heart, Ticket, Gamepad2, Tv, Camera, User as UserIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -28,11 +28,14 @@ const mockMedia = [
     { type: 'image', src: 'https://placehold.co/1920x1080.png', title: 'Командное фото', dataAiHint: 'team photo' },
     { type: 'image', src: 'https://placehold.co/1920x1080.png', title: 'Тренировка', dataAiHint: 'sports training' },
     { type: 'image', src: 'https://placehold.co/1920x1080.png', title: 'Награждение', dataAiHint: 'award ceremony' },
+    { type: 'image', src: 'https://placehold.co/1920x1080.png', title: 'Победный гол', dataAiHint: 'goal celebration' },
+    { type: 'image', src: 'https://placehold.co/1920x1080.png', title: 'Разминка', dataAiHint: 'team warmup' },
 ];
 
 
 export function FanPageTemplate({ user }: { user?: User }) {
     const fanUser = user || defaultFan;
+    const [showTags, _setShowTags] = React.useState(false);
     
     const fanDisciplines = useMemo(() => {
         if (!fanUser) return [];
@@ -53,7 +56,7 @@ export function FanPageTemplate({ user }: { user?: User }) {
                 <Card className="text-center">
                     <CardHeader>
                         <CardTitle>Ошибка</CardTitle>
-                        <CardDescription>Не удалось загрузить данные болельщика.</CardDescription>
+                        <p>Не удалось загрузить данные болельщика.</p>
                     </CardHeader>
                 </Card>
             </div>

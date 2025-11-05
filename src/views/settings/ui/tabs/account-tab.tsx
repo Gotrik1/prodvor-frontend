@@ -96,7 +96,7 @@ function ActiveSessions() {
             await api.delete(`/api/v1/users/me/sessions/${sessionId}`);
             setSessions(prev => prev.filter(s => s.id !== sessionId));
             toast({ title: "Сессия завершена", description: "Доступ с этого устройства был прекращен." });
-        } catch (error) {
+        } catch (_error) {
              toast({ variant: 'destructive', title: 'Ошибка', description: 'Не удалось завершить сессию.' });
         }
     };
@@ -106,7 +106,7 @@ function ActiveSessions() {
             await api.delete(`/api/v1/users/me/sessions/all-except-current`);
             toast({ title: "Все сессии завершены", description: "Все сессии, кроме текущей, были завершены." });
             fetchSessions(); // Re-fetch to show only the current one
-        } catch (error) {
+        } catch (_error) {
              toast({ variant: 'destructive', title: 'Ошибка', description: 'Не удалось завершить другие сессии.' });
         }
     };

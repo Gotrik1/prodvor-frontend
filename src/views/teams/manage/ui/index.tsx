@@ -14,7 +14,7 @@ import { Skeleton } from '@/shared/ui/skeleton';
 import api from '@/shared/api/axios-instance';
 import { RosterManagement } from './roster-management';
 import { TacticalBoard } from './tactical-board';
-import { TransfersTab } from "./tabs/transfers-tab";
+import { TransfersTab } from "./transfers-tab";
 import { AnnouncementsTab } from "./tabs/announcements-tab";
 import { SettingsTab } from "./tabs/settings-tab";
 import { BrandingTab } from "./tabs/branding-tab";
@@ -43,7 +43,7 @@ export function TeamManagementPage({ teamId }: { teamId: string }) {
 
             const fullRoster: User[] = [];
             if (teamData.captain) {
-                fullRoster.push({ ...(teamData.captain as User), role: 'Капитан' });
+                fullRoster.push({ ...(teamData.captain as User), role: 'Капитан' as any });
             }
             teamData.members?.forEach((member: User) => {
                 if (!fullRoster.some(p => p.id === member.id)) {
