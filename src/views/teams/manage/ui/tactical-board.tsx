@@ -3,8 +3,9 @@
 'use client';
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
+import type { User } from '@/mocks';
 
-export function TacticalBoard() {
+export function TacticalBoard({ teamMembers: _teamMembers }: { teamMembers: User[] }) {
     // This is a placeholder component for the tactical board feature.
     return (
         <Card>
