@@ -11,7 +11,7 @@ import { TrainingInfoWidget } from "@/widgets/training-info-widget";
 import { AchievementsWidget } from "@/widgets/achievements-widget";
 import { PlayerStatsOverviewWidget } from "@/widgets/player-stats-overview-widget";
 import { SocialConnectionsWidget } from "@/widgets/social-connections-widget";
-import React, { useMemo, useState, useEffect } from "react";
+import React, { useMemo } from "react";
 import { MyTeamWidget } from "@/widgets/my-team-widget";
 import { Card, CardBody } from "@/shared/ui/card";
 import { Badge } from "@/shared/ui/badge";

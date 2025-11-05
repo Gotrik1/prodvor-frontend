@@ -10,7 +10,7 @@ import { Input } from '@/shared/ui/input';
 import { Label } from '@/shared/ui/label';
 import { Trash2, PlusCircle } from 'lucide-react';
 import { useProtocol } from '../lib/use-protocol';
-import { EventType, users, teams, type BracketMatch, type MatchEvent } from '@/mocks';
+import { EventType, users, type BracketMatch, type MatchEvent } from '@/mocks';
 
 const eventLabels: Record<EventType, string> = {
     'goal': 'Гол',

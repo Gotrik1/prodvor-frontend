@@ -1,7 +1,9 @@
 
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
-import { Activity } from "lucide-react";
+import { Activity, Dumbbell } from "lucide-react";
+import { playgrounds } from "@/mocks";
+import Link from "next/link";
 
 export const TrainingInfoWidget = () => (
     <Card className="md:shadow-main-sm shadow-none md:bg-card bg-transparent">

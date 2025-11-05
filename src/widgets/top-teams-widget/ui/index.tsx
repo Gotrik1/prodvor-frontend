@@ -17,7 +17,7 @@ import Image from 'next/image';
 const TopTeamRow = ({ team, rank }: { team: Team, rank: number }) => (
     <Link href={`/teams/${team.id}`} className="flex items-center gap-3 p-2 rounded-md hover:bg-muted/50 group transition-colors">
         <span className="font-bold text-lg w-6 text-center text-muted-foreground">{rank}</span>
-        <Image src={team.logoUrl || 'https://placehold.co/32x32.png'} alt={team.name} width={32} height={32} className="rounded-md object-cover aspect-square" />
+        <Image src={team.logoUrl || 'https://placehold.co/32x32.png'} alt={team.name} width={32} height={32} className="rounded-md object-cover aspect-square" data-ai-hint="team logo"/>
         <div className="flex-grow">
             <p className="font-semibold group-hover:text-primary transition-colors">{team.name}</p>
             <p className="text-xs text-muted-foreground">{team.sport?.name || team.game}</p>

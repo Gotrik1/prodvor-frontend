@@ -1,4 +1,3 @@
-/* tslint:disable */
 /* eslint-disable */
 /**
  * Sport Matching API
@@ -15,4 +14,3 @@
 
 export * from "./api";
 export * from "./configuration";
-

@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
@@ -12,14 +13,13 @@ import { ScrollArea } from "@/shared/ui/scroll-area";
 import { MyTeamsEmptyState } from "@/views/teams/ui/my-teams-empty-state";
 import { UsersApi } from "@/shared/api";
 import { apiConfig } from "@/shared/api/axios-instance";
-import { useToast } from "@/shared/hooks/use-toast";
+import axios from "axios";
 
 const usersApi = new UsersApi(apiConfig);
 
 export function MyTeamWidget({ user }: { user: User }) {
   const [myTeams, setMyTeams] = useState<Team[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const { toast } = useToast();
 
   useEffect(() => {
     const fetchUserTeams = async () => {
@@ -29,11 +29,16 @@ export function MyTeamWidget({ user }: { user: User }) {
         }
         setIsLoading(true);
         try {
+            // Assume the API for 'me' is implicitly using the authorized user's token
             const response = await usersApi.apiV1UsersUserIdGet(parseInt(user.id, 10), true);
-            const userWithTeams: User & { teams?: Team[] } = response.data as unknown as any;
+            const userWithTeams = response.data as unknown as User & { teams?: Team[] };
             setMyTeams(userWithTeams.teams || []);
         } catch (error) {
-            console.error("Failed to fetch user's teams:", error);
+            if (axios.isAxiosError(error)) {
+                console.error("Failed to fetch user's teams:", error.response?.data || error.message);
+            } else {
+                console.error("Failed to fetch user's teams:", error);
+            }
         } finally {
             setIsLoading(false);
         }

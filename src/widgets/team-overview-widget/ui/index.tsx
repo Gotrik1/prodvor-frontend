@@ -2,7 +2,7 @@
 
 'use client';
 
-import type { Team, User } from "@/mocks";
+import type { Team } from "@/mocks";
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
 import { Crown, Shield, Star, Trophy, TrendingUp, TrendingDown, Rss } from "lucide-react";
 import { StatCard } from "@/shared/ui/stat-card";

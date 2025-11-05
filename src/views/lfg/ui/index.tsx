@@ -8,7 +8,7 @@ import { Button } from "@/shared/ui/button";
 import { Input } from "@/shared/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/select";
 import { users, teams } from "@/mocks";
-import type { Sport } from "@/mocks";
+import type { Sport } from '@/mocks';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { Badge } from "@/shared/ui/badge";
@@ -78,7 +78,7 @@ export function LfgPage() {
         async function fetchSports() {
             try {
                 const response = await api.get(`/api/v1/sports/`);
-                setAllSports(response.data as Sport[]);
+                setAllSports(response.data);
             } catch (error) {
                 console.error("Failed to fetch sports:", error);
             }

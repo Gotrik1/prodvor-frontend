@@ -2,13 +2,13 @@
 
 'use client';
 
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
 import { Button } from "@/shared/ui/button";
 import { Check, X, Send, Swords, Sparkles } from "lucide-react";
 import Image from "next/image"; 
 import { challenges, TeamChallenge } from '@/mocks/challenges';
-import { teams, allSports, Team } from '@/mocks';
+import { teams, allSports } from '@/mocks';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/select";
 import { Input } from "@/shared/ui/input";
 import { Label } from "@/shared/ui/label";

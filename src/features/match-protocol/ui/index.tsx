@@ -10,7 +10,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { Crown } from "lucide-react";
 import Link from "next/link";
 import { useProtocol } from "@/features/protocol-editor/lib/use-protocol";
-import type { BracketMatch, Tournament, Team, User } from "@/mocks";
+import type { BracketMatch, Tournament } from "@/mocks";
 import { LiveTextFeed } from "./live-text-feed";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 
@@ -72,14 +72,14 @@ export function MatchProtocol({ tournament, match }: { tournament: Tournament, m
                                                <AvatarFallback>{player.nickname.charAt(0)}</AvatarFallback>
                                            </Avatar>
                                            <span className="font-medium">{player.nickname}</span>
-                                           {player.id === team1.captain?.id && <Crown className="h-4 w-4 text-amber-400" />}
+                                           {String(player.id) === String(team1.captain?.id) && <Crown className="h-4 w-4 text-amber-400" />}
                                        </li>
                                    ))}
                                </ul>
                                <ul className="space-y-3">
                                     {team2Members.map(player => (
                                        <li key={player.id} className="flex items-center gap-3 justify-start md:justify-end">
-                                            {player.id === team2.captain?.id && <Crown className="h-4 w-4 text-amber-400 order-last md:order-first" />}
+                                            {String(player.id) === String(team2.captain?.id) && <Crown className="h-4 w-4 text-amber-400 order-last md:order-first" />}
                                            <span className="font-medium order-last md:order-first">{player.nickname}</span>
                                            <Avatar className="h-8 w-8 order-first md:order-last">
                                                <AvatarImage src={player.avatarUrl} />
