@@ -5,6 +5,7 @@ import type { Team } from './teams';
 import type { Playground } from './playgrounds';
 import type { Sponsor } from './personnel';
 import type { Sport } from './sports';
+import { allSports as allSportsData } from './sports';
 import type { Tournament } from './tournaments';
 
 interface MockData {
@@ -113,10 +114,10 @@ function generateTeamFollowing(allTeams: Team[], allUsers: User[]) {
     const allTeamIds = allTeams.map(t => t.id);
     allTeams.forEach((team, index) => {
         // All members automatically follow their team
-        team.followers = [...team.members];
+        team.followers = [...team.members.map(m => m.id)];
         
         // Add some random external followers from the same city
-        const cityFollowers = allUsers.filter(u => u.city === team.city && !team.members.includes(u.id));
+        const cityFollowers = allUsers.filter(u => u.city === team.city && !team.members.some(m => m.id === u.id));
         const extraFollowersCount = Math.min(cityFollowers.length, (index % 10) + 5);
         for(let i=0; i < extraFollowersCount; i++) {
             team.followers.push(cityFollowers[i].id);
@@ -130,8 +131,8 @@ function generateTeamFollowing(allTeams: Team[], allUsers: User[]) {
             if (followedTeamId !== team.id && !team.following.includes(followedTeamId)) {
                 team.following.push(followedTeamId);
                 const followedTeam = allTeams.find(t => t.id === followedTeamId);
-                if (followedTeam && !followedTeam.followers.includes(team.id as never)) {
-                    followedTeam.followers.push(team.id as never);
+                if (followedTeam && !followedTeam.followers.includes(team.id)) {
+                    followedTeam.followers.push(team.id);
                 }
             }
         }
@@ -171,10 +172,10 @@ function assignDisciplinesFromTeams(allUsers: User[], allTeams: Team[]) {
         const userSports = new Map<string, { id: string; name: string }>();
         user.sports.forEach(sport => userSports.set(sport.id, sport));
         
-        const userTeams = allTeams.filter(t => t.members.includes(user.id));
+        const userTeams = allTeams.filter(t => t.members.some(m => m.id === user.id));
         userTeams.forEach(team => {
             if (userSports.size < 6) {
-                const teamSport = allSports.find(s => s.id === team.sportId);
+                const teamSport = allSportsData.find(s => s.id === team.sportId);
                 if(teamSport) {
                     userSports.set(teamSport.id, { id: teamSport.id, name: teamSport.name });
                 }
@@ -224,7 +225,7 @@ function assignClientsToCoaches(allUsers: User[], allTeams: Team[]) {
                 const clientIds = new Set<string>();
                 coach.coachProfile.managedTeams.forEach(teamId => {
                     const team = allTeams.find(t => t.id === teamId);
-                    team?.members.forEach(memberId => clientIds.add(memberId));
+                    team?.members.forEach(member => clientIds.add(member.id));
                 });
                 
                 // Add a few extra random players from the same city and discipline

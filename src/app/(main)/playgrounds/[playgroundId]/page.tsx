@@ -10,8 +10,8 @@ const playgroundsApi = new LegacyPlaygroundsApi(apiConfig);
 
 async function getPlayground(playgroundId: string): Promise<Playground | undefined> {
     try {
-        const response = await playgroundsApi.apiV1PlaygroundsGet(); // Corrected method name
-        const playground = (response.data as Playground[]).find(p => p.id === playgroundId);
+        const response = await playgroundsApi.apiV1PlaygroundsGet();
+        const playground = (response.data as unknown as Playground[]).find(p => p.id === playgroundId);
         return playground;
     } catch (error) {
         console.error("Failed to fetch playground:", error);

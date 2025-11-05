@@ -30,7 +30,7 @@ export const TeamOverviewWidget = ({ team }: TeamOverviewWidgetProps) => {
         leagueRank, 
         currentStreakType,
         currentStreakCount, 
-        form = [], 
+        form, 
         mvpPlayerId, 
         topScorerPlayerId, 
         cleanSheets = 0, 
@@ -46,7 +46,7 @@ export const TeamOverviewWidget = ({ team }: TeamOverviewWidgetProps) => {
     const currentStreak = currentStreakType && currentStreakCount ? { type: currentStreakType, count: currentStreakCount } : null;
     const teamForm = Array.isArray(form) ? form : [];
 
-    const followerUsers = users.filter(user => followerIds.some(f => f.id === user.id));
+    const followerUsers = users.filter(user => followerIds.some(fId => fId === user.id));
 
     return (
         <div className="space-y-6">
