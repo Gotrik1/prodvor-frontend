@@ -59,7 +59,7 @@ const LogoUploadDialog = ({ team, onUploadSuccess }: { team: Team, onUploadSucce
                 setFilePreview(null);
                 setFile(null);
             }
-        } catch (_error) {
+        } catch {
             toast({
                 variant: "destructive",
                 title: "Ошибка загрузки",

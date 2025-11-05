@@ -131,7 +131,7 @@ export function TopTeamsWidget() {
                 setTopCountryTeams(countryResponse.data as Team[]);
                 setTopCityTeams(cityResponse.data as Team[]);
 
-            } catch (_error) {
+            } catch {
                  toast({
                     variant: "destructive",
                     title: "Ошибка загрузки",
