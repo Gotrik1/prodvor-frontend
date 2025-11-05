@@ -30,7 +30,7 @@ export const TeamStatsWidget = ({ team }: { team?: Team }) => {
 
     useEffect(() => {
         const fetchStats = async () => {
-            if (!team?.id) { // Check if team and team.id exist
+            if (!team?.id) { 
                 setIsLoading(false);
                 return;
             }
