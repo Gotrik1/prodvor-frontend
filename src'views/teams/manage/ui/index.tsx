@@ -1,8 +1,9 @@
 
+
 'use client';
 
 import React, { useEffect, useState, useCallback } from 'react';
-import type { Team, User } from "@/mocks";
+import type { Team, User, Playground } from "@/mocks";
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
 import Link from "next/link";
@@ -13,7 +14,7 @@ import { Skeleton } from '@/shared/ui/skeleton';
 import api from '@/shared/api/axios-instance';
 import { RosterManagement } from './roster-management';
 import { TacticalBoard } from './tactical-board';
-import { TransfersTab } from './tabs/transfers-tab';
+import { TransfersTab } from "./tabs/transfers-tab";
 import { AnnouncementsTab } from "./tabs/announcements-tab";
 import { SettingsTab } from "./tabs/settings-tab";
 import { BrandingTab } from "./tabs/branding-tab";
@@ -33,7 +34,7 @@ export function TeamManagementPage({ teamId }: { teamId: string }) {
         setLoading(true);
         try {
             const response = await api.get(`/api/v1/teams/${teamId}`);
-            const teamData = response.data as Team;
+            const teamData: Team = response.data as unknown as Team;
             setTeam(teamData);
             
             if (teamData.captain && currentUser) {
@@ -142,7 +143,7 @@ export function TeamManagementPage({ teamId }: { teamId: string }) {
                    <TransfersTab team={team} onApplicationProcessed={fetchTeamData} />
                 </TabsContent>
                 <TabsContent value="announcements" className="mt-6">
-                   <AnnouncementsTab tournamentId={team.id}/>
+                   <AnnouncementsTab tournamentId={team.id} />
                 </TabsContent>
                 <TabsContent value="settings" className="mt-6">
                    <SettingsTab />

@@ -83,15 +83,15 @@ export function BracketTab() {
             
             // Award points for participation
             const allParticipants = [...match.team1.members, ...match.team2.members];
-            allParticipants.forEach(memberId => {
-                 awardProgressPoints(GameplayEvent.MATCH_PARTICIPATION, { userId: memberId, teamId: match.team1?.members.includes(memberId) ? match.team1.id : match.team2?.id, entityId: match.id });
+            allParticipants.forEach(member => {
+                 awardProgressPoints(GameplayEvent.MATCH_PARTICIPATION, { userId: member.id, teamId: match.team1?.members.some(m => m.id === member.id) ? match.team1.id : match.team2?.id, entityId: match.id });
             });
             
             // Award points for winning
             const winner = score1 > score2 ? match.team1 : (score2 > score1 ? match.team2 : null);
             if (winner) {
-                winner.members.forEach(memberId => {
-                    awardProgressPoints(GameplayEvent.MATCH_WIN, { userId: memberId, teamId: winner.id, entityId: match.id });
+                winner.members.forEach(member => {
+                    awardProgressPoints(GameplayEvent.MATCH_WIN, { userId: member.id, teamId: winner.id, entityId: match.id });
                 });
             }
         }

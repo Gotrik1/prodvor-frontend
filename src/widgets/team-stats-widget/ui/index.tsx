@@ -39,7 +39,7 @@ export const TeamStatsWidget = ({ team }: { team?: Team }) => {
                 const response = await api.get(`/api/v1/teams/${team.id}/stats`);
                 
                 const teamCreationYear = new Date(team.createdAt).getFullYear();
-                const filteredStats = response.data.filter((stat: SeasonStat) => stat.season >= teamCreationYear);
+                const filteredStats = (response.data as SeasonStat[]).filter((stat: SeasonStat) => stat.season >= teamCreationYear);
                 
                 setStats(filteredStats.sort((a: SeasonStat, b: SeasonStat) => b.season - a.season));
 

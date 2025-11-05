@@ -2,7 +2,7 @@
 'use client';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
-import type { Sport } from '@/shared/api';
+import type { Sport } from '@/mocks';
 import { DataTable } from './data-table';
 import { TableCell, TableRow } from '@/shared/ui/table';
 import { useEffect, useState } from 'react';
@@ -18,7 +18,7 @@ export function SportsTab() {
     async function fetchSports() {
       try {
         const response = await sportsApi.apiV1SportsGet();
-        setAllSports(response.data as Sport[]);
+        setAllSports(response.data as unknown as Sport[]);
       } catch (error) {
         console.error("Failed to fetch sports:", error);
       }
