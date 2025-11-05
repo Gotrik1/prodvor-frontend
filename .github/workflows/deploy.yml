@@ -1,4 +1,6 @@
-name: Build frontend on remote (console only)
+Workflow file for this run
+.github/workflows/deploy.yml at 603b53c
+name: Sync backend & frontend to local PC via Tailscale
 
 on:
   push:
@@ -8,30 +10,21 @@ permissions:
   contents: read
 
 jobs:
-  build-frontend:
+  sync:
     runs-on: ubuntu-latest
-    env:
-      NPM_CONFIG_LOGLEVEL: verbose
-      CI: "true"
 
     steps:
-      - name: Install & connect Tailscale
+      - name: Install & Connect to Tailscale
         run: |
-          set -euxo pipefail
           curl -fsSL https://tailscale.com/install.sh | sh
-          sudo tailscale up \
-            --authkey="${{ secrets.TAILSCALE_AUTHKEY }}" \
-            --accept-routes=true \
-            --ssh=true
-          tailscale status || true
-
+          sudo tailscale up --authkey="${{ secrets.TAILSCALE_AUTHKEY }}" --accept-routes=true
+          tailscale status
       - name: Trust host key
         run: |
-          set -euxo pipefail
           mkdir -p ~/.ssh
           ssh-keyscan -H "${{ secrets.TAILSCALE_HOST }}" >> ~/.ssh/known_hosts
-
-      - name: FRONTEND — npm ci & build (print to console)
+      # ===== FRONTEND (CMD) =====
+      - name: Pull FRONTEND repo (CMD)
         uses: appleboy/ssh-action@v1.0.0
         with:
           host:     ${{ secrets.TAILSCALE_HOST }}
@@ -40,21 +33,12 @@ jobs:
           port:     22
           script: |
             cmd /c ^
-            "if not exist E:\prodvor\scripts mkdir E:\prodvor\scripts ^&^& ^
-             >E:\prodvor\scripts\frontend_build.ps1 echo $ErrorActionPreference='Stop'; ^
-             >>E:\prodvor\scripts\frontend_build.ps1 echo [Console]::OutputEncoding = [Text.UTF8Encoding]::new(); ^
-             >>E:\prodvor\scripts\frontend_build.ps1 echo $root = 'E:\prodvor\frontend'; ^
-             >>E:\prodvor\scripts\frontend_build.ps1 echo if (-not (Test-Path $root)) { throw 'Path not found: ' ^+ $root }; ^
-             >>E:\prodvor\scripts\frontend_build.ps1 echo Write-Host '== FRONTEND build on ' (hostname); ^
-             >>E:\prodvor\scripts\frontend_build.ps1 echo whoami; ^
-             >>E:\prodvor\scripts\frontend_build.ps1 echo try { node -v } catch { Write-Host 'node not in PATH' }; ^
-             >>E:\prodvor\scripts\frontend_build.ps1 echo try { npm  -v } catch { Write-Host 'npm not in PATH'  }; ^
-             >>E:\prodvor\scripts\frontend_build.ps1 echo Set-Location $root; ^
-             >>E:\prodvor\scripts\frontend_build.ps1 echo $env:NODE_OPTIONS='--max-old-space-size=4096'; ^
-             >>E:\prodvor\scripts\frontend_build.ps1 echo Write-Host '--- npm ci ---'; ^
-             >>E:\prodvor\scripts\frontend_build.ps1 echo npm ci --verbose; ^
-             >>E:\prodvor\scripts\frontend_build.ps1 echo Write-Host '--- npm run build (prod) ---'; ^
-             >>E:\prodvor\scripts\frontend_build.ps1 echo $env:NEXT_TELEMETRY_DISABLED='1'; ^
-             >>E:\prodvor\scripts\frontend_build.ps1 echo $env:TURBO_TELEMETRY_DISABLED='1'; ^
-             >>E:\prodvor\scripts\frontend_build.ps1 echo npm run build --verbose; ^
-             C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -File E:\prodvor\scripts\frontend_build.ps1"
+            "cd /d E:\prodvor\frontend ^
+            && echo == FRONTEND == ^
+            && whoami ^
+            && git rev-parse --show-toplevel ^
+            && git remote -v ^
+            && git fetch --all --prune ^
+            && git reset --hard origin/main ^
+            && git log -1 --oneline ^
+            && echo ✅ FRONTEND synced"
