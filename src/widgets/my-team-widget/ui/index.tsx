@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
 import { Users } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
-import type { User, Team } from '@/shared/api';
+import type { User, Team } from '@/mocks';
 import React, { useState, useEffect } from "react";
 import { Skeleton } from "@/shared/ui/skeleton";
 import { ScrollArea } from "@/shared/ui/scroll-area";
@@ -29,10 +29,8 @@ export function MyTeamWidget({ user }: { user: User }) {
         }
         setIsLoading(true);
         try {
-            // The first argument to apiV1UsersMeGet is the Authorization header.
-            // Axios interceptor will handle this, so we can pass undefined.
             const response = await usersApi.apiV1UsersMeGet(undefined as any, true);
-            const userWithTeams: User & { teams?: Team[] } = response.data;
+            const userWithTeams: User & { teams?: Team[] } = response.data as any;
             setMyTeams(userWithTeams.teams || []);
         } catch (error) {
             console.error("Failed to fetch user's teams:", error);
