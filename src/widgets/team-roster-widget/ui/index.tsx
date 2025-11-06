@@ -11,7 +11,7 @@ import { Button } from "@/shared/ui/button";
 import { useToast } from "@/shared/hooks/use-toast";
 import { useMemo } from "react";
 import { useUserStore } from "@/widgets/dashboard-header/model/user-store";
-import api from "@/shared/api/axios-instance";
+import { api } from "@/shared/api/axios-instance";
 
 const TeamRoster = ({ teamMembers, captain }: { teamMembers: User[], captain?: User }) => {
     if (!teamMembers || teamMembers.length === 0) {
