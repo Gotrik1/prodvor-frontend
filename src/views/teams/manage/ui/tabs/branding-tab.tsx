@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import { useState } from 'react';
@@ -34,7 +33,7 @@ const LogoUploadDialog = ({ team, onUploadSuccess }: { team: Team, onUploadSucce
     };
 
     const handleSaveLogo = async () => {
-        if (!file || !team || !accessToken) {
+        if (!file || !team.id || !accessToken) {
              toast({
                 variant: "destructive",
                 title: "Ошибка",
@@ -44,14 +43,36 @@ const LogoUploadDialog = ({ team, onUploadSuccess }: { team: Team, onUploadSucce
         };
         setIsLoading(true);
 
-        const formData = new FormData();
-        formData.append('logo', file);
-
         try {
-            const response = await api.post(`/api/v1/teams/${team.id}/logo`, formData);
+            // Step 1: Request presigned URL
+            const presignResponse = await api.post('/api/v1/uploads/request-url', {
+                contentType: file.type,
+            });
+            const { url, fields, fileUrl } = presignResponse.data;
 
-            if (response.status === 200 && response.data.logoUrl) {
-                onUploadSuccess(response.data.logoUrl);
+            // Step 2: Upload file directly to storage
+            const formData = new FormData();
+            Object.entries(fields).forEach(([key, value]) => {
+                formData.append(key, value as string);
+            });
+            formData.append('file', file);
+
+            const uploadResponse = await fetch(url, {
+                method: 'POST',
+                body: formData,
+            });
+
+            if (!uploadResponse.ok) {
+                throw new Error('Ошибка прямой загрузки файла в хранилище.');
+            }
+
+            // Step 3: Confirm upload with backend
+            const confirmResponse = await api.post(`/api/v1/teams/${team.id}/logo`, {
+                fileUrl: fileUrl,
+            });
+            
+            if (confirmResponse.status === 200 && confirmResponse.data.logoUrl) {
+                onUploadSuccess(confirmResponse.data.logoUrl);
                 toast({
                     title: "Логотип обновлен!",
                     description: "Новый логотип вашей команды успешно сохранен.",
@@ -60,6 +81,7 @@ const LogoUploadDialog = ({ team, onUploadSuccess }: { team: Team, onUploadSucce
                 setFilePreview(null);
                 setFile(null);
             }
+
         } catch (error) {
             toast({
                 variant: "destructive",
@@ -136,6 +158,7 @@ export function BrandingTab({ team: initialTeam }: { team: Team }) {
                             width={192}
                             height={192}
                             className="rounded-lg border-2 border-primary object-cover aspect-square"
+                            data-ai-hint="team logo"
                         />
                     </div>
                 </CardContent>
