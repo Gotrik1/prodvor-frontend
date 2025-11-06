@@ -18,20 +18,19 @@ import axios from 'axios';
 const usersApi = new UsersApi(apiConfig);
 
 async function getUser(userId: string): Promise<(User & { teams?: Team[] }) | undefined> {
-    if (!userId) return undefined;
-
+    if (!userId) {
+        console.error(`[Server] getUser called with invalid userId: ${userId}`);
+        return undefined;
+    }
+    
+    // The URL parameter `userId` can be a string, but the API expects a number.
+    const numericId = parseInt(userId, 10);
+    if (isNaN(numericId)) {
+        console.error(`[Server] Invalid user ID format, cannot parse to int: ${userId}`);
+        return undefined; // If ID is not a valid number, we cannot make a valid API call.
+    }
+    
     try {
-        // The URL parameter `userId` can be a string, but the API expects a number.
-        // We attempt to parse it, but handle potential `NaN` cases gracefully.
-        const numericId = parseInt(userId, 10);
-        
-        // If the ID is not a valid number, we cannot make a valid API call.
-        if (isNaN(numericId)) {
-            console.error(`[Server] Invalid user ID format: ${userId}`);
-            return undefined;
-        }
-
-        // Only use the direct API call.
         const response = await usersApi.apiV1UsersUserIdGet(numericId, true);
         return response.data as User & { teams?: Team[] };
 
@@ -39,6 +38,7 @@ async function getUser(userId: string): Promise<(User & { teams?: Team[] }) | un
         if (axios.isAxiosError(error) && error.response?.status === 404) {
             console.log(`[Server] User with ID ${userId} not found on the backend.`);
         } else {
+            // Log other errors, like network issues or server errors (5xx)
             console.error(`[Server] Failed to fetch user data for ID ${userId}:`, error.message);
         }
         return undefined;
