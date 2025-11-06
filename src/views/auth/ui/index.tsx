@@ -163,7 +163,7 @@ export function AuthPage() {
         if (accessToken && refreshToken) {
             setTokens({ accessToken, refreshToken });
             // Now fetch the user data using the new token
-            const userResponse = await api.get(`/v1/users/me`);
+            const userResponse = await api.get(`/api/v1/users/me`);
             const user = userResponse.data as User;
             
             if (user) {
