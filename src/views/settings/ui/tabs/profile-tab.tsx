@@ -63,13 +63,21 @@ const AvatarUploadDialog = () => {
     const handleFileChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
         const selectedFile = event.target.files?.[0];
         if (!selectedFile) return;
+        if (!selectedFile.type.startsWith('image/')) {
+            toast({
+                variant: "destructive",
+                title: "Неверный тип файла",
+                description: "Пожалуйста, выберите изображение.",
+            });
+            return;
+        }
         setFile(selectedFile);
         const reader = new FileReader();
         reader.readAsDataURL(selectedFile);
         reader.onloadend = () => {
             setFilePreview(reader.result as string);
         };
-    }, []);
+    }, [toast]);
 
     const handleSaveAvatar = async () => {
         if (!file || !user || !accessToken) {
@@ -82,27 +90,49 @@ const AvatarUploadDialog = () => {
         }
         setIsLoading(true);
 
-        const formData = new FormData();
-        formData.append('avatar', file);
-
         try {
-            const response = await api.post(`/api/v1/users/${user.id}/avatar`, formData);
+            // Step 1: Request presigned URL from our backend
+            const presignResponse = await api.post('/api/v1/uploads/request-url', {
+                contentType: file.type,
+            });
 
-            if (response.status === 200) {
-                setUser(response.data as User);
-                toast({
-                    title: "Аватар обновлен!",
-                    description: "Ваш новый аватар успешно сохранен.",
-                });
-                setIsOpen(false);
-                setFilePreview(null);
-                setFile(null);
+            const { url, fields, fileUrl } = presignResponse.data;
+
+            // Step 2: Upload file directly to S3/MinIO
+            const formData = new FormData();
+            Object.entries(fields).forEach(([key, value]) => {
+                formData.append(key, value as string);
+            });
+            formData.append('file', file); // File must be the last field
+
+            const uploadResponse = await fetch(url, {
+                method: 'POST',
+                body: formData,
+            });
+
+            if (!uploadResponse.ok) {
+                throw new Error('Ошибка прямой загрузки файла в хранилище.');
             }
-        } catch {
+
+            // Step 3: Confirm upload with our backend
+            const confirmResponse = await api.post(`/api/v1/users/avatar`, {
+                fileUrl: fileUrl,
+            });
+            
+            setUser(confirmResponse.data.user);
+            toast({
+                title: "Аватар обновлен!",
+                description: "Ваш новый аватар успешно сохранен.",
+            });
+            setIsOpen(false);
+            setFilePreview(null);
+            setFile(null);
+
+        } catch (error: any) {
              toast({
                 variant: "destructive",
                 title: "Ошибка",
-                description: "Не удалось сохранить аватар. Попробуйте позже.",
+                description: error.message || "Не удалось сохранить аватар. Попробуйте позже.",
             });
         } finally {
             setIsLoading(false);
@@ -123,7 +153,7 @@ const AvatarUploadDialog = () => {
                     {filePreview ? (
                         <div className="space-y-4">
                             <div className="relative w-48 h-48 mx-auto">
-                                <Image src={filePreview} alt="Превью аватара" layout="fill" className="object-cover rounded-full" />
+                                <Image src={filePreview} alt="Превью аватара" fill className="object-cover rounded-full" />
                             </div>
                             <Button variant="outline" className="w-full" onClick={() => { setFilePreview(null); setFile(null); }}>Выбрать другой файл</Button>
                         </div>
@@ -133,7 +163,7 @@ const AvatarUploadDialog = () => {
                                 <div className="flex flex-col items-center justify-center pt-5 pb-6">
                                     <UploadCloud className="w-10 h-10 mb-4 text-muted-foreground" />
                                     <p className="mb-2 text-sm text-muted-foreground"><span className="font-semibold">Нажмите, чтобы загрузить</span></p>
-                                    <p className="text-xs text-muted-foreground">PNG, JPG, GIF (макс. 800x800px)</p>
+                                    <p className="text-xs text-muted-foreground">PNG, JPG, GIF</p>
                                 </div>
                                 <input id="dropzone-file" type="file" className="hidden" accept="image/*" onChange={handleFileChange} />
                             </label>
