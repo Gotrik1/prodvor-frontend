@@ -32,7 +32,7 @@ export function CreateTeamPage() {
     useEffect(() => {
         async function fetchSports() {
             try {
-                const response = await api.get(`/api/v1/sports/`);
+                const response = await api.get(`/v1/sports/`);
                 setAllSports(response.data as Sport[]);
             } catch (error) {
                 console.error("Failed to fetch sports:", error);
@@ -85,7 +85,7 @@ export function CreateTeamPage() {
         setIsLoading(true);
 
         try {
-            const response = await api.post(`/api/v1/teams`, {
+            const response = await api.post(`/v1/teams`, {
                 name: teamName,
                 sport_id: discipline,
                 city: city,

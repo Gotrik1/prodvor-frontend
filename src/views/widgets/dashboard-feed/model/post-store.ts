@@ -20,7 +20,7 @@ export const usePostStore = create<PostState>()(
       posts: [], // Изначально массив пуст
       fetchPosts: async () => {
         try {
-            const response = await api.get('/api/v1/posts');
+            const response = await api.get('/v1/posts');
             set({ posts: response.data as Post[] });
         } catch (error) {
             console.error(error);

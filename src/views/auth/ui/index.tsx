@@ -155,7 +155,7 @@ export function AuthPage() {
   const onSubmit = async (values: z.infer<typeof loginFormSchema>) => {
     setIsLoading(true);
     try {
-        const loginResponse = await api.post(`/api/v1/auth/login`, values);
+        const loginResponse = await api.post(`/v1/auth/login`, values);
         
         const accessToken = loginResponse.data.accessToken;
         const refreshToken = loginResponse.data.refreshToken;
@@ -163,7 +163,7 @@ export function AuthPage() {
         if (accessToken && refreshToken) {
             setTokens({ accessToken, refreshToken });
             // Now fetch the user data using the new token
-            const userResponse = await usersApi.apiV1UsersMeGet(`Bearer ${accessToken}`);
+            const userResponse = await api.get(`/v1/users/me`);
             const user = userResponse.data as User;
             
             if (user) {

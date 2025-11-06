@@ -1,11 +1,11 @@
 
 'use client';
 
-import axios, { type AxiosRequestConfig } from 'axios';
+import axios from 'axios';
 import { useUserStore } from '@/widgets/dashboard-header/model/user-store';
 import { Configuration } from './configuration';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'https://8080-firebase-prodvor-backend-1761850902881.cluster-ombtxv25tbd6yrjpp3lukp6zhc.cloudworkstations.dev';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || '/api';
 
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -64,7 +64,7 @@ api.interceptors.response.use(
       }
 
       try {
-        const { data } = await axios.post(`${API_BASE_URL}/api/v1/auth/refresh`, { refreshToken });
+        const { data } = await api.post(`/v1/auth/refresh`, { refreshToken });
         const newAccessToken = data.accessToken;
         
         setTokens({ accessToken: newAccessToken });

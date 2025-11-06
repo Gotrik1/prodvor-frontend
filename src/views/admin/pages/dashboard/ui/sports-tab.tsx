@@ -18,7 +18,7 @@ export function SportsTab() {
     async function fetchSports() {
       try {
         const response = await sportsApi.apiV1SportsGet();
-        setAllSports(response.data as unknown as Sport[]);
+        setAllSports(response.data as Sport[]);
       } catch (error) {
         console.error("Failed to fetch sports:", error);
       }

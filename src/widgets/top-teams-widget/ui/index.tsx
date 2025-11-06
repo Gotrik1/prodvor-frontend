@@ -117,11 +117,11 @@ export function TopTeamsWidget() {
         const fetchTopTeams = async () => {
             setIsLoading(true);
             try {
-                const countryPromise = api.get('/api/v1/teams?sort_by=rank&order=desc&limit=5');
+                const countryPromise = api.get('/v1/teams?sort_by=rank&order=desc&limit=5');
                 
                 let cityPromise;
                 if (currentUser?.city) {
-                    cityPromise = api.get(`/api/v1/teams?city=${encodeURIComponent(currentUser.city)}&sort_by=rank&order=desc&limit=5`);
+                    cityPromise = api.get(`/v1/teams?city=${encodeURIComponent(currentUser.city)}&sort_by=rank&order=desc&limit=5`);
                 } else {
                     cityPromise = Promise.resolve({ data: [] });
                 }
