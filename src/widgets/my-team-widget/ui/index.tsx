@@ -11,7 +11,7 @@ import React, { useState, useEffect } from "react";
 import { Skeleton } from "@/shared/ui/skeleton";
 import { ScrollArea } from "@/shared/ui/scroll-area";
 import { MyTeamsEmptyState } from "@/views/teams/ui/my-teams-empty-state";
-import api from "@/shared/api/axios-instance";
+import { api } from "@/shared/api/axios-instance";
 import { useUserStore } from "@/widgets/dashboard-header/model/user-store";
 
 export function MyTeamWidget({ user }: { user: User }) {
