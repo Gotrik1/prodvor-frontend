@@ -5,91 +5,75 @@ import axios from 'axios';
 import { useUserStore } from '@/widgets/dashboard-header/model/user-store';
 import { Configuration } from './configuration';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || '/api';
+const BASE_URL =
+  process.env.NEXT_PUBLIC_API_BASE_URL || "/api"; // nginx сам проксирует /api → backend
 
-const api = axios.create({
-  baseURL: API_BASE_URL,
+export const api = axios.create({
+  baseURL: BASE_URL,
+  withCredentials: false,
 });
 
-// 1. Access Token -> в каждый запрос
+// 🔹 Добавляем токен в каждый запрос
 api.interceptors.request.use((config) => {
   const token = useUserStore.getState().accessToken;
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
+  if (token) config.headers.Authorization = `Bearer ${token}`;
+  if (!config.headers["Content-Type"] && config.data)
+    config.headers["Content-Type"] = "application/json";
   return config;
 });
 
-
-// 2. 401 -> refresh -> повтор
+// 🔹 Авто-refresh при 401
 let isRefreshing = false;
-let failedQueue: { resolve: (token: string | null) => void; reject: (error: any) => void; }[] = [];
-
-const processQueue = (error: any, token: string | null = null) => {
-  failedQueue.forEach(prom => {
-    if (error) {
-      prom.reject(error);
-    } else {
-      prom.resolve(token);
-    }
-  });
-  failedQueue = [];
-};
+let queue: Array<(t: string | null) => void> = [];
 
 api.interceptors.response.use(
-  (response) => response,
+  (r) => r,
   async (error) => {
-    const originalRequest = error.config;
+    const { response, config } = error;
+    if (!response) throw error;
+    const original = config as any;
 
-    if (error.response?.status === 401 && !originalRequest._retry) {
-      if (isRefreshing) {
-        return new Promise((resolve, reject) => {
-          failedQueue.push({ resolve, reject });
-        }).then(token => {
-          originalRequest.headers['Authorization'] = 'Bearer ' + token;
-          return api(originalRequest);
-        }).catch(err => {
-            return Promise.reject(err);
-        });
-      }
-
-      originalRequest._retry = true;
-      isRefreshing = true;
-
+    if (response.status === 401 && !original._retry) {
+      original._retry = true;
       const { refreshToken, setTokens, signOut } = useUserStore.getState();
-
       if (!refreshToken) {
         signOut();
-        return Promise.reject(error);
+        throw error;
+      }
+
+      if (isRefreshing) {
+        // Подождать, пока другой refresh завершится
+        const token = await new Promise<string | null>((res) => queue.push(res));
+        if (token) original.headers.Authorization = `Bearer ${token}`;
+        return api(original);
       }
 
       try {
-        const { data } = await api.post(`/v1/auth/refresh`, { refreshToken });
-        const newAccessToken = data.accessToken;
-        
-        setTokens({ accessToken: newAccessToken });
-        api.defaults.headers.common['Authorization'] = 'Bearer ' + newAccessToken;
-        originalRequest.headers['Authorization'] = 'Bearer ' + newAccessToken;
-        
-        processQueue(null, newAccessToken);
-        return api(originalRequest);
-        
-      } catch (refreshError) {
-        processQueue(refreshError, null);
-        signOut();
-        return Promise.reject(refreshError);
+        isRefreshing = true;
+        const ref = await axios.post(`${BASE_URL}/v1/auth/refresh`, { refreshToken });
+        const newAccess = ref.data?.accessToken;
+        if (!newAccess) throw new Error("no access token");
+        setTokens({ accessToken: newAccess });
+        queue.forEach((res) => res(newAccess));
+        queue = [];
+        original.headers.Authorization = `Bearer ${newAccess}`;
+        return api(original);
+      } catch (e) {
+        queue.forEach((res) => res(null));
+        queue = [];
+        useUserStore.getState().signOut();
+        throw e;
       } finally {
         isRefreshing = false;
       }
     }
-
-    return Promise.reject(error);
+    throw error;
   }
 );
 
 
 export const apiConfig = new Configuration({
-    basePath: API_BASE_URL,
+    basePath: BASE_URL,
     accessToken: () => useUserStore.getState().accessToken || '',
 });
 
