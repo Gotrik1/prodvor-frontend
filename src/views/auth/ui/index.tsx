@@ -141,7 +141,7 @@ export function AuthPage() {
     // This effect ensures we don't try to redirect on the server.
     const hasLoggedOut = searchParams?.get('loggedOut') === 'true';
     if (isHydrated && currentUser && !hasLoggedOut) {
-        router.push('/dashboard');
+        router.push(`/users/${currentUser.id}`);
     }
   }, [isHydrated, currentUser, router, searchParams]);
 
@@ -173,7 +173,7 @@ export function AuthPage() {
                     title: "Вход выполнен!",
                     description: `Добро пожаловать, ${user.nickname}!`,
                 });
-                router.push(`/dashboard`);
+                router.push(`/users/${user.id}`);
             } else {
                  throw new Error("Не удалось получить данные пользователя после входа.");
             }
@@ -302,5 +302,3 @@ export function AuthPage() {
     </div>
   );
 }
-
-    
