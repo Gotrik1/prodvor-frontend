@@ -10,7 +10,7 @@ import { Tournament } from "@/mocks";
 import { Badge } from "@/shared/ui/badge";
 import { Progress } from "@/shared/ui/progress";
 import { MyTournamentsEmptyState } from "./my-tournaments-empty-state";
-import api from "@/shared/api/axios-instance";
+import { api } from "@/shared/api/axios-instance";
 import { useState, useEffect } from "react";
 import { Skeleton } from "@/shared/ui/skeleton";
 import { mockMyTournaments } from "@/views/tournaments/public-page/ui/mock-data";
