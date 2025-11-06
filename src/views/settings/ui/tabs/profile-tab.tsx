@@ -38,7 +38,7 @@ import React, { useState, useCallback, useEffect } from 'react';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/shared/ui/dialog';
 import Image from 'next/image';
 import type { User, Sport } from '@/mocks';
-import api from '@/shared/api/axios-instance';
+import { api } from '@/shared/api/axios-instance';
 
 const profileFormSchema = z.object({
   firstName: z.string().min(2, 'Имя должно содержать не менее 2 символов.'),
