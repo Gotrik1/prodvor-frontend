@@ -20,36 +20,38 @@ const usersApi = new UsersApi(apiConfig);
 async function getUser(userId: string): Promise<(User & { teams?: Team[] }) | undefined> {
     if (!userId) return undefined;
     
-    // The backend expects a number, but our mock data uses string IDs.
-    // We'll pass a number to the SDK call to satisfy typing, but the actual logic
-    // might rely on mocks or an updated backend that handles string IDs.
-    const idToFetch = parseInt(userId, 10);
-    const numericId = isNaN(idToFetch) ? 0 : idToFetch; // Fallback for string IDs like 'user1'
-
     try {
-        // The SDK call requires a number. We pass our parsed/fallback numericId.
-        const response = await usersApi.apiV1UsersUserIdGet(numericId, true);
-        
-        // Let's find the user in our mock data using the original string ID,
-        // as the backend might not be fully integrated yet.
-        // In a real scenario, the response.data would be the source of truth.
+        // First, try to fetch all users and find the one we need. This is more reliable with mock data.
         const allUsersResponse = await usersApi.apiV1UsersGet();
         const allUsers = allUsersResponse.data as unknown as User[];
         const user = allUsers.find(u => u.id === userId);
 
-        return user || response.data as unknown as User;
-    } catch (error: any) {
-        // Fallback to searching mock data directly if the API call fails
-        try {
-            const allUsersResponse = await usersApi.apiV1UsersGet();
-            const allUsers = allUsersResponse.data as unknown as User[];
-            const user = allUsers.find(u => u.id === userId);
-            if (user) return user;
-        } catch (e) {
-             console.error(`[Server] Final fallback failed to fetch users: ${e}`);
+        if (user) {
+            // If we found the user, we can try to get their detailed data with teams
+            try {
+                const numericId = parseInt(userId, 10);
+                if (!isNaN(numericId)) {
+                    const response = await usersApi.apiV1UsersUserIdGet(numericId, true);
+                    return response.data as unknown as User;
+                }
+                return user; // Return the user from the list if ID is not numeric
+            } catch (detailedError) {
+                console.warn(`Could not fetch detailed info for user ${userId}, returning basic info.`, detailedError);
+                return user;
+            }
         }
 
-        console.error(`[Server] Failed to fetch user: ${error.response?.status || error.message}`);
+        // If not found in the list, try a direct fetch (for numeric IDs that might exist on backend but not in mock list)
+        const numericId = parseInt(userId, 10);
+        if (!isNaN(numericId)) {
+            const response = await usersApi.apiV1UsersUserIdGet(numericId, true);
+            return response.data as unknown as User;
+        }
+
+        return undefined;
+
+    } catch (error: any) {
+        console.error(`[Server] Failed to fetch user data for ID ${userId}:`, error.message);
         return undefined;
     }
 }
