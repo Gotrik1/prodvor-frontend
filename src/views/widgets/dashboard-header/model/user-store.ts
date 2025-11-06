@@ -35,7 +35,7 @@ const useUserStore = create<UserState>()(
         if (refreshToken) {
           try {
             // Use a separate axios instance or configure the main one to not retry on this specific call
-            await api.post('/v1/auth/logout', { refreshToken }, { _retry: true } as any);
+            await api.post('api//v1/auth/logout', { refreshToken }, { _retry: true } as any);
           } catch (error) {
             console.error("Failed to logout on backend, clearing client session anyway.", error);
           }
