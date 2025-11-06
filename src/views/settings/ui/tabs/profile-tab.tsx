@@ -24,7 +24,7 @@ import {
   FormLabel,
   FormMessage,
 } from '@/shared/ui/form';
-import { CalendarIcon, Save, Warehouse, UploadCloud, Loader2, BookCopy, AlertCircle } from 'lucide-react';
+import { CalendarIcon, Save, Warehouse, UploadCloud, Loader2, BookCopy, AlertCircle, Upload } from 'lucide-react';
 import { useUserStore } from '@/widgets/dashboard-header/model/user-store';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import { Textarea } from '@/shared/ui/textarea';
@@ -64,7 +64,7 @@ const AvatarUploadDialog = () => {
 
     const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
-        if (!file) return;
+        if (!file || !user) return;
 
         setError(null);
         setIsLoading(true);
