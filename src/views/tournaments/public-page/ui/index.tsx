@@ -58,7 +58,7 @@ export function TournamentPublicPage({ tournamentId }: { tournamentId: string | 
         const fetchTournament = async () => {
             setIsLoading(true);
             try {
-                const response = await api.get(`/v1/tournaments/${tournamentId}`);
+                const response = await api.get(`/api/v1/tournaments/${tournamentId}`);
                 const tournamentData: Tournament = response.data;
                 const storageKey = `${LOCAL_STORAGE_BANNER_KEY_PREFIX}${tournamentData.id}`;
                 const savedBanner = localStorage.getItem(storageKey);
