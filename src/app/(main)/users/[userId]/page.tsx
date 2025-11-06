@@ -27,18 +27,9 @@ async function getUser(userId: string): Promise<(User & { teams?: Team[] }) | un
         const user = allUsers.find(u => u.id === userId);
 
         if (user) {
-            // If we found the user, we can try to get their detailed data with teams
-            try {
-                const numericId = parseInt(userId, 10);
-                if (!isNaN(numericId)) {
-                    const response = await usersApi.apiV1UsersUserIdGet(numericId, true);
-                    return response.data as unknown as User;
-                }
-                return user; // Return the user from the list if ID is not numeric
-            } catch (detailedError) {
-                console.warn(`Could not fetch detailed info for user ${userId}, returning basic info.`, detailedError);
-                return user;
-            }
+            // If user is found in the list, just return it. No need for another specific fetch
+            // that might fail with non-numeric IDs. This is the fix.
+            return user;
         }
 
         // If not found in the list, try a direct fetch (for numeric IDs that might exist on backend but not in mock list)
