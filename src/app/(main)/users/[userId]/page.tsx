@@ -1,5 +1,4 @@
 
-
 import type { Metadata } from 'next';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Button } from '@/shared/ui/button';
@@ -14,31 +13,30 @@ import type { User, Team } from '@/mocks';
 import { PlayerPageTemplate } from '@/views/admin/ui/templates/player-page-template';
 import { UsersApi } from '@/shared/api';
 import { apiConfig } from '@/shared/api/axios-instance';
-import { users as mockUsers } from '@/mocks';
+import axios from 'axios';
 
 const usersApi = new UsersApi(apiConfig);
 
 async function getUser(userId: string): Promise<(User & { teams?: Team[] }) | undefined> {
     if (!userId) return undefined;
-    
-    // First, try to find the user in the local mock data. This is faster and more reliable for existing mock users.
-    const localUser = mockUsers.find(u => u.id === userId);
-    if (localUser) {
-        return localUser as User;
-    }
 
-    // If not found locally, try to fetch from the API. This is for users that might exist on the backend but not in mocks.
     try {
         const numericId = parseInt(userId, 10);
         if (isNaN(numericId)) {
-            // If the ID is not a number and wasn't found locally, it's likely an error.
+            console.error(`[Server] Invalid user ID format: ${userId}`);
             return undefined;
         }
+        
+        // Only use the API call, no mock data fallback.
         const response = await usersApi.apiV1UsersUserIdGet(numericId, true);
         return response.data as unknown as User;
 
     } catch (error: any) {
-        console.error(`[Server] Failed to fetch user data for ID ${userId}:`, error.message);
+         if (axios.isAxiosError(error) && error.response?.status === 404) {
+            console.log(`[Server] User with ID ${userId} not found on the backend.`);
+        } else {
+            console.error(`[Server] Failed to fetch user data for ID ${userId}:`, error.message);
+        }
         return undefined;
     }
 }
