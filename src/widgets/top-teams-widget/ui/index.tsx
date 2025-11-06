@@ -121,7 +121,7 @@ export function TopTeamsWidget() {
                 
                 let cityPromise;
                 if (currentUser?.city) {
-                    cityPromise = api.get(`/v1/teams?city=${encodeURIComponent(currentUser.city)}&sort_by=rank&order=desc&limit=5`);
+                    cityPromise = api.get(`/api/v1/teams?city=${encodeURIComponent(currentUser.city)}&sort_by=rank&order=desc&limit=5`);
                 } else {
                     cityPromise = Promise.resolve({ data: [] });
                 }
