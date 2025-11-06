@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { useState } from 'react';
@@ -11,7 +12,7 @@ import Image from 'next/image';
 import { useToast } from '@/shared/hooks/use-toast';
 import { LogoGeneratorWidget } from '@/widgets/logo-generator';
 import { useUserStore } from '@/widgets/dashboard-header/model/user-store';
-import api from '@/shared/api/axios-instance';
+import { api } from '@/shared/api/axios-instance';
 
 const LogoUploadDialog = ({ team, onUploadSuccess }: { team: Team, onUploadSuccess: (newLogoUrl: string) => void }) => {
     const { toast } = useToast();
@@ -59,7 +60,7 @@ const LogoUploadDialog = ({ team, onUploadSuccess }: { team: Team, onUploadSucce
                 setFilePreview(null);
                 setFile(null);
             }
-        } catch {
+        } catch (error) {
             toast({
                 variant: "destructive",
                 title: "Ошибка загрузки",

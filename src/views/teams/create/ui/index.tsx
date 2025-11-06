@@ -15,7 +15,7 @@ import { useUserStore } from '@/widgets/dashboard-header/model/user-store';
 import { GameplayEvent, awardProgressPoints } from '@/shared/lib/gamification';
 import Link from 'next/link';
 import type { Sport } from '@/mocks';
-import api from '@/shared/api/axios-instance';
+import { api } from '@/shared/api/axios-instance';
 
 
 export function CreateTeamPage() {

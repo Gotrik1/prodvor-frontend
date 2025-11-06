@@ -1,0 +1,103 @@
+
+
+'use client';
+
+import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
+import { Users } from "lucide-react";
+import Link from "next/link";
+import Image from "next/image";
+import { teams, User, Team } from '@/mocks';
+import React, { useState, useEffect } from "react";
+import { Skeleton } from "@/shared/ui/skeleton";
+import { ScrollArea } from "@/shared/ui/scroll-area";
+import { MyTeamsEmptyState } from "@/views/teams/ui/my-teams-empty-state";
+import { UsersApi } from "@/shared/api";
+import { apiConfig } from "@/shared/api/axios-instance";
+import axios from "axios";
+
+const usersApi = new UsersApi(apiConfig);
+
+export function MyTeamWidget({ user }: { user: User }) {
+  const [myTeams, setMyTeams] = useState<Team[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchUserTeams = async () => {
+        if (!user) {
+            setIsLoading(false);
+            return;
+        }
+        setIsLoading(true);
+        try {
+            // Assume the API for 'me' is implicitly using the authorized user's token
+            const response = await usersApi.apiV1UsersUserIdGet(parseInt(user.id, 10), true);
+            const userWithTeams = response.data as unknown as User & { teams?: Team[] };
+            setMyTeams(userWithTeams.teams || []);
+        } catch (error) {
+            if (axios.isAxiosError(error)) {
+                console.error("Failed to fetch user's teams:", error.response?.data || error.message);
+            } else {
+                console.error("Failed to fetch user's teams:", error);
+            }
+        } finally {
+            setIsLoading(false);
+        }
+    };
+    
+    fetchUserTeams();
+  }, [user]);
+
+  if (isLoading) {
+    return (
+        <Card className="bg-card shadow-none md:shadow-main-sm">
+            <CardHeader>
+                <CardTitle className="flex items-center gap-2"><Users /> Мои команды</CardTitle>
+            </CardHeader>
+            <CardContent>
+                <div className="space-y-3">
+                    {[...Array(2)].map((_, i) => (
+                        <div key={i} className="flex items-center gap-3">
+                            <Skeleton className="h-10 w-10 rounded-md" />
+                            <div className="space-y-2 flex-grow">
+                                <Skeleton className="h-4 w-24" />
+                                <Skeleton className="h-3 w-16" />
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </CardContent>
+        </Card>
+    );
+  }
+
+  if (myTeams.length === 0) {
+      return <MyTeamsEmptyState />
+  }
+
+  return (
+    <Card className="bg-card shadow-none md:shadow-main-sm">
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2"><Users /> Мои команды</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <ScrollArea className="h-auto max-h-60">
+            <div className="space-y-3 pr-4">
+                {myTeams.map(team => (
+                    <Link href={`/teams/${team.id}`} key={team.id} className="block group">
+                        <div className="flex items-center justify-between gap-3 p-2 rounded-md hover:bg-muted/50 transition-colors">
+                            <div className="flex items-center gap-3">
+                                <Image src={team.logoUrl || 'https://placehold.co/512x512.png'} alt={team.name || 'Team Logo'} width={40} height={40} sizes="40px" className="rounded-md border aspect-square object-cover" data-ai-hint="team logo" />
+                                <div>
+                                    <p className="font-semibold leading-tight group-hover:text-primary transition-colors">{team.name}</p>
+                                    <p className="text-xs text-muted-foreground">{team.sport?.name || ''}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </Link>
+                ))}
+            </div>
+        </ScrollArea>
+      </CardContent>
+    </Card>
+  );
+}

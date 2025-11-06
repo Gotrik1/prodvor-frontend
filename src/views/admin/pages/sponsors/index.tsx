@@ -5,6 +5,7 @@ import { SponsorPageTemplate } from '@/views/admin/ui/templates/sponsor-page-tem
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Button } from '@/shared/ui/button';
 import Link from 'next/link';
+import { api } from '@/shared/api/axios-instance';
 
 export function SponsorPage({ sponsorId }: { sponsorId?: string }) {
   if (!sponsorId) {

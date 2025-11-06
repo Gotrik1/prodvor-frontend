@@ -11,7 +11,7 @@ import { useUserStore } from '@/widgets/dashboard-header/model/user-store';
 import { useState, useMemo, useEffect } from 'react';
 import { useToast } from '@/shared/hooks/use-toast';
 import { cn } from '@/shared/lib/utils';
-import api from '@/shared/api/axios-instance';
+import { api } from '@/shared/api/axios-instance';
 
 interface TeamHeaderProps {
     team: Team;

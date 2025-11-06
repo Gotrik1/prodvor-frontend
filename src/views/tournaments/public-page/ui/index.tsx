@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import Image from "next/image";
@@ -10,7 +11,7 @@ import { Badge } from "@/shared/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { useState, useEffect } from 'react';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/shared/ui/tooltip";
-import api from "@/shared/api/axios-instance";
+import { api } from '@/shared/api/axios-instance';
 import { Skeleton } from "@/shared/ui/skeleton";
 
 const StatCard = ({ title, value, icon: Icon }: { title: string, value: string | React.ReactNode, icon: React.ElementType }) => (
@@ -75,7 +76,7 @@ export function TournamentPublicPage({ tournamentId }: { tournamentId: string | 
 
         const fetchSponsors = async () => {
             try {
-                const response = await api.get('api//v1/sponsors');
+                const response = await api.get('/api/v1/sponsors');
                 setSponsors(response.data);
             } catch(error) {
                  console.error("Failed to fetch sponsors:", error);

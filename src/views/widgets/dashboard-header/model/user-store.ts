@@ -4,7 +4,7 @@
 import { create } from 'zustand';
 import type { User } from '@/mocks';
 import { persist, createJSONStorage } from 'zustand/middleware';
-import api from '@/shared/api/axios-instance';
+import { api } from '@/shared/api/axios-instance';
 
 interface UserState {
   user: User | null;
@@ -35,7 +35,7 @@ const useUserStore = create<UserState>()(
         if (refreshToken) {
           try {
             // Use a separate axios instance or configure the main one to not retry on this specific call
-            await api.post('api//v1/auth/logout', { refreshToken }, { _retry: true } as any);
+            await api.post('/api/v1/auth/logout', { refreshToken }, { _retry: true } as any);
           } catch (error) {
             console.error("Failed to logout on backend, clearing client session anyway.", error);
           }
