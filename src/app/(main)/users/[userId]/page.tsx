@@ -11,11 +11,8 @@ import { RefereePageTemplate } from '@/views/admin/ui/templates/referee-page-tem
 import { PlaceholderTemplate } from '@/views/admin/ui/templates/placeholder-template';
 import type { User, Team } from '@/mocks';
 import { PlayerPageTemplate } from '@/views/admin/ui/templates/player-page-template';
-import { UsersApi } from '@/shared/api';
-import { apiConfig } from '@/shared/api/axios-instance';
+import api from '@/shared/api/axios-instance';
 import axios from 'axios';
-
-const usersApi = new UsersApi(apiConfig);
 
 async function getUser(userId: string): Promise<(User & { teams?: Team[] }) | undefined> {
     if (!userId) {
@@ -23,22 +20,15 @@ async function getUser(userId: string): Promise<(User & { teams?: Team[] }) | un
         return undefined;
     }
     
-    // The URL parameter `userId` can be a string, but the API expects a number.
-    const numericId = parseInt(userId, 10);
-    if (isNaN(numericId)) {
-        console.error(`[Server] Invalid user ID format, cannot parse to int: ${userId}`);
-        return undefined; // If ID is not a valid number, we cannot make a valid API call.
-    }
-    
     try {
-        const response = await usersApi.apiV1UsersUserIdGet(numericId, true);
+        // Используем настроенный инстанс `api`
+        const response = await api.get(`/api/v1/users/${userId}?include_teams=true`);
         return response.data as User & { teams?: Team[] };
 
     } catch (error: any) {
         if (axios.isAxiosError(error) && error.response?.status === 404) {
             console.log(`[Server] User with ID ${userId} not found on the backend.`);
         } else {
-            // Log other errors, like network issues or server errors (5xx)
             console.error(`[Server] Failed to fetch user data for ID ${userId}:`, error.message);
         }
         return undefined;
