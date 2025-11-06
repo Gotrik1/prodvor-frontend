@@ -64,7 +64,7 @@ export function RegisterPage() {
   const onRegisterSubmit = async (values: z.infer<typeof registerFormSchema>) => {
     setIsLoading(true);
     try {
-      const response = await api.post(`/v1/auth/register`, {
+      const response = await api.post(`/api/v1/auth/register`, {
         nickname: values.nickname,
         email: values.email,
         password: values.password,
