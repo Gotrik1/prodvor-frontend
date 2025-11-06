@@ -1,5 +1,4 @@
 
-
 export type TeamJoinEventDetails = Record<string, never>;
 
 export interface MatchWinEventDetails {
@@ -20,4 +19,37 @@ export interface FeedEvent {
     details: TeamJoinEventDetails | MatchWinEventDetails | AchievementUnlockedEventDetails;
 }
 
-export const mockFeedEvents: FeedEvent[] = [];
+export const mockFeedEvents: FeedEvent[] = [
+    {
+        id: 'event-1',
+        type: 'team_join',
+        timestamp: '2025-10-27T10:00:00Z',
+        userIds: ['user1'],
+        teamIds: ['team1'],
+        details: {},
+    },
+    {
+        id: 'event-2',
+        type: 'match_win',
+        timestamp: '2025-10-26T21:30:00Z',
+        userIds: [],
+        teamIds: ['team2', 'team3'],
+        details: { score1: 3, score2: 1 },
+    },
+    {
+        id: 'event-3',
+        type: 'achievement_unlocked',
+        timestamp: '2025-10-26T15:00:00Z',
+        userIds: ['user2'],
+        teamIds: [],
+        details: { achievementId: 'ach-fb-2' },
+    },
+    {
+        id: 'event-4',
+        type: 'team_join',
+        timestamp: '2025-10-25T12:00:00Z',
+        userIds: ['user4'],
+        teamIds: ['team5'],
+        details: {},
+    },
+];
