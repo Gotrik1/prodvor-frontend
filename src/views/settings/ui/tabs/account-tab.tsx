@@ -37,7 +37,7 @@ import {
   AlertDialogTrigger,
 } from "@/shared/ui/alert-dialog";
 import React, { useState, useEffect, useCallback } from 'react';
-import api from '@/shared/api/axios-instance';
+import { api } from '@/shared/api/axios-instance';
 
 const accountFormSchema = z.object({
   email: z.string().email('Неверный формат email.'),
