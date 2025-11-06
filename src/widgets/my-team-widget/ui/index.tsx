@@ -11,41 +11,35 @@ import React, { useState, useEffect } from "react";
 import { Skeleton } from "@/shared/ui/skeleton";
 import { ScrollArea } from "@/shared/ui/scroll-area";
 import { MyTeamsEmptyState } from "@/views/teams/ui/my-teams-empty-state";
-import { UsersApi } from "@/shared/api";
-import { apiConfig } from "@/shared/api/axios-instance";
-import axios from "axios";
-
-const usersApi = new UsersApi(apiConfig);
+import api from "@/shared/api/axios-instance";
+import { useUserStore } from "@/widgets/dashboard-header/model/user-store";
 
 export function MyTeamWidget({ user }: { user: User }) {
   const [myTeams, setMyTeams] = useState<Team[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const { accessToken } = useUserStore();
 
   useEffect(() => {
     const fetchUserTeams = async () => {
-        if (!user) {
+        if (!user || !accessToken) {
             setIsLoading(false);
             return;
         }
         setIsLoading(true);
         try {
-            // Assume the API for 'me' is implicitly using the authorized user's token
-            const response = await usersApi.apiV1UsersUserIdGet(parseInt(user.id, 10), true);
-            const userWithTeams = response.data as unknown as User & { teams?: Team[] };
+            const response = await api.get(`/api/v1/users/me?include_teams=true`);
+            const userWithTeams = response.data as User & { teams?: Team[] };
             setMyTeams(userWithTeams.teams || []);
         } catch (error) {
-            if (axios.isAxiosError(error)) {
-                console.error("Failed to fetch user's teams:", error.response?.data || error.message);
-            } else {
-                console.error("Failed to fetch user's teams:", error);
-            }
+            console.error("Failed to fetch user's teams for widget:", error);
+            setMyTeams([]);
         } finally {
             setIsLoading(false);
         }
     };
     
     fetchUserTeams();
-  }, [user]);
+  }, [user, accessToken]);
 
   if (isLoading) {
     return (
