@@ -75,7 +75,7 @@ export function TournamentPublicPage({ tournamentId }: { tournamentId: string | 
 
         const fetchSponsors = async () => {
             try {
-                const response = await api.get('/v1/sponsors');
+                const response = await api.get('api//v1/sponsors');
                 setSponsors(response.data);
             } catch(error) {
                  console.error("Failed to fetch sponsors:", error);
