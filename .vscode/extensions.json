@@ -1,0 +1,40 @@
+{
+    "recommendations": [
+      // === Python & Flask ===
+      "ms-python.python",
+      "ms-python.vscode-pylance",
+      "kevinrose.vsc-python-indent",
+      "ms-python.black-formatter",
+      "bungcip.better-toml",
+      "wholroyd.jinja",
+      "naumovs.color-highlight",
+  
+      // === Docker & DevOps ===
+      "ms-azuretools.vscode-docker",
+      "redhat.vscode-yaml",
+  
+      // === Git & управление проектом ===
+      "eamodio.gitlens",
+      "mhutchie.git-graph",
+      "usernamehw.errorlens",
+      "wayou.vscode-todo-highlight",
+  
+      // === Удобство и оформление ===
+      "PKief.material-icon-theme",
+      "esbenp.prettier-vscode",
+      "streetsidesoftware.code-spell-checker",
+      "formulahendry.code-runner",
+      "christian-kohler.path-intellisense",
+      "CoenraadS.bracket-pair-colorizer-2",
+      "formulahendry.auto-rename-tag",
+  
+      // === REST / API ===
+      "humao.rest-client",
+      "rangav.vscode-thunder-client",
+  
+      // === Фронтенд (если используешь Next.js) ===
+      "bradlc.vscode-tailwindcss",
+      "dbaeumer.vscode-eslint"
+    ]
+  }
+  
