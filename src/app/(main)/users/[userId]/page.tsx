@@ -12,19 +12,18 @@ import { RefereePageTemplate } from '@/views/admin/ui/templates/referee-page-tem
 import { PlaceholderTemplate } from '@/views/admin/ui/templates/placeholder-template';
 import type { User, Team } from '@/mocks';
 import { PlayerPageTemplate } from '@/views/admin/ui/templates/player-page-template';
-import { api } from '@/shared/api/axios-instance';
 import axios from 'axios';
+
+const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "/api";
 
 async function getUser(userId: string): Promise<(User & { teams?: Team[] }) | undefined> {
     if (!userId) {
-        console.error(`[Server] getUser called with invalid userId: ${userId}`);
         return undefined;
     }
     
     try {
-        const response = await api.get(`/api/v1/users/${userId}?include_teams=true`);
-        return response.data as User & { teams?: Team[] };
-
+        const response = await axios.get(`${BASE_URL}/api/v1/users/${userId}?include_teams=true`);
+        return response.data;
     } catch (error: any) {
         if (axios.isAxiosError(error) && error.response?.status === 404) {
             console.log(`[Server] User with ID ${userId} not found on the backend.`);
