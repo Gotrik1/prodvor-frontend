@@ -14,32 +14,28 @@ import type { User, Team } from '@/mocks';
 import { PlayerPageTemplate } from '@/views/admin/ui/templates/player-page-template';
 import { UsersApi } from '@/shared/api';
 import { apiConfig } from '@/shared/api/axios-instance';
+import { users as mockUsers } from '@/mocks';
 
 const usersApi = new UsersApi(apiConfig);
 
 async function getUser(userId: string): Promise<(User & { teams?: Team[] }) | undefined> {
     if (!userId) return undefined;
     
+    // First, try to find the user in the local mock data. This is faster and more reliable for existing mock users.
+    const localUser = mockUsers.find(u => u.id === userId);
+    if (localUser) {
+        return localUser as User;
+    }
+
+    // If not found locally, try to fetch from the API. This is for users that might exist on the backend but not in mocks.
     try {
-        // First, try to fetch all users and find the one we need. This is more reliable with mock data.
-        const allUsersResponse = await usersApi.apiV1UsersGet();
-        const allUsers = allUsersResponse.data as unknown as User[];
-        const user = allUsers.find(u => u.id === userId);
-
-        if (user) {
-            // If user is found in the list, just return it. No need for another specific fetch
-            // that might fail with non-numeric IDs. This is the fix.
-            return user;
-        }
-
-        // If not found in the list, try a direct fetch (for numeric IDs that might exist on backend but not in mock list)
         const numericId = parseInt(userId, 10);
-        if (!isNaN(numericId)) {
-            const response = await usersApi.apiV1UsersUserIdGet(numericId, true);
-            return response.data as unknown as User;
+        if (isNaN(numericId)) {
+            // If the ID is not a number and wasn't found locally, it's likely an error.
+            return undefined;
         }
-
-        return undefined;
+        const response = await usersApi.apiV1UsersUserIdGet(numericId, true);
+        return response.data as unknown as User;
 
     } catch (error: any) {
         console.error(`[Server] Failed to fetch user data for ID ${userId}:`, error.message);
