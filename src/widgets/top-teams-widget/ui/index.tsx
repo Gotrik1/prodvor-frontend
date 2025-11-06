@@ -10,7 +10,7 @@ import { useUserStore } from '@/widgets/dashboard-header/model/user-store';
 import { Skeleton } from '@/shared/ui/skeleton';
 import type { Team } from '@/mocks';
 import { useToast } from '@/shared/hooks/use-toast';
-import api from '@/shared/api/axios-instance';
+import { api } from '@/shared/api/axios-instance';
 import Image from 'next/image';
 
 const TopTeamRow = ({ team, rank }: { team: Team, rank: number }) => (
