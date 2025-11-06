@@ -50,7 +50,7 @@ api.interceptors.response.use(
 
       try {
         isRefreshing = true;
-        const ref = await axios.post(`${BASE_URL}/v1/auth/refresh`, { refreshToken });
+        const ref = await axios.post(`${BASE_URL}/api/v1/auth/refresh`, { refreshToken });
         const newAccess = ref.data?.accessToken;
         if (!newAccess) throw new Error("no access token");
         setTokens({ accessToken: newAccess });
