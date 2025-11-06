@@ -85,7 +85,7 @@ export function CreateTeamPage() {
         setIsLoading(true);
 
         try {
-            const response = await api.post(`/v1/teams`, {
+            const response = await api.post(`/api/v1/teams`, {
                 name: teamName,
                 sport_id: discipline,
                 city: city,
