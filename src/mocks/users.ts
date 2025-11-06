@@ -16,6 +16,12 @@ export interface UserDiscipline {
     name: string;
 }
 
+export interface PresignedPostResponse {
+  url: string;
+  fields: Record<string, string>;
+  fileUrl: string;
+}
+
 export interface User {
   id: string;
   firstName: string;

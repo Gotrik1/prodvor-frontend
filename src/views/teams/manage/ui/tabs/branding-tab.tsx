@@ -1,12 +1,12 @@
 
 'use client';
 
-import { useState } from 'react';
-import type { Team } from '@/mocks';
+import { useState, useRef } from 'react';
+import type { Team, PresignedPostResponse } from '@/mocks';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/shared/ui/dialog';
 import { Button } from '@/shared/ui/button';
-import { UploadCloud, Image as ImageIcon, Loader2 } from 'lucide-react';
+import { UploadCloud, Image as ImageIcon, Loader2, AlertCircle } from 'lucide-react';
 import Image from 'next/image';
 import { useToast } from '@/shared/hooks/use-toast';
 import { LogoGeneratorWidget } from '@/widgets/logo-generator';
@@ -16,9 +16,11 @@ import { api } from '@/shared/api/axios-instance';
 const LogoUploadDialog = ({ team, onUploadSuccess }: { team: Team, onUploadSuccess: (newLogoUrl: string) => void }) => {
     const { toast } = useToast();
     const { accessToken } = useUserStore();
+    const fileInputRef = useRef<HTMLInputElement>(null);
     const [file, setFile] = useState<File | null>(null);
     const [filePreview, setFilePreview] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
     const [isOpen, setIsOpen] = useState(false);
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -33,31 +35,34 @@ const LogoUploadDialog = ({ team, onUploadSuccess }: { team: Team, onUploadSucce
     };
 
     const handleSaveLogo = async () => {
-        if (!file || !team.id || !accessToken) {
-             toast({
+        if (!file || !team?.id || !accessToken) {
+            toast({
                 variant: "destructive",
                 title: "Ошибка",
                 description: "Файл не выбран или вы не авторизованы.",
             });
             return;
-        };
+        }
         setIsLoading(true);
+        setError(null);
 
         try {
             // Step 1: Request presigned URL
             const presignResponse = await api.post('/api/v1/uploads/request-url', {
                 contentType: file.type,
+            }, {
+                headers: { 'Authorization': `Bearer ${accessToken}` }
             });
-            const { url, fields, fileUrl } = presignResponse.data;
+            const presignedData: PresignedPostResponse = presignResponse.data;
 
             // Step 2: Upload file directly to storage
             const formData = new FormData();
-            Object.entries(fields).forEach(([key, value]) => {
+            Object.entries(presignedData.fields).forEach(([key, value]) => {
                 formData.append(key, value as string);
             });
             formData.append('file', file);
 
-            const uploadResponse = await fetch(url, {
+            const uploadResponse = await fetch(presignedData.url, {
                 method: 'POST',
                 body: formData,
             });
@@ -68,7 +73,9 @@ const LogoUploadDialog = ({ team, onUploadSuccess }: { team: Team, onUploadSucce
 
             // Step 3: Confirm upload with backend
             const confirmResponse = await api.post(`/api/v1/teams/${team.id}/logo`, {
-                fileUrl: fileUrl,
+                fileUrl: presignedData.fileUrl,
+            }, {
+                headers: { 'Authorization': `Bearer ${accessToken}` }
             });
             
             if (confirmResponse.status === 200 && confirmResponse.data.logoUrl) {
@@ -82,14 +89,18 @@ const LogoUploadDialog = ({ team, onUploadSuccess }: { team: Team, onUploadSucce
                 setFile(null);
             }
 
-        } catch (error) {
+        } catch (err) {
+            console.error(err);
+            const errorMessage = err instanceof Error ? err.message : 'Не удалось сохранить логотип. Попробуйте позже.';
+            setError(errorMessage);
             toast({
                 variant: "destructive",
                 title: "Ошибка загрузки",
-                description: "Не удалось сохранить логотип. Проверьте права доступа и попробуйте позже.",
+                description: errorMessage,
             });
         } finally {
             setIsLoading(false);
+            if(fileInputRef.current) fileInputRef.current.value = '';
         }
     };
 
@@ -121,6 +132,12 @@ const LogoUploadDialog = ({ team, onUploadSuccess }: { team: Team, onUploadSucce
                                 </div>
                                 <input id="logo-dropzone" type="file" className="hidden" accept="image/*" onChange={handleFileChange} />
                             </label>
+                        </div>
+                    )}
+                    {error && (
+                        <div className="flex items-center gap-2 mt-2 text-sm text-destructive">
+                            <AlertCircle className="h-4 w-4" />
+                            <span>{error}</span>
                         </div>
                     )}
                 </div>

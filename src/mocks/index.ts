@@ -36,7 +36,7 @@ export * from './ranks';
 
 
 // Export types
-export type { User, UserRole, UserGender, CoachProfile } from './users';
+export type { User, UserRole, UserGender, CoachProfile, PresignedPostResponse } from './users';
 export type { Team } from './teams';
 export type { Playground, FitnessService, ServiceCategory } from './playgrounds';
 export type { Sponsor } from './personnel';

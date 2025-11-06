@@ -1,6 +1,7 @@
 
 'use client';
 
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -23,7 +24,7 @@ import {
   FormLabel,
   FormMessage,
 } from '@/shared/ui/form';
-import { CalendarIcon, Save, Warehouse, UploadCloud, Loader2, BookCopy } from 'lucide-react';
+import { CalendarIcon, Save, Warehouse, UploadCloud, Loader2, BookCopy, AlertCircle } from 'lucide-react';
 import { useUserStore } from '@/widgets/dashboard-header/model/user-store';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import { Textarea } from '@/shared/ui/textarea';
@@ -34,10 +35,8 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/popover';
 import { Calendar } from '@/shared/ui/calendar';
 import { cn } from '@/shared/lib/utils';
 import { MultiSelect, type OptionType } from '@/shared/ui/multi-select';
-import React, { useState, useCallback, useEffect } from 'react';
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/shared/ui/dialog';
 import Image from 'next/image';
-import type { User, Sport } from '@/mocks';
+import type { User, Sport, PresignedPostResponse } from '@/mocks';
 import { api } from '@/shared/api/axios-instance';
 
 const profileFormSchema = z.object({
@@ -55,134 +54,109 @@ const profileFormSchema = z.object({
 const AvatarUploadDialog = () => {
     const { user, setUser, accessToken } = useUserStore();
     const { toast } = useToast();
-    const [file, setFile] = useState<File | null>(null);
-    const [filePreview, setFilePreview] = useState<string | null>(null);
+    const fileInputRef = useRef<HTMLInputElement>(null);
     const [isLoading, setIsLoading] = useState(false);
-    const [isOpen, setIsOpen] = useState(false);
+    const [error, setError] = useState<string | null>(null);
 
-    const handleFileChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-        const selectedFile = event.target.files?.[0];
-        if (!selectedFile) return;
-        if (!selectedFile.type.startsWith('image/')) {
-            toast({
-                variant: "destructive",
-                title: "Неверный тип файла",
-                description: "Пожалуйста, выберите изображение.",
-            });
-            return;
-        }
-        setFile(selectedFile);
-        const reader = new FileReader();
-        reader.readAsDataURL(selectedFile);
-        reader.onloadend = () => {
-            setFilePreview(reader.result as string);
-        };
-    }, [toast]);
+    const handleAvatarClick = () => {
+        fileInputRef.current?.click();
+    };
 
-    const handleSaveAvatar = async () => {
-        if (!file || !user || !accessToken) {
-            toast({
-                variant: "destructive",
-                title: "Ошибка",
-                description: "Файл не выбран или вы не авторизованы.",
-            });
-            return;
-        }
+    const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0];
+        if (!file) return;
+
+        setError(null);
         setIsLoading(true);
 
         try {
-            // Step 1: Request presigned URL from our backend
-            const presignResponse = await api.post('/api/v1/uploads/request-url', {
+            // Step 1: Request presigned URL
+            const presignedResponse = await api.post('/api/v1/uploads/request-url', {
                 contentType: file.type,
+            }, {
+                headers: { 'Authorization': `Bearer ${accessToken}` }
             });
 
-            const { url, fields, fileUrl } = presignResponse.data;
+            const presignedData: PresignedPostResponse = presignedResponse.data;
 
-            // Step 2: Upload file directly to S3/MinIO
+            // Step 2: Upload file directly to storage
             const formData = new FormData();
-            Object.entries(fields).forEach(([key, value]) => {
+            Object.entries(presignedData.fields).forEach(([key, value]) => {
                 formData.append(key, value as string);
             });
-            formData.append('file', file); // File must be the last field
+            formData.append('file', file);
 
-            const uploadResponse = await fetch(url, {
+            const uploadResponse = await fetch(presignedData.url, {
                 method: 'POST',
                 body: formData,
             });
 
             if (!uploadResponse.ok) {
-                throw new Error('Ошибка прямой загрузки файла в хранилище.');
+                throw new Error('Ошибка при загрузке файла в хранилище.');
             }
 
             // Step 3: Confirm upload with our backend
-            const confirmResponse = await api.post(`/api/v1/users/avatar`, {
-                fileUrl: fileUrl,
+            const finalResponse = await api.post('/api/v1/users/avatar', {
+                fileUrl: presignedData.fileUrl,
+            }, {
+                headers: { 'Authorization': `Bearer ${accessToken}` }
             });
             
-            setUser(confirmResponse.data.user);
+            const result = finalResponse.data;
+
+            // Update user state
+            setUser(result.user);
             toast({
                 title: "Аватар обновлен!",
                 description: "Ваш новый аватар успешно сохранен.",
             });
-            setIsOpen(false);
-            setFilePreview(null);
-            setFile(null);
 
-        } catch (error: any) {
-             toast({
+        } catch (err) {
+            console.error(err);
+            const errorMessage = err instanceof Error ? err.message : 'Произошла неизвестная ошибка.';
+            setError(errorMessage);
+            toast({
                 variant: "destructive",
-                title: "Ошибка",
-                description: error.message || "Не удалось сохранить аватар. Попробуйте позже.",
+                title: "Ошибка загрузки",
+                description: errorMessage,
             });
         } finally {
             setIsLoading(false);
+            if(fileInputRef.current) fileInputRef.current.value = '';
         }
     };
-
+    
     return (
-        <Dialog open={isOpen} onOpenChange={setIsOpen}>
-            <DialogTrigger asChild>
-                <Button type="button" variant="outline">Загрузить новый аватар</Button>
-            </DialogTrigger>
-            <DialogContent>
-                <DialogHeader>
-                    <DialogTitle>Обновить аватар</DialogTitle>
-                    <CardDescription>Выберите новое изображение для вашего профиля.</CardDescription>
-                </DialogHeader>
-                <div className="py-4">
-                    {filePreview ? (
-                        <div className="space-y-4">
-                            <div className="relative w-48 h-48 mx-auto">
-                                <Image src={filePreview} alt="Превью аватара" fill className="object-cover rounded-full" />
-                            </div>
-                            <Button variant="outline" className="w-full" onClick={() => { setFilePreview(null); setFile(null); }}>Выбрать другой файл</Button>
-                        </div>
-                    ) : (
-                         <div className="flex items-center justify-center w-full">
-                            <label htmlFor="dropzone-file" className="flex flex-col items-center justify-center w-full h-48 border-2 border-dashed rounded-lg cursor-pointer bg-muted/50 hover:bg-muted">
-                                <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                                    <UploadCloud className="w-10 h-10 mb-4 text-muted-foreground" />
-                                    <p className="mb-2 text-sm text-muted-foreground"><span className="font-semibold">Нажмите, чтобы загрузить</span></p>
-                                    <p className="text-xs text-muted-foreground">PNG, JPG, GIF</p>
-                                </div>
-                                <input id="dropzone-file" type="file" className="hidden" accept="image/*" onChange={handleFileChange} />
-                            </label>
-                        </div>
-                    )}
-                </div>
-                <DialogFooter>
-                    <Button variant="ghost" onClick={() => setIsOpen(false)} disabled={isLoading}>Отмена</Button>
-                    <Button onClick={handleSaveAvatar} disabled={!filePreview || isLoading}>
-                        {isLoading ? (
-                            <>
-                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                Сохранение...
-                            </>
-                        ) : 'Сохранить'}
-                    </Button>
-                </DialogFooter>
-            </DialogContent>
-        </Dialog>
+        <div className="flex items-center gap-4">
+            <Avatar className="h-20 w-20">
+                <AvatarImage src={user?.avatarUrl} />
+                <AvatarFallback className="text-3xl">{user?.nickname?.charAt(0) || '?'}</AvatarFallback>
+            </Avatar>
+            <div>
+                <Button onClick={handleAvatarClick} disabled={isLoading}>
+                {isLoading ? (
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                ) : (
+                    <Upload className="mr-2 h-4 w-4" />
+                )}
+                {isLoading ? 'Загрузка...' : 'Сменить аватар'}
+                </Button>
+                <p className="text-sm text-muted-foreground mt-2">PNG, JPG, GIF до 10МБ.</p>
+                <input
+                    type="file"
+                    ref={fileInputRef}
+                    onChange={handleFileChange}
+                    className="hidden"
+                    accept="image/png, image/jpeg, image/gif"
+                />
+                 {error && (
+                    <div className="flex items-center gap-2 mt-2 text-sm text-destructive">
+                        <AlertCircle className="h-4 w-4" />
+                        <span>{error}</span>
+                    </div>
+                )}
+            </div>
+        </div>
     );
 };
 
@@ -298,7 +272,7 @@ export function ProfileTab() {
             lastName: '',
             nickname: '',
             gender: 'мужской',
-            bio: "Страстный игрок в дворовый футбол и CS2. Ищу команду для серьезных игр.",
+            bio: "",
             city: '',
         }
     });
@@ -310,7 +284,7 @@ export function ProfileTab() {
                 lastName: currentUser.lastName || '',
                 nickname: currentUser.nickname || '',
                 gender: currentUser.gender || 'мужской',
-                bio: currentUser.bio || "Страстный игрок в дворовый футбол и CS2. Ищу команду для серьезных игр.",
+                bio: currentUser.bio || "",
                 city: currentUser.city || '',
                 birthDate: currentUser.age ? new Date(new Date().setFullYear(new Date().getFullYear() - currentUser.age)) : undefined,
             });
@@ -351,18 +325,9 @@ export function ProfileTab() {
                             <CardDescription>Эта информация будет видна другим пользователям.</CardDescription>
                         </CardHeader>
                         <CardContent className="space-y-6">
-                            <div className="flex items-center gap-4">
-                                <Avatar className="h-20 w-20">
-                                    <AvatarImage src={currentUser?.avatarUrl} />
-                                    <AvatarFallback>{currentUser?.nickname?.charAt(0)}</AvatarFallback>
-                                </Avatar>
-                                <div className="flex flex-col gap-2">
-                                    <AvatarUploadDialog />
-                                    <Button asChild type="button" variant="secondary">
-                                        <Link href="/inventory"><Warehouse className="mr-2 h-4 w-4"/>Настроить рамку</Link>
-                                    </Button>
-                                </div>
-                            </div>
+                           
+                            <AvatarUploadDialog />
+                           
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <FormField control={profileForm.control} name="firstName" render={({ field }) => (
                                     <FormItem><FormLabel>Имя</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
