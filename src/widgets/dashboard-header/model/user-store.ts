@@ -1,56 +1,56 @@
 
-
 'use client';
 
 import { create } from 'zustand';
 import type { User } from '@/mocks';
 import { persist, createJSONStorage } from 'zustand/middleware';
-import { AuthenticationApi } from '@/shared/api';
-import { apiConfig } from '@/shared/api/axios-instance';
-
-const authApi = new AuthenticationApi(apiConfig);
+import api from '@/shared/api/axios-instance';
 
 interface UserState {
   user: User | null;
   accessToken: string | null;
+  refreshToken: string | null;
   isHydrated: boolean;
   setUser: (user: User | null) => void;
-  setTokens: (accessToken: string, refreshToken: string | null) => void;
+  setTokens: (tokens: { accessToken?: string | null; refreshToken?: string | null }) => void;
   signOut: () => Promise<void>;
 }
 
 const useUserStore = create<UserState>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       user: null,
       accessToken: null,
+      refreshToken: null,
       isHydrated: false,
       setUser: (user) => set({ user }),
-      setTokens: (accessToken, refreshToken) => {
-        set({ accessToken });
-        if (typeof window !== 'undefined' && refreshToken) {
-          localStorage.setItem('refreshToken', refreshToken);
-        }
+      setTokens: ({ accessToken, refreshToken }) => {
+        set((state) => ({
+          accessToken: accessToken ?? state.accessToken,
+          refreshToken: refreshToken ?? state.refreshToken,
+        }));
       },
       signOut: async () => {
-        if (typeof window !== 'undefined') {
-            const refreshToken = localStorage.getItem('refreshToken');
-            if (refreshToken) {
-                try {
-                    await authApi.apiV1AuthLogoutPost({ refreshToken });
-                } catch (error) {
-                    console.error("Failed to logout on backend:", error);
-                }
-            }
-            localStorage.removeItem('refreshToken');
+        const { refreshToken } = get();
+        if (refreshToken) {
+          try {
+            // Use a separate axios instance or configure the main one to not retry on this specific call
+            await api.post('/api/v1/auth/logout', { refreshToken }, { _retry: true } as any);
+          } catch (error) {
+            console.error("Failed to logout on backend, clearing client session anyway.", error);
+          }
         }
-        set({ user: null, accessToken: null });
+        set({ user: null, accessToken: null, refreshToken: null });
       },
     }),
     {
       name: 'prodvor-user-storage',
       storage: createJSONStorage(() => localStorage),
-      partialize: (state) => ({ user: state.user, accessToken: state.accessToken }),
+      partialize: (state) => ({ 
+        user: state.user, 
+        accessToken: state.accessToken, 
+        refreshToken: state.refreshToken 
+      }),
       onRehydrateStorage: () => (state) => {
         if (state) {
             state.isHydrated = true;
