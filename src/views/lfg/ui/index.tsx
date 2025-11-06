@@ -77,7 +77,7 @@ export function LfgPage() {
     useEffect(() => {
         async function fetchSports() {
             try {
-                const response = await api.get(`/v1/sports/`);
+                const response = await api.get(`/api/v1/sports/`);
                 setAllSports(response.data);
             } catch (error) {
                 console.error("Failed to fetch sports:", error);
