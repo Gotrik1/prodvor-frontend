@@ -50,7 +50,7 @@ export function TournamentsPage() {
         async function fetchTournaments() {
             setIsLoading(true);
             try {
-                const response = await api.get('api//v1/tournaments');
+                const response = await api.get('api/v1/tournaments');
                 setAllTournaments(response.data);
             } catch (error) {
                 console.error("Failed to fetch tournaments:", error);
