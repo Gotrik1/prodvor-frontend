@@ -50,6 +50,7 @@ api.interceptors.response.use(
 
       try {
         isRefreshing = true;
+        // Используем чистый axios для запроса на обновление, чтобы избежать рекурсии
         const ref = await axios.post(`${BASE_URL}/api/v1/auth/refresh`, { refreshToken });
         const newAccess = ref.data?.accessToken;
         if (!newAccess) throw new Error("no access token");
@@ -76,6 +77,3 @@ export const apiConfig = new Configuration({
     basePath: BASE_URL,
     accessToken: () => useUserStore.getState().accessToken || '',
 });
-
-
-export default api;

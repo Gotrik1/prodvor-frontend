@@ -12,7 +12,7 @@ import { RefereePageTemplate } from '@/views/admin/ui/templates/referee-page-tem
 import { PlaceholderTemplate } from '@/views/admin/ui/templates/placeholder-template';
 import type { User, Team } from '@/mocks';
 import { PlayerPageTemplate } from '@/views/admin/ui/templates/player-page-template';
-import api from '@/shared/api/axios-instance';
+import { api } from '@/shared/api/axios-instance';
 import axios from 'axios';
 
 async function getUser(userId: string): Promise<(User & { teams?: Team[] }) | undefined> {
@@ -22,7 +22,6 @@ async function getUser(userId: string): Promise<(User & { teams?: Team[] }) | un
     }
     
     try {
-        // Используем настроенный инстанс `api`
         const response = await api.get(`/api/v1/users/${userId}?include_teams=true`);
         return response.data as User & { teams?: Team[] };
 

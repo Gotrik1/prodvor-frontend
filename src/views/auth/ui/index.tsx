@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import React, { useEffect } from 'react';
@@ -29,7 +30,7 @@ import { Loader2 } from 'lucide-react';
 import type { User } from '@/mocks';
 import { UsersApi } from '@/shared/api';
 import { apiConfig } from '@/shared/api/axios-instance';
-import api from '@/shared/api/axios-instance';
+import { api } from '@/shared/api/axios-instance';
 
 // ------------------ Схемы валидации ------------------
 const loginFormSchema = z.object({
@@ -301,3 +302,5 @@ export function AuthPage() {
     </div>
   );
 }
+
+    

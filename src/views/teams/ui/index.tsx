@@ -14,7 +14,7 @@ import { Separator } from "@/shared/ui/separator";
 import { useToast } from '@/shared/hooks/use-toast';
 import { Skeleton } from '@/shared/ui/skeleton';
 import { TopTeamsWidget } from '@/widgets/top-teams-widget';
-import api from '@/shared/api/axios-instance';
+import { api } from '@/shared/api/axios-instance';
 import Image from 'next/image';
 
 const TeamCard = ({ team, isMember, onApply, isApplicationSent }: { team: Team, isMember: boolean, onApply: (teamId: string) => Promise<void>, isApplicationSent: boolean }) => {
@@ -193,3 +193,5 @@ export function TeamsPage() {
         </div>
     );
 }
+
+    
