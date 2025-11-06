@@ -21,18 +21,22 @@ async function getUser(userId: string): Promise<(User & { teams?: Team[] }) | un
     if (!userId) return undefined;
 
     try {
+        // The URL parameter `userId` can be a string, but the API expects a number.
+        // We attempt to parse it, but handle potential `NaN` cases gracefully.
         const numericId = parseInt(userId, 10);
+        
+        // If the ID is not a valid number, we cannot make a valid API call.
         if (isNaN(numericId)) {
             console.error(`[Server] Invalid user ID format: ${userId}`);
             return undefined;
         }
-        
-        // Only use the API call, no mock data fallback.
+
+        // Only use the direct API call.
         const response = await usersApi.apiV1UsersUserIdGet(numericId, true);
-        return response.data as unknown as User;
+        return response.data as User & { teams?: Team[] };
 
     } catch (error: any) {
-         if (axios.isAxiosError(error) && error.response?.status === 404) {
+        if (axios.isAxiosError(error) && error.response?.status === 404) {
             console.log(`[Server] User with ID ${userId} not found on the backend.`);
         } else {
             console.error(`[Server] Failed to fetch user data for ID ${userId}:`, error.message);
