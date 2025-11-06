@@ -3,7 +3,7 @@
 
 import { create } from 'zustand';
 import { produce } from 'immer';
-import api from '@/shared/api/axios-instance';
+import { api } from '@/shared/api/axios-instance';
 import type { Post, Comment } from '@/mocks/posts';
 
 interface PostState {
