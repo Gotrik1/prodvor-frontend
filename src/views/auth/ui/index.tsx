@@ -155,7 +155,7 @@ export function AuthPage() {
   const onSubmit = async (values: z.infer<typeof loginFormSchema>) => {
     setIsLoading(true);
     try {
-        const loginResponse = await api.post(`/v1/auth/login`, values);
+        const loginResponse = await api.post(`/api/v1/auth/login`, values);
         
         const accessToken = loginResponse.data.accessToken;
         const refreshToken = loginResponse.data.refreshToken;
