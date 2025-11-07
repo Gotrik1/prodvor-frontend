@@ -40,7 +40,7 @@ const nextConfig = {
     ],
   },
   experimental: {
-    allowedDevOrigins: ['https://prodvor.website', 'https://176.106.247.145'],
+    allowedDevOrigins: ['https://prodvor.website', 'https://176.106.247.145', 'https://8080-firebase-prodvor-backend-1761850902881.cluster-ombtxv25tbd6yrjpp3lukp6zhc.cloudworkstations.dev'],
   }
 };
 
