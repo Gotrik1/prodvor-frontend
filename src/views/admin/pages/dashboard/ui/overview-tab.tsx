@@ -4,12 +4,15 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Button } from '@/shared/ui/button';
-import { Eye } from 'lucide-react';
+import { Eye, Server, Link as LinkIcon, AlertTriangle } from 'lucide-react';
 import { ChartContainer, ChartTooltipContent } from "@/shared/ui/chart";
 import { Bar as RechartsBar, BarChart as RechartsBarChart, XAxis, YAxis } from "recharts";
 import { users, teams, tournaments, Tournament } from '@/mocks';
 import Link from 'next/link';
 import { TeamStatCard } from '@/entities/team/ui/stat-card';
+import React from 'react';
+import { useToast } from '@/shared/hooks/use-toast';
+import { Badge } from '@/shared/ui/badge';
 
 
 const userRegistrationData: any[] = [];
@@ -19,6 +22,73 @@ const topSportsData: any[] = [];
 const chartConfig = {
     registrations: { label: "Регистрации", color: "hsl(var(--primary))" },
     teams: { label: "Команды", color: "hsl(var(--primary))" },
+}
+
+const HealthCheckCard = () => {
+    const [status, setStatus] = React.useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+    const [message, setMessage] = React.useState('');
+    const { toast } = useToast();
+
+    const handleCheck = async () => {
+        setStatus('loading');
+        try {
+            const response = await fetch('/api/v1/health-check');
+            const data = await response.json();
+
+            if (response.ok) {
+                setStatus('success');
+                setMessage(data.message || 'Бэкенд доступен.');
+                toast({ title: 'Успех!', description: 'Связь с бэкендом установлена.' });
+            } else {
+                throw new Error(data.error || 'Неизвестная ошибка бэкенда.');
+            }
+        } catch (error: any) {
+            setStatus('error');
+            setMessage(error.message || 'Не удалось подключиться. Проверьте, запущен ли бэкенд и правильный ли URL.');
+            toast({ variant: 'destructive', title: 'Ошибка!', description: error.message });
+        }
+    };
+
+    const getStatusInfo = () => {
+        switch (status) {
+            case 'success':
+                return { color: 'text-green-500', icon: <LinkIcon className="h-4 w-4" /> };
+            case 'error':
+                return { color: 'text-destructive', icon: <AlertTriangle className="h-4 w-4" /> };
+            default:
+                return { color: 'text-muted-foreground', icon: <Server className="h-4 w-4" /> };
+        }
+    };
+
+    const { color, icon } = getStatusInfo();
+
+
+    return (
+        <Card>
+            <CardHeader>
+                <CardTitle className="flex items-center gap-2"><Server />Связь с бэкендом</CardTitle>
+                <CardDescription>Проверка доступности Python-сервера.</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+                 <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
+                    <div className={`flex items-center gap-2 font-semibold text-sm ${color}`}>
+                        {icon}
+                        <span>Статус: </span>
+                        {status === 'idle' && 'Неизвестно'}
+                        {status === 'loading' && 'Проверка...'}
+                        {status === 'success' && 'Доступен'}
+                        {status === 'error' && 'Ошибка'}
+                    </div>
+                    <Button onClick={handleCheck} disabled={status === 'loading'}>Проверить</Button>
+                </div>
+                {message && (
+                    <Badge variant={status === 'error' ? 'destructive' : 'secondary'} className="whitespace-normal">
+                       {message}
+                    </Badge>
+                )}
+            </CardContent>
+        </Card>
+    )
 }
 
 export function OverviewTab() {
@@ -41,6 +111,7 @@ export function OverviewTab() {
                 description="+0 новых на этой неделе"
             />
         </div>
+         <HealthCheckCard />
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <Card className="lg:col-span-2">
                  <CardHeader>
