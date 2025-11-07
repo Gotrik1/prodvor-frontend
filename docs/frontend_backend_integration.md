@@ -1,270 +1,57 @@
-# План интеграции фронтенда с Python-бэкендом
+# Интеграция API: Как фронтенд и бэкенд синхронизируют документацию
 
-Этот документ содержит пошаговую инструкцию по замене моковых данных в Next.js-приложении на реальные API-вызовы к вашему запущенному Python (Flask) бэкенду.
+Этот документ описывает автоматизированный процесс, с помощью которого наш Next.js фронтенд получает актуальную спецификацию API (файл `openapi.json`) от Python-бэкенда.
 
-**Важно:** Адрес вашего бэкенда теперь хранится в файле `.env` в переменной `NEXT_PUBLIC_API_BASE_URL`. Все запросы должны использовать эту переменную. Убедитесь, что в файле `.env` прописана строка:
-`NEXT_PUBLIC_API_BASE_URL=https://<ваш_домен_бэкенда>` (или другой адрес, если ваш сервер запущен на другом порту).
+## 1. Концепция: Единый источник правды
 
----
+- **Источник правды** — это всегда **бэкенд**. Python-сервер генерирует и отдает файл `openapi.json`, который является точным и актуальным описанием всех его эндпоинтов.
+- **Фронтенд** является **потребителем** этой спецификации. Он не редактирует `openapi.json` вручную, а только скачивает его.
+- **Цель** — автоматизировать обновление локальной копии `openapi.json` на фронтенде, чтобы разработчик мог в любой момент перегенерировать типобезопасный API-клиент (SDK).
 
-## Шаг 1: Замена данных в компонентах
+## 2. Как это работает: Пошаговый процесс
 
-Начнем с самых простых замен в файлах страниц, где данные импортируются напрямую из моков.
+Процесс состоит из трех основных частей: настройка на бэкенде, служебный API-маршрут на фронтенде и автоматический запуск по расписанию.
 
-### 1.1. Страница всех команд (`src/views/teams/ui/index.tsx`)
+### Шаг 1: Задача для Бэкенда
 
-Здесь мы заменим статический импорт команд на асинхронную функцию, которая будет загружать их с бэкенда.
+Бэкенд должен предоставлять статический эндпоинт, по которому можно скачать актуальный `openapi.json`.
 
-**Найдите и замените этот блок:**
+- **Эндпоинт:** Должен быть доступен по GET-запросу. Например: `https://<ваш_домен_бэкенда>/openapi.json`.
+- **Путь к этому эндпоинту** настраивается в файле `.env` фронтенда через переменную `BACKEND_OPENAPI_PATH`.
 
-```typescript
-import { teams, Team } from "@/mocks";
-// ... другой код ...
+### Шаг 2: Служебный API-маршрут на Фронтенде
 
-export function TeamsPage() {
-    // ... остальной код ...
-    const { myTeams, otherTeams } = useMemo(() => {
-        if (!currentUser) {
-            return { myTeams: [], otherTeams: teams };
-        }
-        const myTeams = teams.filter(team => team.members.includes(currentUser.id));
-        const otherTeams = teams.filter(team => !team.members.includes(currentUser.id));
-        return { myTeams, otherTeams };
-    }, [currentUser]);
-    // ... остальной код ...
-}
-```
+На фронтенде существует специальный API-маршрут, который выполняет всю работу по обновлению.
 
-**На новый код с `axios`:**
+- **Файл:** `src/app/api/v1/cron/update-openapi/route.ts`
+- **Адрес:** `/api/v1/cron/update-openapi`
+- **Что он делает:**
+    1.  Получает GET-запрос.
+    2.  Читает переменные `NEXT_PUBLIC_API_BASE_URL` и `BACKEND_OPENAPI_PATH` из `.env`, чтобы сформировать полный URL к файлу на бэкенде.
+    3.  Отправляет `fetch`-запрос на этот URL.
+    4.  Если ответ успешен, он берет полученный JSON, форматирует его и **перезаписывает** локальный файл `src/docs/openapi.json`.
+    5.  Если произошла ошибка (бэкенд недоступен, неверный URL), он выводит подробную ошибку в консоль.
+- **Исключение в Middleware:** Путь `/api/v1/cron/.*` добавлен в исключения в файле `middleware.ts`, чтобы этот служебный маршрут никогда не блокировался логикой аутентификации.
 
-```typescript
-import { useState, useEffect, useMemo } from 'react';
-import type { Team } from "@/mocks";
-import api from '@/shared/api/axios-instance';
-// ... другой код ...
+### Шаг 3: Автоматический запуск (Cron Job)
 
-export function TeamsPage() {
-    const { user: currentUser } = useUserStore();
-    const [allTeams, setAllTeams] = useState<Team[]>([]);
-    const [isLoading, setIsLoading] = useState(true);
+Этот процесс должен запускаться автоматически по расписанию.
 
-    useEffect(() => {
-        async function fetchTeams() {
-            try {
-                const response = await api.get('/api/v1/teams');
-                setAllTeams(response.data);
-            } catch (error) {
-                console.error("Failed to fetch teams:", error);
-            } finally {
-                setIsLoading(false);
-            }
-        }
-        fetchTeams();
-    }, []);
+- **Механизм:** Используется внешний сервис (например, GitHub Actions `schedule`, Vercel Cron Jobs или обычный `cron` на сервере).
+- **Задача:** Этот сервис должен всего лишь раз в определенный период (например, раз в день) отправлять GET-запрос на адрес:
+  `https://<ваш_домен_фронтенда>/api/v1/cron/update-openapi`
+- **Ручной запуск:** Для немедленного обновления можно просто перейти по этому URL в браузере или выполнить `curl` в терминале.
 
-    const { myTeams, otherTeams } = useMemo(() => {
-        if (!currentUser) {
-            return { myTeams: [], otherTeams: allTeams };
-        }
-        // В реальном приложении логика определения "моих" команд может быть на бэкенде
-        const myTeams = allTeams.filter(team => team.captainId === currentUser.id || team.members.includes(currentUser.id));
-        const otherTeams = allTeams.filter(team => !myTeams.some(mt => mt.id === team.id));
-        return { myTeams, otherTeams };
-    }, [currentUser, allTeams]);
-    // ... остальной код ...
-}
-```
+## 3. Процесс для разработчика
 
-### 1.2. Страница конкретной команды (`src/views/teams/team/ui/index.tsx`)
+1.  **Бэкенд-разработчик** вносит изменения в API своего Python-приложения.
+2.  **Бэкенд** автоматически пересобирает свой `openapi.json`.
+3.  **Cron Job** по расписанию (или разработчик вручную) "дергает" эндпоинт `/api/v1/cron/update-openapi` на фронтенде.
+4.  **Фронтенд** скачивает новый `openapi.json` с бэкенда.
+5.  **Фронтенд-разработчик** видит изменения в `src/docs/openapi.json` и запускает команду для перегенерации API-клиента:
+    ```bash
+    npx openapi-generator-cli generate -i src/docs/openapi.json -g typescript-axios -o src/shared/api
+    ```
+6.  **Готово!** Теперь во всем фронтенд-коде доступны новые типы и методы API.
 
-Здесь мы получаем данные по ID. Нужно будет переделать компонент на асинхронный и использовать `axios`.
-
-**Найдите и замените этот блок:**
-
-```typescript
-'use client';
-
-import React from 'react';
-import { teams as mockTeams, users, playgrounds, posts, Team } from "@/mocks";
-// ...
-
-export function TeamPublicPage({ teamId }: { teamId: string }) {
-    const team = mockTeams.find(t => t.id === teamId);
-    //...
-}
-```
-
-**На новый асинхронный компонент:**
-
-```typescript
-'use client';
-
-import React from 'react';
-import type { User, Playground, Post, Team } from "@/mocks";
-import api from '@/shared/api/axios-instance';
-// ...
-
-export function TeamPublicPage({ teamId }: { teamId: string }) {
-    const [team, setTeam] = React.useState<Team | undefined>(undefined);
-    const [loading, setLoading] = React.useState(true);
-
-    React.useEffect(() => {
-        if (!teamId) return;
-
-        async function getTeam() {
-            try {
-                const response = await api.get(`/api/v1/teams/${teamId}`);
-                setTeam(response.data);
-            } catch (error) {
-                console.error("Failed to fetch team:", error);
-                setTeam(undefined);
-            } finally {
-                setLoading(false);
-            }
-        }
-
-        getTeam();
-    }, [teamId]);
-    //...
-}
-```
-
-### 1.3. Страница турнира (`src/views/tournaments/public-page/ui/index.tsx`)
-
-Аналогично странице команды, заменяем моки на `axios`.
-
-**Найдите и замените этот блок:**
-
-```typescript
-// ...
-import { tournaments as mockTournaments, type Tournament, sponsors } from '@/mocks';
-// ...
-export function TournamentPublicPage({ tournament: initialTournament }: { tournament: Tournament | undefined}) {
-    // ...
-}
-```
-
-**На новый асинхронный компонент:**
-
-```typescript
-// ...
-import { useState, useEffect } from 'react';
-import type { Tournament, Sponsor } from "@/mocks";
-import api from '@/shared/api/axios-instance';
-
-// ...
-export function TournamentPublicPage({ tournamentId }: { tournamentId: string }) {
-    const [tournament, setTournament] = useState<Tournament | undefined>(undefined);
-
-    useEffect(() => {
-        if (!tournamentId) return;
-        async function fetchTournament() {
-            try {
-                const response = await api.get(`/api/v1/tournaments/${tournamentId}`);
-                setTournament(response.data);
-            } catch (error) {
-                console.error("Failed to fetch tournament:", error);
-            }
-        }
-        fetchTournament();
-    }, [tournamentId]);
-    //...
-}
-```
-
----
-
-## Шаг 2: Обновление глобальных сторов (Zustand)
-
-Некоторые данные, например, посты, хранятся в глобальном состоянии. Нужно изменить их инициализацию.
-
-### 2.1. Стор постов (`src/widgets/dashboard-feed/model/post-store.ts`)
-
-Сейчас стор инициализируется статичными данными. Мы это изменим.
-
-**Найдите и замените этот блок:**
-
-```typescript
-import { posts as initialPosts } from '@/mocks/posts';
-// ...
-interface PostState {
-  posts: Post[];
-  // ...
-}
-
-export const usePostStore = create<PostState>()(
-    (set, get) => ({
-      posts: initialPosts,
-      // ...
-    })
-);
-```
-
-**На новый код с асинхронной загрузкой:**
-
-```typescript
-import { create } from 'zustand';
-import { produce } from 'immer';
-import api from '@/shared/api/axios-instance';
-// Убираем import { posts as initialPosts } from '@/mocks/posts';
-import type { Post, Comment } from '@/mocks/posts';
-import type { User } from '@/mocks';
-
-interface PostState {
-  posts: Post[];
-  fetchPosts: () => Promise<void>; // Новая функция для загрузки
-  getPostsForTeam: (teamId: string) => Post[];
-  getPostsForUser: (userId: string) => Post[];
-  likePost: (postId: string, like: boolean) => void;
-  addComment: (postId: string, comment: Comment) => void;
-}
-
-export const usePostStore = create<PostState>()(
-    (set, get) => ({
-      posts: [], // Изначально массив пуст
-      fetchPosts: async () => {
-        try {
-            const response = await api.get('/api/v1/posts');
-            set({ posts: response.data });
-        } catch (error) {
-            console.error(error);
-        }
-      },
-      getPostsForTeam: (teamId: string) => {
-        return get().posts.filter(p => p.team?.id === teamId);
-      },
-      // ... остальной код стора без изменений ...
-    })
-);
-```
-
-Теперь в компоненте, где используется лента постов (например, `src/widgets/dashboard-feed/ui/index.tsx`), нужно вызвать `fetchPosts`:
-
-```typescript
-// в src/widgets/dashboard-feed/ui/index.tsx
-import { useEffect } from 'react'; // Добавить импорт
-// ...
-
-export function DashboardFeed() {
-  const { user: currentUser } = useUserStore();
-  const { posts, fetchPosts } = usePostStore(); // Получаем новую функцию
-
-  useEffect(() => {
-    fetchPosts(); // Вызываем загрузку постов при монтировании компонента
-  }, [fetchPosts]);
-
-  // ... остальной код компонента без изменений ...
-}
-```
-
----
-
-## Следующие шаги
-
-Это основа для перехода. По аналогии вы можете пройтись по остальным компонентам:
-
-1.  **Найти**, где импортируются данные из ` '@/mocks'`.
-2.  **Заменить** статический импорт на `useEffect` с вызовом `api.get(...)` к вашему API.
-3.  **Сохранять** полученные данные в состоянии компонента с помощью `useState`.
-
-Этот процесс нужно будет повторить для `tournaments`, `users`, `playgrounds` и других сущностей на соответствующих страницах. Удачи!
+Этот подход гарантирует, что фронтенд и бэкенд всегда "говорят на одном языке", и минимизирует ошибки, связанные с рассинхронизацией API.
