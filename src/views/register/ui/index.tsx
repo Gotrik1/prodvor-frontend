@@ -25,7 +25,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/popover';
 import { Calendar } from '@/shared/ui/calendar';
 import { cn } from '@/shared/lib/utils';
-import api from '@/shared/api/axios-instance';
+import { api } from '@/shared/api/axios-instance';
 
 const registerFormSchema = z.object({
   nickname: z.string().min(3, { message: "Никнейм должен быть не менее 3 символов." }),
