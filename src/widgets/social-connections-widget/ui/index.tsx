@@ -1,8 +1,6 @@
-
-
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 import type { User, Team } from '@/entities/user/types';
@@ -14,10 +12,22 @@ import { Check, UserPlus, X, Users as UsersIcon, Rss, Heart } from 'lucide-react
 import { Badge } from '@/shared/ui/badge';
 import { cn } from '@/shared/lib/utils';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/shared/ui/tooltip';
+import { Skeleton } from '@/shared/ui/skeleton';
+import { api } from '@/shared/api/axios-instance';
 
-const UserList = ({ userIds, emptyText }: { userIds: string[], emptyText: string }) => {
-    const userList = users.filter(u => userIds.includes(u.id));
+
+const UserList = ({ userIds, emptyText, isLoading }: { userIds: string[], emptyText: string, isLoading: boolean }) => {
     
+    if (isLoading) {
+        return (
+            <div className="flex flex-wrap gap-2">
+                {[...Array(5)].map((_, i) => <Skeleton key={i} className="h-12 w-12 rounded-full" />)}
+            </div>
+        )
+    }
+
+    const userList = users.filter(u => userIds.includes(u.id));
+
     if (userList.length === 0) {
         return <p className="text-sm text-muted-foreground text-center py-4">{emptyText}</p>;
     }
@@ -45,7 +55,16 @@ const UserList = ({ userIds, emptyText }: { userIds: string[], emptyText: string
     );
 };
 
-const TeamList = ({ teamIds, emptyText }: { teamIds: string[], emptyText: string }) => {
+const TeamList = ({ teamIds, emptyText, isLoading }: { teamIds: string[], emptyText: string, isLoading: boolean }) => {
+
+     if (isLoading) {
+        return (
+            <div className="flex flex-wrap gap-2">
+                {[...Array(3)].map((_, i) => <Skeleton key={i} className="h-12 w-12 rounded-md" />)}
+            </div>
+        )
+    }
+
     const teamList = teams.filter(t => teamIds.includes(t.id));
 
     if (teamList.length === 0) {
@@ -115,6 +134,40 @@ const FriendRequests = () => {
 }
 
 export function SocialConnectionsWidget({ user, isOwnProfile }: { user: User, isOwnProfile: boolean }) {
+    const [activeTab, setActiveTab] = useState('friends');
+    const [isLoading, setIsLoading] = useState(false);
+    const [friends, setFriends] = useState<string[]>([]);
+    const [followers, setFollowers] = useState<string[]>([]);
+    const [followingUsers, setFollowingUsers] = useState<string[]>([]);
+    const [followingTeams, setFollowingTeams] = useState<string[]>([]);
+    
+    useEffect(() => {
+        const fetchData = async (tab: string) => {
+            if (!user) return;
+
+            // For this mock, we'll just populate from the user object.
+            // In a real app, this would be an API call like `/api/v1/users/${user.id}/${tab}`
+            setIsLoading(true);
+            await new Promise(resolve => setTimeout(resolve, 500)); // Simulate network delay
+
+            switch(tab) {
+                case 'friends':
+                    setFriends(user.friends || []);
+                    break;
+                case 'followers':
+                    setFollowers(user.followers || []);
+                    break;
+                case 'following':
+                    setFollowingUsers(user.followingUsers || []);
+                    setFollowingTeams(user.following || []);
+                    break;
+            }
+            setIsLoading(false);
+        };
+
+        fetchData(activeTab);
+
+    }, [activeTab, user]);
     
     if (!user) {
         return (
@@ -146,7 +199,7 @@ export function SocialConnectionsWidget({ user, isOwnProfile }: { user: User, is
                 <CardDescription>Друзья, подписчики и подписки пользователя.</CardDescription>
             </CardHeader>
             <CardContent className="md:p-6">
-                <Tabs defaultValue="friends" className="w-full">
+                <Tabs defaultValue="friends" className="w-full" onValueChange={setActiveTab}>
                     <TabsList className={cn("grid w-full mb-4", isOwnProfile ? "grid-cols-4" : "grid-cols-3")}>
                         {tabs.map(tab => (
                             <TabsTrigger key={tab.value} value={tab.value}>
@@ -162,10 +215,10 @@ export function SocialConnectionsWidget({ user, isOwnProfile }: { user: User, is
                         ))}
                     </TabsList>
                     <TabsContent value="friends">
-                        <UserList userIds={user.friends || []} emptyText="У этого пользователя пока нет друзей." />
+                        <UserList userIds={friends} emptyText="У этого пользователя пока нет друзей." isLoading={isLoading} />
                     </TabsContent>
                     <TabsContent value="followers">
-                        <UserList userIds={user.followers || []} emptyText="На этого пользователя пока никто не подписан." />
+                        <UserList userIds={followers} emptyText="На этого пользователя пока никто не подписан." isLoading={isLoading} />
                     </TabsContent>
                     {isOwnProfile && (
                         <TabsContent value="requests">
@@ -174,12 +227,12 @@ export function SocialConnectionsWidget({ user, isOwnProfile }: { user: User, is
                     )}
                     <TabsContent value="following" className="space-y-4">
                         <div>
-                             <h3 className="text-sm font-semibold text-muted-foreground mb-2">Команды ({user.following?.length || 0})</h3>
-                             <TeamList teamIds={user.following || []} emptyText="Не подписан на команды." />
+                             <h3 className="text-sm font-semibold text-muted-foreground mb-2">Команды ({followingTeams.length})</h3>
+                             <TeamList teamIds={followingTeams} emptyText="Не подписан на команды." isLoading={isLoading} />
                         </div>
                         <div>
-                            <h3 className="text-sm font-semibold text-muted-foreground mb-2">Игроки ({user.followingUsers?.length || 0})</h3>
-                            <UserList userIds={user.followingUsers || []} emptyText="Не подписан на игроков." />
+                            <h3 className="text-sm font-semibold text-muted-foreground mb-2">Игроки ({followingUsers.length})</h3>
+                            <UserList userIds={followingUsers} emptyText="Не подписан на игроков." isLoading={isLoading} />
                         </div>
                     </TabsContent>
                 </Tabs>
