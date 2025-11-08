@@ -1,9 +1,10 @@
 
+
 'use client';
 
 import React from 'react';
 import { TeamPageTemplate } from "@/views/admin/ui/templates/team-page-template";
-import type { Team, User } from "@/mocks";
+import type { Team, User } from "@/entities/user/types";
 import { api } from '@/shared/api/axios-instance';
 
 export function TeamPublicPage({ teamId }: { teamId: string }) {
@@ -24,14 +25,14 @@ export function TeamPublicPage({ teamId }: { teamId: string }) {
                  if (!response.data) {
                     setTeam(undefined);
                 } else {
-                    const data: Team = response.data as unknown as Team;
+                    const data: Team = response.data;
                     setTeam(data);
 
                     const fullRoster: User[] = [];
 
                     // Add captain to the roster, marking them as captain
                     if (data.captain) {
-                        fullRoster.push({ ...(data.captain as User), role: 'Капитан' as any });
+                        fullRoster.push({ ...data.captain, role: 'Капитан' });
                     }
                     
                     // Add other members, ensuring no duplicates

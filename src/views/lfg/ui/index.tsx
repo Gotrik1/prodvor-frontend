@@ -56,7 +56,7 @@ const TeamCard = ({ team }: { team: typeof teamsLookingForPlayers[0] }) => (
             </Avatar>
             <div>
                 <CardTitle>{team.name}</CardTitle>
-                <CardDescription>{team.game}</CardDescription>
+                <CardDescription>{team.sport?.name}</CardDescription>
             </div>
         </CardHeader>
         <CardContent className="space-y-3">
@@ -77,7 +77,7 @@ export function LfgPage() {
     useEffect(() => {
         async function fetchSports() {
             try {
-                const response = await api.get(`/api/v1/sports/`);
+                const response = await api.get(`/api/v1/sports`);
                 setAllSports(response.data);
             } catch (error) {
                 console.error("Failed to fetch sports:", error);
