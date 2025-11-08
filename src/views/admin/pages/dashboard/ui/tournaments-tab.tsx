@@ -3,7 +3,6 @@
 'use client';
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/shared/ui/card';
-import { tournaments } from '@/mocks';
 import type { Tournament } from '@/mocks';
 import { Badge } from '@/shared/ui/badge';
 import { Progress } from '@/shared/ui/progress';
@@ -12,6 +11,8 @@ import { TableCell, TableRow } from '@/shared/ui/table';
 import { Button } from '@/shared/ui/button';
 import Link from 'next/link';
 import { GanttChart, PlusCircle } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { api } from '@/shared/api/axios-instance';
 
 const statusColors: Record<string, string> = {
     'АНОНС': 'bg-purple-500/20 text-purple-300 border-purple-500/30',
@@ -24,6 +25,20 @@ const statusColors: Record<string, string> = {
 };
 
 export function TournamentsTab() {
+  const [tournaments, setTournaments] = useState<Tournament[]>([]);
+
+  useEffect(() => {
+    const fetchTournaments = async () => {
+        try {
+            const response = await api.get('/api/v1/tournaments');
+            setTournaments(response.data);
+        } catch (error) {
+            console.error("Failed to fetch tournaments:", error);
+        }
+    };
+    fetchTournaments();
+  }, []);
+
   return (
     <Card>
         <CardHeader className="flex flex-row items-center justify-between">

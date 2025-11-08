@@ -75,8 +75,6 @@ function ActiveSessions() {
         setIsLoading(true);
         try {
             const response = await api.get('/api/v1/users/me/sessions');
-            // Assuming the backend cannot reliably set `isCurrent`, we might do it on the client
-            // For now, we trust the backend or adjust if needed.
             setSessions(response.data as Session[]);
         } catch (error) {
             console.error("Failed to fetch sessions:", error);

@@ -3,15 +3,30 @@
 'use client';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
-import { playgrounds } from '@/mocks';
 import type { Playground } from '@/mocks';
 import { Badge } from '@/shared/ui/badge';
 import Link from 'next/link';
 import { DataTable } from './data-table';
 import { allSportsFlat } from '../lib';
 import { TableRow, TableCell } from '@/shared/ui/table';
+import { useEffect, useState } from 'react';
+import { api } from '@/shared/api/axios-instance';
 
 export function PlaygroundsTab() {
+  const [playgrounds, setPlaygrounds] = useState<Playground[]>([]);
+  
+  useEffect(() => {
+    const fetchPlaygrounds = async () => {
+        try {
+            const response = await api.get('/api/v1/playgrounds');
+            setPlaygrounds(response.data);
+        } catch (error) {
+            console.error("Failed to fetch playgrounds:", error);
+        }
+    };
+    fetchPlaygrounds();
+  }, []);
+
   return (
     <Card>
          <CardHeader>

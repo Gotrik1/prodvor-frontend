@@ -1,8 +1,8 @@
 
+
 'use client';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
-import { sponsors } from '@/mocks';
 import type { Sponsor } from '@/mocks';
 import { Button } from '@/shared/ui/button';
 import Image from 'next/image';
@@ -10,8 +10,24 @@ import Link from 'next/link';
 import { ExternalLink } from 'lucide-react';
 import { DataTable } from './data-table';
 import { TableRow, TableCell } from '@/shared/ui/table';
+import { useEffect, useState } from 'react';
+import { api } from '@/shared/api/axios-instance';
 
 export function SponsorsTab() {
+  const [sponsors, setSponsors] = useState<Sponsor[]>([]);
+
+  useEffect(() => {
+    const fetchSponsors = async () => {
+      try {
+        const response = await api.get('/api/v1/sponsors');
+        setSponsors(response.data);
+      } catch (error) {
+        console.error("Failed to fetch sponsors:", error);
+      }
+    };
+    fetchSponsors();
+  }, []);
+
   return (
     <Card>
         <CardHeader>
