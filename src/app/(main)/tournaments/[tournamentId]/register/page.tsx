@@ -1,6 +1,5 @@
 
-
-import { TournamentHubPage } from '@/views/tournaments/hub';
+import { TournamentRegisterPage } from '@/views/tournaments/register';
 import type { Metadata } from 'next';
 import type { Tournament } from '@/mocks';
 import { LegacyTournamentsApi } from '@/shared/api';
@@ -18,10 +17,11 @@ async function getTournament(tournamentId: string): Promise<Tournament | undefin
     }
 }
 
+
 export async function generateMetadata({ params }: { params: { tournamentId: string } }): Promise<Metadata> {
   const tournament = await getTournament(params.tournamentId);
-  const title = tournament ? `Хаб: ${tournament.name} | ProDvor` : 'Турнир не найден | ProDvor';
-  const description = tournament ? `Вся информация о ходе турнира ${tournament.name}: участники, сетка, расписание.` : 'Запрошенный турнир не найден.';
+  const title = tournament ? `Регистрация на ${tournament.name} | ProDvor` : 'Турнир не найден | ProDvor';
+  const description = tournament ? `Подача заявки на участие в турнире ${tournament.name} по ${tournament.game}.` : 'Запрошенный турнир не найден.';
 
   return {
     title,
@@ -29,8 +29,9 @@ export async function generateMetadata({ params }: { params: { tournamentId: str
   };
 }
 
-export default async function TournamentDetailsPage({ params }: { params: { tournamentId: string } }) {
+
+export default async function RegisterForTournamentPage({ params }: { params: { tournamentId: string } }) {
   const tournament = await getTournament(params.tournamentId);
   
-  return <TournamentHubPage tournament={tournament as any} />;
+  return <TournamentRegisterPage tournament={tournament as any} />;
 }
