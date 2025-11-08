@@ -5,7 +5,7 @@ import { useState, useEffect, useMemo } from 'react';
 import type { Team, User } from '@/mocks';
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/shared/ui/card";
-import { PlusCircle, UserCheck, Users, BarChart } from "lucide-react";
+import { PlusCircle, UserCheck, Users, BarChart, ChevronLeft, ChevronRight } from "lucide-react";
 import { Badge } from "@/shared/ui/badge";
 import Link from "next/link";
 import { useUserStore } from "@/widgets/dashboard-header/model/user-store";
@@ -64,6 +64,7 @@ export function TeamsPage() {
     const [isLoading, setIsLoading] = useState(true);
     const [sentApplications, setSentApplications] = useState<string[]>([]);
     const { toast } = useToast();
+    const [pagination, setPagination] = useState({ page: 1, limit: 12, totalPages: 1 });
 
     const handleApply = async (teamId: string) => {
         if (!currentUser) {
@@ -95,8 +96,19 @@ export function TeamsPage() {
     useEffect(() => {
         async function fetchTeams() {
             try {
+                // In a real scenario, the backend would handle pagination.
+                // Here, we simulate it.
                 const response = await api.get('/api/v1/teams');
-                setAllTeams(response.data as Team[]);
+                const teamsData = response.data as Team[];
+                
+                const totalPages = Math.ceil(teamsData.length / pagination.limit);
+                setPagination(p => ({ ...p, totalPages }));
+
+                const startIndex = (pagination.page - 1) * pagination.limit;
+                const endIndex = startIndex + pagination.limit;
+                
+                setAllTeams(teamsData.slice(startIndex, endIndex));
+
             } catch (error) {
                 console.error("Failed to fetch teams:", error);
             }
@@ -105,7 +117,7 @@ export function TeamsPage() {
             }
         }
         fetchTeams();
-    }, []);
+    }, [pagination.page, pagination.limit]);
 
     const { myTeams, otherTeams } = useMemo(() => {
         if (!allTeams || allTeams.length === 0) {
@@ -168,17 +180,40 @@ export function TeamsPage() {
                             ))}
                         </div>
                     ) : otherTeams.length > 0 ? (
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                            {otherTeams.map(team => (
-                                <TeamCard 
-                                    key={team.id} 
-                                    team={team} 
-                                    isMember={false} 
-                                    onApply={handleApply}
-                                    isApplicationSent={sentApplications.includes(String(team.id))}
-                                />
-                            ))}
-                        </div>
+                        <>
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                                {otherTeams.map(team => (
+                                    <TeamCard 
+                                        key={team.id} 
+                                        team={team} 
+                                        isMember={false} 
+                                        onApply={handleApply}
+                                        isApplicationSent={sentApplications.includes(String(team.id))}
+                                    />
+                                ))}
+                            </div>
+                            <div className="flex items-center justify-center gap-2 mt-8">
+                                <Button
+                                    variant="outline"
+                                    disabled={pagination.page <= 1}
+                                    onClick={() => setPagination(p => ({ ...p, page: p.page - 1 }))}
+                                >
+                                    <ChevronLeft className="mr-2 h-4 w-4" />
+                                    Назад
+                                </Button>
+                                <span className="font-medium text-sm">
+                                    Страница {pagination.page} из {pagination.totalPages}
+                                </span>
+                                <Button
+                                    variant="outline"
+                                    disabled={pagination.page >= pagination.totalPages}
+                                    onClick={() => setPagination(p => ({ ...p, page: p.page + 1 }))}
+                                >
+                                    Вперед
+                                    <ChevronRight className="ml-2 h-4 w-4" />
+                                </Button>
+                            </div>
+                        </>
                     ) : (
                         <Card className="text-center min-h-[200px] flex flex-col justify-center items-center">
                             <CardHeader>
@@ -192,3 +227,4 @@ export function TeamsPage() {
         </div>
     );
 }
+
