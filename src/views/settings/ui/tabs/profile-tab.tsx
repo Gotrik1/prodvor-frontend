@@ -286,7 +286,7 @@ export function ProfileTab() {
                 gender: currentUser.gender || 'мужской',
                 bio: currentUser.bio || "",
                 city: currentUser.city || '',
-                birthDate: currentUser.age ? new Date(new Date().setFullYear(new Date().getFullYear() - currentUser.age)) : undefined,
+                birthDate: currentUser.birthDate ? new Date(currentUser.birthDate) : undefined,
             });
         }
     }, [currentUser, profileForm]);
@@ -297,6 +297,7 @@ export function ProfileTab() {
         const dataToUpdate = {
             ...values,
             age: new Date().getFullYear() - values.birthDate.getFullYear(),
+            birthDate: values.birthDate.toISOString(), // Send as ISO string
         };
 
         try {

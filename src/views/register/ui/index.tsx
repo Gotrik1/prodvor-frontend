@@ -73,6 +73,7 @@ export function RegisterPage() {
         firstName: values.firstName,
         lastName: values.lastName,
         age: new Date().getFullYear() - values.birthDate.getFullYear(),
+        birthDate: values.birthDate.toISOString(),
         gender: "мужской" // Mocking gender for now
       });
 

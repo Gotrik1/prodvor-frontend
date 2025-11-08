@@ -38,8 +38,8 @@ export interface User {
   email: string;
   role: UserRole;
   gender?: UserGender;
-  elo?: number;
   age?: number;
+  birthDate?: string; // Added for precise date
   city: string;
   phone?: string;
   bio?: string;
