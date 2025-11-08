@@ -29,14 +29,14 @@ export const TeamHeader = ({ team, homePlaygrounds }: TeamHeaderProps) => {
     const [isLoadingFollow, setIsLoadingFollow] = useState(false);
 
     useEffect(() => {
-        if (!currentUser) {
+        if (!currentUser || !team) {
             setIsFollowing(false);
-            setFollowerCount(team.followers?.length || 0);
+            setFollowerCount(team?.followers?.length || 0);
             return;
         };
 
-        setIsFollowing(team.followers?.some(followerId => followerId === currentUser.id) || false);
-        setFollowerCount(team.followers?.length || 0);
+        const userFollows = currentUser.following?.includes(team.id);
+        setIsFollowing(userFollows);
 
         const fetchCaptainedTeams = async () => {
             if (!currentUser.id) return;
@@ -53,7 +53,12 @@ export const TeamHeader = ({ team, homePlaygrounds }: TeamHeaderProps) => {
         };
 
         fetchCaptainedTeams();
-    }, [currentUser, team.followers]);
+    }, [currentUser, team]);
+
+    useEffect(() => {
+        setFollowerCount(team?.followers?.length || 0);
+    }, [team]);
+
 
     const handleApply = async () => {
         if (!currentUser) {
@@ -66,7 +71,7 @@ export const TeamHeader = ({ team, homePlaygrounds }: TeamHeaderProps) => {
         }
         
         try {
-            await api.post(`/api/v1/teams/${team.id}/apply`, {});
+            await api.post(`/api/v1/teams/${team.id}/apply`);
             toast({
                 title: "Заявка отправлена!",
                 description: `Ваша заявка в команду "${team.name}" отправлена на рассмотрение капитану.`,

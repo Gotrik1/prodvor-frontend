@@ -26,7 +26,7 @@ import { useToast } from "@/shared/hooks/use-toast";
 import { Label } from '@/shared/ui/label';
 import type { User, Team } from '@/mocks';
 import { users } from '@/mocks';
-import api from '@/shared/api/axios-instance';
+import { api } from '@/shared/api/axios-instance';
 import { Skeleton } from '@/shared/ui/skeleton';
 import axios from 'axios';
 
@@ -82,8 +82,8 @@ export function TransfersTab({ team, onApplicationProcessed }: TransfersTabProps
       await api.post(`/api/v1/teams/${team.id}/applications/${applicantId}/respond`, {
         action: accepted ? 'accept' : 'decline',
       });
-      setApplications((prev) => prev.filter((app) => app.id !== applicantId));
-      const applicant = users.find((u) => u.id === applicantId);
+      setApplications((prev) => prev.filter((app) => String(app.id) !== String(applicantId)));
+      const applicant = users.find((u) => String(u.id) === String(applicantId));
       toast({
         title: `Заявка ${accepted ? 'принята' : 'отклонена'}`,
         description: `Заявка от игрока ${
@@ -169,7 +169,7 @@ export function TransfersTab({ team, onApplicationProcessed }: TransfersTabProps
                       variant="outline"
                       size="icon"
                       className="h-8 w-8 bg-green-500/10 border-green-500/20 text-green-300 hover:bg-green-500/20 hover:text-green-200"
-                      onClick={() => handleApplication(applicant.id, true)}
+                      onClick={() => handleApplication(String(applicant.id), true)}
                     >
                       <CheckCircle className="h-4 w-4" />
                     </Button>
@@ -177,7 +177,7 @@ export function TransfersTab({ team, onApplicationProcessed }: TransfersTabProps
                       variant="outline"
                       size="icon"
                       className="h-8 w-8 bg-red-500/10 border-red-500/20 text-red-300 hover:bg-red-500/20 hover:text-red-200"
-                      onClick={() => handleApplication(applicant.id, false)}
+                      onClick={() => handleApplication(String(applicant.id), false)}
                     >
                       <XCircle className="h-4 w-4" />
                     </Button>

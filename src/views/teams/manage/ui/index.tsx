@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import React, { useEffect, useState, useCallback } from 'react';
@@ -13,10 +14,10 @@ import { Skeleton } from '@/shared/ui/skeleton';
 import { api } from '@/shared/api/axios-instance';
 import { RosterManagement } from './roster-management';
 import { TacticalBoard } from './tactical-board';
-import { TransfersTab } from "./tabs/transfers-tab";
+import { TransfersTab } from "./transfers-tab";
 import { AnnouncementsTab } from "./tabs/announcements-tab";
-import { SettingsTab } from "./tabs/settings-tab";
-import { BrandingTab } from "./tabs/branding-tab";
+import { SettingsTab } from "./settings-tab";
+import { BrandingTab } from "./branding-tab";
 
 export function TeamManagementPage({ teamId }: { teamId: string }) {
     const { user: currentUser } = useUserStore();
