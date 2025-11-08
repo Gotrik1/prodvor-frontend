@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
@@ -7,7 +6,10 @@ import type { Sport } from '@/mocks';
 import { DataTable } from './data-table';
 import { TableCell, TableRow } from '@/shared/ui/table';
 import { useEffect, useState } from 'react';
-import { api } from '@/shared/api/axios-instance';
+import { SportsApi } from '@/shared/api';
+import { apiConfig } from '@/shared/api/axios-instance';
+
+const sportsApi = new SportsApi(apiConfig);
 
 export function SportsTab() {
   const [allSports, setAllSports] = useState<Sport[]>([]);
@@ -15,7 +17,7 @@ export function SportsTab() {
   useEffect(() => {
     async function fetchSports() {
       try {
-        const response = await api.get('/api/v1/sports');
+        const response = await sportsApi.apiV1SportsGet();
         setAllSports(response.data as Sport[]);
       } catch (error) {
         console.error("Failed to fetch sports:", error);
@@ -67,6 +69,6 @@ export function SportsTab() {
           />
         </CardContent>
       </Card>
-    </Card>
+    </div>
   );
 }
