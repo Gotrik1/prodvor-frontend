@@ -1,19 +1,16 @@
 
+
 import type { Metadata } from 'next';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Button } from '@/shared/ui/button';
 import Link from 'next/link';
-import { CoachPageTemplate } from '@/views/admin/ui/templates/coach-page-template';
-import { FanPageTemplate } from '@/views/admin/ui/templates/fan-page-template';
-import { ManagerPageTemplate } from '@/views/admin/ui/templates/manager-page-template';
-import { OrganizerPageTemplate } from '@/views/admin/ui/templates/organizer-page-template';
-import { RefereePageTemplate } from '@/views/admin/ui/templates/referee-page-template';
-import { PlaceholderTemplate } from '@/views/admin/ui/templates/placeholder-template';
 import { PlayerPageTemplate } from '@/views/admin/ui/templates/player-page-template';
-import axios from 'axios';
 import type { User } from '@/entities/user/types';
+import { UsersApi } from '@/shared/api';
+import { apiConfig } from '@/shared/api/axios-instance';
+import axios from 'axios';
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:6000";
+const usersApi = new UsersApi(apiConfig);
 
 async function getUser(userId: string): Promise<User | undefined> {
     if (!userId) {
@@ -21,13 +18,13 @@ async function getUser(userId: string): Promise<User | undefined> {
     }
     
     try {
-        const response = await axios.get(`${BASE_URL}/api/v1/users/${userId}?include_teams=true`);
-        return response.data;
+        const response = await usersApi.apiV1UsersUserIdGet(parseInt(userId, 10), true);
+        return response.data as User;
     } catch (error: any) {
         if (axios.isAxiosError(error) && error.response?.status === 404) {
             console.log(`[Server] User with ID ${userId} not found on the backend.`);
         } else {
-            console.error(`[Server] Failed to fetch user data for ID ${userId}:`, error.message);
+            console.error(`[Server] Failed to fetch user data for ID ${userId}:`, error.message || error);
         }
         return undefined;
     }
@@ -66,29 +63,11 @@ export default async function UserProfilePage({ params }: { params: { userId: st
     );
   }
 
-  const renderContent = () => {
-    switch (user.role) {
-      case 'Судья':
-          return <RefereePageTemplate user={user} />;
-      case 'Тренер':
-          return <CoachPageTemplate user={user} />;
-      case 'Менеджер':
-          return <ManagerPageTemplate user={user} />;
-      case 'Организатор':
-          return <OrganizerPageTemplate user={user} />;
-      case 'Игрок':
-      case 'Капитан':
-          return <PlayerPageTemplate user={user} />;
-      case 'Болельщик':
-          return <FanPageTemplate user={user} />;
-      default:
-          return <PlaceholderTemplate roleName={user.role || 'Неизвестная роль'} />;
-    }
-  }
-
+  // For now, we assume all non-found roles are Player for template rendering.
+  // In a real app, you'd have templates for each role.
   return (
     <div className="p-0 md:p-6 lg:p-8">
-      {renderContent()}
+      <PlayerPageTemplate user={user} />
     </div>
   )
 }
