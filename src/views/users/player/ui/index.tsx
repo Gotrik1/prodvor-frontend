@@ -2,9 +2,9 @@
 
 'use client';
 
-import type { User } from "@/entities/user/types";
+import type { User, ProfileButton } from "@/entities/user/types";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
-import { MapPin, Cake, User as UserIcon, MessageSquare, UserPlus, Gamepad2 } from "lucide-react";
+import { MapPin, Cake, User as UserIcon, MessageSquare, UserPlus, Gamepad2, Cog, UserX, UserCheck } from "lucide-react";
 import { Button } from "@/shared/ui/button";
 import { useUserStore } from "@/widgets/dashboard-header/model/user-store";
 import { TrainingInfoWidget } from "@/widgets/training-info-widget";
@@ -22,6 +22,7 @@ import { PublicationsFeed } from "@/widgets/publications-feed";
 import Image from "next/image";
 import { Skeleton } from "@/shared/ui/skeleton";
 import { getUserDisciplines } from "@/entities/user/lib";
+import Link from "next/link";
 
 
 const MoreDisciplines = ({ disciplines }: { disciplines: string[] }) => {
@@ -64,6 +65,48 @@ const MoreDisciplines = ({ disciplines }: { disciplines: string[] }) => {
         </Popover>
     );
 };
+
+
+const ProfileActionButton = ({ button }: { button: ProfileButton }) => {
+    const getIcon = () => {
+        switch (button.action.type) {
+            case 'friend_request':
+                if (button.action.status === 'already_friend') return <UserCheck className="mr-2 h-4 w-4" />;
+                if (button.action.status === 'request_sent') return <UserX className="mr-2 h-4 w-4" />;
+                return <UserPlus className="mr-2 h-4 w-4" />;
+            case 'write_message':
+                return <MessageSquare className="mr-2 h-4 w-4" />;
+            case 'edit_profile':
+                 return <Cog className="mr-2 h-4 w-4" />;
+            default:
+                return null;
+        }
+    };
+    
+    const getVariant = () => {
+        if (button.action.type === 'edit_profile') return 'outline';
+        if (button.action.status === 'already_friend') return 'secondary';
+        return 'default';
+    }
+
+    if (button.action.type === 'edit_profile') {
+        return (
+             <Button asChild variant={getVariant()} className="w-full">
+                <Link href="/settings">
+                    {getIcon()}
+                    {button.text}
+                </Link>
+            </Button>
+        )
+    }
+
+    return (
+        <Button variant={getVariant()} className="w-full">
+            {getIcon()}
+            {button.text}
+        </Button>
+    )
+}
 
 
 export function PlayerPage({ user: profileUser }: { user: User }) {
@@ -149,12 +192,11 @@ export function PlayerPage({ user: profileUser }: { user: User }) {
                                     )}
                                 </div>
                             </div>
-                            {!isOwnProfile && (
-                                <div className="flex items-center gap-2 shrink-0 w-full sm:w-auto px-4 sm:px-0">
-                                    <Button className="w-full"><UserPlus className="mr-2 h-4 w-4" />Добавить в друзья</Button>
-                                    <Button variant="secondary" className="w-full"><MessageSquare className="mr-2 h-4 w-4" />Написать</Button>
-                                </div>
-                            )}
+                             <div className="flex items-center gap-2 shrink-0 w-full sm:w-auto px-4 sm:px-0">
+                                {(profileUser.profile_buttons || []).map((button) => (
+                                    <ProfileActionButton key={button.uid} button={button} />
+                                ))}
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -27,6 +27,19 @@ export interface CoachProfile {
     managedTeams: string[]; // Array of team IDs
 }
 
+// Interface for the dynamic profile buttons
+export interface ProfileButtonAction {
+    type: 'friend_request' | 'write_message' | 'more_options' | 'edit_profile';
+    status?: 'not_friend' | 'request_sent' | 'already_friend';
+}
+
+export interface ProfileButton {
+    action: ProfileButtonAction;
+    text: string;
+    uid: string;
+}
+
+
 // Main User interface, combining all possible fields
 export interface User {
   id: string;
@@ -53,6 +66,7 @@ export interface User {
   coachProfile?: CoachProfile;
   player_profile?: PlayerProfile; // This field comes from the backend
   elo?: number; // For quick access
+  profile_buttons?: ProfileButton[]; // For dynamic action buttons
 }
 
 export interface Team {
