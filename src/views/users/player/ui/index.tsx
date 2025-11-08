@@ -23,16 +23,6 @@ import Image from "next/image";
 import { Skeleton } from "@/shared/ui/skeleton";
 import { getUserDisciplines } from "@/entities/user/lib";
 
-function getAgeDeclension(age: number): string {
-    if (age % 10 === 1 && age % 100 !== 11) {
-        return 'год';
-    }
-    if ([2, 3, 4].includes(age % 10) && ![12, 13, 14].includes(age % 100)) {
-        return 'года';
-    }
-    return 'лет';
-}
-
 
 const MoreDisciplines = ({ disciplines }: { disciplines: string[] }) => {
     const isMobile = useIsMobile();
@@ -109,6 +99,14 @@ export function PlayerPage({ user: profileUser }: { user: User }) {
         )
     }
 
+    const birthDateFormatted = profileUser.birthDate 
+    ? new Date(profileUser.birthDate).toLocaleDateString('ru-RU', {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric'
+    })
+    : null;
+
     return (
         <Card className="shadow-none md:shadow-main-sm">
             <CardBody className="p-0 md:p-6 md:pb-6">
@@ -138,7 +136,7 @@ export function PlayerPage({ user: profileUser }: { user: User }) {
                                 {profileUser.bio && <p className="text-sm text-muted-foreground mt-1">{profileUser.bio}</p>}
                                 <div className="flex flex-wrap items-center justify-center sm:justify-start gap-x-4 gap-y-1 text-muted-foreground mt-2 text-sm">
                                     {profileUser.city && <span className="flex items-center gap-1.5"><MapPin className="h-4 w-4 text-red-500" />{profileUser.city}</span>}
-                                    {profileUser.age && <span className="flex items-center gap-1.5"><Cake className="h-4 w-4 text-purple-500" />{profileUser.age} {getAgeDeclension(profileUser.age)}</span>}
+                                    {birthDateFormatted && <span className="flex items-center gap-1.5"><Cake className="h-4 w-4 text-purple-500" />{birthDateFormatted}</span>}
                                     {profileUser.gender && <span className="flex items-center gap-1.5"><UserIcon className={`h-4 w-4 ${profileUser.gender === 'мужской' ? 'text-blue-500' : 'text-pink-500'}`} />{profileUser.gender}</span>}
                                 </div>
                                 <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 mt-3">
