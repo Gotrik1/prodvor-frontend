@@ -6,15 +6,18 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
 import { Users } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
-import type { User, Team } from '@/mocks';
+import type { User, Team } from '@/entities/user/types';
 import React, { useState, useEffect } from "react";
 import { Skeleton } from "@/shared/ui/skeleton";
 import { ScrollArea } from "@/shared/ui/scroll-area";
 import { MyTeamsEmptyState } from "@/views/teams/ui/my-teams-empty-state";
 import { useUserStore } from "@/widgets/dashboard-header/model/user-store";
+import { api } from "@/shared/api/axios-instance";
+import { UsersApi } from "@/shared/api";
+import { apiConfig } from "@/shared/api/axios-instance";
 import axios from "axios";
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:6000";
+const usersApi = new UsersApi(apiConfig);
 
 export function MyTeamWidget({ user }: { user: User }) {
   const [myTeams, setMyTeams] = useState<Team[]>([]);
@@ -29,15 +32,15 @@ export function MyTeamWidget({ user }: { user: User }) {
         }
         setIsLoading(true);
         try {
-            const response = await axios.get(`${BASE_URL}/api/v1/users/me?include_teams=true`, {
-                headers: {
-                    Authorization: `Bearer ${accessToken}`
-                }
-            });
-            const userWithTeams = response.data as User & { teams?: Team[] };
+            const response = await usersApi.apiV1UsersUserIdGet(parseInt(user.id, 10), true);
+            const userWithTeams = response.data as unknown as User & { teams?: Team[] };
             setMyTeams(userWithTeams.teams || []);
         } catch (error) {
-            console.error("Failed to fetch user's teams for widget:", error);
+            if (axios.isAxiosError(error)) {
+                console.error("Failed to fetch user's teams for widget:", error.response?.data || error.message);
+            } else {
+                 console.error("Failed to fetch user's teams for widget:", error);
+            }
             setMyTeams([]);
         } finally {
             setIsLoading(false);
