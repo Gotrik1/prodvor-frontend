@@ -10,13 +10,13 @@ import { ManagerPageTemplate } from '@/views/admin/ui/templates/manager-page-tem
 import { OrganizerPageTemplate } from '@/views/admin/ui/templates/organizer-page-template';
 import { RefereePageTemplate } from '@/views/admin/ui/templates/referee-page-template';
 import { PlaceholderTemplate } from '@/views/admin/ui/templates/placeholder-template';
-import type { User, Team } from '@/mocks';
 import { PlayerPageTemplate } from '@/views/admin/ui/templates/player-page-template';
 import axios from 'axios';
+import type { User } from '@/entities/user/types';
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:6000";
 
-async function getUser(userId: string): Promise<(User & { teams?: Team[] }) | undefined> {
+async function getUser(userId: string): Promise<User | undefined> {
     if (!userId) {
         return undefined;
     }

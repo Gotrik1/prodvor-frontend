@@ -1,50 +1,51 @@
 
+
 'use client';
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
 import { Users } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
-import type { User, Team } from '@/mocks';
+import type { User, Team } from "@/entities/user/types";
 import React, { useState, useEffect } from "react";
 import { Skeleton } from "@/shared/ui/skeleton";
 import { ScrollArea } from "@/shared/ui/scroll-area";
 import { MyTeamsEmptyState } from "@/views/teams/ui/my-teams-empty-state";
-import { UsersApi } from "@/shared/api";
-import { apiConfig } from "@/shared/api/axios-instance";
+import { useUserStore } from "@/widgets/dashboard-header/model/user-store";
 import axios from "axios";
 
-const usersApi = new UsersApi(apiConfig);
+const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:6000";
 
 export function MyTeamWidget({ user }: { user: User }) {
   const [myTeams, setMyTeams] = useState<Team[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const { accessToken } = useUserStore();
 
   useEffect(() => {
     const fetchUserTeams = async () => {
-        if (!user) {
+        if (!user || !accessToken) {
             setIsLoading(false);
             return;
         }
         setIsLoading(true);
         try {
-            // Assume the API for 'me' is implicitly using the authorized user's token
-            const response = await usersApi.apiV1UsersUserIdGet(parseInt(user.id, 10), true);
-            const userWithTeams = response.data as unknown as User & { teams?: Team[] };
+            const response = await axios.get(`${BASE_URL}/api/v1/users/me?include_teams=true`, {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                }
+            });
+            const userWithTeams = response.data as User & { teams?: Team[] };
             setMyTeams(userWithTeams.teams || []);
         } catch (error) {
-            if (axios.isAxiosError(error)) {
-                console.error("Failed to fetch user's teams:", error.response?.data || error.message);
-            } else {
-                console.error("Failed to fetch user's teams:", error);
-            }
+            console.error("Failed to fetch user's teams for widget:", error);
+            setMyTeams([]);
         } finally {
             setIsLoading(false);
         }
     };
     
     fetchUserTeams();
-  }, [user]);
+  }, [user, accessToken]);
 
   if (isLoading) {
     return (
