@@ -1,8 +1,9 @@
 
+
 'use client';
 import { Card, CardBody } from "@/shared/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
-import { FileText, DraftingCompass, Info, Gem, Server, BrainCircuit, Upload, Database as DatabaseIcon, User as UserIconSchema } from "lucide-react";
+import { FileText, DraftingCompass, Info, Gem, Server, BrainCircuit, Upload, Database as DatabaseIcon, User as UserIconSchema, Route } from "lucide-react";
 import ReactMarkdown, { type Components } from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { CONCEPT, README } from './docs-content';
@@ -14,14 +15,16 @@ import { RanksPage } from "../ranks";
 import { markdownComponents } from '@/features/ai-analysis-tool/ui/markdown-styles';
 import { MINIO_SETUP_GUIDE } from "./minio-setup-guide-content";
 import { USER_PROFILE_ARCH } from "./user-profile-arch-content";
+import { BACKEND_MIGRATION_PLAN } from "./backend-migration-plan-content";
 
 export function DocsPage() {
   return (
     <Card>
         <CardBody>
             <Tabs defaultValue="concept" className="w-full">
-                <TabsList className="grid w-full grid-cols-1 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-9">
+                <TabsList className="grid w-full grid-cols-1 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-10">
                     <TabsTrigger value="concept"><DraftingCompass className="mr-2 h-4 w-4" />Концепция</TabsTrigger>
+                    <TabsTrigger value="migration_plan"><Route className="mr-2 h-4 w-4" />План миграции</TabsTrigger>
                     <TabsTrigger value="user_profile"><UserIconSchema className="mr-2 h-4 w-4" />Профиль</TabsTrigger>
                     <TabsTrigger value="readme"><FileText className="mr-2 h-4 w-4" />Тех. док</TabsTrigger>
                     <TabsTrigger value="api"><Server className="mr-2 h-4 w-4" />API</TabsTrigger>
@@ -34,6 +37,11 @@ export function DocsPage() {
                 <TabsContent value="concept" className="mt-6 prose prose-sm dark:prose-invert max-w-none">
                     <ReactMarkdown components={markdownComponents as Components} remarkPlugins={[remarkGfm]}>
                         {CONCEPT}
+                    </ReactMarkdown>
+                </TabsContent>
+                <TabsContent value="migration_plan" className="mt-6 prose prose-sm dark:prose-invert max-w-none">
+                    <ReactMarkdown components={markdownComponents as Components} remarkPlugins={[remarkGfm]}>
+                        {BACKEND_MIGRATION_PLAN}
                     </ReactMarkdown>
                 </TabsContent>
                  <TabsContent value="user_profile" className="mt-6 prose prose-sm dark:prose-invert max-w-none">
