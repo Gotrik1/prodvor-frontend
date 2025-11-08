@@ -13,6 +13,7 @@ import { PlaceholderTemplate } from '@/views/admin/ui/templates/placeholder-temp
 import type { User, Team } from '@/mocks';
 import { PlayerPageTemplate } from '@/views/admin/ui/templates/player-page-template';
 import axios from 'axios';
+import { api } from '@/shared/api/axios-instance';
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "/api";
 
@@ -22,7 +23,7 @@ async function getUser(userId: string): Promise<(User & { teams?: Team[] }) | un
     }
     
     try {
-        const response = await axios.get(`${BASE_URL}/api/v1/users/${userId}?include_teams=true`);
+        const response = await api.get(`/api/v1/users/${userId}?include_teams=true`);
         return response.data;
     } catch (error: any) {
         if (axios.isAxiosError(error) && error.response?.status === 404) {
