@@ -28,8 +28,6 @@ import { useToast } from '@/shared/hooks/use-toast';
 import { useUserStore } from '@/widgets/dashboard-header/model/user-store';
 import { Loader2 } from 'lucide-react';
 import type { User } from '@/mocks';
-import { UsersApi } from '@/shared/api';
-import { apiConfig } from '@/shared/api/axios-instance';
 import { api } from '@/shared/api/axios-instance';
 
 // ------------------ Схемы валидации ------------------
@@ -135,8 +133,6 @@ export function AuthPage() {
   const searchParams = useSearchParams();
   const [isLoading, setIsLoading] = React.useState(false);
 
-  const usersApi = new UsersApi(apiConfig);
-
   useEffect(() => {
     // This effect ensures we don't try to redirect on the server.
     const hasLoggedOut = searchParams?.get('loggedOut') === 'true';
@@ -158,27 +154,18 @@ export function AuthPage() {
     try {
         const loginResponse = await api.post(`/api/v1/auth/login`, values);
         
-        const accessToken = loginResponse.data.accessToken;
-        const refreshToken = loginResponse.data.refreshToken;
+        const { accessToken, refreshToken, user } = loginResponse.data;
 
-        if (accessToken && refreshToken) {
+        if (accessToken && refreshToken && user) {
             setTokens({ accessToken, refreshToken });
-            // Now fetch the user data using the new token
-            const userResponse = await api.get(`/api/v1/users/me`);
-            const user = userResponse.data as User;
-            
-            if (user) {
-                setUser(user);
-                toast({
-                    title: "Вход выполнен!",
-                    description: `Добро пожаловать, ${user.nickname}!`,
-                });
-                router.push(`/users/${user.id}`);
-            } else {
-                 throw new Error("Не удалось получить данные пользователя после входа.");
-            }
+            setUser(user as User);
+            toast({
+                title: "Вход выполнен!",
+                description: `Добро пожаловать, ${user.nickname}!`,
+            });
+            router.push(`/users/${user.id}`);
         } else {
-             throw new Error("Ответ сервера не содержит токены.");
+             throw new Error("Ответ сервера не содержит все необходимые данные (токены и пользователь).");
         }
     } catch (error: any) {
         console.error("Login failed:", error);

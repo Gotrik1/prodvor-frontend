@@ -31,9 +31,9 @@ export interface User {
   coverImageUrl?: string;
   email: string;
   role: UserRole;
-  gender: UserGender;
-  elo?: number;
+  gender?: UserGender;
   age?: number;
+  birthDate?: string;
   city: string;
   phone: string;
   bio?: string;

@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { useState, useRef } from 'react';
@@ -6,7 +7,7 @@ import type { Team, PresignedPostResponse } from '@/mocks';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/shared/ui/dialog';
 import { Button } from '@/shared/ui/button';
-import { UploadCloud, Image as ImageIcon, Loader2, AlertCircle } from 'lucide-react';
+import { UploadCloud, Image as ImageIcon, Loader2, AlertCircle, Upload } from 'lucide-react';
 import Image from 'next/image';
 import { useToast } from '@/shared/hooks/use-toast';
 import { LogoGeneratorWidget } from '@/widgets/logo-generator';
@@ -36,27 +37,25 @@ const LogoUploadDialog = ({ team, onUploadSuccess }: { team: Team, onUploadSucce
 
     const handleSaveLogo = async () => {
         if (!file || !team?.id || !accessToken) {
-            toast({
+             toast({
                 variant: "destructive",
                 title: "Ошибка",
                 description: "Файл не выбран или вы не авторизованы.",
             });
             return;
-        }
+        };
         setIsLoading(true);
         setError(null);
 
         try {
-            // Step 1: Request presigned URL
+            // Step 1: Request presigned URL from our backend
             const presignedResponse = await api.post('/api/v1/uploads/request-url', {
                 contentType: file.type,
-            }, {
-                headers: { 'Authorization': `Bearer ${accessToken}` }
             });
 
             const presignedData: PresignedPostResponse = presignedResponse.data;
 
-            // Step 2: Upload file directly to storage
+            // Step 2: Upload file directly to S3-compatible storage
             const formData = new FormData();
             Object.entries(presignedData.fields).forEach(([key, value]) => {
                 formData.append(key, value as string);
@@ -69,14 +68,13 @@ const LogoUploadDialog = ({ team, onUploadSuccess }: { team: Team, onUploadSucce
             });
 
             if (!uploadResponse.ok) {
-                throw new Error('Ошибка при загрузке файла в хранилище.');
+                 const errorText = await uploadResponse.text();
+                throw new Error(`Ошибка при загрузке файла в хранилище: ${errorText}`);
             }
 
-            // Step 3: Confirm upload with our backend
+            // Step 3: Notify our backend of the successful upload
             const confirmResponse = await api.post(`/api/v1/teams/${team.id}/logo`, {
                 fileUrl: presignedData.fileUrl,
-            }, {
-                headers: { 'Authorization': `Bearer ${accessToken}` }
             });
             
             if (confirmResponse.status === 200 && confirmResponse.data.logoUrl) {
@@ -135,7 +133,7 @@ const LogoUploadDialog = ({ team, onUploadSuccess }: { team: Team, onUploadSucce
                             </label>
                         </div>
                     )}
-                    {error && (
+                     {error && (
                         <div className="flex items-center gap-2 mt-2 text-sm text-destructive">
                             <AlertCircle className="h-4 w-4" />
                             <span>{error}</span>

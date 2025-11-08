@@ -1,7 +1,8 @@
 
+
 'use client';
 
-import { useState, useRef, useEffect, useCallback } from 'react';
+import { useState, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -24,20 +25,19 @@ import {
   FormLabel,
   FormMessage,
 } from '@/shared/ui/form';
-import { CalendarIcon, Save, Warehouse, UploadCloud, Loader2, BookCopy, AlertCircle, Upload } from 'lucide-react';
+import { CalendarIcon, Save, Upload, Loader2, AlertCircle } from 'lucide-react';
 import { useUserStore } from '@/widgets/dashboard-header/model/user-store';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import { Textarea } from '@/shared/ui/textarea';
 import { useToast } from '@/shared/hooks/use-toast';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shared/ui/select';
-import Link from 'next/link';
 import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/popover';
 import { Calendar } from '@/shared/ui/calendar';
 import { cn } from '@/shared/lib/utils';
 import { MultiSelect, type OptionType } from '@/shared/ui/multi-select';
-import Image from 'next/image';
 import type { User, Sport, PresignedPostResponse } from '@/mocks';
 import { api } from '@/shared/api/axios-instance';
+import { DisciplinesCard } from './disciplines-card';
 
 const profileFormSchema = z.object({
   firstName: z.string().min(2, 'Имя должно содержать не менее 2 символов.'),
@@ -70,16 +70,14 @@ const AvatarUploadDialog = () => {
         setIsLoading(true);
 
         try {
-            // Step 1: Request presigned URL
+            // Step 1: Request presigned URL from our backend
             const presignedResponse = await api.post('/api/v1/uploads/request-url', {
                 contentType: file.type,
-            }, {
-                headers: { 'Authorization': `Bearer ${accessToken}` }
             });
 
             const presignedData: PresignedPostResponse = presignedResponse.data;
 
-            // Step 2: Upload file directly to storage
+            // Step 2: Upload file directly to S3-compatible storage
             const formData = new FormData();
             Object.entries(presignedData.fields).forEach(([key, value]) => {
                 formData.append(key, value as string);
@@ -92,19 +90,17 @@ const AvatarUploadDialog = () => {
             });
 
             if (!uploadResponse.ok) {
-                throw new Error('Ошибка при загрузке файла в хранилище.');
+                const errorText = await uploadResponse.text();
+                throw new Error(`Ошибка при загрузке файла в хранилище: ${errorText}`);
             }
 
-            // Step 3: Confirm upload with our backend
+            // Step 3: Notify our backend of the successful upload
             const finalResponse = await api.post('/api/v1/users/avatar', {
                 fileUrl: presignedData.fileUrl,
-            }, {
-                headers: { 'Authorization': `Bearer ${accessToken}` }
             });
             
             const result = finalResponse.data;
 
-            // Update user state
             setUser(result.user);
             toast({
                 title: "Аватар обновлен!",
@@ -160,110 +156,9 @@ const AvatarUploadDialog = () => {
     );
 };
 
-const DisciplinesCard = () => {
-    const { toast } = useToast();
-    const { user: currentUser, setUser, accessToken } = useUserStore();
-    const [sportOptions, setSportOptions] = useState<OptionType[]>([]);
-    const [selectedSports, setSelectedSports] = useState<string[]>([]);
-    const [isLoading, setIsLoading] = useState(false);
-    const [isSaving, setIsSaving] = useState(false);
-
-    useEffect(() => {
-        async function fetchSports() {
-            setIsLoading(true);
-            try {
-                const response = await api.get(`/api/v1/sports/`);
-                const sports: Sport[] = response.data;
-                const options = sports.map(sport => ({
-                    value: sport.id,
-                    label: sport.name,
-                    group: sport.isTeamSport ? 'Командные' : 'Индивидуальные',
-                }));
-                setSportOptions(options);
-            } catch (error) {
-                console.error("Failed to fetch sports:", error);
-                toast({
-                    variant: 'destructive',
-                    title: 'Ошибка загрузки',
-                    description: 'Не удалось загрузить список дисциплин.'
-                });
-            } finally {
-                setIsLoading(false);
-            }
-        }
-        fetchSports();
-    }, [toast]);
-    
-    useEffect(() => {
-        if (currentUser?.sports) {
-            setSelectedSports(currentUser.sports.map(s => s.id));
-        }
-    }, [currentUser]);
-
-    const handleSaveDisciplines = async () => {
-        if (!currentUser || !accessToken) return;
-        setIsSaving(true);
-        try {
-            const response = await api.put(`/api/v1/users/${currentUser.id}`, {
-                sports: selectedSports
-            });
-            const updatedUser = response.data as User;
-            setUser(updatedUser);
-            toast({
-                title: "Дисциплины обновлены",
-                description: "Ваш список видов спорта успешно сохранен.",
-            });
-        } catch {
-             toast({
-                variant: 'destructive',
-                title: "Ошибка",
-                description: "Не удалось сохранить дисциплины. Попробуйте позже.",
-            });
-        } finally {
-            setIsSaving(false);
-        }
-    }
-    
-    return (
-        <Card>
-            <CardHeader>
-                <CardTitle className="flex items-center gap-2"><BookCopy /> Мои дисциплины</CardTitle>
-                <CardDescription>Выберите до 5 видов спорта, в которых вы участвуете.</CardDescription>
-            </CardHeader>
-            <CardContent>
-                {isLoading ? (
-                    <div className="space-y-2">
-                        <div className="h-10 w-full rounded-md border flex items-center p-2 justify-between">
-                             <span className="text-sm text-muted-foreground">Выберите ваши виды спорта...</span>
-                        </div>
-                    </div>
-                ) : (
-                    <MultiSelect
-                        options={sportOptions}
-                        selected={selectedSports}
-                        onChange={setSelectedSports}
-                        placeholder="Выберите ваши виды спорта..."
-                        className="w-full"
-                    />
-                )}
-            </CardContent>
-            <CardFooter className="border-t px-6 py-4">
-                <Button onClick={handleSaveDisciplines} disabled={isSaving || selectedSports.length === 0 || selectedSports.length > 5}>
-                     {isSaving ? (
-                        <><Loader2 className="mr-2 h-4 w-4 animate-spin"/> Сохранение...</>
-                     ) : (
-                        <><Save className="mr-2 h-4 w-4" />Сохранить дисциплины</>
-                     )}
-                </Button>
-            </CardFooter>
-        </Card>
-    );
-};
-
-
 export function ProfileTab() {
     const { toast } = useToast();
-    const { user: currentUser, setUser, accessToken } = useUserStore();
+    const { user: currentUser, setUser } = useUserStore();
 
     const profileForm = useForm<z.infer<typeof profileFormSchema>>({
         resolver: zodResolver(profileFormSchema),
@@ -277,7 +172,7 @@ export function ProfileTab() {
         }
     });
 
-    useEffect(() => {
+    React.useEffect(() => {
         if (currentUser) {
             profileForm.reset({
                 firstName: currentUser.firstName || '',
@@ -292,7 +187,7 @@ export function ProfileTab() {
     }, [currentUser, profileForm]);
 
     async function onProfileSubmit(values: z.infer<typeof profileFormSchema>) {
-        if (!currentUser || !accessToken) return;
+        if (!currentUser) return;
         
         const dataToUpdate = {
             ...values,
@@ -372,16 +267,16 @@ export function ProfileTab() {
                                                 <Button
                                                 variant={"outline"}
                                                 className={cn(
-                                                    "w-full pl-3 text-left font-normal",
+                                                    "w-full justify-start text-left font-normal",
                                                     !field.value && "text-muted-foreground"
                                                 )}
                                                 >
+                                                <CalendarIcon className="mr-2 h-4 w-4" />
                                                 {field.value ? (
                                                     field.value.toLocaleDateString()
                                                 ) : (
                                                     <span>Выберите дату</span>
                                                 )}
-                                                <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                                                 </Button>
                                             </FormControl>
                                             </PopoverTrigger>
