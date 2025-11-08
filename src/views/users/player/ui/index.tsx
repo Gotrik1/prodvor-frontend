@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import { User } from "@/mocks";
@@ -165,7 +164,7 @@ export function PlayerPage({ user: profileUser }: { user: User }) {
                 <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 md:px-0 pb-6 md:pb-0">
                     {/* Left side (2 columns wide) */}
                     <div className="xl:col-span-2 space-y-6">
-                        <PlayerStatsOverviewWidget />
+                        <PlayerStatsOverviewWidget user={profileUser} />
                         <div className="xl:hidden">
                             <SocialConnectionsWidget user={profileUser} isOwnProfile={isOwnProfile} />
                         </div>
