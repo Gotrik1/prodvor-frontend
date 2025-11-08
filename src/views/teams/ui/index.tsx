@@ -14,15 +14,17 @@ import { Separator } from "@/shared/ui/separator";
 import { useToast } from '@/shared/hooks/use-toast';
 import { Skeleton } from '@/shared/ui/skeleton';
 import { TopTeamsWidget } from '@/widgets/top-teams-widget';
-import { api } from '@/shared/api/axios-instance';
 import Image from 'next/image';
+import axios from 'axios';
+
+const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:6000";
 
 const TeamCard = ({ team, isMember, onApply, isApplicationSent }: { team: Team, isMember: boolean, onApply: (teamId: string) => Promise<void>, isApplicationSent: boolean }) => {
     return (
     <Card key={team.id} className="flex flex-col">
         <CardHeader>
             <Link href={`/teams/${team.id}`} className="flex items-center gap-4 group">
-                <Image src={team.logoUrl || 'https://placehold.co/512x512.png'} alt={`${team.name} logo`} width={64} height={64} className="rounded-lg border object-cover aspect-square" />
+                <Image src={team.logoUrl || 'https://placehold.co/512x512.png'} alt={`${team.name} logo`} width={64} height={64} className="rounded-lg border object-cover aspect-square" data-ai-hint="team logo" />
                 <div>
                     <CardTitle className="text-xl group-hover:text-primary transition-colors">{team.name}</CardTitle>
                     <CardDescription>{team.sport?.name || team.game}</CardDescription>
@@ -60,7 +62,7 @@ const TeamCard = ({ team, isMember, onApply, isApplicationSent }: { team: Team, 
 
 
 export function TeamsPage() {
-    const { user: currentUser } = useUserStore();
+    const { user: currentUser, accessToken } = useUserStore();
     const [allTeams, setAllTeams] = useState<Team[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [sentApplications, setSentApplications] = useState<string[]>([]);
@@ -77,7 +79,11 @@ export function TeamsPage() {
         }
         
         try {
-            await api.post(`/api/v1/teams/${teamId}/apply`, {});
+            await axios.post(`${BASE_URL}/api/v1/teams/${teamId}/apply`, {}, {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                }
+            });
             toast({
                 title: "Заявка отправлена!",
                 description: `Ваша заявка в команду отправлена на рассмотрение капитану.`,
@@ -96,8 +102,8 @@ export function TeamsPage() {
     useEffect(() => {
         async function fetchTeams() {
             try {
-                const response = await api.get('/api/v1/teams');
-                setAllTeams(response.data as Team[]);
+                const response = await axios.get(`${BASE_URL}/api/v1/teams`);
+                setAllTeams(response.data);
             } catch (error) {
                 console.error("Failed to fetch teams:", error);
             }
@@ -193,5 +199,3 @@ export function TeamsPage() {
         </div>
     );
 }
-
-    

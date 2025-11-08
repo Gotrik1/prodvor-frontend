@@ -5,7 +5,10 @@
 import React from 'react';
 import { TeamPageTemplate } from "@/views/admin/ui/templates/team-page-template";
 import type { Team, User } from "@/mocks";
-import { api } from '@/shared/api/axios-instance';
+import axios from 'axios';
+
+const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:6000";
+
 
 export function TeamPublicPage({ teamId }: { teamId: string }) {
     const [team, setTeam] = React.useState<Team | undefined>(undefined);
@@ -21,7 +24,7 @@ export function TeamPublicPage({ teamId }: { teamId: string }) {
         async function getTeam() {
             setLoading(true);
             try {
-                const response = await api.get(`/api/v1/teams/${teamId}`);
+                const response = await axios.get(`${BASE_URL}/api/v1/teams/${teamId}`);
                  if (!response.data) {
                     setTeam(undefined);
                 } else {
@@ -32,7 +35,7 @@ export function TeamPublicPage({ teamId }: { teamId: string }) {
 
                     // Add captain to the roster, marking them as captain
                     if (data.captain) {
-                        fullRoster.push({ ...data.captain, role: 'Капитан' });
+                        fullRoster.push({ ...data.captain, role: 'Капитан' as any });
                     }
                     
                     // Add other members, ensuring no duplicates

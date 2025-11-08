@@ -3,7 +3,7 @@
 'use client';
 
 import React, { useEffect, useState, useCallback } from 'react';
-import type { Team, User } from "@/mocks";
+import type { Team, User, Playground } from "@/mocks";
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
 import Link from "next/link";
@@ -11,16 +11,18 @@ import { ArrowLeft } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 import { useUserStore } from '@/widgets/dashboard-header/model/user-store';
 import { Skeleton } from '@/shared/ui/skeleton';
-import api from '@/shared/api/axios-instance';
 import { RosterManagement } from './roster-management';
 import { TacticalBoard } from './tactical-board';
-import { TransfersTab } from "./transfers-tab";
+import { TransfersTab } from "./tabs/transfers-tab";
 import { AnnouncementsTab } from "./tabs/announcements-tab";
 import { SettingsTab } from "./tabs/settings-tab";
 import { BrandingTab } from "./tabs/branding-tab";
+import axios from 'axios';
+
+const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:6000";
 
 export function TeamManagementPage({ teamId }: { teamId: string }) {
-    const { user: currentUser } = useUserStore();
+    const { user: currentUser, accessToken } = useUserStore();
     const [team, setTeam] = useState<Team | undefined>(undefined);
     const [loading, setLoading] = useState(true);
     const [isCaptain, setIsCaptain] = useState(false);
@@ -33,7 +35,7 @@ export function TeamManagementPage({ teamId }: { teamId: string }) {
         };
         setLoading(true);
         try {
-            const response = await api.get(`/api/v1/teams/${teamId}`);
+            const response = await axios.get(`${BASE_URL}/api/v1/teams/${teamId}`);
             const teamData: Team = response.data as unknown as Team;
             setTeam(teamData);
             
