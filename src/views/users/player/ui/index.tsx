@@ -193,8 +193,8 @@ export function PlayerPage({ user: profileUser }: { user: User }) {
                                 </div>
                             </div>
                              <div className="flex items-center gap-2 shrink-0 w-full sm:w-auto px-4 sm:px-0">
-                                {(profileUser.profile_buttons || []).map((button) => (
-                                    <ProfileActionButton key={button.uid} button={button} />
+                                {(profileUser.profile_buttons || []).map((button, index) => (
+                                    <ProfileActionButton key={index} button={button} />
                                 ))}
                             </div>
                         </div>
