@@ -1,11 +1,12 @@
 
+
 'use client';
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
 import { Users } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
-import type { User, Team } from "@/entities/user/types";
+import type { User, Team } from '@/entities/user/types';
 import React, { useState, useEffect } from "react";
 import { Skeleton } from "@/shared/ui/skeleton";
 import { ScrollArea } from "@/shared/ui/scroll-area";

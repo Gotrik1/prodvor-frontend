@@ -2,7 +2,7 @@
 
 'use client';
 
-import { User } from "@/entities/user/types";
+import type { User } from "@/entities/user/types";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { MapPin, Cake, User as UserIcon, MessageSquare, UserPlus, Gamepad2 } from "lucide-react";
 import { Button } from "@/shared/ui/button";

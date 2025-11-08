@@ -44,7 +44,6 @@ export interface User {
   phone?: string;
   bio?: string;
   sports: UserDiscipline[];
-  teams?: Team[]; // Now included for API responses
   friends: string[];
   followers: string[];
   followingUsers: string[];
@@ -53,6 +52,7 @@ export interface User {
   unlockedAchievements: string[];
   coachProfile?: CoachProfile;
   player_profile?: PlayerProfile; // This field comes from the backend
+  elo?: number; // For quick access
 }
 
 export interface Team {
@@ -66,8 +66,8 @@ export interface Team {
   rank: number;
   homePlaygroundIds?: string[];
   dataAiHint: string;
-  followers: string[];
-  following: string[];
+  followers: string[]; // Array of user IDs
+  following: string[]; // Array of team IDs
   sponsorIds?: string[];
   city: string;
   wins?: number;
