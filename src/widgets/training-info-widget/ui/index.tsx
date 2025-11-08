@@ -1,22 +1,42 @@
 
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
-import { Activity } from "lucide-react";
+import { Activity, Dumbbell } from "lucide-react";
+import { playgrounds } from "@/mocks";
+import Link from "next/link";
 
 export const TrainingInfoWidget = () => (
-    <Card className="md:shadow-main-sm shadow-none md:bg-card bg-transparent">
+     <Card>
         <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-                <Activity />
-                <span className="md:hidden">Тренировки</span>
-                <span className="hidden md:inline">Тренировочный процесс</span>
-            </CardTitle>
-            <CardDescription className="hidden md:block">Информация о тренировочной активности и предпочтениях игрока.</CardDescription>
+            <CardTitle className="flex items-center gap-2 text-base"><Activity /> Тренировочный процесс</CardTitle>
         </CardHeader>
-        <CardContent className="md:p-6 space-y-6">
-            <div className="flex items-center justify-center min-h-[150px] text-center text-muted-foreground">
-                <p>У игрока пока нет данных о тренировках.</p>
+        <CardContent className="space-y-4">
+            <div className="grid grid-cols-2 gap-4">
+                <Card className="bg-muted/50 text-center p-2">
+                    <p className="text-xs text-muted-foreground">Специализация</p>
+                    <p className="font-semibold text-sm">Выносливость</p>
+                </Card>
+                 <Card className="bg-muted/50 text-center p-2">
+                    <p className="text-xs text-muted-foreground">Режим</p>
+                    <p className="font-semibold text-sm">4-5 раз/нед.</p>
+                </Card>
+            </div>
+             <div>
+                <h3 className="text-sm font-semibold mb-2">Площадки</h3>
+                 <div className="space-y-2">
+                    {playgrounds.slice(0, 1).map(p => (
+                        <Link href={`/playgrounds/${p.id}`} key={p.id} className="block p-2 rounded-md border bg-card hover:border-primary transition-colors">
+                            <div className="flex items-center gap-2">
+                                <Dumbbell className="h-4 w-4 text-primary" />
+                                <div>
+                                    <p className="font-semibold text-xs">{p.name}</p>
+                                    <p className="text-xs text-muted-foreground">{p.address}</p>
+                                </div>
+                            </div>
+                        </Link>
+                    ))}
+                </div>
             </div>
         </CardContent>
     </Card>
-);
+)

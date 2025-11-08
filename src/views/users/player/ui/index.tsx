@@ -194,5 +194,5 @@ export function PlayerPage({ user: profileUser }: { user: User }) {
                 </div>
             </CardBody>
         </Card>
-    )
+    );
 }

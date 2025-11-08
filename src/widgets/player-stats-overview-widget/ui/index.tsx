@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
@@ -6,7 +7,7 @@ import { ChartContainer, ChartTooltipContent } from "@/shared/ui/chart";
 import { Radar, RadarChart, PolarAngleAxis, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip } from "recharts";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 import { History, BarChart3 } from "lucide-react";
-import type { User } from "@/mocks";
+import type { User } from "@/entities/user/types";
 import { useMemo } from "react";
 
 const skillData = [
@@ -28,7 +29,7 @@ const emptyCareerStats = {
 const FormBadge = ({ result }: { result: 'W' | 'L' | 'D' | 'N/A' }) => {
     const baseClasses = "flex items-center justify-center w-6 h-6 rounded-md font-bold text-xs";
     if (result === 'W') return <div className={`${baseClasses} bg-green-500/20 text-green-300 border border-green-500/30`}>W</div>;
-    if (result === 'L') return <div className={`${base-classes} bg-red-500/20 text-red-300 border border-red-500/30`}>L</div>;
+    if (result === 'L') return <div className={`${baseClasses} bg-red-500/20 text-red-300 border border-red-500/30`}>L</div>;
     if (result === 'D') return <div className={`${baseClasses} bg-secondary text-secondary-foreground border border-secondary/30`}>D</div>;
     return <div className={`${baseClasses} bg-muted text-muted-foreground border-border`}>-</div>;
 };
@@ -45,7 +46,6 @@ export const PlayerStatsOverviewWidget = ({ user }: { user: User }) => {
     const last5Form: ('W' | 'L' | 'D' | 'N/A')[] = ['N/A', 'N/A', 'N/A', 'N/A', 'N/A'];
     const currentSeason = new Date().getFullYear().toString();
 
-    // @ts-ignore - player_profile is not in the type def but comes from the backend
     const playerProfile = user?.player_profile;
 
     const careerStats = useMemo(() => {
