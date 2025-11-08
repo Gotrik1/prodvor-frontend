@@ -1,5 +1,4 @@
 
-
 import { Button } from '@/shared/ui/button';
 import Link from 'next/link';
 import { users, User } from '@/mocks';
@@ -37,7 +36,7 @@ export function UserPage({ userId }: { userId?: string }) {
             <CardTitle>Ошибка 404</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-muted-foreground">Пользователь не найден.</p>
+            <p className="text-muted-foreground">Пользователь с ID "{userId}" не найден.</p>
             <Button asChild className="mt-6">
               <Link href="/admin/dashboard">Вернуться к списку</Link>
             </Button>
@@ -73,5 +72,3 @@ export function UserPage({ userId }: { userId?: string }) {
     </div>
   );
 }
-
-    

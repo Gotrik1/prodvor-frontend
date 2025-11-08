@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
@@ -12,9 +11,7 @@ import { Skeleton } from "@/shared/ui/skeleton";
 import { ScrollArea } from "@/shared/ui/scroll-area";
 import { MyTeamsEmptyState } from "@/views/teams/ui/my-teams-empty-state";
 import { useUserStore } from "@/widgets/dashboard-header/model/user-store";
-import axios from "axios";
-
-const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:6000";
+import { api } from "@/shared/api/axios-instance";
 
 export function MyTeamWidget({ user }: { user: User }) {
   const [myTeams, setMyTeams] = useState<Team[]>([]);
@@ -29,11 +26,7 @@ export function MyTeamWidget({ user }: { user: User }) {
         }
         setIsLoading(true);
         try {
-            const response = await axios.get(`${BASE_URL}/api/v1/users/me?include_teams=true`, {
-                headers: {
-                    Authorization: `Bearer ${accessToken}`
-                }
-            });
+            const response = await api.get(`/api/v1/users/me?include_teams=true`);
             const userWithTeams = response.data as User & { teams?: Team[] };
             setMyTeams(userWithTeams.teams || []);
         } catch (error) {

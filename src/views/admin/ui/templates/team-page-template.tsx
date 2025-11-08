@@ -1,9 +1,8 @@
 
-
 'use client';
 
-import React, { useEffect } from 'react';
-import type { User, Team } from "@/mocks";
+import React, { useEffect, useState, useCallback, useMemo } from 'react';
+import type { User, Playground, Team } from "@/mocks";
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
 import { History, Grid3x3 } from "lucide-react";
@@ -17,6 +16,7 @@ import { TeamMatchesWidget } from "@/widgets/team-matches-widget";
 import { TeamChallengesWidget } from "@/widgets/team-challenges-widget";
 import { TeamStatsWidget } from "@/widgets/team-stats-widget";
 import { Skeleton } from '@/shared/ui/skeleton';
+import { api } from '@/shared/api/axios-instance';
 
 interface TeamPageTemplateProps {
   team?: Team;
@@ -30,13 +30,36 @@ export function TeamPageTemplate({
   isLoading: initialIsLoading,
 }: TeamPageTemplateProps) {
   const [team, setTeam] = React.useState<Team | undefined>(initialTeam);
+  const [playgrounds, setPlaygrounds] = React.useState<Playground[]>([]);
+  const [teamMembers, setTeamMembers] = React.useState<User[]>(initialTeamMembers || []);
   const [isLoading, setIsLoading] = React.useState(initialIsLoading ?? true);
   
   useEffect(() => {
     setTeam(initialTeam);
+    setTeamMembers(initialTeamMembers || []);
     setIsLoading(initialIsLoading ?? !initialTeam);
-  }, [initialTeam, initialIsLoading]);
+  }, [initialTeam, initialTeamMembers, initialIsLoading]);
 
+  React.useEffect(() => {
+    if (!team) return;
+
+    const fetchPlaygrounds = async () => {
+      if (team.homePlaygroundIds && team.homePlaygroundIds.length > 0) {
+        try {
+          const playgroundsRes = await api.get(`/api/v1/playgrounds`);
+          const allPlaygrounds: Playground[] = playgroundsRes.data;
+          const homePgs = allPlaygrounds.filter((p) =>
+            team.homePlaygroundIds?.includes(p.id)
+          );
+          setPlaygrounds(homePgs);
+        } catch (error) {
+          console.error("Failed to fetch playgrounds:", error);
+        }
+      }
+    };
+
+    fetchPlaygrounds();
+  }, [team]);
 
   if (isLoading) {
     return (
@@ -68,7 +91,7 @@ export function TeamPageTemplate({
 
   return (
     <div className="p-4 md:p-6 lg:p-8 space-y-6">
-      <TeamHeader team={team} homePlaygrounds={[]} />
+      <TeamHeader team={team} homePlaygrounds={playgrounds} />
 
       <Tabs defaultValue="overview" className="w-full">
         <TabsList className="grid w-full grid-cols-4 md:grid-cols-6">
@@ -89,7 +112,7 @@ export function TeamPageTemplate({
           <TeamOverviewWidget team={team} />
         </TabsContent>
         <TabsContent value="roster" className="mt-6">
-          <TeamRosterWidget team={team} teamMembers={initialTeamMembers || []} />
+          <TeamRosterWidget team={team} teamMembers={teamMembers} />
         </TabsContent>
         <TabsContent value="matches" className="mt-6">
           <TeamMatchesWidget />

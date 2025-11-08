@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -12,9 +11,7 @@ import { Skeleton } from '@/shared/ui/skeleton';
 import type { Team } from '@/mocks';
 import { useToast } from '@/shared/hooks/use-toast';
 import Image from 'next/image';
-import axios from 'axios';
-
-const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:6000";
+import { api } from '@/shared/api/axios-instance';
 
 const TopTeamRow = ({ team, rank }: { team: Team, rank: number }) => (
     <Link href={`/teams/${team.id}`} className="flex items-center gap-3 p-2 rounded-md hover:bg-muted/50 group transition-colors">
@@ -120,11 +117,11 @@ export function TopTeamsWidget() {
         const fetchTopTeams = async () => {
             setIsLoading(true);
             try {
-                const countryPromise = axios.get(`${BASE_URL}/api/v1/teams?sort_by=rank&order=desc&limit=5`);
+                const countryPromise = api.get('/api/v1/teams?sort_by=rank&order=desc&limit=5');
                 
                 let cityPromise;
                 if (currentUser?.city) {
-                    cityPromise = axios.get(`${BASE_URL}/api/v1/teams?city=${encodeURIComponent(currentUser.city)}&sort_by=rank&order=desc&limit=5`);
+                    cityPromise = api.get(`/api/v1/teams?city=${encodeURIComponent(currentUser.city)}&sort_by=rank&order=desc&limit=5`);
                 } else {
                     cityPromise = Promise.resolve({ data: [] });
                 }

@@ -1,4 +1,3 @@
-
 'use client';
 
 import axios from 'axios';
@@ -6,7 +5,7 @@ import { useUserStore } from '@/widgets/dashboard-header/model/user-store';
 import { Configuration } from './configuration';
 
 const BASE_URL =
-  process.env.NEXT_PUBLIC_API_BASE_URL || "/api"; // nginx сам проксирует /api → backend
+  process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:6000";
 
 export const api = axios.create({
   baseURL: BASE_URL,
