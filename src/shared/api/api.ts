@@ -1045,11 +1045,11 @@ export const LegacyPostsApiAxiosParamCreator = function (configuration?: Configu
         /**
          * 
          * @summary Get all comments for a post
-         * @param {number} postId 
+         * @param {string} postId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiV1PostsPostIdCommentsGet: async (postId: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        apiV1PostsPostIdCommentsGet: async (postId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'postId' is not null or undefined
             assertParamExists('apiV1PostsPostIdCommentsGet', 'postId', postId)
             const localVarPath = `/api/v1/posts/{post_id}/comments`
@@ -1079,12 +1079,12 @@ export const LegacyPostsApiAxiosParamCreator = function (configuration?: Configu
         /**
          * 
          * @summary Create a new comment on a post
-         * @param {number} postId 
+         * @param {string} postId 
          * @param {ApiV1PostsPostIdCommentsPostRequest} body 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiV1PostsPostIdCommentsPost: async (postId: number, body: ApiV1PostsPostIdCommentsPostRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        apiV1PostsPostIdCommentsPost: async (postId: string, body: ApiV1PostsPostIdCommentsPostRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'postId' is not null or undefined
             assertParamExists('apiV1PostsPostIdCommentsPost', 'postId', postId)
             // verify required parameter 'body' is not null or undefined
@@ -1153,11 +1153,11 @@ export const LegacyPostsApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary Get all comments for a post
-         * @param {number} postId 
+         * @param {string} postId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiV1PostsPostIdCommentsGet(postId: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async apiV1PostsPostIdCommentsGet(postId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.apiV1PostsPostIdCommentsGet(postId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['LegacyPostsApi.apiV1PostsPostIdCommentsGet']?.[localVarOperationServerIndex]?.url;
@@ -1166,12 +1166,12 @@ export const LegacyPostsApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary Create a new comment on a post
-         * @param {number} postId 
+         * @param {string} postId 
          * @param {ApiV1PostsPostIdCommentsPostRequest} body 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiV1PostsPostIdCommentsPost(postId: number, body: ApiV1PostsPostIdCommentsPostRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async apiV1PostsPostIdCommentsPost(postId: string, body: ApiV1PostsPostIdCommentsPostRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.apiV1PostsPostIdCommentsPost(postId, body, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['LegacyPostsApi.apiV1PostsPostIdCommentsPost']?.[localVarOperationServerIndex]?.url;
@@ -1208,22 +1208,22 @@ export const LegacyPostsApiFactory = function (configuration?: Configuration, ba
         /**
          * 
          * @summary Get all comments for a post
-         * @param {number} postId 
+         * @param {string} postId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiV1PostsPostIdCommentsGet(postId: number, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+        apiV1PostsPostIdCommentsGet(postId: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
             return localVarFp.apiV1PostsPostIdCommentsGet(postId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
          * @summary Create a new comment on a post
-         * @param {number} postId 
+         * @param {string} postId 
          * @param {ApiV1PostsPostIdCommentsPostRequest} body 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiV1PostsPostIdCommentsPost(postId: number, body: ApiV1PostsPostIdCommentsPostRequest, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+        apiV1PostsPostIdCommentsPost(postId: string, body: ApiV1PostsPostIdCommentsPostRequest, options?: RawAxiosRequestConfig): AxiosPromise<void> {
             return localVarFp.apiV1PostsPostIdCommentsPost(postId, body, options).then((request) => request(axios, basePath));
         },
     };
@@ -1257,23 +1257,23 @@ export class LegacyPostsApi extends BaseAPI {
     /**
      * 
      * @summary Get all comments for a post
-     * @param {number} postId 
+     * @param {string} postId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public apiV1PostsPostIdCommentsGet(postId: number, options?: RawAxiosRequestConfig) {
+    public apiV1PostsPostIdCommentsGet(postId: string, options?: RawAxiosRequestConfig) {
         return LegacyPostsApiFp(this.configuration).apiV1PostsPostIdCommentsGet(postId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
      * @summary Create a new comment on a post
-     * @param {number} postId 
+     * @param {string} postId 
      * @param {ApiV1PostsPostIdCommentsPostRequest} body 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public apiV1PostsPostIdCommentsPost(postId: number, body: ApiV1PostsPostIdCommentsPostRequest, options?: RawAxiosRequestConfig) {
+    public apiV1PostsPostIdCommentsPost(postId: string, body: ApiV1PostsPostIdCommentsPostRequest, options?: RawAxiosRequestConfig) {
         return LegacyPostsApiFp(this.configuration).apiV1PostsPostIdCommentsPost(postId, body, options).then((request) => request(this.axios, this.basePath));
     }
 }
@@ -1828,11 +1828,11 @@ export const LegacyTournamentsApiAxiosParamCreator = function (configuration?: C
         /**
          * 
          * @summary Get a specific tournament
-         * @param {number} tournamentId 
+         * @param {string} tournamentId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiV1TournamentsTournamentIdGet: async (tournamentId: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        apiV1TournamentsTournamentIdGet: async (tournamentId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'tournamentId' is not null or undefined
             assertParamExists('apiV1TournamentsTournamentIdGet', 'tournamentId', tournamentId)
             const localVarPath = `/api/v1/tournaments/{tournament_id}`
@@ -1896,11 +1896,11 @@ export const LegacyTournamentsApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary Get a specific tournament
-         * @param {number} tournamentId 
+         * @param {string} tournamentId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiV1TournamentsTournamentIdGet(tournamentId: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async apiV1TournamentsTournamentIdGet(tournamentId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.apiV1TournamentsTournamentIdGet(tournamentId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['LegacyTournamentsApi.apiV1TournamentsTournamentIdGet']?.[localVarOperationServerIndex]?.url;
@@ -1937,11 +1937,11 @@ export const LegacyTournamentsApiFactory = function (configuration?: Configurati
         /**
          * 
          * @summary Get a specific tournament
-         * @param {number} tournamentId 
+         * @param {string} tournamentId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiV1TournamentsTournamentIdGet(tournamentId: number, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+        apiV1TournamentsTournamentIdGet(tournamentId: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
             return localVarFp.apiV1TournamentsTournamentIdGet(tournamentId, options).then((request) => request(axios, basePath));
         },
     };
@@ -1975,11 +1975,11 @@ export class LegacyTournamentsApi extends BaseAPI {
     /**
      * 
      * @summary Get a specific tournament
-     * @param {number} tournamentId 
+     * @param {string} tournamentId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public apiV1TournamentsTournamentIdGet(tournamentId: number, options?: RawAxiosRequestConfig) {
+    public apiV1TournamentsTournamentIdGet(tournamentId: string, options?: RawAxiosRequestConfig) {
         return LegacyTournamentsApiFp(this.configuration).apiV1TournamentsTournamentIdGet(tournamentId, options).then((request) => request(this.axios, this.basePath));
     }
 }
@@ -2484,11 +2484,11 @@ export const TeamsApiAxiosParamCreator = function (configuration?: Configuration
         /**
          * 
          * @summary Get team applications
-         * @param {number} teamId 
+         * @param {string} teamId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiV1TeamsTeamIdApplicationsGet: async (teamId: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        apiV1TeamsTeamIdApplicationsGet: async (teamId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'teamId' is not null or undefined
             assertParamExists('apiV1TeamsTeamIdApplicationsGet', 'teamId', teamId)
             const localVarPath = `/api/v1/teams/{team_id}/applications`
@@ -2521,13 +2521,13 @@ export const TeamsApiAxiosParamCreator = function (configuration?: Configuration
         /**
          * 
          * @summary Respond to a team application
-         * @param {number} teamId 
-         * @param {number} userId 
+         * @param {string} teamId 
+         * @param {string} userId 
          * @param {ApiV1TeamsTeamIdApplicationsUserIdRespondPostRequest} body 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiV1TeamsTeamIdApplicationsUserIdRespondPost: async (teamId: number, userId: number, body: ApiV1TeamsTeamIdApplicationsUserIdRespondPostRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        apiV1TeamsTeamIdApplicationsUserIdRespondPost: async (teamId: string, userId: string, body: ApiV1TeamsTeamIdApplicationsUserIdRespondPostRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'teamId' is not null or undefined
             assertParamExists('apiV1TeamsTeamIdApplicationsUserIdRespondPost', 'teamId', teamId)
             // verify required parameter 'userId' is not null or undefined
@@ -2568,11 +2568,11 @@ export const TeamsApiAxiosParamCreator = function (configuration?: Configuration
         /**
          * 
          * @summary Apply to a team
-         * @param {number} teamId 
+         * @param {string} teamId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiV1TeamsTeamIdApplyPost: async (teamId: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        apiV1TeamsTeamIdApplyPost: async (teamId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'teamId' is not null or undefined
             assertParamExists('apiV1TeamsTeamIdApplyPost', 'teamId', teamId)
             const localVarPath = `/api/v1/teams/{team_id}/apply`
@@ -2605,11 +2605,11 @@ export const TeamsApiAxiosParamCreator = function (configuration?: Configuration
         /**
          * 
          * @summary Toggle follow a team
-         * @param {number} teamId 
+         * @param {string} teamId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiV1TeamsTeamIdFollowPost: async (teamId: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        apiV1TeamsTeamIdFollowPost: async (teamId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'teamId' is not null or undefined
             assertParamExists('apiV1TeamsTeamIdFollowPost', 'teamId', teamId)
             const localVarPath = `/api/v1/teams/{team_id}/follow`
@@ -2642,11 +2642,11 @@ export const TeamsApiAxiosParamCreator = function (configuration?: Configuration
         /**
          * 
          * @summary Get a team by ID
-         * @param {number} teamId 
+         * @param {string} teamId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiV1TeamsTeamIdGet: async (teamId: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        apiV1TeamsTeamIdGet: async (teamId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'teamId' is not null or undefined
             assertParamExists('apiV1TeamsTeamIdGet', 'teamId', teamId)
             const localVarPath = `/api/v1/teams/{team_id}`
@@ -2676,12 +2676,12 @@ export const TeamsApiAxiosParamCreator = function (configuration?: Configuration
         /**
          * 
          * @summary Remove a team member
-         * @param {number} teamId 
-         * @param {number} userId 
+         * @param {string} teamId 
+         * @param {string} userId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiV1TeamsTeamIdMembersUserIdDelete: async (teamId: number, userId: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        apiV1TeamsTeamIdMembersUserIdDelete: async (teamId: string, userId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'teamId' is not null or undefined
             assertParamExists('apiV1TeamsTeamIdMembersUserIdDelete', 'teamId', teamId)
             // verify required parameter 'userId' is not null or undefined
@@ -2756,11 +2756,11 @@ export const TeamsApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary Get team applications
-         * @param {number} teamId 
+         * @param {string} teamId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiV1TeamsTeamIdApplicationsGet(teamId: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async apiV1TeamsTeamIdApplicationsGet(teamId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.apiV1TeamsTeamIdApplicationsGet(teamId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['TeamsApi.apiV1TeamsTeamIdApplicationsGet']?.[localVarOperationServerIndex]?.url;
@@ -2769,13 +2769,13 @@ export const TeamsApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary Respond to a team application
-         * @param {number} teamId 
-         * @param {number} userId 
+         * @param {string} teamId 
+         * @param {string} userId 
          * @param {ApiV1TeamsTeamIdApplicationsUserIdRespondPostRequest} body 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiV1TeamsTeamIdApplicationsUserIdRespondPost(teamId: number, userId: number, body: ApiV1TeamsTeamIdApplicationsUserIdRespondPostRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async apiV1TeamsTeamIdApplicationsUserIdRespondPost(teamId: string, userId: string, body: ApiV1TeamsTeamIdApplicationsUserIdRespondPostRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.apiV1TeamsTeamIdApplicationsUserIdRespondPost(teamId, userId, body, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['TeamsApi.apiV1TeamsTeamIdApplicationsUserIdRespondPost']?.[localVarOperationServerIndex]?.url;
@@ -2784,11 +2784,11 @@ export const TeamsApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary Apply to a team
-         * @param {number} teamId 
+         * @param {string} teamId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiV1TeamsTeamIdApplyPost(teamId: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async apiV1TeamsTeamIdApplyPost(teamId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.apiV1TeamsTeamIdApplyPost(teamId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['TeamsApi.apiV1TeamsTeamIdApplyPost']?.[localVarOperationServerIndex]?.url;
@@ -2797,11 +2797,11 @@ export const TeamsApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary Toggle follow a team
-         * @param {number} teamId 
+         * @param {string} teamId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiV1TeamsTeamIdFollowPost(teamId: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async apiV1TeamsTeamIdFollowPost(teamId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.apiV1TeamsTeamIdFollowPost(teamId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['TeamsApi.apiV1TeamsTeamIdFollowPost']?.[localVarOperationServerIndex]?.url;
@@ -2810,11 +2810,11 @@ export const TeamsApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary Get a team by ID
-         * @param {number} teamId 
+         * @param {string} teamId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiV1TeamsTeamIdGet(teamId: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async apiV1TeamsTeamIdGet(teamId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.apiV1TeamsTeamIdGet(teamId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['TeamsApi.apiV1TeamsTeamIdGet']?.[localVarOperationServerIndex]?.url;
@@ -2823,12 +2823,12 @@ export const TeamsApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary Remove a team member
-         * @param {number} teamId 
-         * @param {number} userId 
+         * @param {string} teamId 
+         * @param {string} userId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiV1TeamsTeamIdMembersUserIdDelete(teamId: number, userId: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async apiV1TeamsTeamIdMembersUserIdDelete(teamId: string, userId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.apiV1TeamsTeamIdMembersUserIdDelete(teamId, userId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['TeamsApi.apiV1TeamsTeamIdMembersUserIdDelete']?.[localVarOperationServerIndex]?.url;
@@ -2870,64 +2870,64 @@ export const TeamsApiFactory = function (configuration?: Configuration, basePath
         /**
          * 
          * @summary Get team applications
-         * @param {number} teamId 
+         * @param {string} teamId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiV1TeamsTeamIdApplicationsGet(teamId: number, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+        apiV1TeamsTeamIdApplicationsGet(teamId: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
             return localVarFp.apiV1TeamsTeamIdApplicationsGet(teamId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
          * @summary Respond to a team application
-         * @param {number} teamId 
-         * @param {number} userId 
+         * @param {string} teamId 
+         * @param {string} userId 
          * @param {ApiV1TeamsTeamIdApplicationsUserIdRespondPostRequest} body 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiV1TeamsTeamIdApplicationsUserIdRespondPost(teamId: number, userId: number, body: ApiV1TeamsTeamIdApplicationsUserIdRespondPostRequest, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+        apiV1TeamsTeamIdApplicationsUserIdRespondPost(teamId: string, userId: string, body: ApiV1TeamsTeamIdApplicationsUserIdRespondPostRequest, options?: RawAxiosRequestConfig): AxiosPromise<void> {
             return localVarFp.apiV1TeamsTeamIdApplicationsUserIdRespondPost(teamId, userId, body, options).then((request) => request(axios, basePath));
         },
         /**
          * 
          * @summary Apply to a team
-         * @param {number} teamId 
+         * @param {string} teamId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiV1TeamsTeamIdApplyPost(teamId: number, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+        apiV1TeamsTeamIdApplyPost(teamId: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
             return localVarFp.apiV1TeamsTeamIdApplyPost(teamId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
          * @summary Toggle follow a team
-         * @param {number} teamId 
+         * @param {string} teamId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiV1TeamsTeamIdFollowPost(teamId: number, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+        apiV1TeamsTeamIdFollowPost(teamId: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
             return localVarFp.apiV1TeamsTeamIdFollowPost(teamId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
          * @summary Get a team by ID
-         * @param {number} teamId 
+         * @param {string} teamId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiV1TeamsTeamIdGet(teamId: number, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+        apiV1TeamsTeamIdGet(teamId: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
             return localVarFp.apiV1TeamsTeamIdGet(teamId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
          * @summary Remove a team member
-         * @param {number} teamId 
-         * @param {number} userId 
+         * @param {string} teamId 
+         * @param {string} userId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiV1TeamsTeamIdMembersUserIdDelete(teamId: number, userId: number, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+        apiV1TeamsTeamIdMembersUserIdDelete(teamId: string, userId: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
             return localVarFp.apiV1TeamsTeamIdMembersUserIdDelete(teamId, userId, options).then((request) => request(axios, basePath));
         },
     };
@@ -2966,69 +2966,69 @@ export class TeamsApi extends BaseAPI {
     /**
      * 
      * @summary Get team applications
-     * @param {number} teamId 
+     * @param {string} teamId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public apiV1TeamsTeamIdApplicationsGet(teamId: number, options?: RawAxiosRequestConfig) {
+    public apiV1TeamsTeamIdApplicationsGet(teamId: string, options?: RawAxiosRequestConfig) {
         return TeamsApiFp(this.configuration).apiV1TeamsTeamIdApplicationsGet(teamId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
      * @summary Respond to a team application
-     * @param {number} teamId 
-     * @param {number} userId 
+     * @param {string} teamId 
+     * @param {string} userId 
      * @param {ApiV1TeamsTeamIdApplicationsUserIdRespondPostRequest} body 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public apiV1TeamsTeamIdApplicationsUserIdRespondPost(teamId: number, userId: number, body: ApiV1TeamsTeamIdApplicationsUserIdRespondPostRequest, options?: RawAxiosRequestConfig) {
+    public apiV1TeamsTeamIdApplicationsUserIdRespondPost(teamId: string, userId: string, body: ApiV1TeamsTeamIdApplicationsUserIdRespondPostRequest, options?: RawAxiosRequestConfig) {
         return TeamsApiFp(this.configuration).apiV1TeamsTeamIdApplicationsUserIdRespondPost(teamId, userId, body, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
      * @summary Apply to a team
-     * @param {number} teamId 
+     * @param {string} teamId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public apiV1TeamsTeamIdApplyPost(teamId: number, options?: RawAxiosRequestConfig) {
+    public apiV1TeamsTeamIdApplyPost(teamId: string, options?: RawAxiosRequestConfig) {
         return TeamsApiFp(this.configuration).apiV1TeamsTeamIdApplyPost(teamId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
      * @summary Toggle follow a team
-     * @param {number} teamId 
+     * @param {string} teamId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public apiV1TeamsTeamIdFollowPost(teamId: number, options?: RawAxiosRequestConfig) {
+    public apiV1TeamsTeamIdFollowPost(teamId: string, options?: RawAxiosRequestConfig) {
         return TeamsApiFp(this.configuration).apiV1TeamsTeamIdFollowPost(teamId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
      * @summary Get a team by ID
-     * @param {number} teamId 
+     * @param {string} teamId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public apiV1TeamsTeamIdGet(teamId: number, options?: RawAxiosRequestConfig) {
+    public apiV1TeamsTeamIdGet(teamId: string, options?: RawAxiosRequestConfig) {
         return TeamsApiFp(this.configuration).apiV1TeamsTeamIdGet(teamId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
      * @summary Remove a team member
-     * @param {number} teamId 
-     * @param {number} userId 
+     * @param {string} teamId 
+     * @param {string} userId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public apiV1TeamsTeamIdMembersUserIdDelete(teamId: number, userId: number, options?: RawAxiosRequestConfig) {
+    public apiV1TeamsTeamIdMembersUserIdDelete(teamId: string, userId: string, options?: RawAxiosRequestConfig) {
         return TeamsApiFp(this.configuration).apiV1TeamsTeamIdMembersUserIdDelete(teamId, userId, options).then((request) => request(this.axios, this.basePath));
     }
 }
@@ -3155,12 +3155,12 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
         /**
          * 
          * @summary Upload an avatar for a user
-         * @param {number} userId 
+         * @param {string} userId 
          * @param {File} avatar 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiV1UsersUserIdAvatarPost: async (userId: number, avatar: File, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        apiV1UsersUserIdAvatarPost: async (userId: string, avatar: File, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'userId' is not null or undefined
             assertParamExists('apiV1UsersUserIdAvatarPost', 'userId', userId)
             // verify required parameter 'avatar' is not null or undefined
@@ -3200,12 +3200,12 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
         /**
          * 
          * @summary Upload a cover image for a user
-         * @param {number} userId 
+         * @param {string} userId 
          * @param {File} cover 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiV1UsersUserIdCoverPost: async (userId: number, cover: File, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        apiV1UsersUserIdCoverPost: async (userId: string, cover: File, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'userId' is not null or undefined
             assertParamExists('apiV1UsersUserIdCoverPost', 'userId', userId)
             // verify required parameter 'cover' is not null or undefined
@@ -3245,13 +3245,13 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
         /**
          * 
          * @summary Get a user by ID
-         * @param {number} userId 
+         * @param {string} userId 
          * @param {boolean} [includeTeams] Include teams in the response
          * @param {boolean} [includeFollows] Include followed teams in the response
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiV1UsersUserIdGet: async (userId: number, includeTeams?: boolean, includeFollows?: boolean, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        apiV1UsersUserIdGet: async (userId: string, includeTeams?: boolean, includeFollows?: boolean, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'userId' is not null or undefined
             assertParamExists('apiV1UsersUserIdGet', 'userId', userId)
             const localVarPath = `/api/v1/users/{user_id}`
@@ -3289,12 +3289,12 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
         /**
          * 
          * @summary Update a user
-         * @param {number} userId 
+         * @param {string} userId 
          * @param {ApiV1UsersUserIdPutRequest} body 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiV1UsersUserIdPut: async (userId: number, body: ApiV1UsersUserIdPutRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        apiV1UsersUserIdPut: async (userId: string, body: ApiV1UsersUserIdPutRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'userId' is not null or undefined
             assertParamExists('apiV1UsersUserIdPut', 'userId', userId)
             // verify required parameter 'body' is not null or undefined
@@ -3378,12 +3378,12 @@ export const UsersApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary Upload an avatar for a user
-         * @param {number} userId 
+         * @param {string} userId 
          * @param {File} avatar 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiV1UsersUserIdAvatarPost(userId: number, avatar: File, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async apiV1UsersUserIdAvatarPost(userId: string, avatar: File, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.apiV1UsersUserIdAvatarPost(userId, avatar, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['UsersApi.apiV1UsersUserIdAvatarPost']?.[localVarOperationServerIndex]?.url;
@@ -3392,12 +3392,12 @@ export const UsersApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary Upload a cover image for a user
-         * @param {number} userId 
+         * @param {string} userId 
          * @param {File} cover 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiV1UsersUserIdCoverPost(userId: number, cover: File, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async apiV1UsersUserIdCoverPost(userId: string, cover: File, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.apiV1UsersUserIdCoverPost(userId, cover, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['UsersApi.apiV1UsersUserIdCoverPost']?.[localVarOperationServerIndex]?.url;
@@ -3406,13 +3406,13 @@ export const UsersApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary Get a user by ID
-         * @param {number} userId 
+         * @param {string} userId 
          * @param {boolean} [includeTeams] Include teams in the response
          * @param {boolean} [includeFollows] Include followed teams in the response
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiV1UsersUserIdGet(userId: number, includeTeams?: boolean, includeFollows?: boolean, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async apiV1UsersUserIdGet(userId: string, includeTeams?: boolean, includeFollows?: boolean, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.apiV1UsersUserIdGet(userId, includeTeams, includeFollows, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['UsersApi.apiV1UsersUserIdGet']?.[localVarOperationServerIndex]?.url;
@@ -3421,12 +3421,12 @@ export const UsersApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary Update a user
-         * @param {number} userId 
+         * @param {string} userId 
          * @param {ApiV1UsersUserIdPutRequest} body 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiV1UsersUserIdPut(userId: number, body: ApiV1UsersUserIdPutRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async apiV1UsersUserIdPut(userId: string, body: ApiV1UsersUserIdPutRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.apiV1UsersUserIdPut(userId, body, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['UsersApi.apiV1UsersUserIdPut']?.[localVarOperationServerIndex]?.url;
@@ -3475,46 +3475,46 @@ export const UsersApiFactory = function (configuration?: Configuration, basePath
         /**
          * 
          * @summary Upload an avatar for a user
-         * @param {number} userId 
+         * @param {string} userId 
          * @param {File} avatar 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiV1UsersUserIdAvatarPost(userId: number, avatar: File, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+        apiV1UsersUserIdAvatarPost(userId: string, avatar: File, options?: RawAxiosRequestConfig): AxiosPromise<void> {
             return localVarFp.apiV1UsersUserIdAvatarPost(userId, avatar, options).then((request) => request(axios, basePath));
         },
         /**
          * 
          * @summary Upload a cover image for a user
-         * @param {number} userId 
+         * @param {string} userId 
          * @param {File} cover 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiV1UsersUserIdCoverPost(userId: number, cover: File, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+        apiV1UsersUserIdCoverPost(userId: string, cover: File, options?: RawAxiosRequestConfig): AxiosPromise<void> {
             return localVarFp.apiV1UsersUserIdCoverPost(userId, cover, options).then((request) => request(axios, basePath));
         },
         /**
          * 
          * @summary Get a user by ID
-         * @param {number} userId 
+         * @param {string} userId 
          * @param {boolean} [includeTeams] Include teams in the response
          * @param {boolean} [includeFollows] Include followed teams in the response
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiV1UsersUserIdGet(userId: number, includeTeams?: boolean, includeFollows?: boolean, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+        apiV1UsersUserIdGet(userId: string, includeTeams?: boolean, includeFollows?: boolean, options?: RawAxiosRequestConfig): AxiosPromise<void> {
             return localVarFp.apiV1UsersUserIdGet(userId, includeTeams, includeFollows, options).then((request) => request(axios, basePath));
         },
         /**
          * 
          * @summary Update a user
-         * @param {number} userId 
+         * @param {string} userId 
          * @param {ApiV1UsersUserIdPutRequest} body 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiV1UsersUserIdPut(userId: number, body: ApiV1UsersUserIdPutRequest, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+        apiV1UsersUserIdPut(userId: string, body: ApiV1UsersUserIdPutRequest, options?: RawAxiosRequestConfig): AxiosPromise<void> {
             return localVarFp.apiV1UsersUserIdPut(userId, body, options).then((request) => request(axios, basePath));
         },
     };
@@ -3561,52 +3561,49 @@ export class UsersApi extends BaseAPI {
     /**
      * 
      * @summary Upload an avatar for a user
-     * @param {number} userId 
+     * @param {string} userId 
      * @param {File} avatar 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public apiV1UsersUserIdAvatarPost(userId: number, avatar: File, options?: RawAxiosRequestConfig) {
+    public apiV1UsersUserIdAvatarPost(userId: string, avatar: File, options?: RawAxiosRequestConfig) {
         return UsersApiFp(this.configuration).apiV1UsersUserIdAvatarPost(userId, avatar, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
      * @summary Upload a cover image for a user
-     * @param {number} userId 
+     * @param {string} userId 
      * @param {File} cover 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public apiV1UsersUserIdCoverPost(userId: number, cover: File, options?: RawAxiosRequestConfig) {
+    public apiV1UsersUserIdCoverPost(userId: string, cover: File, options?: RawAxiosRequestConfig) {
         return UsersApiFp(this.configuration).apiV1UsersUserIdCoverPost(userId, cover, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
      * @summary Get a user by ID
-     * @param {number} userId 
+     * @param {string} userId 
      * @param {boolean} [includeTeams] Include teams in the response
      * @param {boolean} [includeFollows] Include followed teams in the response
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public apiV1UsersUserIdGet(userId: number, includeTeams?: boolean, includeFollows?: boolean, options?: RawAxiosRequestConfig) {
+    public apiV1UsersUserIdGet(userId: string, includeTeams?: boolean, includeFollows?: boolean, options?: RawAxiosRequestConfig) {
         return UsersApiFp(this.configuration).apiV1UsersUserIdGet(userId, includeTeams, includeFollows, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
      * @summary Update a user
-     * @param {number} userId 
+     * @param {string} userId 
      * @param {ApiV1UsersUserIdPutRequest} body 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public apiV1UsersUserIdPut(userId: number, body: ApiV1UsersUserIdPutRequest, options?: RawAxiosRequestConfig) {
+    public apiV1UsersUserIdPut(userId: string, body: ApiV1UsersUserIdPutRequest, options?: RawAxiosRequestConfig) {
         return UsersApiFp(this.configuration).apiV1UsersUserIdPut(userId, body, options).then((request) => request(this.axios, this.basePath));
     }
 }
-
-
-

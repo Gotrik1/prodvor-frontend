@@ -354,7 +354,7 @@
             "in": "path",
             "name": "post_id",
             "required": true,
-            "type": "integer"
+            "type": "string"
           }
         ],
         "responses": {
@@ -376,7 +376,7 @@
             "in": "path",
             "name": "post_id",
             "required": true,
-            "type": "integer"
+            "type": "string"
           },
           {
             "in": "body",
@@ -694,7 +694,7 @@
             "in": "path",
             "name": "team_id",
             "required": true,
-            "type": "integer"
+            "type": "string"
           }
         ],
         "responses": {
@@ -718,7 +718,7 @@
             "in": "path",
             "name": "team_id",
             "required": true,
-            "type": "integer"
+            "type": "string"
           }
         ],
         "responses": {
@@ -747,13 +747,13 @@
             "in": "path",
             "name": "team_id",
             "required": true,
-            "type": "integer"
+            "type": "string"
           },
           {
             "in": "path",
             "name": "user_id",
             "required": true,
-            "type": "integer"
+            "type": "string"
           },
           {
             "in": "body",
@@ -805,7 +805,7 @@
             "in": "path",
             "name": "team_id",
             "required": true,
-            "type": "integer"
+            "type": "string"
           }
         ],
         "responses": {
@@ -834,7 +834,7 @@
             "in": "path",
             "name": "team_id",
             "required": true,
-            "type": "integer"
+            "type": "string"
           }
         ],
         "responses": {
@@ -863,13 +863,13 @@
             "in": "path",
             "name": "team_id",
             "required": true,
-            "type": "integer"
+            "type": "string"
           },
           {
             "in": "path",
             "name": "user_id",
             "required": true,
-            "type": "integer"
+            "type": "string"
           }
         ],
         "responses": {
@@ -966,7 +966,7 @@
             "in": "path",
             "name": "tournament_id",
             "required": true,
-            "type": "integer"
+            "type": "string"
           }
         ],
         "responses": {
@@ -1199,7 +1199,7 @@
             "in": "path",
             "name": "user_id",
             "required": true,
-            "type": "integer"
+            "type": "string"
           },
           {
             "description": "Include teams in the response",
@@ -1235,7 +1235,7 @@
             "in": "path",
             "name": "user_id",
             "required": true,
-            "type": "integer"
+            "type": "string"
           },
           {
             "in": "body",
@@ -1311,7 +1311,7 @@
             "in": "path",
             "name": "user_id",
             "required": true,
-            "type": "integer"
+            "type": "string"
           },
           {
             "in": "formData",
@@ -1344,7 +1344,7 @@
             "in": "path",
             "name": "user_id",
             "required": true,
-            "type": "integer"
+            "type": "string"
           },
           {
             "in": "formData",

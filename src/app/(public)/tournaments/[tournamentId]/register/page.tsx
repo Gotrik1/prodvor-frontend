@@ -10,7 +10,7 @@ const tournamentsApi = new LegacyTournamentsApi(apiConfig);
 
 async function getTournament(tournamentId: string): Promise<Tournament | undefined> {
     try {
-        const response = await tournamentsApi.apiV1TournamentsTournamentIdGet(parseInt(tournamentId));
+        const response = await tournamentsApi.apiV1TournamentsTournamentIdGet(tournamentId);
         return response.data as unknown as Tournament;
     } catch (error) {
         console.error("Failed to fetch tournament:", error);
