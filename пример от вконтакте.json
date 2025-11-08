@@ -1,0 +1,109 @@
+[
+    [
+      {
+        "action": {
+          "type": "story"
+        },
+        "text": "История",
+        "uid": "button_history"
+      },
+      {
+        "action": {
+          "type": "post"
+        },
+        "text": "Пост",
+        "uid": "button_post"
+      },
+      {
+        "action": {
+          "type": "photo"
+        },
+        "text": "Фото",
+        "uid": "button_photo"
+      },
+      {
+        "action": {
+          "type": "clip"
+        },
+        "text": "Клип",
+        "uid": "button_clip"
+      },
+      {
+        "action": {
+          "type": "profile_question"
+        },
+        "text": "Вопросы",
+        "uid": "button_question_my",
+        "badge_counter": 0
+      },
+      {
+        "action": {
+          "type": "open_app",
+          "app": {
+            "type": "mini_app",
+            "id": 7310670,
+            "title": "Желания",
+            "author_owner_id": -22822305,
+            "can_cache": true,
+            "are_notifications_enabled": false,
+            "is_install_screen": true,
+            "is_favorite": false,
+            "is_recommended": false,
+            "is_installed": true,
+            "track_code": "YXRjX9wAGADOAG-NTgHOaQ-nEQIAA6AEzn7g9dQFoAagBwAIoAkACpQA3AAQAAABzl48RAoCwwOgBMIFoAYAB6dzZXJ2aWNlAcALAA",
+            "share_url": "https://vk.com/wishlist",
+            "webview_url": "https://static.vk.com/wishlist/?vk_access_token_settings=friends,photos,market&vk_app_id=7310670&vk_are_notifications_enabled=0&vk_is_app_user=1&vk_is_favorite=0&vk_language=ru&vk_platform=desktop_web&vk_ref=profile_button&vk_ts=1762633489&vk_user_id=204910545&sign=rPu6UHenWu0YVpSXZzVPQFCWS1Rl_5bl07gsxnt1BxE#user_id=204910545",
+            "hide_tabbar": 0,
+            "icon_139": "https://sun1-28.userapi.com/impg/rIhTB-QgbyjazmUuZvmLSZ8aEclP17zfi3gPBw/k1YU9wTQhPg.jpg?size=139x139&quality=90&sign=a435dc85c2c949f4a24e83b162d2e03f&c_uniq_tag=ZCmH27Jbhlag-U2wkOSki0jJ18t9W2quTDvG0bV0TFI",
+            "icon_150": "https://sun1-18.userapi.com/impg/XtHVOdXATyGrw-MPXsTQnd-yXHT1Vx-FX5daOQ/5-ttD1Ug2Xk.jpg?size=150x150&quality=90&sign=43fcd9562e96af761a585a8c44d3bfbc&c_uniq_tag=X3V3Cr-MEYNNdxg2q4PWJ1f5BEMMD0qHTcpotlSfbvM",
+            "icon_278": "https://sun1-28.userapi.com/impg/rIhTB-QgbyjazmUuZvmLSZ8aEclP17zfi3gPBw/k1YU9wTQhPg.jpg?size=278x278&quality=90&sign=78fa74a2cc201b8fe5d0928b20af0016&c_uniq_tag=1MakpDDMsG79hpfGTouHf1spTlqBBWxw6RZs6_30LUI",
+            "icon_576": "https://sun1-14.userapi.com/impg/ZXE11m7XsvkwR8xGq18gTLVr-YcJm1ZVZB3BJg/j-8Fhg1fCJ8.jpg?size=576x576&quality=90&sign=95ba0b136e19e3f899459fa8c56de6a7&c_uniq_tag=qLVUfMHSFp9JyAF5Xhe0Qe2hjEsudjQVkGmQb2Vu62s",
+            "splash_screen": {
+              "is_animated": false,
+              "url": "https://sun1-26.userapi.com/pV5R1wH_p_miK2-aAo3j__vv684sFMs121i0YQ/1wfAat_MN5s.json"
+            },
+            "icon_75": "https://sun1-18.userapi.com/impg/XtHVOdXATyGrw-MPXsTQnd-yXHT1Vx-FX5daOQ/5-ttD1Ug2Xk.jpg?size=75x75&quality=90&sign=6a1fced3a2bf085c63151f64cb894bf8&c_uniq_tag=5qLw79viC_jPEvT9LQM0GT33izy9DVwQrngSOhPb2vM",
+            "open_in_external_browser": false,
+            "need_policy_confirmation": false,
+            "is_vkui_internal": true,
+            "has_vk_connect": false,
+            "short_description": "Создайте список подарков, которые хотели бы получить. Друзья их увидят, смогут приобрести и вручить.",
+            "ad_config": {
+              "id": 999
+            },
+            "profile_button_available": false,
+            "is_button_added_to_profile": false,
+            "app_status": 1,
+            "mobile_controls_type": 1,
+            "need_show_unverified_screen": false,
+            "is_calls_available": true,
+            "is_plugin": false
+          }
+        },
+        "text": "Мои желания",
+        "uid": "app_7310670",
+        "icons": [
+          {
+            "url": "https://sun1-20.userapi.com/09A-6hbeCeGft5T5ilXv2FbRWd14FGfLzkRyEQ/IhtqkIhhZPo.png",
+            "width": 28,
+            "height": 28
+          },
+          {
+            "url": "https://sun1-95.userapi.com/Bdsn6N-mXXcpBMHcdcrumFxfJBP21umWxRkhtQ/-ROgUgWt8tI.png",
+            "width": 56,
+            "height": 56
+          },
+          {
+            "url": "https://sun1-15.userapi.com/EHt4K4nRQENlPeoRrQA7FDWPFh2wQIXhGE2kuQ/1A5NhD-xmb8.png",
+            "width": 84,
+            "height": 84
+          },
+          {
+            "url": "https://sun1-57.userapi.com/ufGk412gI6brn6eNwdkzdn58LmC0supsiUx2qw/bE3NKb6y2J0.png",
+            "width": 112,
+            "height": 112
+          }
+        ]
+      }
+    ]
+  ]
