@@ -48,12 +48,13 @@ const LogoUploadDialog = ({ team, onUploadSuccess }: { team: Team, onUploadSucce
 
         try {
             // Step 1: Request presigned URL
-            const presignResponse = await api.post('/api/v1/uploads/request-url', {
+            const presignedResponse = await api.post('/api/v1/uploads/request-url', {
                 contentType: file.type,
             }, {
                 headers: { 'Authorization': `Bearer ${accessToken}` }
             });
-            const presignedData: PresignedPostResponse = presignResponse.data;
+
+            const presignedData: PresignedPostResponse = presignedResponse.data;
 
             // Step 2: Upload file directly to storage
             const formData = new FormData();
@@ -68,10 +69,10 @@ const LogoUploadDialog = ({ team, onUploadSuccess }: { team: Team, onUploadSucce
             });
 
             if (!uploadResponse.ok) {
-                throw new Error('Ошибка прямой загрузки файла в хранилище.');
+                throw new Error('Ошибка при загрузке файла в хранилище.');
             }
 
-            // Step 3: Confirm upload with backend
+            // Step 3: Confirm upload with our backend
             const confirmResponse = await api.post(`/api/v1/teams/${team.id}/logo`, {
                 fileUrl: presignedData.fileUrl,
             }, {
