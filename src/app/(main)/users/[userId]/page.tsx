@@ -4,7 +4,7 @@ import type { Metadata } from 'next';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Button } from '@/shared/ui/button';
 import Link from 'next/link';
-import { PlayerPageTemplate } from '@/views/users/player';
+import { PlayerPage } from '@/views/users/player';
 import type { User } from '@/entities/user/types';
 import { UsersApi } from '@/shared/api/api';
 import { apiConfig } from '@/shared/api/axios-instance';
@@ -67,7 +67,7 @@ export default async function UserProfilePage({ params }: { params: { userId: st
   // In a real app, you'd have templates for each role.
   return (
     <div className="p-0 md:p-6 lg:p-8">
-      <PlayerPageTemplate user={user} />
+      <PlayerPage user={user} />
     </div>
   )
 }
