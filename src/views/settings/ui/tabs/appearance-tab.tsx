@@ -5,6 +5,7 @@ import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from '@/shared/ui/card';
@@ -12,9 +13,22 @@ import { Label } from '@/shared/ui/label';
 import { ThemeToggle } from '@/shared/ui/theme-toggle';
 import { Slider } from '@/shared/ui/slider';
 import { useScale } from '@/shared/hooks/use-scale';
+import { Button } from '@/shared/ui/button';
+import { Save } from 'lucide-react';
+import { useToast } from '@/shared/hooks/use-toast';
 
 export function AppearanceTab() {
   const { scale, setScale } = useScale();
+  const { toast } = useToast();
+
+  const handleSave = () => {
+    // In a real app, this would call an API like:
+    // api.put('/api/v1/users/me/settings', { theme: currentTheme, scale });
+    toast({
+      title: 'Настройки сохранены',
+      description: 'Ваш интерфейс был успешно обновлен.',
+    });
+  };
 
   return (
     <Card>
@@ -46,6 +60,12 @@ export function AppearanceTab() {
           />
         </div>
       </CardContent>
+      <CardFooter className="border-t px-6 py-4">
+        <Button onClick={handleSave}>
+          <Save className="mr-2 h-4 w-4" />
+          Сохранить
+        </Button>
+      </CardFooter>
     </Card>
   );
 }

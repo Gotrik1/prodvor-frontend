@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import { users, teams, User } from "@/mocks";
@@ -17,7 +16,7 @@ import Image from "next/image";
 import { CreatePlanDialog } from "@/features/fitness-plan/ui/create-plan-dialog";
 import { FitnessSchedule } from "@/widgets/fitness-schedule";
 
-const defaultCoach = users.find(u => u.id === 'staff2');
+const defaultCoach = users.find(u => u.role === 'Тренер');
 
 export function CoachPageTemplate({ user }: { user?: User }) {
     const coach = user || defaultCoach;

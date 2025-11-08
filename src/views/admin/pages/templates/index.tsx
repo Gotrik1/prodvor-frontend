@@ -1,7 +1,7 @@
+
 import { Button } from '@/shared/ui/button';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
-import { CoachPageTemplate } from '@/views/admin/ui/templates/coach-page-template';
 import { FanPageTemplate } from '@/views/admin/ui/templates/fan-page-template';
 import { ManagerPageTemplate } from '@/views/admin/ui/templates/manager-page-template';
 import { PlaceholderTemplate } from '@/views/admin/ui/templates/placeholder-template';
@@ -10,6 +10,7 @@ import { PlayerPageTemplate } from '@/views/admin/ui/templates/player-page-templ
 import { RefereePageTemplate } from '@/views/admin/ui/templates/referee-page-template';
 import { SponsorPageTemplate } from '@/views/admin/ui/templates/sponsor-page-template';
 import { TournamentPublicPageTemplate } from '@/views/admin/ui/templates/tournament-public-page-template';
+import { CoachPageTemplate } from '@/views/admin/ui/templates/coach-page-template';
 
 
 export const templateMap = {
