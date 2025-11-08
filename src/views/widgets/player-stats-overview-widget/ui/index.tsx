@@ -42,7 +42,7 @@ const StatRow = ({ label, value }: { label: string, value: string | number }) =>
 );
 
 
-export const PlayerStatsOverviewWidget = ({ user }: { user: User }) => {
+export function PlayerStatsOverviewWidget({ user }: { user: User }) {
     const last5Form: ('W' | 'L' | 'D' | 'N/A')[] = ['N/A', 'N/A', 'N/A', 'N/A', 'N/A'];
     const currentSeason = new Date().getFullYear().toString();
 

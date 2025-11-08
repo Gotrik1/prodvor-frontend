@@ -68,8 +68,9 @@ export interface Team {
   dataAiHint: string;
   followers: string[]; // Array of user IDs
   following: string[]; // Array of team IDs
-  sponsorIds?: string[];
+  sponsorIds?: string[]; // Array of sponsor IDs
   city: string;
+  
   wins?: number;
   losses?: number;
   leagueRank?: string;
