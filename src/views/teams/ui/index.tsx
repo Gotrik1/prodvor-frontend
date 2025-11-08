@@ -96,7 +96,7 @@ export function TeamsPage() {
         async function fetchTeams() {
             try {
                 const response = await api.get('/api/v1/teams');
-                setAllTeams(response.data);
+                setAllTeams(response.data as Team[]);
             } catch (error) {
                 console.error("Failed to fetch teams:", error);
             }

@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
@@ -32,7 +31,7 @@ export function CreateTeamPage() {
     useEffect(() => {
         async function fetchSports() {
             try {
-                const response = await api.get(`/api/v1/sports/`);
+                const response = await api.get(`/api/v1/sports`);
                 setAllSports(response.data as Sport[]);
             } catch (error) {
                 console.error("Failed to fetch sports:", error);

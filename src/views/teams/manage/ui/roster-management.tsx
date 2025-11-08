@@ -18,7 +18,7 @@ import {
   AlertDialogTrigger,
 } from "@/shared/ui/alert-dialog";
 import type { User } from '@/mocks';
-import api from '@/shared/api/axios-instance';
+import { api } from '@/shared/api/axios-instance';
 
 interface RosterManagementProps {
   teamId: string;
@@ -88,7 +88,7 @@ export function RosterManagement({ teamId, allTeamMembers, onRosterChange }: Ros
                     </AlertDialogHeader>
                     <AlertDialogFooter>
                       <AlertDialogCancel>Отмена</AlertDialogCancel>
-                      <AlertDialogAction onClick={() => handleRemovePlayer(member.id, member.nickname)} className="bg-destructive hover:bg-destructive/90">
+                      <AlertDialogAction onClick={() => handleRemovePlayer(String(member.id), member.nickname)} className="bg-destructive hover:bg-destructive/90">
                         Да, исключить
                       </AlertDialogAction>
                     </AlertDialogFooter>

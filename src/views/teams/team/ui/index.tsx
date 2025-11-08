@@ -15,7 +15,7 @@ export function TeamPublicPage({ teamId }: { teamId: string }) {
         if (!teamId) {
             setLoading(false);
             return;
-        }
+        };
 
         async function getTeam() {
             setLoading(true);
@@ -24,7 +24,7 @@ export function TeamPublicPage({ teamId }: { teamId: string }) {
                  if (!response.data) {
                     setTeam(undefined);
                 } else {
-                    const data: Team & { captain: User; members: User[] } = response.data;
+                    const data: Team = response.data as unknown as Team;
                     setTeam(data);
 
                     const fullRoster: User[] = [];

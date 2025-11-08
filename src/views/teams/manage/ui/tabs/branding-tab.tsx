@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import { useState, useRef } from 'react';
@@ -7,16 +6,14 @@ import type { Team, PresignedPostResponse } from '@/mocks';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/shared/ui/dialog';
 import { Button } from '@/shared/ui/button';
-import { UploadCloud, Image as ImageIcon, Loader2, AlertCircle, Upload } from 'lucide-react';
+import { UploadCloud, Image as ImageIcon, Loader2, AlertCircle } from 'lucide-react';
 import Image from 'next/image';
 import { useToast } from '@/shared/hooks/use-toast';
 import { LogoGeneratorWidget } from '@/widgets/logo-generator';
-import { useUserStore } from '@/widgets/dashboard-header/model/user-store';
 import { api } from '@/shared/api/axios-instance';
 
 const LogoUploadDialog = ({ team, onUploadSuccess }: { team: Team, onUploadSuccess: (newLogoUrl: string) => void }) => {
     const { toast } = useToast();
-    const { accessToken } = useUserStore();
     const fileInputRef = useRef<HTMLInputElement>(null);
     const [file, setFile] = useState<File | null>(null);
     const [filePreview, setFilePreview] = useState<string | null>(null);
@@ -36,11 +33,11 @@ const LogoUploadDialog = ({ team, onUploadSuccess }: { team: Team, onUploadSucce
     };
 
     const handleSaveLogo = async () => {
-        if (!file || !team?.id || !accessToken) {
+        if (!file || !team?.id) {
              toast({
                 variant: "destructive",
                 title: "Ошибка",
-                description: "Файл не выбран или вы не авторизованы.",
+                description: "Файл не выбран.",
             });
             return;
         };
