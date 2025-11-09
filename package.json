@@ -6,8 +6,7 @@
   "type": "module",
   "scripts": {
     "dev": "npm run api:refresh && next dev --hostname 0.0.0.0 --turbopack -p 6000",
-    "build": "next build",
-    "prebuild": "npm run api:refresh",
+    "build": "npm run api:refresh && next build",
     "start": "next start",
     "lint": "next lint . --ext .ts,.tsx --fix",
     "lint:fix": "eslint . --ext .ts,.tsx --fix",
