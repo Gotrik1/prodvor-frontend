@@ -5,7 +5,7 @@ import { useUserStore } from '@/widgets/dashboard-header/model/user-store';
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'https://8080-firebase-prodvor-backend-1761850902881.cluster-ombtxv25tbd6yrjpp3lukp6zhc.cloudworkstations.dev';
 
-export const api: AxiosInstance = axios.create({
+export const http: AxiosInstance = axios.create({
   baseURL: BASE_URL,
   withCredentials: true,
   headers: {
@@ -14,7 +14,7 @@ export const api: AxiosInstance = axios.create({
   },
 });
 
-api.interceptors.response.use(
+http.interceptors.response.use(
   (r) => r,
   (err) => {
     console.error('API error:', err?.response?.data || err);
@@ -38,7 +38,7 @@ const processQueue = (error: Error | null, token: string | null = null) => {
   failedQueue = [];
 };
 
-api.interceptors.request.use(
+http.interceptors.request.use(
   (config) => {
     const accessToken = useUserStore.getState().accessToken;
     if (accessToken && !config.headers?.Authorization) {
@@ -49,7 +49,7 @@ api.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-api.interceptors.response.use(
+http.interceptors.response.use(
   (response) => response,
   async (error: AxiosError) => {
     const originalRequest = error.config as RawAxiosRequestConfig & { _retry?: boolean };
@@ -63,7 +63,7 @@ api.interceptors.response.use(
             if (originalRequest.headers) {
               originalRequest.headers['Authorization'] = `Bearer ${token}`;
             }
-            return api(originalRequest);
+            return http(originalRequest);
           })
           .catch((err) => {
             return Promise.reject(err);
@@ -97,7 +97,7 @@ api.interceptors.response.use(
         }
         processQueue(null, newAccessToken);
         
-        return api(originalRequest);
+        return http(originalRequest);
 
       } catch (refreshError) {
         processQueue(refreshError as Error, null);
@@ -112,4 +112,4 @@ api.interceptors.response.use(
   }
 );
 
-export default api;
+export default http;

@@ -1,11 +1,11 @@
-
 'use client';
 
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { loginAction } from '@/features/auth/actions';
 
 import { Button } from "@/shared/ui/button";
 import {
@@ -27,11 +27,6 @@ import { useToast } from '@/shared/hooks/use-toast';
 import { useUserStore } from '@/widgets/dashboard-header/model/user-store';
 import { Loader2 } from 'lucide-react';
 import type { User } from '@/mocks';
-import { AuthApi } from '@/shared/api/sdk';
-import { apiConfig } from '@/shared/api/client';
-
-const authApi = new AuthApi(apiConfig);
-
 
 // ------------------ Схемы валидации ------------------
 const loginFormSchema = z.object({
@@ -131,12 +126,12 @@ const SocialButton = ({ className, children }: { className?: string, children: R
 
 export function AuthPage() {
   const { toast } = useToast();
-  const { setTokens, setUser, isHydrated, user: currentUser, signOut } = useUserStore();
+  const { setTokens, setUser, isHydrated, user: currentUser } = useUserStore();
   const router = useRouter();
   const searchParams = useSearchParams();
   const [isLoading, setIsLoading] = React.useState(false);
 
-  useEffect(() => {
+  React.useEffect(() => {
     // This effect ensures we don't try to redirect on the server.
     const hasLoggedOut = searchParams?.get('loggedOut') === 'true';
     if (isHydrated && currentUser && !hasLoggedOut) {
@@ -154,32 +149,25 @@ export function AuthPage() {
 
   const onSubmit = async (values: z.infer<typeof loginFormSchema>) => {
     setIsLoading(true);
-    try {
-        const loginResponse = await authApi.login(values);
-        
-        const { accessToken, refreshToken, user } = loginResponse.data as any;
-
-        if (accessToken && refreshToken && user) {
-            setTokens({ accessToken, refreshToken });
-            setUser(user as User);
-            toast({
-                title: "Вход выполнен!",
-                description: `Добро пожаловать, ${user.nickname}!`,
-            });
-            router.push(`/users/${user.id}`);
-        } else {
-             throw new Error("Ответ сервера не содержит все необходимые данные (токены и пользователь).");
-        }
-    } catch (error: any) {
-        console.error("Login failed:", error);
-        toast({
-            variant: "destructive",
-            title: "Ошибка входа",
-            description: error.response?.data?.message || "Неверный email или пароль. Попробуйте снова.",
-        });
-    } finally {
-        setIsLoading(false);
+    const result = await loginAction(values);
+    
+    if (result.success) {
+      const { accessToken, refreshToken, user } = result.data;
+      setTokens({ accessToken, refreshToken });
+      setUser(user as User);
+      toast({
+        title: "Вход выполнен!",
+        description: `Добро пожаловать, ${user.nickname}!`,
+      });
+      router.push(`/users/${user.id}`);
+    } else {
+      toast({
+        variant: "destructive",
+        title: "Ошибка входа",
+        description: result.error || "Неверный email или пароль.",
+      });
     }
+    setIsLoading(false);
   };
 
 
