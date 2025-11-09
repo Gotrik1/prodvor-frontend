@@ -26,15 +26,15 @@ const useUserStore = create<UserState>()(
       setUser: (user) => set({ user }),
       setTokens: ({ accessToken, refreshToken }) => {
         set((state) => ({
-          accessToken: accessToken ?? state.accessToken,
-          refreshToken: refreshToken ?? state.refreshToken,
+          accessToken: accessToken !== undefined ? accessToken : state.accessToken,
+          refreshToken: refreshToken !== undefined ? refreshToken : state.refreshToken,
         }));
       },
       signOut: async () => {
         const { refreshToken } = get();
         if (refreshToken) {
           try {
-            // Correctly send refreshToken as an object
+            // Correctly send refreshToken as a JSON object
             await api.post('/api/v1/auth/logout', { refreshToken });
           } catch (error) {
             console.error("Failed to logout on backend, clearing client session anyway.", error);

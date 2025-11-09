@@ -15,6 +15,7 @@ export const api = axios.create({
 // 1. Interceptor to add the token to every request
 api.interceptors.request.use(
   (config) => {
+    // Make sure we get the fresh token on every request
     const token = useUserStore.getState().accessToken;
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
@@ -85,12 +86,14 @@ api.interceptors.response.use(
         }
 
         setTokens({ accessToken: newAccessToken });
+        // Update the default header for subsequent requests
         api.defaults.headers.common['Authorization'] = `Bearer ${newAccessToken}`;
         originalRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
         
         processQueue(null, newAccessToken);
         return api(originalRequest);
       } catch (refreshError) {
+        console.error('Token refresh failed:', refreshError);
         processQueue(refreshError, null);
         await signOut(); // Logout if refresh fails
         return Promise.reject(refreshError);
