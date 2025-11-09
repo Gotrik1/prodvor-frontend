@@ -1,4 +1,3 @@
-
 'use client';
 
 import React, { useEffect } from 'react';
@@ -127,7 +126,7 @@ const SocialButton = ({ className, children }: { className?: string, children: R
 
 export function AuthPage() {
   const { toast } = useToast();
-  const { setTokens, setUser, isHydrated, user: currentUser } = useUserStore();
+  const { setTokens, setUser, isHydrated, user: currentUser, signOut } = useUserStore();
   const router = useRouter();
   const searchParams = useSearchParams();
   const [isLoading, setIsLoading] = React.useState(false);
