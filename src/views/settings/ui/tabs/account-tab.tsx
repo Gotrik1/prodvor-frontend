@@ -39,10 +39,10 @@ import {
 } from "@/shared/ui/alert-dialog";
 import React, { useState, useEffect, useCallback } from 'react';
 import { api } from '@/shared/api/axios-instance';
-import { SessionsApi } from '@/shared/api/api';
+import { UserApi } from '@/shared/api/api';
 import { apiConfig } from '@/shared/api/axios-instance';
 
-const sessionsApi = new SessionsApi(apiConfig);
+const userApi = new UserApi(apiConfig);
 
 const accountFormSchema = z.object({
   email: z.string().email('Неверный формат email.'),
@@ -79,7 +79,7 @@ function ActiveSessions() {
     const fetchSessions = useCallback(async () => {
         setIsLoading(true);
         try {
-            const response = await api.get('/api/v1/users/me/sessions');
+            const response = await userApi.apiV1UsersMeSessionsGet();
             setSessions(response.data as Session[]);
         } catch (error) {
             console.error("Failed to fetch sessions:", error);
@@ -95,7 +95,7 @@ function ActiveSessions() {
 
     const handleTerminate = async (sessionId: number) => {
         try {
-            await sessionsApi.apiV1UsersMeSessionsSessionIdDelete({sessionId: String(sessionId)});
+            await userApi.apiV1UsersMeSessionsSessionIdDelete(String(sessionId));
             setSessions(prev => prev.filter(s => s.id !== sessionId));
             toast({ title: "Сессия завершена", description: "Доступ с этого устройства был прекращен." });
         } catch {
@@ -105,7 +105,7 @@ function ActiveSessions() {
 
     const handleTerminateAll = async () => {
          try {
-            await api.delete('/api/v1/users/me/sessions/all-except-current');
+            await userApi.apiV1UsersMeSessionsAllExceptCurrentDelete();
             toast({ title: "Все сессии завершены", description: "Все сессии, кроме текущей, были завершены." });
             fetchSessions(); // Re-fetch to show only the current one
         } catch {
