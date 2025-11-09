@@ -1,51 +1,90 @@
 
+'use client';
+
 import type { Metadata } from 'next';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Button } from '@/shared/ui/button';
 import Link from 'next/link';
 import { PlayerPage } from '@/views/users/player';
 import type { User } from '@/entities/user/types';
-import { api as serverApi } from '@/shared/api/server-instance'; // Use server-safe api instance
+import { api } from '@/shared/api/axios-instance';
 import axios from 'axios';
+import { useEffect, useState } from 'react';
+import { useParams } from 'next/navigation';
+import { Skeleton } from '@/shared/ui/skeleton';
 
-async function getUser(userId: string): Promise<User | undefined> {
-    if (!userId) {
-        return undefined;
+function UserProfileSkeleton() {
+    return (
+        <div className="p-0 md:p-6 lg:p-8">
+            <Card className="shadow-none md:shadow-main-sm">
+                <div className="p-0 md:p-6 md:pb-6">
+                    <div className="relative h-48 md:h-64 w-full bg-muted">
+                        <Skeleton className="w-full h-full" />
+                    </div>
+                     <div className="bg-card px-0 md:px-6 pb-4">
+                        <div className="flex flex-col sm:flex-row sm:items-end gap-4">
+                             <div className="w-full flex justify-center sm:w-auto sm:justify-start -mt-16 sm:-mt-20 shrink-0">
+                                <Skeleton className="h-32 w-32 rounded-full border-4 border-card" />
+                            </div>
+                            <div className="flex-grow text-center sm:text-left pt-2 space-y-2">
+                                <Skeleton className="h-8 w-3/4 mx-auto sm:mx-0" />
+                                <Skeleton className="h-4 w-full max-w-md mx-auto sm:mx-0" />
+                                <Skeleton className="h-4 w-1/2 mx-auto sm:mx-0" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </Card>
+        </div>
+    )
+}
+
+export default function UserProfilePage() {
+   const params = useParams();
+   const userId = params?.userId as string;
+   const [user, setUser] = useState<User | null>(null);
+   const [isLoading, setIsLoading] = useState(true);
+   const [error, setError] = useState<string | null>(null);
+
+   useEffect(() => {
+    async function getUser() {
+        if (!userId) {
+            setError("User ID is missing.");
+            setIsLoading(false);
+            return;
+        }
+        
+        setIsLoading(true);
+        setError(null);
+        
+        try {
+            const response = await api.get(`/api/v1/users/${userId}?include_teams=true`);
+            if (response.data) {
+                setUser(response.data as User);
+            } else {
+                setError("User not found.");
+            }
+        } catch (err: any) {
+            if (axios.isAxiosError(err) && err.response?.status === 404) {
+                setError("User not found.");
+            } else {
+                console.error(`[Client] Failed to fetch user data for ID ${userId}:`, err.message || err);
+                setError("Failed to fetch user data.");
+            }
+        } finally {
+            setIsLoading(false);
+        }
     }
     
-    try {
-        const response = await serverApi.get(`/api/v1/users/${userId}?include_teams=true`);
-        
-        if (response.data) {
-             return response.data as User;
-        }
-        return undefined;
-    } catch (error: any) {
-        if (axios.isAxiosError(error) && error.response?.status === 404) {
-            console.log(`[Server] User with ID ${userId} not found on the backend.`);
-        } else {
-            console.error(`[Server] Failed to fetch user data for ID ${userId}:`, error.message || error);
-        }
-        return undefined;
-    }
-}
+    getUser();
+   }, [userId]);
 
 
-export async function generateMetadata({ params }: { params: { userId: string } }): Promise<Metadata> {
-  const user = await getUser(params.userId);
-  const title = user ? `Профиль ${user.nickname} | ProDvor` : 'Пользователь не найден | ProDvor';
-  const description = user ? `Публичный профиль пользователя ${user.nickname}.` : 'Запрошенный пользователь не найден.';
+   if (isLoading) {
+       return <UserProfileSkeleton />
+   }
 
-  return {
-    title,
-    description,
-  };
-}
-
-export default async function UserProfilePage({ params }: { params: { userId: string } }) {
-   const user = await getUser(params.userId);
-
-   if (!user) {
+   if (error || !user) {
     return (
        <div className="flex flex-col min-h-[80vh] items-center justify-center p-4">
         <Card className="text-center max-w-md w-full">
