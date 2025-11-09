@@ -12,7 +12,10 @@ import { Skeleton } from "@/shared/ui/skeleton";
 import { ScrollArea } from "@/shared/ui/scroll-area";
 import { MyTeamsEmptyState } from "@/views/teams/ui/my-teams-empty-state";
 import { useUserStore } from "@/widgets/dashboard-header/model/user-store";
-import { api } from "@/shared/api/axios-instance";
+import { UsersApi } from "@/shared/api/api";
+import { apiConfig } from "@/shared/api/axios-instance";
+
+const usersApi = new UsersApi(apiConfig);
 
 export function MyTeamWidget({ user }: { user: User }) {
   const [myTeams, setMyTeams] = useState<Team[]>([]);
@@ -20,25 +23,31 @@ export function MyTeamWidget({ user }: { user: User }) {
   const { accessToken } = useUserStore();
 
   useEffect(() => {
-    const fetchUserTeams = async () => {
-        if (!user || !accessToken) {
-            setIsLoading(false);
-            return;
-        }
-        setIsLoading(true);
-        try {
-            const response = await api.get(`/api/v1/users/me?include_teams=true`);
-            const userWithTeams = response.data as User & { teams?: Team[] };
-            setMyTeams(userWithTeams.teams || []);
-        } catch (error) {
-            console.error("Failed to fetch user's teams for widget:", error);
-            setMyTeams([]);
-        } finally {
-            setIsLoading(false);
-        }
-    };
-    
-    fetchUserTeams();
+    // If the user object passed as a prop already contains the teams, use them.
+    if (user && Array.isArray((user as any).teams)) {
+        setMyTeams((user as any).teams);
+        setIsLoading(false);
+    } else {
+        // Fallback to fetching if data is not available
+        const fetchUserTeams = async () => {
+            if (!user || !accessToken) {
+                setIsLoading(false);
+                return;
+            }
+            setIsLoading(true);
+            try {
+                const response = await usersApi.apiV1UsersMeGet({ includeTeams: true });
+                const userWithTeams = response.data as User & { teams?: Team[] };
+                setMyTeams(userWithTeams.teams || []);
+            } catch (error) {
+                console.error("Failed to fetch user's teams for widget:", error);
+                setMyTeams([]);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+        fetchUserTeams();
+    }
   }, [user, accessToken]);
 
   if (isLoading) {

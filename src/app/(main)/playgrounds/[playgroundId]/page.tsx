@@ -3,14 +3,11 @@
 import { PlaygroundPage } from '@/views/playgrounds/playground';
 import type { Playground } from '@/mocks';
 import type { Metadata } from 'next';
-import { LegacyPlaygroundsApi } from '@/shared/api';
-import { apiConfig } from '@/shared/api/axios-instance';
-
-const playgroundsApi = new LegacyPlaygroundsApi(apiConfig);
+import { api } from '@/shared/api/axios-instance';
 
 async function getPlayground(playgroundId: string): Promise<Playground | undefined> {
     try {
-        const response = await playgroundsApi.apiV1PlaygroundsGet();
+        const response = await api.get('/api/v1/playgrounds');
         const playground = (response.data as unknown as Playground[]).find(p => p.id === playgroundId);
         return playground;
     } catch (error) {

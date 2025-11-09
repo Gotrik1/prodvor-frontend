@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
@@ -64,7 +65,7 @@ export function TeamsPage() {
     const [isLoading, setIsLoading] = useState(true);
     const [sentApplications, setSentApplications] = useState<string[]>([]);
     const { toast } = useToast();
-    const [pagination, setPagination] = useState({ page: 1, limit: 12, totalPages: 1 });
+    const [pagination, setPagination] = useState({ page: 1, per_page: 12, total: 0 });
 
     const handleApply = async (teamId: string) => {
         if (!currentUser) {
@@ -95,20 +96,16 @@ export function TeamsPage() {
 
     useEffect(() => {
         async function fetchTeams() {
+            setIsLoading(true);
             try {
-                // In a real scenario, the backend would handle pagination.
-                // Here, we simulate it.
-                const response = await api.get('/api/v1/teams');
-                const teamsData = response.data as Team[];
-                
-                const totalPages = Math.ceil(teamsData.length / pagination.limit);
-                setPagination(p => ({ ...p, totalPages }));
-
-                const startIndex = (pagination.page - 1) * pagination.limit;
-                const endIndex = startIndex + pagination.limit;
-                
-                setAllTeams(teamsData.slice(startIndex, endIndex));
-
+                const response = await api.get('/api/v1/teams', {
+                    params: {
+                        page: pagination.page,
+                        per_page: pagination.per_page,
+                    }
+                });
+                setAllTeams(response.data.data);
+                setPagination(p => ({ ...p, total: response.data.meta.total }));
             } catch (error) {
                 console.error("Failed to fetch teams:", error);
             }
@@ -117,7 +114,7 @@ export function TeamsPage() {
             }
         }
         fetchTeams();
-    }, [pagination.page, pagination.limit]);
+    }, [pagination.page, pagination.per_page]);
 
     const { myTeams, otherTeams } = useMemo(() => {
         if (!allTeams || allTeams.length === 0) {
@@ -133,6 +130,7 @@ export function TeamsPage() {
     }, [currentUser, allTeams]);
     
     const showMyTeams = currentUser && myTeams.length > 0;
+    const totalPages = Math.ceil(pagination.total / pagination.per_page);
 
     return (
         <div className="p-4 md:p-6 lg:p-8 space-y-8">
@@ -202,11 +200,11 @@ export function TeamsPage() {
                                     Назад
                                 </Button>
                                 <span className="font-medium text-sm">
-                                    Страница {pagination.page} из {pagination.totalPages}
+                                    Страница {pagination.page} из {totalPages}
                                 </span>
                                 <Button
                                     variant="outline"
-                                    disabled={pagination.page >= pagination.totalPages}
+                                    disabled={pagination.page >= totalPages}
                                     onClick={() => setPagination(p => ({ ...p, page: p.page + 1 }))}
                                 >
                                     Вперед
@@ -227,4 +225,3 @@ export function TeamsPage() {
         </div>
     );
 }
-

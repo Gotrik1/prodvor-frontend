@@ -13,10 +13,7 @@ export function TeamPublicPage({ teamId }: { teamId: string }) {
     const [loading, setLoading] = React.useState(true);
 
     React.useEffect(() => {
-        if (!teamId) {
-            setLoading(false);
-            return;
-        };
+        if (!teamId) return;
 
         async function getTeam() {
             setLoading(true);
@@ -32,7 +29,7 @@ export function TeamPublicPage({ teamId }: { teamId: string }) {
 
                     // Add captain to the roster, marking them as captain
                     if (data.captain) {
-                        fullRoster.push({ ...data.captain, role: 'Капитан' });
+                        fullRoster.push({ ...data.captain, role: 'Капитан' as any });
                     }
                     
                     // Add other members, ensuring no duplicates

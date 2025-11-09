@@ -4,7 +4,7 @@
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
 import { Trophy, Megaphone } from "lucide-react";
-import { Tournament } from "@/mocks";
+import type { Tournament } from "@/mocks";
 import Link from "next/link";
 import { Progress } from "@/shared/ui/progress";
 import { Badge } from "@/shared/ui/badge";
@@ -46,7 +46,7 @@ export function DashboardAside() {
     const fetchTournaments = async () => {
         try {
             const response = await api.get('/api/v1/tournaments');
-            setTournaments(response.data);
+            setTournaments(response.data.data);
         } catch (error) {
             console.error("Failed to fetch tournaments for aside widget:", error);
         }

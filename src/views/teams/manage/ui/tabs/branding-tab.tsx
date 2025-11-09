@@ -2,7 +2,7 @@
 'use client';
 
 import { useState, useRef } from 'react';
-import type { Team, PresignedPostResponse } from '@/mocks';
+import type { Team } from '@/mocks';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/shared/ui/dialog';
 import { Button } from '@/shared/ui/button';
@@ -11,6 +11,12 @@ import Image from 'next/image';
 import { useToast } from '@/shared/hooks/use-toast';
 import { LogoGeneratorWidget } from '@/widgets/logo-generator';
 import { api } from '@/shared/api/axios-instance';
+
+interface PresignedPostResponse {
+  url: string;
+  fields: Record<string, string>;
+  fileId: string;
+}
 
 const LogoUploadDialog = ({ team, onUploadSuccess }: { team: Team, onUploadSuccess: (newLogoUrl: string) => void }) => {
     const { toast } = useToast();
@@ -45,14 +51,15 @@ const LogoUploadDialog = ({ team, onUploadSuccess }: { team: Team, onUploadSucce
         setError(null);
 
         try {
-            // Step 1: Request presigned URL from our backend
-            const presignedResponse = await api.post('/api/v1/uploads/request-url', {
+            // Step 1: Initiate upload
+            const initiateResponse = await api.post('/api/v1/uploads/initiate', {
                 contentType: file.type,
+                purpose: 'team_logo'
             });
 
-            const presignedData: PresignedPostResponse = presignedResponse.data;
+            const presignedData: PresignedPostResponse = initiateResponse.data;
 
-            // Step 2: Upload file directly to S3-compatible storage
+            // Step 2: Upload file directly to storage
             const formData = new FormData();
             Object.entries(presignedData.fields).forEach(([key, value]) => {
                 formData.append(key, value as string);
@@ -65,17 +72,20 @@ const LogoUploadDialog = ({ team, onUploadSuccess }: { team: Team, onUploadSucce
             });
 
             if (!uploadResponse.ok) {
-                 const errorText = await uploadResponse.text();
-                throw new Error(`Ошибка при загрузке файла в хранилище: ${errorText}`);
+                throw new Error('Ошибка при загрузке файла в хранилище.');
             }
 
-            // Step 3: Notify our backend of the successful upload
-            const confirmResponse = await api.post(`/api/v1/teams/${team.id}/logo`, {
-                fileUrl: presignedData.fileUrl,
+            // Step 3: Complete upload
+            const completeResponse = await api.post('/api/v1/uploads/complete', {
+                fileId: presignedData.fileId,
+                entityType: 'team_logo',
+                entityId: team.id
             });
             
-            if (confirmResponse.status === 200 && confirmResponse.data.logoUrl) {
-                onUploadSuccess(confirmResponse.data.logoUrl);
+             if (completeResponse.status === 200) {
+                // In a real scenario, the backend would return the new URL
+                // For this mock, we'll just re-use the preview
+                onUploadSuccess(filePreview!);
                 toast({
                     title: "Логотип обновлен!",
                     description: "Новый логотип вашей команды успешно сохранен.",

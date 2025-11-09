@@ -31,7 +31,7 @@ export function TournamentsTab() {
     const fetchTournaments = async () => {
         try {
             const response = await api.get('/api/v1/tournaments');
-            setTournaments(response.data);
+            setTournaments(response.data.data);
         } catch (error) {
             console.error("Failed to fetch tournaments:", error);
         }

@@ -83,7 +83,7 @@ export function TeamsTab() {
                 </Link>
               </TableCell>
               <TableCell>
-                <Badge variant="secondary">{team.game}</Badge>
+                <Badge variant="secondary">{team.sport?.name || team.game}</Badge>
               </TableCell>
               <TableCell className="text-xs">
                 {getCaptainNickname(team.captain)}

@@ -14,10 +14,10 @@ import { Skeleton } from '@/shared/ui/skeleton';
 import { api } from '@/shared/api/axios-instance';
 import { RosterManagement } from './roster-management';
 import { TacticalBoard } from './tactical-board';
-import { TransfersTab } from "./transfers-tab";
+import { TransfersTab } from "./tabs/transfers-tab";
 import { AnnouncementsTab } from "./tabs/announcements-tab";
-import { SettingsTab } from "./settings-tab";
-import { BrandingTab } from "./branding-tab";
+import { SettingsTab } from "./tabs/settings-tab";
+import { BrandingTab } from "./tabs/branding-tab";
 
 export function TeamManagementPage({ teamId }: { teamId: string }) {
     const { user: currentUser } = useUserStore();
@@ -34,7 +34,7 @@ export function TeamManagementPage({ teamId }: { teamId: string }) {
         setLoading(true);
         try {
             const response = await api.get(`/api/v1/teams/${teamId}`);
-            const teamData: Team = response.data as unknown as Team;
+            const teamData: Team = response.data;
             setTeam(teamData);
             
             if (teamData.captain && currentUser) {

@@ -19,7 +19,7 @@ export function PlaygroundsTab() {
     const fetchPlaygrounds = async () => {
         try {
             const response = await api.get('/api/v1/playgrounds');
-            setPlaygrounds(response.data);
+            setPlaygrounds(response.data.data);
         } catch (error) {
             console.error("Failed to fetch playgrounds:", error);
         }

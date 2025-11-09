@@ -18,7 +18,7 @@ async function getUser(userId: string): Promise<User | undefined> {
     }
     
     try {
-        const response = await usersApi.apiV1UsersUserIdGet(userId, true);
+        const response = await usersApi.apiV1UsersUserIdGet({userId, includeTeams: true});
         return response.data as User;
     } catch (error: any) {
         if (axios.isAxiosError(error) && error.response?.status === 404) {

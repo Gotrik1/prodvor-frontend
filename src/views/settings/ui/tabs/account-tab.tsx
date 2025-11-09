@@ -79,7 +79,7 @@ function ActiveSessions() {
     const fetchSessions = useCallback(async () => {
         setIsLoading(true);
         try {
-            const response = await sessionsApi.apiV1UsersMeSessionsGet();
+            const response = await api.get('/api/v1/users/me/sessions');
             setSessions(response.data as Session[]);
         } catch (error) {
             console.error("Failed to fetch sessions:", error);
@@ -95,7 +95,7 @@ function ActiveSessions() {
 
     const handleTerminate = async (sessionId: number) => {
         try {
-            await sessionsApi.apiV1UsersMeSessionsSessionIdDelete(sessionId);
+            await sessionsApi.apiV1UsersMeSessionsSessionIdDelete({sessionId: String(sessionId)});
             setSessions(prev => prev.filter(s => s.id !== sessionId));
             toast({ title: "Сессия завершена", description: "Доступ с этого устройства был прекращен." });
         } catch {
@@ -105,7 +105,7 @@ function ActiveSessions() {
 
     const handleTerminateAll = async () => {
          try {
-            await sessionsApi.apiV1UsersMeSessionsAllExceptCurrentDelete();
+            await api.delete('/api/v1/users/me/sessions/all-except-current');
             toast({ title: "Все сессии завершены", description: "Все сессии, кроме текущей, были завершены." });
             fetchSessions(); // Re-fetch to show only the current one
         } catch {

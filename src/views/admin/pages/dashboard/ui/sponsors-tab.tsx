@@ -20,7 +20,7 @@ export function SponsorsTab() {
     const fetchSponsors = async () => {
       try {
         const response = await api.get('/api/v1/sponsors');
-        setSponsors(response.data);
+        setSponsors(response.data.data);
       } catch (error) {
         console.error("Failed to fetch sponsors:", error);
       }
