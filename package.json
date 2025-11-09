@@ -1,3 +1,4 @@
+
 {
   "name": "nextn",
   "version": "0.1.0",
@@ -12,7 +13,7 @@
     "lint:fix": "eslint . --ext .ts,.tsx --fix",
     "typecheck": "tsc --noEmit",
     "api:pull": "node scripts/fetch-openapi.mjs",
-    "api:gen": "openapi -i ./openapi.json -o src/shared/api/sdk --client axios --useOptions",
+    "api:gen": "openapi-generator-cli generate -g typescript-axios -i ./openapi.json -o src/shared/api/sdk",
     "api:refresh": "npm run api:pull && npm run api:gen"
   },
   "dependencies": {
@@ -67,7 +68,7 @@
     "zustand": "^4.5.2"
   },
   "devDependencies": {
-    "@openapitools/openapi-generator-cli": "^2.25.0",
+    "@openapitools/openapi-generator-cli": "^2.11.0",
     "@tailwindcss/typography": "^0.5.14",
     "@types/node": "^20",
     "@types/react": "^18",
