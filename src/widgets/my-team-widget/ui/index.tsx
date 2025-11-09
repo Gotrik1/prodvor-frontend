@@ -10,12 +10,8 @@ import React, { useState, useEffect } from "react";
 import { Skeleton } from "@/shared/ui/skeleton";
 import { ScrollArea } from "@/shared/ui/scroll-area";
 import { MyTeamsEmptyState } from "@/views/teams/ui/my-teams-empty-state";
-import { useUserStore } from "@/widgets/dashboard-header/model/user-store";
-import { UserApi } from "@/shared/api/api";
-import { apiConfig } from "@/shared/api/axios-instance";
+import { UserService } from "@/shared/api/sdk";
 import axios from "axios";
-
-const usersApi = new UserApi(apiConfig);
 
 export function MyTeamWidget({ user }: { user: User }) {
   const [myTeams, setMyTeams] = useState<Team[]>([]);
@@ -27,7 +23,7 @@ export function MyTeamWidget({ user }: { user: User }) {
         setMyTeams((user as any).teams);
         setIsLoading(false);
     } else {
-        // Fallback to fetching if data is not available, though this is less optimal.
+        // Fallback to fetching if data is not available.
         const fetchUserTeams = async () => {
             if (!user) {
                 setIsLoading(false);
@@ -35,9 +31,8 @@ export function MyTeamWidget({ user }: { user: User }) {
             }
             setIsLoading(true);
             try {
-                const response = await usersApi.apiV1UsersUserIdGet(user.id, true);
-                const userWithTeams = response.data as unknown as User & { teams?: Team[] };
-                setMyTeams(userWithTeams.teams || []);
+                const userWithTeams = await UserService.getUsersUserId({userId: user.id, includeTeams: true });
+                setMyTeams((userWithTeams as any).teams || []);
             } catch (error) {
                 if (axios.isAxiosError(error)) {
                     console.error("Failed to fetch user's teams for widget:", error.response?.data || error.message);
