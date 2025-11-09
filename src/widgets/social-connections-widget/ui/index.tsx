@@ -144,25 +144,29 @@ export function SocialConnectionsWidget({ user, isOwnProfile }: { user: User, is
     useEffect(() => {
         const fetchData = async (tab: string) => {
             if (!user) return;
-
-            // For this mock, we'll just populate from the user object.
-            // In a real app, this would be an API call like `/api/v1/users/${user.id}/${tab}`
             setIsLoading(true);
-            await new Promise(resolve => setTimeout(resolve, 500)); // Simulate network delay
 
-            switch(tab) {
-                case 'friends':
-                    setFriends(user.friends || []);
-                    break;
-                case 'followers':
-                    setFollowers(user.followers || []);
-                    break;
-                case 'following':
-                    setFollowingUsers(user.followingUsers || []);
-                    setFollowingTeams(user.following || []);
-                    break;
+            try {
+                switch(tab) {
+                    case 'friends':
+                        const friendsRes = await api.get(`/api/v1/users/${user.id}/friends`);
+                        setFriends(friendsRes.data.map((u: User) => u.id));
+                        break;
+                    case 'followers':
+                        const followersRes = await api.get(`/api/v1/users/${user.id}/followers`);
+                        setFollowers(followersRes.data.map((u: User) => u.id));
+                        break;
+                    case 'following':
+                        const followingRes = await api.get(`/api/v1/users/${user.id}/following`);
+                        setFollowingUsers(followingRes.data.users.map((u: User) => u.id));
+                        setFollowingTeams(followingRes.data.teams.map((t: Team) => t.id));
+                        break;
+                }
+            } catch (error) {
+                console.error(`Failed to fetch data for tab ${tab}:`, error);
+            } finally {
+                setIsLoading(false);
             }
-            setIsLoading(false);
         };
 
         fetchData(activeTab);

@@ -339,6 +339,152 @@
         ]
       }
     },
+    "/api/v1/users/me/settings": {
+      "put": {
+        "summary": "Update current user's interface settings",
+        "tags": [
+          "Users"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "theme": { "type": "string" },
+                "language": { "type": "string" }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Settings updated"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/users/me/privacy": {
+      "put": {
+        "summary": "Update current user's privacy settings",
+        "tags": [
+          "Users"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "profile_visibility": { "type": "string" },
+                "teams_visibility": { "type": "string" }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Privacy settings updated"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+     "/api/v1/users/{user_id}/friends": {
+      "get": {
+        "summary": "Get user's friends",
+        "tags": [
+          "Users"
+        ],
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of friends."
+          }
+        }
+      }
+    },
+    "/api/v1/users/{user_id}/followers": {
+      "get": {
+        "summary": "Get user's followers",
+        "tags": [
+          "Users"
+        ],
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of followers."
+          }
+        }
+      }
+    },
+    "/api/v1/users/{user_id}/following": {
+      "get": {
+        "summary": "Get user's following list",
+        "tags": [
+          "Users"
+        ],
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of followed users and teams."
+          }
+        }
+      }
+    },
+     "/api/v1/users/{user_id}/posts": {
+      "get": {
+        "summary": "Get user's posts",
+        "tags": [
+          "Users"
+        ],
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of posts by the user."
+          }
+        }
+      }
+    },
     "/api/v1/users/{user_id}/avatar": {
       "post": {
         "summary": "Upload a user avatar",
@@ -674,6 +820,39 @@
         }
       }
     },
+    "/api/v1/lfg": {
+      "get": {
+        "summary": "Get LFG posts",
+        "tags": [
+          "LFG"
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of LFG posts."
+          }
+        }
+      },
+      "post": {
+        "summary": "Create an LFG post",
+        "tags": [
+          "LFG"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "type": "object"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "LFG post created"
+          }
+        }
+      }
+    },
     "/api/v1/playgrounds": {
       "get": {
         "summary": "Get all playgrounds",
@@ -727,6 +906,14 @@
         "summary": "Get a specific tournament",
         "tags": [
           "Legacy Tournaments"
+        ],
+        "parameters": [
+          {
+            "name": "tournament_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
         ],
         "responses": {
           "200": {
@@ -920,6 +1107,12 @@
         },
         "player_profile": {
           "$ref": "#/definitions/PlayerProfile"
+        },
+         "profile_buttons": {
+            "type": "array",
+            "items": {
+                "$ref": "#/definitions/ProfileButton"
+            }
         }
       }
     },
@@ -1127,6 +1320,28 @@
           "format": "date-time"
         }
       }
+    },
+    "ProfileButtonAction": {
+        "type": "object",
+        "properties": {
+            "type": {
+                "type": "string"
+            },
+            "status": {
+                "type": "string"
+            }
+        }
+    },
+    "ProfileButton": {
+        "type": "object",
+        "properties": {
+            "action": {
+                "$ref": "#/definitions/ProfileButtonAction"
+            },
+            "text": {
+                "type": "string"
+            }
+        }
     }
   }
 }
