@@ -7,7 +7,6 @@ import { DataTable } from './data-table';
 import { TableCell, TableRow } from '@/shared/ui/table';
 import { useEffect, useState } from 'react';
 import { SportsService } from '@/shared/api/sdk';
-import { api } from '@/shared/api/client';
 
 export function SportsTab() {
   const [allSports, setAllSports] = useState<Sport[]>([]);

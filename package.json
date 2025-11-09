@@ -5,7 +5,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "next dev --turbopack -p 6000",
+    "dev": "npm run api:refresh && next dev --turbopack -p 6000",
     "build": "next build",
     "prebuild": "npm run api:refresh",
     "start": "next start",

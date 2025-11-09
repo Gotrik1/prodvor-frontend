@@ -11,7 +11,7 @@ import React, { useState, useEffect } from "react";
 import { Skeleton } from "@/shared/ui/skeleton";
 import { ScrollArea } from "@/shared/ui/scroll-area";
 import { MyTeamsEmptyState } from "@/views/teams/ui/my-teams-empty-state";
-import { UserService } from "@/shared/api/sdk";
+import { UsersService } from "@/shared/api/sdk";
 import axios from "axios";
 
 export function MyTeamWidget({ user }: { user: User }) {
@@ -32,7 +32,7 @@ export function MyTeamWidget({ user }: { user: User }) {
             }
             setIsLoading(true);
             try {
-                const userWithTeams = await UserService.getUsersUserId({userId: user.id, includeTeams: true });
+                const userWithTeams = await UsersService.getUsersUserId({userId: user.id, includeTeams: true });
                 setMyTeams((userWithTeams as any).teams || []);
             } catch (error) {
                 if (axios.isAxiosError(error)) {
