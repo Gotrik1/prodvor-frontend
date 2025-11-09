@@ -6,7 +6,7 @@ import { Button } from '@/shared/ui/button';
 import Link from 'next/link';
 import { PlayerPage } from '@/views/users/player';
 import type { User } from '@/entities/user/types';
-import { UsersApi } from '@/shared/api';
+import { UsersApi } from '@/shared/api/api';
 import { apiConfig } from '@/shared/api/axios-instance';
 import axios from 'axios';
 
