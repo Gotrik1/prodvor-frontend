@@ -13,6 +13,9 @@ import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { Skeleton } from '@/shared/ui/skeleton';
 import { useUserStore } from '@/widgets/dashboard-header/model/user-store';
+import { UsersApi, Configuration } from '@/shared/api/sdk';
+
+const usersApi = new UsersApi(new Configuration({ basePath: process.env.NEXT_PUBLIC_API_BASE_URL }), undefined, api);
 
 function UserProfileSkeleton() {
     return (
@@ -72,7 +75,7 @@ export default function UserProfilePage() {
         setError(null);
         
         try {
-            const response = await api.get(`/api/v1/users/${userId}?include_teams=true`);
+            const response = await usersApi.getUsersUserId(userId, true);
             if (response.data) {
                 setUser(response.data as User);
             } else {

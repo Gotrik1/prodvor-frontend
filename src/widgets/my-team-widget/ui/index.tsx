@@ -34,7 +34,7 @@ export function MyTeamWidget({ user }: { user: User }) {
             }
             setIsLoading(true);
             try {
-                const userWithTeams = await usersApi.getUsersUserId(user.id, true);
+                const userWithTeams = await usersApi.getUsersMe({ includeTeams: true });
                 setMyTeams((userWithTeams.data as any).teams || []);
             } catch (error) {
                 if (axios.isAxiosError(error)) {
