@@ -1,4 +1,3 @@
-'use client';
 
 import axios, { type AxiosError, type AxiosInstance, type RawAxiosRequestConfig } from 'axios';
 import { useUserStore } from '@/widgets/dashboard-header/model/user-store';
@@ -111,5 +110,3 @@ http.interceptors.response.use(
     return Promise.reject(error);
   }
 );
-
-export default http;

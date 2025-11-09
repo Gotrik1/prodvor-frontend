@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -25,7 +24,7 @@ import { useToast } from "@/shared/hooks/use-toast";
 import { Label } from '@/shared/ui/label';
 import type { User, Team } from '@/mocks';
 import { users } from '@/mocks';
-import api from '@/shared/api/axios-instance';
+import { api } from '@/shared/api/axios-instance';
 import { Skeleton } from '@/shared/ui/skeleton';
 import axios from 'axios';
 

@@ -1,5 +1,3 @@
-
-
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
@@ -15,7 +13,7 @@ import { useToast } from '@/shared/hooks/use-toast';
 import { Skeleton } from '@/shared/ui/skeleton';
 import { TopTeamsWidget } from '@/widgets/top-teams-widget';
 import Image from 'next/image';
-import { api } from '@/shared/api/axios-instance';
+import { sdk } from '@/shared/api/sdkClient';
 
 const TeamCard = ({ team, isMember, onApply, isApplicationSent }: { team: Team, isMember: boolean, onApply: (teamId: string) => Promise<void>, isApplicationSent: boolean }) => {
     return (
@@ -78,7 +76,7 @@ export function TeamsPage() {
         }
         
         try {
-            await api.post(`/api/v1/teams/${teamId}/apply`);
+            await sdk.teams.applyToTeam({ teamId });
             toast({
                 title: "Заявка отправлена!",
                 description: `Ваша заявка в команду отправлена на рассмотрение капитану.`,
@@ -98,14 +96,12 @@ export function TeamsPage() {
         async function fetchTeams() {
             setIsLoading(true);
             try {
-                const response = await api.get('/api/v1/teams', {
-                    params: {
-                        page: pagination.page,
-                        per_page: pagination.per_page,
-                    }
+                const response = await sdk.teams.listTeams({
+                    page: pagination.page,
+                    perPage: pagination.per_page,
                 });
-                setAllTeams(response.data.data);
-                setPagination(p => ({ ...p, total: response.data.meta.total }));
+                setAllTeams(response.data);
+                setPagination(p => ({ ...p, total: (response as any).meta.total }));
             } catch (error) {
                 console.error("Failed to fetch teams:", error);
             }

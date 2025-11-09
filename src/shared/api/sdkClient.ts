@@ -2,35 +2,6 @@ import { Configuration } from '@/shared/api/sdk';
 import * as SDK from '@/shared/api/sdk';
 import { http } from './http';
 
-/**
- * In different generator versions, classes can be named:
- *  - DefaultApi
- *  - AuthApi / AuthenticationApi
- *  - UsersApi / PlaygroundsApi / ...
- *  Below is a universal selection of the first available *Api class.
- */
-function pickApiCtor(): new (...args: any[]) => any {
-  const prefer = ['AuthApi', 'AuthenticationApi', 'DefaultApi', 'Api'];
-  for (const name of prefer) {
-    if ((SDK as any)[name]) return (SDK as any)[name] as any;
-  }
-  const anyApi =
-    Object.values(SDK).find(
-      (v: any) => typeof v === 'function' && (v.name?.endsWith('Api') || v.name?.endsWith('API'))
-    ) ||
-    // sometimes it's exported in default
-    ((SDK as any).default && typeof (SDK as any).default === 'function' ? (SDK as any).default : null);
-
-  if (!anyApi) {
-    // This part is crucial for debugging if the SDK structure changes unexpectedly.
-    const availableExports = Object.keys(SDK).join(', ');
-    console.error(`Could not find any *Api class in the generated SDK. Available exports: ${availableExports}`);
-    throw new Error(`Could not find any *Api class in the SDK.`);
-  }
-  return anyApi as any;
-}
-
-
 const config = new Configuration({
   basePath: process.env.NEXT_PUBLIC_API_BASE_URL,
 });
@@ -45,6 +16,7 @@ type SdkType = {
 };
 
 export const sdk: SdkType = apiClasses.reduce((acc, [name, ApiClass]) => {
+    // a key for the sdk object, e.g. 'users' from 'UsersApi'
     const key = name.charAt(0).toLowerCase() + name.slice(1).replace('Api', '');
     acc[key] = new (ApiClass as any)(config, undefined, http);
     return acc;
@@ -57,7 +29,7 @@ export async function sdkLoginJSON(body: { email: string; password: string }) {
   if (!authApi) {
     throw new Error('AuthApi or DefaultApi not found in SDK client.');
   }
-  // Method can be named differently: apiV1AuthLoginPost / login / loginPost ...
+
   const candidateNames = [
     'login',
     'authLogin',
@@ -67,9 +39,8 @@ export async function sdkLoginJSON(body: { email: string; password: string }) {
   ];
   for (const m of candidateNames) {
     if (typeof (authApi as any)[m] === 'function') {
-      // The generated method expects the body as the first argument.
-      // The second argument for options (like headers) might not be needed if `http` instance handles it.
-      return (authApi as any)[m](body).then((r: any) => r.data);
+      const response = await (authApi as any)[m](body);
+      return response.data;
     }
   }
   throw new Error(`Login method not found in class ${authApi.constructor.name}. Available methods: ${Object.getOwnPropertyNames(

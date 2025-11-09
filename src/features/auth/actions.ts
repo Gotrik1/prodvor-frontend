@@ -1,7 +1,7 @@
 'use server';
 
 import { z } from 'zod';
-import { api } from '@/shared/api/axios-instance';
+import { sdkLoginJSON } from '@/shared/api/sdkClient';
 
 const LoginSchema = z.object({
   email: z.string().email("Неверный формат email."),
@@ -11,12 +11,8 @@ const LoginSchema = z.object({
 export async function loginAction(input: unknown) {
   try {
     const validatedFields = LoginSchema.parse(input);
-    
-    // Используем axios-инстанс, который уже настроен
-    const response = await api.post('/api/v1/auth/login', validatedFields);
-
-    return { success: true, data: response.data };
-
+    const data = await sdkLoginJSON(validatedFields);
+    return { success: true, data };
   } catch (error: any) {
     if (error.isAxiosError && error.response) {
       // Бэкенд возвращает ошибку в поле message
