@@ -1,32 +1,68 @@
-name: Deploy frontend to local PC via Tailscale
+name: Deploy to Production & Sync API Spec
 
 on:
   push:
+    branches: [ "main" ]
+  pull_request:
     branches: [ "main" ]
 
 permissions:
   contents: read
 
 jobs:
-  deploy:
+  validate-api-spec:
+    name: Validate OpenAPI Spec
     runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install -g @redocly/cli
+
+      - name: Download backend OpenAPI spec
+        run: |
+          BACKEND_URL=${{ secrets.BACKEND_BASE_URL || 'http://localhost:5000' }}
+          curl -fsS "$BACKEND_URL/openapi.json" -o backend-openapi.json
+      
+      - name: Validate downloaded spec
+        run: npx @redocly/cli lint backend-openapi.json
+
+      - name: Compare with local spec
+        run: |
+          echo "Comparing backend spec with local docs/OPENAPI_SPEC.json"
+          if ! diff -q backend-openapi.json docs/OPENAPI_SPEC.json; then
+            echo "::error::API specification is out of sync. Please run the sync script described in docs/OPENAPI_SYNC.md"
+            exit 1
+          fi
+
+  deploy:
+    name: Deploy to Windows Host
+    needs: validate-api-spec
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' # Run deploy only on push to main
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install & Connect to Tailscale (manual)
-        run: |
-          curl -fsSL https://tailscale.com/install.sh | sh
-          sudo tailscale up --authkey="${{ secrets.TAILSCALE_AUTHKEY }}" --accept-routes=true
-          tailscale status
-          tailscale ip -4
+      - name: Install & Connect to Tailscale
+        uses: tailscale/github-action@v2
+        with:
+          authkey: ${{ secrets.TAILSCALE_AUTHKEY }}
+          
       - name: Trust host key
         run: |
           mkdir -p ~/.ssh
           ssh-keyscan -H "${{ secrets.TAILSCALE_HOST }}" >> ~/.ssh/known_hosts
+
       - name: Pull & restart frontend on Windows host
-        uses: appleboy/ssh-action@v1.0.0
+        uses: appleboy/ssh-action@v1.0.3
         with:
           host:     ${{ secrets.TAILSCALE_HOST }}
           username: ${{ secrets.WINDOWS_USER }}
@@ -47,8 +83,3 @@ jobs:
             REM ====== RESTART (выбери один вариант) ======
             taskkill /im node.exe /f >NUL 2>&1
             start "" cmd /c "pnpm dev || npm run dev"
-            REM PM2:
-            REM npx pm2 startOrReload ecosystem.config.js --only frontend
-            REM Docker:
-            REM cd /d E:\prodvor
-            REM docker compose pull && docker compose up -d --build
