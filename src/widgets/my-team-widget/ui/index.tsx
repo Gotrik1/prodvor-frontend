@@ -36,7 +36,7 @@ export function MyTeamWidget({ user }: { user: User }) {
             }
             setIsLoading(true);
             try {
-                const response = await usersApi.apiV1UsersUserIdGet({userId: user.id, includeTeams: true});
+                const response = await usersApi.apiV1UsersUserIdGet(user.id, true);
                 const userWithTeams = response.data as unknown as User & { teams?: Team[] };
                 setMyTeams(userWithTeams.teams || []);
             } catch (error) {

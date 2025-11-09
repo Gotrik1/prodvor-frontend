@@ -6,7 +6,7 @@ import { Button } from '@/shared/ui/button';
 import Link from 'next/link';
 import { PlayerPage } from '@/views/users/player';
 import type { User } from '@/entities/user/types';
-import { UsersApi } from '@/shared/api/api';
+import { UsersApi } from '@/shared/api';
 import { apiConfig } from '@/shared/api/axios-instance';
 import axios from 'axios';
 
@@ -18,7 +18,7 @@ async function getUser(userId: string): Promise<User | undefined> {
     }
     
     try {
-        const response = await usersApi.apiV1UsersUserIdGet({userId, includeTeams: true});
+        const response = await usersApi.apiV1UsersUserIdGet(userId, true);
         return response.data as User;
     } catch (error: any) {
         if (axios.isAxiosError(error) && error.response?.status === 404) {
