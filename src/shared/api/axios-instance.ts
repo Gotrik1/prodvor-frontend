@@ -3,7 +3,7 @@
 import axios, { AxiosError, type AxiosInstance, type RawAxiosRequestConfig } from 'axios';
 import { useUserStore } from '@/widgets/dashboard-header/model/user-store';
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:6000';
+const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'https://8080-firebase-prodvor-backend-1761850902881.cluster-ombtxv25tbd6yrjpp3lukp6zhc.cloudworkstations.dev';
 
 export const api: AxiosInstance = axios.create({
   baseURL: BASE_URL,
