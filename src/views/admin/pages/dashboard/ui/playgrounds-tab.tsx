@@ -8,11 +8,11 @@ import { DataTable } from './data-table';
 import { allSportsFlat } from '../lib';
 import { TableRow, TableCell } from '@/shared/ui/table';
 import { useEffect, useState } from 'react';
-import { PlaygroundsApi, Configuration } from '@/shared/api/sdk';
-import api from '@/shared/api/axios-instance';
 import type { Playground } from '@/mocks';
+import { PlaygroundsApi } from '@/shared/api/sdk';
+import { apiConfig } from '@/shared/api/client';
 
-const playgroundsApi = new PlaygroundsApi(new Configuration({basePath: process.env.NEXT_PUBLIC_API_BASE_URL}), undefined, api);
+const playgroundsApi = new PlaygroundsApi(apiConfig);
 
 export function PlaygroundsTab() {
   const [playgrounds, setPlaygrounds] = useState<Playground[]>([]);

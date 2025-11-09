@@ -11,7 +11,10 @@ import { Button } from '@/shared/ui/button';
 import Link from 'next/link';
 import { GanttChart, PlusCircle } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import api from '@/shared/api/axios-instance';
+import { TournamentsApi } from '@/shared/api/sdk';
+import { apiConfig } from '@/shared/api/client';
+
+const tournamentsApi = new TournamentsApi(apiConfig);
 
 const statusColors: Record<string, string> = {
     'АНОНС': 'bg-purple-500/20 text-purple-300 border-purple-500/30',
@@ -29,8 +32,8 @@ export function TournamentsTab() {
   useEffect(() => {
     const fetchTournaments = async () => {
         try {
-            const response = await api.get('/api/v1/tournaments');
-            setTournaments(response.data.data);
+            const response = await tournamentsApi.getAllTournaments();
+            setTournaments((response.data as any).data);
         } catch (error) {
             console.error("Failed to fetch tournaments:", error);
         }

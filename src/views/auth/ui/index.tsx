@@ -27,7 +27,11 @@ import { useToast } from '@/shared/hooks/use-toast';
 import { useUserStore } from '@/widgets/dashboard-header/model/user-store';
 import { Loader2 } from 'lucide-react';
 import type { User } from '@/mocks';
-import { api } from '@/shared/api/axios-instance';
+import { AuthApi } from '@/shared/api/sdk';
+import { apiConfig } from '@/shared/api/client';
+
+const authApi = new AuthApi(apiConfig);
+
 
 // ------------------ Схемы валидации ------------------
 const loginFormSchema = z.object({
@@ -151,7 +155,7 @@ export function AuthPage() {
   const onSubmit = async (values: z.infer<typeof loginFormSchema>) => {
     setIsLoading(true);
     try {
-        const loginResponse = await api.post(`/api/v1/auth/login`, values);
+        const loginResponse = await authApi.login(values);
         
         const { accessToken, refreshToken, user } = loginResponse.data as any;
 

@@ -14,12 +14,11 @@ import Link from 'next/link';
 import { DataTable } from './data-table';
 import { TableCell, TableRow } from '@/shared/ui/table';
 import { getUserDisciplines } from '@/entities/user/lib';
-import { UsersApi, Configuration } from '@/shared/api/sdk';
 import { Skeleton } from '@/shared/ui/skeleton';
-import api from '@/shared/api/axios-instance';
+import { UsersApi } from '@/shared/api/sdk';
+import { apiConfig } from '@/shared/api/client';
 
-const usersApi = new UsersApi(new Configuration({ basePath: process.env.NEXT_PUBLIC_API_BASE_URL }), undefined, api);
-
+const usersApi = new UsersApi(apiConfig);
 
 export function UsersTab() {
     const { toast } = useToast();

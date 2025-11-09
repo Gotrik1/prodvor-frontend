@@ -6,10 +6,10 @@ import type { Sport } from '@/mocks';
 import { DataTable } from './data-table';
 import { TableCell, TableRow } from '@/shared/ui/table';
 import { useEffect, useState } from 'react';
-import { SportsApi, Configuration } from '@/shared/api/sdk';
-import api from '@/shared/api/axios-instance';
+import { SportsApi } from '@/shared/api/sdk';
+import { apiConfig } from '@/shared/api/client';
 
-const sportsApi = new SportsApi(new Configuration({ basePath: process.env.NEXT_PUBLIC_API_BASE_URL }), undefined, api);
+const sportsApi = new SportsApi(apiConfig);
 
 export function SportsTab() {
   const [allSports, setAllSports] = useState<Sport[]>([]);
