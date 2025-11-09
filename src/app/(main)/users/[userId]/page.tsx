@@ -6,11 +6,8 @@ import { Button } from '@/shared/ui/button';
 import Link from 'next/link';
 import { PlayerPage } from '@/views/users/player';
 import type { User } from '@/entities/user/types';
-import { UserApi } from '@/shared/api/api';
-import { apiConfig } from '@/shared/api/axios-instance';
+import { api } from '@/shared/api/axios-instance';
 import axios from 'axios';
-
-const usersApi = new UserApi(apiConfig);
 
 async function getUser(userId: string): Promise<User | undefined> {
     if (!userId) {
@@ -18,13 +15,13 @@ async function getUser(userId: string): Promise<User | undefined> {
     }
     
     try {
-        // This is a placeholder and will not work as `apiV1UsersUserIdGet` does not exist on `UserApi`.
-        // The generator seems to have split the Users endpoints incorrectly.
-        // In a correctly generated client, this would be:
-        // const response = await usersApi.apiV1UsersUserIdGet({ userId, includeTeams: true });
-        // For now, let's assume `apiV1UsersMeGet` can serve for demonstration, though it's incorrect.
-        const response = await usersApi.apiV1UsersMeGet();
-        return response.data as User;
+        const response = await api.get(`/api/v1/users/${userId}?include_teams=true`);
+        // The API returns the user object directly on success.
+        // If response.data exists, we have a user.
+        if (response.data) {
+             return response.data as User;
+        }
+        return undefined;
     } catch (error: any) {
         if (axios.isAxiosError(error) && error.response?.status === 404) {
             console.log(`[Server] User with ID ${userId} not found on the backend.`);
