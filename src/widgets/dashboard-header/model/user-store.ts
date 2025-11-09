@@ -34,13 +34,11 @@ const useUserStore = create<UserState>()(
         const { refreshToken } = get();
         if (refreshToken) {
           try {
-            // Correctly send the refresh token to the backend to invalidate the session.
             await api.post('/api/v1/auth/logout', { refreshToken });
           } catch (error) {
             console.error("Failed to logout on backend, clearing client session anyway.", error);
           }
         }
-        // Clear client-side state regardless of backend response.
         set({ user: null, accessToken: null, refreshToken: null });
       },
     }),
