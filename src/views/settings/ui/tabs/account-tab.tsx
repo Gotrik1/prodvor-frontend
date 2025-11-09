@@ -37,10 +37,10 @@ import {
   AlertDialogTrigger,
 } from "@/shared/ui/alert-dialog";
 import React, { useState, useEffect, useCallback } from 'react';
-import { UserApi } from '@/shared/api/sdk';
-import { api } from '@/shared/api/axios-instance';
+import { UserApi, Configuration } from '@/shared/api/sdk';
+import api from '@/shared/api/axios-instance';
 
-const userApi = new UserApi(undefined, process.env.NEXT_PUBLIC_API_BASE_URL, api);
+const userApi = new UserApi(new Configuration({ basePath: process.env.NEXT_PUBLIC_API_BASE_URL }), undefined, api);
 
 const accountFormSchema = z.object({
   email: z.string().email('Неверный формат email.'),

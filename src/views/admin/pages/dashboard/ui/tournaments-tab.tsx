@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/shared/ui/card';
@@ -12,7 +11,7 @@ import { Button } from '@/shared/ui/button';
 import Link from 'next/link';
 import { GanttChart, PlusCircle } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { api } from '@/shared/api/axios-instance';
+import api from '@/shared/api/axios-instance';
 
 const statusColors: Record<string, string> = {
     'АНОНС': 'bg-purple-500/20 text-purple-300 border-purple-500/30',

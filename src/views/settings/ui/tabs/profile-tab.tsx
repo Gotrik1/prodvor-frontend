@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import { useState, useRef } from 'react';
@@ -34,10 +33,12 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/popover';
 import { Calendar } from '@/shared/ui/calendar';
 import { cn } from '@/shared/lib/utils';
-import { MultiSelect, type OptionType } from '@/shared/ui/multi-select';
-import type { User, Sport, PresignedPostResponse } from '@/mocks';
+import type { User } from '@/mocks';
 import { api } from '@/shared/api/axios-instance';
 import { DisciplinesCard } from './disciplines-card';
+import { UsersApi, Configuration } from '@/shared/api/sdk';
+
+const usersApi = new UsersApi(new Configuration({ basePath: process.env.NEXT_PUBLIC_API_BASE_URL }), undefined, api);
 
 const profileFormSchema = z.object({
   firstName: z.string().min(2, 'Имя должно содержать не менее 2 символов.'),
@@ -52,7 +53,7 @@ const profileFormSchema = z.object({
 });
 
 const AvatarUploadDialog = () => {
-    const { user, setUser, accessToken } = useUserStore();
+    const { user, setUser } = useUserStore();
     const { toast } = useToast();
     const fileInputRef = useRef<HTMLInputElement>(null);
     const [isLoading, setIsLoading] = useState(false);
@@ -70,42 +71,42 @@ const AvatarUploadDialog = () => {
         setIsLoading(true);
 
         try {
-            // Step 1: Request presigned URL from our backend
-            const presignedResponse = await api.post('/api/v1/uploads/request-url', {
-                contentType: file.type,
+            const initiateResponse = await api.post('/api/v1/uploads/initiate', {
+                file_name: file.name,
+                content_type: file.type,
             });
 
-            const presignedData: PresignedPostResponse = presignedResponse.data;
+            const presignedData = initiateResponse.data;
 
-            // Step 2: Upload file directly to S3-compatible storage
             const formData = new FormData();
             Object.entries(presignedData.fields).forEach(([key, value]) => {
                 formData.append(key, value as string);
             });
             formData.append('file', file);
-
+            
             const uploadResponse = await fetch(presignedData.url, {
                 method: 'POST',
                 body: formData,
             });
-
-            if (!uploadResponse.ok) {
-                const errorText = await uploadResponse.text();
-                throw new Error(`Ошибка при загрузке файла в хранилище: ${errorText}`);
+            
+            if(!uploadResponse.ok) {
+                throw new Error("Ошибка при загрузке файла в хранилище.");
             }
 
-            // Step 3: Notify our backend of the successful upload
-            const finalResponse = await api.post('/api/v1/users/avatar', {
-                fileUrl: presignedData.fileUrl,
+            const completeResponse = await api.post('/api/v1/uploads/complete', {
+                uploadId: presignedData.uploadId,
+                target_type: 'avatar',
+                target_id: user.id
             });
             
-            const result = finalResponse.data;
-
-            setUser(result.user);
-            toast({
-                title: "Аватар обновлен!",
-                description: "Ваш новый аватар успешно сохранен.",
-            });
+            if (completeResponse.data.file_url) {
+                const updatedUser = { ...user, avatarUrl: completeResponse.data.file_url };
+                setUser(updatedUser as User);
+                toast({
+                    title: "Аватар обновлен!",
+                    description: "Ваш новый аватар успешно сохранен.",
+                });
+            }
 
         } catch (err) {
             console.error(err);
@@ -159,7 +160,7 @@ const AvatarUploadDialog = () => {
 export function ProfileTab() {
     const { toast } = useToast();
     const { user: currentUser, setUser } = useUserStore();
-
+    
     const profileForm = useForm<z.infer<typeof profileFormSchema>>({
         resolver: zodResolver(profileFormSchema),
         defaultValues: {
@@ -196,7 +197,7 @@ export function ProfileTab() {
         };
 
         try {
-            const response = await api.put(`/api/v1/users/${currentUser.id}`, dataToUpdate);
+            const response = await usersApi.updateUser({userId: currentUser.id, requestBody: dataToUpdate});
             setUser(response.data as User);
             toast({
                 title: "Профиль обновлен",

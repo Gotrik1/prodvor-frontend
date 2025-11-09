@@ -82,8 +82,8 @@ export default function UserProfilePage() {
             if (axios.isAxiosError(err) && err.response?.status === 404) {
                 setError("User not found.");
             } else if (axios.isAxiosError(err) && err.response?.status === 401) {
-                // This could happen if token expires between checks, interceptor should handle it,
-                // but if it fails, we log out.
+                // The interceptor should handle this, but as a fallback:
+                console.error(`[Client] Unauthorized fetch for user data ID ${userId}: "${err.message}"`);
                 await signOut();
                 router.push('/auth');
             } else {

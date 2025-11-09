@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { GanttChart, Bell, CheckSquare, PlusCircle } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
-import { Tournament } from "@/mocks";
+import type { Tournament } from "@/mocks";
 import { Badge } from "@/shared/ui/badge";
 import { Progress } from "@/shared/ui/progress";
 import { MyTournamentsEmptyState } from "./my-tournaments-empty-state";
@@ -50,8 +50,8 @@ export function TournamentsPage() {
         async function fetchTournaments() {
             setIsLoading(true);
             try {
-                const response = await api.get('api/v1/tournaments');
-                setAllTournaments(response.data);
+                const response = await api.get('/api/v1/tournaments');
+                setAllTournaments((response.data as any).data);
             } catch (error) {
                 console.error("Failed to fetch tournaments:", error);
             } finally {

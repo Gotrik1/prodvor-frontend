@@ -11,7 +11,7 @@ import { Skeleton } from '@/shared/ui/skeleton';
 import type { Team } from '@/mocks';
 import { useToast } from '@/shared/hooks/use-toast';
 import Image from 'next/image';
-import { api } from '@/shared/api/axios-instance';
+import api from '@/shared/api/axios-instance';
 
 const TopTeamRow = ({ team, rank }: { team: Team, rank: number }) => (
     <Link href={`/teams/${team.id}`} className="flex items-center gap-3 p-2 rounded-md hover:bg-muted/50 group transition-colors">
@@ -117,19 +117,19 @@ export function TopTeamsWidget() {
         const fetchTopTeams = async () => {
             setIsLoading(true);
             try {
-                const countryPromise = api.get('/api/v1/teams?sort_by=rank&order=desc&limit=5');
+                const countryPromise = api.get('/api/v1/teams?sort_by=rank&order=desc&per_page=5');
                 
                 let cityPromise;
                 if (currentUser?.city) {
-                    cityPromise = api.get(`/api/v1/teams?city=${encodeURIComponent(currentUser.city)}&sort_by=rank&order=desc&limit=5`);
+                    cityPromise = api.get(`/api/v1/teams?city=${encodeURIComponent(currentUser.city)}&sort_by=rank&order=desc&per_page=5`);
                 } else {
-                    cityPromise = Promise.resolve({ data: [] });
+                    cityPromise = Promise.resolve({ data: { data: [] } });
                 }
 
                 const [countryResponse, cityResponse] = await Promise.all([countryPromise, cityPromise]);
                 
-                setTopCountryTeams(countryResponse.data as Team[]);
-                setTopCityTeams(cityResponse.data as Team[]);
+                setTopCountryTeams(countryResponse.data.data as Team[]);
+                setTopCityTeams(cityResponse.data.data as Team[]);
 
             } catch {
                  toast({

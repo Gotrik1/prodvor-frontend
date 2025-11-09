@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
@@ -11,7 +10,7 @@ import { Badge } from "@/shared/ui/badge";
 import Image from "next/image";
 import { useUserStore } from "@/widgets/dashboard-header/model/user-store";
 import React, { useMemo, useState, useEffect } from "react";
-import { api } from '@/shared/api/axios-instance';
+import api from '@/shared/api/axios-instance';
 
 type TournamentStatus = 'АНОНС' | 'ПРЕДРЕГИСТРАЦИЯ' | 'РЕГИСТРАЦИЯ' | 'ИДЕТ' | 'ЗАВЕРШЕН' | 'ПРИОСТАНОВЛЕН' | 'ОТМЕНЕН';
 
@@ -46,7 +45,7 @@ export function DashboardAside() {
     const fetchTournaments = async () => {
         try {
             const response = await api.get('/api/v1/tournaments');
-            setTournaments(response.data.data);
+            setTournaments((response.data as any).data);
         } catch (error) {
             console.error("Failed to fetch tournaments for aside widget:", error);
         }

@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -51,7 +50,7 @@ export function TransfersTab({ team, onApplicationProcessed }: TransfersTabProps
       setIsLoadingApps(true);
       try {
         const response = await api.get(`/api/v1/teams/${team.id}/applications`);
-        setApplications(response.data as User[]);
+        setApplications((response.data as any).data as User[]);
       } catch (err) {
         if (axios.isAxiosError(err)) {
           console.group('fetchApplications 422 debug');
@@ -93,7 +92,7 @@ export function TransfersTab({ team, onApplicationProcessed }: TransfersTabProps
       if (accepted) {
         onApplicationProcessed(); // Re-fetch team data
       }
-    } catch (_error) {
+    } catch (error) {
       toast({
         variant: 'destructive',
         title: 'Ошибка',

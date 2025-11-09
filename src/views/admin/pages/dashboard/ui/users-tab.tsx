@@ -9,16 +9,17 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import { Copy, ExternalLink, Heart, UserPlus, Rss, Mail, Phone } from 'lucide-react';
 import { Tooltip, TooltipProvider, TooltipContent, TooltipTrigger } from '@/shared/ui/tooltip';
 import { useToast } from '@/shared/hooks/use-toast';
-import { useMemo, useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { DataTable } from './data-table';
 import { TableCell, TableRow } from '@/shared/ui/table';
 import { getUserDisciplines } from '@/entities/user/lib';
-import { UsersApi } from '@/shared/api/sdk';
+import { UsersApi, Configuration } from '@/shared/api/sdk';
 import { Skeleton } from '@/shared/ui/skeleton';
-import { api } from '@/shared/api/axios-instance';
+import api from '@/shared/api/axios-instance';
 
-const usersApi = new UsersApi(undefined, process.env.NEXT_PUBLIC_API_BASE_URL, api);
+const usersApi = new UsersApi(new Configuration({ basePath: process.env.NEXT_PUBLIC_API_BASE_URL }), undefined, api);
+
 
 export function UsersTab() {
     const { toast } = useToast();

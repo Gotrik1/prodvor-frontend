@@ -10,11 +10,11 @@ import React, { useState, useEffect } from "react";
 import { Skeleton } from "@/shared/ui/skeleton";
 import { ScrollArea } from "@/shared/ui/scroll-area";
 import { MyTeamsEmptyState } from "@/views/teams/ui/my-teams-empty-state";
-import { UsersApi } from "@/shared/api/sdk";
+import { UsersApi, Configuration } from "@/shared/api/sdk";
 import axios from "axios";
-import { api } from '@/shared/api/axios-instance';
+import api from '@/shared/api/axios-instance';
 
-const usersApi = new UsersApi(undefined, process.env.NEXT_PUBLIC_API_BASE_URL, api);
+const usersApi = new UsersApi(new Configuration({ basePath: process.env.NEXT_PUBLIC_API_BASE_URL }), undefined, api);
 
 export function MyTeamWidget({ user }: { user: User }) {
   const [myTeams, setMyTeams] = useState<Team[]>([]);

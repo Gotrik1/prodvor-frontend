@@ -3,8 +3,8 @@
 
 import { create } from 'zustand';
 import type { User } from '@/mocks';
-import { persist, createJSONStorage } from 'zustand/middleware';
 import { api } from '@/shared/api/axios-instance';
+import { persist, createJSONStorage } from 'zustand/middleware';
 
 interface UserState {
   user: User | null;
@@ -12,11 +12,11 @@ interface UserState {
   refreshToken: string | null;
   isHydrated: boolean;
   setUser: (user: User | null) => void;
-  setTokens: (tokens: { accessToken?: string | null; refreshToken?: string | null }) => void;
+  setTokens: (tokens: { accessToken: string | null; refreshToken: string | null }) => void;
   signOut: () => Promise<void>;
 }
 
-const useUserStore = create<UserState>()(
+export const useUserStore = create<UserState>()(
   persist(
     (set, get) => ({
       user: null,
@@ -24,22 +24,23 @@ const useUserStore = create<UserState>()(
       refreshToken: null,
       isHydrated: false,
       setUser: (user) => set({ user }),
-      setTokens: ({ accessToken, refreshToken }) => {
-        set((state) => ({
-          accessToken: accessToken ?? state.accessToken,
-          refreshToken: refreshToken ?? state.refreshToken,
-        }));
+      setTokens: (tokens) => {
+        set({
+          accessToken: tokens.accessToken,
+          refreshToken: tokens.refreshToken,
+        });
       },
       signOut: async () => {
         const { refreshToken } = get();
-        if (refreshToken) {
-          try {
-            await api.post('/api/v1/auth/logout', { refreshToken }, { _retry: true } as any);
-          } catch (error) {
-            console.error("Failed to logout on backend, clearing client session anyway.", error);
+        try {
+          if (refreshToken) {
+            await api.post('/api/v1/auth/logout', { refreshToken: refreshToken });
           }
+        } catch (error) {
+            console.error("Failed to logout on backend, clearing client session anyway.", error);
+        } finally {
+            set({ user: null, accessToken: null, refreshToken: null });
         }
-        set({ user: null, accessToken: null, refreshToken: null });
       },
     }),
     {
@@ -58,5 +59,3 @@ const useUserStore = create<UserState>()(
     }
   )
 );
-
-export { useUserStore };

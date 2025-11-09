@@ -16,6 +16,9 @@ import { MultiSelect, type OptionType } from '@/shared/ui/multi-select';
 import type { Sport, User } from '@/mocks';
 import { api } from '@/shared/api/axios-instance';
 import { useUserStore } from '@/widgets/dashboard-header/model/user-store';
+import { UsersApi, Configuration } from '@/shared/api/sdk';
+
+const usersApi = new UsersApi(new Configuration({ basePath: process.env.NEXT_PUBLIC_API_BASE_URL }), undefined, api);
 
 export function DisciplinesCard() {
   const { toast } = useToast();
@@ -52,9 +55,9 @@ export function DisciplinesCard() {
     if (!currentUser) return;
     setIsLoading(true);
     try {
-      const response = await api.put(`/api/v1/users/${currentUser.id}`, {
+      const response = await usersApi.updateUser({userId: currentUser.id, requestBody: {
         sports: selectedSports,
-      });
+      }});
       setUser(response.data as User);
       toast({
         title: 'Дисциплины обновлены',
