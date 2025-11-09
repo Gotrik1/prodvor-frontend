@@ -1,12 +1,11 @@
 
-
 import type { Metadata } from 'next';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Button } from '@/shared/ui/button';
 import Link from 'next/link';
 import { PlayerPage } from '@/views/users/player';
 import type { User } from '@/entities/user/types';
-import { api } from '@/shared/api/axios-instance';
+import { api as serverApi } from '@/shared/api/server-instance'; // Use server-safe api instance
 import axios from 'axios';
 
 async function getUser(userId: string): Promise<User | undefined> {
@@ -15,9 +14,8 @@ async function getUser(userId: string): Promise<User | undefined> {
     }
     
     try {
-        const response = await api.get(`/api/v1/users/${userId}?include_teams=true`);
-        // The API returns the user object directly on success.
-        // If response.data exists, we have a user.
+        const response = await serverApi.get(`/api/v1/users/${userId}?include_teams=true`);
+        
         if (response.data) {
              return response.data as User;
         }
