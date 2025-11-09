@@ -38,7 +38,7 @@ import {
 } from "@/shared/ui/alert-dialog";
 import React, { useState, useEffect, useCallback } from 'react';
 import { api } from '@/shared/api/axios-instance';
-import { SessionsApi } from '@/shared/api';
+import { SessionsApi } from '@/shared/api/api';
 import { apiConfig } from '@/shared/api/axios-instance';
 
 const sessionsApi = new SessionsApi(apiConfig);
