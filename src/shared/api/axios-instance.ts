@@ -2,7 +2,6 @@
 
 import axios, { AxiosError, type AxiosInstance, type RawAxiosRequestConfig } from 'axios';
 import { useUserStore } from '@/widgets/dashboard-header/model/user-store';
-import { Configuration } from './configuration';
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:6000';
 
@@ -108,11 +107,5 @@ api.interceptors.response.use(
     return Promise.reject(error);
   }
 );
-
-
-export const apiConfig = new Configuration({
-    basePath: BASE_URL,
-    accessToken: () => useUserStore.getState().accessToken || '',
-});
 
 export default api;
