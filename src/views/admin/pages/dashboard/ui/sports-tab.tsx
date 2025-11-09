@@ -6,7 +6,7 @@ import type { Sport } from '@/mocks';
 import { DataTable } from './data-table';
 import { TableCell, TableRow } from '@/shared/ui/table';
 import { useEffect, useState } from 'react';
-import { SportsApi } from '@/shared/api';
+import { SportsApi } from '@/shared/api/api';
 import { apiConfig } from '@/shared/api/axios-instance';
 
 const sportsApi = new SportsApi(apiConfig);
