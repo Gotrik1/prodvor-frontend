@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import { useForm } from 'react-hook-form';
@@ -38,11 +37,8 @@ import {
   AlertDialogTrigger,
 } from "@/shared/ui/alert-dialog";
 import React, { useState, useEffect, useCallback } from 'react';
-import { api } from '@/shared/api/axios-instance';
-import { UserApi } from '@/shared/api/api';
-import { apiConfig } from '@/shared/api/axios-instance';
+import { UserService } from '@/shared/api/sdk';
 
-const userApi = new UserApi(apiConfig);
 
 const accountFormSchema = z.object({
   email: z.string().email('Неверный формат email.'),
@@ -79,8 +75,8 @@ function ActiveSessions() {
     const fetchSessions = useCallback(async () => {
         setIsLoading(true);
         try {
-            const response = await userApi.apiV1UsersMeSessionsGet();
-            setSessions(response.data as Session[]);
+            const response = await UserService.getUsersMeSessions();
+            setSessions(response as Session[]);
         } catch (error) {
             console.error("Failed to fetch sessions:", error);
             toast({ variant: 'destructive', title: 'Ошибка', description: 'Не удалось загрузить список сессий.' });
@@ -95,7 +91,7 @@ function ActiveSessions() {
 
     const handleTerminate = async (sessionId: number) => {
         try {
-            await userApi.apiV1UsersMeSessionsSessionIdDelete(String(sessionId));
+            await UserService.deleteUsersMeSession({sessionId: String(sessionId)});
             setSessions(prev => prev.filter(s => s.id !== sessionId));
             toast({ title: "Сессия завершена", description: "Доступ с этого устройства был прекращен." });
         } catch {
@@ -105,7 +101,7 @@ function ActiveSessions() {
 
     const handleTerminateAll = async () => {
          try {
-            await userApi.apiV1UsersMeSessionsAllExceptCurrentDelete();
+            await UserService.deleteUsersMeSessionsAllExceptCurrent();
             toast({ title: "Все сессии завершены", description: "Все сессии, кроме текущей, были завершены." });
             fetchSessions(); // Re-fetch to show only the current one
         } catch {

@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
@@ -10,11 +9,7 @@ import { DataTable } from './data-table';
 import { allSportsFlat } from '../lib';
 import { TableRow, TableCell } from '@/shared/ui/table';
 import { useEffect, useState } from 'react';
-import { PlaygroundsApi } from '@/shared/api/api';
-import { apiConfig } from '@/shared/api/axios-instance';
-
-const playgroundsApi = new PlaygroundsApi(apiConfig);
-
+import { PlaygroundsService } from '@/shared/api/sdk';
 
 export function PlaygroundsTab() {
   const [playgrounds, setPlaygrounds] = useState<Playground[]>([]);
@@ -22,8 +17,8 @@ export function PlaygroundsTab() {
   useEffect(() => {
     const fetchPlaygrounds = async () => {
         try {
-            const response = await playgroundsApi.apiV1PlaygroundsGet();
-            setPlaygrounds((response.data as any).data);
+            const response = await PlaygroundsService.getAllPlaygrounds();
+            setPlaygrounds((response as any).data);
         } catch (error) {
             console.error("Failed to fetch playgrounds:", error);
         }

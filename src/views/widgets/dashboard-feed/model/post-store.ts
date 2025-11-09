@@ -3,12 +3,8 @@
 
 import { create } from 'zustand';
 import { produce } from 'immer';
-import { api } from '@/shared/api/axios-instance';
 import type { Post, Comment } from '@/mocks/posts';
-import { PostsApi } from '@/shared/api/api';
-import { apiConfig } from '@/shared/api/axios-instance';
-
-const postsApi = new PostsApi(apiConfig);
+import { PostsService } from '@/shared/api/sdk';
 
 
 interface PostState {
@@ -25,8 +21,8 @@ export const usePostStore = create<PostState>()(
       posts: [], // Изначально массив пуст
       fetchPosts: async () => {
         try {
-            const response = await postsApi.apiV1PostsGet();
-            set({ posts: (response.data as any).data as Post[] });
+            const response = await PostsService.getAllPosts();
+            set({ posts: (response as any).data as Post[] });
         } catch (error) {
             console.error(error);
         }
