@@ -154,7 +154,7 @@ export function AuthPage() {
     try {
         const loginResponse = await api.post(`/api/v1/auth/login`, values);
         
-        const { accessToken, refreshToken, user } = loginResponse.data;
+        const { accessToken, refreshToken, user } = loginResponse.data as any;
 
         if (accessToken && refreshToken && user) {
             setTokens({ accessToken, refreshToken });

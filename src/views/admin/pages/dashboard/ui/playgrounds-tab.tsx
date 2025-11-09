@@ -10,7 +10,11 @@ import { DataTable } from './data-table';
 import { allSportsFlat } from '../lib';
 import { TableRow, TableCell } from '@/shared/ui/table';
 import { useEffect, useState } from 'react';
-import { api } from '@/shared/api/axios-instance';
+import { PlaygroundsApi } from '@/shared/api/api';
+import { apiConfig } from '@/shared/api/axios-instance';
+
+const playgroundsApi = new PlaygroundsApi(apiConfig);
+
 
 export function PlaygroundsTab() {
   const [playgrounds, setPlaygrounds] = useState<Playground[]>([]);
@@ -18,8 +22,8 @@ export function PlaygroundsTab() {
   useEffect(() => {
     const fetchPlaygrounds = async () => {
         try {
-            const response = await api.get('/api/v1/playgrounds');
-            setPlaygrounds(response.data.data);
+            const response = await playgroundsApi.apiV1PlaygroundsGet();
+            setPlaygrounds((response.data as any).data);
         } catch (error) {
             console.error("Failed to fetch playgrounds:", error);
         }
@@ -47,7 +51,7 @@ export function PlaygroundsTab() {
                         <TableCell>{p.address}</TableCell>
                         <TableCell><Badge variant="outline">{p.type}</Badge></TableCell>
                         <TableCell>{p.surface}</TableCell>
-                        <TableCell className="text-xs">{p.sportIds.map((id: string) => allSportsFlat.find(s => s.id === id)?.name).filter(Boolean).join(', ')}</TableCell>
+                        <TableCell className="text-xs">{(p.sportIds || []).map((id: string) => allSportsFlat.find(s => s.id === id)?.name).filter(Boolean).join(', ')}</TableCell>
                     </TableRow>
                 )}
             />

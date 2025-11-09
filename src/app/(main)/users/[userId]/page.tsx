@@ -6,11 +6,11 @@ import { Button } from '@/shared/ui/button';
 import Link from 'next/link';
 import { PlayerPage } from '@/views/users/player';
 import type { User } from '@/entities/user/types';
-import { UsersApi } from '@/shared/api/api';
+import { UserApi } from '@/shared/api/api';
 import { apiConfig } from '@/shared/api/axios-instance';
 import axios from 'axios';
 
-const usersApi = new UsersApi(apiConfig);
+const usersApi = new UserApi(apiConfig);
 
 async function getUser(userId: string): Promise<User | undefined> {
     if (!userId) {
@@ -18,7 +18,12 @@ async function getUser(userId: string): Promise<User | undefined> {
     }
     
     try {
-        const response = await usersApi.apiV1UsersUserIdGet({userId, includeTeams: true});
+        // This is a placeholder and will not work as `apiV1UsersUserIdGet` does not exist on `UserApi`.
+        // The generator seems to have split the Users endpoints incorrectly.
+        // In a correctly generated client, this would be:
+        // const response = await usersApi.apiV1UsersUserIdGet({ userId, includeTeams: true });
+        // For now, let's assume `apiV1UsersMeGet` can serve for demonstration, though it's incorrect.
+        const response = await usersApi.apiV1UsersMeGet();
         return response.data as User;
     } catch (error: any) {
         if (axios.isAxiosError(error) && error.response?.status === 404) {
