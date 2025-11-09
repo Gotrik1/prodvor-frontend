@@ -12,6 +12,7 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import { Skeleton } from '@/shared/ui/skeleton';
+import { useUserStore } from '@/widgets/dashboard-header/model/user-store';
 
 function UserProfileSkeleton() {
     return (
@@ -45,12 +46,18 @@ export default function UserProfilePage() {
    const [user, setUser] = useState<User | null>(null);
    const [isLoading, setIsLoading] = useState(true);
    const [error, setError] = useState<string | null>(null);
+   const { accessToken, isHydrated } = useUserStore();
 
    useEffect(() => {
     async function getUser() {
         if (!userId) {
             setError("User ID is missing.");
             setIsLoading(false);
+            return;
+        }
+
+        // Wait for hydration and token availability
+        if (!isHydrated || !accessToken) {
             return;
         }
         
@@ -67,6 +74,9 @@ export default function UserProfilePage() {
         } catch (err: any) {
             if (axios.isAxiosError(err) && err.response?.status === 404) {
                 setError("User not found.");
+            } else if (axios.isAxiosError(err) && err.response?.status === 401) {
+                setError("Unauthorized: Please log in.");
+                console.error(`[Client] Unauthorized fetch for user data ID ${userId}:`, err.message || err);
             } else {
                 console.error(`[Client] Failed to fetch user data for ID ${userId}:`, err.message || err);
                 setError("Failed to fetch user data.");
@@ -77,7 +87,7 @@ export default function UserProfilePage() {
     }
     
     getUser();
-   }, [userId]);
+   }, [userId, accessToken, isHydrated]);
 
 
    if (isLoading) {
