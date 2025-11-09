@@ -34,11 +34,13 @@ const useUserStore = create<UserState>()(
         const { refreshToken } = get();
         if (refreshToken) {
           try {
+            // Correctly send refreshToken as an object
             await api.post('/api/v1/auth/logout', { refreshToken });
           } catch (error) {
             console.error("Failed to logout on backend, clearing client session anyway.", error);
           }
         }
+        // Always clear client-side session
         set({ user: null, accessToken: null, refreshToken: null });
       },
     }),

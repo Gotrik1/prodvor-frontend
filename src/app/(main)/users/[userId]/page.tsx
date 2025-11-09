@@ -10,7 +10,7 @@ import type { User } from '@/entities/user/types';
 import { api } from '@/shared/api/axios-instance';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { Skeleton } from '@/shared/ui/skeleton';
 import { useUserStore } from '@/widgets/dashboard-header/model/user-store';
 
@@ -42,11 +42,12 @@ function UserProfileSkeleton() {
 
 export default function UserProfilePage() {
    const params = useParams();
+   const router = useRouter();
    const userId = params?.userId as string;
    const [user, setUser] = useState<User | null>(null);
    const [isLoading, setIsLoading] = useState(true);
    const [error, setError] = useState<string | null>(null);
-   const { accessToken, isHydrated } = useUserStore();
+   const { accessToken, isHydrated, signOut } = useUserStore();
 
    useEffect(() => {
     async function getUser() {
@@ -57,7 +58,13 @@ export default function UserProfilePage() {
         }
 
         // Wait for hydration and token availability
-        if (!isHydrated || !accessToken) {
+        if (!isHydrated) {
+            return; // Wait for the store to rehydrate from localStorage
+        }
+        if (!accessToken) {
+            // If hydrated but no token, means user is not logged in.
+            signOut();
+            router.push('/auth');
             return;
         }
         
@@ -75,8 +82,10 @@ export default function UserProfilePage() {
             if (axios.isAxiosError(err) && err.response?.status === 404) {
                 setError("User not found.");
             } else if (axios.isAxiosError(err) && err.response?.status === 401) {
-                setError("Unauthorized: Please log in.");
-                console.error(`[Client] Unauthorized fetch for user data ID ${userId}:`, err.message || err);
+                // This could happen if token expires between checks, interceptor should handle it,
+                // but if it fails, we log out.
+                await signOut();
+                router.push('/auth');
             } else {
                 console.error(`[Client] Failed to fetch user data for ID ${userId}:`, err.message || err);
                 setError("Failed to fetch user data.");
@@ -87,7 +96,7 @@ export default function UserProfilePage() {
     }
     
     getUser();
-   }, [userId, accessToken, isHydrated]);
+   }, [userId, accessToken, isHydrated, router, signOut]);
 
 
    if (isLoading) {
@@ -102,7 +111,7 @@ export default function UserProfilePage() {
             <CardTitle>Ошибка 404</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-muted-foreground">Пользователь не найден.</p>
+            <p className="text-muted-foreground">{error || "Пользователь не найден."}</p>
             <Button asChild className="mt-6">
               <Link href="/dashboard">Вернуться в дашборд</Link>
             </Button>
