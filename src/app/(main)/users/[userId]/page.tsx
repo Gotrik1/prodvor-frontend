@@ -18,18 +18,7 @@ async function getUser(userId: string): Promise<User | undefined> {
     }
     
     try {
-        // The generated API client expects a number for the user ID.
-        // We will parse it from the string. A more robust solution
-        // might use a different ID scheme or handle non-numeric IDs.
-        const numericUserId = parseInt(userId, 10);
-        if (isNaN(numericUserId)) {
-            // If the userId is not a number (e.g. a UUID as in the error), 
-            // we can't call the current API. We'll log this and return undefined.
-            console.warn(`[Server] User ID "${userId}" is not a valid number for the API.`);
-            return undefined;
-        }
-
-        const response = await usersApi.apiV1UsersUserIdGet(numericUserId, true);
+        const response = await usersApi.apiV1UsersUserIdGet(userId, true);
         return response.data as User;
     } catch (error: any) {
         if (axios.isAxiosError(error) && error.response?.status === 404) {
