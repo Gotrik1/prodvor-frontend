@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
@@ -11,8 +10,11 @@ import React, { useState, useEffect } from "react";
 import { Skeleton } from "@/shared/ui/skeleton";
 import { ScrollArea } from "@/shared/ui/scroll-area";
 import { MyTeamsEmptyState } from "@/views/teams/ui/my-teams-empty-state";
-import { UsersService } from "@/shared/api/sdk";
+import { UsersApi } from "@/shared/api/sdk";
 import axios from "axios";
+import { api } from '@/shared/api/axios-instance';
+
+const usersApi = new UsersApi(undefined, process.env.NEXT_PUBLIC_API_BASE_URL, api);
 
 export function MyTeamWidget({ user }: { user: User }) {
   const [myTeams, setMyTeams] = useState<Team[]>([]);
@@ -32,8 +34,8 @@ export function MyTeamWidget({ user }: { user: User }) {
             }
             setIsLoading(true);
             try {
-                const userWithTeams = await UsersService.getUsersUserId({userId: user.id, includeTeams: true });
-                setMyTeams((userWithTeams as any).teams || []);
+                const userWithTeams = await usersApi.getUsersUserId(user.id, true);
+                setMyTeams((userWithTeams.data as any).teams || []);
             } catch (error) {
                 if (axios.isAxiosError(error)) {
                     console.error("Failed to fetch user's teams for widget:", error.response?.data || error.message);

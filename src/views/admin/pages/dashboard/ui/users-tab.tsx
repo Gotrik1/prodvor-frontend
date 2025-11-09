@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
@@ -15,8 +14,11 @@ import Link from 'next/link';
 import { DataTable } from './data-table';
 import { TableCell, TableRow } from '@/shared/ui/table';
 import { getUserDisciplines } from '@/entities/user/lib';
-import { UsersService } from '@/shared/api/sdk';
+import { UsersApi } from '@/shared/api/sdk';
 import { Skeleton } from '@/shared/ui/skeleton';
+import { api } from '@/shared/api/axios-instance';
+
+const usersApi = new UsersApi(undefined, process.env.NEXT_PUBLIC_API_BASE_URL, api);
 
 export function UsersTab() {
     const { toast } = useToast();
@@ -27,8 +29,8 @@ export function UsersTab() {
         const fetchUsers = async () => {
             setIsLoading(true);
             try {
-                const response = await UsersService.getAllUsers();
-                setUsers((response as any).data || []);
+                const response = await usersApi.getAllUsers();
+                setUsers((response.data as any).data || []);
             } catch (error) {
                 console.error("Failed to fetch users:", error);
                 toast({

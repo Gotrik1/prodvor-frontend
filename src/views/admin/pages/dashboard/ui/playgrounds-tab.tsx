@@ -9,7 +9,10 @@ import { DataTable } from './data-table';
 import { allSportsFlat } from '../lib';
 import { TableRow, TableCell } from '@/shared/ui/table';
 import { useEffect, useState } from 'react';
-import { PlaygroundsService } from '@/shared/api/sdk';
+import { PlaygroundsApi } from '@/shared/api/sdk';
+import { api } from '@/shared/api/axios-instance';
+
+const playgroundsApi = new PlaygroundsApi(undefined, process.env.NEXT_PUBLIC_API_BASE_URL, api);
 
 export function PlaygroundsTab() {
   const [playgrounds, setPlaygrounds] = useState<Playground[]>([]);
@@ -17,8 +20,8 @@ export function PlaygroundsTab() {
   useEffect(() => {
     const fetchPlaygrounds = async () => {
         try {
-            const response = await PlaygroundsService.getAllPlaygrounds();
-            setPlaygrounds((response as any).data);
+            const response = await playgroundsApi.getAllPlaygrounds();
+            setPlaygrounds((response.data as any).data);
         } catch (error) {
             console.error("Failed to fetch playgrounds:", error);
         }

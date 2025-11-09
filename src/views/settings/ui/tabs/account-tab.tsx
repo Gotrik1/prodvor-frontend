@@ -37,8 +37,10 @@ import {
   AlertDialogTrigger,
 } from "@/shared/ui/alert-dialog";
 import React, { useState, useEffect, useCallback } from 'react';
-import { UserService } from '@/shared/api/sdk';
+import { UserApi } from '@/shared/api/sdk';
+import { api } from '@/shared/api/axios-instance';
 
+const userApi = new UserApi(undefined, process.env.NEXT_PUBLIC_API_BASE_URL, api);
 
 const accountFormSchema = z.object({
   email: z.string().email('Неверный формат email.'),
@@ -75,8 +77,8 @@ function ActiveSessions() {
     const fetchSessions = useCallback(async () => {
         setIsLoading(true);
         try {
-            const response = await UserService.getUsersMeSessions();
-            setSessions(response as Session[]);
+            const response = await userApi.getUsersMeSessions();
+            setSessions(response.data as Session[]);
         } catch (error) {
             console.error("Failed to fetch sessions:", error);
             toast({ variant: 'destructive', title: 'Ошибка', description: 'Не удалось загрузить список сессий.' });
@@ -91,7 +93,7 @@ function ActiveSessions() {
 
     const handleTerminate = async (sessionId: number) => {
         try {
-            await UserService.deleteUsersMeSession({sessionId: String(sessionId)});
+            await userApi.deleteUsersMeSession({sessionId: String(sessionId)});
             setSessions(prev => prev.filter(s => s.id !== sessionId));
             toast({ title: "Сессия завершена", description: "Доступ с этого устройства был прекращен." });
         } catch {
@@ -101,7 +103,7 @@ function ActiveSessions() {
 
     const handleTerminateAll = async () => {
          try {
-            await UserService.deleteUsersMeSessionsAllExceptCurrent();
+            await userApi.deleteUsersMeSessionsAllExceptCurrent();
             toast({ title: "Все сессии завершены", description: "Все сессии, кроме текущей, были завершены." });
             fetchSessions(); // Re-fetch to show only the current one
         } catch {
