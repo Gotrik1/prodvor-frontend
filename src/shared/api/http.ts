@@ -1,19 +1,21 @@
 
+'use client';
+
 import axios, { type AxiosError, type AxiosInstance, type RawAxiosRequestConfig } from 'axios';
-import { useUserStore } from '@/widgets/dashboard-header/model/user-store';
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'https://8080-firebase-prodvor-backend-1761850902881.cluster-ombtxv25tbd6yrjpp3lukp6zhc.cloudworkstations.dev';
 
-export const http: AxiosInstance = axios.create({
+// Публичный клиент — безопасен в Server Actions / на сервере
+export const httpPublic: AxiosInstance = axios.create({
   baseURL: BASE_URL,
   withCredentials: true,
   headers: {
-    'Content-Type': 'application/json',
     Accept: 'application/json',
+    'Content-Type': 'application/json',
   },
 });
 
-http.interceptors.response.use(
+httpPublic.interceptors.response.use(
   (r) => r,
   (err) => {
     console.error('API error:', err?.response?.data || err);
@@ -22,6 +24,33 @@ http.interceptors.response.use(
 );
 
 
+// Авторизованный клиент — токен и рефреш логика добавляются ТОЛЬКО в браузере
+export const httpAuth: AxiosInstance = axios.create({
+  baseURL: BASE_URL,
+  withCredentials: true,
+  headers: {
+    Accept: 'application/json',
+    'Content-Type': 'application/json',
+  },
+});
+
+httpAuth.interceptors.request.use(async (config) => {
+    // На сервере (Server Actions / RSC) — НИЧЕГО не делаем
+    if (typeof window === 'undefined') {
+        return config;
+    }
+    
+    // Динамически импортим стор только в браузере
+    const { useUserStore } = await import('@/widgets/dashboard-header/model/user-store');
+    const accessToken = useUserStore.getState?.().accessToken;
+
+    if (accessToken && !config.headers?.Authorization) {
+        config.headers = { ...config.headers, Authorization: `Bearer ${accessToken}` };
+    }
+    return config;
+});
+
+// Перехватчик для обновления токена - только для авторизованного клиента
 let isRefreshing = false;
 let failedQueue: Array<{ resolve: (value?: any) => void; reject: (reason?: any) => void }> = [];
 
@@ -33,27 +62,16 @@ const processQueue = (error: Error | null, token: string | null = null) => {
       prom.resolve(token);
     }
   });
-
   failedQueue = [];
 };
 
-http.interceptors.request.use(
-  (config) => {
-    const accessToken = useUserStore.getState().accessToken;
-    if (accessToken && !config.headers?.Authorization) {
-      config.headers = { ...config.headers, Authorization: `Bearer ${accessToken}` };
-    }
-    return config;
-  },
-  (error) => Promise.reject(error)
-);
-
-http.interceptors.response.use(
+httpAuth.interceptors.response.use(
   (response) => response,
   async (error: AxiosError) => {
     const originalRequest = error.config as RawAxiosRequestConfig & { _retry?: boolean };
 
-    if (error.response?.status === 401 && !originalRequest._retry) {
+    // Работаем только в браузере, где есть стор
+    if (typeof window !== 'undefined' && error.response?.status === 401 && !originalRequest._retry) {
       if (isRefreshing) {
         return new Promise(function (resolve, reject) {
           failedQueue.push({ resolve, reject });
@@ -62,16 +80,15 @@ http.interceptors.response.use(
             if (originalRequest.headers) {
               originalRequest.headers['Authorization'] = `Bearer ${token}`;
             }
-            return http(originalRequest);
+            return httpAuth(originalRequest);
           })
-          .catch((err) => {
-            return Promise.reject(err);
-          });
+          .catch((err) => Promise.reject(err));
       }
 
       originalRequest._retry = true;
       isRefreshing = true;
 
+      const { useUserStore } = await import('@/widgets/dashboard-header/model/user-store');
       const { refreshToken, setTokens, signOut } = useUserStore.getState();
 
       if (!refreshToken) {
@@ -81,8 +98,8 @@ http.interceptors.response.use(
       }
 
       try {
-        const refreshResponse = await axios.post(
-          `${BASE_URL}/api/v1/auth/refresh`,
+        const refreshResponse = await httpPublic.post(
+          '/api/v1/auth/refresh',
           {},
           { headers: { Authorization: `Bearer ${refreshToken}` } }
         );
@@ -96,7 +113,7 @@ http.interceptors.response.use(
         }
         processQueue(null, newAccessToken);
         
-        return http(originalRequest);
+        return httpAuth(originalRequest);
 
       } catch (refreshError) {
         processQueue(refreshError as Error, null);
