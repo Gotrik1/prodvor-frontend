@@ -10,11 +10,9 @@ import React, { useState, useEffect } from "react";
 import { Skeleton } from "@/shared/ui/skeleton";
 import { ScrollArea } from "@/shared/ui/scroll-area";
 import { MyTeamsEmptyState } from "@/views/teams/ui/my-teams-empty-state";
-import { UsersApi, Configuration } from "@/shared/api/sdk";
+import { UsersApi } from "@/shared/api/sdk";
 import axios from "axios";
-import api from '@/shared/api/axios-instance';
-
-const usersApi = new UsersApi(new Configuration({ basePath: process.env.NEXT_PUBLIC_API_BASE_URL }), undefined, api);
+import { sdk } from "@/shared/api/sdkClient";
 
 export function MyTeamWidget({ user }: { user: User }) {
   const [myTeams, setMyTeams] = useState<Team[]>([]);
@@ -34,7 +32,7 @@ export function MyTeamWidget({ user }: { user: User }) {
             }
             setIsLoading(true);
             try {
-                const userWithTeams = await usersApi.getUsersMe({ includeTeams: true });
+                const userWithTeams = await sdk.users.getUsersMe({ includeTeams: true });
                 setMyTeams((userWithTeams.data as any).teams || []);
             } catch (error) {
                 if (axios.isAxiosError(error)) {
