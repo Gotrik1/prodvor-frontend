@@ -24,7 +24,6 @@ import { Loader2, CalendarIcon } from 'lucide-react';
 import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/popover';
 import { Calendar } from '@/shared/ui/calendar';
 import { cn } from '@/shared/lib/utils';
-import { sdk } from '@/shared/api/sdkClient';
 import { httpPublic } from '@/shared/api/http';
 import { format } from 'date-fns';
 
@@ -35,6 +34,7 @@ const registerFormSchema = z.object({
   confirmPassword: z.string(),
   first_name: z.string().min(2, "Имя обязательно."),
   last_name: z.string().min(2, "Фамилия обязательна."),
+  phone: z.string().min(1, { message: "Телефон обязателен." }),
   birth_date: z.date({ required_error: "Укажите дату рождения." }),
 }).refine(data => data.password === data.confirmPassword, {
     message: "Пароли не совпадают.",
@@ -56,6 +56,7 @@ export function RegisterPage() {
       confirmPassword: "",
       first_name: "",
       last_name: "",
+      phone: "",
     },
   });
 
@@ -63,9 +64,14 @@ export function RegisterPage() {
     setIsLoading(true);
     try {
       const payload = {
-        ...values,
+        email: values.email,
+        nickname: values.nickname,
+        first_name: values.first_name,
+        last_name: values.last_name,
         birth_date: format(values.birth_date, 'yyyy-MM-dd'),
-        avatar_url: `https://i.pravatar.cc/150?u=${values.email}` // Mock avatar
+        avatar_url: `https://i.pravatar.cc/150?u=${values.email}`, // Mock avatar
+        password: values.password,
+        phone: values.phone,
       };
       
       const response = await httpPublic.post('/api/v1/auth/register', payload);
@@ -129,6 +135,9 @@ export function RegisterPage() {
                         <FormItem><FormLabel>Подтвердите пароль</FormLabel><FormControl><Input type="password" {...field} /></FormControl><FormMessage /></FormItem>
                     )} />
                 </div>
+                <FormField control={form.control} name="phone" render={({ field }) => (
+                    <FormItem><FormLabel>Телефон</FormLabel><FormControl><Input type="tel" placeholder="+7 (999) 123-45-67" {...field} /></FormControl><FormMessage /></FormItem>
+                )} />
                 <FormField control={form.control} name="birth_date" render={({ field }) => (
                     <FormItem>
                         <FormLabel>Дата рождения</FormLabel>
