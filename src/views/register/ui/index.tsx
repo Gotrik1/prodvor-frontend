@@ -1,3 +1,4 @@
+
 'use client';
 
 import React from 'react';
@@ -20,22 +21,21 @@ import { Logo } from "@/views/auth/ui";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/shared/ui/form';
 import { useToast } from '@/shared/hooks/use-toast';
 import { Loader2, CalendarIcon } from 'lucide-react';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shared/ui/select';
 import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/popover';
 import { Calendar } from '@/shared/ui/calendar';
 import { cn } from '@/shared/lib/utils';
 import { sdk } from '@/shared/api/sdkClient';
+import { httpPublic } from '@/shared/api/http';
+import { format } from 'date-fns';
 
 const registerFormSchema = z.object({
   nickname: z.string().min(3, { message: "Никнейм должен быть не менее 3 символов." }),
   email: z.string().email({ message: "Неверный формат email." }),
   password: z.string().min(8, { message: "Пароль должен быть не менее 8 символов." }),
   confirmPassword: z.string(),
-  firstName: z.string().min(2, "Имя обязательно."),
-  lastName: z.string().min(2, "Фамилия обязательна."),
-  city: z.string().min(2, "Город обязателен."),
-  role: z.string({ required_error: "Пожалуйста, выберите роль." }),
-  birthDate: z.date({ required_error: "Укажите дату рождения." }),
+  first_name: z.string().min(2, "Имя обязательно."),
+  last_name: z.string().min(2, "Фамилия обязательна."),
+  birth_date: z.date({ required_error: "Укажите дату рождения." }),
 }).refine(data => data.password === data.confirmPassword, {
     message: "Пароли не совпадают.",
     path: ["confirmPassword"],
@@ -54,29 +54,23 @@ export function RegisterPage() {
       email: "",
       password: "",
       confirmPassword: "",
-      firstName: "",
-      lastName: "",
-      city: "",
+      first_name: "",
+      last_name: "",
     },
   });
 
   const onRegisterSubmit = async (values: z.infer<typeof registerFormSchema>) => {
     setIsLoading(true);
     try {
-      const response = await sdk.auth.register({
-        nickname: values.nickname,
-        email: values.email,
-        password: values.password,
-        role: values.role,
-        city: values.city,
-        firstName: values.firstName,
-        lastName: values.lastName,
-        age: new Date().getFullYear() - values.birthDate.getFullYear(),
-        birthDate: values.birthDate.toISOString(),
-        gender: "мужской" // Mocking gender for now
-      });
+      const payload = {
+        ...values,
+        birth_date: format(values.birth_date, 'yyyy-MM-dd'),
+        avatar_url: `https://i.pravatar.cc/150?u=${values.email}` // Mock avatar
+      };
+      
+      const response = await httpPublic.post('/api/v1/auth/register', payload);
 
-      if (response.status === 201) {
+      if (response.status === 200) {
         toast({
             title: "Аккаунт создан! Теперь войдите.",
             description: `Добро пожаловать, ${response.data.nickname}!`,
@@ -84,7 +78,7 @@ export function RegisterPage() {
         router.push(`/auth`);
       }
     } catch (error: any) {
-        const errorMessage = error.response?.data?.message || "Произошла неизвестная ошибка.";
+        const errorMessage = error.response?.data?.detail || "Произошла неизвестная ошибка.";
         toast({
             variant: "destructive",
             title: "Ошибка регистрации",
@@ -114,10 +108,10 @@ export function RegisterPage() {
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onRegisterSubmit)} className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
-                    <FormField control={form.control} name="firstName" render={({ field }) => (
+                    <FormField control={form.control} name="first_name" render={({ field }) => (
                         <FormItem><FormLabel>Имя</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
                     )} />
-                    <FormField control={form.control} name="lastName" render={({ field }) => (
+                    <FormField control={form.control} name="last_name" render={({ field }) => (
                         <FormItem><FormLabel>Фамилия</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
                     )} />
                 </div>
@@ -135,27 +129,7 @@ export function RegisterPage() {
                         <FormItem><FormLabel>Подтвердите пароль</FormLabel><FormControl><Input type="password" {...field} /></FormControl><FormMessage /></FormItem>
                     )} />
                 </div>
-                 <div className="grid grid-cols-2 gap-4">
-                    <FormField control={form.control} name="city" render={({ field }) => (
-                        <FormItem><FormLabel>Город</FormLabel><FormControl><Input placeholder="Например, Москва" {...field} /></FormControl><FormMessage /></FormItem>
-                    )} />
-                     <FormField control={form.control} name="role" render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Основная роль</FormLabel>
-                            <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                <FormControl><SelectTrigger><SelectValue placeholder="Выберите роль" /></SelectTrigger></FormControl>
-                                <SelectContent>
-                                    <SelectItem value="Игрок">Игрок</SelectItem>
-                                    <SelectItem value="Судья">Судья</SelectItem>
-                                    <SelectItem value="Тренер">Тренер</SelectItem>
-                                    <SelectItem value="Болельщик">Болельщик</SelectItem>
-                                </SelectContent>
-                            </Select>
-                            <FormMessage />
-                        </FormItem>
-                    )} />
-                </div>
-                <FormField control={form.control} name="birthDate" render={({ field }) => (
+                <FormField control={form.control} name="birth_date" render={({ field }) => (
                     <FormItem>
                         <FormLabel>Дата рождения</FormLabel>
                         <Popover>

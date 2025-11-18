@@ -1,3 +1,4 @@
+
 'use client';
 
 import React from 'react';
@@ -151,9 +152,9 @@ export function AuthPage() {
     setIsLoading(true);
     const result = await loginAction(values);
     
-    if (result.success) {
-      const { accessToken, refreshToken, user } = result.data;
-      setTokens({ accessToken, refreshToken });
+    if (result.success && result.data.user) {
+      const { access_token, refresh_token, user } = result.data;
+      setTokens({ accessToken: access_token, refreshToken: refresh_token });
       setUser(user as User);
       toast({
         title: "Вход выполнен!",

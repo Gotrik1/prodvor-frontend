@@ -3,6 +3,7 @@
 
 import { z } from 'zod';
 import { httpPublic } from '@/shared/api/http';
+import axios from 'axios';
 
 const LoginSchema = z.object({
   email: z.string().email("Неверный формат email."),
@@ -12,18 +13,40 @@ const LoginSchema = z.object({
 export async function loginAction(input: unknown) {
   try {
     const validatedFields = LoginSchema.parse(input);
-    const { data } = await httpPublic.post('/api/v1/auth/login', validatedFields, {
-      headers: { 'Content-Type': 'application/json' },
+
+    const params = new URLSearchParams();
+    params.append('username', validatedFields.email);
+    params.append('password', validatedFields.password);
+
+    const { data } = await httpPublic.post('/api/v1/auth/login', params, {
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     });
-    return { success: true, data };
+    
+    // After getting tokens, immediately fetch user data
+    const userResponse = await httpPublic.get('/api/v1/users/me', {
+        headers: {
+            'Authorization': `Bearer ${data.access_token}`
+        }
+    });
+
+    return { success: true, data: { ...data, user: userResponse.data } };
   } catch (error: any) {
-    if (error.isAxiosError && error.response) {
-      return { success: false, error: error.response.data.message || 'Ошибка входа' };
-    }
-    if (error instanceof z.ZodError) {
-      return { success: false, error: 'Неверный формат данных.' };
+    let errorMessage = 'Произошла непредвиденная ошибка.';
+    if (axios.isAxiosError(error) && error.response) {
+      // Handle validation errors from backend
+      if (error.response.data && error.response.data.detail) {
+          if (Array.isArray(error.response.data.detail)) {
+            errorMessage = error.response.data.detail.map((d: any) => d.msg).join(', ');
+          } else {
+            errorMessage = error.response.data.detail;
+          }
+      } else {
+        errorMessage = error.response.data.message || 'Ошибка входа. Проверьте email и пароль.';
+      }
+    } else if (error instanceof z.ZodError) {
+      errorMessage = 'Неверный формат данных.';
     }
     console.error('[Login Action Error]', error);
-    return { success: false, error: 'Произошла непредвиденная ошибка.' };
+    return { success: false, error: errorMessage };
   }
 }

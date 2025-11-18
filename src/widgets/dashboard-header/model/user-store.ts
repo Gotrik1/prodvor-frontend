@@ -1,3 +1,4 @@
+
 'use client';
 
 import { create } from 'zustand';
@@ -33,7 +34,7 @@ export const useUserStore = create<UserState>()(
         const { refreshToken } = get();
         try {
           if (refreshToken) {
-            await httpPublic.post('/api/v1/auth/logout', { refreshToken: refreshToken });
+            await httpPublic.post('/api/v1/auth/logout', { refresh_token: refreshToken });
           }
         } catch (error) {
             console.error("Failed to logout on backend, clearing client session anyway.", error);
