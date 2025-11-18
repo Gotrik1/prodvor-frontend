@@ -1,7 +1,7 @@
 
 'use client';
 
-import axios, { type AxiosError, type AxiosInstance, type RawAxiosRequestConfig } from 'axios';
+import axios, { type AxiosError, type AxiosInstance, type RawAxiosRequestConfig, AxiosHeaders } from 'axios';
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'https://8080-firebase-prodvor-backendgit-1762801375121.cluster-3iz2yhcd4rhr2rsnuja2mv2i6k.cloudworkstations.dev';
 
@@ -11,7 +11,6 @@ export const httpPublic: AxiosInstance = axios.create({
   withCredentials: true,
   headers: {
     Accept: 'application/json',
-    'Content-Type': 'application/json',
   },
 });
 
@@ -30,7 +29,6 @@ export const httpAuth: AxiosInstance = axios.create({
   withCredentials: true,
   headers: {
     Accept: 'application/json',
-    'Content-Type': 'application/json',
   },
 });
 
@@ -43,10 +41,16 @@ httpAuth.interceptors.request.use(async (config) => {
     // Динамически импортим стор только в браузере
     const { useUserStore } = await import('@/widgets/dashboard-header/model/user-store');
     const accessToken = useUserStore.getState?.().accessToken;
-
-    if (accessToken && !config.headers?.Authorization) {
-        config.headers = { ...config.headers, Authorization: `Bearer ${accessToken}` };
+    
+    if (accessToken) {
+        // Убедимся, что headers является экземпляром AxiosHeaders
+        if (!(config.headers instanceof AxiosHeaders)) {
+            config.headers = new AxiosHeaders(config.headers);
+        }
+        // Используем метод .set() для добавления заголовка
+        config.headers.set('Authorization', `Bearer ${accessToken}`);
     }
+
     return config;
 });
 
@@ -100,16 +104,15 @@ httpAuth.interceptors.response.use(
       try {
         const refreshResponse = await httpPublic.post(
           '/api/v1/auth/refresh',
-          {},
-          { headers: { Authorization: `Bearer ${refreshToken}` } }
+          { refresh_token: refreshToken },
         );
-
-        const { accessToken: newAccessToken, refreshToken: newRefreshToken } = refreshResponse.data;
+        
+        const { access_token: newAccessToken, refresh_token: newRefreshToken } = refreshResponse.data;
         
         setTokens({ accessToken: newAccessToken, refreshToken: newRefreshToken || refreshToken });
         
         if (originalRequest.headers) {
-            originalRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
+            (originalRequest.headers as AxiosHeaders).set('Authorization', `Bearer ${newAccessToken}`);
         }
         processQueue(null, newAccessToken);
         
