@@ -1,3 +1,4 @@
+
 'use client';
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
@@ -16,8 +17,8 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/shared/ui/alert-dialog";
-import type { User } from '@/mocks';
-import { api } from '@/shared/api/axios-instance';
+import type { User } from '@/entities/user/types';
+import { sdk } from "@/shared/api/sdkClient";
 
 interface RosterManagementProps {
   teamId: string;
@@ -30,7 +31,7 @@ export function RosterManagement({ teamId, allTeamMembers, onRosterChange }: Ros
   
   const handleRemovePlayer = async (userId: string, userName: string) => {
     try {
-      await api.delete(`/api/v1/teams/${teamId}/members/${userId}`);
+      await sdk.teams.removeMember({teamId, userId});
       toast({
         title: "Игрок исключен",
         description: `${userName} был удален из состава команды.`,
@@ -101,3 +102,5 @@ export function RosterManagement({ teamId, allTeamMembers, onRosterChange }: Ros
     </Card>
   );
 }
+
+    

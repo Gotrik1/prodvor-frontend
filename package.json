@@ -6,14 +6,12 @@
   "type": "module",
   "scripts": {
     "dev": "next dev --hostname 0.0.0.0 --turbopack -p 6000",
-    "build": "npm run api:refresh && next build",
+    "build": "npm run api:gen && next build",
     "start": "next start",
     "lint": "next lint . --ext .ts,.tsx --fix",
     "lint:fix": "eslint . --ext .ts,.tsx --fix",
     "typecheck": "tsc --noEmit",
-    "api:pull": "node scripts/fetch-openapi.mjs",
-    "api:gen": "openapi-generator-cli generate -g typescript-axios -i ./openapi.json -o src/shared/api/sdk",
-    "api:refresh": "npm run api:pull && npm run api:gen"
+    "api:gen": "openapi-generator-cli generate -g typescript-axios -i docs/OPENAPI_SPEC.json -o src/shared/api/sdk --additional-properties=withInterfaces=true,useOptions=true,nullSafe-additional-properties=true"
   },
   "dependencies": {
     "@genkit-ai/ai": "^1.0.0",
@@ -86,3 +84,5 @@
     "typescript-eslint": "^8.39.1"
   }
 }
+
+    

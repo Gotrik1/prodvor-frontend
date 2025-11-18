@@ -6,7 +6,8 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { loginAction } from '@/features/auth/actions';
+import { sdkLogin } from '@/shared/api/sdkClient';
+import { sdk } from '@/shared/api/sdkClient';
 
 import { Button } from "@/shared/ui/button";
 import {
@@ -27,7 +28,7 @@ import { i18n } from '@/shared/lib/i18n';
 import { useToast } from '@/shared/hooks/use-toast';
 import { useUserStore } from '@/widgets/dashboard-header/model/user-store';
 import { Loader2 } from 'lucide-react';
-import type { User } from '@/mocks';
+import type { User } from '@/entities/user/types';
 
 // ------------------ Схемы валидации ------------------
 const loginFormSchema = z.object({
@@ -133,7 +134,6 @@ export function AuthPage() {
   const [isLoading, setIsLoading] = React.useState(false);
 
   React.useEffect(() => {
-    // This effect ensures we don't try to redirect on the server.
     const hasLoggedOut = searchParams?.get('loggedOut') === 'true';
     if (isHydrated && currentUser && !hasLoggedOut) {
         router.push(`/users/${currentUser.id}`);
@@ -150,25 +150,34 @@ export function AuthPage() {
 
   const onSubmit = async (values: z.infer<typeof loginFormSchema>) => {
     setIsLoading(true);
-    const result = await loginAction(values);
-    
-    if (result.success && result.data.user) {
-      const { access_token, refresh_token, user } = result.data;
-      setTokens({ accessToken: access_token, refreshToken: refresh_token });
-      setUser(user as User);
+    try {
+      const params = new URLSearchParams();
+      params.append('username', values.email);
+      params.append('password', values.password);
+      
+      const tokenData = await sdkLogin(params);
+      setTokens({ accessToken: tokenData.access_token, refreshToken: tokenData.refresh_token });
+      
+      const userResponse = await sdk.users.getUsersMe();
+      const user = userResponse.data as User;
+      
+      setUser(user);
+
       toast({
         title: "Вход выполнен!",
         description: `Добро пожаловать, ${user.nickname}!`,
       });
       router.push(`/users/${user.id}`);
-    } else {
+
+    } catch (error: any) {
       toast({
         variant: "destructive",
         title: "Ошибка входа",
-        description: result.error || "Неверный email или пароль.",
+        description: error.response?.data?.detail || "Неверный email или пароль.",
       });
+    } finally {
+        setIsLoading(false);
     }
-    setIsLoading(false);
   };
 
 
@@ -281,3 +290,5 @@ export function AuthPage() {
     </div>
   );
 }
+
+    

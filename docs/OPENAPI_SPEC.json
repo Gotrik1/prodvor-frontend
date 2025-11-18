@@ -1,366 +1,2153 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "title": "Sport Matching API",
-    "description": "A RESTful API for a sports team and player matching platform.",
-    "version": "1.0.0"
+    "title": "ProDvor API",
+    "version": "0.1.0"
   },
-  "servers": [
-    {
-      "url": "/api/v1"
-    }
-  ],
   "paths": {
-    "/playgrounds": {
-      "get": {
-        "summary": "Get all playgrounds",
-        "tags": ["Playgrounds"],
-        "parameters": [
-          {
-            "name": "page",
-            "in": "query",
-            "schema": { "type": "integer", "default": 1 }
+    "/api/v1/auth/register": {
+      "post": {
+        "summary": "Register",
+        "operationId": "register_api_v1_auth_register_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserCreate"
+              }
+            }
           },
-          {
-            "name": "per_page",
-            "in": "query",
-            "schema": { "type": "integer", "default": 20 }
-          }
-        ],
+          "required": true
+        },
         "responses": {
           "200": {
-            "description": "A list of playgrounds.",
+            "description": "Successful Response",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "data": {
-                      "type": "array",
-                      "items": { "$ref": "#/components/schemas/Playground" }
-                    },
-                    "meta": { "$ref": "#/components/schemas/Pagination" }
-                  }
+                  "$ref": "#/components/schemas/UserRead"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
                 }
               }
             }
           }
-        }
-      },
-      "post": {
-        "summary": "Create a new playground",
-        "tags": ["Playgrounds"],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": { "$ref": "#/components/schemas/NewPlayground" }
-            }
-          }
         },
-        "responses": {
-          "201": { "description": "Playground created successfully." },
-          "400": { "$ref": "#/components/responses/BadRequest" }
-        }
+        "tags": [
+          "auth"
+        ]
       }
     },
-    "/posts": {
-      "get": {
-        "summary": "Get all posts",
-        "tags": ["Posts"],
-        "parameters": [
-          {
-            "name": "page",
-            "in": "query",
-            "schema": { "type": "integer", "default": 1 }
+    "/api/v1/auth/login": {
+      "post": {
+        "summary": "Login",
+        "operationId": "login_api_v1_auth_login_post",
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_login_api_v1_auth_login_post"
+              }
+            }
           },
-          {
-            "name": "per_page",
-            "in": "query",
-            "schema": { "type": "integer", "default": 20 }
-          }
-        ],
+          "required": true
+        },
         "responses": {
           "200": {
-            "description": "A list of posts.",
+            "description": "Successful Response",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "data": {
-                      "type": "array",
-                      "items": { "$ref": "#/components/schemas/Post" }
-                    },
-                    "meta": { "$ref": "#/components/schemas/Pagination" }
-                  }
+                  "$ref": "#/components/schemas/Token"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
                 }
               }
             }
           }
-        }
-      },
-      "post": {
-        "summary": "Create a new post",
-        "tags": ["Posts"],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": { "$ref": "#/components/schemas/NewPost" }
-            }
-          }
         },
-        "responses": {
-          "201": { "description": "Post created successfully." },
-          "400": { "$ref": "#/components/responses/BadRequest" }
-        }
+        "tags": [
+          "auth"
+        ]
       }
     },
-    "/sports": {
-      "get": {
-        "summary": "Get all sports",
-        "tags": ["Sports"],
+    "/api/v1/auth/refresh": {
+      "post": {
+        "summary": "Refresh",
+        "operationId": "refresh_api_v1_auth_refresh_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RefreshTokenRequest"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
-            "description": "A list of sports.",
+            "description": "Successful Response",
             "content": {
               "application/json": {
                 "schema": {
+                  "$ref": "#/components/schemas/Token"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref.json": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "auth"
+        ]
+      }
+    },
+    "/api/v1/auth/logout": {
+      "post": {
+        "summary": "Logout",
+        "operationId": "logout_api_v1_auth_logout_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RefreshTokenRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "auth"
+        ]
+      }
+    },
+    "/api/v1/users/": {
+      "get": {
+        "summary": "Get All Users",
+        "operationId": "get_all_users_api_v1_users__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/User"
+                  },
                   "type": "array",
-                  "items": { "$ref": "#/components/schemas/Sport" }
+                  "title": "Response Get All Users Api V1 Users  Get"
                 }
               }
             }
           }
-        }
-      },
-      "post": {
-        "summary": "Create a new sport",
-        "tags": ["Sports"],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": { "$ref": "#/components/schemas/NewSport" }
-            }
-          }
         },
-        "responses": {
-          "201": { "description": "Sport created successfully." },
-          "400": { "$ref": "#/components/responses/BadRequest" }
-        }
+        "tags": [
+          "users"
+        ]
       }
     },
-    "/users/me": {
+    "/api/v1/users/me": {
       "get": {
-        "summary": "Get current user's profile",
-        "tags": ["User"],
+        "summary": "Get Users Me",
+        "operationId": "get_users_me_api_v1_users_me_get",
+        "parameters": [
+          {
+            "name": "include_teams",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false,
+              "title": "Include Teams"
+            }
+          }
+        ],
         "responses": {
           "200": {
-            "description": "User profile data.",
+            "description": "Successful Response",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/User" }
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
               }
             }
           },
-          "401": { "$ref": "#/components/responses/Unauthorized" }
-        }
-      }
-    },
-    "/uploads/initiate": {
-      "post": {
-        "summary": "Initiate a file upload",
-        "tags": ["Uploads"],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "file_name": { "type": "string" },
-                  "content_type": { "type": "string" }
-                },
-                "required": ["file_name", "content_type"]
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Upload initiated.",
+          "422": {
+            "description": "Validation Error",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "uploadId": { "type": "string" },
-                    "presignedUrl": { "type": "string", "format": "uri" }
-                  }
+                  "$ref": "#/components/schemas/HTTPValidationError"
                 }
               }
             }
           }
-        }
+        },
+        "tags": [
+          "users"
+        ],
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
       }
     },
-    "/uploads/complete": {
-      "post": {
-        "summary": "Complete a file upload",
-        "tags": ["Uploads"],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "uploadId": { "type": "string" },
-                  "target_type": { "type": "string", "enum": ["avatar", "team_logo", "post_media"] },
-                  "target_id": { "type": "string" }
-                },
-                "required": ["uploadId", "target_type", "target_id"]
-              }
+    "/api/v1/users/{user_id}": {
+      "get": {
+        "summary": "Get Users",
+        "operationId": "get_users_api_v1_users__user_id__get",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "User Id"
+            }
+          },
+          {
+            "name": "include_teams",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false,
+              "title": "Include Teams"
             }
           }
-        },
+        ],
         "responses": {
           "200": {
-            "description": "Upload completed and file linked.",
+            "description": "Successful Response",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "file_url": { "type": "string", "format": "uri" }
-                  }
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
                 }
               }
             }
           }
-        }
+        },
+        "tags": [
+          "users"
+        ]
+      },
+      "put": {
+        "summary": "Update User",
+        "operationId": "update_user_api_v1_users__user_id__put",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "User Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserUpdate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "users"
+        ],
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/users/me/sessions": {
+      "get": {
+        "summary": "Get Users Me Sessions",
+        "operationId": "get_users_me_sessions_api_v1_users_me_sessions_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/UserSession"
+                  },
+                  "type": "array",
+                  "title": "Response Get Users Me Sessions Api V1 Users Me Sessions Get"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "users"
+        ],
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/users/me/sessions/{session_id}": {
+      "delete": {
+        "summary": "Delete Users Me Session",
+        "operationId": "delete_users_me_session_api_v1_users_me_sessions__session_id__delete",
+        "parameters": [
+          {
+            "name": "session_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Session Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "users"
+        ],
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/users/me/sessions/all-except-current": {
+      "delete": {
+        "summary": "Delete Users Me Sessions All Except Current",
+        "operationId": "delete_users_me_sessions_all_except_current_api_v1_users_me_sessions_all_except_current_delete",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        },
+        "tags": [
+          "users"
+        ],
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/teams": {
+      "get": {
+        "summary": "List Teams",
+        "operationId": "list_teams_api_v1_teams_get",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 1,
+              "title": "Page"
+            }
+          },
+          {
+            "name": "per_page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 20,
+              "title": "Per Page"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/Team"
+                  },
+                  "type": "array",
+                  "title": "Response List Teams Api V1 Teams Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "teams"
+        ]
+      },
+      "post": {
+        "summary": "Create Team",
+        "operationId": "create_team_api_v1_teams_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Team"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "teams"
+        ],
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/teams/{team_id}": {
+      "get": {
+        "summary": "Get Team By Id",
+        "operationId": "get_team_by_id_api_v1_teams__team_id__get",
+        "parameters": [
+          {
+            "name": "team_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Team Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Team"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "teams"
+        ]
+      }
+    },
+    "/api/v1/teams/{team_id}/apply": {
+      "post": {
+        "summary": "Apply To Team",
+        "operationId": "apply_to_team_api_v1_teams__team_id__apply_post",
+        "parameters": [
+          {
+            "name": "team_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Team Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "teams"
+        ],
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/teams/{team_id}/applications": {
+      "get": {
+        "summary": "Get Applications",
+        "operationId": "get_applications_api_v1_teams__team_id__applications_get",
+        "parameters": [
+          {
+            "name": "team_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Team Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/User"
+                  },
+                  "type": "array",
+                  "title": "Response Get Applications Api V1 Teams  Team Id  Applications Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "teams"
+        ],
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/teams/{team_id}/applications/{user_id}/respond": {
+      "post": {
+        "summary": "Respond To Application",
+        "operationId": "respond_to_application_api_v1_teams__team_id__applications__user_id__respond_post",
+        "parameters": [
+          {
+            "name": "team_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Team Id"
+            }
+          },
+          {
+            "name": "user_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "User Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApplicationResponse"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "teams"
+        ],
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/teams/{team_id}/follow": {
+      "post": {
+        "summary": "Follow Team",
+        "operationId": "follow_team_api_v1_teams__team_id__follow_post",
+        "parameters": [
+          {
+            "name": "team_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Team Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "teams"
+        ],
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/teams/{team_id}/members/{user_id}": {
+      "delete": {
+        "summary": "Remove Member",
+        "operationId": "remove_member_api_v1_teams__team_id__members__user_id__delete",
+        "parameters": [
+          {
+            "name": "team_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Team Id"
+            }
+          },
+          {
+            "name": "user_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "User Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "teams"
+        ],
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/sports/": {
+      "get": {
+        "summary": "Get All Sports",
+        "operationId": "get_all_sports_api_v1_sports__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/Sport"
+                  },
+                  "type": "array",
+                  "title": "Response Get All Sports Api V1 Sports  Get"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "sports"
+        ]
+      }
+    },
+    "/api/v1/playgrounds/": {
+      "get": {
+        "summary": "Get All Playgrounds",
+        "operationId": "get_all_playgrounds_api_v1_playgrounds__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/Playground"
+                  },
+                  "type": "array",
+                  "title": "Response Get All Playgrounds Api V1 Playgrounds  Get"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "playgrounds"
+        ]
+      },
+      "post": {
+        "summary": "Create Playground",
+        "operationId": "create_playground_api_v1_playgrounds__post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PlaygroundCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Playground"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "playgrounds"
+        ]
+      }
+    },
+    "/api/v1/tournaments/": {
+      "get": {
+        "summary": "Get All Tournaments",
+        "operationId": "get_all_tournaments_api_v1_tournaments__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/Tournament"
+                  },
+                  "type": "array",
+                  "title": "Response Get All Tournaments Api V1 Tournaments  Get"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "tournaments"
+        ]
+      },
+      "post": {
+        "summary": "Create Tournament",
+        "operationId": "create_tournament_api_v1_tournaments__post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TournamentCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Tournament"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "tournaments"
+        ]
+      }
+    },
+    "/api/v1/tournaments/{tournament_id}": {
+      "get": {
+        "summary": "Get Tournament",
+        "operationId": "get_tournament_api_v1_tournaments__tournament_id__get",
+        "parameters": [
+          {
+            "name": "tournament_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Tournament Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Tournament"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "tournaments"
+        ]
+      }
+    },
+    "/api/v1/posts/": {
+      "get": {
+        "summary": "Get All Posts",
+        "operationId": "get_all_posts_api_v1_posts__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/Post"
+                  },
+                  "type": "array",
+                  "title": "Response Get All Posts Api V1 Posts  Get"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "posts"
+        ]
+      },
+      "post": {
+        "summary": "Create Post",
+        "operationId": "create_post_api_v1_posts__post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PostCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "posts"
+        ]
+      }
+    },
+    "/api/v1/sponsors/": {
+      "get": {
+        "summary": "Get All Sponsors",
+        "operationId": "get_all_sponsors_api_v1_sponsors__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/Sponsor"
+                  },
+                  "type": "array",
+                  "title": "Response Get All Sponsors Api V1 Sponsors  Get"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "sponsors"
+        ]
+      }
+    },
+    "/api/v1/uploads/initiate": {
+      "post": {
+        "summary": "Initiate Upload",
+        "operationId": "initiate_upload_api_v1_uploads_initiate_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UploadInitiateRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "uploads"
+        ],
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/uploads/complete": {
+      "post": {
+        "summary": "Complete Upload",
+        "operationId": "complete_upload_api_v1_uploads_complete_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UploadCompleteRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "uploads"
+        ],
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
       }
     }
   },
   "components": {
     "schemas": {
-      "Error": {
-        "type": "object",
+      "ApplicationResponse": {
         "properties": {
-          "error": { "type": "string", "example": "Resource Not Found" },
-          "details": { "type": "string", "example": "The requested resource could not be found." }
+          "action": {
+            "enum": [
+              "accept",
+              "decline"
+            ],
+            "type": "string",
+            "title": "Action"
+          }
         },
-        "required": ["error"]
-      },
-      "Pagination": {
         "type": "object",
-        "properties": {
-          "total": { "type": "integer" },
-          "page": { "type": "integer" },
-          "per_page": { "type": "integer" }
-        }
+        "required": [
+          "action"
+        ],
+        "title": "ApplicationResponse"
       },
-      "User": {
-        "type": "object",
+      "Body_login_api_v1_auth_login_post": {
         "properties": {
-          "id": { "type": "string" },
-          "nickname": { "type": "string" },
-          "email": { "type": "string", "format": "email" },
-          "avatarUrl": { "type": "string", "format": "uri" }
-        }
+          "grant_type": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^password$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Grant Type"
+          },
+          "username": {
+            "type": "string",
+            "title": "Username"
+          },
+          "password": {
+            "type": "string",
+            "format": "password",
+            "title": "Password"
+          },
+          "scope": {
+            "type": "string",
+            "title": "Scope",
+            "default": ""
+          },
+          "client_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Client Id"
+          },
+          "client_secret": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "password"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Client Secret"
+          }
+        },
+        "type": "object",
+        "required": [
+          "username",
+          "password"
+        ],
+        "title": "Body_login_api_v1_auth_login_post"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
       },
       "Playground": {
-        "type": "object",
         "properties": {
-          "id": { "type": "string" },
-          "name": { "type": "string" },
-          "address": { "type": "string" },
-          "surface": { "type": "string" },
-          "type": { "type": "string" }
-        }
-      },
-      "NewPlayground": {
-        "type": "object",
-        "properties": {
-          "name": { "type": "string" },
-          "address": { "type": "string" },
-          "surface": { "type": "string" },
-          "type": { "type": "string" }
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "address": {
+            "type": "string",
+            "title": "Address"
+          },
+          "type": {
+            "type": "string",
+            "title": "Type"
+          },
+          "surface": {
+            "type": "string",
+            "title": "Surface"
+          },
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          }
         },
-        "required": ["name", "address"]
+        "type": "object",
+        "required": [
+          "name",
+          "address",
+          "type",
+          "surface",
+          "id"
+        ],
+        "title": "Playground"
+      },
+      "PlaygroundCreate": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "address": {
+            "type": "string",
+            "title": "Address"
+          },
+          "type": {
+            "type": "string",
+            "title": "Type"
+          },
+          "surface": {
+            "type": "string",
+            "title": "Surface"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "address",
+          "type",
+          "surface"
+        ],
+        "title": "PlaygroundCreate"
       },
       "Post": {
-        "type": "object",
         "properties": {
-          "id": { "type": "string" },
-          "content": { "type": "string" },
-          "teamId": { "type": "string" }
-        }
-      },
-      "NewPost": {
-        "type": "object",
-        "properties": {
-          "content": { "type": "string" },
-          "teamId": { "type": "string" }
+          "content": {
+            "type": "string",
+            "title": "Content"
+          },
+          "author_id": {
+            "type": "integer",
+            "title": "Author Id"
+          },
+          "team_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Team Id"
+          },
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Timestamp"
+          }
         },
-        "required": ["content"]
+        "type": "object",
+        "required": [
+          "content",
+          "author_id",
+          "id",
+          "timestamp"
+        ],
+        "title": "Post"
+      },
+      "PostCreate": {
+        "properties": {
+          "content": {
+            "type": "string",
+            "title": "Content"
+          },
+          "author_id": {
+            "type": "integer",
+            "title": "Author Id"
+          },
+          "team_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Team Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "content",
+          "author_id"
+        ],
+        "title": "PostCreate"
+      },
+      "RefreshTokenRequest": {
+        "properties": {
+          "refresh_token": {
+            "type": "string",
+            "title": "Refresh Token"
+          }
+        },
+        "type": "object",
+        "required": [
+          "refresh_token"
+        ],
+        "title": "RefreshTokenRequest"
       },
       "Sport": {
-        "type": "object",
         "properties": {
-          "id": { "type": "string" },
-          "name": { "type": "string" },
-          "isTeamSport": { "type": "boolean" }
-        }
-      },
-      "NewSport": {
-        "type": "object",
-        "properties": {
-          "name": { "type": "string" },
-          "isTeamSport": { "type": "boolean" }
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "is_team_sport": {
+            "type": "boolean",
+            "title": "Is Team Sport"
+          }
         },
-        "required": ["name", "isTeamSport"]
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "is_team_sport"
+        ],
+        "title": "Sport"
+      },
+      "Sponsor": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "logo_url": {
+            "type": "string",
+            "title": "Logo Url"
+          },
+          "contribution": {
+            "type": "string",
+            "title": "Contribution"
+          },
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "logo_url",
+          "contribution",
+          "id"
+        ],
+        "title": "Sponsor"
+      },
+      "Team": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "logo_url": {
+            "type": "string",
+            "title": "Logo Url"
+          },
+          "captain_id": {
+            "type": "integer",
+            "title": "Captain Id"
+          },
+          "game": {
+            "type": "string",
+            "title": "Game"
+          },
+          "city": {
+            "type": "string",
+            "title": "City"
+          },
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "rank": {
+            "type": "integer",
+            "title": "Rank"
+          },
+          "wins": {
+            "type": "integer",
+            "title": "Wins"
+          },
+          "losses": {
+            "type": "integer",
+            "title": "Losses"
+          },
+          "league_rank": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "League Rank"
+          },
+          "current_streak_type": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Current Streak Type"
+          },
+          "current_streak_count": {
+            "type": "integer",
+            "title": "Current Streak Count"
+          },
+          "form": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Form"
+          },
+          "mvp_player_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Mvp Player Id"
+          },
+          "top_scorer_player_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Top Scorer Player Id"
+          },
+          "clean_sheets": {
+            "type": "integer",
+            "title": "Clean Sheets"
+          },
+          "avg_rating": {
+            "type": "integer",
+            "title": "Avg Rating"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "captain": {
+            "$ref": "#/components/schemas/User"
+          },
+          "members": {
+            "items": {
+              "$ref": "#/components/schemas/User"
+            },
+            "type": "array",
+            "title": "Members"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "logo_url",
+          "captain_id",
+          "game",
+          "city",
+          "id",
+          "rank",
+          "wins",
+          "losses",
+          "current_streak_count",
+          "clean_sheets",
+          "avg_rating",
+          "created_at",
+          "captain",
+          "members"
+        ],
+        "title": "Team"
+      },
+      "Token": {
+        "properties": {
+          "access_token": {
+            "type": "string",
+            "title": "Access Token"
+          },
+          "refresh_token": {
+            "type": "string",
+            "title": "Refresh Token"
+          },
+          "token_type": {
+            "type": "string",
+            "title": "Token Type",
+            "default": "bearer"
+          }
+        },
+        "type": "object",
+        "required": [
+          "access_token",
+          "refresh_token"
+        ],
+        "title": "Token"
+      },
+      "Tournament": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "game": {
+            "type": "string",
+            "title": "Game"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "prize_pool": {
+            "type": "string",
+            "title": "Prize Pool"
+          },
+          "max_participants": {
+            "type": "integer",
+            "title": "Max Participants"
+          },
+          "start_date": {
+            "type": "string",
+            "title": "Start Date"
+          },
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "participants": {
+            "type": "integer",
+            "title": "Participants"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "game",
+          "status",
+          "prize_pool",
+          "max_participants",
+          "start_date",
+          "id",
+          "participants"
+        ],
+        "title": "Tournament"
+      },
+      "TournamentCreate": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "game": {
+            "type": "string",
+            "title": "Game"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "prize_pool": {
+            "type": "string",
+            "title": "Prize Pool"
+          },
+          "max_participants": {
+            "type": "integer",
+            "title": "Max Participants"
+          },
+          "start_date": {
+            "type": "string",
+            "title": "Start Date"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "game",
+          "status",
+          "prize_pool",
+          "max_participants",
+          "start_date"
+        ],
+        "title": "TournamentCreate"
+      },
+      "UploadCompleteRequest": {
+        "properties": {
+          "file_id": {
+            "type": "string",
+            "title": "File Id"
+          },
+          "entity_type": {
+            "type": "string",
+            "title": "Entity Type"
+          },
+          "entity_id": {
+            "type": "string",
+            "title": "Entity Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "file_id",
+          "entity_type",
+          "entity_id"
+        ],
+        "title": "UploadCompleteRequest"
+      },
+      "UploadInitiateRequest": {
+        "properties": {
+          "content_type": {
+            "type": "string",
+            "title": "Content Type"
+          },
+          "purpose": {
+            "type": "string",
+            "title": "Purpose"
+          }
+        },
+        "type": "object",
+        "required": [
+          "content_type",
+          "purpose"
+        ],
+        "title": "UploadInitiateRequest"
+      },
+      "User": {
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "title": "Email"
+          },
+          "nickname": {
+            "type": "string",
+            "title": "Nickname"
+          },
+          "first_name": {
+            "type": "string",
+            "title": "First Name"
+          },
+          "last_name": {
+            "type": "string",
+            "title": "Last Name"
+          },
+          "birth_date": {
+            "type": "string",
+            "format": "date",
+            "title": "Birth Date"
+          },
+          "avatar_url": {
+            "type": "string",
+            "title": "Avatar Url"
+          },
+          "phone": {
+            "type": "string",
+            "title": "Phone"
+          },
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Updated At"
+          },
+          "player_profile": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PlayerProfile"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Player Profile"
+          }
+        },
+        "type": "object",
+        "required": [
+          "email",
+          "nickname",
+          "first_name",
+          "last_name",
+          "birth_date",
+          "avatar_url",
+          "phone",
+          "id",
+          "created_at",
+          "updated_at"
+        ],
+        "title": "User"
+      },
+      "UserCreate": {
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "title": "Email"
+          },
+          "nickname": {
+            "type": "string",
+            "title": "Nickname"
+          },
+          "first_name": {
+            "type": "string",
+            "title": "First Name"
+          },
+          "last_name": {
+            "type": "string",
+            "title": "Last Name"
+          },
+          "birth_date": {
+            "type": "string",
+            "format": "date",
+            "title": "Birth Date"
+          },
+          "avatar_url": {
+            "type": "string",
+            "title": "Avatar Url"
+          },
+          "password": {
+            "type": "string",
+            "title": "Password"
+          },
+          "phone": {
+            "type": "string",
+            "title": "Phone"
+          }
+        },
+        "type": "object",
+        "required": [
+          "email",
+          "nickname",
+          "first_name",
+          "last_name",
+          "birth_date",
+          "avatar_url",
+          "password",
+          "phone"
+        ],
+        "title": "UserCreate"
+      },
+      "UserRead": {
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "title": "Email"
+          },
+          "nickname": {
+            "type": "string",
+            "title": "Nickname"
+          },
+          "first_name": {
+            "type": "string",
+            "title": "First Name"
+          },
+          "last_name": {
+            "type": "string",
+            "title": "Last Name"
+          },
+          "birth_date": {
+            "type": "string",
+            "format": "date",
+            "title": "Birth Date"
+          },
+          "avatar_url": {
+            "type": "string",
+            "title": "Avatar Url"
+          },
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Updated At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "email",
+          "nickname",
+          "first_name",
+          "last_name",
+          "birth_date",
+          "avatar_url",
+          "id",
+          "created_at",
+          "updated_at"
+        ],
+        "title": "UserRead"
+      },
+      "UserSession": {
+        "properties": {
+          "user_id": {
+            "type": "integer",
+            "title": "User Id"
+          },
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "user_agent": {
+            "type": "string",
+            "title": "User Agent"
+          },
+          "last_active_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Last Active At"
+          },
+          "ip_address": {
+            "type": "string",
+            "title": "Ip Address"
+          },
+          "is_current": {
+            "type": "boolean",
+            "title": "Is Current"
+          }
+        },
+        "type": "object",
+        "required": [
+          "user_id",
+          "id",
+          "created_at",
+          "user_agent",
+          "last_active_at",
+          "ip_address",
+          "is_current"
+        ],
+        "title": "UserSession"
+      },
+      "UserUpdate": {
+        "properties": {
+          "nickname": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Nickname"
+          },
+          "first_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "First Name"
+          },
+          "last_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Name"
+          },
+          "birth_date": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Birth Date"
+          },
+          "avatar_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Avatar Url"
+          },
+          "phone": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Phone"
+          },
+          "sports": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Sports",
+            "default": []
+          }
+        },
+        "type": "object",
+        "title": "UserUpdate"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
       }
     },
     "securitySchemes": {
-      "bearerAuth": {
-        "type": "http",
-        "scheme": "bearer",
-        "bearerFormat": "JWT"
-      }
-    },
-    "responses": {
-      "BadRequest": {
-        "description": "Bad Request. The request body is invalid.",
-        "content": {
-          "application/json": {
-            "schema": { "$ref": "#/components/schemas/Error" }
-          }
-        }
-      },
-      "Unauthorized": {
-        "description": "Unauthorized. JWT is missing or invalid.",
-        "content": {
-          "application/json": {
-            "schema": { "$ref": "#/components/schemas/Error" }
-          }
-        }
-      },
-      "NotFound": {
-        "description": "The specified resource was not found.",
-        "content": {
-          "application/json": {
-            "schema": { "$ref": "#/components/schemas/Error" }
+      "OAuth2PasswordBearer": {
+        "type": "oauth2",
+        "flows": {
+          "password": {
+            "scopes": {},
+            "tokenUrl": "api/v1/auth/login"
           }
         }
       }
     }
-  },
-  "security": [
-    {
-      "bearerAuth": []
-    }
-  ]
+  }
 }
+    

@@ -1,7 +1,8 @@
+
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
-import type { Team, User } from '@/mocks';
+import type { Team, User } from '@/entities/user/types';
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/shared/ui/card";
 import { PlusCircle, UserCheck, Users, BarChart, ChevronLeft, ChevronRight } from "lucide-react";
@@ -100,8 +101,17 @@ export function TeamsPage() {
                     page: pagination.page,
                     perPage: pagination.per_page,
                 });
-                setAllTeams(response.data);
-                setPagination(p => ({ ...p, total: (response as any).meta.total }));
+                setAllTeams(response.data as Team[]);
+                // Assuming backend returns total in a header or meta object, which is not in the spec
+                // Let's mock a total based on the response.
+                if (pagination.page === 1 && response.data.length < pagination.per_page) {
+                    setPagination(p => ({ ...p, total: response.data.length }));
+                } else if (pagination.page > 1 && response.data.length < pagination.per_page) {
+                     setPagination(p => ({ ...p, total: p.page * p.per_page }));
+                } else {
+                    setPagination(p => ({ ...p, total: (p.page + 1) * p.per_page })); // Guess there's more
+                }
+
             } catch (error) {
                 console.error("Failed to fetch teams:", error);
             }
@@ -120,7 +130,7 @@ export function TeamsPage() {
             return { myTeams: [], otherTeams: allTeams };
         }
         
-        const myTeams = allTeams.filter(team => team.captain?.id === currentUser.id || team.members?.some(m => m.id === currentUser.id));
+        const myTeams = allTeams.filter(team => String(team.captain?.id) === String(currentUser.id) || team.members?.some(m => String(m.id) === String(currentUser.id)));
         const otherTeams = allTeams.filter(team => !myTeams.some(mt => mt.id === team.id));
         return { myTeams, otherTeams };
     }, [currentUser, allTeams]);
@@ -186,27 +196,29 @@ export function TeamsPage() {
                                     />
                                 ))}
                             </div>
-                            <div className="flex items-center justify-center gap-2 mt-8">
-                                <Button
-                                    variant="outline"
-                                    disabled={pagination.page <= 1}
-                                    onClick={() => setPagination(p => ({ ...p, page: p.page - 1 }))}
-                                >
-                                    <ChevronLeft className="mr-2 h-4 w-4" />
-                                    Назад
-                                </Button>
-                                <span className="font-medium text-sm">
-                                    Страница {pagination.page} из {totalPages}
-                                </span>
-                                <Button
-                                    variant="outline"
-                                    disabled={pagination.page >= totalPages}
-                                    onClick={() => setPagination(p => ({ ...p, page: p.page + 1 }))}
-                                >
-                                    Вперед
-                                    <ChevronRight className="ml-2 h-4 w-4" />
-                                </Button>
-                            </div>
+                           {totalPages > 1 && (
+                                <div className="flex items-center justify-center gap-2 mt-8">
+                                    <Button
+                                        variant="outline"
+                                        disabled={pagination.page <= 1}
+                                        onClick={() => setPagination(p => ({ ...p, page: p.page - 1 }))}
+                                    >
+                                        <ChevronLeft className="mr-2 h-4 w-4" />
+                                        Назад
+                                    </Button>
+                                    <span className="font-medium text-sm">
+                                        Страница {pagination.page} из {totalPages}
+                                    </span>
+                                    <Button
+                                        variant="outline"
+                                        disabled={pagination.page >= totalPages}
+                                        onClick={() => setPagination(p => ({ ...p, page: p.page + 1 }))}
+                                    >
+                                        Вперед
+                                        <ChevronRight className="ml-2 h-4 w-4" />
+                                    </Button>
+                                </div>
+                           )}
                         </>
                     ) : (
                         <Card className="text-center min-h-[200px] flex flex-col justify-center items-center">
@@ -221,3 +233,5 @@ export function TeamsPage() {
         </div>
     );
 }
+
+    

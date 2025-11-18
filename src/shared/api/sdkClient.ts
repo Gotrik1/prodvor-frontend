@@ -22,7 +22,9 @@ export const sdk: SdkType = apiClasses.reduce((acc, [name, ApiClass]) => {
     return acc;
 }, {} as SdkType);
 
-export async function sdkLoginJSON(body: { email: string; password: string }) {
+export async function sdkLogin(body: URLSearchParams) {
   const response = await httpPublic.post('/api/v1/auth/login', body);
   return response.data;
 }
+
+    
