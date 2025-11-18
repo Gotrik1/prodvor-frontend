@@ -25,7 +25,6 @@ const nextConfig = {
     '176.106.247.145',
 
     // Точные хосты ваших Workstations (из логов)
-    '8080-firebase-prodvor-backendgit-1762801375121.cluster-3iz2yhcd4rhrrsnuja2mv2i6k.cloudworkstations.dev',
     '9000-firebase-prodvor-backendgit-1762801375121.cluster-3iz2yhcd4rhr2rsnuja2mv2i6k.cloudworkstations.dev',
     '5000-firebase-prodvor-backendgit-1762801375121.cluster-3iz2yhcd4rhr2rsnuja2mv2i6k.cloudworkstations.dev',
     '8080-firebase-prodvor-backendgit-1762840441881.cluster-tafiw3cv6fduct4hlcc5knh5fo.cloudworkstations.dev',
