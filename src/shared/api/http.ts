@@ -3,7 +3,7 @@
 
 import axios, { type AxiosError, type AxiosInstance, type RawAxiosRequestConfig, AxiosHeaders } from 'axios';
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8080';
+const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'https://8080-firebase-prodvor-backendgit-1762840441881.cluster-tafiw3cv6fduct4hlcc5knh5fo.cloudworkstations.dev/';
 
 // Публичный клиент — безопасен в Server Actions / на сервере
 export const httpPublic: AxiosInstance = axios.create({
