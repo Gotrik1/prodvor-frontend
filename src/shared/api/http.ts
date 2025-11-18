@@ -3,7 +3,7 @@
 
 import axios, { type AxiosError, type AxiosInstance, type RawAxiosRequestConfig, AxiosHeaders } from 'axios';
 
-const BASE_URL = ''; // Теперь пустой, т.к. запросы идут на тот же домен
+const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8080';
 
 // Публичный клиент — безопасен в Server Actions / на сервере
 export const httpPublic: AxiosInstance = axios.create({
